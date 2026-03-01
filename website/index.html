@@ -3,11 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RadiantX — Esports Analytics</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Primary Meta Tags -->
+    <title>RadiantX — Esports Analytics Platform | Valorant & CS Stats</title>
+    <meta name="description" content="Advanced esports analytics for Valorant and Counter-Strike. Real-time match data, player performance metrics, tournament tracking, and predictive insights.">
+    <meta name="keywords" content="esports analytics, valorant stats, cs stats, esports dashboard, match analysis, player performance, tournament tracking, radiantx, sator exe">
+    <meta name="author" content="RadiantX">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sator.exe/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sator.exe/">
+    <meta property="og:title" content="RadiantX — Esports Analytics Platform">
+    <meta property="og:description" content="Advanced analytics for Valorant and CS. Real-time match data, player performance metrics, and predictive insights.">
+    <meta property="og:image" content="https://sator.exe/og-image.png">
+    <meta property="og:site_name" content="RadiantX">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://sator.exe/">
+    <meta name="twitter:title" content="RadiantX — Esports Analytics Platform">
+    <meta name="twitter:description" content="Advanced analytics for Valorant and CS. Real-time match data, player performance metrics, and predictive insights.">
+    <meta name="twitter:image" content="https://sator.exe/og-image.png">
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style">
+    <link rel="preload" href="assets/js/main.js" as="script">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -154,6 +199,29 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(1.2); }
         }
+
+        /* Lazy loading for images */
+        img[data-src] {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        img.loaded {
+            opacity: 1;
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .sator-sphere,
+            .flow-line,
+            .glow-center,
+            .live-dot {
+                animation: none;
+            }
+            .facet,
+            .stat-card {
+                transition: none;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -162,19 +230,19 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-gradient-to-br from-radiant-red to-radiant-orange rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 bg-gradient-to-br from-radiant-red to-radiant-orange rounded-lg flex items-center justify-center" aria-label="RadiantX Logo">
                         <span class="font-bold text-sm">RX</span>
                     </div>
                     <span class="font-bold text-xl tracking-tight">RadiantX</span>
                 </div>
-                <nav class="hidden md:flex items-center gap-8">
+                <nav class="hidden md:flex items-center gap-8" role="navigation" aria-label="Main navigation">
                     <a href="#" class="text-sm text-radiant-gray hover:text-white transition-colors">Dashboard</a>
                     <a href="#" class="text-sm text-radiant-gray hover:text-white transition-colors">Matches</a>
                     <a href="#" class="text-sm text-radiant-gray hover:text-white transition-colors">Players</a>
                     <a href="#" class="text-sm text-radiant-gray hover:text-white transition-colors">Teams</a>
                 </nav>
                 <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 px-3 py-1.5 bg-radiant-red/10 border border-radiant-red/30 rounded-full">
+                    <div class="flex items-center gap-2 px-3 py-1.5 bg-radiant-red/10 border border-radiant-red/30 rounded-full" aria-live="polite">
                         <div class="w-2 h-2 bg-radiant-red rounded-full live-dot"></div>
                         <span class="text-xs font-medium text-radiant-red">LIVE</span>
                     </div>
@@ -186,7 +254,7 @@
     <!-- Main Content -->
     <main class="pt-16">
         <!-- Hero Section with SATOR Sphere -->
-        <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden" aria-labelledby="hero-heading">
             <!-- Background gradient -->
             <div class="absolute inset-0 bg-gradient-to-b from-radiant-black via-radiant-card/30 to-radiant-black"></div>
             
@@ -195,7 +263,7 @@
                     <!-- Left: Text content -->
                     <div class="text-center lg:text-left">
                         <p class="text-radiant-cyan text-sm font-mono tracking-widest uppercase mb-4">Esports Analytics Platform</p>
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                        <h1 id="hero-heading" class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                             Decode the
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-radiant-red to-radiant-orange">Game</span>
                         </h1>
@@ -203,10 +271,10 @@
                             Advanced analytics for Valorant and CS. Real-time match data, player performance metrics, and predictive insights.
                         </p>
                         <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
-                            <button class="px-6 py-3 bg-radiant-red hover:bg-radiant-red/90 text-white font-medium rounded-lg transition-all hover:shadow-lg hover:shadow-radiant-red/25">
+                            <button class="px-6 py-3 bg-radiant-red hover:bg-radiant-red/90 text-white font-medium rounded-lg transition-all hover:shadow-lg hover:shadow-radiant-red/25" aria-label="View live matches">
                                 View Matches
                             </button>
-                            <button class="px-6 py-3 bg-radiant-card hover:bg-radiant-border text-white font-medium rounded-lg border border-radiant-border transition-all">
+                            <button class="px-6 py-3 bg-radiant-card hover:bg-radiant-border text-white font-medium rounded-lg border border-radiant-border transition-all" aria-label="Explore esports data">
                                 Explore Data
                             </button>
                         </div>
@@ -231,7 +299,7 @@
                     <!-- Right: SATOR Sphere -->
                     <div class="relative flex items-center justify-center">
                         <div class="w-full max-w-[400px] aspect-square">
-                            <svg class="sator-sphere" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="sator-sphere" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SATOR Sphere - 5-Layer Palindrome Visualization">
                                 <defs>
                                     <radialGradient id="sphereDepth" cx="30%" cy="30%">
                                         <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/>
@@ -257,94 +325,94 @@
 
                                 <!-- SATOR Upper Hemisphere -->
                                 <!-- Row 1: S -->
-                                <g class="facet facet-s" data-letter="S">
+                                <g class="facet facet-s" data-letter="S" tabindex="0" role="button" aria-label="S facet">
                                     <polygon points="200,45 188,65 212,65"/>
                                     <text x="200" y="60" class="facet-letter">S</text>
                                 </g>
 
                                 <!-- Row 2: A A -->
-                                <g class="facet facet-a" data-letter="A">
+                                <g class="facet facet-a" data-letter="A" tabindex="0" role="button" aria-label="A facet">
                                     <polygon points="188,65 170,90 188,90"/>
                                     <text x="179" y="84" class="facet-letter light">A</text>
                                 </g>
-                                <g class="facet facet-a" data-letter="A">
+                                <g class="facet facet-a" data-letter="A" tabindex="0" role="button" aria-label="A facet">
                                     <polygon points="212,65 212,90 230,90"/>
                                     <text x="221" y="84" class="facet-letter light">A</text>
                                 </g>
 
                                 <!-- Row 3: T R T -->
-                                <g class="facet facet-t" data-letter="T">
+                                <g class="facet facet-t" data-letter="T" tabindex="0" role="button" aria-label="T facet">
                                     <polygon points="170,90 148,120 175,120"/>
                                     <text x="164" y="112" class="facet-letter">T</text>
                                 </g>
-                                <g class="facet facet-r" data-letter="R">
+                                <g class="facet facet-r" data-letter="R" tabindex="0" role="button" aria-label="R facet">
                                     <polygon points="188,90 175,120 200,120"/>
                                     <text x="188" y="110" class="facet-letter">R</text>
                                 </g>
-                                <g class="facet facet-t" data-letter="T">
+                                <g class="facet facet-t" data-letter="T" tabindex="0" role="button" aria-label="T facet">
                                     <polygon points="212,90 200,120 225,120"/>
                                     <text x="212" y="110" class="facet-letter">T</text>
                                 </g>
 
                                 <!-- Row 4: O E E O -->
-                                <g class="facet facet-o" data-letter="O">
+                                <g class="facet facet-o" data-letter="O" tabindex="0" role="button" aria-label="O facet">
                                     <polygon points="148,120 125,155 155,155"/>
                                     <text x="143" y="148" class="facet-letter">O</text>
                                 </g>
-                                <g class="facet facet-e" data-letter="E">
+                                <g class="facet facet-e" data-letter="E" tabindex="0" role="button" aria-label="E facet">
                                     <polygon points="175,120 155,155 185,155"/>
                                     <text x="172" y="148" class="facet-letter light">E</text>
                                 </g>
-                                <g class="facet facet-e" data-letter="E">
+                                <g class="facet facet-e" data-letter="E" tabindex="0" role="button" aria-label="E facet">
                                     <polygon points="200,120 185,155 215,155"/>
                                     <text x="200" y="148" class="facet-letter light">E</text>
                                 </g>
-                                <g class="facet facet-o" data-letter="O">
+                                <g class="facet facet-o" data-letter="O" tabindex="0" role="button" aria-label="O facet">
                                     <polygon points="225,120 215,155 245,155"/>
                                     <text x="232" y="148" class="facet-letter">O</text>
                                 </g>
 
                                 <!-- Row 5: R P N P R (Equator) -->
-                                <g class="facet facet-r" data-letter="R">
+                                <g class="facet facet-r" data-letter="R" tabindex="0" role="button" aria-label="R facet">
                                     <polygon points="125,155 100,195 135,195"/>
                                     <text x="120" y="185" class="facet-letter">R</text>
                                 </g>
-                                <g class="facet facet-p" data-letter="P">
+                                <g class="facet facet-p" data-letter="P" tabindex="0" role="button" aria-label="P facet">
                                     <polygon points="155,155 135,195 170,195"/>
                                     <text x="153" y="185" class="facet-letter">P</text>
                                 </g>
-                                <g class="facet facet-n" data-letter="N">
+                                <g class="facet facet-n" data-letter="N" tabindex="0" role="button" aria-label="N facet - Center">
                                     <polygon points="185,155 170,195 200,195" filter="url(#glow)"/>
                                     <text x="185" y="182" class="facet-letter light">N</text>
                                 </g>
-                                <g class="facet facet-p" data-letter="P">
+                                <g class="facet facet-p" data-letter="P" tabindex="0" role="button" aria-label="P facet">
                                     <polygon points="215,155 200,195 230,195"/>
                                     <text x="215" y="185" class="facet-letter">P</text>
                                 </g>
-                                <g class="facet facet-r" data-letter="R">
+                                <g class="facet facet-r" data-letter="R" tabindex="0" role="button" aria-label="R facet">
                                     <polygon points="245,155 230,195 265,195"/>
                                     <text x="250" y="185" class="facet-letter">R</text>
                                 </g>
 
                                 <!-- ROTAS Lower Hemisphere (reflected) -->
                                 <!-- Row 6: R O T A S -->
-                                <g class="facet facet-r" data-letter="R" opacity="0.7">
+                                <g class="facet facet-r" data-letter="R" opacity="0.7" tabindex="0" role="button" aria-label="R facet">
                                     <polygon points="100,195 125,235 135,205"/>
                                     <text x="118" y="215" class="facet-letter">R</text>
                                 </g>
-                                <g class="facet facet-o" data-letter="O" opacity="0.7">
+                                <g class="facet facet-o" data-letter="O" opacity="0.7" tabindex="0" role="button" aria-label="O facet">
                                     <polygon points="135,195 155,235 170,205"/>
                                     <text x="152" y="215" class="facet-letter">O</text>
                                 </g>
-                                <g class="facet facet-t" data-letter="T" opacity="0.7">
+                                <g class="facet facet-t" data-letter="T" opacity="0.7" tabindex="0" role="button" aria-label="T facet">
                                     <polygon points="170,195 185,235 200,205"/>
                                     <text x="182" y="215" class="facet-letter">T</text>
                                 </g>
-                                <g class="facet facet-a" data-letter="A" opacity="0.7">
+                                <g class="facet facet-a" data-letter="A" opacity="0.7" tabindex="0" role="button" aria-label="A facet">
                                     <polygon points="200,195 215,235 230,205"/>
                                     <text x="212" y="215" class="facet-letter light">A</text>
                                 </g>
-                                <g class="facet facet-s" data-letter="S" opacity="0.7">
+                                <g class="facet facet-s" data-letter="S" opacity="0.7" tabindex="0" role="button" aria-label="S facet">
                                     <polygon points="230,195 245,235 265,205"/>
                                     <text x="248" y="215" class="facet-letter">S</text>
                                 </g>
@@ -365,20 +433,20 @@
         </section>
 
         <!-- Stats Overview -->
-        <section class="py-16 border-t border-radiant-border">
+        <section class="py-16 border-t border-radiant-border" aria-labelledby="matches-heading">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-2xl font-bold">Live Matches</h2>
+                    <h2 id="matches-heading" class="text-2xl font-bold">Live Matches</h2>
                     <a href="#" class="text-sm text-radiant-cyan hover:text-radiant-cyan/80 transition-colors">View All →</a>
                 </div>
                 
                 <!-- Match cards grid -->
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Match 1 -->
-                    <div class="stat-card bg-radiant-card rounded-xl p-6 border border-radiant-border">
+                    <article class="stat-card bg-radiant-card rounded-xl p-6 border border-radiant-border">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
-                                <div class="w-2 h-2 bg-radiant-red rounded-full live-dot"></div>
+                                <div class="w-2 h-2 bg-radiant-red rounded-full live-dot" aria-hidden="true"></div>
                                 <span class="text-xs text-radiant-red font-medium uppercase">Live</span>
                             </div>
                             <span class="text-xs text-radiant-gray">VCT Masters</span>
@@ -401,13 +469,13 @@
                             <span>Round 18/24</span>
                             <span>12:34 elapsed</span>
                         </div>
-                    </div>
+                    </article>
 
                     <!-- Match 2 -->
-                    <div class="stat-card bg-radiant-card rounded-xl p-6 border border-radiant-border">
+                    <article class="stat-card bg-radiant-card rounded-xl p-6 border border-radiant-border">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
-                                <div class="w-2 h-2 bg-radiant-green rounded-full"></div>
+                                <div class="w-2 h-2 bg-radiant-green rounded-full" aria-hidden="true"></div>
                                 <span class="text-xs text-radiant-green font-medium uppercase">Finished</span>
                             </div>
                             <span class="text-xs text-radiant-gray">VCT Americas</span>
@@ -430,13 +498,13 @@
                             <span>Final</span>
                             <span>45:12 duration</span>
                         </div>
-                    </div>
+                    </article>
 
                     <!-- Match 3 -->
-                    <div class="stat-card bg-radiant-card rounded-xl p-6 border border-radiant-border">
+                    <article class="stat-card bg-radiant-card rounded-xl p-6 border border-radiant-border">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
-                                <div class="w-2 h-2 bg-radiant-orange rounded-full animate-pulse"></div>
+                                <div class="w-2 h-2 bg-radiant-orange rounded-full animate-pulse" aria-hidden="true"></div>
                                 <span class="text-xs text-radiant-orange font-medium uppercase">Upcoming</span>
                             </div>
                             <span class="text-xs text-radiant-gray">VCT Pacific</span>
@@ -459,19 +527,19 @@
                             <span>Starts in 2h 15m</span>
                             <span>Bind / Split</span>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
         <!-- Top Players -->
-        <section class="py-16 border-t border-radiant-border">
+        <section class="py-16 border-t border-radiant-border" aria-labelledby="players-heading">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-2xl font-bold">Top Performers</h2>
+                    <h2 id="players-heading" class="text-2xl font-bold">Top Performers</h2>
                     <div class="flex gap-2">
-                        <button class="px-3 py-1.5 text-xs bg-radiant-red text-white rounded-lg">VCT 2024</button>
-                        <button class="px-3 py-1.5 text-xs bg-radiant-card text-radiant-gray rounded-lg border border-radiant-border">All Time</button>
+                        <button class="px-3 py-1.5 text-xs bg-radiant-red text-white rounded-lg" aria-pressed="true">VCT 2024</button>
+                        <button class="px-3 py-1.5 text-xs bg-radiant-card text-radiant-gray rounded-lg border border-radiant-border" aria-pressed="false">All Time</button>
                     </div>
                 </div>
 
@@ -494,7 +562,7 @@
                                 <tr class="border-b border-radiant-border/50 hover:bg-white/5 transition-colors">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-radiant-gold to-radiant-orange flex items-center justify-center font-bold text-sm">1</div>
+                                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-radiant-gold to-radiant-orange flex items-center justify-center font-bold text-sm" aria-hidden="true">1</div>
                                             <div>
                                                 <p class="font-medium">TenZ</p>
                                                 <p class="text-xs text-radiant-gray">Duelist</p>
@@ -513,7 +581,7 @@
                                 <tr class="border-b border-radiant-border/50 hover:bg-white/5 transition-colors">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-radiant-card border border-radiant-border flex items-center justify-center font-bold text-sm">2</div>
+                                            <div class="w-10 h-10 rounded-full bg-radiant-card border border-radiant-border flex items-center justify-center font-bold text-sm" aria-hidden="true">2</div>
                                             <div>
                                                 <p class="font-medium">aspas</p>
                                                 <p class="text-xs text-radiant-gray">Duelist</p>
@@ -532,7 +600,7 @@
                                 <tr class="border-b border-radiant-border/50 hover:bg-white/5 transition-colors">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-radiant-card border border-radiant-border flex items-center justify-center font-bold text-sm">3</div>
+                                            <div class="w-10 h-10 rounded-full bg-radiant-card border border-radiant-border flex items-center justify-center font-bold text-sm" aria-hidden="true">3</div>
                                             <div>
                                                 <p class="font-medium">Derke</p>
                                                 <p class="text-xs text-radiant-gray">Duelist</p>
@@ -551,7 +619,7 @@
                                 <tr class="hover:bg-white/5 transition-colors">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-radiant-card border border-radiant-border flex items-center justify-center font-bold text-sm">4</div>
+                                            <div class="w-10 h-10 rounded-full bg-radiant-card border border-radiant-border flex items-center justify-center font-bold text-sm" aria-hidden="true">4</div>
                                             <div>
                                                 <p class="font-medium">yay</p>
                                                 <p class="text-xs text-radiant-gray">Duelist</p>
@@ -579,31 +647,23 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-6 h-6 bg-gradient-to-br from-radiant-red to-radiant-orange rounded flex items-center justify-center">
+                        <div class="w-6 h-6 bg-gradient-to-br from-radiant-red to-radiant-orange rounded flex items-center justify-center" aria-hidden="true">
                             <span class="font-bold text-xs">RX</span>
                         </div>
                         <span class="text-sm text-radiant-gray">© 2024 RadiantX. All rights reserved.</span>
                     </div>
-                    <div class="flex items-center gap-6 text-sm text-radiant-gray">
+                    <nav class="flex items-center gap-6 text-sm text-radiant-gray" aria-label="Footer navigation">
                         <a href="#" class="hover:text-white transition-colors">About</a>
                         <a href="#" class="hover:text-white transition-colors">API</a>
                         <a href="#" class="hover:text-white transition-colors">GitHub</a>
                         <a href="#" class="hover:text-white transition-colors">Twitter</a>
-                    </div>
+                    </nav>
                 </div>
             </div>
         </footer>
     </main>
 
-    <script>
-        // Simple interaction for SATOR Sphere facets
-        document.querySelectorAll('.facet').forEach(facet => {
-            facet.addEventListener('click', function() {
-                const letter = this.getAttribute('data-letter');
-                console.log('Clicked:', letter);
-                // Could expand to show detailed info about each layer
-            });
-        });
-    </script>
+    <!-- Main JavaScript -->
+    <script src="assets/js/main.js" defer></script>
 </body>
 </html>
