@@ -18,17 +18,12 @@ export function usePlayerList(
     data: searchData,
     isLoading: isSearchLoading,
     error: searchError,
-  } = usePlayerSearch(searchQuery, {
-    enabled: searchQuery.length >= 2,
-  });
+  } = usePlayerSearch(searchQuery);
 
   const {
     data: listData,
     isLoading: isListLoading,
     error: listError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
   } = usePlayersQuery(filters, page * pageSize, pageSize);
 
   // Determine which data to use
@@ -79,10 +74,10 @@ export function usePlayerList(
 
   // Pagination handlers
   const nextPage = useCallback(() => {
-    if (!isSearching && hasNextPage) {
+    if (!isSearching) {
       setPage((p) => p + 1);
     }
-  }, [isSearching, hasNextPage]);
+  }, [isSearching]);
 
   const prevPage = useCallback(() => {
     setPage((p) => Math.max(0, p - 1));
@@ -118,9 +113,6 @@ export function usePlayerList(
     nextPage,
     prevPage,
     goToPage,
-    hasNextPage: isSearching ? false : hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
 
     // State
     isSearching,

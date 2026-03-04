@@ -9,8 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write          # Allow Kimi agents to push changes
       deployments: write
+      pull-requests: write     # Allow Kimi agents to create PRs
+      issues: write            # Allow Kimi agents to create tracking issues
     steps:
       - name: Checkout
         uses: actions/checkout@v4

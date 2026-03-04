@@ -1,0 +1,95 @@
+# =============================================================================
+# SATOR / eSports-EXE CODEOWNERS
+# Defines who has authority over different parts of the codebase
+# =============================================================================
+
+# Default owners for everything in the repo
+* @notbleaux
+
+# =============================================================================
+# Core Infrastructure & Configuration
+# =============================================================================
+
+# GitHub Actions workflows - Require admin approval
+/.github/workflows/ @notbleaux
+/.github/CODEOWNERS @notbleaux
+
+# Kimi agent configuration
+/.kimi/ @notbleaux
+/.vscode/kimi-settings.json @notbleaux
+
+# Repository documentation at root
+/*.md @notbleaux
+/PATCH_REPORTS/ @notbleaux
+
+# =============================================================================
+# Data Partition Firewall (CRITICAL SECURITY)
+# =============================================================================
+
+# Firewall middleware - Changes require security review
+/shared/axiom-esports-data/api/src/middleware/firewall.py @notbleaux
+/shared/packages/data-partition-lib/ @notbleaux
+
+# =============================================================================
+# API Layer
+# =============================================================================
+
+# FastAPI main entry point
+/shared/axiom-esports-data/api/main.py @notbleaux
+/shared/axiom-esports-data/api/src/routes/ @notbleaux
+/shared/axiom-esports-data/api/src/schemas/ @notbleaux
+
+# =============================================================================
+# Data Pipeline
+# =============================================================================
+
+# Pipeline orchestrator - Core data processing
+/shared/axiom-esports-data/pipeline/orchestrator.py @notbleaux
+/shared/axiom-esports-data/pipeline/coordinator/ @notbleaux
+
+# =============================================================================
+# Frontend Applications
+# =============================================================================
+
+# React web application
+/shared/apps/sator-web/ @notbleaux
+/website/ @notbleaux
+
+# =============================================================================
+# Game Simulation (Godot)
+# =============================================================================
+
+# Godot game files
+/simulation-game/ @notbleaux
+/shared/apps/radiantx-game/ @notbleaux
+
+# =============================================================================
+# Database & Infrastructure
+# =============================================================================
+
+# Database migrations
+/shared/axiom-esports-data/infrastructure/migrations/ @notbleaux
+
+# =============================================================================
+# Environment & Secrets
+# =============================================================================
+
+# Environment files - Never commit secrets
+/.env* @notbleaux
+/shared/axiom-esports-data/.env* @notbleaux
+/shared/apps/sator-web/.env* @notbleaux
+
+# =============================================================================
+# Deployment Configuration
+# =============================================================================
+
+/render.yaml @notbleaux
+/vercel.json @notbleaux
+
+# =============================================================================
+# Kimi Agent Generated Code
+# =============================================================================
+
+# Any files marked as agent-generated should be reviewed
+**/*agent-generated* @notbleaux
+**/*agent_generated* @notbleaux

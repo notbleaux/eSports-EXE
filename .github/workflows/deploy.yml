@@ -6,9 +6,12 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write          # Allow Kimi agents to push changes
   pages: write
   id-token: write
+  pull-requests: write     # Allow Kimi agents to create PRs
+  issues: write            # Allow Kimi agents to create tracking issues
+  actions: write           # Allow Kimi agents to trigger workflows
 
 concurrency:
   group: "pages"

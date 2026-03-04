@@ -1,5 +1,5 @@
-import { Github, Twitter, MessageCircle, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Github, Twitter, Discord } from 'lucide-react';
 
 const footerLinks = {
   platform: [
@@ -9,14 +9,14 @@ const footerLinks = {
     { label: 'Analytics', href: '/analytics' },
   ],
   resources: [
-    { label: 'API Documentation', href: '/docs/api' },
-    { label: 'Data Dictionary', href: '/docs/data' },
-    { label: 'SATOR Architecture', href: '/docs/architecture' },
+    { label: 'Documentation', href: '/docs' },
+    { label: 'API Reference', href: '/api' },
+    { label: 'GitHub', href: 'https://github.com', external: true },
   ],
   community: [
-    { label: 'GitHub', href: 'https://github.com', icon: Github },
-    { label: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-    { label: 'Discord', href: 'https://discord.com', icon: MessageCircle },
+    { label: 'Twitter', href: 'https://twitter.com', external: true, icon: Twitter },
+    { label: 'Discord', href: 'https://discord.com', external: true, icon: Discord },
+    { label: 'GitHub', href: 'https://github.com', external: true, icon: Github },
   ],
 };
 
@@ -24,21 +24,21 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-radiant-border bg-radiant-black lg:ml-64">
+    <footer className="bg-radiant-black border-t border-radiant-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-radiant-red to-radiant-orange rounded-lg flex items-center justify-center">
-                <span className="font-bold text-sm">S</span>
+          <div className="lg:col-span-1">
+            <Link to="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-radiant-red rounded-lg flex items-center justify-center">
+                <span className="font-bold text-white">S</span>
               </div>
-              <span className="font-bold text-xl">SATOR</span>
+              <span className="font-mono font-bold text-xl">SATOR</span>
             </Link>
-            <p className="text-sm text-radiant-gray mb-4">
+            <p className="text-radiant-gray text-sm leading-relaxed">
               Advanced esports analytics platform powered by the SATOR engine.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mt-4">
               {footerLinks.community.map((link) => {
                 const Icon = link.icon;
                 return (
@@ -48,7 +48,6 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-radiant-gray hover:text-white transition-colors"
-                    aria-label={link.label}
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -59,13 +58,13 @@ export function Footer() {
 
           {/* Platform Links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Platform</h3>
+            <h3 className="font-semibold text-white mb-4">Platform</h3>
             <ul className="space-y-2">
               {footerLinks.platform.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-sm text-radiant-gray hover:text-white transition-colors"
+                    className="text-radiant-gray hover:text-white text-sm transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -76,19 +75,21 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Resources</h3>
+            <h3 className="font-semibold text-white mb-4">Resources</h3>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-sm text-radiant-gray hover:text-white transition-colors inline-flex items-center gap-1"
+                  <a
+                    href={link.href}
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                    className="text-radiant-gray hover:text-white text-sm transition-colors inline-flex items-center gap-1"
                   >
                     {link.label}
-                    {link.href.startsWith('http') && (
-                      <ExternalLink className="w-3 h-3" />
+                    {link.external && (
+                      <span className="text-xs">↗</span>
                     )}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -96,36 +97,33 @@ export function Footer() {
 
           {/* Newsletter / Updates */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Stay Updated</h3>
-            <p className="text-sm text-radiant-gray mb-4">
+            <h3 className="font-semibold text-white mb-4">Stay Updated</h3>
+            <p className="text-radiant-gray text-sm mb-4">
               Get the latest analytics updates and features.
             </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+            <div className="flex gap-2">
               <input
                 type="email"
-                placeholder="Email address"
-                className="flex-1 px-3 py-2 bg-radiant-card border border-radiant-border rounded-lg text-sm placeholder-radiant-gray focus:outline-none focus:border-radiant-red/50"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-2 bg-radiant-card border border-radiant-border rounded-lg text-white placeholder-radiant-gray text-sm focus:outline-none focus:border-radiant-red/50"
               />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-radiant-red hover:bg-radiant-red/90 text-white text-sm font-medium rounded-lg transition-colors"
-              >
+              <button className="px-4 py-2 bg-radiant-red hover:bg-radiant-red/90 text-white text-sm font-medium rounded-lg transition-colors">
                 Subscribe
               </button>
-            </form>
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-radiant-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-radiant-gray">
+        <div className="border-t border-radiant-border mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-radiant-gray text-sm">
             © {currentYear} SATOR Analytics. All rights reserved.
           </p>
-          <div className="flex items-center gap-6 text-sm text-radiant-gray">
-            <Link to="/privacy" className="hover:text-white transition-colors">
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="text-radiant-gray hover:text-white text-sm transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="hover:text-white transition-colors">
+            <Link to="/terms" className="text-radiant-gray hover:text-white text-sm transition-colors">
               Terms of Service
             </Link>
           </div>

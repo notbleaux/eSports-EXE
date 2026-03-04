@@ -10,17 +10,10 @@ export function PlayerDetailPage() {
     data: player,
     isLoading: playerLoading,
     error: playerError,
-  } = usePlayer(id || '', {
-    enabled: !!id,
-  });
+  } = usePlayer(id || '');
 
-  const { data: simRating, isLoading: simRatingLoading } = useSimRating(id || '', undefined, {
-    enabled: !!id,
-  });
-
-  const { data: rar, isLoading: rarLoading } = useRAR(id || '', {
-    enabled: !!id,
-  });
+  const { data: simRating, isLoading: simRatingLoading } = useSimRating(id || '');
+  const { data: rar, isLoading: rarLoading } = useRAR(id || '');
 
   if (playerLoading) {
     return (

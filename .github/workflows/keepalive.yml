@@ -20,6 +20,9 @@ jobs:
   ping:
     name: Ping API Health Endpoint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write            # Allow creating issues if API is down
 
     steps:
       - name: Ping API Health Endpoint

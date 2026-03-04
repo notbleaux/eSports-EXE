@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Users, MapPin, Calendar, TrendingUp, Target, Award } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Target, Award, Users } from 'lucide-react';
 import type { ExtendedPlayer, SimRatingBreakdown, RARResponse } from '../../types';
 import { SimRatingChart } from '../Analytics/SimRatingChart';
 import { StatsTable } from '../Analytics/StatsTable';
@@ -15,14 +15,14 @@ export function PlayerDetail({
   player,
   simRating,
   rar,
-  isLoadingAnalytics = false,
+  isLoadingAnalytics,
 }: PlayerDetailProps) {
   return (
     <div className="space-y-6">
       {/* Back Navigation */}
       <Link
         to="/players"
-        className="inline-flex items-center gap-2 text-sm text-radiant-gray hover:text-white transition-colors"
+        className="inline-flex items-center gap-2 text-radiant-gray hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Players
@@ -30,25 +30,20 @@ export function PlayerDetail({
 
       {/* Player Header */}
       <div className="stat-card p-6">
-        <div className="flex flex-col md:flex-row md:items-center gap-6">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-radiant-red to-radiant-orange flex items-center justify-center text-3xl font-bold">
-            {player.name.charAt(0).toUpperCase()}
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+          {/* Avatar */}
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-radiant-red/30 to-radiant-orange/30 border-2 border-radiant-red/50 flex items-center justify-center">
+            <span className="text-3xl font-bold">
+              {player.name.charAt(0).toUpperCase()}
+            </span>
           </div>
+
+          {/* Info */}
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold">{player.name}</h1>
               {player.investment_grade && (
-                <span
-                  className={`inline-flex items-center px-3 py-1 text-sm font-bold rounded ${
-                    player.investment_grade === 'A+'
-                      ? 'bg-radiant-gold/20 text-radiant-gold'
-                      : player.investment_grade === 'A'
-                      ? 'bg-radiant-cyan/20 text-radiant-cyan'
-                      : player.investment_grade === 'B'
-                      ? 'bg-radiant-green/20 text-radiant-green'
-                      : 'bg-radiant-gray/20 text-radiant-gray'
-                  }`}
-                >
+                <span className="badge-gold">
                   Grade {player.investment_grade}
                 </span>
               )}
@@ -62,7 +57,7 @@ export function PlayerDetail({
               )}
               {player.region && (
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
+                  <Target className="w-4 h-4" />
                   {player.region}
                 </span>
               )}
@@ -74,47 +69,35 @@ export function PlayerDetail({
               )}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Key Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard
-          label="ACS"
-          value={player.acs?.toFixed(1) || '-'}
-          icon={Target}
-          color="cyan"
-        />
-        <StatCard
-          label="ADR"
-          value={player.adr?.toFixed(1) || '-'}
-          icon={TrendingUp}
-          color="red"
-        />
-        <StatCard
-          label="KAST%"
-          value={player.kast_pct ? `${player.kast_pct.toFixed(1)}%` : '-'}
-          icon={Calendar}
-          color="gold"
-        />
-        <StatCard
-          label="Maps"
-          value={player.map_count?.toString() || '-'}
-          icon={MapPin}
-          color="green"
-        />
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 gap-4">
+            <StatCard
+              label="ACS"
+              value={player.acs?.toFixed(0) || '-'}
+              icon={TrendingUp}
+              color="cyan"
+            />
+            <StatCard
+              label="Rating"
+              value={player.sim_rating?.toFixed(2) || '-'}
+              icon={Target}
+              color="gold"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Analytics Section */}
       <div className="grid lg:grid-cols-2 gap-6">
         {/* SimRating Chart */}
         <div className="stat-card p-6">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Target className="w-5 h-5 text-radiant-cyan" />
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Target className="w-5 h-5 text-radiant-red" />
             SimRating Breakdown
           </h2>
           {isLoadingAnalytics ? (
-            <div className="h-64 skeleton" />
+            <div className="h-64 skeleton rounded-lg" />
           ) : simRating ? (
             <SimRatingChart data={simRating} />
           ) : (
@@ -126,32 +109,47 @@ export function PlayerDetail({
 
         {/* RAR Score */}
         <div className="stat-card p-6">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-radiant-gold" />
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-radiant-cyan" />
             Role-Adjusted Value
           </h2>
           {isLoadingAnalytics ? (
-            <div className="h-64 skeleton" />
+            <div className="h-64 skeleton rounded-lg" />
           ) : rar ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-radiant-black rounded-lg">
-                <span className="text-radiant-gray">RAR Score</span>
-                <span className="text-2xl font-mono font-bold text-radiant-gold">
+            <div className="space-y-6">
+              <div className="text-center p-6 bg-radiant-black rounded-lg">
+                <p className="text-sm text-radiant-gray mb-1">RAR Score</p>
+                <p className="text-5xl font-mono font-bold text-radiant-cyan">
                   {rar.rar_score.toFixed(2)}
-                </span>
+                </p>
+                <p className="text-sm text-radiant-gray mt-2">
+                  Value above replacement level
+                </p>
               </div>
-              <div className="flex items-center justify-between p-4 bg-radiant-black rounded-lg">
-                <span className="text-radiant-gray">Raw Rating</span>
-                <span className="font-mono">{rar.raw_rating.toFixed(2)}</span>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-radiant-black rounded-lg text-center">
+                  <p className="text-xs text-radiant-gray mb-1">Raw Rating</p>
+                  <p className="text-xl font-mono font-semibold">
+                    {rar.raw_rating.toFixed(2)}
+                  </p>
+                </div>
+                <div className="p-4 bg-radiant-black rounded-lg text-center">
+                  <p className="text-xs text-radiant-gray mb-1">
+                    Replacement Level
+                  </p>
+                  <p className="text-xl font-mono font-semibold">
+                    {rar.replacement_level.toFixed(2)}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center justify-between p-4 bg-radiant-black rounded-lg">
-                <span className="text-radiant-gray">Replacement Level</span>
-                <span className="font-mono">{rar.replacement_level.toFixed(2)}</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-radiant-black rounded-lg">
-                <span className="text-radiant-gray">Role</span>
-                <span className="font-medium">{rar.role}</span>
-              </div>
+              {rar.investment_grade && (
+                <div className="flex items-center justify-center gap-2 p-3 bg-radiant-gold/10 border border-radiant-gold/30 rounded-lg">
+                  <Award className="w-5 h-5 text-radiant-gold" />
+                  <span className="text-radiant-gold font-medium">
+                    Investment Grade: {rar.investment_grade}
+                  </span>
+                </div>
+              )}
             </div>
           ) : (
             <p className="text-radiant-gray text-center py-8">
@@ -163,7 +161,7 @@ export function PlayerDetail({
 
       {/* Detailed Stats Table */}
       <div className="stat-card p-6">
-        <h2 className="text-lg font-semibold mb-4">Performance Statistics</h2>
+        <h2 className="text-xl font-bold mb-4">Performance Statistics</h2>
         <StatsTable player={player} />
       </div>
     </div>
@@ -186,13 +184,9 @@ function StatCard({ label, value, icon: Icon, color }: StatCardProps) {
   };
 
   return (
-    <div className="stat-card p-4">
-      <div className="flex items-center gap-3 mb-2">
-        <div className={`p-2 rounded-lg ${colorClasses[color]}`}>
-          <Icon className="w-4 h-4" />
-        </div>
-        <span className="text-sm text-radiant-gray">{label}</span>
-      </div>
+    <div className={`p-4 rounded-lg ${colorClasses[color]}`}>
+      <Icon className="w-5 h-5 mb-2" />
+      <p className="text-xs opacity-80 mb-1">{label}</p>
       <p className="text-2xl font-mono font-bold">{value}</p>
     </div>
   );

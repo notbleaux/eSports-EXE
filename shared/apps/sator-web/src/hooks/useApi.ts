@@ -1,19 +1,28 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  getHealth,
-  getPlayers,
-  getPlayer,
-  getSimRating,
-  getRAR,
-  getInvestmentGrade,
-  getMatch,
-  getSatorEvents,
-  type PlayerListResponse,
-  type Player,
-  type SimRatingResponse,
-  type RARResponse,
-  type InvestmentGradeResponse,
-} from '../lib/api'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
+import type {
+  ExtendedPlayer,
+  PlayerListResponse,
+  ExtendedMatch,
+  SimRatingBreakdown,
+  RARResponse,
+  InvestmentGradeResponse,
+  DashboardStats,
+  PlayerFilters,
+  MatchFilters,
+} from '../types';
+
+// API Configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+// Create axios instance
+const apiClient: AxiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000,
+});
 
 // Query keys for cache management
 export const queryKeys = {
@@ -23,103 +32,143 @@ export const queryKeys = {
   simRating: (id: string, season?: string) => ['simRating', id, season] as const,
   rar: (id: string) => ['rar', id] as const,
   investment: (id: string) => ['investment', id] as const,
+  matches: ['matches'] as const,
   match: (id: string) => ['match', id] as const,
-  satorEvents: (matchId: string, round: number) => ['satorEvents', matchId, round] as const,
-}
+  dashboardStats: ['dashboardStats'] as const,
+};
 
-/**
- * Hook for API health check
- */
+// Health check
 export function useHealth() {
   return useQuery({
     queryKey: queryKeys.health,
-    queryFn: getHealth,
-    refetchInterval: 30000, // Refetch every 30 seconds
-    retry: 3,
-  })
+    queryFn: async () => {
+      const response = await apiClient.get('/api/health');
+      return response.data;
+    },
+    refetchInterval: 30000,
+  });
 }
 
-/**
- * Hook for fetching players list
- */
-export function usePlayers(params?: {
-  region?: string
-  role?: string
-  min_maps?: number
-  grade?: string
-  limit?: number
-  offset?: number
-}) {
+// Players
+export function usePlayers(filters?: PlayerFilters, offset?: number, limit?: number) {
   return useQuery<PlayerListResponse>({
-    queryKey: [...queryKeys.players, params],
-    queryFn: () => getPlayers(params),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  })
+    queryKey: [...queryKeys.players, filters, offset, limit],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (filters?.region) params.append('region', filters.region);
+      if (filters?.role) params.append('role', filters.role);
+      if (filters?.minMaps) params.append('min_maps', filters.minMaps.toString());
+      if (filters?.grade) params.append('grade', filters.grade);
+      if (offset) params.append('offset', offset.toString());
+      if (limit) params.append('limit', limit.toString());
+
+      const response = await apiClient.get(`/api/players?${params.toString()}`);
+      return response.data;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 }
 
-/**
- * Hook for fetching single player
- */
 export function usePlayer(playerId: string) {
-  return useQuery<Player>({
+  return useQuery<ExtendedPlayer>({
     queryKey: queryKeys.player(playerId),
-    queryFn: () => getPlayer(playerId),
+    queryFn: async () => {
+      const response = await apiClient.get(`/api/players/${playerId}`);
+      return response.data;
+    },
     enabled: !!playerId,
     staleTime: 5 * 60 * 1000,
-  })
+  });
 }
 
-/**
- * Hook for fetching SimRating
- */
+// SimRating
 export function useSimRating(playerId: string, season?: string) {
-  return useQuery<SimRatingResponse>({
+  return useQuery<SimRatingBreakdown>({
     queryKey: queryKeys.simRating(playerId, season),
-    queryFn: () => getSimRating(playerId, season),
+    queryFn: async () => {
+      const params = season ? `?season=${season}` : '';
+      const response = await apiClient.get(`/api/analytics/simrating/${playerId}${params}`);
+      return response.data;
+    },
     enabled: !!playerId,
-  })
+  });
 }
 
-/**
- * Hook for fetching RAR
- */
+// RAR
 export function useRAR(playerId: string) {
   return useQuery<RARResponse>({
     queryKey: queryKeys.rar(playerId),
-    queryFn: () => getRAR(playerId),
+    queryFn: async () => {
+      const response = await apiClient.get(`/api/analytics/rar/${playerId}`);
+      return response.data;
+    },
     enabled: !!playerId,
-  })
+  });
 }
 
-/**
- * Hook for fetching Investment Grade
- */
+// Investment Grade
 export function useInvestmentGrade(playerId: string) {
   return useQuery<InvestmentGradeResponse>({
     queryKey: queryKeys.investment(playerId),
-    queryFn: () => getInvestmentGrade(playerId),
+    queryFn: async () => {
+      const response = await apiClient.get(`/api/analytics/investment/${playerId}`);
+      return response.data;
+    },
     enabled: !!playerId,
-  })
+  });
 }
 
-/**
- * Hook for fetching match data
- */
+// Matches
+export function useMatches(filters?: MatchFilters) {
+  return useQuery<ExtendedMatch[]>({
+    queryKey: [...queryKeys.matches, filters],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (filters?.status) params.append('status', filters.status);
+      if (filters?.map) params.append('map', filters.map);
+      if (filters?.tournament) params.append('tournament', filters.tournament);
+
+      const response = await apiClient.get(`/api/matches?${params.toString()}`);
+      return response.data;
+    },
+    staleTime: 60 * 1000,
+  });
+}
+
 export function useMatch(matchId: string) {
-  return useQuery({
+  return useQuery<ExtendedMatch>({
     queryKey: queryKeys.match(matchId),
-    queryFn: () => getMatch(matchId),
+    queryFn: async () => {
+      const response = await apiClient.get(`/api/matches/${matchId}`);
+      return response.data;
+    },
     enabled: !!matchId,
-  })
+  });
 }
 
-/**
- * Hook for fetching SATOR events
- */
-export function useSatorEvents(matchId: string, roundNumber: number) {
-  return useQuery({
-    queryKey: queryKeys.satorEvents(matchId, roundNumber),
-    queryFn: () => getSatorEvents(matchId, roundNumber),
-    enabled: !!matchId && roundNumber > 0,
-  })
+// Dashboard Stats
+export function useDashboardStats() {
+  return useQuery<DashboardStats>({
+    queryKey: queryKeys.dashboardStats,
+    queryFn: async () => {
+      const response = await apiClient.get('/api/stats/dashboard');
+      return response.data;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 }
+
+// Player Search
+export function usePlayerSearch(query: string) {
+  return useQuery<ExtendedPlayer[]>({
+    queryKey: ['playerSearch', query],
+    queryFn: async () => {
+      const response = await apiClient.get(`/api/players/search?q=${encodeURIComponent(query)}`);
+      return response.data;
+    },
+    enabled: query.length >= 2,
+    staleTime: 60 * 1000,
+  });
+}
+
+export { apiClient };

@@ -1,0 +1,144 @@
+# Cursor IDE Rules for eSports-EXE / SATOR Project
+# These rules apply to Cursor IDE and are compatible with Kimi agent workflows
+
+# =============================================================================
+# PROJECT CONTEXT
+# =============================================================================
+project:
+  name: eSports-EXE
+  type: full-stack-esports-platform
+  repository: notbleaux/eSports-EXE
+
+# =============================================================================
+# CODE STYLE RULES
+# =============================================================================
+
+## Python (Analytics & API)
+python:
+  formatter: black
+  lineLength: 100
+  typeHints: required
+  docstrings: google-style
+  
+## TypeScript/React (Web Frontend)
+typescript:
+  formatter: prettier
+  strictMode: true
+  imports: relative
+  
+## GDScript (Godot Game)
+gdscript:
+  indentation: tabs
+  naming:
+    classes: PascalCase
+    functions: snake_case
+    variables: snake_case
+
+# =============================================================================
+# CRITICAL ARCHITECTURAL RULES
+# =============================================================================
+
+## Data Partition Firewall - NEVER VIOLATE
+firewall:
+  description: Game-internal data must NEVER reach public web
+  gameOnlyFields:
+    - internalAgentState
+    - radarData
+    - detailedReplayFrameData
+    - simulationTick
+    - seedValue
+    - visionConeData
+    - smokeTickData
+    - recoilPattern
+  enforcement: |
+    Always use FantasyDataFilter.sanitizeForWeb() before sending data to API
+
+## Determinism Rules (Game Simulation)
+determinism:
+  description: Simulation must be deterministic
+  rules:
+    - Use seeded RNG only (never randf()/randi())
+    - Fixed 20 TPS timestep (50ms)
+    - No delta-time in simulation logic
+    - Consistent agent/action ordering
+
+## Overfitting Guardrails (Analytics)
+analytics:
+  temporalWall: true
+  adversarialValidation: true
+  confidenceWeighting: true
+
+# =============================================================================
+# FILE PATTERNS
+# =============================================================================
+
+exclude:
+  - "**/.git/**"
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/.godot/**"
+  - "**/__pycache__/**"
+  - "**/.pytest_cache/**"
+  - "**/*.pkl"
+  - "**/*.joblib"
+
+include:
+  - "shared/**/*.py"
+  - "shared/**/*.ts"
+  - "shared/**/*.tsx"
+  - "simulation-game/**/*.gd"
+  - "website/**/*.html"
+  - "website/**/*.css"
+  - "website/**/*.js"
+
+# =============================================================================
+# AGENT WORKFLOW INTEGRATION
+# =============================================================================
+
+agentIntegration:
+  enabled: true
+  compatibleWith: [kimi-code, kimi-agents, kimi-subagents]
+  
+  # When Cursor AI makes changes, it should:
+  workflow:
+    - runLinting: true
+    - runTypeChecking: true
+    - stageChanges: false  # Let Kimi handle git
+    - createCheckpoint: true
+
+# =============================================================================
+# DEPLOYMENT AWARENESS
+# =============================================================================
+
+deployment:
+  platforms:
+    - name: GitHub Pages
+      path: website/
+      workflow: .github/workflows/static.yml
+    - name: Render
+      path: shared/axiom-esports-data/api/
+      config: render.yaml
+    - name: Vercel
+      path: shared/apps/sator-web/
+      config: vercel.json
+
+# =============================================================================
+# SECURITY RULES
+# =============================================================================
+
+security:
+  # Never commit these
+  secrets:
+    - ".env"
+    - ".env.*"
+    - "*.pem"
+    - "*.key"
+    - "secrets.*"
+    - "**/secrets/**"
+  
+  # Check before generating code
+  checkFor:
+    - hardcodedCredentials
+    - exposedApiKeys
+    - sqlInjectionVectors
+    - xssVulnerabilities

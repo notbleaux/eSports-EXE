@@ -1,12 +1,9 @@
 /**
  * SATOR Web Platform Types
- * 
+ *
  * These types extend the base stats-schema types with additional
  * frontend-specific fields and API response types.
  */
-
-// Re-export base types from stats-schema
-export type { Player, Match, Statistics } from '@sator/stats-schema';
 
 // Extended Player type with additional fields from the API
 export interface ExtendedPlayer {
@@ -156,13 +153,13 @@ export interface MatchFilters {
 }
 
 // Sort options
-export type PlayerSortField = 
-  | 'name' 
-  | 'acs' 
-  | 'adr' 
-  | 'kast_pct' 
-  | 'sim_rating' 
-  | 'rar_score' 
+export type PlayerSortField =
+  | 'name'
+  | 'acs'
+  | 'adr'
+  | 'kast_pct'
+  | 'sim_rating'
+  | 'rar_score'
   | 'map_count';
 
 export type SortDirection = 'asc' | 'desc';
