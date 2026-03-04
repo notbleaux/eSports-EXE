@@ -1,0 +1,183 @@
+/**
+ * Porcelain³ Color Tokens
+ * A sophisticated palette of White, Blue, and Gold hues
+ */
+
+:root {
+  /* ========================================
+     WHITE HUES - Porcelain Base
+     ======================================== */
+  
+  /* Pure Porcelain Scale */
+  --porcelain-white-50: #FFFFFF;
+  --porcelain-white-100: #FDFCFA;
+  --porcelain-white-200: #FAF9F7;
+  --porcelain-white-300: #F5F4F2;
+  --porcelain-white-400: #EFEDE9;
+  --porcelain-white-500: #E8E6E2;
+  --porcelain-white-600: #D4D2CE;
+  --porcelain-white-700: #B8B6B2;
+  --porcelain-white-800: #9A9894;
+  --porcelain-white-900: #7A7874;
+
+  /* Warm Porcelain Undertones */
+  --porcelain-cream-50: #FFFBF5;
+  --porcelain-cream-100: #FFF8ED;
+  --porcelain-cream-200: #FFF5E6;
+  --porcelain-cream-300: #FFF0DB;
+  --porcelain-cream-400: #FFE8CC;
+  --porcelain-cream-500: #F5D9B8;
+  --porcelain-cream-600: #E5C4A0;
+  --porcelain-cream-700: #C9A882;
+  --porcelain-cream-800: #A88A68;
+  --porcelain-cream-900: #876C52;
+
+  /* Cool Porcelain Undertones */
+  --porcelain-ivory-50: #FAFCFE;
+  --porcelain-ivory-100: #F5F8FA;
+  --porcelain-ivory-200: #EEF3F6;
+  --porcelain-ivory-300: #E5EDF2;
+  --porcelain-ivory-400: #DAE5EC;
+  --porcelain-ivory-500: #CDDBE3;
+  --porcelain-ivory-600: #B5C7D1;
+  --porcelain-ivory-700: #97ADBA;
+  --porcelain-ivory-800: #78909C;
+  --porcelain-ivory-900: #5D7582;
+
+  /* ========================================
+     BLUE HUES - Lapis & Ceramic
+     ======================================== */
+  
+  /* Lapis Lazuli - Primary Blue */
+  --porcelain-blue-50: #F0F7FF;
+  --porcelain-blue-100: #E0EFFF;
+  --porcelain-blue-200: #C2DFFF;
+  --porcelain-blue-300: #94C8FF;
+  --porcelain-blue-400: #5AA8FF;
+  --porcelain-blue-500: #2B85F5;
+  --porcelain-blue-600: #1565D8;
+  --porcelain-blue-700: #0D4EA8;
+  --porcelain-blue-800: #114082;
+  --porcelain-blue-900: #153968;
+
+  /* Ceramic Teal - Secondary Blue */
+  --porcelain-teal-50: #F0FDFA;
+  --porcelain-teal-100: #CCFBF1;
+  --porcelain-teal-200: #99F6E4;
+  --porcelain-teal-300: #5EEAD4;
+  --porcelain-teal-400: #2DD4BF;
+  --porcelain-teal-500: #14B8A6;
+  --porcelain-teal-600: #0D9488;
+  --porcelain-teal-700: #0F766E;
+  --porcelain-teal-800: #115E59;
+  --porcelain-teal-900: #134E4A;
+
+  /* Midnight - Deep Accent */
+  --porcelain-midnight-50: #F1F5F9;
+  --porcelain-midnight-100: #E2E8F0;
+  --porcelain-midnight-200: #CBD5E1;
+  --porcelain-midnight-300: #94A3B8;
+  --porcelain-midnight-400: #64748B;
+  --porcelain-midnight-500: #475569;
+  --porcelain-midnight-600: #334155;
+  --porcelain-midnight-700: #1E293B;
+  --porcelain-midnight-800: #0F172A;
+  --porcelain-midnight-900: #020617;
+
+  /* ========================================
+     GOLD HUES - Gilded Accents
+     ======================================== */
+  
+  /* Pure Gold - Primary Accent */
+  --porcelain-gold-50: #FFFBEB;
+  --porcelain-gold-100: #FEF3C7;
+  --porcelain-gold-200: #FDE68A;
+  --porcelain-gold-300: #FCD34D;
+  --porcelain-gold-400: #FBBF24;
+  --porcelain-gold-500: #F59E0B;
+  --porcelain-gold-600: #D97706;
+  --porcelain-gold-700: #B45309;
+  --porcelain-gold-800: #92400E;
+  --porcelain-gold-900: #78350F;
+
+  /* Rose Gold - Warm Accent */
+  --porcelain-rose-gold-50: #FFF1F2;
+  --porcelain-rose-gold-100: #FFE4E6;
+  --porcelain-rose-gold-200: #FECDD3;
+  --porcelain-rose-gold-300: #FDA4AF;
+  --porcelain-rose-gold-400: #FB7185;
+  --porcelain-rose-gold-500: #F43F5E;
+  --porcelain-rose-gold-600: #E11D48;
+  --porcelain-rose-gold-700: #BE123C;
+  --porcelain-rose-gold-800: #9F1239;
+  --porcelain-rose-gold-900: #881337;
+
+  /* Champagne - Subtle Accent */
+  --porcelain-champagne-50: #FFFBF0;
+  --porcelain-champagne-100: #FEF5E0;
+  --porcelain-champagne-200: #FCEBC2;
+  --porcelain-champagne-300: #F9DB94;
+  --porcelain-champagne-400: #F5C55A;
+  --porcelain-champagne-500: #EAB130;
+  --porcelain-champagne-600: #CA951B;
+  --porcelain-champagne-700: #A87A1A;
+  --porcelain-champagne-800: #8B641D;
+  --porcelain-champagne-900: #75521D;
+
+  /* ========================================
+     SEMANTIC COLORS
+     ======================================== */
+  
+  /* Background Colors */
+  --porcelain-bg-primary: var(--porcelain-white-50);
+  --porcelain-bg-secondary: var(--porcelain-white-100);
+  --porcelain-bg-tertiary: var(--porcelain-ivory-100);
+  --porcelain-bg-elevated: var(--porcelain-white-50);
+  --porcelain-bg-sunken: var(--porcelain-white-200);
+
+  /* Text Colors */
+  --porcelain-text-primary: var(--porcelain-midnight-900);
+  --porcelain-text-secondary: var(--porcelain-midnight-600);
+  --porcelain-text-tertiary: var(--porcelain-midnight-400);
+  --porcelain-text-inverse: var(--porcelain-white-50);
+
+  /* Accent Colors */
+  --porcelain-accent-primary: var(--porcelain-blue-600);
+  --porcelain-accent-secondary: var(--porcelain-teal-500);
+  --porcelain-accent-tertiary: var(--porcelain-gold-500);
+  --porcelain-accent-rose: var(--porcelain-rose-gold-500);
+
+  /* State Colors */
+  --porcelain-state-success: var(--porcelain-teal-600);
+  --porcelain-state-warning: var(--porcelain-gold-500);
+  --porcelain-state-error: var(--porcelain-rose-gold-600);
+  --porcelain-state-info: var(--porcelain-blue-500);
+
+  /* Interactive Colors */
+  --porcelain-interactive-hover: var(--porcelain-blue-50);
+  --porcelain-interactive-active: var(--porcelain-blue-100);
+  --porcelain-interactive-selected: var(--porcelain-blue-600);
+  --porcelain-interactive-disabled: var(--porcelain-white-500);
+
+  /* Border Colors */
+  --porcelain-border-subtle: var(--porcelain-white-400);
+  --porcelain-border-default: var(--porcelain-white-500);
+  --porcelain-border-strong: var(--porcelain-midnight-300);
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+  --porcelain-bg-primary: var(--porcelain-midnight-900);
+  --porcelain-bg-secondary: var(--porcelain-midnight-800);
+  --porcelain-bg-tertiary: var(--porcelain-midnight-700);
+  --porcelain-bg-elevated: var(--porcelain-midnight-800);
+  --porcelain-bg-sunken: var(--porcelain-midnight-950);
+
+  --porcelain-text-primary: var(--porcelain-white-100);
+  --porcelain-text-secondary: var(--porcelain-white-400);
+  --porcelain-text-tertiary: var(--porcelain-white-600);
+
+  --porcelain-border-subtle: var(--porcelain-midnight-700);
+  --porcelain-border-default: var(--porcelain-midnight-600);
+  --porcelain-border-strong: var(--porcelain-midnight-500);
+}

@@ -1,0 +1,403 @@
+/**
+ * Porcelain³ Quarter Grid Component
+ * A sophisticated 4-quadrant grid layout with quarterly organization
+ */
+
+/* ========================================
+   QUARTER GRID CONTAINER
+   ======================================== */
+
+.quarter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: var(--porcelain-grid-gap-lg);
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  padding: var(--porcelain-container-padding-lg);
+  background: var(--porcelain-bg-secondary);
+  border-radius: var(--porcelain-radius-container);
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 768px) {
+  .quarter-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+    min-height: auto;
+    gap: var(--porcelain-grid-gap-md);
+    padding: var(--porcelain-container-padding-md);
+  }
+}
+
+/* ========================================
+   QUADRANT STYLES
+   ======================================== */
+
+.quarter-grid__quadrant {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--porcelain-card-padding-lg);
+  background: var(--porcelain-bg-primary);
+  border-radius: var(--porcelain-radius-card);
+  box-shadow: var(--porcelain-elevation-card);
+  transition: var(--porcelain-transition-interactive);
+  overflow: hidden;
+}
+
+.quarter-grid__quadrant::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--porcelain-blue-500) 0%,
+    var(--porcelain-gold-400) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--porcelain-duration-swift) var(--porcelain-ease-out);
+}
+
+.quarter-grid__quadrant:hover {
+  box-shadow: var(--porcelain-elevation-card-hover);
+  transform: translateY(-2px);
+}
+
+.quarter-grid__quadrant:hover::before {
+  opacity: 1;
+}
+
+/* Quadrant Variants by Position */
+.quarter-grid__quadrant--q1 {
+  border-top-left-radius: var(--porcelain-radius-2xl);
+}
+
+.quarter-grid__quadrant--q1::before {
+  background: linear-gradient(
+    90deg,
+    var(--porcelain-blue-600) 0%,
+    var(--porcelain-teal-400) 100%
+  );
+}
+
+.quarter-grid__quadrant--q2 {
+  border-top-right-radius: var(--porcelain-radius-2xl);
+}
+
+.quarter-grid__quadrant--q2::before {
+  background: linear-gradient(
+    90deg,
+    var(--porcelain-teal-400) 0%,
+    var(--porcelain-gold-400) 100%
+  );
+}
+
+.quarter-grid__quadrant--q3 {
+  border-bottom-left-radius: var(--porcelain-radius-2xl);
+}
+
+.quarter-grid__quadrant--q3::before {
+  background: linear-gradient(
+    90deg,
+    var(--porcelain-gold-400) 0%,
+    var(--porcelain-rose-gold-400) 100%
+  );
+}
+
+.quarter-grid__quadrant--q4 {
+  border-bottom-right-radius: var(--porcelain-radius-2xl);
+}
+
+.quarter-grid__quadrant--q4::before {
+  background: linear-gradient(
+    90deg,
+    var(--porcelain-rose-gold-400) 0%,
+    var(--porcelain-blue-500) 100%
+  );
+}
+
+/* ========================================
+   QUADRANT HEADER
+   ======================================== */
+
+.quarter-grid__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--porcelain-gap-md);
+  padding-bottom: var(--porcelain-gap-sm);
+  border-bottom: 1px solid var(--porcelain-border-subtle);
+}
+
+.quarter-grid__title {
+  font: var(--porcelain-typo-h4);
+  color: var(--porcelain-text-primary);
+  margin: 0;
+}
+
+.quarter-grid__quarter-label {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--porcelain-space-1) var(--porcelain-space-3);
+  font: var(--porcelain-typo-caption);
+  font-weight: var(--porcelain-weight-semibold);
+  color: var(--porcelain-accent-primary);
+  background: var(--porcelain-blue-50);
+  border-radius: var(--porcelain-radius-pill);
+  text-transform: uppercase;
+  letter-spacing: var(--porcelain-tracking-wider);
+}
+
+.quarter-grid__quarter-label--q1 {
+  color: var(--porcelain-blue-700);
+  background: var(--porcelain-blue-50);
+}
+
+.quarter-grid__quarter-label--q2 {
+  color: var(--porcelain-teal-700);
+  background: var(--porcelain-teal-50);
+}
+
+.quarter-grid__quarter-label--q3 {
+  color: var(--porcelain-gold-700);
+  background: var(--porcelain-gold-50);
+}
+
+.quarter-grid__quarter-label--q4 {
+  color: var(--porcelain-rose-gold-700);
+  background: var(--porcelain-rose-gold-50);
+}
+
+/* ========================================
+   QUADRANT CONTENT
+   ======================================== */
+
+.quarter-grid__content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.quarter-grid__item-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--porcelain-gap-sm);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.quarter-grid__item {
+  display: flex;
+  align-items: center;
+  padding: var(--porcelain-space-3) var(--porcelain-space-4);
+  background: var(--porcelain-bg-secondary);
+  border-radius: var(--porcelain-radius-lg);
+  border: 1px solid var(--porcelain-border-subtle);
+  cursor: pointer;
+  transition: var(--porcelain-transition-interactive);
+}
+
+.quarter-grid__item:hover {
+  background: var(--porcelain-interactive-hover);
+  border-color: var(--porcelain-border-default);
+  transform: translateX(4px);
+}
+
+.quarter-grid__item--selected {
+  background: var(--porcelain-blue-50);
+  border-color: var(--porcelain-accent-primary);
+  box-shadow: var(--porcelain-glow-blue-sm);
+}
+
+.quarter-grid__item--completed {
+  opacity: 0.7;
+}
+
+.quarter-grid__item--completed .quarter-grid__item-text {
+  text-decoration: line-through;
+  color: var(--porcelain-text-tertiary);
+}
+
+.quarter-grid__item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: var(--porcelain-space-3);
+  background: var(--porcelain-bg-primary);
+  border-radius: var(--porcelain-radius-md);
+  color: var(--porcelain-accent-primary);
+  font-size: var(--porcelain-text-body-sm);
+}
+
+.quarter-grid__item-text {
+  flex: 1;
+  font: var(--porcelain-typo-body);
+  color: var(--porcelain-text-primary);
+}
+
+.quarter-grid__item-meta {
+  font: var(--porcelain-typo-caption);
+  color: var(--porcelain-text-tertiary);
+}
+
+/* ========================================
+   STATUS INDICATORS
+   ======================================== */
+
+.quarter-grid__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--porcelain-space-1);
+  padding: var(--porcelain-space-1) var(--porcelain-space-2);
+  font: var(--porcelain-typo-caption);
+  font-weight: var(--porcelain-weight-medium);
+  border-radius: var(--porcelain-radius-sm);
+}
+
+.quarter-grid__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.quarter-grid__status--active {
+  color: var(--porcelain-state-success);
+  background: var(--porcelain-teal-50);
+}
+
+.quarter-grid__status--active .quarter-grid__status-dot {
+  background: var(--porcelain-state-success);
+  animation: porcelain-pulse 2s var(--porcelain-ease-in-out) infinite;
+}
+
+.quarter-grid__status--pending {
+  color: var(--porcelain-state-warning);
+  background: var(--porcelain-gold-50);
+}
+
+.quarter-grid__status--pending .quarter-grid__status-dot {
+  background: var(--porcelain-state-warning);
+}
+
+.quarter-grid__status--completed {
+  color: var(--porcelain-text-secondary);
+  background: var(--porcelain-white-200);
+}
+
+.quarter-grid__status--completed .quarter-grid__status-dot {
+  background: var(--porcelain-text-tertiary);
+}
+
+/* ========================================
+   PROGRESS BAR
+   ======================================== */
+
+.quarter-grid__progress {
+  margin-top: var(--porcelain-gap-md);
+  padding-top: var(--porcelain-gap-sm);
+  border-top: 1px solid var(--porcelain-border-subtle);
+}
+
+.quarter-grid__progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--porcelain-space-2);
+}
+
+.quarter-grid__progress-label {
+  font: var(--porcelain-typo-caption);
+  color: var(--porcelain-text-secondary);
+}
+
+.quarter-grid__progress-value {
+  font: var(--porcelain-typo-caption);
+  font-weight: var(--porcelain-weight-semibold);
+  color: var(--porcelain-text-primary);
+}
+
+.quarter-grid__progress-bar {
+  height: 6px;
+  background: var(--porcelain-white-300);
+  border-radius: var(--porcelain-radius-pill);
+  overflow: hidden;
+}
+
+.quarter-grid__progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--porcelain-blue-500) 0%,
+    var(--porcelain-gold-400) 100%
+  );
+  border-radius: var(--porcelain-radius-pill);
+  transition: width var(--porcelain-duration-smooth) var(--porcelain-ease-emphasized-decelerate);
+}
+
+.quarter-grid__progress-fill--q1 {
+  background: linear-gradient(90deg, var(--porcelain-blue-500), var(--porcelain-blue-400));
+}
+
+.quarter-grid__progress-fill--q2 {
+  background: linear-gradient(90deg, var(--porcelain-teal-500), var(--porcelain-teal-400));
+}
+
+.quarter-grid__progress-fill--q3 {
+  background: linear-gradient(90deg, var(--porcelain-gold-500), var(--porcelain-gold-400));
+}
+
+.quarter-grid__progress-fill--q4 {
+  background: linear-gradient(90deg, var(--porcelain-rose-gold-500), var(--porcelain-rose-gold-400));
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+
+.quarter-grid__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--porcelain-space-12);
+  text-align: center;
+}
+
+.quarter-grid__empty-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--porcelain-space-4);
+  color: var(--porcelain-text-tertiary);
+}
+
+.quarter-grid__empty-title {
+  font: var(--porcelain-typo-h5);
+  color: var(--porcelain-text-secondary);
+  margin: 0 0 var(--porcelain-space-2) 0;
+}
+
+.quarter-grid__empty-text {
+  font: var(--porcelain-typo-body-sm);
+  color: var(--porcelain-text-tertiary);
+  margin: 0;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+.quarter-grid__quadrant {
+  animation: porcelain-fade-in var(--porcelain-duration-standard) var(--porcelain-ease-out) forwards;
+}
+
+.quarter-grid__quadrant:nth-child(1) { animation-delay: 0ms; }
+.quarter-grid__quadrant:nth-child(2) { animation-delay: 100ms; }
+.quarter-grid__quadrant:nth-child(3) { animation-delay: 200ms; }
+.quarter-grid__quadrant:nth-child(4) { animation-delay: 300ms; }

@@ -1,0 +1,169 @@
+/**
+ * Porcelain³ Design System - Main Entry
+ * Import all tokens and component styles
+ */
+
+/* ========================================
+   CORE TOKENS
+   ======================================== */
+
+@import url('./tokens/colors.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/spacing.css');
+@import url('./tokens/elevation.css');
+@import url('./tokens/animations.css');
+
+/* ========================================
+   COMPONENT STYLES
+   ======================================== */
+
+@import url('./components/quarter-grid.css');
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--porcelain-font-body);
+  font-size: var(--porcelain-text-body-md);
+  line-height: var(--porcelain-leading-normal);
+  color: var(--porcelain-text-primary);
+  background-color: var(--porcelain-bg-primary);
+}
+
+/* ========================================
+   TYPOGRAPHY BASELINE
+   ======================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--porcelain-font-display);
+  color: var(--porcelain-text-primary);
+}
+
+h1 { font: var(--porcelain-typo-h1); }
+h2 { font: var(--porcelain-typo-h2); }
+h3 { font: var(--porcelain-typo-h3); }
+h4 { font: var(--porcelain-typo-h4); }
+h5 { font: var(--porcelain-typo-h5); }
+h6 { font: var(--porcelain-typo-h6); }
+
+p {
+  margin: 0 0 var(--porcelain-paragraph-gap) 0;
+  font: var(--porcelain-typo-body);
+  color: var(--porcelain-text-secondary);
+}
+
+a {
+  color: var(--porcelain-accent-primary);
+  text-decoration: none;
+  transition: var(--porcelain-transition-colors);
+}
+
+a:hover {
+  color: var(--porcelain-blue-700);
+  text-decoration: underline;
+}
+
+/* ========================================
+   SELECTION STYLES
+   ======================================== */
+
+::selection {
+  background: var(--porcelain-blue-100);
+  color: var(--porcelain-blue-900);
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--porcelain-bg-sunken);
+  border-radius: var(--porcelain-radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--porcelain-border-default);
+  border-radius: var(--porcelain-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--porcelain-border-strong);
+}
+
+/* ========================================
+   FOCUS STYLES
+   ======================================== */
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--porcelain-focus-ring);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Container */
+.porcelain-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--porcelain-container-padding-lg);
+}
+
+.porcelain-container--narrow {
+  max-width: 768px;
+}
+
+.porcelain-container--wide {
+  max-width: 1440px;
+}
+
+/* Screen Reader Only */
+.porcelain-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Text Utilities */
+.porcelain-text-center { text-align: center; }
+.porcelain-text-left { text-align: left; }
+.porcelain-text-right { text-align: right; }
+
+.porcelain-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.porcelain-text-balance {
+  text-wrap: balance;
+}

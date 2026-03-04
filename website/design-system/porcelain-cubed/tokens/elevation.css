@@ -1,0 +1,153 @@
+/**
+ * Porcelain³ Elevation Tokens
+ * Shadows and depth system for layered UI
+ */
+
+:root {
+  /* ========================================
+     SHADOW TOKENS
+     ======================================== */
+  
+  /* Core Shadow Values */
+  --porcelain-shadow-color: 220 20% 20%;
+  --porcelain-shadow-opacity: 0.08;
+  
+  /* Flat - No elevation */
+  --porcelain-shadow-none: none;
+  
+  /* Subtle - Slight lift */
+  --porcelain-shadow-xs: 
+    0 1px 2px -1px hsl(var(--porcelain-shadow-color) / 0.1);
+  
+  /* Light - Cards at rest */
+  --porcelain-shadow-sm: 
+    0 1px 3px -1px hsl(var(--porcelain-shadow-color) / 0.1),
+    0 1px 2px -1px hsl(var(--porcelain-shadow-color) / 0.06);
+  
+  /* Medium - Cards hovered, buttons */
+  --porcelain-shadow-md: 
+    0 4px 6px -1px hsl(var(--porcelain-shadow-color) / 0.1),
+    0 2px 4px -2px hsl(var(--porcelain-shadow-color) / 0.06);
+  
+  /* Raised - Dropdowns, popovers */
+  --porcelain-shadow-lg: 
+    0 10px 15px -3px hsl(var(--porcelain-shadow-color) / 0.1),
+    0 4px 6px -4px hsl(var(--porcelain-shadow-color) / 0.06);
+  
+  /* High - Modals, dialogs */
+  --porcelain-shadow-xl: 
+    0 20px 25px -5px hsl(var(--porcelain-shadow-color) / 0.1),
+    0 8px 10px -6px hsl(var(--porcelain-shadow-color) / 0.06);
+  
+  /* Floating - Notifications, toasts */
+  --porcelain-shadow-2xl: 
+    0 25px 50px -12px hsl(var(--porcelain-shadow-color) / 0.25);
+  
+  /* Inner Shadows */
+  --porcelain-shadow-inner: inset 0 2px 4px 0 hsl(var(--porcelain-shadow-color) / 0.06);
+  --porcelain-shadow-inner-sm: inset 0 1px 2px 0 hsl(var(--porcelain-shadow-color) / 0.05);
+
+  /* ========================================
+     GLOW TOKENS (Accent lighting)
+     ======================================== */
+  
+  /* Blue Glow */
+  --porcelain-glow-blue-sm: 0 0 8px hsl(215 90% 60% / 0.3);
+  --porcelain-glow-blue-md: 0 0 16px hsl(215 90% 60% / 0.4);
+  --porcelain-glow-blue-lg: 0 0 32px hsl(215 90% 60% / 0.5);
+  
+  /* Gold Glow */
+  --porcelain-glow-gold-sm: 0 0 8px hsl(43 90% 55% / 0.3);
+  --porcelain-glow-gold-md: 0 0 16px hsl(43 90% 55% / 0.4);
+  --porcelain-glow-gold-lg: 0 0 32px hsl(43 90% 55% / 0.5);
+  
+  /* Rose Gold Glow */
+  --porcelain-glow-rose-sm: 0 0 8px hsl(350 80% 60% / 0.3);
+  --porcelain-glow-rose-md: 0 0 16px hsl(350 80% 60% / 0.4);
+  --porcelain-glow-rose-lg: 0 0 32px hsl(350 80% 60% / 0.5);
+  
+  /* Focus Ring */
+  --porcelain-focus-ring: 0 0 0 3px hsl(215 90% 60% / 0.3);
+  --porcelain-focus-ring-offset: 0 0 0 4px var(--porcelain-bg-primary);
+
+  /* ========================================
+     LAYER Z-INDEX
+     ======================================== */
+  
+  --porcelain-z-base: 0;
+  --porcelain-z-dropdown: 100;
+  --porcelain-z-sticky: 200;
+  --porcelain-z-fixed: 300;
+  --porcelain-modal-backdrop: 400;
+  --porcelain-z-modal: 500;
+  --porcelain-z-popover: 600;
+  --porcelain-z-tooltip: 700;
+  --porcelain-z-toast: 800;
+
+  /* ========================================
+     SEMANTIC ELEVATION
+     ======================================== */
+  
+  /* Surface Elevation */
+  --porcelain-elevation-surface: var(--porcelain-shadow-none);
+  --porcelain-elevation-card: var(--porcelain-shadow-sm);
+  --porcelain-elevation-card-hover: var(--porcelain-shadow-md);
+  --porcelain-elevation-dropdown: var(--porcelain-shadow-lg);
+  --porcelain-elevation-modal: var(--porcelain-shadow-xl);
+  --porcelain-elevation-toast: var(--porcelain-shadow-2xl);
+  
+  /* Interactive Elevation */
+  --porcelain-elevation-button: var(--porcelain-shadow-sm);
+  --porcelain-elevation-button-hover: var(--porcelain-shadow-md);
+  --porcelain-elevation-button-active: var(--porcelain-shadow-xs);
+  --porcelain-elevation-input: var(--porcelain-shadow-inner-sm);
+  --porcelain-elevation-input-focus: var(--porcelain-shadow-inner), var(--porcelain-focus-ring);
+
+  /* ========================================
+     BORDER & DIVIDER STYLES
+     ======================================== */
+  
+  /* Border Widths */
+  --porcelain-border-width-none: 0;
+  --porcelain-border-width-thin: 1px;
+  --porcelain-border-width-medium: 2px;
+  --porcelain-border-width-thick: 4px;
+  
+  /* Border Styles */
+  --porcelain-border-style-solid: solid;
+  --porcelain-border-style-dashed: dashed;
+  --porcelain-border-style-dotted: dotted;
+  
+  /* Divider */
+  --porcelain-divider: var(--porcelain-border-width-thin) var(--porcelain-border-style-solid) var(--porcelain-border-subtle);
+}
+
+/* ========================================
+   ELEVATION UTILITY CLASSES
+   ======================================== */
+
+/* Shadow Utilities */
+.porcelain-shadow-none { box-shadow: var(--porcelain-shadow-none); }
+.porcelain-shadow-xs { box-shadow: var(--porcelain-shadow-xs); }
+.porcelain-shadow-sm { box-shadow: var(--porcelain-shadow-sm); }
+.porcelain-shadow-md { box-shadow: var(--porcelain-shadow-md); }
+.porcelain-shadow-lg { box-shadow: var(--porcelain-shadow-lg); }
+.porcelain-shadow-xl { box-shadow: var(--porcelain-shadow-xl); }
+.porcelain-shadow-2xl { box-shadow: var(--porcelain-shadow-2xl); }
+.porcelain-shadow-inner { box-shadow: var(--porcelain-shadow-inner); }
+
+/* Glow Utilities */
+.porcelain-glow-blue-sm { box-shadow: var(--porcelain-glow-blue-sm); }
+.porcelain-glow-blue-md { box-shadow: var(--porcelain-glow-blue-md); }
+.porcelain-glow-gold-sm { box-shadow: var(--porcelain-glow-gold-sm); }
+.porcelain-glow-gold-md { box-shadow: var(--porcelain-glow-gold-md); }
+
+/* Z-Index Utilities */
+.porcelain-z-base { z-index: var(--porcelain-z-base); }
+.porcelain-z-dropdown { z-index: var(--porcelain-z-dropdown); }
+.porcelain-z-sticky { z-index: var(--porcelain-z-sticky); }
+.porcelain-z-fixed { z-index: var(--porcelain-z-fixed); }
+.porcelain-z-modal { z-index: var(--porcelain-z-modal); }
+.porcelain-z-popover { z-index: var(--porcelain-z-popover); }
+.porcelain-z-tooltip { z-index: var(--porcelain-z-tooltip); }
+.porcelain-z-toast { z-index: var(--porcelain-z-toast); }

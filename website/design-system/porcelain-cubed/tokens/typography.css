@@ -1,0 +1,174 @@
+/**
+ * Porcelain³ Typography Tokens
+ * Elegant, readable type system inspired by fine ceramics
+ */
+
+:root {
+  /* ========================================
+     FONT FAMILIES
+     ======================================== */
+  
+  /* Primary Display Font - Elegant Serif */
+  --porcelain-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  
+  /* Primary Body Font - Clean Sans */
+  --porcelain-font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  /* Monospace Font - Code & Data */
+  --porcelain-font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  
+  /* System Fallback */
+  --porcelain-font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+
+  /* ========================================
+     FONT SIZES - Major Third Scale (1.25)
+     ======================================== */
+  
+  /* Display Sizes */
+  --porcelain-text-display-3xl: 5rem;      /* 80px */
+  --porcelain-text-display-2xl: 4rem;      /* 64px */
+  --porcelain-text-display-xl: 3rem;       /* 48px */
+  --porcelain-text-display-lg: 2.5rem;     /* 40px */
+  --porcelain-text-display-md: 2rem;       /* 32px */
+  --porcelain-text-display-sm: 1.5rem;     /* 24px */
+  --porcelain-text-display-xs: 1.25rem;    /* 20px */
+
+  /* Body Sizes */
+  --porcelain-text-body-xl: 1.25rem;       /* 20px */
+  --porcelain-text-body-lg: 1.125rem;      /* 18px */
+  --porcelain-text-body-md: 1rem;          /* 16px - Base */
+  --porcelain-text-body-sm: 0.875rem;      /* 14px */
+  --porcelain-text-body-xs: 0.75rem;       /* 12px */
+  --porcelain-text-body-2xs: 0.625rem;     /* 10px */
+
+  /* ========================================
+     LINE HEIGHTS
+     ======================================== */
+  
+  /* Display Line Heights */
+  --porcelain-leading-display: 1.1;        /* Tight for headlines */
+  --porcelain-leading-tight: 1.2;          /* Headings */
+  --porcelain-leading-snug: 1.35;          /* Subheadings */
+  
+  /* Body Line Heights */
+  --porcelain-leading-normal: 1.5;         /* Standard reading */
+  --porcelain-leading-relaxed: 1.625;      /* Comfortable reading */
+  --porcelain-leading-loose: 1.75;         /* Extended reading */
+
+  /* ========================================
+     FONT WEIGHTS
+     ======================================== */
+  
+  --porcelain-weight-thin: 100;
+  --porcelain-weight-light: 300;
+  --porcelain-weight-regular: 400;
+  --porcelain-weight-medium: 500;
+  --porcelain-weight-semibold: 600;
+  --porcelain-weight-bold: 700;
+  --porcelain-weight-black: 900;
+
+  /* ========================================
+     LETTER SPACING
+     ======================================== */
+  
+  --porcelain-tracking-tight: -0.025em;
+  --porcelain-tracking-normal: 0;
+  --porcelain-tracking-wide: 0.025em;
+  --porcelain-tracking-wider: 0.05em;
+  --porcelain-tracking-widest: 0.1em;
+
+  /* ========================================
+     TYPOGRAPHY PRESETS
+     ======================================== */
+  
+  /* Display Typography */
+  --porcelain-typo-hero: var(--porcelain-weight-light) var(--porcelain-text-display-3xl) / var(--porcelain-leading-display) var(--porcelain-font-display);
+  --porcelain-typo-h1: var(--porcelain-weight-regular) var(--porcelain-text-display-2xl) / var(--porcelain-leading-display) var(--porcelain-font-display);
+  --porcelain-typo-h2: var(--porcelain-weight-regular) var(--porcelain-text-display-xl) / var(--porcelain-leading-tight) var(--porcelain-font-display);
+  --porcelain-typo-h3: var(--porcelain-weight-medium) var(--porcelain-text-display-lg) / var(--porcelain-leading-tight) var(--porcelain-font-body);
+  --porcelain-typo-h4: var(--porcelain-weight-medium) var(--porcelain-text-display-md) / var(--porcelain-leading-snug) var(--porcelain-font-body);
+  --porcelain-typo-h5: var(--porcelain-weight-semibold) var(--porcelain-text-display-sm) / var(--porcelain-leading-snug) var(--porcelain-font-body);
+  --porcelain-typo-h6: var(--porcelain-weight-semibold) var(--porcelain-text-display-xs) / var(--porcelain-leading-normal) var(--porcelain-font-body);
+
+  /* Body Typography */
+  --porcelain-typo-body-xl: var(--porcelain-weight-regular) var(--porcelain-text-body-xl) / var(--porcelain-leading-relaxed) var(--porcelain-font-body);
+  --porcelain-typo-body-lg: var(--porcelain-weight-regular) var(--porcelain-text-body-lg) / var(--porcelain-leading-relaxed) var(--porcelain-font-body);
+  --porcelain-typo-body: var(--porcelain-weight-regular) var(--porcelain-text-body-md) / var(--porcelain-leading-normal) var(--porcelain-font-body);
+  --porcelain-typo-body-sm: var(--porcelain-weight-regular) var(--porcelain-text-body-sm) / var(--porcelain-leading-normal) var(--porcelain-font-body);
+  --porcelain-typo-caption: var(--porcelain-weight-medium) var(--porcelain-text-body-xs) / var(--porcelain-leading-normal) var(--porcelain-font-body);
+  --porcelain-typo-overline: var(--porcelain-weight-semibold) var(--porcelain-text-body-xs) / var(--porcelain-leading-normal) var(--porcelain-font-body);
+
+  /* Code Typography */
+  --porcelain-typo-code: var(--porcelain-weight-regular) var(--porcelain-text-body-sm) / var(--porcelain-leading-normal) var(--porcelain-font-mono);
+  --porcelain-typo-code-sm: var(--porcelain-weight-regular) var(--porcelain-text-body-xs) / var(--porcelain-leading-normal) var(--porcelain-font-mono);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Font Family Utilities */
+.porcelain-font-display { font-family: var(--porcelain-font-display); }
+.porcelain-font-body { font-family: var(--porcelain-font-body); }
+.porcelain-font-mono { font-family: var(--porcelain-font-mono); }
+
+/* Display Typography */
+.porcelain-hero {
+  font: var(--porcelain-typo-hero);
+  letter-spacing: var(--porcelain-tracking-tight);
+}
+
+.porcelain-h1 {
+  font: var(--porcelain-typo-h1);
+  letter-spacing: var(--porcelain-tracking-tight);
+}
+
+.porcelain-h2 {
+  font: var(--porcelain-typo-h2);
+  letter-spacing: var(--porcelain-tracking-tight);
+}
+
+.porcelain-h3 {
+  font: var(--porcelain-typo-h3);
+}
+
+.porcelain-h4 {
+  font: var(--porcelain-typo-h4);
+}
+
+.porcelain-h5 {
+  font: var(--porcelain-typo-h5);
+}
+
+.porcelain-h6 {
+  font: var(--porcelain-typo-h6);
+  text-transform: uppercase;
+  letter-spacing: var(--porcelain-tracking-wide);
+}
+
+/* Body Typography */
+.porcelain-body-xl { font: var(--porcelain-typo-body-xl); }
+.porcelain-body-lg { font: var(--porcelain-typo-body-lg); }
+.porcelain-body { font: var(--porcelain-typo-body); }
+.porcelain-body-sm { font: var(--porcelain-typo-body-sm); }
+
+.porcelain-caption {
+  font: var(--porcelain-typo-caption);
+  letter-spacing: var(--porcelain-tracking-wide);
+}
+
+.porcelain-overline {
+  font: var(--porcelain-typo-overline);
+  text-transform: uppercase;
+  letter-spacing: var(--porcelain-tracking-wider);
+}
+
+/* Code */
+.porcelain-code { font: var(--porcelain-typo-code); }
+.porcelain-code-sm { font: var(--porcelain-typo-code-sm); }
+
+/* Font Smoothing */
+.porcelain-antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
