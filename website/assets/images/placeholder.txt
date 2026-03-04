@@ -1,0 +1,76 @@
+# SATOR Website Images
+
+This directory contains image assets for the SATOR website.
+
+## Directory Structure
+
+```
+assets/images/
+├── logos/              # Brand and logo images
+├── icons/              # UI icons (PNG/WebP versions)
+├── backgrounds/        # Background images
+├── hubs/               # HUB-specific images
+│   ├── stat-ref/
+│   ├── analytics/
+│   ├── esports/
+│   ├── fantasy/
+│   └── help/
+├── players/            # Player photos (if applicable)
+├── teams/              # Team logos (if applicable)
+└── temp/               # Temporary/working images
+```
+
+## Image Guidelines
+
+### Formats
+- **Logos**: SVG (preferred) or PNG with transparency
+- **Photos**: WebP (preferred) with JPEG fallback
+- **Icons**: SVG (preferred) or PNG
+- **Backgrounds**: WebP or JPEG
+
+### Sizes
+- **Favicon**: 32x32, 180x180 (apple-touch)
+- **Logos**: Multiple sizes (150w, 300w, 600w)
+- **Hero Images**: 1920x1080 or responsive srcset
+- **Thumbnails**: 300x200, 600x400
+- **Icons**: 24x24, 48x48, 96x96
+
+### Optimization
+All images should be:
+- Compressed (TinyPNG, ImageOptim, etc.)
+- Properly sized for their use case
+- Include alt text for accessibility
+- Lazy loaded when below the fold
+
+## Naming Convention
+
+```
+[type]-[name]-[size].[ext]
+
+Examples:
+- logo-sator-300x100.svg
+- hero-esports-1920x1080.webp
+- icon-stat-ref-48x48.png
+- player-tenz-300x300.webp
+```
+
+## CDN Usage
+
+For production, images should be served from a CDN:
+- Cloudflare Images
+- AWS CloudFront
+- Vercel Edge Network
+
+Update image paths in code accordingly.
+
+## Placeholder Images
+
+During development, use placeholder services:
+- https://via.placeholder.com/
+- https://placehold.co/
+- https://picsum.photos/
+
+Example:
+```html
+<img src="https://placehold.co/600x400/1E3A5F/FFF?text=Stat+Ref" alt="Placeholder">
+```

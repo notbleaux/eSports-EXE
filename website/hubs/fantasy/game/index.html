@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axiom eSports Simulation Game — SATOR Fantasy</title>
+    <meta name="description" content="Axiom eSports Simulation Game - Build your franchise, manage teams, and compete in career mode. Download now for free.">
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        radiant: {
+                            black: '#0a0a0f', card: '#14141f', border: '#2a2a3a',
+                            white: '#ffffff', gray: '#8a8a9a', green: '#00FF88', cyan: '#00d4ff'
+                        }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/fantasy.css">
+</head>
+<body class="fantasy-body antialiased">
+    <!-- Navigation -->
+    <nav class="fantasy-nav">
+        <div class="fantasy-nav__container">
+            <a href="../../../index.html" class="fantasy-nav__logo">
+                <div class="fantasy-nav__logo-icon">S</div>
+                <span>SATOR</span>
+            </a>
+            <div class="fantasy-nav__links hidden md:flex">
+                <a href="../index.html" class="fantasy-nav__link">Home</a>
+                <a href="index.html" class="fantasy-nav__link fantasy-nav__link--active">Game</a>
+                <a href="../leagues/index.html" class="fantasy-nav__link">Leagues</a>
+                <a href="../leaderboards/index.html" class="fantasy-nav__link">Leaderboards</a>
+                <a href="../my-team/index.html" class="fantasy-nav__link">My Team</a>
+                <a href="../membership/index.html" class="fantasy-nav__link">Membership</a>
+            </div>
+            <div class="fantasy-nav__cta">
+                <a href="download.html" class="fantasy-btn fantasy-btn--primary text-sm hidden sm:flex">Download</a>
+                <button class="md:hidden p-2 text-white/70 hover:text-white" data-mobile-nav-toggle aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden border-t border-white/10" data-mobile-nav>
+            <div class="px-4 py-4 space-y-2">
+                <a href="../index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Home</a>
+                <a href="index.html" class="block px-4 py-2 text-radiant-green bg-white/5 rounded-lg">Game</a>
+                <a href="../leagues/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leagues</a>
+                <a href="../leaderboards/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leaderboards</a>
+                <a href="../my-team/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">My Team</a>
+                <a href="../membership/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Membership</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="game-hero">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-radiant-green/10 border border-radiant-green/30 rounded-full mb-6" data-animate="animate-fade-in-up">
+                <svg class="w-4 h-4 text-radiant-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm text-radiant-green font-medium">Free Download</span>
+            </div>
+            <h1 class="game-hero__title" data-animate="animate-fade-in-up">Axiom eSports Simulation Game</h1>
+            <p class="text-xl text-radiant-gray max-w-2xl mx-auto mb-8" data-animate="animate-fade-in-up">
+                Build your franchise from the ground up. Scout talent, manage finances, and lead your organization to championship glory.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4" data-animate="animate-fade-in-up">
+                <a href="download.html" class="fantasy-btn fantasy-btn--primary fantasy-btn--large">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download for Windows
+                </a>
+                <a href="#features" class="fantasy-btn fantasy-btn--secondary fantasy-btn--large">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="fantasy-section">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Game Features</h2>
+            <p class="fantasy-section__subtitle">Everything you need to build the ultimate eSports dynasty</p>
+        </div>
+        <div class="game-features-grid">
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Career Mode</h3>
+                    <p>Start from humble beginnings and build your way to becoming the world's premier eSports organization.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Team Management</h3>
+                    <p>Hire coaches, scouts, and support staff. Manage player contracts and team dynamics.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Match Simulation</h3>
+                    <p>Watch your team compete in real-time with detailed statistics and play-by-play analysis.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Player Scouting</h3>
+                    <p>Discover hidden gems in the amateur scene. Evaluate prospects with detailed scouting reports.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Economy System</h3>
+                    <p>Manage your organization's finances. Secure sponsorships and balance the books.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Draft System</h3>
+                    <p>Participate in annual drafts to build your roster. Trade picks and players with other teams.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Offline Gameplay</h3>
+                    <p>No internet required. Play anywhere, anytime with full single-player functionality.</p>
+                </div>
+            </div>
+            <div class="game-feature" data-animate="animate-fade-in-up">
+                <div class="game-feature__icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                    </svg>
+                </div>
+                <div class="game-feature__content">
+                    <h3>Achievements</h3>
+                    <p>Unlock achievements and track your progress. Compare stats with friends.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section class="fantasy-section" style="background: rgba(0, 0, 0, 0.2);">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Screenshots</h2>
+            <p class="fantasy-section__subtitle">Preview the game experience</p>
+        </div>
+        <div class="screenshots-grid">
+            <div class="screenshot-card" data-animate="animate-fade-in-up">
+                <div class="screenshot-card__placeholder">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span>Team Management UI</span>
+                </div>
+            </div>
+            <div class="screenshot-card" data-animate="animate-fade-in-up">
+                <div class="screenshot-card__placeholder">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span>Match Simulation</span>
+                </div>
+            </div>
+            <div class="screenshot-card" data-animate="animate-fade-in-up">
+                <div class="screenshot-card__placeholder">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span>Player Stats</span>
+                </div>
+            </div>
+            <div class="screenshot-card" data-animate="animate-fade-in-up">
+                <div class="screenshot-card__placeholder">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span>Scouting Report</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Requirements -->
+    <section class="fantasy-section">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">System Requirements</h2>
+            <p class="fantasy-section__subtitle">Make sure your system can run the game</p>
+        </div>
+        <div class="sysreq-grid">
+            <div class="sysreq-card" data-animate="animate-fade-in-up">
+                <h3 class="sysreq-card__title">Minimum Requirements</h3>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">OS</span>
+                    <span class="sysreq-item__value">Windows 10 64-bit</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Processor</span>
+                    <span class="sysreq-item__value">Intel Core i3 / AMD Ryzen 3</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Memory</span>
+                    <span class="sysreq-item__value">4 GB RAM</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Graphics</span>
+                    <span class="sysreq-item__value">Integrated Graphics</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Storage</span>
+                    <span class="sysreq-item__value">2 GB available space</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Internet</span>
+                    <span class="sysreq-item__value">Not required</span>
+                </div>
+            </div>
+            <div class="sysreq-card" data-animate="animate-fade-in-up">
+                <h3 class="sysreq-card__title">Recommended Requirements</h3>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">OS</span>
+                    <span class="sysreq-item__value">Windows 11 64-bit</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Processor</span>
+                    <span class="sysreq-item__value">Intel Core i5 / AMD Ryzen 5</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Memory</span>
+                    <span class="sysreq-item__value">8 GB RAM</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Graphics</span>
+                    <span class="sysreq-item__value">Dedicated GPU</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Storage</span>
+                    <span class="sysreq-item__value">2 GB SSD space</span>
+                </div>
+                <div class="sysreq-item">
+                    <span class="sysreq-item__label">Internet</span>
+                    <span class="sysreq-item__value">Optional (for updates)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="fantasy-section" style="background: rgba(0, 0, 0, 0.2);">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Frequently Asked Questions</h2>
+            <p class="fantasy-section__subtitle">Common questions about the game</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    Is the game really free?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        Yes! The Axiom eSports Simulation Game is completely free to download and play. There are no microtransactions, no pay-to-win mechanics, and no subscription fees. We believe everyone should have access to quality gaming experiences.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    Do I need an internet connection to play?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        No, the game is designed to be fully playable offline. You only need an internet connection to download updates. All game features, including career mode and match simulation, work without any internet connection.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    What eSports titles are included?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        Currently, the game focuses on VCT Valorant as the primary simulation title. We plan to add more eSports titles in future updates, including CS2 and League of Legends, based on community feedback and demand.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    How long is a typical career mode season?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        A full career mode season typically takes 4-6 hours to complete, depending on your play style and the depth of management you engage in. You can simulate matches to speed up the process, or watch every game in detail for a more immersive experience.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    Can I transfer my saves between devices?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        Yes! Save files are stored locally and can be transferred between devices. Simply copy the save files from the game's save directory to your new device. Save files are compatible across different Windows versions.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download CTA -->
+    <section class="fantasy-section">
+        <div class="max-w-2xl mx-auto px-8 text-center">
+            <h2 class="fantasy-section__title mb-4" data-animate="animate-fade-in-up">Ready to Build Your Dynasty?</h2>
+            <p class="text-lg text-radiant-gray mb-8" data-animate="animate-fade-in-up">Download Axiom eSports Simulation Game today and start your journey to eSports glory.</p>
+            <a href="download.html" class="fantasy-btn fantasy-btn--primary fantasy-btn--large inline-flex" data-animate="animate-fade-in-up">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Download Now (Free)
+            </a>
+            <p class="mt-4 text-sm text-radiant-gray" data-animate="animate-fade-in-up">Windows 10/11 • Version 1.0.2 • 1.2 GB</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="fantasy-footer">
+        <div class="fantasy-footer__content">
+            <div class="fantasy-footer__links">
+                <a href="../index.html" class="fantasy-footer__link">Fantasy Home</a>
+                <a href="download.html" class="fantasy-footer__link">Download</a>
+                <a href="../../../index.html" class="fantasy-footer__link">SATOR Home</a>
+            </div>
+            <p class="fantasy-footer__copy">© 2026 Axiom eSports Simulation. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/fantasy.js"></script>
+</body>
+</html>

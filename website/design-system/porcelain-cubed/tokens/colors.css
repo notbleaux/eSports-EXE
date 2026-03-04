@@ -169,10 +169,65 @@
   --error: #EF4444;
   --info: var(--royal-bright);
   
+  /* ============================================
+     HUB COLOR PALETTES - SATOR Website Expansion
+     ============================================ */
+  
+  /* HUB 1/4: Statistical Reference - Blue Theme */
+  --hub-statref-primary: #1E3A5F;
+  --hub-statref-secondary: #00d4ff;
+  --hub-statref-accent: #ffffff;
+  --hub-statref-glow: rgba(0, 212, 255, 0.4);
+  --hub-statref-muted: rgba(30, 58, 95, 0.6);
+  
+  /* HUB 2/4: Advanced Analytics - Purple Theme */
+  --hub-analytics-primary: #6B46C1;
+  --hub-analytics-secondary: #FFD700;
+  --hub-analytics-accent: #00d4ff;
+  --hub-analytics-glow: rgba(107, 70, 193, 0.4);
+  --hub-analytics-muted: rgba(107, 70, 193, 0.6);
+  
+  /* HUB 3/4: eSports - Red Theme */
+  --hub-esports-primary: #FF4655;
+  --hub-esports-secondary: #ff6b00;
+  --hub-esports-accent: #FFD700;
+  --hub-esports-glow: rgba(255, 70, 85, 0.4);
+  --hub-esports-muted: rgba(255, 70, 85, 0.6);
+  
+  /* HUB 4/4: Fantasy eSports - Green Theme */
+  --hub-fantasy-primary: #00FF88;
+  --hub-fantasy-secondary: #00d4ff;
+  --hub-fantasy-accent: #FFD700;
+  --hub-fantasy-glow: rgba(0, 255, 136, 0.4);
+  --hub-fantasy-muted: rgba(0, 255, 136, 0.6);
+  
+  /* NJZ Center - Gold/Cyan */
+  --njz-primary: #FFD700;
+  --njz-secondary: #00d4ff;
+  --njz-glow: rgba(255, 215, 0, 0.4);
+  --njz-gradient: linear-gradient(135deg, #FFD700 0%, #00d4ff 100%);
+  
+  /* ============================================
+     HUB SEMANTIC MAPPINGS
+     ============================================ */
+  
+  /* Current HUB variables - set by JS based on active HUB */
+  --hub-current-primary: var(--hub-statref-primary);
+  --hub-current-secondary: var(--hub-statref-secondary);
+  --hub-current-accent: var(--hub-statref-accent);
+  --hub-current-glow: var(--hub-statref-glow);
+  --hub-current-muted: var(--hub-statref-muted);
+  
   /* Gradients */
   --gradient-porcelain: linear-gradient(135deg, var(--porcelain-light) 0%, var(--white-soft) 50%, var(--cream-butter) 100%);
   --gradient-abyss: linear-gradient(180deg, var(--abyssal-mid) 0%, var(--abyssal-deep) 50%, var(--abyssal-void) 100%);
   --gradient-gold: linear-gradient(135deg, var(--gold-champagne) 0%, var(--gold-medium) 50%, var(--gold-rich) 100%);
   --gradient-electric: linear-gradient(90deg, var(--neon-blue) 0%, var(--electric-blue) 50%, var(--royal-bright) 100%);
   --gradient-glass: linear-gradient(180deg, var(--glass-frost) 0%, transparent 100%);
+  
+  /* HUB-specific gradients */
+  --gradient-hub-statref: linear-gradient(135deg, var(--hub-statref-primary) 0%, var(--abyssal-deep) 100%);
+  --gradient-hub-analytics: linear-gradient(135deg, var(--hub-analytics-primary) 0%, var(--abyssal-deep) 100%);
+  --gradient-hub-esports: linear-gradient(135deg, var(--hub-esports-primary) 0%, var(--abyssal-deep) 100%);
+  --gradient-hub-fantasy: linear-gradient(135deg, var(--hub-fantasy-primary) 0%, var(--abyssal-deep) 100%);
 }

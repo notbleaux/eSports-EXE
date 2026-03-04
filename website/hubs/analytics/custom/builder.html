@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Layer Builder — SATOR Analytics</title>
+  <meta name="description" content="Build custom analytics views with the SATOR Layer Builder. Drag, drop, and visualize data your way.">
+  <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/analytics.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            analytics: {
+              primary: '#6B46C1',
+              'primary-light': '#8B5CF6',
+              gold: '#FFD700',
+              dark: '#0a0a0f',
+              card: '#14141f',
+              border: '#2a2a3a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="hub-analytics bg-analytics-dark text-white min-h-screen">
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-4">
+          <a href="../../../" class="flex items-center gap-3 group hover:opacity-80 transition-opacity">
+            <div class="w-9 h-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+              <span class="font-bold text-slate-900 text-sm">S</span>
+            </div>
+            <span class="font-bold text-xl text-white hidden sm:block">SATOR</span>
+          </a>
+          <a href="../" class="text-white/50 hover:text-white transition-colors">Analytics</a>
+        </div>
+        
+        <nav class="hidden md:flex items-center gap-1">
+          <a href="../" class="px-4 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5">Dashboard</a>
+          <a href="../layers/sator-square/" class="px-4 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5">SATOR Square</a>
+          <a href="../layers/performance/" class="px-4 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5">Performance</a>
+          <a href="builder.html" class="px-4 py-2 rounded-lg text-sm text-white bg-white/10">Builder</a>
+          <a href="my-views.html" class="px-4 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5">My Views</a>
+        </nav>
+        
+        <div class="flex items-center gap-3">
+          <button id="saveViewBtn" class="hidden sm:flex items-center gap-2 px-4 py-2 bg-analytics-primary hover:bg-analytics-primary-light rounded-lg text-sm font-medium transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save View
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-3xl font-bold mb-2">Custom Layer Builder</h1>
+          <p class="text-white/60">Build personalized analytics views with drag-and-drop</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="my-views.html" class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white/70 hover:bg-white/10 transition-colors">
+            My Saved Views
+          </a>
+        </div>
+      </div>
+
+      <!-- Builder Interface -->
+      <div class="builder-container">
+        <!-- Left Sidebar: Metrics -->
+        <div class="builder-sidebar">
+          <h3 class="builder-sidebar__title">Select Metrics</h3>
+          <p class="text-xs text-white/40 mb-4">Click to select or drag to canvas</p>
+          
+          <div class="space-y-2">
+            <div class="builder-metric" data-metric="acs">
+              <div class="builder-metric__checkbox" data-metric="acs"></div>
+              <span class="builder-metric__label">ACS</span>
+              <span class="text-xs text-white/30">Avg Combat Score</span>
+            </div>
+            <div class="builder-metric" data-metric="kd">
+              <div class="builder-metric__checkbox" data-metric="kd"></div>
+              <span class="builder-metric__label">K/D Ratio</span>
+              <span class="text-xs text-white/30">Kills/Deaths</span>
+            </div>
+            <div class="builder-metric" data-metric="adr">
+              <div class="builder-metric__checkbox" data-metric="adr"></div>
+              <span class="builder-metric__label">ADR</span>
+              <span class="text-xs text-white/30">Avg Damage/Round</span>
+            </div>
+            <div class="builder-metric" data-metric="kast">
+              <div class="builder-metric__checkbox" data-metric="kast"></div>
+              <span class="builder-metric__label">KAST%</span>
+              <span class="text-xs text-white/30">Kill/Assist/Survive/Trade</span>
+            </div>
+            <div class="builder-metric" data-metric="rating">
+              <div class="builder-metric__checkbox" data-metric="rating"></div>
+              <span class="builder-metric__label">SimRating</span>
+              <span class="text-xs text-white/30">Composite Score</span>
+            </div>
+            <div class="builder-metric" data-metric="fk">
+              <div class="builder-metric__checkbox" data-metric="fk"></div>
+              <span class="builder-metric__label">First Kills</span>
+              <span class="text-xs text-white/30">Opening Kills</span>
+            </div>
+            <div class="builder-metric" data-metric="fd">
+              <div class="builder-metric__checkbox" data-metric="fd"></div>
+              <span class="builder-metric__label">First Deaths</span>
+              <span class="text-xs text-white/30">Opening Deaths</span>
+            </div>
+            <div class="builder-metric" data-metric="clutch">
+              <div class="builder-metric__checkbox" data-metric="clutch"></div>
+              <span class="builder-metric__label">Clutch Rate</span>
+              <span class="text-xs text-white/30">1vX Success</span>
+            </div>
+            <div class="builder-metric" data-metric="hs">
+              <div class="builder-metric__checkbox" data-metric="hs"></div>
+              <span class="builder-metric__label">HS %</span>
+              <span class="text-xs text-white/30">Headshot Percentage</span>
+            </div>
+            <div class="builder-metric" data-metric="eco">
+              <div class="builder-metric__checkbox" data-metric="eco"></div>
+              <span class="builder-metric__label">Eco Kills</span>
+              <span class="text-xs text-white/30">Low-buy Kills</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Canvas -->
+        <div class="builder-canvas">
+          <div class="builder-canvas__header">
+            <input type="text" placeholder="Untitled View" class="bg-transparent text-lg font-semibold placeholder-white/30 focus:outline-none focus:placeholder-white/20">
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-white/50">Visualization:</span>
+              <div class="flex bg-white/5 rounded-lg p-1">
+                <label class="cursor-pointer">
+                  <input type="radio" name="vizType" value="table" checked class="sr-only peer">
+                  <span class="px-3 py-1.5 rounded text-sm text-white/50 peer-checked:bg-analytics-primary peer-checked:text-white transition-all">Table</span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="vizType" value="chart" class="sr-only peer">
+                  <span class="px-3 py-1.5 rounded text-sm text-white/50 peer-checked:bg-analytics-primary peer-checked:text-white transition-all">Chart</span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="vizType" value="grid" class="sr-only peer">
+                  <span class="px-3 py-1.5 rounded text-sm text-white/50 peer-checked:bg-analytics-primary peer-checked:text-white transition-all">Grid</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="flex flex-wrap gap-3 mb-4 p-3 bg-white/5 rounded-lg">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-white/50 uppercase">Role:</span>
+              <select class="bg-white/10 border border-white/10 rounded px-2 py-1 text-sm focus:outline-none focus:border-analytics-primary">
+                <option value="all">All Roles</option>
+                <option value="duelist">Duelist</option>
+                <option value="controller">Controller</option>
+                <option value="sentinel">Sentinel</option>
+                <option value="initiator">Initiator</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-white/50 uppercase">Region:</span>
+              <select class="bg-white/10 border border-white/10 rounded px-2 py-1 text-sm focus:outline-none focus:border-analytics-primary">
+                <option value="all">All Regions</option>
+                <option value="na">NA</option>
+                <option value="eu">EU</option>
+                <option value="apac">APAC</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-white/50 uppercase">Min Rating:</span>
+              <input type="number" value="1.0" step="0.1" min="0.5" max="2.0" class="w-16 bg-white/10 border border-white/10 rounded px-2 py-1 text-sm focus:outline-none focus:border-analytics-primary">
+            </div>
+          </div>
+
+          <!-- Preview Area -->
+          <div class="builder-preview">
+            <div class="builder-preview__placeholder">
+              <svg class="builder-preview__placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+              <p class="text-white/50">Select metrics to build your view</p>
+              <p class="text-sm mt-2 text-white/30">Or drag metrics here</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Sidebar: Presets -->
+        <div class="builder-presets">
+          <h3 class="builder-sidebar__title">Presets</h3>
+          <p class="text-xs text-white/40 mb-4">Quick-start templates</p>
+
+          <div class="builder-preset" data-preset="offensive">
+            <div class="builder-preset__icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="16"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+              </svg>
+            </div>
+            <div class="builder-preset__content">
+              <div class="builder-preset__title">Offensive Stats</div>
+              <div class="builder-preset__description">ACS, K/D, ADR for fraggers</div>
+            </div>
+          </div>
+
+          <div class="builder-preset" data-preset="efficiency">
+            <div class="builder-preset__icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <div class="builder-preset__content">
+              <div class="builder-preset__title">Efficiency Metrics</div>
+              <div class="builder-preset__description">Rating, ACS, KAST combo</div>
+            </div>
+          </div>
+
+          <div class="builder-preset" data-preset="entry">
+            <div class="builder-preset__icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <div class="builder-preset__content">
+              <div class="builder-preset__title">Entry Fragger</div>
+              <div class="builder-preset__description">First Kills, Entry Success</div>
+            </div>
+          </div>
+
+          <div class="builder-preset" data-preset="clutch">
+            <div class="builder-preset__icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div class="builder-preset__content">
+              <div class="builder-preset__title">Clutch King</div>
+              <div class="builder-preset__description">Clutch stats, 1vX performance</div>
+            </div>
+          </div>
+
+          <div class="builder-preset" data-preset="defensive">
+            <div class="builder-preset__icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="builder-preset__content">
+              <div class="builder-preset__title">Defensive Stats</div>
+              <div class="builder-preset__description">KAST, FD, Survival metrics</div>
+            </div>
+          </div>
+
+          <!-- Pro Feature -->
+          <div class="mt-6 p-4 bg-gradient-to-br from-analytics-primary/20 to-analytics-primary/5 border border-analytics-primary/30 rounded-xl">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="membership-badge">Premium</span>
+            </div>
+            <p class="text-sm text-white/60 mb-3">
+              Save unlimited custom views and share with your team.
+            </p>
+            <button class="w-full py-2 bg-analytics-gold/20 border border-analytics-gold/30 rounded-lg text-analytics-gold text-sm font-medium hover:bg-analytics-gold/30 transition-colors">
+              Upgrade to Premium
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-12 bg-analytics-card border border-analytics-border rounded-2xl p-6">
+        <h3 class="text-lg font-semibold mb-4">Builder Tips</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-lg bg-analytics-primary/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-analytics-primary-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-medium mb-1">Select Metrics</h4>
+              <p class="text-sm text-white/50">Click checkboxes or drag metrics to the canvas</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-lg bg-analytics-primary/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-analytics-primary-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-medium mb-1">Choose Visualization</h4>
+              <p class="text-sm text-white/50">Table for details, Chart for trends, Grid for comparison</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-lg bg-analytics-primary/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-analytics-primary-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-medium mb-1">Save Your View</h4>
+              <p class="text-sm text-white/50">Access saved views anytime from "My Views"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 py-8 px-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <a href="../" class="flex items-center gap-2 text-white/50 hover:text-white transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Analytics Dashboard
+      </a>
+      <p class="text-sm text-white/30">Custom Layer Builder — SATOR Analytics</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/analytics.js"></script>
+</body>
+</html>

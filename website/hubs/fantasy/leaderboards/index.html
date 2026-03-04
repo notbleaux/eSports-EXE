@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboards — SATOR Fantasy eSports</title>
+    <meta name="description" content="Fantasy eSports leaderboards. View global rankings, league-specific standings, and weekly top performers.">
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        radiant: {
+                            black: '#0a0a0f', card: '#14141f', border: '#2a2a3a',
+                            white: '#ffffff', gray: '#8a8a9a', green: '#00FF88', cyan: '#00d4ff'
+                        }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/fantasy.css">
+</head>
+<body class="fantasy-body antialiased">
+    <!-- Navigation -->
+    <nav class="fantasy-nav">
+        <div class="fantasy-nav__container">
+            <a href="../../../index.html" class="fantasy-nav__logo">
+                <div class="fantasy-nav__logo-icon">S</div>
+                <span>SATOR</span>
+            </a>
+            <div class="fantasy-nav__links hidden md:flex">
+                <a href="../index.html" class="fantasy-nav__link">Home</a>
+                <a href="../game/index.html" class="fantasy-nav__link">Game</a>
+                <a href="../leagues/index.html" class="fantasy-nav__link">Leagues</a>
+                <a href="index.html" class="fantasy-nav__link fantasy-nav__link--active">Leaderboards</a>
+                <a href="../my-team/index.html" class="fantasy-nav__link">My Team</a>
+                <a href="../membership/index.html" class="fantasy-nav__link">Membership</a>
+            </div>
+            <div class="fantasy-nav__cta">
+                <a href="../membership/index.html" class="fantasy-btn fantasy-btn--primary text-sm hidden sm:flex">Sign In</a>
+                <button class="md:hidden p-2 text-white/70 hover:text-white" data-mobile-nav-toggle aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden border-t border-white/10" data-mobile-nav>
+            <div class="px-4 py-4 space-y-2">
+                <a href="../index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Home</a>
+                <a href="../game/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Game</a>
+                <a href="../leagues/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leagues</a>
+                <a href="index.html" class="block px-4 py-2 text-radiant-green bg-white/5 rounded-lg">Leaderboards</a>
+                <a href="../my-team/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">My Team</a>
+                <a href="../membership/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Membership</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="membership-hero">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-radiant-green/10 border border-radiant-green/30 rounded-full mb-6" data-animate="animate-fade-in-up">
+                <svg class="w-4 h-4 text-radiant-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <span class="text-sm text-radiant-green font-medium">Global Rankings</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4" data-animate="animate-fade-in-up">Leaderboards</h1>
+            <p class="text-xl text-radiant-gray" data-animate="animate-fade-in-up">Track the top performers across all fantasy leagues</p>
+        </div>
+    </section>
+
+    <!-- Leaderboard Tabs -->
+    <section class="px-4">
+        <div class="leaderboard-tabs" data-tabs="leaderboard">
+            <button class="leaderboard-tab leaderboard-tab--active" data-tab="weekly" data-leaderboard-tab="weekly">Weekly</button>
+            <button class="leaderboard-tab" data-tab="season" data-leaderboard-tab="season">Season</button>
+        </div>
+    </section>
+
+    <!-- Weekly Leaderboard -->
+    <section class="fantasy-section" style="padding-top: 1rem;" data-tab-panel="leaderboard" data-panel="weekly">
+        <div class="leaderboard" data-leaderboard>
+            <!-- Top 3 -->
+            <div class="leaderboard-item leaderboard-item--top1" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank leaderboard-rank--1">1</div>
+                <div class="leaderboard-avatar">O</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">Oracle</div>
+                    <div class="leaderboard-team">Visionaries</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,987</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 2</div>
+                </div>
+            </div>
+            <div class="leaderboard-item leaderboard-item--top2" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank leaderboard-rank--2">2</div>
+                <div class="leaderboard-avatar">D</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">DragonSlayer</div>
+                    <div class="leaderboard-team">FireBreathers</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,847</div>
+                    <div class="leaderboard-change">— 0</div>
+                </div>
+            </div>
+            <div class="leaderboard-item leaderboard-item--top3" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank leaderboard-rank--3">3</div>
+                <div class="leaderboard-avatar">P</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">PredictorX</div>
+                    <div class="leaderboard-team">FutureSight</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,876</div>
+                    <div class="leaderboard-change leaderboard-change--down">↓ 1</div>
+                </div>
+            </div>
+            <!-- Rest of Top 15 -->
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">4</div>
+                <div class="leaderboard-avatar">N</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">NeonKnight</div>
+                    <div class="leaderboard-team">CyberPunk</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,734</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 3</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">5</div>
+                <div class="leaderboard-avatar">V</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">Visionary</div>
+                    <div class="leaderboard-team">Seers</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,756</div>
+                    <div class="leaderboard-change">— 0</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">6</div>
+                <div class="leaderboard-avatar">T</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">ToxicWaste</div>
+                    <div class="leaderboard-team">Radioactive</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,689</div>
+                    <div class="leaderboard-change leaderboard-change--down">↓ 4</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">7</div>
+                <div class="leaderboard-avatar">F</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">FnaticFan</div>
+                    <div class="leaderboard-team">OrangeArmy</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,567</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 1</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">8</div>
+                <div class="leaderboard-avatar">P</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">PaperRex</div>
+                    <div class="leaderboard-team">PaperChasers</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,543</div>
+                    <div class="leaderboard-change leaderboard-change--down">↓ 2</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">9</div>
+                <div class="leaderboard-avatar">G</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">G2Gang</div>
+                    <div class="leaderboard-team">SamuraiBlue</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,498</div>
+                    <div class="leaderboard-change">— 0</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">10</div>
+                <div class="leaderboard-avatar">D</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">DRXDevotee</div>
+                    <div class="leaderboard-team">BlueWave</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,498</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 5</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">11</div>
+                <div class="leaderboard-avatar">T</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">T1Fanatic</div>
+                    <div class="leaderboard-team">Telecom</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,432</div>
+                    <div class="leaderboard-change leaderboard-change--down">↓ 1</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">12</div>
+                <div class="leaderboard-avatar">L</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">LiquidLove</div>
+                    <div class="leaderboard-team">HorsePower</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,432</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 2</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">13</div>
+                <div class="leaderboard-avatar">C</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">CloudNine</div>
+                    <div class="leaderboard-team">SkyHigh</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,156</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 1</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">14</div>
+                <div class="leaderboard-avatar">S</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">SageMain</div>
+                    <div class="leaderboard-team">Healers</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,098</div>
+                    <div class="leaderboard-change leaderboard-change--down">↓ 1</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">15</div>
+                <div class="leaderboard-avatar">J</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">JettRider</div>
+                    <div class="leaderboard-team">WindWalkers</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">2,045</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 2</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">16</div>
+                <div class="leaderboard-avatar">R</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">ReynaRage</div>
+                    <div class="leaderboard-team">Empress</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">1,987</div>
+                    <div class="leaderboard-change">— 0</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">17</div>
+                <div class="leaderboard-avatar">V</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">ViperVenom</div>
+                    <div class="leaderboard-team">Toxic</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">1,945</div>
+                    <div class="leaderboard-change leaderboard-change--down">↓ 3</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">18</div>
+                <div class="leaderboard-avatar">K</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">KilljoyKing</div>
+                    <div class="leaderboard-team">Turret</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">1,923</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 1</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">19</div>
+                <div class="leaderboard-avatar">B</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">BrimstoneBoss</div>
+                    <div class="leaderboard-team">Commander</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">1,898</div>
+                    <div class="leaderboard-change">— 0</div>
+                </div>
+            </div>
+            <div class="leaderboard-item" data-animate="animate-fade-in-up">
+                <div class="leaderboard-rank">20</div>
+                <div class="leaderboard-avatar">C</div>
+                <div class="leaderboard-info">
+                    <div class="leaderboard-name">ChamberChamp</div>
+                    <div class="leaderboard-team">Headhunter</div>
+                </div>
+                <div class="leaderboard-points">
+                    <div class="leaderboard-score">1,876</div>
+                    <div class="leaderboard-change leaderboard-change--up">↑ 4</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Season Leaderboard (Hidden by default) -->
+    <section class="fantasy-section hidden" style="padding-top: 1rem;" data-tab-panel="leaderboard" data-panel="season">
+        <div class="max-w-2xl mx-auto px-8 text-center">
+            <div class="p-8 bg-white/5 rounded-2xl border border-white/10">
+                <svg class="w-16 h-16 mx-auto mb-4 text-radiant-green/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <h3 class="text-xl font-bold text-white mb-2">Season Leaderboard</h3>
+                <p class="text-radiant-gray">The season has just begun! Check back soon for full season standings.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- League-Specific Rankings -->
+    <section class="fantasy-section" style="background: rgba(0, 0, 0, 0.2);">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">League Rankings</h2>
+            <p class="fantasy-section__subtitle">Top performers by league</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-8">
+            <!-- Global Championship -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6" data-animate="animate-fade-in-up">
+                <h3 class="text-lg font-semibold text-white mb-4">Global Championship</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-green font-bold">1</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">D</div>
+                        <span class="flex-1 text-white">DragonSlayer</span>
+                        <span class="text-radiant-accent">2,847</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-gray font-bold">2</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">N</div>
+                        <span class="flex-1 text-white">NeonKnight</span>
+                        <span class="text-radiant-accent">2,734</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-gray font-bold">3</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">T</div>
+                        <span class="flex-1 text-white">ToxicWaste</span>
+                        <span class="text-radiant-accent">2,689</span>
+                    </div>
+                </div>
+                <a href="../leagues/index.html" class="block mt-4 text-center text-radiant-green text-sm hover:underline">View Full League →</a>
+            </div>
+
+            <!-- NA Regional -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6" data-animate="animate-fade-in-up">
+                <h3 class="text-lg font-semibold text-white mb-4">NA Regional</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-green font-bold">1</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">C</div>
+                        <span class="flex-1 text-white">CloudNine</span>
+                        <span class="text-radiant-accent">2,156</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-gray font-bold">2</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">S</div>
+                        <span class="flex-1 text-white">SageMain</span>
+                        <span class="text-radiant-accent">2,098</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-gray font-bold">3</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">J</div>
+                        <span class="flex-1 text-white">JettRider</span>
+                        <span class="text-radiant-accent">2,045</span>
+                    </div>
+                </div>
+                <a href="../leagues/index.html" class="block mt-4 text-center text-radiant-green text-sm hover:underline">View Full League →</a>
+            </div>
+
+            <!-- VCT Predictor -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6" data-animate="animate-fade-in-up">
+                <h3 class="text-lg font-semibold text-white mb-4">VCT Predictor</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-green font-bold">1</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">O</div>
+                        <span class="flex-1 text-white">Oracle</span>
+                        <span class="text-radiant-accent">2,987</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-gray font-bold">2</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">P</div>
+                        <span class="flex-1 text-white">PredictorX</span>
+                        <span class="text-radiant-accent">2,876</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 text-radiant-gray font-bold">3</span>
+                        <div class="w-8 h-8 bg-radiant-green/20 rounded-full flex items-center justify-center text-radiant-green text-sm font-bold">V</div>
+                        <span class="flex-1 text-white">Visionary</span>
+                        <span class="text-radiant-accent">2,756</span>
+                    </div>
+                </div>
+                <a href="../leagues/index.html" class="block mt-4 text-center text-radiant-green text-sm hover:underline">View Full League →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="fantasy-section">
+        <div class="max-w-2xl mx-auto px-8 text-center">
+            <h2 class="fantasy-section__title mb-4" data-animate="animate-fade-in-up">Want to See Your Name Here?</h2>
+            <p class="text-lg text-radiant-gray mb-8" data-animate="animate-fade-in-up">Join a league, build your team, and climb the leaderboards to fantasy glory.</p>
+            <div class="flex flex-wrap justify-center gap-4" data-animate="animate-fade-in-up">
+                <a href="../leagues/index.html" class="fantasy-btn fantasy-btn--primary fantasy-btn--large">Join a League</a>
+                <a href="../membership/index.html" class="fantasy-btn fantasy-btn--secondary fantasy-btn--large">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="fantasy-footer">
+        <div class="fantasy-footer__content">
+            <div class="fantasy-footer__links">
+                <a href="../index.html" class="fantasy-footer__link">Fantasy Home</a>
+                <a href="../game/index.html" class="fantasy-footer__link">Game</a>
+                <a href="../../../index.html" class="fantasy-footer__link">SATOR Home</a>
+            </div>
+            <p class="fantasy-footer__copy">© 2026 SATOR Fantasy eSports. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/fantasy.js"></script>
+</body>
+</html>

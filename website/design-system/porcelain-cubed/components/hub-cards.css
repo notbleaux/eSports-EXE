@@ -1,0 +1,388 @@
+/**
+ * HUB Cards Component
+ * Card styles for the 4 HUB system with distinct theming
+ */
+
+/* ============================================
+   BASE HUB CARD
+   ============================================ */
+
+.hub-card {
+  position: relative;
+  background: var(--glass-dark);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  transition: all var(--transition-slow);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.hub-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.hub-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl), 0 0 30px var(--hub-current-glow);
+}
+
+.hub-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Header */
+.hub-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+/* Icon Container */
+.hub-card__icon {
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  background: var(--glass-mid);
+  border: 1px solid var(--border-medium);
+  transition: all var(--transition-normal);
+}
+
+.hub-card:hover .hub-card__icon {
+  transform: scale(1.1);
+  border-color: var(--hub-current-secondary);
+  box-shadow: 0 0 20px var(--hub-current-glow);
+}
+
+/* Badge */
+.hub-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  background: var(--glass-mid);
+  border: 1px solid var(--border-medium);
+  color: var(--text-tertiary);
+  transition: all var(--transition-normal);
+}
+
+.hub-card:hover .hub-card__badge {
+  background: var(--hub-current-muted);
+  border-color: var(--hub-current-primary);
+  color: var(--hub-current-secondary);
+}
+
+/* Title */
+.hub-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-light);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  letter-spacing: var(--tracking-wide);
+  transition: color var(--transition-normal);
+}
+
+.hub-card:hover .hub-card__title {
+  color: var(--hub-current-secondary);
+}
+
+/* Description */
+.hub-card__description {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+/* Footer / Action */
+.hub-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.hub-card__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--hub-current-secondary);
+  transition: all var(--transition-fast);
+}
+
+.hub-card__action::after {
+  content: '→';
+  transition: transform var(--transition-fast);
+}
+
+.hub-card:hover .hub-card__action::after {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   HUB-SPECIFIC VARIANTS
+   ============================================ */
+
+/* HUB 1/4: Statistical Reference - Blue Theme */
+.hub-card--statref {
+  --hub-current-primary: var(--hub-statref-primary);
+  --hub-current-secondary: var(--hub-statref-secondary);
+  --hub-current-accent: var(--hub-statref-accent);
+  --hub-current-glow: var(--hub-statref-glow);
+  --hub-current-muted: var(--hub-statref-muted);
+}
+
+.hub-card--statref .hub-card__icon {
+  color: var(--hub-statref-secondary);
+}
+
+/* HUB 2/4: Advanced Analytics - Purple Theme */
+.hub-card--analytics {
+  --hub-current-primary: var(--hub-analytics-primary);
+  --hub-current-secondary: var(--hub-analytics-secondary);
+  --hub-current-accent: var(--hub-analytics-accent);
+  --hub-current-glow: var(--hub-analytics-glow);
+  --hub-current-muted: var(--hub-analytics-muted);
+}
+
+.hub-card--analytics .hub-card__icon {
+  color: var(--hub-analytics-secondary);
+}
+
+/* HUB 3/4: eSports - Red Theme */
+.hub-card--esports {
+  --hub-current-primary: var(--hub-esports-primary);
+  --hub-current-secondary: var(--hub-esports-secondary);
+  --hub-current-accent: var(--hub-esports-accent);
+  --hub-current-glow: var(--hub-esports-glow);
+  --hub-current-muted: var(--hub-esports-muted);
+}
+
+.hub-card--esports .hub-card__icon {
+  color: var(--hub-esports-secondary);
+}
+
+/* HUB 4/4: Fantasy eSports - Green Theme */
+.hub-card--fantasy {
+  --hub-current-primary: var(--hub-fantasy-primary);
+  --hub-current-secondary: var(--hub-fantasy-secondary);
+  --hub-current-accent: var(--hub-fantasy-accent);
+  --hub-current-glow: var(--hub-fantasy-glow);
+  --hub-current-muted: var(--hub-fantasy-muted);
+}
+
+.hub-card--fantasy .hub-card__icon {
+  color: var(--hub-fantasy-primary);
+}
+
+/* ============================================
+   CARD SIZES
+   ============================================ */
+
+.hub-card--small {
+  padding: var(--space-4);
+}
+
+.hub-card--small .hub-card__icon {
+  width: var(--space-10);
+  height: var(--space-10);
+  font-size: var(--text-xl);
+}
+
+.hub-card--small .hub-card__title {
+  font-size: var(--text-lg);
+}
+
+.hub-card--large {
+  padding: var(--space-8);
+}
+
+.hub-card--large .hub-card__icon {
+  width: var(--space-16);
+  height: var(--space-16);
+  font-size: var(--text-3xl);
+}
+
+.hub-card--large .hub-card__title {
+  font-size: var(--text-3xl);
+}
+
+.hub-card--large .hub-card__description {
+  font-size: var(--text-base);
+}
+
+/* ============================================
+   FEATURED CARD (Hero Style)
+   ============================================ */
+
+.hub-card--featured {
+  background: linear-gradient(
+    135deg,
+    var(--hub-current-muted) 0%,
+    var(--glass-dark) 50%,
+    var(--abyssal-deep) 100%
+  );
+  border-color: var(--hub-current-primary);
+}
+
+.hub-card--featured::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--hub-current-secondary) 50%,
+    transparent 100%
+  );
+}
+
+/* ============================================
+   COMPACT CARD (List View)
+   ============================================ */
+
+.hub-card--compact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.hub-card--compact .hub-card__header {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: 0;
+}
+
+.hub-card--compact .hub-card__icon {
+  width: var(--space-10);
+  height: var(--space-10);
+  font-size: var(--text-lg);
+}
+
+.hub-card--compact .hub-card__content {
+  flex: 1;
+}
+
+.hub-card--compact .hub-card__title {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-1);
+}
+
+.hub-card--compact .hub-card__description {
+  font-size: var(--text-xs);
+  margin-bottom: 0;
+}
+
+.hub-card--compact .hub-card__badge {
+  display: none;
+}
+
+.hub-card--compact .hub-card__footer {
+  display: none;
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+.hub-card--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.hub-card--disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.hub-card--loading {
+  pointer-events: none;
+}
+
+.hub-card--loading .hub-card__icon,
+.hub-card--loading .hub-card__title,
+.hub-card--loading .hub-card__description {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hub-card--loading .hub-card__title {
+  background: var(--glass-mid);
+  color: transparent;
+  border-radius: var(--radius-sm);
+}
+
+.hub-card--loading .hub-card__description {
+  background: var(--glass-mid);
+  color: transparent;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   GRID LAYOUT FOR HUB CARDS
+   ============================================ */
+
+.hub-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  padding: var(--space-6);
+}
+
+.hub-cards-grid--2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.hub-cards-grid--4col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1024px) {
+  .hub-cards-grid--4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .hub-cards-grid,
+  .hub-cards-grid--2col,
+  .hub-cards-grid--4col {
+    grid-template-columns: 1fr;
+  }
+}

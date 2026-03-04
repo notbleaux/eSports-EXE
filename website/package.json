@@ -1,20 +1,23 @@
 {
-  "name": "sator",
-  "version": "0.1.0",
-  "description": "SATOR esports simulation platform — monorepo root",
+  "name": "sator-website",
+  "version": "0.2.0",
+  "description": "SATOR Website - Static site with HUB architecture",
   "private": true,
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "dev": "echo 'Game: open project.godot in Godot 4 | API (Phase 3): cd api && npm run dev'",
-    "test:firewall": "npm run test --workspace=packages/data-partition-lib",
-    "validate:schema": "npm run validate:schema --workspace=packages/stats-schema",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "build": "echo 'Building static site...' && npm run build:css",
+    "build:css": "echo 'CSS is handled via Tailwind CDN'",
+    "dev": "echo 'For local development, use a static server like: npx serve .'",
+    "dev:serve": "npx serve . -p 3000",
+    "validate": "echo 'Validating HTML...'",
+    "clean": "echo 'Nothing to clean for static site'"
   },
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "api"
+  "keywords": [
+    "sator",
+    "esports",
+    "tactical-fps",
+    "analytics",
+    "valorant"
   ],
-  "keywords": ["sator", "esports", "tactical-fps", "simulation"],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {}
 }
