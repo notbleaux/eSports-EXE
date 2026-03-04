@@ -16,7 +16,17 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 
 # Import route modules
-from api.src.routes import players, matches, analytics
+from api.src.routes import players, matches, analytics, collection, dashboard, websocket
+
+# Import database manager
+try:
+    from api.src.db_manager import db
+except ImportError:
+    # Fallback for when running from different paths
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent))
+    from src.db_manager import db
 
 # Configure logging
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
@@ -39,8 +49,8 @@ APP_ENVIRONMENT = os.getenv("APP_ENVIRONMENT", "development")
 # Database configuration
 DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL")
 
-# Global database pool (initialized during startup)
-db_pool: Optional[asyncpg.Pool] = None
+# Global database instance
+db = db  # From db_manager module
 
 
 @asynccontextmanager
@@ -209,6 +219,9 @@ async def liveness_check():
 app.include_router(players.router)
 app.include_router(matches.router)
 app.include_router(analytics.router)
+app.include_router(collection.router)
+app.include_router(dashboard.router)
+app.include_router(websocket.router)
 
 
 # ---------------------------------------------------------------------------
