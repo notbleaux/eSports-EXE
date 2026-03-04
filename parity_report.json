@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-03-04T12:39:49.930451",
+  "database": "raws_base_demo.db",
+  "reports": [
+    {
+      "table_pair": "raws_tournaments <-> base_tournaments",
+      "raws_count": 2,
+      "base_count": 2,
+      "matched": 2,
+      "orphaned_base": 0,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "ok",
+      "details": []
+    },
+    {
+      "table_pair": "raws_seasons <-> base_seasons",
+      "raws_count": 0,
+      "base_count": 0,
+      "matched": 0,
+      "orphaned_base": 0,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "ok",
+      "details": []
+    },
+    {
+      "table_pair": "raws_teams <-> base_teams",
+      "raws_count": 3,
+      "base_count": 4,
+      "matched": 3,
+      "orphaned_base": 1,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 1,
+      "status": "error",
+      "details": [
+        "Orphaned BASE records: ['error_team']",
+        "Sync errors: 1",
+        "  error_team: Failed to compute map statistics"
+      ]
+    },
+    {
+      "table_pair": "raws_players <-> base_players",
+      "raws_count": 5,
+      "base_count": 6,
+      "matched": 5,
+      "orphaned_base": 1,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "error",
+      "details": [
+        "Orphaned BASE records: ['deleted_player']"
+      ]
+    },
+    {
+      "table_pair": "raws_matches <-> base_matches",
+      "raws_count": 1,
+      "base_count": 1,
+      "matched": 1,
+      "orphaned_base": 0,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "ok",
+      "details": []
+    },
+    {
+      "table_pair": "raws_match_maps <-> base_match_maps",
+      "raws_count": 0,
+      "base_count": 0,
+      "matched": 0,
+      "orphaned_base": 0,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "ok",
+      "details": []
+    },
+    {
+      "table_pair": "raws_player_stats <-> base_player_stats",
+      "raws_count": 4,
+      "base_count": 4,
+      "matched": 4,
+      "orphaned_base": 0,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "ok",
+      "details": []
+    },
+    {
+      "table_pair": "raws_team_stats <-> base_team_stats",
+      "raws_count": 0,
+      "base_count": 0,
+      "matched": 0,
+      "orphaned_base": 0,
+      "missing_base": 0,
+      "hash_mismatches": 0,
+      "sync_errors": 0,
+      "status": "ok",
+      "details": []
+    }
+  ]
+}
