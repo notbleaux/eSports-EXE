@@ -2,16 +2,14 @@
 
 import { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, MeshDistortMaterial, Float } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-type FlowState = 'terrestrial' | 'harmonic' | 'celestial';
-
 // === TORUS KNOT HOURGLASS ===
-function TorusHourglass({ state }: { state: FlowState }) {
-  const torusRef = useRef<THREE.Mesh>(null);
-  const innerTorusRef = useRef<THREE.Mesh>(null);
-  const particleRef = useRef<THREE.Points>(null);
+function TorusHourglass({ state }) {
+  const torusRef = useRef(null);
+  const innerTorusRef = useRef(null);
+  const particleRef = useRef(null);
   
   const stateColors = {
     terrestrial: new THREE.Color('#8b4513'),
@@ -187,8 +185,8 @@ function TorusHourglass({ state }: { state: FlowState }) {
 }
 
 // === STATE LABELS ===
-function StateLabels({ currentState }: { currentState: FlowState }) {
-  const states: FlowState[] = ['terrestrial', 'harmonic', 'celestial'];
+function StateLabels({ currentState }) {
+  const states = ['terrestrial', 'harmonic', 'celestial'];
   
   return (
     <div className="torus-state-labels">
@@ -209,11 +207,8 @@ function StateLabels({ currentState }: { currentState: FlowState }) {
 export function TorusFlow({ 
   className = '',
   autoRotate = true
-}: { 
-  className?: string;
-  autoRotate?: boolean;
 }) {
-  const [currentState, setCurrentState] = useState<FlowState>('terrestrial');
+  const [currentState, setCurrentState] = useState('terrestrial');
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -253,6 +248,7 @@ export function TorusFlow({
           <ambientLight intensity={0.4} />
           <pointLight position={[10, 10, 10]} intensity={1} />
           <pointLight position={[-10, -10, -10]} intensity={0.5} color="#00f0ff" />
+          
           <TorusHourglass state={currentState} />
           
           <OrbitControls 

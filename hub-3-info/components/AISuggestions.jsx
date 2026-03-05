@@ -1,295 +1,383 @@
 /**
  * AISuggestions.jsx
  * Contextual recommendations based on user role
- * Reference: Landingi AI, Darkroom comparison
+ * Reference: Phamily segmentation, personalized content
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { AI_SUGGESTIONS, getSuggestionsByRole } from '../data/ai-suggestions';
-import { useIntersectionObserver, useLocalStorage } from '../hooks';
+import { useIntersectionObserver } from '../hooks';
 import '../styles/ai-suggestions.css';
 
-// Priority indicator component
-const PriorityIndicator = ({ priority }) => {
+// Priority indicator colors
+const PRIORITY_COLORS = {
+  high: '#ef4444',
+  medium: '#ff9f1c',
+  low: '#10b981'
+};
+
+// Type icons
+const TYPE_ICONS = {
+  team: '👥',
+  tournament: '🏆',
+  player: '🎮',
+  training: '📚',
+  analytics: '📊',
+  recruitment: '🎯',
+  schedule: '📅',
+  scouting: '🔍',
+  finance: '💰',
+  data: '🗄️',
+  report: '📈',
+  visualization: '👁️',
+  collaboration: '🤝',
+  event: '🎪',
+  registration: '📝',
+  broadcast: '📡',
+  sponsors: '💼',
+  match: '⚔️',
+  prediction: '🔮',
+  community: '💬',
+  resources: '📖',
+  workshop: '🎓'
+};
+
+// Type gradients
+const TYPE_GRADIENTS = {
+  team: 'linear-gradient(135deg, rgba(78, 205, 196, 0.2) 0%, rgba(78, 205, 196, 0.05) 100%)',
+  tournament: 'linear-gradient(135deg, rgba(201, 176, 55, 0.2) 0%, rgba(201, 176, 55, 0.05) 100%)',
+  player: 'linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0.05) 100%)',
+  training: 'linear-gradient(135deg, rgba(155, 89, 182, 0.2) 0%, rgba(155, 89, 182, 0.05) 100%)',
+  analytics: 'linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.05) 100%)',
+  recruitment: 'linear-gradient(135deg, rgba(231, 76, 60, 0.2) 0%, rgba(231, 76, 60, 0.05) 100%)',
+  schedule: 'linear-gradient(135deg, rgba(241, 196, 15, 0.2) 0%, rgba(241, 196, 15, 0.05) 100%)',
+  scouting: 'linear-gradient(135deg, rgba(149, 165, 166, 0.2) 0%, rgba(149, 165, 166, 0.05) 100%)',
+  finance: 'linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(46, 204, 113, 0.05) 100%)',
+  data: 'linear-gradient(135deg, rgba(52, 73, 94, 0.2) 0%, rgba(52, 73, 94, 0.05) 100%)',
+  report: 'linear-gradient(135deg, rgba(155, 89, 182, 0.2) 0%, rgba(155, 89, 182, 0.05) 100%)',
+  visualization: 'linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.05) 100%)',
+  collaboration: 'linear-gradient(135deg, rgba(230, 126, 34, 0.2) 0%, rgba(230, 126, 34, 0.05) 100%)',
+  event: 'linear-gradient(135deg, rgba(231, 76, 60, 0.2) 0%, rgba(231, 76, 60, 0.05) 100%)',
+  registration: 'linear-gradient(135deg, rgba(149, 165, 166, 0.2) 0%, rgba(149, 165, 166, 0.05) 100%)',
+  broadcast: 'linear-gradient(135deg, rgba(155, 89, 182, 0.2) 0%, rgba(155, 89, 182, 0.05) 100%)',
+  sponsors: 'linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(46, 204, 113, 0.05) 100%)',
+  match: 'linear-gradient(135deg, rgba(231, 76, 60, 0.2) 0%, rgba(231, 76, 60, 0.05) 100%)',
+  prediction: 'linear-gradient(135deg, rgba(241, 196, 15, 0.2) 0%, rgba(241, 196, 15, 0.05) 100%)',
+  community: 'linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.05) 100%)',
+  resources: 'linear-gradient(135deg, rgba(155, 89, 182, 0.2) 0%, rgba(155, 89, 182, 0.05) 100%)',
+  workshop: 'linear-gradient(135deg, rgba(230, 126, 34, 0.2) 0%, rgba(230, 126, 34, 0.05) 100%)'
+};
+
+// Priority Badge Component
+const PriorityBadge = ({ priority }) => {
   const colors = {
-    high: '#ff6b6b',
-    medium: '#c9b037',
-    low: '#7a7874'
+    high: { bg: 'rgba(239, 68, 68, 0.15)', text: '#ef4444', label: 'High Priority' },
+    medium: { bg: 'rgba(255, 159, 28, 0.15)', text: '#ff9f1c', label: 'Medium' },
+    low: { bg: 'rgba(16, 185, 129, 0.15)', text: '#10b981', label: 'Low' }
   };
   
+  const style = colors[priority] || colors.low;
+  
   return (
-    <div 
-      className={`priority-indicator ${priority}`}
-      style={{ '--priority-color': colors[priority] }}
-      title={`${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority`}
+    <span 
+      className={`priority-badge ${priority}`}
+      style={{ background: style.bg, color: style.text }}
     >
-      <span className="priority-dot" />
-      <span className="priority-label">{priority}</span>
-    </div>
+      {style.label}
+    </span>
   );
 };
 
-// Type icon component
-const TypeIcon = ({ type }) => {
-  const icons = {
-    team: '👥',
-    tournament: '🏆',
-    training: '📚',
-    analytics: '📊',
-    recruitment: '🔍',
-    schedule: '📅',
-    scouting: '🎯',
-    finance: '💰',
-    resources: '📖',
-    workshop: '🎓',
-    data: '💾',
-    report: '📄',
-    visualization: '📈',
-    collaboration: '🤝',
-    event: '🎪',
-    registration: '📝',
-    broadcast: '📺',
-    sponsors: '🤝',
-    match: '⚔️',
-    prediction: '🔮',
-    community: '💬'
-  };
+// Suggestion Card Component
+const SuggestionCard = ({ suggestion, index, isVisible }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
   
-  return <span className="type-icon">{icons[type] || '💡'}</span>;
-};
-
-// Suggestion card component
-const SuggestionCard = ({ suggestion, index, onDismiss, onAction }) => {
-  const [ref, isIntersecting] = useIntersectionObserver({ threshold: 0.3 });
-  const [isDismissing, setIsDismissing] = useState(false);
-  
-  const handleDismiss = useCallback(() => {
-    setIsDismissing(true);
-    setTimeout(() => onDismiss(suggestion.id), 300);
-  }, [suggestion.id, onDismiss]);
+  const handleDismiss = useCallback((e) => {
+    e.stopPropagation();
+    setIsDismissed(true);
+  }, []);
   
   const handleAction = useCallback(() => {
-    onAction(suggestion);
-  }, [suggestion, onAction]);
+    console.log('Action:', suggestion.action, 'for', suggestion.title);
+  }, [suggestion]);
   
-  return (
-    <div
-      ref={ref}
-      className={`suggestion-card ${suggestion.priority} ${isIntersecting ? 'visible' : ''} ${isDismissing ? 'dismissing' : ''}`}
-      style={{ '--card-delay': `${index * 100}ms` }}
-    >
-      <div className="card-glow" />
-      
-      <button className="card-dismiss" onClick={handleDismiss} title="Dismiss">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
-      </button>
-      
-      <div className="card-header">
-        <TypeIcon type={suggestion.type} />
-        <PriorityIndicator priority={suggestion.priority} />
-      </div>
-      
-      <h4 className="card-title">{suggestion.title}</h4>
-      <p className="card-description">{suggestion.description}</p>
-      
-      <button className="card-action" onClick={handleAction}>
-        {suggestion.action}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 12h14" />
-          <path d="m12 5 7 7-7 7" />
-        </svg>
-      </button>
-    </div>
-  );
-};
-
-// Role selector component
-const RoleSelector = ({ currentRole, onRoleChange }) => {
-  const roles = Object.entries(AI_SUGGESTIONS.roles);
+  if (isDismissed) return null;
   
-  return (
-    <div className="role-selector">
-      <span className="selector-label">I am a:</span>
-      <div className="role-tabs">
-        {roles.map(([key, role]) => (
-          <button
-            key={key}
-            className={`role-tab ${currentRole === key ? 'active' : ''}`}
-            onClick={() => onRoleChange(key)}
-            title={role.description}
-          >
-            <span className="role-icon">{role.icon}</span>
-            <span className="role-name">{role.title}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Empty state component
-const EmptyState = ({ onReset }) => (
-  <div className="suggestions-empty">
-    <div className="empty-icon">✨</div>
-    <h4>All caught up!</h4>
-    <p>You've reviewed all suggestions for this role.</p>
-    <button className="empty-reset" onClick={onReset}>
-      Restore Suggestions
-    </button>
-  </div>);
-
-// AI Thinking Animation
-const AIThinking = () => (
-  <div className="ai-thinking">
-    <div className="thinking-dots">
-      <span />
-      <span />
-      <span />
-    </div>
-    <span className="thinking-text">AI analyzing your preferences...</span>
-  </div>);
-
-// Main AI Suggestions Component
-const AISuggestions = ({ 
-  defaultRole = 'player',
-  onSuggestionAction,
-  showRoleSelector = true,
-  maxSuggestions = null
-}) => {
-  const [currentRole, setCurrentRole] = useLocalStorage('njz-preferred-role', defaultRole);
-  const [dismissedIds, setDismissedIds] = useLocalStorage('njz-dismissed-suggestions', []);
-  const [isThinking, setIsThinking] = useState(false);
-  const [sectionRef, isInView] = useIntersectionObserver({ threshold: 0.1 });
-  
-  // Get current role data
-  const roleData = useMemo(() => getSuggestionsByRole(currentRole), [currentRole]);
-  
-  // Filter out dismissed suggestions
-  const activeSuggestions = useMemo(() => {
-    let suggestions = roleData.suggestions.filter(
-      s => !dismissedIds.includes(s.id)
-    );
-    if (maxSuggestions) {
-      suggestions = suggestions.slice(0, maxSuggestions);
-    }
-    return suggestions;
-  }, [roleData.suggestions, dismissedIds, maxSuggestions]);
-  
-  // Handle role change with animation
-  const handleRoleChange = useCallback((newRole) => {
-    if (newRole === currentRole) return;
-    setIsThinking(true);
-    setTimeout(() => {
-      setCurrentRole(newRole);
-      setIsThinking(false);
-    }, 600);
-  }, [currentRole, setCurrentRole]);
-  
-  // Handle dismiss
-  const handleDismiss = useCallback((id) => {
-    setDismissedIds(prev => [...prev, id]);
-  }, [setDismissedIds]);
-  
-  // Handle reset
-  const handleReset = useCallback(() => {
-    setDismissedIds([]);
-  }, [setDismissedIds]);
-  
-  // Handle action
-  const handleAction = useCallback((suggestion) => {
-    onSuggestionAction?.(suggestion, currentRole);
-  }, [onSuggestionAction, currentRole]);
-  
-  // Count by priority
-  const priorityCounts = useMemo(() => {
-    return activeSuggestions.reduce((acc, s) => {
-      acc[s.priority] = (acc[s.priority] || 0) + 1;
-      return acc;
-    }, {});
-  }, [activeSuggestions]);
+  const icon = TYPE_ICONS[suggestion.type] || '💡';
+  const gradient = TYPE_GRADIENTS[suggestion.type] || TYPE_GRADIENTS.analytics;
   
   return (
     <div 
-      ref={sectionRef}
-      className={`ai-suggestions ${isInView ? 'in-view' : ''}`}
+      className={`suggestion-card ${isVisible ? 'visible' : ''} priority-${suggestion.priority}`}
+      style={{ 
+        '--card-gradient': gradient,
+        '--card-index': index,
+        animationDelay: `${index * 100}ms`
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Section header */}
-      <div className="suggestions-header">
-        <div className="header-title-group">
-          <div className="ai-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
-              <path d="M8.5 8.5v.01" />
-              <path d="M16 15.5v.01" />
-              <path d="M12 12v.01" />
-              <path d="M11 17v.01" />
-              <path d="M7 14v.01" />
-            </svg>
-            AI Powered
-          </div>
-          <h3 className="header-title">Personalized For You</h3>
-          <p className="header-subtitle">
-            {roleData.description}
-          </p>
+      <div className="suggestion-card-glow" />
+      
+      <div className="suggestion-card-content">
+        <div className="suggestion-card-header">
+          <div className="suggestion-icon">{icon}</div>
+          <PriorityBadge priority={suggestion.priority} />
+          <button 
+            className="suggestion-dismiss"
+            onClick={handleDismiss}
+            aria-label="Dismiss suggestion"
+          >
+            ×
+          </button>
         </div>
         
-        {/* Priority summary */}
-        {activeSuggestions.length > 0 && (
-          <div className="priority-summary">
-            {priorityCounts.high > 0 && (
-              <span className="summary-badge high">
-                {priorityCounts.high} High Priority
-              </span>
-            )}
-            {priorityCounts.medium > 0 && (
-              <span className="summary-badge medium">
-                {priorityCounts.medium} Medium
-              </span>
-            )}
-          </div>
-        )}
+        <h4 className="suggestion-title">{suggestion.title}</h4>
+        <p className="suggestion-description">{suggestion.description}</p>
+        
+        <button 
+          className="suggestion-action"
+          onClick={handleAction}
+        >
+          {suggestion.action}
+          <svg 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
       </div>
       
-      {/* Role selector */}
-      {showRoleSelector && (
-        <RoleSelector 
-          currentRole={currentRole}
-          onRoleChange={handleRoleChange}
-        />
-      )}
+      {/* Decorative elements */}
+      <div className="suggestion-decoration">
+        <div className="deco-circle" />
+        <div className="deco-line" />
+      </div>
+    </div>
+  );
+};
+
+// Empty State Component
+const EmptySuggestions = ({ role }) => (
+  <div className="empty-suggestions">
+    <div className="empty-icon">🎯</div>
+    <h4>All Caught Up!</h4>
+    <p>No new suggestions for {role.replace('_', ' ')} right now.</p>
+    <button className="empty-refresh">
+      Refresh Suggestions
+    </button>
+  </div>
+);
+
+// AI Insights Panel Component
+const AIInsightsPanel = ({ suggestions }) => {
+  const stats = useMemo(() => {
+    const total = suggestions.length;
+    const highPriority = suggestions.filter(s => s.priority === 'high').length;
+    const types = suggestions.reduce((acc, s) => {
+      acc[s.type] = (acc[s.type] || 0) + 1;
+      return acc;
+    }, {});
+    
+    return { total, highPriority, types };
+  }, [suggestions]);
+  
+  const topTypes = useMemo(() => {
+    return Object.entries(stats.types)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3);
+  }, [stats.types]);
+  
+  return (
+    <div className="ai-insights-panel">
+      <div className="insights-header">
+        <svg 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2"
+        >
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>AI Insights</span>
+      </div>
       
-      {/* AI thinking state */}
-      {isThinking && <AIThinking />}
+      <div className="insights-stats">
+        <div className="insight-stat">
+          <span className="stat-number">{stats.total}</span>
+          <span className="stat-label">Suggestions</span>
+        </div>
+        <div className="insight-stat highlight">
+          <span className="stat-number">{stats.highPriority}</span>
+          <span className="stat-label">High Priority</span>
+        </div>
+      </div>
       
-      {/* Suggestions grid */}
-      {!isThinking && (
-        <>
-          {activeSuggestions.length > 0 ? (
-            <div className="suggestions-grid">
-              {activeSuggestions.map((suggestion, index) => (
+      <div className="insights-types">
+        <span className="types-label">Top Categories</span>
+        <div className="types-list">
+          {topTypes.map(([type, count]) => (
+            <div key={type} className="type-item">
+              <span className="type-icon">{TYPE_ICONS[type] || '💡'}</span>
+              <span className="type-name">{type}</span>
+              <span className="type-count">{count}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="insights-footer">
+        <span>Powered by NJZ Intelligence</span>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Main AI Suggestions Component
+ */
+const AISuggestions = ({ suggestions = [], role = 'spectator' }) => {
+  const [containerRef, isIntersecting, hasIntersected] = useIntersectionObserver({ threshold: 0.1 });
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [filterPriority, setFilterPriority] = useState('all');
+  
+  // Filter suggestions
+  const filteredSuggestions = useMemo(() => {
+    let filtered = suggestions;
+    
+    if (filterPriority !== 'all') {
+      filtered = filtered.filter(s => s.priority === filterPriority);
+    }
+    
+    // Sort by priority
+    const priorityOrder = { high: 0, medium: 1, low: 2 };
+    return filtered.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+  }, [suggestions, filterPriority]);
+  
+  // Group suggestions by type for list view
+  const groupedSuggestions = useMemo(() => {
+    return filteredSuggestions.reduce((acc, suggestion) => {
+      if (!acc[suggestion.type]) acc[suggestion.type] = [];
+      acc[suggestion.type].push(suggestion);
+      return acc;
+    }, {});
+  }, [filteredSuggestions]);
+  
+  if (suggestions.length === 0) {
+    return <EmptySuggestions role={role} />;
+  }
+  
+  return (
+    <div ref={containerRef} className="ai-suggestions-container">
+      {/* Controls */}
+      <div className="suggestions-controls">
+        <div className="filter-pills">
+          {[
+            { id: 'all', label: 'All', count: suggestions.length },
+            { id: 'high', label: 'High Priority', count: suggestions.filter(s => s.priority === 'high').length },
+            { id: 'medium', label: 'Medium', count: suggestions.filter(s => s.priority === 'medium').length },
+            { id: 'low', label: 'Low', count: suggestions.filter(s => s.priority === 'low').length }
+          ].map((filter) => (
+            <button
+              key={filter.id}
+              className={`filter-pill ${filterPriority === filter.id ? 'active' : ''}`}
+              onClick={() => setFilterPriority(filter.id)}
+            >
+              {filter.label}
+              <span className="pill-count">{filter.count}</span>
+            </button>
+          ))}
+        </div>
+        
+        <div className="view-toggle"
+        >
+          <button 
+            className={viewMode === 'grid' ? 'active' : ''}
+            onClick={() => setViewMode('grid')}
+            title="Grid view"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </button>
+          <button 
+            className={viewMode === 'list' ? 'active' : ''}
+            onClick={() => setViewMode('list')}
+            title="List view"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div className="suggestions-layout"
+      >
+        {/* Main Content */}
+        <div className={`suggestions-content ${viewMode}`}
+        >
+          {viewMode === 'grid' ? (
+            <div className="suggestions-grid"
+            >
+              {filteredSuggestions.map((suggestion, index) => (
                 <SuggestionCard
                   key={suggestion.id}
                   suggestion={suggestion}
                   index={index}
-                  onDismiss={handleDismiss}
-                  onAction={handleAction}
+                  isVisible={hasIntersected}
                 />
               ))}
             </div>
           ) : (
-            <EmptyState onReset={handleReset} />
+            <div className="suggestions-list"
+            >
+              {Object.entries(groupedSuggestions).map(([type, items]) => (
+                <div key={type} className="suggestion-group"
+                >
+                  <h5 className="group-header"
+                  >
+                    <span>{TYPE_ICONS[type] || '💡'}</span>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                    <span className="group-count">{items.length}</span>
+                  </h5>
+                  <div className="group-items"
+                  >
+                    {items.map((suggestion, index) => (
+                      <SuggestionCard
+                        key={suggestion.id}
+                        suggestion={suggestion}
+                        index={index}
+                        isVisible={hasIntersected}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
-        </>
-      )}
-      
-      {/* Footer */}
-      <div className="suggestions-footer">
-        <p>
-          Suggestions update based on your activity and preferences.
-        </p>
+        </div>
+        
+        {/* Sidebar - AI Insights */}
+        <aside className="suggestions-sidebar"
+        >
+          <AIInsightsPanel suggestions={filteredSuggestions} />
+        </aside>
       </div>
     </div>
   );
