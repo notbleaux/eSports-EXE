@@ -1,24 +1,24 @@
-# AGENTS.md — SATOR / RadiantX Project Guide
+# AGENTS.md — SATOR / eSports-EXE Project Guide
 
-This document provides essential information for AI coding agents working on the SATOR esports simulation platform. SATOR is a complex multi-component project with strict architectural boundaries and coding conventions.
+This document provides essential information for AI coding agents working on the SATOR esports simulation and analytics platform. SATOR is a complex multi-component project with strict architectural boundaries and coding conventions.
 
 ---
 
 ## Project Overview
 
-**SATOR** (also known as **RadiantX**) is a three-part esports simulation and analytics platform:
+**SATOR** (also known as **RadiantX** or **eSports-EXE**) is a three-part esports simulation and analytics platform:
 
 1. **RadiantX** — An offline, deterministic tactical FPS simulation game built with Godot 4 and GDScript
-2. **Axiom Esports Data** — A tactical FPS analytics pipeline with SATOR Square 5-layer visualization (Python + React/TypeScript/D3/WebGL)
-3. **SATOR Web** — An online public statistics platform (TypeScript/HTML/Tailwind CSS)
+2. **Axiom Esports Data** — A tactical FPS analytics pipeline with SATOR Square 5-layer visualization (Python + FastAPI + React/TypeScript)
+3. **SATOR Web** — An online public statistics platform (Static HTML/Tailwind CSS + React/Vite frontend)
 
 ### Key Characteristics
 
-- **Deterministic Simulation**: 20 TPS fixed timestep, seeded RNG for reproducible matches
+- **Deterministic Simulation**: 20 TPS (ticks per second) fixed timestep, seeded RNG for reproducible matches
 - **Data Partition Firewall**: Strict boundary preventing game-internal data from reaching the public web
-- **Dual-Storage Protocol**: Immutable raw data + calculated reconstruction data
-- **Overfitting Guardrails**: Temporal train/test wall, adversarial validation, confidence weighting
-- **37-field KCRITR Schema**: Comprehensive player performance database
+- **Dual-Storage Protocol**: Immutable raw data (`separation_flag=0`) + calculated reconstruction data (`separation_flag=1`)
+- **Overfitting Guardrails**: Temporal train/test wall (cutoff: 2024-01-01), adversarial validation, confidence weighting
+- **37-Field KCRITR Schema**: Comprehensive player performance database (Kills-Confidence-Role-Investment-Temporal-Reliability)
 - **SATOR Square Visualization**: 5-layer palindromic match analysis (D3.js + WebGL)
 
 ---
@@ -27,25 +27,22 @@ This document provides essential information for AI coding agents working on the
 
 ```
 /
-├── website/                    # Static website (HTML/CSS/JS/Tailwind)
+├── website/                    # Static website (HTML/CSS/JS/Tailwind CDN)
 │   ├── index.html             # Main entry point
-│   ├── src/style.css          # Custom styles
-│   ├── system/                # Core system files
-│   └── package.json           # Node dependencies (Tailwind, PostCSS)
+│   ├── package.json           # Minimal npm config (no build required)
+│   └── ...
 │
-├── simulation-game/           # Godot 4 game project
+├── simulation-game/           # Godot 4 game project (RadiantX)
 │   ├── project.godot          # Godot project configuration
 │   ├── scripts/               # GDScript game logic
-│   │   ├── Main.gd           # Entry point
-│   │   ├── MatchEngine.gd    # 20 TPS simulation loop
+│   │   ├── Main.gd           # Entry point with HUD
+│   │   ├── MatchEngine.gd    # 20 TPS deterministic simulation loop
 │   │   ├── Agent.gd          # Agent AI with belief system
 │   │   ├── Data/             # 22 data type definitions
 │   │   └── Sim/              # Combat resolution (6 files)
-│   ├── scenes/                # Godot scene files
+│   ├── scenes/                # Godot scene files (.tscn)
 │   ├── maps/                  # JSON map definitions
-│   ├── Defs/                  # Game definition files (JSON)
-│   ├── tests/                 # GDScript determinism tests
-│   └── tactical-fps-sim-core-updated/  # C# simulation core
+│   └── Defs/                  # Game definition files (JSON)
 │
 ├── shared/                    # Shared components
 │   ├── axiom-esports-data/   # Python analytics pipeline
@@ -54,19 +51,25 @@ This document provides essential information for AI coding agents working on the
 │   │   ├── visualization/    # SATOR Square React/D3/WebGL
 │   │   ├── api/              # FastAPI REST service
 │   │   ├── infrastructure/   # Docker, PostgreSQL migrations
+│   │   ├── pipeline/         # Async extraction pipeline coordinator
+│   │   ├── monitoring/       # Dev dashboard and alerting
 │   │   ├── scripts/          # CLI operational tools
-│   │   └── config/           # Static configuration
+│   │   └── config/           # Static configuration (JSON/YAML)
+│   │
+│   ├── apps/                 # Application implementations
+│   │   ├── sator-web/        # React/Vite frontend (TypeScript)
+│   │   └── radiantx-game/    # Godot game integration modules
 │   │
 │   ├── packages/             # TypeScript shared packages
 │   │   ├── stats-schema/     # Public stats type definitions
 │   │   └── data-partition-lib/  # Firewall enforcement library
 │   │
-│   ├── apps/                 # Application placeholders (Phase 2+)
 │   ├── api/                  # API placeholder (Phase 3+)
 │   └── docs/                 # Project documentation
 │
 ├── .github/workflows/        # CI/CD workflows
 ├── package.json              # Root npm workspace configuration
+├── render.yaml               # Render.com deployment config
 ├── vercel.json               # Vercel deployment config
 └── AGENTS.md                 # This file
 ```
@@ -75,18 +78,22 @@ This document provides essential information for AI coding agents working on the
 
 ## Technology Stack
 
-| Component | Technology |
-|-----------|------------|
-| **Game Engine** | Godot 4.x |
-| **Game Language** | GDScript |
-| **Simulation Core** | C# (.NET) |
-| **Analytics** | Python 3.11+ |
-| **Analytics Libraries** | pandas, scikit-learn, numpy, FastAPI |
-| **Database** | PostgreSQL 15 + TimescaleDB |
-| **Web Frontend** | HTML5, Tailwind CSS, vanilla JavaScript |
-| **Visualization** | React 18, TypeScript, D3.js, WebGL/Three.js |
-| **Containerization** | Docker, Docker Compose |
-| **CI/CD** | GitHub Actions |
+| Component | Technology | Version |
+|-----------|------------|---------|
+| **Game Engine** | Godot | 4.x |
+| **Game Language** | GDScript | 4.0 |
+| **Simulation Core** | C# | .NET (optional) |
+| **Analytics** | Python | 3.11+ |
+| **Analytics Libraries** | pandas, scikit-learn, numpy | Latest stable |
+| **API Framework** | FastAPI | 0.109+ |
+| **Database** | PostgreSQL | 15 + TimescaleDB |
+| **Cache** | Redis | 7.x |
+| **Web Frontend (Static)** | HTML5, Tailwind CSS | CDN |
+| **Web Frontend (React)** | React, TypeScript, Vite | 18.x, 5.x |
+| **Visualization** | D3.js, WebGL/Three.js, Recharts | Latest |
+| **HTTP Client** | aiohttp, httpx | Latest |
+| **Containerization** | Docker, Docker Compose | Latest |
+| **CI/CD** | GitHub Actions | Latest |
 
 ---
 
@@ -96,11 +103,12 @@ This document provides essential information for AI coding agents working on the
 
 ```bash
 cd website
-npm install      # Install Tailwind, PostCSS dependencies
-npm run build    # Build CSS (Tailwind compilation)
+npm install      # Install dependencies (if any added)
+npm run build    # Build CSS (Tailwind handled via CDN)
+npm run dev:serve # Start local static server on port 3000
 ```
 
-The website is deployed to GitHub Pages via `.github/workflows/static.yml`.
+The website is deployed to GitHub Pages via `.github/workflows/static.yml` or `.github/workflows/deploy.yml`.
 
 ### RadiantX Game (Godot)
 
@@ -111,13 +119,19 @@ The website is deployed to GitHub Pages via `.github/workflows/static.yml`.
 godot --path simulation-game --scene scenes/Main.tscn
 ```
 
+**Determinism Requirements:**
+- Always use seeded RNG: `rng = RandomNumberGenerator.new(); rng.seed = match_seed`
+- Never use `randf()` or `randi()` directly
+- Fixed timestep (20 TPS, 50ms) — never use delta-time in simulation logic
+- Process agents/actions in the same order every tick
+
 ### Axiom Esports Data (Python)
 
 ```bash
 cd shared/axiom-esports-data
 
 # Database setup
-docker-compose -f infrastructure/docker-compose.yml up -d
+docker-compose -f infrastructure/docker-compose.yml up -d postgres redis
 psql $DATABASE_URL -f infrastructure/migrations/001_initial_schema.sql
 
 # Extraction pipeline
@@ -125,9 +139,25 @@ cd extraction
 pip install -r requirements.txt
 python src/scrapers/epoch_harvester.py --mode=delta
 
+# Run API
+cd ../api
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
 # Analytics
 cd ../analytics
 pytest tests/ -v
+```
+
+### SATOR Web (React/Vite)
+
+```bash
+cd shared/apps/sator-web
+npm install
+npm run dev        # Start Vite dev server
+npm run build      # Production build
+npm run typecheck  # TypeScript check
+npm run lint       # ESLint
 ```
 
 ### TypeScript Packages
@@ -149,18 +179,18 @@ npm run validate:schema    # Validate stats schema
 
 - **Indentation**: Tabs only (not spaces)
 - **Naming**: `snake_case` for variables/functions, `PascalCase` for classes
+- **Type hints**: Use static typing where possible: `func process_tick() -> void:`
 - **Determinism Rules**:
   - Only use seeded RNG — never use `randf()` or `randi()` directly
   - Fixed timestep (20 TPS, 50ms) — never use delta-time in simulation logic
   - Consistent ordering — process agents/actions in the same order every tick
 
 ```gdscript
-# Example
-global class_name MatchEngine
+class_name MatchEngine
 
 func calculate_damage(attacker: Agent, target: Agent) -> float:
-	var base_damage = 25.0
-	return base_damage
+    var base_damage: float = 25.0
+    return base_damage
 ```
 
 ### Python (Analytics)
@@ -169,8 +199,9 @@ func calculate_damage(attacker: Agent, target: Agent) -> float:
 - Use type hints for all function signatures
 - **Overfitting Guardrails**:
   - All data must pass through `integrity_checker.py` before analytics
-  - Use `temporal_wall.py` to enforce train/test temporal splits
+  - Use `temporal_wall.py` to enforce train/test temporal splits (cutoff: 2024-01-01)
   - Use `confidence_sampler.py` for confidence-weighted calculations
+- **Naming**: `snake_case` for functions/variables, `PascalCase` for classes
 
 ```python
 from typing import Dict, List, Optional
@@ -186,7 +217,8 @@ def calculate_simrating(
 
 ### TypeScript (Packages/Web)
 
-- Strict TypeScript mode enabled
+- Strict TypeScript mode enabled (`strict: true` in tsconfig.json)
+- **Naming**: `camelCase` for variables/functions, `PascalCase` for classes/interfaces
 - **Firewall Enforcement**: Always sanitize game data before sending to API
 
 ```typescript
@@ -197,8 +229,9 @@ const safe = FantasyDataFilter.sanitizeForWeb(rawData);
 ### SQL (Migrations)
 
 - Numbered migration files: `001_`, `002_`, etc.
-- Always include rollback (DOWN) migration
+- Always include rollback (DOWN) migration comments
 - Use `snake_case` for table and column names
+- TimescaleDB hypertables for time-series data
 
 ---
 
@@ -215,8 +248,15 @@ simulation-game/tests/test_determinism.tscn
 ### Python Analytics Tests
 
 ```bash
-cd shared/axiom-esports-data/analytics
-pytest tests/ -v
+cd shared/axiom-esports-data
+
+# All tests
+pytest -v
+
+# Specific modules
+pytest analytics/tests/ -v
+pytest extraction/tests/ -v
+pytest api/tests/ -v
 
 # Required coverage:
 # - test_schema_validation.py — 37-field KCRITR completeness
@@ -267,7 +307,7 @@ The firewall prevents game-internal fields from reaching the public web platform
 
 **Enforcement Points**:
 1. Game extraction (`LiveSeasonModule.gd`)
-2. API middleware filter (TypeScript)
+2. API middleware filter (`api/src/middleware/firewall.py`)
 3. Web schema validation (`stats-schema`)
 4. CI/CD automated testing
 
@@ -276,53 +316,74 @@ The firewall prevents game-internal fields from reaching the public web platform
 - Never commit `.env` files — use `.env.example` as template
 - Never commit model files (`.pkl`, `.joblib`) — gitignored
 - No hardcoded player IDs in test files
-- All firewall changes require `@hvrryh-web` approval (CODEOWNERS)
+- All firewall changes require explicit review (see CODEOWNERS)
+- Database migrations must not create columns named after `GAME_ONLY_FIELDS`
 
 ---
 
 ## Deployment Process
 
-### GitHub Pages (Website)
+### GitHub Pages (Static Website)
 
 Triggered on push to `main` branch:
 ```yaml
-# .github/workflows/static.yml
+# .github/workflows/static.yml or deploy.yml
 - Uploads ./website folder to GitHub Pages
 ```
 
-### Vercel (Alternative)
+### Render (FastAPI Backend)
 
-Configured in `vercel.json` with static build settings.
+Uses `render.yaml` blueprint:
+```bash
+# Auto-deploys on push to main
+# Services: sator-api (web), sator-keepalive (cron)
+```
 
-### Axiom Data Pipeline
+### Vercel (React Frontend)
+
+Configured in `vercel.json`:
+```bash
+# Routes /web/* to sator-web React app
+# Routes /* to static website
+# API proxy to Render backend
+```
+
+### Database Migrations
 
 ```bash
-# Daily extraction (scheduled CI)
-python src/scrapers/epoch_harvester.py --mode=delta
+cd shared/axiom-esports-data/infrastructure
 
-# Weekly analytics refresh
-python scripts/weekly_analytics_refresh.py
-
-# Monthly full harvest
-python scripts/monthly_full_harvest.py
+# Apply in order:
+psql $DATABASE_URL -f migrations/001_initial_schema.sql
+psql $DATABASE_URL -f migrations/002_sator_layers.sql
+# ... etc through 009_alert_scheduler_tables.sql
 ```
 
 ---
 
-## Documentation Index
+## Branch Strategy
 
-| Document | Location | Purpose |
-|----------|----------|---------|
-| Quick Start | `shared/docs/quick_start.md` | Getting started guide |
-| Architecture | `shared/docs/architecture.md` | System design overview |
-| Agent Behavior | `shared/docs/agents.md` | AI agent documentation |
-| Map Format | `shared/docs/map_format.md` | JSON map specification |
-| Replay System | `shared/docs/replay.md` | Match replay guide |
-| Firewall Policy | `shared/docs/FIREWALL_POLICY.md` | Data partition rules |
-| Branch Strategy | `shared/docs/BRANCH_STRATEGY.md` | Git workflow |
-| AXIOM Guide | `shared/axiom-esports-data/AXIOM.md` | AI agent operational guide |
-| Data Dictionary | `shared/axiom-esports-data/docs/DATA_DICTIONARY.md` | 37-field KCRITR schema |
-| SATOR Architecture | `shared/axiom-esports-data/docs/SATOR_ARCHITECTURE.md` | 5-layer visualization spec |
+```
+main (production)
+  │
+  └─ develop (integration)
+        │
+        ├─ feature/stats-schema-types
+        ├─ feature/firewall-implementation
+        └─ ...
+```
+
+| Branch | Purpose | Merge Requirements |
+|--------|---------|-------------------|
+| `main` | Production | All CI passes, firewall tests, `@hvrryh-web` approval |
+| `develop` | Integration | CI passes, code review |
+| `feature/*` | Development | CI passes |
+
+### Naming Convention
+- `feature/<description>` — New feature
+- `fix/<description>` — Bug fix
+- `chore/<description>` — Non-functional change
+- `docs/<description>` — Documentation only
 
 ---
 
@@ -331,15 +392,48 @@ python scripts/monthly_full_harvest.py
 Copy `shared/axiom-esports-data/.env.example` to `.env` and configure:
 
 ```bash
-DATABASE_URL=postgresql://user:pass@localhost:5432/axiom_esports
+# Database
+DATABASE_URL=postgresql://axiom:changeme@localhost:5432/axiom_esports
+POSTGRES_USER=axiom
+POSTGRES_PASSWORD=changeme
+
+# Extraction
 VLR_RATE_LIMIT=2.0
-HLTV_API_KEY=optional_for_validation
-GRID_API_KEY=optional_partnership
-GITHUB_TOKEN=for_actions
+RAW_STORAGE_PATH=data/raw_extractions
+
+# External validation (optional)
+HLTV_API_KEY=
+GRID_API_KEY=
+LIQUIPEDIA_API_KEY=
+
+# Data retention
 DATA_RETENTION_DAYS=730
+
+# Analytics
+TRAIN_CUTOFF_DATE=2024-01-01
+MIN_MAPS_TRAINING=50
+MAX_MAPS_CEILING=200
 ```
 
 **Never commit `.env` files to version control.**
+
+---
+
+## Documentation Index
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| Quick Start | `shared/docs/quick_start.md` | Getting started guide |
+| Architecture | `ARCHITECTURE.md` | System design overview |
+| Agent Behavior | `shared/docs/agents.md` | AI agent documentation |
+| Map Format | `shared/docs/map_format.md` | JSON map specification |
+| Replay System | `shared/docs/replay.md` | Match replay guide |
+| Firewall Policy | `shared/docs/FIREWALL_POLICY.md` | Data partition rules |
+| Branch Strategy | `shared/docs/BRANCH_STRATEGY.md` | Git workflow |
+| AXIOM Guide | `shared/axiom-esports-data/AXIOM.md` | AI agent operational guide |
+| Data Dictionary | `shared/axiom-esports-data/docs/DATA_DICTIONARY.md` | 37-field KCRITR schema |
+| SATOR Architecture | `shared/axiom-esports-data/docs/SATOR_ARCHITECTURE.md` | 5-layer visualization spec |
+| API Reference | `shared/axiom-esports-data/docs/API_REFERENCE.md` | REST API documentation |
 
 ---
 
@@ -368,15 +462,26 @@ DATA_RETENTION_DAYS=730
 4. Run `npm run test:firewall` and `npm run validate:schema`
 5. Update firewall documentation
 
-### Database Migrations
+### Database Schema Changes
 
-```bash
-cd shared/axiom-esports-data/infrastructure
-# Apply in order:
-psql $DATABASE_URL -f migrations/001_initial_schema.sql
-psql $DATABASE_URL -f migrations/002_sator_layers.sql
-# ... etc
-```
+1. Create new migration file with next sequential number
+2. Follow existing naming: `XXX_description.sql`
+3. Include both UP and DOWN migrations as comments
+4. Test migration against local Docker database
+5. Update `DATA_DICTIONARY.md` if fields added/changed
+
+---
+
+## Key Constants and Configuration
+
+| Constant | Value | Location |
+|----------|-------|----------|
+| Tick rate | 20 TPS | `simulation-game/project.godot` |
+| Training cutoff | 2024-01-01 | `analytics/src/guardrails/temporal_wall.py` |
+| VLR rate limit | 2.0s | `extraction/src/scrapers/vlr_resilient_client.py` |
+| Min maps training | 50 | `config/overfitting_guardrails.json` |
+| Max maps ceiling | 200 | `config/overfitting_guardrails.json` |
+| Validation target | r > 0.85 | `analytics/tests/` |
 
 ---
 
@@ -387,4 +492,4 @@ psql $DATABASE_URL -f migrations/002_sator_layers.sql
 
 ---
 
-*Last updated: 2026-03-04*
+*Last updated: 2026-03-05*
