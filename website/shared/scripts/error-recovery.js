@@ -97,19 +97,30 @@
    * Attempt to recover connection
    */
   async function attemptRecovery() {
-    // Try to fetch a small resource
+    // Try to fetch a small resource with timeout support for all browsers
+    const testUrl = '/api/health?' + Date.now();
+
+    const controller = new AbortController();
+    let timeoutId;
+
     try {
-      const testUrl = '/api/health?' + Date.now();
+      timeoutId = setTimeout(() => controller.abort(), 5000);
+
       const response = await fetch(testUrl, {
         method: 'HEAD',
         cache: 'no-store',
-        signal: AbortSignal.timeout(5000),
+        signal: controller.signal,
       });
-      
+
       return response.ok;
-    } catch (error) {
-      // Try alternative check
+    } catch (fetchError) {
+      // Fetch failed - could be offline or timeout
       return navigator.onLine;
+    } finally {
+      // Always clear the timeout to prevent memory leaks
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     }
   }
 
@@ -211,26 +222,29 @@
     }, 5000);
   }
 
-  // Add animation styles
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideDown {
-      from { transform: translate(-50%, -100%); opacity: 0; }
-      to { transform: translate(-50%, 0); opacity: 1; }
-    }
-    @keyframes slideUp {
-      from { transform: translate(-50%, 0); opacity: 1; }
-      to { transform: translate(-50%, -100%); opacity: 0; }
-    }
-    .is-offline .error-icon {
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-  `;
-  document.head.appendChild(style);
+  // Add animation styles only once
+  if (!document.getElementById('error-recovery-styles')) {
+    const style = document.createElement('style');
+    style.id = 'error-recovery-styles';
+    style.textContent = `
+      @keyframes slideDown {
+        from { transform: translate(-50%, -100%); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+      }
+      @keyframes slideUp {
+        from { transform: translate(-50%, 0); opacity: 1; }
+        to { transform: translate(-50%, -100%); opacity: 0; }
+      }
+      .is-offline .error-icon {
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 
   // Initialize when DOM is ready
   if (document.readyState === 'loading') {

@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: njz-vlr-api
+    ports:
+      - "3001:3001"
+    environment:
+      - DEBUG=false
+      - PORT=3001
+      - VLR_REQUEST_DELAY=1.5
+      - VLR_MAX_RETRIES=3
+      - VLR_CONCURRENT_REQUESTS=2
+      - DATA_STORAGE_PATH=/app/data
+      - RAWS_ENABLED=true
+      - BASE_ENABLED=true
+      - REDIS_ENABLED=true
+      - REDIS_URL=redis://redis:6379/0
+      - PROMETHEUS_ENABLED=true
+      - API_KEY_REQUIRED=false
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - influxdb
+    restart: unless-stopped
+    networks:
+      - vlr-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: vlr-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - vlr-network
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: vlr-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminpassword
+      - DOCKER_INFLUXDB_INIT_ORG=njz
+      - DOCKER_INFLUXDB_INIT_BUCKET=vlr_data
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=vlr-api-token
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    restart: unless-stopped
+    networks:
+      - vlr-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: vlr-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
+    networks:
+      - vlr-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: vlr-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - influxdb
+    restart: unless-stopped
+    networks:
+      - vlr-network
+
+volumes:
+  redis-data:
+  influxdb-data:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  vlr-network:
+    driver: bridge

@@ -1,0 +1,59 @@
+# Auto-detect text files and handle line endings
+* text=auto
+
+# Source code
+*.py text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.rar binary
+
+# Large RAWS files - store with Git LFS
+*.raws.json filter=lfs diff=lfs merge=lfs -text
+*.raws.json.gz filter=lfs diff=lfs merge=lfs -text
+data/raws/**/*.json filter=lfs diff=lfs merge=lfs -text
+data/exports/*.parquet filter=lfs diff=lfs merge=lfs -text
+data/exports/*.csv filter=lfs diff=lfs merge=lfs -text
+
+# Test cassettes - can be large
+tests/fixtures/cassettes/*.yml filter=lfs diff=lfs merge=lfs -text
+
+# Documentation images
+docs/images/*.png filter=lfs diff=lfs merge=lfs -text
+docs/images/*.jpg filter=lfs diff=lfs merge=lfs -text
+
+# Model files (if ML models are included)
+*.pkl filter=lfs diff=lfs merge=lfs -text
+*.model filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
+
+# Database files
+*.db binary
+*.sqlite binary
+*.sqlite3 binary

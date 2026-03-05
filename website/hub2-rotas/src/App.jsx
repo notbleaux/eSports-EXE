@@ -7,9 +7,10 @@ import FormulaLibrary from './components/FormulaLibrary';
 import MatchPredictor from './components/MatchPredictor';
 import OnboardingFlow from './shared/components/OnboardingFlow';
 import PersonalizedDashboard from './shared/components/PersonalizedDashboard';
+import ErrorBoundary from './shared/components/ErrorBoundary';
 import { analyticsLayers } from './data/analyticsLayers';
-import { 
-  hasCompletedOnboarding, 
+import {
+  hasCompletedOnboarding,
   getStoredRole,
   saveUserPreferences,
   getUserPreferences
@@ -105,7 +106,7 @@ function RoleSpecificContent({ role }) {
         <h2>{content.title}</h2>
         <p>{content.description}</p>
       </div>
-      
+
       <div className="role-features">
         {content.features.map((feature, i) => (
           <div key={i} className="role-feature-tag">
@@ -213,7 +214,7 @@ function App() {
     const checkOnboarding = () => {
       const completed = hasCompletedOnboarding();
       const role = getStoredRole();
-      
+
       if (!completed) {
         // First-time user, show onboarding
         setTimeout(() => {
@@ -243,7 +244,7 @@ function App() {
     setUserRole(data.role);
     setShowOnboarding(false);
     setShowDashboard(true);
-    
+
     // Save preferences
     const prefs = getUserPreferences();
     saveUserPreferences({
@@ -319,118 +320,122 @@ function App() {
   // Onboarding Flow
   if (showOnboarding) {
     return (
-      <ProgressiveDisclosureProvider>
-        <OnboardingFlow 
-          onComplete={handleOnboardingComplete}
-          onSkip={handleOnboardingSkip}
-        />
-      </ProgressiveDisclosureProvider>
+      <ErrorBoundary>
+        <ProgressiveDisclosureProvider>
+          <OnboardingFlow
+            onComplete={handleOnboardingComplete}
+            onSkip={handleOnboardingSkip}
+          />
+        </ProgressiveDisclosureProvider>
+      </ErrorBoundary>
     );
   }
 
   // Main App with Dashboard or Regular View
   return (
-    <ProgressiveDisclosureProvider>
-      <div className="rotas-app">
-        <Header />
-        
-        {showDashboard ? (
-          <>
-            <section className="hero-section">
-              <div className="hero-content">
-                <h1 className="hero-title">
-                  <span className="text-cyan">ROTAS</span>
-                  <span className="text-porcelain"> Hub</span>
-                </h1>
-                <p className="hero-subtitle">
-                  Advanced Analytics & Probability Engines
-                </p>
-                <CrossHubLink />
-              </div>
-              <EllipseSystem activeLayer={activeLayer} />
-            </section>
+    <ErrorBoundary>
+      <ProgressiveDisclosureProvider>
+        <div className="rotas-app">
+          <Header />
 
-            <RoleSpecificContent role={userRole} />
+          {showDashboard ? (
+            <>
+              <section className="hero-section">
+                <div className="hero-content">
+                  <h1 className="hero-title">
+                    <span className="text-cyan">ROTAS</span>
+                    <span className="text-porcelain"> Hub</span>
+                  </h1>
+                  <p className="hero-subtitle">
+                    Advanced Analytics & Probability Engines
+                  </p>
+                  <CrossHubLink />
+                </div>
+                <EllipseSystem activeLayer={activeLayer} />
+              </section>
 
-            <section className="dashboard-section">
-              <PersonalizedDashboard 
-                role={userRole}
-                onFirstVisit={handleFirstVisit}
-              />
-            </section>
-          </>
-        ) : (
-          <>
-            <section className="hero-section">
-              <div className="hero-content">
-                <h1 className="hero-title">
-                  <span className="text-cyan">ROTAS</span>
-                  <span className="text-porcelain"> Hub</span>
-                </h1>
-                <p className="hero-subtitle">
-                  Advanced Analytics & Probability Engines
-                </p>
-                <CrossHubLink />
-              </div>
-              <EllipseSystem activeLayer={activeLayer} />
-            </section>
+              <RoleSpecificContent role={userRole} />
 
-            <HubBridge />
-          </>
-        )}
+              <section className="dashboard-section">
+                <PersonalizedDashboard
+                  role={userRole}
+                  onFirstVisit={handleFirstVisit}
+                />
+              </section>
+            </>
+          ) : (
+            <>
+              <section className="hero-section">
+                <div className="hero-content">
+                  <h1 className="hero-title">
+                    <span className="text-cyan">ROTAS</span>
+                    <span className="text-porcelain"> Hub</span>
+                  </h1>
+                  <p className="hero-subtitle">
+                    Advanced Analytics & Probability Engines
+                  </p>
+                  <CrossHubLink />
+                </div>
+                <EllipseSystem activeLayer={activeLayer} />
+              </section>
 
-        <section className="layer-section">
-          <div className="section-header">
-            <h2 className="section-title">Analytics Layers</h2>
-            <p className="section-desc">Toggle visualization layers to analyze different data dimensions</p>
-          </div>
-          <LayerToggle 
-            layers={analyticsLayers} 
-            activeLayer={activeLayer} 
-            onToggle={handleLayerToggle} 
-          />
-        </section>
+              <HubBridge />
+            </>
+          )}
 
-        <section className="probability-section">
-          <div className="section-header">
-            <h2 className="section-title">Probability Engines</h2>
-            <p className="section-desc">Monte Carlo simulations powering predictive analytics</p>
-          </div>
-          <div className="probability-grid">
-            {probabilityData.map((item, index) => (
-              <ProbabilityGauge 
-                key={index}
-                value={item.value} 
-                label={item.label} 
-              />
-            ))}
-          </div>
-        </section>
+          <section className="layer-section">
+            <div className="section-header">
+              <h2 className="section-title">Analytics Layers</h2>
+              <p className="section-desc">Toggle visualization layers to analyze different data dimensions</p>
+            </div>
+            <LayerToggle
+              layers={analyticsLayers}
+              activeLayer={activeLayer}
+              onToggle={handleLayerToggle}
+            />
+          </section>
 
-        <section className="predictor-section">
-          <div className="section-header">
-            <h2 className="section-title">Match Predictor</h2>
-            <p className="section-desc">Real-time matchup analysis with probability distribution</p>
-          </div>
-          <MatchPredictor />
-        </section>
+          <section className="probability-section">
+            <div className="section-header">
+              <h2 className="section-title">Probability Engines</h2>
+              <p className="section-desc">Monte Carlo simulations powering predictive analytics</p>
+            </div>
+            <div className="probability-grid">
+              {probabilityData.map((item, index) => (
+                <ProbabilityGauge
+                  key={index}
+                  value={item.value}
+                  label={item.label}
+                />
+              ))}
+            </div>
+          </section>
 
-        <section className="formula-section">
-          <FormulaLibrary />
-        </section>
+          <section className="predictor-section">
+            <div className="section-header">
+              <h2 className="section-title">Match Predictor</h2>
+              <p className="section-desc">Real-time matchup analysis with probability distribution</p>
+            </div>
+            <MatchPredictor />
+          </section>
 
-        <footer className="rotas-footer">
-          <div className="footer-content">
-            <p className="footer-text">
-              <span className="text-cyan">ROTAS</span> Hub &copy; 2024 NJZ Analytics
-            </p>
-            <p className="footer-version">Version 2.4.1-beta</p>
-          </div>
-        </footer>
+          <section className="formula-section">
+            <FormulaLibrary />
+          </section>
 
-        <BottomNav />
-      </div>
-    </ProgressiveDisclosureProvider>
+          <footer className="rotas-footer">
+            <div className="footer-content">
+              <p className="footer-text">
+                <span className="text-cyan">ROTAS</span> Hub &copy; 2024 NJZ Analytics
+              </p>
+              <p className="footer-version">Version 2.4.1-beta</p>
+            </div>
+          </footer>
+
+          <BottomNav />
+        </div>
+      </ProgressiveDisclosureProvider>
+    </ErrorBoundary>
   );
 }
 

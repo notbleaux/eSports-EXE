@@ -94,8 +94,21 @@ export const HUBS = {
  * Router class for managing navigation and state
  */
 export class CrossHubRouter {
+  /**
+   * Whitelist of allowed query parameters
+   */
+  ALLOWED_PARAMS = [
+    'dl',      // Deep link
+    'hub',     // Hub target
+    'state',   // State data
+    'expires', // Expiration
+    'ref',     // Referrer
+    'source',  // Traffic source
+  ];
+
   constructor(options = {}) {
     this.basePath = options.basePath || '';
+    this.strictQueryParams = options.strictQueryParams !== false;
     this.hooks = {
       beforeNavigate: [],
       afterNavigate: [],
@@ -106,25 +119,95 @@ export class CrossHubRouter {
     this.maxHistorySize = options.maxHistorySize || 50;
     this.enableAnalytics = options.enableAnalytics !== false;
     this.enableDeepLinking = options.enableDeepLinking !== false;
-    
+
+    // Bind methods for proper cleanup
+    this.handlePopState = this.handlePopState.bind(this);
+    this.trackPageView = this.trackPageView.bind(this);
+
     this.init();
+  }
+
+  /**
+   * Sanitize query parameter value
+   */
+  sanitizeParamValue(value) {
+    if (typeof value !== 'string') return '';
+
+    // Limit length to prevent DoS
+    const maxLength = 2048;
+    let sanitized = value.slice(0, maxLength);
+
+    // Remove null bytes and control characters
+    sanitized = sanitized.replace(/[\x00-\x1F\x7F]/g, '');
+
+    // Remove HTML tags
+    sanitized = sanitized.replace(/<[^>]*>/g, '');
+
+    return sanitized;
+  }
+
+  /**
+   * Validate route parameter
+   */
+  validateRouteParam(key, value) {
+    const maxLength = 256;
+
+    if (typeof value !== 'string') return '';
+
+    // Trim and limit length
+    let sanitized = value.trim().slice(0, maxLength);
+
+    // Remove control characters and dangerous patterns
+    sanitized = sanitized
+      .replace(/[\x00-\x1F\x7F]/g, '')
+      .replace(/[<>"']/g, '')  // Remove HTML special chars
+      .replace(/\.\./g, '');    // Prevent path traversal
+
+    // Validate ID format (alphanumeric, hyphens, underscores)
+    if (key.toLowerCase().includes('id')) {
+      if (!/^[\w-]+$/.test(sanitized)) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(`[CrossHubRouter] Invalid ID format for ${key}:`, value);
+        }
+        return '';
+      }
+    }
+
+    return sanitized;
   }
 
   init() {
     // Initialize from current URL
     this.parseCurrentUrl();
-    
-    // Set up popstate listener for back/forward buttons
+
+    // Set up popstate listener with bound method for cleanup
     if (typeof window !== 'undefined') {
-      window.addEventListener('popstate', (e) => {
-        this.handlePopState(e);
-      });
-      
+      window.addEventListener('popstate', this.handlePopState);
+
       // Handle initial deep link
       if (this.enableDeepLinking) {
         this.handleDeepLink();
       }
     }
+  }
+
+  /**
+   * Cleanup method to prevent memory leaks
+   */
+  destroy() {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('popstate', this.handlePopState);
+      window.removeEventListener('router:pageview', this.trackPageView);
+      window.removeEventListener('router:event', this.trackPageView);
+    }
+
+    // Clear hooks
+    this.hooks.beforeNavigate = [];
+    this.hooks.afterNavigate = [];
+    this.hooks.onError = [];
+
+    // Clear history
+    this.routeHistory = [];
   }
 
   /**
@@ -150,33 +233,39 @@ export class CrossHubRouter {
   }
 
   /**
-   * Extract route parameters from path
+   * Extract route parameters from path with validation
    */
   extractParams(path) {
+    if (!path || typeof path !== 'string') {
+      console.warn('[CrossHubRouter] Invalid path provided to extractParams');
+      return {};
+    }
+
     const params = {};
-    
+
     // Match dynamic segments like :id
     const paramPattern = /:([^/]+)/g;
-    
+
     for (const [routePattern] of Object.entries(this.getAllRoutes())) {
       const regex = this.routeToRegex(routePattern);
       const match = path.match(regex);
-      
+
       if (match) {
         const keys = [];
         let paramMatch;
         while ((paramMatch = paramPattern.exec(routePattern)) !== null) {
           keys.push(paramMatch[1]);
         }
-        
+
         keys.forEach((key, index) => {
-          params[key] = match[index + 1];
+          const rawValue = match[index + 1];
+          params[key] = this.validateRouteParam(key, rawValue);
         });
-        
+
         break;
       }
     }
-    
+
     return params;
   }
 
@@ -190,22 +279,57 @@ export class CrossHubRouter {
   }
 
   /**
-   * Parse query string to object
+   * Parse query string to object with validation
    */
   parseQueryString(search) {
     const params = {};
     if (!search) return params;
-    
+
     const queryString = search.startsWith('?') ? search.slice(1) : search;
-    const pairs = queryString.split('&');
-    
+
+    // Limit query string length to prevent DoS
+    if (queryString.length > 4096) {
+      console.warn('[CrossHubRouter] Query string too long, truncating');
+    }
+
+    const pairs = queryString.slice(0, 4096).split('&');
+
     pairs.forEach(pair => {
-      const [key, value] = pair.split('=').map(decodeURIComponent);
+      if (!pair) return;
+
+      const eqIndex = pair.indexOf('=');
+      let key, value;
+
+      if (eqIndex === -1) {
+        key = pair;
+        value = '';
+      } else {
+        key = pair.slice(0, eqIndex);
+        value = pair.slice(eqIndex + 1);
+      }
+
+      try {
+        key = decodeURIComponent(key);
+        value = decodeURIComponent(value);
+      } catch (e) {
+        console.warn('[CrossHubRouter] Failed to decode query param:', key);
+        return;
+      }
+
+      // Validate key against whitelist if strict mode enabled
+      if (this.strictQueryParams && !this.ALLOWED_PARAMS.includes(key)) {
+        return;
+      }
+
+      // Sanitize both key and value
+      key = this.sanitizeParamValue(key);
+      value = this.sanitizeParamValue(value);
+
       if (key) {
-        params[key] = value || '';
+        params[key] = value;
       }
     });
-    
+
     return params;
   }
 
@@ -355,28 +479,68 @@ export class CrossHubRouter {
   }
 
   /**
-   * Handle deep linking
+   * Validate deep link URL for security
+   */
+  isValidDeepLink(url) {
+    if (typeof url !== 'string') return false;
+
+    // Check for dangerous protocols
+    const lowerUrl = url.toLowerCase().trim();
+    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:'];
+    for (const protocol of dangerousProtocols) {
+      if (lowerUrl.startsWith(protocol)) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('[CrossHubRouter] Blocked dangerous deep link protocol:', protocol);
+        }
+        return false;
+      }
+    }
+
+    // Check max length
+    if (url.length > 2048) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('[CrossHubRouter] Deep link too long');
+      }
+      return false;
+    }
+
+    // Validate against internal routes
+    return this.isValidInternalLink(url);
+  }
+
+  /**
+   * Handle deep linking with validation
    */
   handleDeepLink() {
     if (typeof window === 'undefined') return;
-    
-    const url = new URL(window.location.href);
-    
-    // Check for deep link parameters
-    const deepLink = url.searchParams.get('dl');
-    const hubTarget = url.searchParams.get('hub');
-    
-    if (deepLink) {
-      // Validate and navigate to deep link
-      const decodedLink = decodeURIComponent(deepLink);
-      if (this.isValidInternalLink(decodedLink)) {
-        setTimeout(() => this.navigate(decodedLink, { replace: true }), 0);
+
+    try {
+      const url = new URL(window.location.href);
+
+      // Check for deep link parameters
+      const deepLink = url.searchParams.get('dl');
+      const hubTarget = url.searchParams.get('hub');
+
+      if (deepLink) {
+        // Validate and navigate to deep link
+        const decodedLink = decodeURIComponent(deepLink);
+        if (this.isValidDeepLink(decodedLink)) {
+          setTimeout(() => this.navigate(decodedLink, { replace: true }), 0);
+        } else {
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn('[CrossHubRouter] Invalid deep link target:', decodedLink);
+          }
+        }
       }
-    }
-    
-    if (hubTarget && HUBS[hubTarget.toUpperCase()]) {
-      // Track cross-hub navigation
-      this.trackEvent('deep_link', { targetHub: hubTarget });
+
+      if (hubTarget && HUBS[hubTarget.toUpperCase()]) {
+        // Track cross-hub navigation
+        this.trackEvent('deep_link', { targetHub: hubTarget });
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('[CrossHubRouter] Deep link handling failed:', error);
+      }
     }
   }
 
@@ -449,8 +613,14 @@ export class CrossHubRouter {
         const result = hook(data);
         if (result === false) return false;
       } catch (error) {
-        console.error(`Hook error for ${event}:`, error);
-        this.executeHooks('onError', { error, event, data });
+        console.error(`[CrossHubRouter] Hook error for ${event}:`, error);
+        // Don't fail silently - attempt error hook
+        try {
+          this.executeHooks('onError', { error, event, data });
+        } catch (e) {
+          // Error handler failed, log to console
+          console.error('[CrossHubRouter] Error handler also failed:', e);
+        }
       }
     }
     

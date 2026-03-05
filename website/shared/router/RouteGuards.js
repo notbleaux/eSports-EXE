@@ -188,7 +188,9 @@ export class RouteGuard {
           };
         }
       } catch (error) {
-        console.error('Route guard custom check failed:', error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Route guard custom check failed:', error);
+        }
         return {
           allowed: false,
           reason: 'CHECK_ERROR',
@@ -267,7 +269,9 @@ export class RouteGuard {
         this.cache.set('currentUser', { data: user, timestamp: Date.now() });
         return user;
       } catch (error) {
-        console.error('Failed to get current user:', error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to get current user:', error);
+        }
         return null;
       }
     }
@@ -282,7 +286,9 @@ export class RouteGuard {
           return user;
         }
       } catch (error) {
-        console.error('Failed to parse user from localStorage:', error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to parse user from localStorage:', error);
+        }
       }
     }
     

@@ -66,38 +66,24 @@ export class AnalyticsManager {
 
   init() {
     if (!this.enabled) return;
-    
+
     // Set up automatic flush
     this.flushTimer = setInterval(() => this.flush(), this.flushInterval);
-    
+
     // Track initial page view
     this.trackPageView();
-    
-    // Set up visibility change tracking
+
+    // Set up visibility change tracking with bound handler
     if (typeof document !== 'undefined') {
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
-          this.trackEvent(ANALYTICS_EVENTS.CONTENT_ENGAGEMENT, {
-            engagementTime: Date.now() - this.pageStartTime,
-          });
-          this.flush();
-        } else {
-          this.pageStartTime = Date.now();
-        }
-      });
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
     }
-    
-    // Listen for router events
+
+    // Listen for router events with bound handlers
     if (typeof window !== 'undefined') {
-      window.addEventListener('router:pageview', (e) => {
-        this.trackPageView(e.detail);
-      });
-      
-      window.addEventListener('router:event', (e) => {
-        this.trackEvent(e.detail.name, e.detail.properties);
-      });
+      window.addEventListener('router:pageview', this.handleRouterPageView);
+      window.addEventListener('router:event', this.handleRouterEvent);
     }
-    
+
     this.log('Analytics initialized');
   }
 
@@ -403,8 +389,26 @@ export class AnalyticsManager {
   destroy() {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
+      this.flushTimer = null;
     }
     this.flush();
+
+    // Remove event listeners with bound handlers
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    }
+
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('router:pageview', this.handleRouterPageView);
+      window.removeEventListener('router:event', this.handleRouterEvent);
+    }
+
+    // Clear queues
+    this.eventQueue = [];
+    this.hubTransitions = [];
+    this.conversionGoals.clear();
+
+    this.log('Analytics manager destroyed');
   }
 
   /**
@@ -414,6 +418,34 @@ export class AnalyticsManager {
     if (this.debug) {
       console.log('[SATOR Analytics]', ...args);
     }
+  }
+
+  /**
+   * Handle visibility change - bound for cleanup
+   */
+  handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') {
+      this.trackEvent(ANALYTICS_EVENTS.CONTENT_ENGAGEMENT, {
+        engagementTime: Date.now() - this.pageStartTime,
+      });
+      this.flush();
+    } else {
+      this.pageStartTime = Date.now();
+    }
+  }
+
+  /**
+   * Handle router pageview - bound for cleanup
+   */
+  handleRouterPageView = (e) => {
+    this.trackPageView(e.detail);
+  }
+
+  /**
+   * Handle router event - bound for cleanup
+   */
+  handleRouterEvent = (e) => {
+    this.trackEvent(e.detail.name, e.detail.properties);
   }
 }
 

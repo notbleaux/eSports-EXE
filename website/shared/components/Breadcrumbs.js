@@ -3,8 +3,8 @@
  * Generates and renders breadcrumb trails for navigation
  */
 
-import { HUBS, ROUTES } from './CrossHubRouter.js';
-import { UrlBuilder } from './UrlHelpers.js';
+import { HUBS, ROUTES } from '../router/CrossHubRouter.js';
+import { UrlBuilder } from '../router/UrlHelpers.js';
 
 /**
  * Breadcrumb item structure
@@ -329,7 +329,7 @@ export class BreadcrumbRenderer {
   }
 
   /**
-   * Render breadcrumbs to DOM
+   * Render breadcrumbs to DOM using safe DOM construction
    */
   render(path = null, container = null) {
     const targetContainer = container || document.querySelector(this.containerSelector);
@@ -339,74 +339,94 @@ export class BreadcrumbRenderer {
     }
     
     const breadcrumbs = this.generator.generate(path);
-    const html = this.buildHTML(breadcrumbs);
     
-    targetContainer.innerHTML = html;
-    this.attachEventListeners(targetContainer);
+    // Clear existing content
+    targetContainer.innerHTML = '';
+    
+    // Build DOM safely
+    const nav = this.buildDOM(breadcrumbs);
+    targetContainer.appendChild(nav);
     
     return breadcrumbs;
   }
 
   /**
-   * Build HTML string
+   * Build breadcrumb DOM element safely
    */
-  buildHTML(breadcrumbs) {
-    const items = breadcrumbs.map((item, index) => {
+  buildDOM(breadcrumbs) {
+    const nav = document.createElement('nav');
+    nav.className = this.className;
+    nav.setAttribute('aria-label', 'Breadcrumb');
+    
+    breadcrumbs.forEach((item, index) => {
       const isLast = index === breadcrumbs.length - 1;
-      const classes = [this.itemClassName];
+      const element = this.createItemElement(item, isLast);
+      nav.appendChild(element);
       
-      if (isLast) classes.push(this.activeClassName);
-      if (item.hub) classes.push(`hub-${item.hub}`);
-      if (item.metadata?.isParam) classes.push('is-param');
-      if (item.metadata?.isEllipsis) classes.push('is-ellipsis');
-      
-      const classAttr = classes.join(' ');
-      
-      if (item.metadata?.isEllipsis) {
-        return `<span class="${classAttr}" data-ellipsis="true">${item.label}</span>`;
+      // Add separator if not last
+      if (!isLast) {
+        const separator = document.createElement('span');
+        separator.className = this.separatorClassName;
+        separator.textContent = this.generator.separator;
+        nav.appendChild(separator);
       }
-      
-      if (isLast) {
-        return `<span class="${classAttr}" aria-current="page">${this.renderLabel(item)}</span>`;
-      }
-      
-      return `<a href="${item.path}" class="${classAttr}" data-path="${item.path}">${this.renderLabel(item)}</a>`;
     });
     
-    const separator = `<span class="${this.separatorClassName}">${this.generator.separator}</span>`;
-    
-    return `<nav class="${this.className}" aria-label="Breadcrumb">${items.join(separator)}</nav>`;
+    return nav;
   }
 
   /**
-   * Render item label
+   * Create individual breadcrumb item element
    */
-  renderLabel(item) {
-    const parts = [];
+  createItemElement(item, isLast) {
+    const classes = [this.itemClassName];
     
-    if (item.icon) {
-      parts.push(`<span class="breadcrumb-icon">${item.icon}</span>`);
-    }
+    if (isLast) classes.push(this.activeClassName);
+    if (item.hub) classes.push(`hub-${item.hub}`);
+    if (item.metadata?.isParam) classes.push('is-param');
+    if (item.metadata?.isEllipsis) classes.push('is-ellipsis');
     
-    parts.push(`<span class="breadcrumb-label">${item.label}</span>`);
-    
-    return parts.join('');
-  }
-
-  /**
-   * Attach event listeners
-   */
-  attachEventListeners(container) {
-    container.querySelectorAll('a[data-path]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const path = link.getAttribute('data-path');
-        
+    // Create appropriate element type
+    let element;
+    if (item.metadata?.isEllipsis) {
+      element = document.createElement('span');
+      element.textContent = item.label;
+      element.dataset.ellipsis = 'true';
+    } else if (isLast) {
+      element = document.createElement('span');
+      element.textContent = item.label;
+      element.setAttribute('aria-current', 'page');
+    } else {
+      element = document.createElement('a');
+      element.href = item.path;
+      element.dataset.path = item.path;
+      
+      // Add click handler
+      element.addEventListener('click', (e) => {
         if (this.onItemClick) {
           e.preventDefault();
-          this.onItemClick(path);
+          this.onItemClick(item.path);
         }
       });
-    });
+    }
+    
+    element.className = classes.join(' ');
+    
+    // Add icon if present
+    if (item.icon) {
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'breadcrumb-icon';
+      iconSpan.textContent = item.icon;
+      element.appendChild(iconSpan);
+    }
+    
+    // Add label
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'breadcrumb-label';
+    labelSpan.textContent = item.label;
+    element.appendChild(labelSpan);
+    
+    return element;
   }
 
   /**

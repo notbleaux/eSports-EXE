@@ -1,4 +1,4 @@
-/* === CRITICAL CSS - Inline in <head> ===
+/* === CRITICAL CSS v2.0 - Enhanced for FCP < 1.0s ===
  * This CSS should be inlined in the document <head> for fastest first paint.
  * Load the full CSS asynchronously after initial render.
  * 
@@ -112,7 +112,7 @@ p {
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   text-decoration: none;
-  min-height: 48px; /* Touch target */
+  min-height: 48px;
   min-width: 48px;
 }
 
@@ -159,6 +159,50 @@ p {
   color: #9ca3af;
 }
 
+/* Enhanced Component Styles - v2.0 Additions */
+
+/* Reserve space for stat cards to prevent CLS */
+.stat-card {
+  min-height: 120px;
+  contain: layout style;
+}
+
+/* Content visibility for below-fold sections */
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Font display swap for faster text render */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: local('Inter'), local('Inter-Regular');
+}
+
+/* Contain for complex components */
+.hub-switcher,
+.sator-sphere-container {
+  contain: layout style paint;
+}
+
+/* Aspect ratio for images to prevent CLS */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: attr(width) / attr(height);
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
 /* Loading states */
 .skeleton {
   background: linear-gradient(90deg, #1e1e24 25%, #2a2a35 50%, #1e1e24 75%);
@@ -200,22 +244,6 @@ p {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-/* Image placeholders */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-img[loading="lazy"] {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-img[loading="lazy"].loaded {
-  opacity: 1;
 }
 
 /* Focus visible polyfill */

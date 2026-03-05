@@ -263,4 +263,7 @@ class DataLoader {
 }
 
 // Create global instance
-const DataLoader = new DataLoader();
+const dataLoader = new DataLoader();
+
+// Also expose class for testing/extending
+window.DataLoader = DataLoader;

@@ -4,6 +4,7 @@ import NJZGrid from './components/NJZGrid';
 import DirectorySearch from './components/DirectorySearch';
 import MembershipTiers from './components/MembershipTiers';
 import CompressionPanel from './components/CompressionPanel';
+import ErrorBoundary from './shared/components/ErrorBoundary';
 
 function App() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -15,19 +16,21 @@ function App() {
   }, []);
 
   return (
-    <div className="info-hub">
-      <Header onSearchClick={handleSearchClick} />
-      <main className="hub-main">
-        <NJZGrid />
-        <DirectorySearch 
-          ref={directorySearchRef}
-          isMobileSearchOpen={isMobileSearchOpen}
-          setIsMobileSearchOpen={setIsMobileSearchOpen}
-        />
-        <MembershipTiers />
-        <CompressionPanel />
-      </main>
-    </div>
+    <ErrorBoundary>
+      <div className="info-hub">
+        <Header onSearchClick={handleSearchClick} />
+        <main className="hub-main">
+          <NJZGrid />
+          <DirectorySearch 
+            ref={directorySearchRef}
+            isMobileSearchOpen={isMobileSearchOpen}
+            setIsMobileSearchOpen={setIsMobileSearchOpen}
+          />
+          <MembershipTiers />
+          <CompressionPanel />
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }
 

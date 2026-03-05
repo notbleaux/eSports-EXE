@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import DOMPurify from 'dompurify';
 import { getUserPreferences, saveUserPreferences } from './userPreferences';
 
 /**
@@ -359,7 +360,7 @@ export function TutorialOverlay({ steps, onComplete, isOpen }) {
         </div>
         
         <div className="tutorial-content"
-          dangerouslySetInnerHTML={{ __html: step.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(step.content) }}
         />
         
         <div className="tutorial-progress">

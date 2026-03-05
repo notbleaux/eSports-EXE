@@ -15,6 +15,20 @@
     "apps/*",
     "api"
   ],
-  "keywords": ["sator", "esports", "tactical-fps", "simulation"],
-  "license": "MIT"
+  "keywords": [
+    "sator",
+    "esports",
+    "tactical-fps",
+    "simulation"
+  ],
+  "license": "MIT",
+  "main": "postcss.config.js",
+  "author": "",
+  "devDependencies": {
+    "@axe-core/cli": "^4.11.1",
+    "jsdom": "^28.1.0"
+  },
+  "dependencies": {
+    "dompurify": "^3.3.1"
+  }
 }

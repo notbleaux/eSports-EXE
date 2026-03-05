@@ -83,9 +83,9 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: var(--njz-void-black);
-  color: var(--njz-porcelain);
+  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  background-color: var(--njz-void-black, #0a0a0f);
+  color: var(--njz-porcelain, #e8e6e3);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -195,6 +195,10 @@
     },
 
     createOverlay() {
+      // Remove existing overlay if present to prevent duplicates
+      const existing = document.querySelector('.loading-overlay');
+      if (existing) existing.remove();
+      
       this.overlay = document.createElement('div');
       this.overlay.className = 'loading-overlay';
       this.overlay.innerHTML = `
@@ -274,6 +278,10 @@
     },
 
     createContainer() {
+      // Check if container already exists to prevent duplicates
+      this.container = document.querySelector('.error-container');
+      if (this.container) return;
+      
       this.container = document.createElement('div');
       this.container.className = 'error-container';
       document.body.appendChild(this.container);

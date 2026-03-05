@@ -1,60 +1,70 @@
 /**
- * RadiantX Service Worker
- * Caching strategy: Cache First, Network Fallback
- * Version: 1.0.0
+ * RadiantX Service Worker - Enhanced Caching Strategy
+ * Version: 2.0.0
+ * Strategy: Multi-tier caching with expiration
  */
 
-const CACHE_NAME = 'radiantx-v1';
-const STATIC_CACHE = 'radiantx-static-v1';
-const IMAGE_CACHE = 'radiantx-images-v1';
-const API_CACHE = 'radiantx-api-v1';
+const CACHE_VERSION = '2';
+const STATIC_CACHE = `radiantx-static-v${CACHE_VERSION}`;
+const IMAGE_CACHE = `radiantx-images-v${CACHE_VERSION}`;
+const API_CACHE = `radiantx-api-v${CACHE_VERSION}`;
+const FONT_CACHE = `radiantx-fonts-v${CACHE_VERSION}`;
 
-// Critical static assets to cache on install
+// Critical static assets - cached on install
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/landing.html',
   '/launchpad.html',
   '/njz-design-system.css',
-  '/assets/js/main.js',
   '/assets/css/critical.css',
+  '/assets/css/animations.css',
+  '/assets/js/main-optimized.js',
   '/favicon.svg',
-  '/sitemap.xml',
-  '/robots.txt',
-  '/manifest.json'
+  '/manifest.json',
+  '/offline.html'
 ];
 
 // Hub-specific assets
 const HUB_ASSETS = [
-  '/njz-central/index.html',
-  '/njz-central/app.js',
-  '/njz-central/styles.css',
   '/hub1-sator/index.html',
   '/hub1-sator/app.js',
   '/hub1-sator/styles.css',
-  '/hub2-rotas/index.html',
   '/hub2-rotas/dist/index.html',
   '/hub3-information/dist/index.html',
   '/hub4-games/dist/index.html'
 ];
 
-// Install event - cache critical assets
+// ============================================
+// INSTALL EVENT
+// ============================================
+
 self.addEventListener('install', (event) => {
+  console.log('[SW] Installing...');
+  
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
         console.log('[SW] Caching static assets');
         return cache.addAll([...STATIC_ASSETS, ...HUB_ASSETS]);
       })
-      .then(() => self.skipWaiting())
+      .then(() => {
+        console.log('[SW] Installation complete');
+        return self.skipWaiting();
+      })
       .catch((err) => {
         console.error('[SW] Cache install failed:', err);
       })
   );
 });
 
-// Activate event - clean up old caches
+// ============================================
+// ACTIVATE EVENT
+// ============================================
+
 self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating...');
+  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -63,18 +73,25 @@ self.addEventListener('activate', (event) => {
             return name.startsWith('radiantx-') && 
                    name !== STATIC_CACHE && 
                    name !== IMAGE_CACHE && 
-                   name !== API_CACHE;
+                   name !== API_CACHE &&
+                   name !== FONT_CACHE;
           })
           .map((name) => {
             console.log('[SW] Deleting old cache:', name);
             return caches.delete(name);
           })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => {
+      console.log('[SW] Activation complete');
+      return self.clients.claim();
+    })
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// ============================================
+// FETCH EVENT
+// ============================================
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -89,25 +106,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  // Strategy: Cache First for static assets
+  // Route to appropriate strategy
   if (isStaticAsset(request)) {
     event.respondWith(cacheFirst(request, STATIC_CACHE));
     return;
   }
   
-  // Strategy: Cache First with expiration for images
   if (isImage(request)) {
     event.respondWith(cacheFirstWithExpiration(request, IMAGE_CACHE, 30)); // 30 days
     return;
   }
   
-  // Strategy: Network First for API calls
-  if (isAPI(request)) {
-    event.respondWith(networkFirst(request, API_CACHE));
+  if (isFont(request)) {
+    event.respondWith(cacheFirstWithExpiration(request, FONT_CACHE, 365)); // 1 year
     return;
   }
   
-  // Strategy: Stale While Revalidate for HTML
+  if (isAPI(request)) {
+    event.respondWith(networkFirstWithTimeout(request, API_CACHE, 5000)); // 5s timeout
+    return;
+  }
+  
   if (isHTML(request)) {
     event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));
     return;
@@ -117,25 +136,11 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(networkWithCacheFallback(request));
 });
 
-// Helper functions
-function isStaticAsset(request) {
-  return request.url.match(/\.(js|css|woff2?|json|svg)$/);
-}
+// ============================================
+// STRATEGY FUNCTIONS
+// ============================================
 
-function isImage(request) {
-  return request.url.match(/\.(png|jpg|jpeg|webp|gif|avif)$/i);
-}
-
-function isAPI(request) {
-  return request.url.includes('/api/') || request.url.includes('/data/');
-}
-
-function isHTML(request) {
-  return request.headers.get('Accept')?.includes('text/html') || 
-         request.url.match(/\.html$/);
-}
-
-// Cache First strategy
+// Cache First - For static assets that rarely change
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -156,7 +161,7 @@ async function cacheFirst(request, cacheName) {
   }
 }
 
-// Cache First with expiration
+// Cache First with Expiration - For images
 async function cacheFirstWithExpiration(request, cacheName, days) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -169,6 +174,7 @@ async function cacheFirstWithExpiration(request, cacheName, days) {
         return cached;
       }
     } else {
+      // No date header, assume valid
       return cached;
     }
   }
@@ -195,12 +201,20 @@ async function cacheFirstWithExpiration(request, cacheName, days) {
   }
 }
 
-// Network First strategy
-async function networkFirst(request, cacheName) {
+// Network First with Timeout - For API calls
+async function networkFirstWithTimeout(request, cacheName, timeoutMs) {
   const cache = await caches.open(cacheName);
   
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('Timeout')), timeoutMs);
+  });
+  
   try {
-    const networkResponse = await fetch(request);
+    const networkResponse = await Promise.race([
+      fetch(request),
+      timeoutPromise
+    ]);
+    
     if (networkResponse.ok) {
       cache.put(request, networkResponse.clone());
     }
@@ -210,11 +224,19 @@ async function networkFirst(request, cacheName) {
     if (cached) {
       return cached;
     }
-    throw error;
+    
+    // Return offline fallback for API
+    return new Response(
+      JSON.stringify({ error: 'Offline', cached: false }),
+      {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 }
 
-// Stale While Revalidate strategy
+// Stale While Revalidate - For HTML pages
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -229,18 +251,79 @@ async function staleWhileRevalidate(request, cacheName) {
   return cached || fetchPromise;
 }
 
-// Network with cache fallback
-async function networkWithCacheFallback(request) {
-  try {
-    return await fetch(request);
-  } catch (error) {
-    const cache = await caches.open(STATIC_CACHE);
-    const cached = await cache.match(request);
-    if (cached) {
-      return cached;
+// Stale While Revalidate with timeout
+async function staleWhileRevalidateWithTimeout(request, cacheName, timeoutMs = 3000) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  
+  // Return cached immediately if available
+  const fetchPromise = fetch(request).then(async (response) => {
+    if (response.ok) {
+      cache.put(request, response.clone());
     }
-    throw error;
+    return response;
+  }).catch(() => cached); // Fall back to cache on error
+  
+  // Race with timeout
+  const timeoutPromise = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Timeout')), timeoutMs)
+  );
+  
+  if (cached) {
+    // Return cached immediately, update in background
+    fetch(request).then(response => {
+      if (response.ok) cache.put(request, response.clone());
+    }).catch(() => {});
+    return cached;
   }
+  
+  // No cache - wait for fetch with timeout
+  try {
+    return await Promise.race([fetchPromise, timeoutPromise]);
+  } catch {
+    return new Response(JSON.stringify({ error: 'Network timeout' }), {
+      status: 504,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+
+// Enhanced Cache First with stale check
+async function cacheFirstWithStaleCheck(request, cacheName, maxAgeHours = 24) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  
+  if (cached) {
+    // Check cache age
+    const dateHeader = cached.headers.get('sw-fetched-date');
+    if (dateHeader) {
+      const age = (Date.now() - parseInt(dateHeader)) / (1000 * 60 * 60);
+      if (age < maxAgeHours) {
+        return cached;
+      }
+    }
+    
+    // Stale - fetch in background but return cached
+    fetch(request).then(response => {
+      if (response.ok) cache.put(request, response.clone());
+    }).catch(() => {});
+    return cached;
+  }
+  
+  // No cache - fetch and store
+  const response = await fetch(request);
+  if (response.ok) {
+    const headers = new Headers(response.headers);
+    headers.set('sw-fetched-date', Date.now().toString());
+    const cachedResponse = new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers
+    });
+    cache.put(request, cachedResponse.clone());
+    return cachedResponse;
+  }
+  return response;
 }
 
 // Background sync for analytics
@@ -251,8 +334,110 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncAnalytics() {
-  // Send queued analytics data when back online
   const queue = await getAnalyticsQueue();
+  for (const item of queue) {
+    try {
+      await fetch('/api/analytics', {
+        method: 'POST',
+        body: JSON.stringify(item),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      await removeFromQueue(item.id);
+    } catch (err) {
+      console.error('[SW] Analytics sync failed:', err);
+    }
+  }
+}
+
+// Placeholder functions for queue management
+async function getAnalyticsQueue() {
+  // Implementation would use IndexedDB
+  return [];
+}
+
+async function removeFromQueue(id) {
+  // Implementation would use IndexedDB
+  return true;
+}
+
+// Cache size management
+const MAX_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
+const MAX_CACHE_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+async function cleanupCache() {
+  const cacheNames = [STATIC_CACHE, IMAGE_CACHE, API_CACHE, FONT_CACHE];
+  
+  for (const cacheName of cacheNames) {
+    const cache = await caches.open(cacheName);
+    const requests = await cache.keys();
+    
+    for (const request of requests) {
+      const response = await cache.match(request);
+      if (response) {
+        // Remove old entries
+        const dateHeader = response.headers.get('sw-fetched-date');
+        if (dateHeader) {
+          const age = Date.now() - parseInt(dateHeader);
+          if (age > MAX_CACHE_AGE) {
+            await cache.delete(request);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Run cleanup on activate
+self.addEventListener('activate', (event) => {
+  event.waitUntil(cleanupCache());
+});
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+function isStaticAsset(request) {
+  return request.url.match(/\.(js|css|woff2?|json|svg)$/);
+}
+
+function isImage(request) {
+  return request.url.match(/\.(png|jpg|jpeg|webp|gif|avif)$/i);
+}
+
+function isFont(request) {
+  return request.url.match(/\.(woff2?|ttf|otf)$/i) || 
+         request.url.includes('fonts.gstatic.com');
+}
+
+function isAPI(request) {
+  return request.url.includes('/api/') || 
+         request.url.includes('/data/') ||
+         request.headers.get('Accept')?.includes('application/json');
+}
+
+function isHTML(request) {
+  return request.headers.get('Accept')?.includes('text/html') || 
+         request.url.match(/\.html$/);
+}
+
+// ============================================
+// BACKGROUND SYNC
+// ============================================
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'analytics-sync') {
+    event.waitUntil(syncAnalytics());
+  }
+  
+  if (event.tag === 'form-sync') {
+    event.waitUntil(syncForms());
+  }
+});
+
+async function syncAnalytics() {
+  // Get queued analytics from IndexedDB
+  const queue = await getQueuedData('analytics');
+  
   for (const data of queue) {
     try {
       await fetch('/api/analytics', {
@@ -260,16 +445,94 @@ async function syncAnalytics() {
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
       });
-      await removeFromQueue(data.id);
+      await removeQueuedData('analytics', data.id);
     } catch (err) {
       console.error('[SW] Analytics sync failed:', err);
     }
   }
 }
 
-// Message handling from main thread
+async function syncForms() {
+  const queue = await getQueuedData('forms');
+  
+  for (const data of queue) {
+    try {
+      await fetch(data.url, {
+        method: 'POST',
+        body: JSON.stringify(data.payload),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      await removeQueuedData('forms', data.id);
+    } catch (err) {
+      console.error('[SW] Form sync failed:', err);
+    }
+  }
+}
+
+// Placeholder functions for queue management
+async function getQueuedData(type) {
+  // Implementation would use IndexedDB
+  return [];
+}
+
+async function removeQueuedData(type, id) {
+  // Implementation would use IndexedDB
+}
+
+// ============================================
+// PUSH NOTIFICATIONS
+// ============================================
+
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() || {};
+  
+  const options = {
+    body: data.body || 'New update from RadiantX',
+    icon: '/favicon.svg',
+    badge: '/favicon.svg',
+    data: data.url || '/',
+    actions: data.actions || [],
+    requireInteraction: false
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification(
+      data.title || 'RadiantX',
+      options
+    )
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  
+  event.waitUntil(
+    clients.openWindow(event.notification.data || '/')
+  );
+});
+
+// ============================================
+// MESSAGE HANDLING
+// ============================================
+
 self.addEventListener('message', (event) => {
   if (event.data === 'skipWaiting') {
     self.skipWaiting();
+  }
+  
+  if (event.data?.type === 'CLEAR_CACHE') {
+    event.waitUntil(
+      caches.keys().then((names) => {
+        return Promise.all(names.map((name) => caches.delete(name)));
+      })
+    );
+  }
+  
+  if (event.data?.type === 'PRECACHE_URLS') {
+    event.waitUntil(
+      caches.open(STATIC_CACHE).then((cache) => {
+        return cache.addAll(event.data.urls);
+      })
+    );
   }
 });

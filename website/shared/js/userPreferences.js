@@ -1,6 +1,86 @@
 /**
  * User Role Types and Configuration
+ * 
+ * SECURITY NOTE: All localStorage data is validated against PREFERENCES_SCHEMA
+ * to prevent XSS and data corruption from tampered storage.
  */
+
+/**
+ * User Preferences Schema for validation
+ */
+const PREFERENCES_SCHEMA = {
+  // Allowed keys and their types
+  unlockedFeatures: { type: 'array', itemType: 'string', default: [] },
+  tipsSeen: { type: 'array', itemType: 'string', default: [] },
+  role: { type: 'string', allowed: ['player', 'organizer', 'spectator'], default: null },
+  theme: { type: 'string', allowed: ['light', 'dark', 'auto'], default: 'auto' },
+  onboardingComplete: { type: 'boolean', default: false },
+  lastVisited: { type: 'number', default: null },
+};
+
+/**
+ * Validate value against schema
+ * @param {*} value - Value to validate
+ * @param {Object} schema - Schema definition
+ * @returns {*} - Validated value or default
+ */
+function validateValue(value, schema) {
+  if (value === undefined || value === null) {
+    return schema.default;
+  }
+
+  switch (schema.type) {
+    case 'string':
+      if (typeof value !== 'string') return schema.default;
+      if (schema.allowed && !schema.allowed.includes(value)) return schema.default;
+      // Sanitize string - remove control characters
+      return value.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 1000);
+    
+    case 'array':
+      if (!Array.isArray(value)) return schema.default;
+      // Validate array items
+      return value
+        .filter(item => typeof item === schema.itemType)
+        .map(item => 
+          typeof item === 'string' 
+            ? item.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 500)
+            : item
+        )
+        .slice(0, 1000); // Limit array size
+    
+    case 'boolean':
+      return typeof value === 'boolean' ? value : schema.default;
+    
+    case 'number':
+      if (typeof value !== 'number' || !isFinite(value)) return schema.default;
+      return Math.max(0, Math.min(Number.MAX_SAFE_INTEGER, value));
+    
+    default:
+      return schema.default;
+  }
+}
+
+/**
+ * Validate and sanitize user preferences
+ * @param {Object} prefs - Raw preferences object
+ * @returns {Object} - Validated preferences
+ */
+function validatePreferences(prefs) {
+  if (!prefs || typeof prefs !== 'object' || Array.isArray(prefs)) {
+    return {};
+  }
+
+  const validated = {};
+  
+  // Only allow known keys
+  for (const [key, schema] of Object.entries(PREFERENCES_SCHEMA)) {
+    if (key in prefs) {
+      validated[key] = validateValue(prefs[key], schema);
+    }
+  }
+  
+  return validated;
+}
 
 export const USER_ROLES = {
   PLAYER: {
@@ -131,12 +211,26 @@ export function getStoredRole() {
 }
 
 /**
- * Get stored user preferences
+ * Get stored user preferences with validation
+ * @returns {Object} - Validated user preferences
  */
 export function getUserPreferences() {
   if (typeof window === 'undefined') return {};
   try {
     const prefs = localStorage.getItem('njz_user_preferences');
+    if (!prefs) return {};
+    
+    // Parse and validate
+    const parsed = JSON.parse(prefs);
+    return validatePreferences(parsed);
+  } catch (error) {
+    // Invalid JSON or validation error - clear corrupted data
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('njz_user_preferences');
+    }
+    return {};
+  }
+}
     return prefs ? JSON.parse(prefs) : {};
   } catch {
     return {};
