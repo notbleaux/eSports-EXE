@@ -1,0 +1,26 @@
+# Missing P0 Critical Files
+# Generated: 2026-03-05
+# Total Missing P0 Files: 14
+
+## Deployment Configuration (4 files)
+1. render.yaml
+2. vercel.json
+3. docker-compose.yml
+4. .github/workflows/ci.yml
+
+## API Firewall (1 file)
+5. shared/api/src/middleware/firewall.py
+
+## Web Components (4 files)
+6. shared/apps/sator-web/src/components/QuarterGrid/QuarterGrid.tsx
+7. shared/apps/sator-web/src/components/QuarterGrid/HubCard.tsx
+8. shared/apps/sator-web/src/components/HelpHub/HelpHub.tsx
+9. shared/apps/sator-web/src/components/HelpHub/HealthCheckDashboard.tsx
+
+## Pipeline Coordinator (5 files)
+10. shared/axiom-esports-data/pipeline/coordinator/agent_manager.py
+11. shared/axiom-esports-data/pipeline/coordinator/main.py
+12. shared/axiom-esports-data/pipeline/coordinator/conflict_resolver.py
+13. shared/axiom-esports-data/pipeline/coordinator/workers/base_worker.py
+14. shared/axiom-esports-data/pipeline/coordinator/workers/cs2_worker.py
+15. shared/axiom-esports-data/pipeline/coordinator/workers/valorant_worker.py

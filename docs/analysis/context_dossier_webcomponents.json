@@ -1,0 +1,271 @@
+{
+  "task": "web_components",
+  "priority": "P0",
+  "estimated_effort_hours": 20,
+  "design_system": {
+    "name": "Porcelain³",
+    "tokens_directory": "website/design-system/porcelain-cubed/tokens/",
+    "css_files": [
+      "colors.css",
+      "spacing.css",
+      "typography.css",
+      "elevation.css",
+      "animations.css"
+    ],
+    "colors": {
+      "navy": "#001F3F (porcelain-midnight-900)",
+      "midnight": {
+        "50": "#F1F5F9",
+        "100": "#E2E8F0",
+        "200": "#CBD5E1",
+        "300": "#94A3B8",
+        "400": "#64748B",
+        "500": "#475569",
+        "600": "#334155",
+        "700": "#1E293B",
+        "800": "#0F172A",
+        "900": "#020617"
+      },
+      "gold": {
+        "50": "#FFFBEB",
+        "100": "#FEF3C7",
+        "200": "#FDE68A",
+        "300": "#FCD34D",
+        "400": "#FBBF24",
+        "500": "#F59E0B",
+        "600": "#D97706",
+        "700": "#B45309",
+        "800": "#92400E",
+        "900": "#78350F"
+      },
+      "blue": {
+        "50": "#F0F7FF",
+        "100": "#E0EFFF",
+        "200": "#C2DFFF",
+        "300": "#94C8FF",
+        "400": "#5AA8FF",
+        "500": "#2B85F5",
+        "600": "#1565D8",
+        "700": "#0D4EA8",
+        "800": "#114082",
+        "900": "#153968"
+      },
+      "teal": {
+        "50": "#F0FDFA",
+        "100": "#CCFBF1",
+        "200": "#99F6E4",
+        "300": "#5EEAD4",
+        "400": "#2DD4BF",
+        "500": "#14B8A6",
+        "600": "#0D9488",
+        "700": "#0F766E",
+        "800": "#115E59",
+        "900": "#134E4A"
+      },
+      "rose_gold": {
+        "50": "#FFF1F2",
+        "100": "#FFE4E6",
+        "200": "#FECDD3",
+        "300": "#FDA4AF",
+        "400": "#FB7185",
+        "500": "#F43F5E",
+        "600": "#E11D48",
+        "700": "#BE123C",
+        "800": "#9F1239",
+        "900": "#881337"
+      },
+      "semantic": {
+        "bg_primary": "var(--porcelain-white-50)",
+        "bg_secondary": "var(--porcelain-white-100)",
+        "text_primary": "var(--porcelain-midnight-900)",
+        "text_secondary": "var(--porcelain-midnight-600)",
+        "accent_primary": "var(--porcelain-blue-600)",
+        "accent_secondary": "var(--porcelain-teal-500)",
+        "accent_tertiary": "var(--porcelain-gold-500)",
+        "state_success": "var(--porcelain-teal-600)",
+        "state_warning": "var(--porcelain-gold-500)",
+        "state_error": "var(--porcelain-rose-gold-600)"
+      }
+    },
+    "spacing": {
+      "base": "4px",
+      "scale": [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 56, 64, 80, 96, 112, 128, 144, 160],
+      "css_vars": [
+        "--porcelain-space-1 (4px)",
+        "--porcelain-space-2 (8px)",
+        "--porcelain-space-4 (16px)",
+        "--porcelain-space-6 (24px)",
+        "--porcelain-space-8 (32px)",
+        "--porcelain-space-12 (48px)",
+        "--porcelain-space-16 (64px)"
+      ]
+    },
+    "border_radius": {
+      "none": "0",
+      "xs": "2px",
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "2xl": "16px",
+      "3xl": "24px",
+      "full": "9999px"
+    },
+    "animation": "Framer Motion",
+    "existing_css_components": {
+      "path": "website/design-system/porcelain-cubed/components/quarter-grid.css",
+      "classes": [
+        ".quarter-grid",
+        ".quarter-grid__quadrant",
+        ".quarter-grid__quadrant--q1/q2/q3/q4",
+        ".quarter-grid__header",
+        ".quarter-grid__title",
+        ".quarter-grid__quarter-label",
+        ".quarter-grid__content",
+        ".quarter-grid__item",
+        ".quarter-grid__item--selected",
+        ".quarter-grid__progress",
+        ".quarter-grid__progress-bar",
+        ".quarter-grid__status"
+      ]
+    }
+  },
+  "existing_files": [
+    {
+      "path": "shared/apps/sator-web/src/components/QuarterGrid/",
+      "status": "DIRECTORY_EXISTS_EMPTY",
+      "note": "Has pages/ subdirectory but no main component files"
+    },
+    {
+      "path": "shared/apps/sator-web/src/components/HelpHub/",
+      "status": "DIRECTORY_EXISTS_EMPTY"
+    }
+  ],
+  "missing_files": [
+    {
+      "path": "shared/apps/sator-web/src/components/QuarterGrid/QuarterGrid.tsx",
+      "description": "Main quarterly grid container with 5 hubs",
+      "features": [
+        "5 hubs in cross pattern (center + 4 cardinal directions)",
+        "Resizeable via click-and-drag",
+        "Smooth Framer Motion animations",
+        "Glass morphism effects",
+        "CSS Grid-based layout (2x2 quadrants)",
+        "Responsive: stacks on mobile"
+      ],
+      "props": [
+        "hubs: HubConfig[]",
+        "onHubClick: (hubId: string) => void",
+        "defaultSize: 'small' | 'medium' | 'large'",
+        "className?: string"
+      ],
+      "css_dependencies": [
+        "--porcelain-bg-primary",
+        "--porcelain-bg-secondary",
+        "--porcelain-border-subtle",
+        "--porcelain-radius-container",
+        "--porcelain-radius-card",
+        "--porcelain-grid-gap-lg",
+        "--porcelain-container-padding-lg"
+      ]
+    },
+    {
+      "path": "shared/apps/sator-web/src/components/QuarterGrid/HubCard.tsx",
+      "description": "Individual hub card component",
+      "features": [
+        "Icon (Lucide React)",
+        "Title",
+        "Color theme (quarter-specific)",
+        "Hover animation with transform",
+        "Glass morphism background",
+        "Gradient accent on hover",
+        "Progress indicator support"
+      ],
+      "props": [
+        "id: string",
+        "title: string",
+        "icon: LucideIcon",
+        "color: 'blue' | 'teal' | 'gold' | 'rose'",
+        "onClick: () => void",
+        "size: 'small' | 'medium' | 'large'",
+        "isActive?: boolean",
+        "progress?: number (0-100)"
+      ],
+      "variants": {
+        "q1": "blue gradient (--porcelain-blue-500 to --porcelain-teal-400)",
+        "q2": "teal gradient (--porcelain-teal-400 to --porcelain-gold-400)",
+        "q3": "gold gradient (--porcelain-gold-400 to --porcelain-rose-gold-400)",
+        "q4": "rose gradient (--porcelain-rose-gold-400 to --porcelain-blue-500)"
+      }
+    },
+    {
+      "path": "shared/apps/sator-web/src/components/HelpHub/HelpHub.tsx",
+      "description": "Expandable help center with 4 tabs",
+      "tabs": [
+        {
+          "id": "quick-start",
+          "label": "Quick Start",
+          "content": "Getting started guide"
+        },
+        {
+          "id": "guides",
+          "label": "Guides",
+          "content": "Feature documentation"
+        },
+        {
+          "id": "troubleshoot",
+          "label": "Troubleshoot",
+          "content": "Common issues and fixes"
+        },
+        {
+          "id": "health",
+          "label": "Health",
+          "content": "Service status dashboard"
+        }
+      ],
+      "props": [
+        "isOpen: boolean",
+        "onClose: () => void",
+        "defaultTab?: string"
+      ],
+      "animation": "Framer Motion slide-in from right"
+    },
+    {
+      "path": "shared/apps/sator-web/src/components/HelpHub/HealthCheckDashboard.tsx",
+      "description": "Real-time service health monitoring",
+      "features": [
+        "API endpoint status indicators",
+        "Pipeline coordinator health",
+        "Database connection status",
+        "External service status (HLTV, VLR)",
+        "Response time graphs",
+        "Error rate display"
+      ],
+      "api_endpoints_needed": [
+        "GET /health",
+        "GET /stats/queues",
+        "GET /stats/agents"
+      ],
+      "refresh_interval": "30 seconds"
+    }
+  ],
+  "dependencies": {
+    "react": "18.x",
+    "typescript": "5.x",
+    "framer_motion": "for animations",
+    "lucide_react": "for icons",
+    "design_tokens": "Porcelain³ CSS variables from website/design-system/porcelain-cubed/"
+  },
+  "implementation_notes": [
+    "Use existing CSS from website/design-system/porcelain-cubed/",
+    "QuarterGrid uses CSS Grid: 2 columns x 2 rows",
+    "Each quadrant has unique gradient accent on hover",
+    "Mobile responsive: stacks to single column below 768px",
+    "Framer Motion for entrance animations (staggered fade-in)",
+    "Glass morphism effects use backdrop-filter: blur()",
+    "HubCard uses transform: translateY(-2px) on hover",
+    "HelpHub uses AnimatePresence for smooth open/close",
+    "Health dashboard polls every 30 seconds",
+    "All components must support dark mode via data-theme attribute"
+  ]
+}
