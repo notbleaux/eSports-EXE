@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | SATOR</title>
+  <link rel="icon" href="favicon.svg">
+  <style>
+    :root {
+      --error-color: #FFD700;
+      --bg-color: #0a0a0a;
+      --text-color: #ffffff;
+      --card-bg: #1a1a1a;
+      --sator-gold: #FFD700;
+      --rotas-cyan: #00CED1;
+      --info-purple: #9370DB;
+      --games-green: #32CD32;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(0, 206, 209, 0.03) 0%, transparent 50%);
+    }
+    
+    .error-container {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .hub-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--card-bg);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .hub-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--error-color);
+      box-shadow: 0 0 10px var(--error-color);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .error-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .error-code {
+      font-size: 8rem;
+      font-weight: 900;
+      color: var(--error-color);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+      letter-spacing: -0.05em;
+    }
+    
+    .error-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    
+    .error-message {
+      font-size: 1.1rem;
+      opacity: 0.7;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--error-color);
+      color: #000;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-color);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-secondary:hover {
+      opacity: 1;
+      border-color: var(--error-color);
+      color: var(--error-color);
+    }
+    
+    .suggestions {
+      margin-top: 1rem;
+    }
+    
+    .suggestions-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.875rem;
+    }
+    
+    .suggestions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .suggestion-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .suggestion-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--hub-color, var(--sator-gold));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .suggestion-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .suggestion-card:hover::before {
+      opacity: 1;
+    }
+    
+    .suggestion-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    
+    .suggestion-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+    
+    .suggestion-desc {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      line-height: 1.4;
+    }
+    
+    .request-id {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      opacity: 0.3;
+      font-family: 'SF Mono', monospace;
+    }
+    
+    @media (max-width: 600px) {
+      .error-code { font-size: 5rem; }
+      .error-title { font-size: 1.5rem; }
+      .error-icon { font-size: 4rem; }
+      .suggestions-grid { grid-template-columns: 1fr; }
+      .error-actions { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 280px; justify-content: center; }
+    }
+    
+    /* Hub-specific colors */
+    .hub-sator { --hub-color: var(--sator-gold); }
+    .hub-rotas { --hub-color: var(--rotas-cyan); }
+    .hub-info { --hub-color: var(--info-purple); }
+    .hub-games { --hub-color: var(--games-green); }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="hub-indicator">
+      <span class="hub-dot"></span>
+      <span>SATOR Platform</span>
+    </div>
+    
+    <div class="error-icon">🔍</div>
+    <div class="error-code">404</div>
+    <h1 class="error-title">Page Not Found</h1>
+    <p class="error-message">The page you're looking for doesn't exist or has been moved. Explore our hubs below to find what you need.</p>
+    
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">🏠 Go Home</a>
+      <button class="btn btn-secondary" onclick="history.back()">← Go Back</button>
+    </div>
+    
+    <div class="suggestions">
+      <p class="suggestions-title">Explore Our Hubs</p>
+      <div class="suggestions-grid">
+        <a href="hub1-sator/index.html" class="suggestion-card hub-sator" style="--hub-color: #FFD700">
+          <span class="suggestion-icon">◎</span>
+          <div class="suggestion-title">SATOR</div>
+          <div class="suggestion-desc">RAWS Archive - Match history & raw data</div>
+        </a>
+        
+        <a href="hub2-rotas/index.html" class="suggestion-card hub-rotas" style="--hub-color: #00CED1">
+          <span class="suggestion-icon">◈</span>
+          <div class="suggestion-title">ROTAS</div>
+          <div class="suggestion-desc">Analytics Engine - Predictions & probability</div>
+        </a>
+        
+        <a href="hub3-information/index.html" class="suggestion-card hub-info" style="--hub-color: #9370DB">
+          <span class="suggestion-icon">ℹ</span>
+          <div class="suggestion-title">INFO</div>
+          <div class="suggestion-desc">Knowledge Hub - Teams, guides & tournaments</div>
+        </a>
+        
+        <a href="hub4-games/index.html" class="suggestion-card hub-games" style="--hub-color: #32CD32">
+          <span class="suggestion-icon">▶</span>
+          <div class="suggestion-title">GAMES</div>
+          <div class="suggestion-desc">Play & Download - Tactical FPS simulator</div>
+        </a>
+      </div>
+    </div>
+    
+    <div class="request-id" id="request-id"></div>
+  </div>
+  
+  <script>
+    // Generate request ID
+    document.getElementById('request-id').textContent = 
+      'Request ID: err_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    // Track 404 in analytics if available
+    if (window.satorAnalytics) {
+      window.satorAnalytics.trackEvent('page_not_found', {
+        path: window.location.pathname,
+        referrer: document.referrer,
+      });
+    }
+  </script>
+</body>
+</html>
