@@ -1,0 +1,282 @@
+.glass-panel {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.37, 0, 0.63, 1);
+  will-change: transform, box-shadow;
+}
+
+/* Depth Variants */
+.glass-depth-1 {
+  --glass-bg: rgba(15, 15, 19, 0.4);
+  --glass-blur: blur(8px);
+  --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+.glass-depth-2 {
+  --glass-bg: rgba(10, 10, 15, 0.6);
+  --glass-blur: blur(12px);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+.glass-depth-3 {
+  --glass-bg: rgba(10, 10, 15, 0.75);
+  --glass-blur: blur(16px);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.glass-depth-4 {
+  --glass-bg: rgba(10, 10, 15, 0.85);
+  --glass-blur: blur(24px);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+/* Accent Variants */
+.glass-accent-cyan {
+  border-color: rgba(0, 240, 255, 0.3) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 240, 255, 0.1),
+    inset 0 1px 0 rgba(0, 240, 255, 0.1);
+}
+
+.glass-accent-cyan::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), transparent 50%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-accent-gold {
+  border-color: rgba(201, 176, 55, 0.3) !important;
+  box-shadow: 
+    0 0 30px rgba(201, 176, 55, 0.1),
+    inset 0 1px 0 rgba(201, 176, 55, 0.1);
+}
+
+.glass-accent-gold::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201, 176, 55, 0.3), transparent 50%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-accent-gradient {
+  border: none !important;
+  box-shadow: 
+    0 0 30px rgba(0, 240, 255, 0.1),
+    0 0 30px rgba(201, 176, 55, 0.1);
+}
+
+.glass-accent-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.5), rgba(201, 176, 55, 0.5));
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Hover Effects */
+.glass-hoverable {
+  cursor: pointer;
+}
+
+.glass-hoverable:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(0, 240, 255, 0.1);
+}
+
+.glass-hoverable.glass-accent-gold:hover {
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(201, 176, 55, 0.15);
+}
+
+.glass-hoverable:active {
+  transform: translateY(-2px);
+  transition-duration: 0.1s;
+}
+
+/* Animated Shimmer */
+.glass-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.03),
+    transparent
+  );
+  animation: glass-shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glass-shimmer {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Card Sizes */
+.glass-card-sm {
+  padding: 1rem;
+}
+
+.glass-card-md {
+  padding: 1.5rem;
+}
+
+.glass-card-lg {
+  padding: 2rem;
+}
+
+/* Modal Styles */
+.glass-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modal-fade-in 0.3s ease-out;
+}
+
+.glass-modal {
+  animation: modal-scale-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-modal-sm { width: 90%; max-width: 400px; max-height: 80vh; }
+.glass-modal-md { width: 90%; max-width: 600px; max-height: 80vh; }
+.glass-modal-lg { width: 90%; max-width: 900px; max-height: 85vh; }
+.glass-modal-xl { width: 95%; max-width: 1200px; max-height: 90vh; }
+.glass-modal-full { width: 95%; height: 90vh; }
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Morphing Border Animation */
+.glass-morphing {
+  position: relative;
+}
+
+.glass-morphing::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 240, 255, 0.5),
+    rgba(201, 176, 55, 0.5),
+    rgba(0, 240, 255, 0.5)
+  );n  background-size: 200% 200%;
+  animation: morphing-gradient 4s ease infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-morphing:hover::after {
+  opacity: 1;
+}
+
+@keyframes morphing-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass-panel,
+  .glass-hoverable:hover,
+  .glass-modal {
+    transition: none;
+    animation: none;
+  }
+  
+  .glass-shimmer {
+    animation: none;
+  }
+  
+  .glass-morphing::after {
+    animation: none;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .glass-panel {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+  
+  .glass-modal-overlay {
+    backdrop-filter: blur(4px);
+  }
+  
+  .glass-modal-sm,
+  .glass-modal-md,
+  .glass-modal-lg,
+  .glass-modal-xl {
+    width: 95%;
+    max-height: 90vh;
+  }
+}

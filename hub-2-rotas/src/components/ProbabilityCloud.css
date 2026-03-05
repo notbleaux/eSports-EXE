@@ -1,0 +1,210 @@
+.probability-cloud {
+  position: relative;
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+.probability-cloud:hover {
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.1);
+}
+
+.probability-cloud.collapsed {
+  border-color: rgba(201, 176, 55, 0.3);
+  box-shadow: 0 0 40px rgba(201, 176, 55, 0.15);
+}
+
+/* ========== CANVAS ========== */
+
+.cloud-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== OVERLAY ========== */
+
+.cloud-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.cloud-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cloud-state {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.probability-cloud.collapsed .cloud-state {
+  color: #c9b037;
+  text-shadow: 0 0 10px rgba(201, 176, 55, 0.5);
+}
+
+.cloud-particles {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  color: #6b7280;
+}
+
+/* ========== PROBABILITY DISPLAY ========== */
+
+.probability-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: prob-fade-in 0.5s ease-out;
+}
+
+@keyframes prob-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prob-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.625rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prob-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 20px currentColor;
+  transition: color 0.3s ease;
+}
+
+/* ========== CLICK HINT ========== */
+
+.click-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 20px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  color: #00f0ff;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.click-hint.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.probability-cloud:hover .click-hint {
+  opacity: 1;
+  background: rgba(0, 240, 255, 0.15);
+}
+
+/* ========== ERROR STATE ========== */
+
+.probability-cloud.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.cloud-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.cloud-error span:first-child {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.875rem;
+  color: #ef4444;
+}
+
+.error-fallback {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 480px) {
+  .cloud-overlay {
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+  
+  .probability-display {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .prob-value {
+    font-size: 1.25rem;
+  }
+  
+  .cloud-state,
+  .cloud-particles {
+    font-size: 0.5625rem;
+  }
+  
+  .click-hint {
+    font-size: 0.625rem;
+    padding: 0.375rem 0.75rem;
+  }
+}
+
+/* ========== REDUCED MOTION ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  .probability-cloud,
+  .click-hint,
+  .probability-display {
+    transition: none;
+  }
+  
+  .probability-display {
+    animation: none;
+  }
+}
