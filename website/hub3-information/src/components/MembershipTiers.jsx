@@ -1,7 +1,125 @@
 import { useState } from 'react';
 
+// Reusable Tier Feature Item Component
+function TierFeature({ included, children }) {
+  return (
+    <li className={included ? 'feature-included' : 'feature-excluded'}>
+      <span className={included ? 'feature-check' : 'feature-x'} aria-hidden="true">
+        {included ? '✓' : '✗'}
+      </span>
+      <span>{children}</span>
+    </li>
+  );
+}
+
+// Resonance Visualization Component
+function ResonanceVisualization({ level }) {
+  if (level === 1) {
+    return (
+      <div className="resonance-visualization level-1" aria-label="Level 1 Resonance">
+        <div className="sphere"></div>
+        <div className="resonance-label">Level 1 Resonance</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="resonance-visualization level-5" aria-label="Level 5 Resonance">
+      <div className="sphere core"></div>
+      <div className="sphere ring-1"></div>
+      <div className="sphere ring-2"></div>
+      <div className="sphere ring-3"></div>
+      <div className="sphere ring-4"></div>
+      <div className="resonance-label">Level 5 Resonance</div>
+    </div>
+  );
+}
+
+// Reusable Tier Card Component
+function TierCard({ 
+  tier, 
+  price, 
+  priceUnit = '', 
+  features, 
+  isPopular = false,
+  ctaText,
+  ctaVariant = 'outline',
+  onSelect,
+  hoveredTier,
+  setHoveredTier,
+  tierId
+}) {
+  return (
+    <div 
+      className={`tier-card ${tierId} ${hoveredTier === tierId ? 'hovered' : ''}`}
+      onMouseEnter={() => setHoveredTier(tierId)}
+      onMouseLeave={() => setHoveredTier(null)}
+      role="article"
+      aria-label={`${tier} membership tier`}
+    >
+      {isPopular && (
+        <div className="tier-badge popular" aria-label="Most Popular">
+          Most Popular
+        </div>
+      )}
+      
+      <div className="tier-header">
+        <h3>{tier}</h3>
+        <p className="tier-price">
+          {price}
+          {priceUnit && <span>{priceUnit}</span>}
+        </p>
+      </div>
+      
+      <ResonanceVisualization level={isPopular ? 5 : 1} />
+      
+      <ul className="tier-features" role="list">
+        {features.map((feature, index) => (
+          <TierFeature key={index} included={feature.included}>
+            {feature.text}
+          </TierFeature>
+        ))}
+      </ul>
+      
+      <div className="tier-cta">
+        <button 
+          className={`btn btn-${ctaVariant}`}
+          onClick={() => onSelect?.(tierId)}
+          aria-label={`${ctaText} for ${tier}`}
+        >
+          {ctaText}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Main Membership Tiers Component
 function MembershipTiers() {
   const [hoveredTier, setHoveredTier] = useState(null);
+
+  const handleTierSelect = (tierId) => {
+    console.log(`Selected tier: ${tierId}`);
+    // Handle tier selection - could open payment modal, etc.
+  };
+
+  const nvrDieFeatures = [
+    { text: 'Directory browsing', included: true },
+    { text: '24h delayed statistics', included: true },
+    { text: 'Standard search', included: true },
+    { text: 'Compressed downloads', included: true },
+    { text: 'Real-time data', included: false },
+    { text: 'Predictive tools', included: false },
+  ];
+
+  const njz4evaFeatures = [
+    { text: 'Everything in Nvr Die', included: true },
+    { text: 'Real-time RAWS streams', included: true },
+    { text: 'Advanced ROTAS layers', included: true },
+    { text: 'Predictive analytics', included: true },
+    { text: 'Early patch access', included: true },
+    { text: 'Priority support', included: true },
+  ];
 
   return (
     <section id="membership" className="membership-section">
@@ -10,105 +128,44 @@ function MembershipTiers() {
         <p className="section-subtitle">Unlock the full potential of NJZ Information Hub</p>
       </div>
       
-      <div className="tier-comparison">
-        
-        <div 
-          className={`tier-card nvr-die ${hoveredTier === 'nvr-die' ? 'hovered' : ''}`}
-          onMouseEnter={() => setHoveredTier('nvr-die')}
-          onMouseLeave={() => setHoveredTier(null)}
-        >
-          <div className="tier-header">
-            <h3>Nvr Die</h3>
-            <p className="tier-price">Free</p>
+      <div className="tier-comparison-container">
+        <div className="tier-comparison">
+          <TierCard
+            tier="Nvr Die"
+            price="Free"
+            features={nvrDieFeatures}
+            isPopular={false}
+            ctaText="Start Free"
+            ctaVariant="outline"
+            onSelect={handleTierSelect}
+            hoveredTier={hoveredTier}
+            setHoveredTier={setHoveredTier}
+            tierId="nvr-die"
+          />
+          
+          <div className="tier-divider" aria-hidden="true">
+            <div className="growth-arrow">→</div>
+            <div className="growth-label">Upgrade</div>
           </div>
-          <div className="resonance-visualization level-1">
-            <div className="sphere"></div>
-            <div className="resonance-label">Level 1 Resonance</div>
-          </div>
-          <ul className="tier-features">
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Directory browsing</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>24h delayed statistics</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Standard search</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Compressed downloads</span>
-            </li>
-            <li className="feature-excluded">
-              <span className="feature-x">✗</span>
-              <span>Real-time data</span>
-            </li>
-            <li className="feature-excluded">
-              <span className="feature-x">✗</span>
-              <span>Predictive tools</span>
-            </li>
-          </ul>
-          <button className="btn btn-outline">Start Free</button>
+          
+          <TierCard
+            tier="NJZ 4eva"
+            price="$29"
+            priceUnit="/month"
+            features={njz4evaFeatures}
+            isPopular={true}
+            ctaText="Upgrade Now"
+            ctaVariant="primary"
+            onSelect={handleTierSelect}
+            hoveredTier={hoveredTier}
+            setHoveredTier={setHoveredTier}
+            tierId="njz-4eva"
+          />
         </div>
-        
-        <div className="tier-divider">
-          <div className="growth-arrow">→</div>
-          <div className="growth-label">Upgrade</div>
-        </div>
-        
-        <div 
-          className={`tier-card njz-4eva ${hoveredTier === 'njz-4eva' ? 'hovered' : ''}`}
-          onMouseEnter={() => setHoveredTier('njz-4eva')}
-          onMouseLeave={() => setHoveredTier(null)}
-        >
-          <div className="tier-badge">Recommended</div>
-          <div className="tier-header">
-            <h3>NJZ 4eva</h3>
-            <p className="tier-price">$29<span>/month</span></p>
-          </div>
-          <div className="resonance-visualization level-5">
-            <div className="sphere core"></div>
-            <div className="sphere ring-1"></div>
-            <div className="sphere ring-2"></div>
-            <div className="sphere ring-3"></div>
-            <div className="sphere ring-4"></div>
-            <div className="resonance-label">Level 5 Resonance</div>
-          </div>
-          <ul className="tier-features">
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Everything in Nvr Die</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Real-time RAWS streams</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Advanced ROTAS layers</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Predictive analytics</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Early patch access</span>
-            </li>
-            <li className="feature-included">
-              <span className="feature-check">✓</span>
-              <span>Priority support</span>
-            </li>
-          </ul>
-          <button className="btn btn-primary">Upgrade Now</button>
-        </div>
-        
       </div>
     </section>
   );
 }
 
 export default MembershipTiers;
+export { TierCard, TierFeature, ResonanceVisualization };
