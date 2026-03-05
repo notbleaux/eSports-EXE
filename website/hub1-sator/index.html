@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATOR | Statistical Database Hub - NJZ</title>
+  <link rel="stylesheet" href="../njz-design-system.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  
+  <!-- HEADER -->
+  <header class="hub-header">
+    <nav class="hub-nav">
+      <a href="../main-portal/index.html" class="back-link">← NJZ Central</a>
+      <div class="hub-title">
+        <span class="hub-icon">◎</span>
+        <span>SATOR</span>
+      </div>
+      <div class="hub-status">
+        <span class="status-indicator live"></span>
+        <span>Live Data Ingestion</span>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- MAIN CONTENT -->
+  <main class="sator-main">
+    
+    <!-- HERO WITH CONCENTRIC RINGS -->
+    <section class="sator-hero">
+      <div class="ring-system">
+        <div class="ring ring-1" data-ring="outer">
+          <div class="data-point" style="--angle: 0deg;"></div>
+          <div class="data-point" style="--angle: 72deg;"></div>
+          <div class="data-point" style="--angle: 144deg;"></div>
+          <div class="data-point" style="--angle: 216deg;"></div>
+          <div class="data-point" style="--angle: 288deg;"></div>
+        </div>
+        <div class="ring ring-2" data-ring="middle">
+          <div class="data-point" style="--angle: 36deg;"></div>
+          <div class="data-point" style="--angle: 108deg;"></div>
+          <div class="data-point" style="--angle: 180deg;"></div>
+          <div class="data-point" style="--angle: 252deg;"></div>
+          <div class="data-point" style="--angle: 324deg;"></div>
+        </div>
+        <div class="ring ring-3" data-ring="inner">
+          <div class="data-point" style="--angle: 0deg;"></div>
+          <div class="data-point" style="--angle: 120deg;"></div>
+          <div class="data-point" style="--angle: 240deg;"></div>
+        </div>
+        <div class="ring-center">
+          <span class="center-label">RAWS</span>
+          <span class="center-count">2.4M</span>
+          <span class="center-label">Records</span>
+        </div>
+      </div>
+      
+      <div class="hero-content">
+        <h1>Statistical Database Hub</h1>
+        <p>Immutable RAWS files with cryptographic verification</p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">99.99%</span>
+            <span class="stat-label">Integrity</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="live-matches">156</span>
+            <span class="stat-label">Live Matches</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">12,847</span>
+            <span class="stat-label">Players</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- DATA INGRESS STREAMS -->
+    <section class="ingress-section">
+      <h2>Live Data Ingress</h2>
+      <div class="ingress-streams">
+        <div class="stream" data-stream="hltv">
+          <span class="stream-name">HLTV CS2</span>
+          <div class="stream-bar">
+            <div class="stream-fill" style="width: 85%;"></div>
+          </div>
+          <span class="stream-rate" data-rate="847">847 req/min</span>
+        </div>
+        <div class="stream" data-stream="vlr">
+          <span class="stream-name">VLR Valorant</span>
+          <div class="stream-bar">
+            <div class="stream-fill" style="width: 72%;"></div>
+          </div>
+          <span class="stream-rate" data-rate="623">623 req/min</span>
+        </div>
+        <div class="stream" data-stream="grid">
+          <span class="stream-name">GRID Open</span>
+          <div class="stream-bar">
+            <div class="stream-fill" style="width: 45%;"></div>
+          </div>
+          <span class="stream-rate" data-rate="234">234 req/min</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- RAWS FILE BROWSER -->
+    <section class="raws-browser">
+      <h2>RAWS File Archive</h2>
+      <div class="file-table">
+        <div class="table-header">
+          <span>Match ID</span>
+          <span>Game</span>
+          <span>Timestamp</span>
+          <span>Checksum</span>
+          <span>Size</span>
+          <span>Action</span>
+        </div>
+        <div class="table-body">
+          <div class="table-row">
+            <span class="match-id">CS2-2024-03-05-001</span>
+            <span class="game-tag cs">CS2</span>
+            <span class="timestamp">2024-03-05 14:32:18 UTC</span>
+            <span class="checksum" title="a7f32c8e1d9b4f5a6c8e7d9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b">a7f3...9e2d</span>
+            <span class="file-size">2.4 MB</span>
+            <button class="btn btn-sm download-btn" data-file="CS2-2024-03-05-001">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">VAL-2024-03-05-042</span>
+            <span class="game-tag val">VAL</span>
+            <span class="timestamp">2024-03-05 13:15:42 UTC</span>
+            <span class="checksum" title="b8c43d9f2e0a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c">b8c4...0a3e</span>
+            <span class="file-size">1.8 MB</span>
+            <button class="btn btn-sm download-btn" data-file="VAL-2024-03-05-042">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">CS2-2024-03-05-038</span>
+            <span class="game-tag cs">CS2</span>
+            <span class="timestamp">2024-03-05 12:58:11 UTC</span>
+            <span class="checksum" title="c9d54e0a3f1b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d">c9d5...1b4f</span>
+            <span class="file-size">3.1 MB</span>
+            <button class="btn btn-sm download-btn" data-file="CS2-2024-03-05-038">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">VAL-2024-03-05-037</span>
+            <span class="game-tag val">VAL</span>
+            <span class="timestamp">2024-03-05 11:22:55 UTC</span>
+            <span class="checksum" title="d0e65f1b4a2c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e">d0e6...2c5g</span>
+            <span class="file-size">2.0 MB</span>
+            <button class="btn btn-sm download-btn" data-file="VAL-2024-03-05-037">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">CS2-2024-03-05-036</span>
+            <span class="game-tag cs">CS2</span>
+            <span class="timestamp">2024-03-05 10:45:33 UTC</span>
+            <span class="checksum" title="e1f76a2c5b3d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f">e1f7...3d6h</span>
+            <span class="file-size">2.7 MB</span>
+            <button class="btn btn-sm download-btn" data-file="CS2-2024-03-05-036">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">DOTA-2024-03-05-035</span>
+            <span class="game-tag dota">DOTA</span>
+            <span class="timestamp">2024-03-05 09:18:27 UTC</span>
+            <span class="checksum" title="f2a87b3d6c4e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a">f2a8...4e7i</span>
+            <span class="file-size">4.2 MB</span>
+            <button class="btn btn-sm download-btn" data-file="DOTA-2024-03-05-035">Download</button>
+          </div>
+        </div>
+      </div>
+      <div class="pagination">
+        <button class="btn btn-ghost pagination-prev" disabled>← Previous</button>
+        <div class="page-numbers">
+          <span class="page active">1</span>
+          <span class="page">2</span>
+          <span class="page">3</span>
+          <span class="page-dots">...</span>
+          <span class="page">42</span>
+        </div>
+        <button class="btn btn-ghost pagination-next">Next →</button>
+      </div>
+    </section>
+    
+    <!-- INTEGRITY DASHBOARD -->
+    <section class="integrity-dashboard">
+      <h2>Integrity Verification</h2>
+      <div class="integrity-grid">
+        <div class="integrity-card verified" data-check="twin-file">
+          <span class="card-icon">✓</span>
+          <span class="card-label">Twin-File Sync</span>
+          <span class="card-status">Verified</span>
+        </div>
+        <div class="integrity-card verified" data-check="sha256">
+          <span class="card-icon">✓</span>
+          <span class="card-label">SHA-256 Hashes</span>
+          <span class="card-status">Valid</span>
+        </div>
+        <div class="integrity-card verified" data-check="cross-ref">
+          <span class="card-icon">✓</span>
+          <span class="card-label">Cross-Reference</span>
+          <span class="card-status">Matched</span>
+        </div>
+      </div>
+      <div class="integrity-timestamp">
+        <span class="timestamp-label">Last Verification:</span>
+        <span class="timestamp-value" id="last-verify">2024-03-05 14:32:18 UTC</span>
+      </div>
+    </section>
+    
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NJZ ¿!? - Twin-file statistical infrastructure for professional eSports. 4eva and Nvr Die.">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>NJZ ¿!? | 4eva and Nvr Die</title>
+  <link rel="stylesheet" href="../njz-design-system.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="bg-void text-porcelain">
+  
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <!-- Navigation -->
+  <nav class="main-nav" id="mainNav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">NJZ ¿!?</a>
+      <div class="nav-links">
+        <a href="../hub1-satorxrotas/index.html" class="nav-link">SATOR</a>
+        <a href="../hub2-esports-exe/index.html" class="nav-link">ROTAS</a>
+        <a href="../hub3-dashboard/index.html" class="nav-link">INFO</a>
+        <a href="../hub4-directory/index.html" class="nav-link">GAMES</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn btn-ghost">Sign In</button>
+        <button class="btn btn-primary">Join 4eva</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <div class="hero-backdrop"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title" data-animate="fade-in">NJZ ¿!?</h1>
+      <p class="hero-tagline" data-animate="typewriter">4eva and Nvr Die</p>
+      <p class="hero-description" data-animate="slide-up">Twin-file statistical infrastructure for professional eSports</p>
+      
+      <!-- Twin-File Visualizer Demo -->
+      <div class="twin-file-preview" data-animate="pulse-in">
+        <div class="twin-file-connector">
+          <div class="connector-line"></div>
+          <div class="connector-pulse"></div>
+        </div>
+        <div class="raws-side">
+          <span class="file-label">RAWS</span>
+          <span class="file-type">Immutable Statistics</span>
+          <div class="file-meta">
+            <span class="hash-prefix">SHA-256:</span>
+            <span class="hash-value">a7f3c2...</span>
+          </div>
+        </div>
+        <div class="sync-indicator" aria-label="Files synchronized">
+          <svg class="sync-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 12l3 3 5-6"/>
+          </svg>
+          <span class="sync-text">SYNCED</span>
+        </div>
+        <div class="base-side">
+          <span class="file-label">BASE</span>
+          <span class="file-type">Analytics Layers</span>
+          <div class="file-meta">
+            <span class="layer-count">47 Layers</span>
+            <span class="update-status">Live</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <div class="scroll-mouse">
+          <div class="scroll-wheel"></div>
+        </div>
+        <span class="scroll-text">Scroll to explore</span>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 4-HUB NAVIGATION GRID -->
+  <section class="hub-grid" id="hubs">
+    <div class="section-header">
+      <h2 class="section-title">The Four Hubs</h2>
+      <p class="section-subtitle">Navigate the NJZ ecosystem</p>
+    </div>
+    
+    <div class="grid-container">
+      
+      <!-- HUB 1: SATOR -->
+      <a href="../hub1-satorxrotas/index.html" class="hub-card sator" aria-label="SATOR Statistical Database Hub">
+        <div class="hub-glow sator-glow"></div>
+        <div class="hub-visual">
+          <!-- Concentric rings animation -->
+          <div class="ring-container">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+            <div class="ring ring-4"></div>
+          </div>
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="3"/>
+              <circle cx="12" cy="12" r="8"/>
+              <circle cx="12" cy="12" r="11"/>
+            </svg>
+          </div>
+        </div>
+        <div class="hub-content">
+          <div class="hub-header">
+            <h3 class="hub-name">SATOR</h3>
+            <span class="hub-badge" data-badge="core">CORE</span>
+          </div>
+          <p class="hub-subtitle">Statistical Database Hub</p>
+          <p class="hub-description">Immutable RAWS files with SHA-256 verification and cryptographic integrity</p>
+          <span class="hub-cta">
+            <span>Access RAWS Data</span>
+            <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+      
+      <!-- HUB 2: ROTAS -->
+      <a href="../hub2-esports-exe/index.html" class="hub-card rotas" aria-label="ROTAS Advanced Analytics Hub">
+        <div class="hub-glow rotas-glow"></div>
+        <div class="hub-visual">
+          <!-- Intersecting ellipses -->
+          <div class="ellipse-container">
+            <div class="ellipse ellipse-1"></div>
+            <div class="ellipse ellipse-2"></div>
+            <div class="ellipse ellipse-3"></div>
+          </div>
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(45 12 12)"/>
+              <ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(-45 12 12)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="hub-content">
+          <div class="hub-header">
+            <h3 class="hub-name">ROTAS</h3>
+            <span class="hub-badge" data-badge="analytics">AI</span>
+          </div>
+          <p class="hub-subtitle">Advanced Analytics Hub</p>
+          <p class="hub-description">Probability engines and predictive modeling with neural network insights</p>
+          <span class="hub-cta">
+            <span>Explore Analytics</span>
+            <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+      
+      <!-- HUB 3: INFORMATION -->
+      <a href="../hub3-dashboard/index.html" class="hub-card information" aria-label="INFORMATION Professional eSports Directory">
+        <div class="hub-glow info-glow"></div>
+        <div class="hub-visual">
+          <!-- 3x3 grid preview -->
+          <div class="mini-grid">
+            <div class="grid-cell" data-delay="0"></div>
+            <div class="grid-cell" data-delay="1"></div>
+            <div class="grid-cell" data-delay="2"></div>
+            <div class="grid-cell" data-delay="3"></div>
+            <div class="grid-cell active" data-delay="4"></div>
+            <div class="grid-cell" data-delay="5"></div>
+            <div class="grid-cell" data-delay="6"></div>
+            <div class="grid-cell" data-delay="7"></div>
+            <div class="grid-cell" data-delay="8"></div>
+          </div>
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+        </div>
+        <div class="hub-content">
+          <div class="hub-header">
+            <h3 class="hub-name">INFORMATION</h3>
+            <span class="hub-badge" data-badge="directory">DIR</span>
+          </div>
+          <p class="hub-subtitle">Professional eSports Directory</p>
+          <p class="hub-description">Unified directory, player profiles, and team membership portal</p>
+          <span class="hub-cta">
+            <span>Browse Directory</span>
+            <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+      
+      <!-- HUB 4: GAMES -->
+      <a href="../hub4-directory/index.html" class="hub-card games" aria-label="GAMES Simulation and Live Platform">
+        <div class="hub-glow games-glow"></div>
+        <div class="hub-visual">
+          <!-- Torus/hourglass shape -->
+          <div class="torus-container">
+            <div class="torus-ring top"></div>
+            <div class="torus-ring middle"></div>
+            <div class="torus-ring bottom"></div>
+            <div class="torus-flow"></div>
+          </div>
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+              <path d="M12 6v12M8 10l8 4M8 14l8-4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="hub-content">
+          <div class="hub-header">
+            <h3 class="hub-name">GAMES</h3>
+            <span class="hub-badge" data-badge="live">LIVE</span>
+          </div>
+          <p class="hub-subtitle">Simulation & Live Platform</p>
+          <p class="hub-description">Offline simulation engine and NJZ ¿!? Live streaming platform</p>
+          <span class="hub-cta">
+            <span>Enter Games Hub</span>
+            <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+      
+    </div>
+  </section>
+  
+  <!-- MEMBERSHIP TIERS -->
+  <section class="membership" id="membership">
+    <div class="section-header">
+      <h2 class="section-title">Membership Tiers</h2>
+      <p class="section-subtitle">Choose your resonance level</p>
+    </div>
+    
+    <div class="tier-comparison">
+      
+      <div class="tier nvr-die">
+        <div class="tier-glow"></div>
+        <div class="tier-header">
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v8M8 12h8"/>
+            </svg>
+          </div>
+          <h3 class="tier-name">Nvr Die</h3>
+          <p class="tier-price">
+            <span class="price-value">Free</span>
+            <span class="price-period">forever</span>
+          </p>
+        </div>
+        <div class="tier-resonance level-1">
+          <div class="resonance-core"></div>
+          <div class="resonance-orbit"></div>
+        </div>
+        <ul class="tier-features">
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Compressed BASE files</span>
+          </li>
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>24-hour delayed data</span>
+          </li>
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Standard analytics</span>
+          </li>
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Directory access</span>
+          </li>
+        </ul>
+        <button class="btn btn-ghost tier-cta">Get Started</button>
+      </div>
+      
+      <div class="tier-divider">
+        <div class="growth-line">
+          <div class="growth-arrow"></div>
+        </div>
+        <div class="growth-labels">
+          <span>Evolve</span>
+          <span>Grow</span>
+        </div>
+      </div>
+      
+      <div class="tier njz-4eva">
+        <div class="tier-glow premium-glow"></div>
+        <div class="tier-badge-premium">
+          <span class="badge-star">★</span>
+          <span>Premium</span>
+        </div>
+        <div class="tier-header">
+          <div class="tier-icon premium-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3 class="tier-name">NJZ 4eva</h3>
+          <p class="tier-price">
+            <span class="price-value">$29</span>
+            <span class="price-period">/mo</span>
+          </p>
+        </div>
+        <div class="tier-resonance level-5">
+          <div class="resonance-core"></div>
+          <div class="resonance-orbit orbit-1"></div>
+          <div class="resonance-orbit orbit-2"></div>
+          <div class="resonance-orbit orbit-3"></div>
+          <div class="resonance-orbit orbit-4"></div>
+        </div>
+        <ul class="tier-features">
+          <li class="feature-highlight">
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Real-time RAWS streams</span>
+          </li>
+          <li class="feature-highlight">
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Advanced ROTAS layers</span>
+          </li>
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Predictive tools</span>
+          </li>
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Early patch access</span>
+          </li>
+          <li>
+            <svg class="feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <span>Priority support</span>
+          </li>
+        </ul>
+        <button class="btn btn-primary tier-cta">
+          <span>Upgrade to 4eva</span>
+          <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- STATS SECTION -->
+  <section class="stats-section" id="stats">
+    <div class="stats-grid">
+      <div class="stat-item" data-stat="files">
+        <div class="stat-value" data-count="2.4">0</div>
+        <div class="stat-unit">M+</div>
+        <div class="stat-label">RAWS Files</div>
+      </div>
+      <div class="stat-item" data-stat="layers">
+        <div class="stat-value" data-count="47">0</div>
+        <div class="stat-unit">K+</div>
+        <div class="stat-label">BASE Layers</div>
+      </div>
+      <div class="stat-item" data-stat="players">
+        <div class="stat-value" data-count="128">0</div>
+        <div class="stat-unit">K+</div>
+        <div class="stat-label">Active Players</div>
+      </div>
+      <div class="stat-item" data-stat="uptime">
+        <div class="stat-value" data-count="99.99">0</div>
+        <div class="stat-unit">%</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <p class="footer-logo">NJZ ¿!?</p>
+        <p class="footer-tagline">Twin-file statistical infrastructure</p>
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Discord">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+        </div>
+      </div>
+      
+      <div class="footer-links-group">
+        <h4 class="footer-group-title">Platform</h4>
+        <div class="footer-links">
+          <a href="../hub1-satorxrotas/index.html">SATOR Database</a>
+          <a href="../hub2-esports-exe/index.html">ROTAS Analytics</a>
+          <a href="../hub3-dashboard/index.html">Information Hub</a>
+          <a href="../hub4-directory/index.html">Games Platform</a>
+        </div>
+      </div>
+      
+      <div class="footer-links-group">
+        <h4 class="footer-group-title">Resources</h4>
+        <div class="footer-links">
+          <a href="#">Documentation</a>
+          <a href="#">API Reference</a>
+          <a href="#">Status Page</a>
+          <a href="#">Changelog</a>
+        </div>
+      </div>
+      
+      <div class="footer-links-group">
+        <h4 class="footer-group-title">Company</h4>
+        <div class="footer-links">
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2026 NJZ Platform. All rights reserved.</p>
+      <div class="footer-status">
+        <span class="status-indicator"></span>
+        <span class="status-text">All systems operational</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
