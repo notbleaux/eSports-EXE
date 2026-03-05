@@ -117,7 +117,7 @@ function GlassPanel({
   return (
     <div 
       className={`glass-panel ${className}`}
-      style={{ ['--glow-color' as string]: glowColor }}
+      style={{ ['--glow-color']: glowColor }}
     >
       <div className="glass-border">
         <div className="glass-border-top" />

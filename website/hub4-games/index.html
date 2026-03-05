@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Nexus | NJZ ¿!? Games Hub</title>
+  <meta name="description" content="The Nexus - Where offline strategy meets live competition. Download NJZ Manager and compete on the live platform.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- NJZ Design System -->
+  <link rel="stylesheet" href="/njz-design-system.css">
+  
+  <style>
+    /* === THE NEXUS - STANDALONE STYLES === */
+    :root {
+      --nexus-void: #050508;
+      --nexus-deep-cobalt: #0a1628;
+      --nexus-cobalt: #1e3a5f;
+      --nexus-neon-cyan: #00f0ff;
+      --nexus-amber: #ff9f1c;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--nexus-void);
+      color: #e8e6e3;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Background */
+    .nexus-bg {
+      min-height: 100vh;
+      background: 
+        radial-gradient(ellipse at 20% 0%, rgba(30, 58, 95, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+        var(--nexus-void);
+    }
+    
+    /* Navigation */
+    .nexus-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(5, 5, 8, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    }
+    
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .brand-njz { color: #e8e6e3; }
+    .brand-symbol { color: #00f0ff; }
+    .brand-divider { color: #6b7280; margin: 0 4px; }
+    .brand-hub { color: #9ca3af; font-size: 1rem; font-weight: 500; }
+    
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    
+    .nav-link {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    
+    .nav-link:hover { color: #e8e6e3; }
+    
+    .nav-link.live {
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    }
+    
+    /* Hero */
+    .nexus-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 40px 80px;
+      text-align: center;
+    }
+    
+    .hero-content h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    
+    .title-nexus {
+      background: linear-gradient(135deg, #00f0ff 0%, #8338ec 50%, #ff006e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: #9ca3af;
+      margin-bottom: 40px;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .cta-primary, .cta-secondary {
+      padding: 16px 32px;
+      border-radius: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .cta-primary {
+      background: linear-gradient(135deg, #00f0ff, #00c8ff);
+      color: #050508;
+    }
+    
+    .cta-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+    }
+    
+    .cta-secondary {
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: #00f0ff;
+    }
+    
+    .cta-secondary:hover {
+      background: rgba(0, 240, 255, 0.1);
+    }
+    
+    /* Sections */
+    .nexus-section {
+      padding: 80px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .section-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    
+    .section-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #e8e6e3;
+    }
+    
+    .section-header p {
+      color: #9ca3af;
+      font-size: 1rem;
+    }
+    
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    
+    .feature-card {
+      background: linear-gradient(135deg, rgba(13, 17, 23, 0.9) 0%, rgba(10, 22, 40, 0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      border-color: rgba(0, 240, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .feature-icon-large {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+    
+    .feature-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      color: #e8e6e3;
+    }
+    
+    .feature-card p {
+      color: #9ca3af;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    
+    /* Status Cards */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    .status-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .status-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00f0ff;
+      display: block;
+    }
+    
+    .status-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    
+    /* Footer */
+    .nexus-footer {
+      padding: 60px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+    
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+    
+    .footer-links a {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-links a:hover { color: #e8e6e3; }
+    
+    .footer-copyright {
+      color: #4b5563;
+      font-size: 0.75rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nexus-nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero-cta { flex-direction: column; }
+      .cta-primary, .cta-secondary { width: 100%; text-align: center; }
+      .nexus-section { padding: 60px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nexus-bg">
+    <!-- Navigation -->
+    <nav class="nexus-nav">
+      <div class="nav-brand">
+        <span class="brand-njz">NJZ</span>
+        <span class="brand-symbol">¿!?</span>
+        <span class="brand-divider">|</span>
+        <span class="brand-hub">The Nexus</span>
+      </div>
+      
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#download" class="nav-link">Download</a>
+        <a href="#live" class="nav-link live">
+          <span class="live-dot"></span>
+          Live
+        </a>
+      </div>
+    </nav>
+    
+    <!-- Hero -->
+    <section class="nexus-hero">
+      <div class="hero-content">
+        <h1><span class="title-nexus">The Nexus</span></h1>
+        <p class="hero-subtitle">Where offline strategy meets live competition</p>
+        
+        <div class="hero-cta">
+          <a href="#download" class="cta-primary">⬇ Download NJZ Manager</a>
+          <a href="#live" class="cta-secondary">▶ Play Live Now</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Features -->
+    <section id="features" class="nexus-section">
+      <div class="section-header">
+        <span class="section-icon">✨</span>
+        <h2>The Nexus Experience</h2>
+        <p>Seamless flow between offline and live gameplay</p>
+      </div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon-large">🎮</div>
+          <h3>Download & Play Offline</h3>
+          <p>NJZ Manager puts you in control of your eSports empire. Build teams, develop strategies, and dominate the competition at your own pace.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">⚡</div>
+          <h3>Resonant Matchmaking</h3>
+          <p>Our advanced matchmaking system finds your perfect opponents using harmonic resonance algorithms that match skill, style, and temperament.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">🌐</div>
+          <h3>Live Platform</h3>
+          <p>Connect to the NJZ Live Platform and compete against players worldwide in real-time tournaments, ranked matches, and casual games.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">🌊</div>
+          <h3>Torus Flow</h3>
+          <p>Experience seamless transitions between Terrestrial (practice), Harmonic (balanced), and Celestial (competitive) game states.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">⭐</div>
+          <h3>Nine Game Modes</h3>
+          <p>From Academy learning to Singularity championships, choose from nine distinct modes across three realms of competition.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">💾</div>
+          <h3>Cross-Platform Saves</h3>
+          <p>Your progress syncs seamlessly between desktop, web, and mobile versions. Resume anywhere, anytime.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Live Status -->
+    <section id="live" class="nexus-section">
+      <div class="section-header">
+        <span class="section-icon" style="color: #ef4444;">●</span>
+        <h2>Live Platform Status</h2>
+        <p>Real-time platform metrics</p>
+      </div>
+      
+      <div class="status-grid">
+        <div class="status-card">
+          <span class="status-value">12,453</span>
+          <span class="status-label">Players Online</span>
+        </div>
+        <div class="status-card">
+          <span class="status-value">1,247</span>
+          <span class="status-label">Active Matches</span>
+        </div>
+        <div class="status-card">
+          <span class="status-value"><20ms</span>
+          <span class="status-label">Avg Latency</span>
+        </div>
+        <div class="status-card">
+          <span class="status-value">98.9%</span>
+          <span class="status-label">Uptime</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Download -->
+    <section id="download" class="nexus-section">
+      <div class="section-header">
+        <span class="section-icon">⬇</span>
+        <h2>Download Portal</h2>
+        <p>Get NJZ Manager for your platform</p>
+      </div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon-large">🪟</div>
+          <h3>Windows</h3>
+          <p>Windows 10/11 (64-bit) · 4.2 GB · DirectX 12</p>
+          <a href="#" class="cta-primary" style="display: inline-block; margin-top: 16px;">Download</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">🍎</div>
+          <h3>macOS</h3>
+          <p>macOS 12+ · 3.8 GB · Apple Silicon Ready</p>
+          <a href="#" class="cta-primary" style="display: inline-block; margin-top: 16px;">Download</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">🐧</div>
+          <h3>Linux</h3>
+          <p>Ubuntu 20.04+ · 4.0 GB · Steam Deck Verified</p>
+          <a href="#" class="cta-primary" style="display: inline-block; margin-top: 16px;">Download</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon-large">🌐</div>
+          <h3>Web</h3>
+          <p>Browser-based · 847 MB · No Install</p>
+          <a href="#" class="cta-secondary" style="display: inline-block; margin-top: 16px;">Play Now</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="nexus-footer">
+      <div class="footer-brand">
+        <span class="brand-njz">NJZ</span>
+        <span class="brand-symbol">¿!?</span>
+      </div>
+      
+      <div class="footer-links">
+        <a href="#">Documentation</a>
+        <a href="#">Support</a>
+        <a href="#">Community</a>
+        <a href="#">Status</a>
+      </div>
+      
+      <div class="footer-copyright">
+        © 2024 NJZ ¿!? Platform. All realities reserved.
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Live status animation
+    setInterval(() => {
+      const onlineValue = document.querySelector('.status-card:first-child .status-value');
+      if (onlineValue) {
+        const current = parseInt(onlineValue.textContent.replace(',', ''));
+        const change = Math.floor(Math.random() * 50) - 25;
+        onlineValue.textContent = (current + change).toLocaleString();
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

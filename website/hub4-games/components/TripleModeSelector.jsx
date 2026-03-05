@@ -143,8 +143,8 @@ function TetraFace({
       }}
       transition={{ duration: 0.6, ease: [0.68, -0.55, 0.265, 1.55] }}
       style={{
-        ['--face-color' as string]: colors.base,
-        ['--face-glow' as string]: colors.glow,
+        ['--face-color']: colors.base,
+        ['--face-glow']: colors.glow,
       }}
     >
       <div className="face-content">

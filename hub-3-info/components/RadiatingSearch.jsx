@@ -1,317 +1,418 @@
 /**
  * RadiatingSearch.jsx
- * Search results radiate from center along 8 vectors
- * Reference: Landingi AI, cloud-like search transitions
+ * Search with radiating results visualization
+ * Reference: Gufram grid expansion, signal propagation
  */
 
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { useDebounce, useAnimatedCounter } from '../hooks';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useDebounce } from '../hooks';
 import { filterItems } from '../utils/helpers';
-import { TEAMS_DATA } from '../data/teams';
-import { GAME_CATEGORIES } from '../data/categories';
 import '../styles/radiating-search.css';
 
-// Search data combined from all sources
+// Search data - teams, tournaments, players
 const SEARCH_DATA = [
-  ...TEAMS_DATA.sampleTeams.map(team => ({
-    ...team,
-    type: 'team',
-    searchableText: `${team.name} ${team.region} ${team.tier}`
-  })),
-  ...GAME_CATEGORIES.map(cat => ({
-    ...cat,
-    type: 'category',
-    searchableText: `${cat.name} ${cat.fullName} ${cat.description}`
-  }))
+  // Teams
+  { id: 1, type: 'team', name: 'Nexus Gaming', category: 'FPS', region: 'NA', tier: 'S', members: 5 },
+  { id: 2, type: 'team', name: 'Apex Predators', category: 'Battle Royale', region: 'EU', tier: 'S', members: 4 },
+  { id: 3, type: 'team', name: 'Phantom Legion', category: 'MOBA', region: 'Asia', tier: 'A', members: 5 },
+  { id: 4, type: 'team', name: 'Storm Riders', category: 'MOBA', region: 'NA', tier: 'A', members: 5 },
+  { id: 5, type: 'team', name: 'Cyber Wolves', category: 'FPS', region: 'EU', tier: 'B', members: 5 },
+  { id: 6, type: 'team', name: 'Neon Dragons', category: 'RPG', region: 'Asia', tier: 'S', members: 8 },
+  { id: 7, type: 'team', name: 'Void Walkers', category: 'Strategy', region: 'NA', tier: 'B', members: 3 },
+  { id: 8, type: 'team', name: 'Solar Flare', category: 'Sports', region: 'EU', tier: 'A', members: 6 },
+  { id: 9, type: 'team', name: 'Thunder Strike', category: 'FPS', region: 'Asia', tier: 'S', members: 5 },
+  { id: 10, type: 'team', name: 'Crystal Blades', category: 'MOBA', region: 'SA', tier: 'C', members: 5 },
+  
+  // Tournaments
+  { id: 101, type: 'tournament', name: 'World Championship 2024', game: 'Multiple', prize: '$5,000,000', teams: 32 },
+  { id: 102, type: 'tournament', name: 'Regional Masters', game: 'FPS', prize: '$500,000', teams: 16 },
+  { id: 103, type: 'tournament', name: 'MOBA Summit', game: 'MOBA', prize: '$1,000,000', teams: 12 },
+  { id: 104, type: 'tournament', name: 'Battle Royale Cup', game: 'Battle Royale', prize: '$250,000', teams: 100 },
+  { id: 105, type: 'tournament', name: 'Indie Showdown', game: 'Indie', prize: '$50,000', teams: 64 },
+  
+  // Players
+  { id: 201, type: 'player', name: 'Phoenix', team: 'Nexus Gaming', role: 'AWPer', rank: 1 },
+  { id: 202, type: 'player', name: 'Viper', team: 'Apex Predators', role: 'IGL', rank: 3 },
+  { id: 203, type: 'player', name: 'Shadow', team: 'Phantom Legion', role: 'Mid', rank: 5 },
+  { id: 204, type: 'player', name: 'Blaze', team: 'Neon Dragons', role: 'Carry', rank: 2 },
+  { id: 205, type: 'player', name: 'Frost', team: 'Cyber Wolves', role: 'Support', rank: 12 },
+  { id: 206, type: 'player', name: 'Storm', team: 'Thunder Strike', role: 'Entry', rank: 4 },
+  { id: 207, type: 'player', name: 'Nova', team: 'Solar Flare', role: 'Captain', rank: 8 },
+  { id: 208, type: 'player', name: 'Echo', team: 'Void Walkers', role: 'Strategist', rank: 15 }
 ];
 
-// Vector directions for 8 radiating arms (in degrees)
-const VECTORS = [0, 45, 90, 135, 180, 225, 270, 315];
-
-// Get color based on result type
-const getResultColor = (type, item) => {
-  if (type === 'category') return item.color;
-  if (type === 'team') {
-    const colors = {
-      'tier-s': '#c9b037',
-      'tier-a': '#e8e6e3',
-      'tier-b': '#b8b6b2',
-      'tier-c': '#7a7874',
-      'tier-d': '#5a5854'
-    };
-    return colors[item.tier] || '#7a7874';
-  }
-  return '#c9b037';
+// Type icons
+const TYPE_ICONS = {
+  team: '👥',
+  tournament: '🏆',
+  player: '🎮'
 };
 
-// Individual result node
-const ResultNode = ({ item, index, vector, delay, onClick, isVisible }) => {
-  const distance = 120 + (index * 80);
-  const angleRad = (vector * Math.PI) / 180;
-  const x = Math.cos(angleRad) * distance;
-  const y = Math.sin(angleRad) * distance;
-  
-  const color = getResultColor(item.type, item);
-  
+// Type colors
+const TYPE_COLORS = {
+  team: '#4ecdc4',
+  tournament: '#c9b037',
+  player: '#00f0ff'
+};
+
+// Radiating Ring Component
+const RadiatingRing = ({ delay, isActive }) => {
+  return (
+    <div 
+      className={`radiating-ring ${isActive ? 'active' : ''}`}
+      style={{ animationDelay: `${delay}ms` }}
+    />
+  );
+};
+
+// Search Result Node Component
+const ResultNode = ({ result, index, total, isHovered, onHover, onClick }) => {
+  // Calculate position in radial layout
+  const angle = useMemo(() => {
+    const baseAngle = (index / Math.min(total, 8)) * 2 * Math.PI - Math.PI / 2;
+    const ringIndex = Math.floor(index / 8);
+    const ringOffset = ringIndex * 0.3;
+    return baseAngle + ringOffset;
+  }, [index, total]);
+
+  const radius = useMemo(() => {
+    const ringIndex = Math.floor(index / 8);
+    return 120 + ringIndex * 80;
+  }, [index]);
+
+  const position = useMemo(() => ({
+    x: Math.cos(angle) * radius,
+    y: Math.sin(angle) * radius
+  }), [angle, radius]);
+
   return (
     <div
-      className={`result-node ${item.type} ${isVisible ? 'visible' : ''}`}
+      className={`result-node ${result.type} ${isHovered ? 'hovered' : ''}`}
       style={{
-        '--x': `${x}px`,
-        '--y': `${y}px`,
-        '--delay': `${delay}ms`,
-        '--node-color': color
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        '--node-color': TYPE_COLORS[result.type]
       }}
-      onClick={() => onClick(item)}
+      onMouseEnter={() => onHover(result)}
+      onMouseLeave={() => onHover(null)}
+      onClick={() => onClick(result)}
     >
-      <div className="result-node-glow" style={{ background: color }} />
+      <div className="result-node-pulse" />
       <div className="result-node-content">
-        {item.type === 'category' && (
-          <>
-            <span className="result-icon">{item.icon}</span>
-            <span className="result-name">{item.name}</span>
-            <span className="result-meta">{item.totalTeams} teams</span>
-          </>
-        )}
-        {item.type === 'team' && (
-          <>
-            <span className={`result-tier ${item.tier}`}>{item.tier.replace('tier-', '').toUpperCase()}</span>
-            <span className="result-name">{item.name}</span>
-            <span className="result-meta">{item.region.toUpperCase()}</span>
-          </>
-        )}
+        <span className="result-node-icon">{TYPE_ICONS[result.type]}</span>
+        <div className="result-node-info">
+          <span className="result-node-name">{result.name}</span>
+          <span className="result-node-type">{result.type}</span>
+        </div>
       </div>
     </div>
   );
 };
 
-// Cloud particle for background effect
-const CloudParticle = ({ index, total }) => {
-  const angle = (index / total) * 360;
-  const distance = 200 + Math.random() * 300;
-  const size = 20 + Math.random() * 60;
-  const delay = Math.random() * 2000;
-  const duration = 4000 + Math.random() * 2000;
-  
-  return (
-    <div
-      className="cloud-particle"
-      style={{
-        '--angle': `${angle}deg`,
-        '--distance': `${distance}px`,
-        '--size': `${size}px`,
-        '--delay': `${delay}ms`,
-        '--duration': `${duration}ms`
-      }}
-    />
-  );
-};
+// Result Detail Card
+const ResultDetailCard = ({ result, onClose }) => {
+  if (!result) return null;
 
-// Main Radiating Search Component
-const RadiatingSearch = ({ onResultSelect, placeholder = "Search teams, games, categories..." }) => {
-  const [query, setQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [selectedResult, setSelectedResult] = useState(null);
-  const inputRef = useRef(null);
-  
-  const debouncedQuery = useDebounce(query, 300);
-  
-  // Filter results based on query
-  const results = useMemo(() => {
-    if (!debouncedQuery || debouncedQuery.length < 2) return [];
-    
-    return filterItems(SEARCH_DATA, debouncedQuery, ['searchableText', 'name'])
-      .slice(0, 16); // Max 16 results (2 per vector)
-  }, [debouncedQuery]);
-  
-  // Distribute results across 8 vectors
-  const distributedResults = useMemo(() => {
-    const distributed = VECTORS.map(vector => ({
-      vector,
-      items: []
-    }));
-    
-    results.forEach((item, index) => {
-      const vectorIndex = index % 8;
-      distributed[vectorIndex].items.push({
-        ...item,
-        index: Math.floor(index / 8)
-      });
-    });
-    
-    return distributed.filter(v => v.items.length > 0);
-  }, [results]);
-  
-  // Handle search
-  useEffect(() => {
-    if (debouncedQuery.length >= 2) {
-      setIsSearching(true);
-      const timer = setTimeout(() => {
-        setIsSearching(false);
-        setHasSearched(true);
-      }, 300);
-      return () => clearTimeout(timer);
-    } else {
-      setHasSearched(false);
-      setSelectedResult(null);
+  const getDetailFields = () => {
+    switch (result.type) {
+      case 'team':
+        return [
+          { label: 'Category', value: result.category },
+          { label: 'Region', value: result.region },
+          { label: 'Tier', value: result.tier },
+          { label: 'Members', value: result.members }
+        ];
+      case 'tournament':
+        return [
+          { label: 'Game', value: result.game },
+          { label: 'Prize Pool', value: result.prize },
+          { label: 'Teams', value: result.teams }
+        ];
+      case 'player':
+        return [
+          { label: 'Team', value: result.team },
+          { label: 'Role', value: result.role },
+          { label: 'Rank', value: `#${result.rank}` }
+        ];
+      default:
+        return [];
     }
-  }, [debouncedQuery]);
-  
-  const handleInputChange = useCallback((e) => {
-    setQuery(e.target.value);
-  }, []);
-  
-  const handleResultClick = useCallback((item) => {
-    setSelectedResult(item);
-    onResultSelect?.(item);
-  }, [onResultSelect]);
-  
-  const handleClear = useCallback(() => {
-    setQuery('');
-    setSelectedResult(null);
-    inputRef.current?.focus();
-  }, []);
-  
-  const resultCount = results.length;
-  
+  };
+
   return (
-    <div className={`radiating-search ${hasSearched ? 'has-results' : ''} ${selectedResult ? 'has-selection' : ''}`}>
-      {/* Cloud particles background */}
-      <div className="cloud-particles">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <CloudParticle key={i} index={i} total={20} />
+    <div className={`result-detail-card ${result.type}`}>
+      <button className="result-detail-close" onClick={onClose}>×</button>
+      
+      <div className="result-detail-header">
+        <span className="result-detail-icon">{TYPE_ICONS[result.type]}</span>
+        <h4>{result.name}</h4>
+        <span className="result-detail-type">{result.type}</span>
+      </div>
+      
+      <div className="result-detail-fields">
+        {getDetailFields().map((field, index) => (
+          <div key={index} className="result-detail-field">
+            <span className="field-label">{field.label}</span>
+            <span className="field-value">{field.value}</span>
+          </div>
         ))}
       </div>
       
-      {/* Search center */}
-      <div className="search-center">
+      <button className="result-detail-action">
+        View {result.type === 'player' ? 'Profile' : 'Details'} →
+      </button>
+    </div>
+  );
+};
+
+/**
+ * Main Radiating Search Component
+ */
+const RadiatingSearch = ({ isOpen, onClose, categories }) => {
+  const [query, setQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [results, setResults] = useState([]);
+  const [hoveredResult, setHoveredResult] = useState(null);
+  const [selectedResult, setSelectedResult] = useState(null);
+  const [activeFilters, setActiveFilters] = useState(['team', 'tournament', 'player']);
+  
+  const debouncedQuery = useDebounce(query, 300);
+  const inputRef = useRef(null);
+  const searchContainerRef = useRef(null);
+
+  // Focus input when opened
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 100);
+    }
+  }, [isOpen]);
+
+  // Perform search
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+
+    // Simulate API delay
+    const timer = setTimeout(() => {
+      const filtered = SEARCH_DATA.filter(item => {
+        const matchesQuery = item.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+                            (item.category && item.category.toLowerCase().includes(debouncedQuery.toLowerCase())) ||
+                            (item.team && item.team.toLowerCase().includes(debouncedQuery.toLowerCase()));
+        const matchesFilter = activeFilters.includes(item.type);
+        return matchesQuery && matchesFilter;
+      });
+      
+      setResults(filtered);
+      setIsSearching(false);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [debouncedQuery, activeFilters]);
+
+  // Handle filter toggle
+  const toggleFilter = useCallback((filter) => {
+    setActiveFilters(prev => {
+      if (prev.includes(filter)) {
+        return prev.length > 1 ? prev.filter(f => f !== filter) : prev;
+      }
+      return [...prev, filter];
+    });
+  }, []);
+
+  // Handle result click
+  const handleResultClick = useCallback((result) => {
+    setSelectedResult(result);
+  }, []);
+
+  // Clear search
+  const clearSearch = useCallback(() => {
+    setQuery('');
+    setResults([]);
+    setSelectedResult(null);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  // Generate radiating rings
+  const rings = useMemo(() => {
+    return Array.from({ length: 4 }, (_, i) => ({
+      id: i,
+      delay: i * 200,
+      isActive: results.length > 0 && !isSearching
+    }));
+  }, [results.length, isSearching]);
+
+  // Group results by type
+  const groupedResults = useMemo(() => {
+    return results.reduce((acc, result) => {
+      if (!acc[result.type]) acc[result.type] = [];
+      acc[result.type].push(result);
+      return acc;
+    }, {});
+  }, [results]);
+
+  return (
+    <div 
+      ref={searchContainerRef}
+      className={`radiating-search ${isOpen ? 'open' : ''} ${results.length > 0 ? 'has-results' : ''}`}
+    >
+      {/* Search Input Container */}
+      <div className="search-input-container">
         <div className="search-input-wrapper">
-          <div className="search-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-          </div>
+          <svg 
+            className="search-icon"
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          
           <input
             ref={inputRef}
             type="text"
             className="search-input"
-            placeholder={placeholder}
+            placeholder="Search teams, tournaments, players..."
             value={query}
-            onChange={handleInputChange}
-            autoComplete="off"
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search"
           />
+          
           {query && (
-            <button className="search-clear" onClick={handleClear}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 6 6 18" />
-                <path d="m6 6 12 12" />
-              </svg>
-            </button>
+            <button className="search-clear" onClick={clearSearch}>×</button>
           )}
+          
           {isSearching && (
-            <div className="search-spinner">
-              <div className="spinner-ring" />
-            </div>
+            <div className="search-spinner" />
           )}
         </div>
-        
-        {/* Result counter */}
-        {hasSearched && !isSearching && (
-          <div className="result-counter">
-            <span className="counter-value">{resultCount}</span>
-            <span className="counter-label">{resultCount === 1 ? 'result' : 'results'}</span>
-          </div>
-        )}
-        
-        {/* Selected result preview */}
-        {selectedResult && (
-          <div className="selected-preview">
-            <div 
-              className="preview-glow"
-              style={{ background: getResultColor(selectedResult.type, selectedResult) }}
-            />
-            <div className="preview-content">
-              {selectedResult.type === 'category' && (
-                <>
-                  <span className="preview-icon">{selectedResult.icon}</span>
-                  <h4>{selectedResult.fullName}</h4>
-                  <p>{selectedResult.description}</p>
-                </>
-              )}
-              {selectedResult.type === 'team' && (
-                <>
-                  <span className={`preview-tier ${selectedResult.tier}`}>
-                    {selectedResult.tier.replace('tier-', '').toUpperCase()}
-                  </span>
-                  <h4>{selectedResult.name}</h4>
-                  <p>{selectedResult.region.toUpperCase()} • {selectedResult.members} members • Founded {selectedResult.founded}</p>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+
+        {/* Filter Pills */}
+        <div className="search-filters"
+        >
+          {[
+            { id: 'team', label: 'Teams', icon: '👥' },
+            { id: 'tournament', label: 'Tournaments', icon: '🏆' },
+            { id: 'player', label: 'Players', icon: '🎮' }
+          ].map((filter) => (
+            <button
+              key={filter.id}
+              className={`filter-pill ${activeFilters.includes(filter.id) ? 'active' : ''}`}
+              onClick={() => toggleFilter(filter.id)}
+              style={{ '--filter-color': TYPE_COLORS[filter.id] }}
+            >
+              <span>{filter.icon}</span>
+              {filter.label}
+            </button>
+          ))}
+        </div>
       </div>
-      
-      {/* Radiating results */}
-      <div className="radiating-results">
-        {distributedResults.map((vectorGroup) => (
-          <div 
-            key={vectorGroup.vector} 
-            className="vector-arm"
-            style={{ '--vector-angle': `${vectorGroup.vector}deg` }}
+
+      {/* Radiating Results Visualization */}
+      <div className="radiating-results-container"
+      >
+        {/* Radiating Rings */}
+        <div className="radiating-rings"
+        >
+          {rings.map((ring) => (
+            <RadiatingRing 
+              key={ring.id}
+              delay={ring.delay}
+              isActive={ring.isActive}
+            />
+          ))}
+        </div>
+
+        {/* Center Hub */}
+        <div className="search-hub"
+        >
+          <div className="search-hub-inner"
           >
-            {vectorGroup.items.map((item, idx) => (
+            {isSearching ? (
+              <span className="hub-text searching">Searching...</span>
+            ) : results.length > 0 ? (
+              <>
+                <span className="hub-count">{results.length}</span>
+                <span className="hub-text">results</span>
+              </>
+            ) : query ? (
+              <span className="hub-text">No results</span>
+            ) : (
+              <span className="hub-text">Type to search</span>
+            )}
+          </div>
+        </div>
+
+        {/* Result Nodes */}
+        {results.length > 0 && !isSearching && (
+          <div className="result-nodes-container"
+          >
+            {results.slice(0, 24).map((result, index) => (
               <ResultNode
-                key={`${item.type}-${item.id}`}
-                item={item}
-                index={idx}
-                vector={vectorGroup.vector}
-                delay={idx * 100 + Math.random() * 200}
+                key={`${result.type}-${result.id}`}
+                result={result}
+                index={index}
+                total={Math.min(results.length, 24)}
+                isHovered={hoveredResult?.id === result.id && hoveredResult?.type === result.type}
+                onHover={setHoveredResult}
                 onClick={handleResultClick}
-                isVisible={hasSearched && !isSearching}
               />
             ))}
           </div>
-        ))}
+        )}
+
+        {/* Result Detail Card */}
+        <ResultDetailCard 
+          result={selectedResult}
+          onClose={() => setSelectedResult(null)}
+        />
       </div>
-      
-      {/* Search suggestions */}
-      {!hasSearched && !query && (
-        <div className="search-suggestions">
-          <div className="suggestion-group">
-            <span className="suggestion-label">Popular</span>
-            <div className="suggestion-tags">
-              <button onClick={() => setQuery('Valorant')}>Valorant</button>
-              <button onClick={() => setQuery('Tier S')}>Tier S</button>
-              <button onClick={() => setQuery('MOBA')}>MOBA</button>
-              <button onClick={() => setQuery('Nexus')}>Nexus</button>
+
+      {/* Results List View (Alternative) */}
+      {results.length > 0 && !isSearching && (
+        <div className="search-results-list"
+        >
+          {Object.entries(groupedResults).map(([type, items]) => (
+            <div key={type} className="result-group"
+            >
+              <h4 className="result-group-header"
+              >
+                <span>{TYPE_ICONS[type]}</span>
+                {type.charAt(0).toUpperCase() + type.slice(1)}s
+                <span className="result-count">{items.length}</span>
+              </h4>
+              <div className="result-group-items"
+              >
+                {items.slice(0, 5).map((item) => (
+                  <div 
+                    key={item.id}
+                    className="result-list-item"
+                    onClick={() => handleResultClick(item)}
+                  >
+                    <span className="item-name">{item.name}</span>
+                    <span className="item-meta">
+                      {item.category || item.game || item.team}
+                    </span>
+                  </div>
+                ))}
+                {items.length > 5 && (
+                  <button className="result-show-more"
+                  >
+                    +{items.length - 5} more
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="suggestion-group">
-            <span className="suggestion-label">Categories</span>
-            <div className="suggestion-tags">
-              {GAME_CATEGORIES.slice(0, 4).map(cat => (
-                <button 
-                  key={cat.id}
-                  onClick={() => setQuery(cat.name)}
-                  style={{ '--tag-color': cat.color }}
-                >
-                  {cat.icon} {cat.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* No results message */}
-      {hasSearched && !isSearching && results.length === 0 && (
-        <div className="no-results">
-          <div className="no-results-icon">🔍</div>
-          <h4>No results found</h4>
-          <p>Try adjusting your search terms</p>
+          ))}
         </div>
       )}
     </div>

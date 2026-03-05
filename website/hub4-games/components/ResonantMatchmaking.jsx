@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useMemo, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Stars, Float, MeshDistortMaterial, Trail } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
 // === IRIDESCENT BUBBLE COMPONENT ===
@@ -15,18 +15,9 @@ function IridescentBubble({
   orbitRadius = 0,
   orbitSpeed = 0,
   orbitOffset = 0
-}: {
-  position: [number, number, number];
-  scale?: number;
-  colorStart?: string;
-  colorMid?: string;
-  colorEnd?: string;
-  orbitRadius?: number;
-  orbitSpeed?: number;
-  orbitOffset?: number;
 }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const groupRef = useRef<THREE.Group>(null);
+  const meshRef = useRef(null);
+  const groupRef = useRef(null);
   
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
@@ -122,24 +113,8 @@ function IridescentBubble({
 }
 
 // === CHEMISTRY ORBIT SYSTEM ===
-function ChemistryOrbit({ 
-  centerBubble, 
-  satelliteBubbles 
-}: {
-  centerBubble: {
-    position: [number, number, number];
-    scale: number;
-    colors: [string, string, string];
-  };
-  satelliteBubbles: Array<{
-    orbitRadius: number;
-    orbitSpeed: number;
-    orbitOffset: number;
-    scale: number;
-    colors: [string, string, string];
-  }>;
-}) {
-  const orbitRef = useRef<THREE.Group>(null);
+function ChemistryOrbit({ centerBubble, satelliteBubbles }) {
+  const orbitRef = useRef(null);
   
   useFrame((state) => {
     if (orbitRef.current) {
@@ -189,7 +164,7 @@ function ChemistryOrbit({
 
 // === PARTICLE FIELD ===
 function ParticleField() {
-  const pointsRef = useRef<THREE.Points>(null);
+  const pointsRef = useRef(null);
   const count = 200;
   
   const positions = useMemo(() => {
@@ -294,11 +269,8 @@ function MatchmakingCore() {
 export function ResonantMatchmaking({ 
   className = '',
   onMatchFound
-}: { 
-  className?: string;
-  onMatchFound?: () => void;
 }) {
-  const [matchStatus, setMatchStatus] = useState<'searching' | 'found' | 'connected'>('searching');
+  const [matchStatus, setMatchStatus] = useState('searching');
   const [matchProgress, setMatchProgress] = useState(0);
 
   useEffect(() => {
