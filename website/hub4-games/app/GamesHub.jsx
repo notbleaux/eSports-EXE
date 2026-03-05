@@ -155,7 +155,7 @@ function HeroSection() {
 }
 
 // === TOROIDAL TRANSITION ===
-function ToroidalTransition({ children, id }: { children: React.ReactNode; id?: string }) {
+function ToroidalTransition({ children, id }) {
   return (
     <section id={id} className="nexus-section">
       <div className="section-transition top">

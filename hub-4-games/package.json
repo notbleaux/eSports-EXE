@@ -1,0 +1,37 @@
+{
+  "name": "@njz/hub-4-games",
+  "version": "4.2.1-alpha",
+  "description": "Hub 4: The Nexus - Games Hub for NJZ Platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.jsx"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "keywords": [
+    "njz",
+    "games",
+    "hub",
+    "nexus",
+    "matchmaking",
+    "threejs"
+  ],
+  "author": "NJZ Platform Team",
+  "license": "MIT"
+}

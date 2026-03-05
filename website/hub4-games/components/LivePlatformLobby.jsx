@@ -3,34 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export type MatchStatus = 'waiting' | 'forming' | 'ready' | 'live' | 'completed';
-
-export type Player = {
-  id: string;
-  name: string;
-  avatar: string;
-  rank: number;
-  region: string;
-  ping: number;
-  status: 'online' | 'in-game' | 'queued';
-};
-
-export type Match = {
-  id: string;
-  mode: string;
-  region: string;
-  players: Player[];
-  maxPlayers: number;
-  status: MatchStatus;
-  startTime?: Date;
-  resonance: number; // 0-100 match quality score
-};
-
 // === MOCK DATA ===
 const REGIONS = ['NA-East', 'NA-West', 'EU-West', 'EU-East', 'Asia', 'OCE'];
 const MODES = ['Quick Match', 'Ranked', 'Tournament', 'Conquest'];
 
-const generateMockPlayer = (id: string): Player => ({
+const generateMockPlayer = (id) => ({
   id,
   name: `Player_${Math.floor(Math.random() * 9999)}`,
   avatar: ['🎮', '👾', '🕹️', '🎯', '🎲', '🎪'][Math.floor(Math.random() * 6)],
@@ -40,7 +17,7 @@ const generateMockPlayer = (id: string): Player => ({
   status: 'queued'
 });
 
-const generateMockMatch = (id: string): Match => {
+const generateMockMatch = (id) => {
   const maxPlayers = [2, 5, 10, 20, 50][Math.floor(Math.random() * 5)];
   const currentPlayers = Math.floor(Math.random() * maxPlayers);
   
@@ -50,22 +27,14 @@ const generateMockMatch = (id: string): Match => {
     region: REGIONS[Math.floor(Math.random() * REGIONS.length)],
     players: Array.from({ length: currentPlayers }, (_, i) => generateMockPlayer(`${id}-p${i}`)),
     maxPlayers,
-    status: ['waiting', 'forming', 'ready', 'live'][Math.floor(Math.random() * 4)] as MatchStatus,
+    status: ['waiting', 'forming', 'ready', 'live'][Math.floor(Math.random() * 4)],
     resonance: Math.floor(Math.random() * 30) + 70
   };
 };
 
 // === RESONANT SPHERE ===
-function ResonantSphere({ 
-  resonance, 
-  size = 120,
-  pulse = false 
-}: { 
-  resonance: number;
-  size?: number;
-  pulse?: boolean;
-}) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+function ResonantSphere({ resonance, size = 120, pulse = false }) {
+  const canvasRef = useRef(null);
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,7 +43,7 @@ function ResonantSphere({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    let animationId: number;
+    let animationId;
     let time = 0;
     
     const draw = () => {
@@ -107,7 +76,7 @@ function ResonantSphere({
         baseRadius
       );
       
-      const hue = 180 + (resonance * 0.6); // Cyan to purple based on resonance
+      const hue = 180 + (resonance * 0.6);
       gradient.addColorStop(0, `hsla(${hue}, 80%, 60%, 0.8)`);
       gradient.addColorStop(0.5, `hsla(${hue}, 70%, 40%, 0.4)`);
       gradient.addColorStop(1, `hsla(${hue}, 60%, 20%, 0.1)`);
@@ -179,13 +148,7 @@ function ResonantSphere({
 }
 
 // === MATCH CARD ===
-function MatchCard({ 
-  match, 
-  onJoin 
-}: { 
-  match: Match;
-  onJoin: (match: Match) => void;
-}) {
+function MatchCard({ match, onJoin }) {
   const statusColors = {
     waiting: '#6b7280',
     forming: '#f59e0b',
@@ -278,15 +241,7 @@ function MatchCard({
 }
 
 // === QUEUE STATUS ===
-function QueueStatus({ 
-  position, 
-  estimatedTime,
-  playersOnline
-}: {
-  position: number;
-  estimatedTime: string;
-  playersOnline: number;
-}) {
+function QueueStatus({ position, estimatedTime, playersOnline }) {
   return (
     <div className="queue-status">
       <div className="queue-position">
@@ -310,17 +265,11 @@ function QueueStatus({
 }
 
 // === MAIN COMPONENT ===
-export function LivePlatformLobby({ 
-  className = '',
-  onMatchJoin
-}: { 
-  className?: string;
-  onMatchJoin?: (match: Match) => void;
-}) {
-  const [matches, setMatches] = useState<Match[]>([]);
+export function LivePlatformLobby({ className = '', onMatchJoin }) {
+  const [matches, setMatches] = useState([]);
   const [queuePosition, setQueuePosition] = useState(42);
   const [playersOnline, setPlayersOnline] = useState(12453);
-  const [selectedMode, setSelectedMode] = useState<string | 'all'>('all');
+  const [selectedMode, setSelectedMode] = useState('all');
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
@@ -331,7 +280,6 @@ export function LivePlatformLobby({
     const interval = setInterval(() => {
       setMatches(prev => {
         const updated = [...prev];
-        // Randomly update a match
         const idx = Math.floor(Math.random() * updated.length);
         updated[idx] = {
           ...updated[idx],
@@ -340,10 +288,7 @@ export function LivePlatformLobby({
         return updated;
       });
       
-      // Update queue position
       setQueuePosition(prev => Math.max(1, prev + Math.floor(Math.random() * 3) - 1));
-      
-      // Update online count
       setPlayersOnline(prev => prev + Math.floor(Math.random() * 50) - 25);
     }, 3000);
     
@@ -732,7 +677,7 @@ export function LivePlatformLobby({
         
         .player-avatars {
           display: flex;
-          gap: -8px;
+          margin-left: 8px;
         }
         
         .player-avatar {

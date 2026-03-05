@@ -284,7 +284,7 @@ const LivePlatformLobby = ({
                   <div 
                     className="match-status"
                     style={{ color: getStatusColor(match.status) }}
-003e
+                  >
                     <span className="status-dot" />
                     {match.status}
                   </div>
