@@ -1,32 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export type DownloadPlatform = 'windows' | 'macos' | 'linux' | 'web';
-
-export type DownloadItem = {
-  id: string;
-  name: string;
-  version: string;
-  platform: DownloadPlatform;
-  size: string;
-  sizeMB: number;
-  icon: string;
-  description: string;
-  requirements: {
-    os: string;
-    cpu: string;
-    ram: string;
-    storage: string;
-    gpu?: string;
-  };
-  checksum: string;
-  releaseDate: string;
-  featured?: boolean;
-};
-
-const DOWNLOADS: DownloadItem[] = [
+const DOWNLOADS = [
   {
     id: 'njz-windows',
     name: 'NJZ Manager 2024',
@@ -105,15 +82,7 @@ const DOWNLOADS: DownloadItem[] = [
 ];
 
 // === ABYSSAL GLASS PANEL ===
-function GlassPanel({ 
-  children, 
-  className = '',
-  glowColor = 'rgba(0, 240, 255, 0.1)'
-}: { 
-  children: React.ReactNode;
-  className?: string;
-  glowColor?: string;
-}) {
+function GlassPanel({ children, className = '', glowColor = 'rgba(0, 240, 255, 0.1)' }) {
   return (
     <div 
       className={`glass-panel ${className}`}
@@ -134,23 +103,7 @@ function GlassPanel({
 }
 
 // === DOWNLOAD PROGRESS ===
-function DownloadProgress({ 
-  progress, 
-  speed, 
-  timeRemaining,
-  status,
-  onPause,
-  onResume,
-  onCancel
-}: {
-  progress: number;
-  speed: string;
-  timeRemaining: string;
-  status: 'downloading' | 'paused' | 'complete' | 'error';
-  onPause: () => void;
-  onResume: () => void;
-  onCancel: () => void;
-}) {
+function DownloadProgress({ progress, speed, timeRemaining, status, onPause, onResume, onCancel }) {
   return (
     <div className="download-progress">
       <div className="progress-track">
@@ -187,21 +140,7 @@ function DownloadProgress({
 }
 
 // === DOWNLOAD CARD ===
-function DownloadCard({ 
-  item, 
-  isActive,
-  isDownloading,
-  progress,
-  onDownload,
-  onExpand
-}: {
-  item: DownloadItem;
-  isActive: boolean;
-  isDownloading: boolean;
-  progress: { percent: number; speed: string; time: string; status: string };
-  onDownload: () => void;
-  onExpand: () => void;
-}) {
+function DownloadCard({ item, isActive, isDownloading, progress, onDownload, onExpand }) {
   const platformColors = {
     windows: { primary: '#00a4ef', glow: 'rgba(0, 164, 239, 0.3)' },
     macos: { primary: '#a2aaad', glow: 'rgba(162, 170, 173, 0.3)' },
@@ -248,7 +187,7 @@ function DownloadCard({
           progress={progress.percent}
           speed={progress.speed}
           timeRemaining={progress.time}
-          status={progress.status as any}
+          status={progress.status}
           onPause={() => {}}
           onResume={() => {}}
           onCancel={() => {}}
@@ -319,15 +258,9 @@ function DownloadCard({
 }
 
 // === MAIN COMPONENT ===
-export function GameDownloadPortal({ 
-  className = '',
-  onDownloadStart
-}: { 
-  className?: string;
-  onDownloadStart?: (item: DownloadItem) => void;
-}) {
-  const [activeCard, setActiveCard] = useState<string | null>(null);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+export function GameDownloadPortal({ className = '', onDownloadStart }) {
+  const [activeCard, setActiveCard] = useState(null);
+  const [downloadingId, setDownloadingId] = useState(null);
   const [downloadProgress, setDownloadProgress] = useState({
     percent: 0,
     speed: '0 MB/s',
@@ -335,7 +268,7 @@ export function GameDownloadPortal({
     status: 'downloading'
   });
 
-  const handleDownload = (item: DownloadItem) => {
+  const handleDownload = (item) => {
     setDownloadingId(item.id);
     onDownloadStart?.(item);
     
