@@ -1,20 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export type GameMode = {
-  id: string;
-  name: string;
-  category: 'terrestrial' | 'harmonic' | 'celestial';
-  description: string;
-  players: string;
-  duration: string;
-  difficulty: 'casual' | 'normal' | 'ranked';
-  icon: string;
-};
-
-const GAME_MODES: GameMode[] = [
+const GAME_MODES = [
   // Terrestrial Modes
   {
     id: 't1',
@@ -111,17 +100,7 @@ const GAME_MODES: GameMode[] = [
 ];
 
 // === STAR TETRAHEDRON FACE ===
-function TetraFace({ 
-  mode, 
-  isActive, 
-  onClick,
-  rotation 
-}: { 
-  mode: GameMode;
-  isActive: boolean;
-  onClick: () => void;
-  rotation: { x: number; y: number; z: number };
-}) {
+function TetraFace({ mode, isActive, onClick, rotation }) {
   const categoryColors = {
     terrestrial: { base: '#8b4513', glow: 'rgba(139, 69, 19, 0.5)' },
     harmonic: { base: '#c9b037', glow: 'rgba(201, 176, 55, 0.5)' },
@@ -157,55 +136,46 @@ function TetraFace({
 }
 
 // === 3D STAR TETRAHEDRON ===
-function StarTetrahedron({ 
-  activeMode,
-  onModeSelect 
-}: { 
-  activeMode: GameMode | null;
-  onModeSelect: (mode: GameMode) => void;
-}) {
+function StarTetrahedron({ activeMode, onModeSelect }) {
   const [rotation, setRotation] = useState({ x: -20, y: 30 });
   const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const startPos = useRef({ x: 0, y: 0 });
+  const startPos = { x: 0, y: 0 };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e) => {
     setIsDragging(true);
-    startPos.current = { x: e.clientX, y: e.clientY };
+    startPos.x = e.clientX;
+    startPos.y = e.clientY;
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (e) => {
     if (!isDragging) return;
-    const deltaX = e.clientX - startPos.current.x;
-    const deltaY = e.clientY - startPos.current.y;
+    const deltaX = e.clientX - startPos.x;
+    const deltaY = e.clientY - startPos.y;
     setRotation(prev => ({
       x: prev.x - deltaY * 0.5,
       y: prev.y + deltaX * 0.5
     }));
-    startPos.current = { x: e.clientX, y: e.clientY };
+    startPos.x = e.clientX;
+    startPos.y = e.clientY;
   };
 
   const handleMouseUp = () => setIsDragging(false);
 
-  // Face positions for star tetrahedron (stellated octahedron)
+  // Face positions for star tetrahedron
   const faces = [
-    // Upper pyramid (pointing up)
-    { mode: GAME_MODES[0], rot: { x: 0, y: 0, z: 0 } },      // Front
-    { mode: GAME_MODES[1], rot: { x: 0, y: 120, z: 0 } },    // Right
-    { mode: GAME_MODES[2], rot: { x: 0, y: 240, z: 0 } },    // Left
-    // Lower pyramid (pointing down)
-    { mode: GAME_MODES[3], rot: { x: 180, y: 0, z: 0 } },    // Back
-    { mode: GAME_MODES[4], rot: { x: 180, y: 120, z: 0 } },  // Left-down
-    { mode: GAME_MODES[5], rot: { x: 180, y: 240, z: 0 } },  // Right-down
-    // Additional faces for full star
-    { mode: GAME_MODES[6], rot: { x: 90, y: 0, z: 0 } },     // Top
-    { mode: GAME_MODES[7], rot: { x: -90, y: 0, z: 0 } },    // Bottom
-    { mode: GAME_MODES[8], rot: { x: 0, y: 60, z: 90 } },    // Side
+    { mode: GAME_MODES[0], rot: { x: 0, y: 0, z: 0 } },
+    { mode: GAME_MODES[1], rot: { x: 0, y: 120, z: 0 } },
+    { mode: GAME_MODES[2], rot: { x: 0, y: 240, z: 0 } },
+    { mode: GAME_MODES[3], rot: { x: 180, y: 0, z: 0 } },
+    { mode: GAME_MODES[4], rot: { x: 180, y: 120, z: 0 } },
+    { mode: GAME_MODES[5], rot: { x: 180, y: 240, z: 0 } },
+    { mode: GAME_MODES[6], rot: { x: 90, y: 0, z: 0 } },
+    { mode: GAME_MODES[7], rot: { x: -90, y: 0, z: 0 } },
+    { mode: GAME_MODES[8], rot: { x: 0, y: 60, z: 90 } },
   ];
 
   return (
     <div 
-      ref={containerRef}
       className="tetrahedron-container"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -237,7 +207,7 @@ function StarTetrahedron({
 }
 
 // === MODE DETAILS PANEL ===
-function ModeDetails({ mode }: { mode: GameMode | null }) {
+function ModeDetails({ mode }) {
   if (!mode) {
     return (
       <div className="mode-details empty">
@@ -318,13 +288,10 @@ function ModeDetails({ mode }: { mode: GameMode | null }) {
 export function TripleModeSelector({ 
   className = '',
   onModeChange
-}: { 
-  className?: string;
-  onModeChange?: (mode: GameMode) => void;
 }) {
-  const [activeMode, setActiveMode] = useState<GameMode | null>(null);
+  const [activeMode, setActiveMode] = useState(null);
 
-  const handleModeSelect = (mode: GameMode) => {
+  const handleModeSelect = (mode) => {
     setActiveMode(mode);
     onModeChange?.(mode);
   };
