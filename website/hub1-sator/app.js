@@ -1,7 +1,230 @@
-/* SATOR Hub JavaScript - Ring Animation & Live Data */
+/* SATOR Hub JavaScript - Ring Animation, Live Data & Terminal Effects */
 
 (function() {
   'use strict';
+
+  // === TERMINAL LOADING CONTROLLER ===
+  const TerminalLoader = {
+    terminalBody: null,
+    overlay: null,
+    lines: [],
+    currentLine: 0,
+    isComplete: false,
+
+    terminalMessages: [
+      { text: 'Initializing SATOR kernel...', type: 'info', delay: 100 },
+      { text: 'Loading RAWS database schema...', type: 'info', delay: 400 },
+      { text: 'Connecting to HLTV data stream...', type: 'info', delay: 700 },
+      { text: 'Connected. Latency: 23ms', type: 'success', delay: 1000 },
+      { text: 'Connecting to VLR data stream...', type: 'info', delay: 1200 },
+      { text: 'Connected. Latency: 31ms', type: 'success', delay: 1500 },
+      { text: 'Connecting to GRID Open API...', type: 'info', delay: 1700 },
+      { text: 'Connected. Rate limit: 1000 req/min', type: 'success', delay: 2000 },
+      { text: 'Verifying twin-file integrity...', type: 'info', delay: 2300 },
+      { text: 'SHA-256 checksum validation...', type: 'info', delay: 2600 },
+      { text: 'Cross-referencing 2.4M records...', type: 'info', delay: 2900 },
+      { text: 'Integrity check PASSED ✓', type: 'success', delay: 3200 },
+      { text: 'Calibrating ring visualization...', type: 'info', delay: 3500 },
+      { text: 'Rendering data points...', type: 'info', delay: 3800 },
+      { text: 'System ready.', type: 'success', delay: 4200 }
+    ],
+
+    init() {
+      this.terminalBody = document.getElementById('terminal-body');
+      this.overlay = document.getElementById('terminal-overlay');
+      
+      if (!this.terminalBody || !this.overlay) return;
+
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      if (prefersReducedMotion) {
+        // Skip animation for users who prefer reduced motion
+        this.overlay.classList.add('hidden');
+        return;
+      }
+
+      this.startSequence();
+    },
+
+    startSequence() {
+      this.terminalMessages.forEach((msg, index) => {
+        setTimeout(() => {
+          this.addLine(msg.text, msg.type);
+          
+          // Add cursor to latest line
+          this.updateCursor();
+          
+          // Check if this is the last message
+          if (index === this.terminalMessages.length - 1) {
+            setTimeout(() => this.complete(), 500);
+          }
+        }, msg.delay);
+      });
+    },
+
+    addLine(text, type = 'info') {
+      const line = document.createElement('div');
+      line.className = `terminal-line ${type}`;
+      
+      const prompt = document.createElement('span');
+      prompt.className = 'terminal-prompt';
+      prompt.textContent = '>';
+      
+      const content = document.createElement('span');
+      content.textContent = ` ${text}`;
+      
+      line.appendChild(prompt);
+      line.appendChild(content);
+      
+      this.terminalBody.appendChild(line);
+      
+      // Auto-scroll to bottom
+      this.terminalBody.scrollTop = this.terminalBody.scrollHeight;
+      
+      // Trigger animation
+      requestAnimationFrame(() => {
+        line.classList.add('visible');
+      });
+      
+      this.lines.push(line);
+    },
+
+    updateCursor() {
+      // Remove cursor from all lines
+      this.lines.forEach(line => {
+        const existingCursor = line.querySelector('.terminal-cursor');
+        if (existingCursor) {
+          existingCursor.remove();
+        }
+      });
+      
+      // Add cursor to last line
+      if (this.lines.length > 0) {
+        const lastLine = this.lines[this.lines.length - 1];
+        const cursor = document.createElement('span');
+        cursor.className = 'terminal-cursor';
+        lastLine.appendChild(cursor);
+      }
+    },
+
+    complete() {
+      this.isComplete = true;
+      
+      // Fade out overlay
+      setTimeout(() => {
+        this.overlay.classList.add('hidden');
+        
+        // Remove from DOM after transition
+        setTimeout(() => {
+          this.overlay.style.display = 'none';
+        }, 500);
+      }, 300);
+    }
+  };
+
+  // === TIER PREVIEW CONTROLLER ===
+  const TierPreview = {
+    overlay: null,
+    title: null,
+    nvrdieStatus: null,
+    fourEvaStatus: null,
+    currentPoint: null,
+
+    init() {
+      this.overlay = document.getElementById('tier-preview');
+      this.title = document.getElementById('tier-preview-title');
+      this.nvrdieStatus = document.getElementById('tier-nvrdie-status');
+      this.fourEvaStatus = document.getElementById('tier-4eva-status');
+      
+      if (!this.overlay) return;
+
+      this.attachEventListeners();
+    },
+
+    attachEventListeners() {
+      const dataPoints = document.querySelectorAll('.data-point');
+      
+      dataPoints.forEach(point => {
+        // Mouse events for desktop
+        point.addEventListener('mouseenter', (e) => this.show(e, point));
+        point.addEventListener('mouseleave', () => this.hide());
+        point.addEventListener('mousemove', (e) => this.move(e));
+        
+        // Touch events for mobile
+        point.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.show(e.touches[0], point);
+        }, { passive: false });
+        
+        point.addEventListener('touchend', () => {
+          setTimeout(() => this.hide(), 2000);
+        });
+      });
+    },
+
+    show(event, point) {
+      const tier = point.dataset.tier;
+      const pointName = point.dataset.point || 'Data Point';
+      
+      this.title.textContent = pointName;
+      
+      // Update access statuses based on tier
+      const nvrdieHasAccess = tier === 'nvrdie' || tier === '4eva';
+      const fourEvaHasAccess = tier === '4eva';
+      
+      this.updateStatusRow(this.nvrdieStatus, nvrdieHasAccess);
+      this.updateStatusRow(this.fourEvaStatus, fourEvaHasAccess);
+      
+      // Position overlay
+      this.positionOverlay(event);
+      
+      // Show
+      this.overlay.classList.add('visible');
+    },
+
+    updateStatusRow(element, hasAccess) {
+      if (hasAccess) {
+        element.className = 'access-status granted';
+        element.innerHTML = '<span>✓</span> Access';
+      } else {
+        element.className = 'access-status locked';
+        element.innerHTML = '<span>✕</span> Locked';
+      }
+    },
+
+    move(event) {
+      if (!this.overlay.classList.contains('visible')) return;
+      this.positionOverlay(event);
+    },
+
+    positionOverlay(event) {
+      const x = event.clientX || event.pageX;
+      const y = event.clientY || event.pageY;
+      
+      const offsetX = 20;
+      const offsetY = 20;
+      
+      // Prevent overflow on right edge
+      let left = x + offsetX;
+      if (left + 200 > window.innerWidth) {
+        left = x - 220;
+      }
+      
+      // Prevent overflow on bottom edge
+      let top = y + offsetY;
+      if (top + 120 > window.innerHeight) {
+        top = y - 130;
+      }
+      
+      this.overlay.style.left = `${left}px`;
+      this.overlay.style.top = `${top}px`;
+    },
+
+    hide() {
+      this.overlay.classList.remove('visible');
+    }
+  };
 
   // === RING ANIMATION CONTROL ===
   const RingController = {
@@ -23,6 +246,15 @@
           ring.element.addEventListener('mouseleave', () => this.resumeSpeed(index));
         }
       });
+
+      // Check for reduced motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.rings.forEach(ring => {
+          if (ring.element) {
+            ring.element.style.animation = 'none';
+          }
+        });
+      }
     },
 
     slowDown(index) {
@@ -333,6 +565,35 @@
     }
   };
 
+  // === MOBILE DETECTION & OPTIMIZATION ===
+  const MobileOptimizer = {
+    init() {
+      this.detectTouchDevice();
+      this.optimizeGlassmorphism();
+    },
+
+    detectTouchDevice() {
+      const isTouch = window.matchMedia('(pointer: coarse)').matches;
+      if (isTouch) {
+        document.body.classList.add('touch-device');
+        
+        // Reduce animation complexity on mobile
+        document.querySelectorAll('.glass-panel').forEach(panel => {
+          panel.classList.add('glass-panel-mobile');
+        });
+      }
+    },
+
+    optimizeGlassmorphism() {
+      // Check for backdrop-filter support
+      const supportsBackdropFilter = CSS.supports('backdrop-filter', 'blur(20px)');
+      
+      if (!supportsBackdropFilter) {
+        document.body.classList.add('no-backdrop-filter');
+      }
+    }
+  };
+
   // === UTILITY FUNCTIONS ===
   const Utils = {
     // Debounce function for performance
@@ -359,14 +620,47 @@
     }
   };
 
+  // === HUB DROPDOWN ===
+  const HubDropdown = {
+    init() {
+      const toggle = document.getElementById('hubDropdownToggle');
+      const menu = document.getElementById('hubDropdownMenu');
+      const indicator = document.getElementById('hubIndicator');
+      
+      if (!toggle || !menu) return;
+
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+        toggle.classList.toggle('active');
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!indicator.contains(e.target)) {
+          menu.classList.remove('open');
+          toggle.classList.remove('active');
+        }
+      });
+    }
+  };
+
   // === INITIALIZATION ===
   function init() {
-    // Initialize all modules
-    RingController.init();
-    DataSimulator.init();
-    FileManager.init();
-    IntegrityMonitor.init();
-    CountAnimator.init();
+    // Initialize terminal loader first (it controls initial experience)
+    TerminalLoader.init();
+    
+    // Initialize other modules after terminal completes
+    setTimeout(() => {
+      RingController.init();
+      DataSimulator.init();
+      FileManager.init();
+      IntegrityMonitor.init();
+      CountAnimator.init();
+      TierPreview.init();
+      MobileOptimizer.init();
+      HubDropdown.init();
+    }, 500);
 
     // Console welcome message
     console.log('%c SATOR Statistical Database Hub ', 'background: #ff9f1c; color: #0a0a0f; font-size: 14px; font-weight: bold; padding: 5px 10px;');
@@ -385,7 +679,6 @@
 
     // Handle window resize
     window.addEventListener('resize', Utils.debounce(() => {
-      // Recalculate any position-dependent elements if needed
       console.log('SATOR: Window resized');
     }, 250));
   }
@@ -399,10 +692,14 @@
 
   // Expose API for debugging
   window.SATOR = {
+    TerminalLoader,
+    TierPreview,
     RingController,
     DataSimulator,
     FileManager,
     IntegrityMonitor,
+    MobileOptimizer,
+    HubDropdown,
     Utils
   };
 

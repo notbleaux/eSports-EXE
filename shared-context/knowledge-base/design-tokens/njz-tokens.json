@@ -1,0 +1,48 @@
+{
+  "project": "NJZ Platform",
+  "version": "1.0.0",
+  "tokens": {
+    "colors": {
+      "void_black": "#0a0a0f",
+      "deep_space": "#0f0f13",
+      "obsidian": "#2a2a35",
+      "slate": "#1e1e24",
+      "porcelain": "#e8e6e3",
+      "data_white": "#f5f5f5",
+      "signal_cyan": "#00f0ff",
+      "aged_gold": "#c9b037",
+      "alert_amber": "#ff9f1c",
+      "live_green": "#10b981",
+      "error_red": "#ef4444"
+    },
+    "typography": {
+      "header": "Space Grotesk",
+      "body": "Inter",
+      "data": "JetBrains Mono",
+      "accent": "Cinzel"
+    },
+    "spacing": {
+      "xs": "0.25rem",
+      "sm": "0.5rem",
+      "md": "1rem",
+      "lg": "1.5rem",
+      "xl": "2.5rem",
+      "2xl": "4rem",
+      "3xl": "6rem"
+    },
+    "animation": {
+      "ease_harmonic": "cubic-bezier(0.37, 0, 0.63, 1)",
+      "ease_toroidal": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+      "ease_dramatic": "cubic-bezier(0.87, 0, 0.13, 1)",
+      "duration_fast": "150ms",
+      "duration_normal": "300ms",
+      "duration_slow": "500ms"
+    }
+  },
+  "hubs": {
+    "sator": { "primary": "#ff9f1c", "type": "data" },
+    "rotas": { "primary": "#00f0ff", "type": "analytics" },
+    "information": { "primary": "#e8e6e3", "type": "directory" },
+    "games": { "primary": "#1e3a5f", "type": "platform" }
+  }
+}

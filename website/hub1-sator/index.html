@@ -5,24 +5,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SATOR | Statistical Database Hub - NJZ</title>
   <link rel="stylesheet" href="../njz-design-system.css">
+  <link rel="stylesheet" href="../shared/styles/hub-navigation.css">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-hub="sator">
   
-  <!-- HEADER -->
-  <header class="hub-header">
-    <nav class="hub-nav">
-      <a href="../njz-central/index.html" class="back-link">← NJZ Central</a>
-      <div class="hub-title">
-        <span class="hub-icon">◎</span>
-        <span>SATOR</span>
+  <!-- SHARED HEADER WITH HUB SWITCHER -->
+  <header class="hub-header-shared">
+    <div class="hub-header-inner">
+      <!-- Back Button -->
+      <div class="header-back">
+        <a href="../njz-central/index.html" class="back-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="back-text">NJZ Central</span>
+        </a>
       </div>
-      <div class="hub-status">
-        <span class="status-indicator live"></span>
-        <span>Live Data Ingestion</span>
+      
+      <!-- Hub Indicator / Switcher -->
+      <div class="hub-switcher">
+        <div class="hub-indicator sator" id="hubIndicator">
+          <span class="hub-indicator-icon">◎</span>
+          <span class="hub-indicator-name">SATOR</span>
+          <button class="hub-dropdown-toggle" id="hubDropdownToggle" aria-label="Switch hub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          
+          <!-- Hub Dropdown Menu -->
+          <div class="hub-dropdown-menu" id="hubDropdownMenu">
+            <a href="index.html" class="hub-option sator active">
+              <span class="hub-option-icon">◎</span>
+              <div class="hub-option-info">
+                <span class="hub-option-name">SATOR</span>
+                <span class="hub-option-desc">Raw Data Archive</span>
+              </div>
+            </a>
+            <a href="../hub2-rotas/index.html" class="hub-option rotas">
+              <span class="hub-option-icon">◈</span>
+              <div class="hub-option-info">
+                <span class="hub-option-name">ROTAS</span>
+                <span class="hub-option-desc">Analytics Hub</span>
+              </div>
+              <span class="hub-arrow">→</span>
+            </a>
+          </div>
+        </div>
       </div>
-    </nav>
+      
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <div class="header-status">
+          <span class="status-pulse"></span>
+          <span class="status-text">Live</span>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
   </header>
+  
+  <!-- MOBILE MENU DRAWER -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+  <nav class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <div class="mobile-menu-section">
+      <h3 class="mobile-menu-title">Navigation</h3>
+      <div class="mobile-menu-links">
+        <a href="../njz-central/index.html" class="mobile-menu-link">
+          <span class="mobile-menu-link-icon">⌂</span>
+          <div class="mobile-menu-link-text">
+            <span class="mobile-menu-link-name">NJZ Central</span>
+            <span class="mobile-menu-link-desc">Command Center</span>
+          </div>
+          <span class="mobile-menu-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="mobile-menu-section">
+      <h3 class="mobile-menu-title">Hubs</h3>
+      <div class="mobile-menu-links">
+        <a href="index.html" class="mobile-menu-link sator">
+          <span class="mobile-menu-link-icon">◎</span>
+          <div class="mobile-menu-link-text">
+            <span class="mobile-menu-link-name">SATOR</span>
+            <span class="mobile-menu-link-desc">Statistical Database</span>
+          </div>
+          <span class="mobile-menu-link-arrow">→</span>
+        </a>
+        <a href="../hub2-rotas/index.html" class="mobile-menu-link rotas">
+          <span class="mobile-menu-link-icon">◈</span>
+          <div class="mobile-menu-link-text">
+            <span class="mobile-menu-link-name">ROTAS</span>
+            <span class="mobile-menu-link-desc">Analytics Hub</span>
+          </div>
+          <span class="mobile-menu-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Twin-File Bridge in Mobile Menu -->
+    <div class="mobile-menu-section">
+      <h3 class="mobile-menu-title">Data Bridge</h3>
+      <div class="hub-bridge">
+        <div class="hub-bridge-node sator">
+          <span class="hub-bridge-icon">◎</span>
+          <span class="hub-bridge-label">RAWS</span>
+          <span class="hub-bridge-desc">Raw Data</span>
+        </div>
+        <div class="hub-bridge-connector">
+          <div class="bridge-line"></div>
+          <div class="data-flow"></div>
+          <span class="bridge-status">Synced</span>
+        </div>
+        <div class="hub-bridge-node rotas">
+          <span class="hub-bridge-icon">◈</span>
+          <span class="hub-bridge-label">BASE</span>
+          <span class="hub-bridge-desc">Analytics</span>
+        </div>
+      </div>
+    </div>
+  </nav>
   
   <!-- MAIN CONTENT -->
   <main class="sator-main">
@@ -73,7 +183,41 @@
             <span class="stat-label">Players</span>
           </div>
         </div>
+        
+        <!-- Cross-Hub Link -->
+        <div class="cross-hub-section">
+          <a href="../hub2-rotas/index.html" class="cross-hub-link sator-to-rotas" data-cross-hub="true" data-preserve-params="true">
+            View Analytics in ROTAS
+            <span class="hub-arrow">→</span>
+          </a>
+        </div>
       </div>
+    </section>
+    
+    <!-- TWIN-FILE BRIDGE VISUAL -->
+    <section class="bridge-section">
+      <h2>Data Flow</h2>
+      <div class="hub-bridge">
+        <div class="hub-bridge-node sator">
+          <span class="hub-bridge-icon">◎</span>
+          <span class="hub-bridge-label">SATOR</span>
+          <span class="hub-bridge-desc">RAWS Archive</span>
+        </div>
+        <div class="hub-bridge-connector">
+          <div class="bridge-line"></div>
+          <div class="data-flow"></div>
+          <span class="bridge-status">Synced</span>
+        </div>
+        <div class="hub-bridge-node rotas">
+          <span class="hub-bridge-icon">◈</span>
+          <span class="hub-bridge-label">ROTAS</span>
+          <span class="hub-bridge-desc">Analytics Engine</span>
+        </div>
+      </div>
+      <p class="bridge-description">
+        Raw data flows from SATOR to ROTAS for analysis and probability calculations.
+        Twin-file architecture ensures data integrity across both systems.
+      </p>
     </section>
     
     <!-- DATA INGRESS STREAMS -->
@@ -208,6 +352,22 @@
     
   </main>
 
+  <!-- BOTTOM NAVIGATION (Mobile) -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-tabs">
+      <a href="index.html" class="nav-tab sator" data-hub="sator">
+        <span class="nav-tab-icon">◎</span>
+        <span class="nav-tab-label">SATOR</span>
+      </a>
+      <a href="../hub2-rotas/index.html" class="nav-tab rotas" data-hub="rotas">
+        <span class="nav-tab-icon">◈</span>
+        <span class="nav-tab-label">ROTAS</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SHARED SCRIPTS -->
+  <script src="../shared/js/hub-navigation.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import EllipseSystem from './components/EllipseSystem';
 import LayerToggle from './components/LayerToggle';
@@ -7,8 +7,77 @@ import FormulaLibrary from './components/FormulaLibrary';
 import MatchPredictor from './components/MatchPredictor';
 import { analyticsLayers } from './data/analyticsLayers';
 
+// Hub Bridge Component
+function HubBridge() {
+  return (
+    <section className="bridge-section">
+      <h2 className="section-title">Data Flow</h2>
+      <div className="hub-bridge">
+        <div className="hub-bridge-node sator">
+          <span className="hub-bridge-icon">◎</span>
+          <span className="hub-bridge-label">SATOR</span>
+          <span className="hub-bridge-desc">RAWS Archive</span>
+        </div>
+        <div className="hub-bridge-connector">
+          <div className="bridge-line"></div>
+          <div className="data-flow"></div>
+          <span className="bridge-status">Synced</span>
+        </div>
+        <div className="hub-bridge-node rotas">
+          <span className="hub-bridge-icon">◈</span>
+          <span className="hub-bridge-label">ROTAS</span>
+          <span className="hub-bridge-desc">Analytics Engine</span>
+        </div>
+      </div>
+      <p className="bridge-description">
+        Raw data flows from SATOR to ROTAS for analysis and probability calculations.
+        Twin-file architecture ensures data integrity across both systems.
+      </p>
+    </section>
+  );
+}
+
+// Cross-Hub Link Component
+function CrossHubLink() {
+  return (
+    <div className="cross-hub-section">
+      <a href="../hub1-sator/index.html" className="cross-hub-link rotas-to-sator" data-cross-hub="true">
+        View Raw Data in SATOR
+        <span className="hub-arrow">←</span>
+      </a>
+    </div>
+  );
+}
+
+// Bottom Navigation Component
+function BottomNav() {
+  return (
+    <nav className="bottom-nav">
+      <div className="bottom-nav-tabs">
+        <a href="../hub1-sator/index.html" className="nav-tab sator" data-hub="sator">
+          <span className="nav-tab-icon">◎</span>
+          <span className="nav-tab-label">SATOR</span>
+        </a>
+        <a href="index.html" className="nav-tab rotas active" data-hub="rotas">
+          <span className="nav-tab-icon">◈</span>
+          <span className="nav-tab-label">ROTAS</span>
+        </a>
+      </div>
+    </nav>
+  );
+}
+
 function App() {
   const [activeLayer, setActiveLayer] = useState('base');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial loading
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleLayerToggle = (layerId) => {
     setActiveLayer(layerId);
@@ -20,6 +89,45 @@ function App() {
     { value: 78.5, label: 'Risk Factor' },
     { value: 94.2, label: 'Talent Potential' },
   ];
+
+  if (loading) {
+    return (
+      <div className="loading-overlay visible">
+        <div className="loading-terminal">
+          <div className="terminal-header">
+            <span className="terminal-dot red"></span>
+            <span className="terminal-dot yellow"></span>
+            <span className="terminal-dot green"></span>
+            <span className="terminal-title">rotas_hub_loader</span>
+          </div>
+          <div className="terminal-body">
+            <div className="terminal-output">
+              <div className="terminal-line">
+                <span className="timestamp">{new Date().toLocaleTimeString()}</span>
+                Initializing ROTAS analytics engine...
+              </div>
+              <div className="terminal-line">
+                <span className="timestamp">{new Date().toLocaleTimeString()}</span>
+                Loading probability models...
+              </div>
+              <div className="terminal-line">
+                <span className="timestamp">{new Date().toLocaleTimeString()}</span>
+                Connecting to SATOR data bridge...
+              </div>
+              <div className="terminal-line">
+                <span className="timestamp">{new Date().toLocaleTimeString()}</span>
+                Rendering interface...
+              </div>
+            </div>
+            <div className="terminal-input">
+              <span className="prompt">$</span>
+              <span className="cursor">_</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rotas-app">
@@ -34,9 +142,12 @@ function App() {
           <p className="hero-subtitle">
             Advanced Analytics & Probability Engines
           </p>
+          <CrossHubLink />
         </div>
         <EllipseSystem activeLayer={activeLayer} />
       </section>
+
+      <HubBridge />
 
       <section className="layer-section">
         <div className="section-header">
@@ -61,7 +172,7 @@ function App() {
               key={index}
               value={item.value} 
               label={item.label} 
-            />
+            /
           ))}
         </div>
       </section>
@@ -86,6 +197,8 @@ function App() {
           <p className="footer-version">Version 2.4.1-beta</p>
         </div>
       </footer>
+
+      <BottomNav />
     </div>
   );
 }

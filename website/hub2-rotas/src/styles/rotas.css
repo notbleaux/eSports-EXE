@@ -21,6 +21,11 @@
   --njz-live-green: #10b981;
   --njz-error-red: #ef4444;
   
+  /* JUNGIAN COLORS */
+  --jungian-persona: #00f0ff;
+  --jungian-shadow: #ff6b6b;
+  --jungian-animus: #c9b037;
+  
   /* TYPOGRAPHY */
   --font-header: 'Space Grotesk', 'Helvetica Neue', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -56,6 +61,14 @@
   --rotas-gold: #c9b037;
   --rotas-ellipse-glow: rgba(0, 240, 255, 0.3);
   --rotas-gold-glow: rgba(201, 176, 55, 0.3);
+  
+  /* GLASSMORPHISM DEPTH LEVELS */
+  --glass-base-bg: var(--njz-deep-space);
+  --glass-analytics-bg: rgba(10, 10, 15, 0.7);
+  --glass-analytics-blur: blur(10px);
+  --glass-predictions-bg: rgba(10, 10, 15, 0.4);
+  --glass-predictions-blur: blur(20px);
+  --glass-mobile-blur: blur(8px);
 }
 
 /* === APP CONTAINER === */
@@ -67,92 +80,13 @@
 }
 
 /* === HEADER === */
+/* Note: Header styles are now in shared/styles/hub-navigation.css */
+/* The following are ROTAS-specific header overrides only */
+
 .rotas-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--ma-md) var(--ma-xl);
-  background: rgba(10, 10, 15, 0.9);
-  backdrop-filter: blur(20px);
-  border-bottom: var(--border-subtle);
+  /* Old styles - overridden by shared header */
+  display: none;
 }
-
-.header-left {
-  flex: 1;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ma-sm);
-  color: var(--njz-gray-400);
-  text-decoration: none;
-  font-size: 0.875rem;
-  transition: color var(--duration-fast) var(--ease-harmonic);
-}
-
-.back-link:hover {
-  color: var(--njz-signal-cyan);
-}
-
-.header-center {
-  flex: 0 0 auto;
-}
-
-.hub-badge {
-  display: flex;
-  align-items: center;
-  gap: var(--ma-sm);
-  padding: var(--ma-xs) var(--ma-md);
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  border-radius: var(--radius-full);
-}
-
-.hub-icon {
-  font-size: 1rem;
-  color: var(--rotas-cyan);
-}
-
-.hub-name {
-  font-family: var(--font-header);
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--rotas-cyan);
-  letter-spacing: 0.1em;
-}
-
-.header-right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.status-indicator {
-  display: flex;
-  align-items: center;
-  gap: var(--ma-sm);
-  font-family: var(--font-data);
-  font-size: 0.75rem;
-  color: var(--njz-live-green);
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--njz-live-green);
-  border-radius: 50%;
-  animation: pulse-status 2s ease-in-out infinite;
-}
-
-@keyframes pulse-status {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-
 /* === HERO SECTION === */
 .hero-section {
   position: relative;
@@ -207,6 +141,125 @@
   justify-content: center;
 }
 
+/* Jungian Layer Controls */
+.jungian-controls {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ma-sm);
+  z-index: 30;
+}
+
+.jungian-label {
+  font-family: var(--font-data);
+  font-size: 0.625rem;
+  color: var(--njz-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.jungian-toggles {
+  display: flex;
+  gap: var(--ma-sm);
+  padding: var(--ma-xs) var(--ma-sm);
+  background: rgba(10, 10, 15, 0.8);
+  border: var(--border-subtle);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(10px);
+}
+
+.jungian-toggles.vertical {
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+}
+
+.jungian-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--ma-xs);
+  padding: var(--ma-xs) var(--ma-sm);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-harmonic);
+}
+
+.jungian-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.toggle-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+  transition: all var(--duration-fast);
+}
+
+.toggle-label {
+  font-family: var(--font-header);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.blend-mode-badge {
+  font-family: var(--font-data);
+  font-size: 0.625rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.correlation-display {
+  display: flex;
+  align-items: center;
+  gap: var(--ma-xs);
+  padding: var(--ma-xs) var(--ma-md);
+  background: rgba(0, 240, 255, 0.1);
+  border-radius: var(--radius-sm);
+  margin-top: var(--ma-xs);
+}
+
+.correlation-label {
+  font-family: var(--font-data);
+  font-size: 0.625rem;
+  color: var(--njz-gray-400);
+}
+
+.correlation-value {
+  font-family: var(--font-data);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--rotas-cyan);
+}
+
+/* Jungian Indicators in Center */
+.jungian-indicators {
+  display: flex;
+  justify-content: center;
+  gap: var(--ma-xs);
+  margin: var(--ma-sm) 0;
+}
+
+.jungian-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Ellipse Visualization */
+.ellipse-visualization {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .ellipse {
   position: absolute;
   width: 300px;
@@ -225,6 +278,45 @@
   mix-blend-mode: screen;
   transition: all var(--duration-slow) var(--ease-harmonic);
   cursor: pointer;
+}
+
+/* Jungian Layer Ellipses */
+.ellipse.jungian-layer {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--layer-color), 0.15) 0%,
+    rgba(var(--layer-color), 0.03) 50%,
+    transparent 100%
+  );
+  border-color: var(--layer-color);
+  box-shadow: 
+    0 0 30px rgba(var(--layer-color), 0.3),
+    inset 0 0 30px rgba(var(--layer-color), 0.05);
+}
+
+.ellipse.jungian-layer.persona {
+  --layer-color: var(--jungian-persona);
+}
+
+.ellipse.jungian-layer.shadow {
+  --layer-color: var(--jungian-shadow);
+}
+
+.ellipse.jungian-layer.animus {
+  --layer-color: var(--jungian-animus);
+}
+
+/* Blend Mode Effects */
+.ellipse.jungian-layer[blend-mode="multiply"] {
+  mix-blend-mode: multiply;
+}
+
+.ellipse.jungian-layer[blend-mode="screen"] {
+  mix-blend-mode: screen;
+}
+
+.ellipse.jungian-layer[blend-mode="overlay"] {
+  mix-blend-mode: overlay;
 }
 
 .ellipse.layer-1 {
@@ -259,7 +351,7 @@
 
 .layer-tooltip {
   position: absolute;
-  top: -40px;
+  top: -50px;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
   padding: var(--ma-xs) var(--ma-sm);
@@ -273,11 +365,21 @@
   opacity: 0;
   pointer-events: none;
   transition: all var(--duration-fast) var(--ease-harmonic);
+  z-index: 50;
 }
 
 .layer-tooltip.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+.layer-tooltip small {
+  display: block;
+  font-size: 0.625rem;
+  color: var(--njz-gray-500);
+  max-width: 150px;
+  white-space: normal;
+  text-align: center;
 }
 
 .layer-tooltip::after {
@@ -293,16 +395,38 @@
   border-bottom: var(--border-subtle);
 }
 
+/* Glassmorphism Depth Layers */
+.glass-depth-base {
+  background: var(--glass-base-bg);
+}
+
+.glass-depth-analytics {
+  background: var(--glass-analytics-bg);
+  backdrop-filter: var(--glass-analytics-blur);
+  -webkit-backdrop-filter: var(--glass-analytics-blur);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-depth-predictions {
+  background: var(--glass-predictions-bg);
+  backdrop-filter: var(--glass-predictions-blur);
+  -webkit-backdrop-filter: var(--glass-predictions-blur);
+}
+
 /* Center Data */
 .center-data {
   position: relative;
   z-index: 20;
   text-align: center;
   padding: var(--ma-xl);
-  background: rgba(10, 10, 15, 0.8);
+  background: var(--glass-analytics-bg);
   border: 1px solid rgba(0, 240, 255, 0.2);
   border-radius: var(--radius-xl);
-  backdrop-filter: blur(10px);
+  backdrop-filter: var(--glass-analytics-blur);
+  -webkit-backdrop-filter: var(--glass-analytics-blur);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .center-pulse {
@@ -799,14 +923,14 @@ section {
   box-shadow: 0 0 6px var(--rotas-gold);
 }
 
+.simulating .sim-point {
+  animation: point-pulse 0.8s ease-in-out infinite;
+}
+
 @keyframes point-pop {
   0% { opacity: 0; transform: scale(0); }
   50% { opacity: 1; transform: scale(1.5); }
   100% { opacity: 0.7; transform: scale(1); }
-}
-
-.simulating .sim-point {
-  animation: point-pulse 0.8s ease-in-out infinite;
 }
 
 @keyframes point-pulse {
@@ -1091,24 +1215,118 @@ section {
   color: var(--njz-gray-600);
 }
 
-/* === RESPONSIVE === */
+/* === REDUCED MOTION SUPPORT === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .ellipse {
+    animation: none !important;
+  }
+  
+  .center-pulse {
+    animation: none !important;
+    opacity: 0.3;
+  }
+  
+  .node {
+    animation: none !important;
+    opacity: 1;
+  }
+  
+  .intersection {
+    animation: none !important;
+    opacity: 0.7;
+  }
+  
+  .status-dot {
+    animation: none !important;
+    opacity: 1;
+  }
+}
+
+/* === MOBILE RESPONSIVE (< 768px) === */
 @media (max-width: 768px) {
+  :root {
+    --glass-analytics-blur: blur(5px);
+    --glass-predictions-blur: blur(8px);
+  }
+  
   .hero-title {
     font-size: 2.5rem;
   }
   
+  /* Mobile Ellipse Container - Stacked Layout */
   .ellipse-container {
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    min-height: 350px;
+    flex-direction: column;
+    gap: var(--ma-lg);
+  }
+  
+  .ellipse-container.mobile {
+    padding-top: 80px;
+  }
+  
+  /* Stacked ellipses on mobile */
+  .ellipse-visualization {
+    position: relative;
+    width: 280px;
+    height: 200px;
   }
   
   .ellipse {
-    width: 220px;
-    height: 130px;
+    width: 180px;
+    height: 110px;
+  }
+  
+  /* Adjust Jungian controls for mobile */
+  .jungian-controls {
+    top: 0;
+    position: relative;
+    transform: none;
+    left: auto;
+    margin-bottom: var(--ma-md);
+  }
+  
+  .jungian-toggles {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .jungian-toggles.vertical {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  /* Center data adjustments */
+  .center-data {
+    position: relative;
+    padding: var(--ma-lg);
+    width: 200px;
+    margin: 0 auto;
   }
   
   .center-value {
     font-size: 2rem;
+  }
+  
+  /* Formula grid responsive */
+  .formula-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Layer panel vertical layout */
+  .layer-panel.vertical .layer-grid {
+    grid-template-columns: 1fr;
   }
   
   .predictor-teams {
@@ -1141,6 +1359,17 @@ section {
     gap: var(--ma-sm);
     text-align: center;
   }
+  
+  /* Reduce glassmorphism blur on mobile for performance */
+  .glass-depth-analytics {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  
+  .glass-depth-predictions {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
 
 @media (max-width: 480px) {
@@ -1166,5 +1395,82 @@ section {
   
   .probability-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--ma-md);
   }
+  
+  .ellipse {
+    width: 150px;
+    height: 90px;
+  }
+  
+  .ellipse-visualization {
+    width: 240px;
+    height: 160px;
+  }
+}
+
+/* === ADDITIONAL STYLES FOR HUB INTEGRATION === */
+
+/* Override for shared header */
+.hub-header-shared {
+  background: rgba(10, 10, 15, 0.95);
+}
+
+.rotas-app {
+  padding-top: 60px;
+}
+
+/* Cross-hub section in hero */
+.cross-hub-section {
+  margin-top: var(--ma-xl);
+}
+
+/* Bridge section */
+.bridge-section {
+  padding: var(--ma-2xl) var(--ma-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bridge-section .section-title {
+  margin-bottom: var(--ma-lg);
+}
+
+.bridge-description {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--njz-gray-400);
+  max-width: 600px;
+  margin: var(--ma-lg) auto 0;
+  line-height: 1.6;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .rotas-app {
+    padding-top: 56px;
+  }
+  
+  .bridge-section {
+    padding: var(--ma-xl) var(--ma-md);
+  }
+  
+  .rotas-footer {
+    margin-bottom: 70px;
+  }
+}
+
+/* Ensure ROTAS-specific colors override shared styles */
+.hub-indicator.rotas {
+  border-color: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.hub-indicator.rotas .hub-indicator-icon {
+  color: var(--rotas-cyan);
+}
+
+.hub-indicator.rotas .hub-indicator-name {
+  color: var(--rotas-cyan);
 }
