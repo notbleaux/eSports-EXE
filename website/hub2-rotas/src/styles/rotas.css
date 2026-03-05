@@ -1,8 +1,57 @@
 /* === ROTAS HUB STYLES === */
-@import url('../njz-design-system.css');
-
-/* === HUB VARIABLES === */
+/* Design System Variables (inlined from njz-design-system.css) */
 :root {
+  /* BACKGROUND PALETTE */
+  --njz-void-black: #0a0a0f;
+  --njz-deep-space: #0f0f13;
+  --njz-obsidian: #2a2a35;
+  --njz-slate: #1e1e24;
+  
+  /* TEXT & STRUCTURE */
+  --njz-porcelain: #e8e6e3;
+  --njz-data-white: #f5f5f5;
+  --njz-gray-400: #9ca3af;
+  --njz-gray-500: #6b7280;
+  --njz-gray-600: #4b5563;
+  
+  /* ACCENT COLORS */
+  --njz-signal-cyan: #00f0ff;
+  --njz-aged-gold: #c9b037;
+  --njz-alert-amber: #ff9f1c;
+  --njz-live-green: #10b981;
+  --njz-error-red: #ef4444;
+  
+  /* TYPOGRAPHY */
+  --font-header: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-data: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-accent: 'Cinzel', serif;
+  
+  /* SPACING */
+  --ma-xs: 0.25rem;
+  --ma-sm: 0.5rem;
+  --ma-md: 1rem;
+  --ma-lg: 1.5rem;
+  --ma-xl: 2.5rem;
+  --ma-2xl: 4rem;
+  --ma-3xl: 6rem;
+  
+  /* ANIMATION */
+  --ease-harmonic: cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-toroidal: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  
+  /* BORDERS */
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.1);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+  
+  /* ROTAS SPECIFIC */
   --rotas-cyan: #00f0ff;
   --rotas-gold: #c9b037;
   --rotas-ellipse-glow: rgba(0, 240, 255, 0.3);
