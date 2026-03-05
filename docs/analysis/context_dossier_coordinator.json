@@ -1,0 +1,210 @@
+{
+  "task": "pipeline_coordinator",
+  "priority": "P0",
+  "estimated_effort_hours": 16,
+  "existing_files": [
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/models.py",
+      "description": "Pydantic v2 models for jobs, agents, batches",
+      "key_classes": [
+        "JobConfig",
+        "ExtractionJob",
+        "JobBatch",
+        "AgentCapabilities",
+        "Agent",
+        "ExtractionConflict",
+        "QueueStats",
+        "CoordinatorStatus",
+        "SubmitJobRequest",
+        "SubmitBatchRequest",
+        "JobResponse",
+        "BatchResponse",
+        "AgentRegistrationRequest",
+        "AgentHeartbeatRequest",
+        "HealthCheckResponse"
+      ],
+      "key_enums": [
+        "GameType (CS, VALORANT)",
+        "JobStatus (PENDING, ASSIGNED, PROCESSING, COMPLETED, FAILED, CANCELLED, RETRYING)",
+        "AgentStatus (IDLE, BUSY, OFFLINE, DEGRADED, MAINTENANCE)",
+        "JobPriority (CRITICAL=0, HIGH=1, NORMAL=2, LOW=3, BACKGROUND=4)",
+        "ConflictType (DUPLICATE, CONTENT_DRIFT, VERSION_MISMATCH, SCHEMA_VIOLATION)",
+        "ConflictStatus (OPEN, RESOLVED, IGNORED, PENDING_REVIEW)",
+        "DataSource (VLR_GG, HLTV, RIOT_API, STEAM_API, KAGGLE, GRID_OPENACCESS, MANUAL, UNKNOWN)"
+      ],
+      "lines_of_code": 550,
+      "key_methods_per_class": {
+        "ExtractionJob": ["to_queue_key()", "is_retryable()", "mark_assigned()", "mark_started()", "mark_completed()", "mark_failed()"],
+        "JobBatch": ["add_job()", "get_pending_jobs()", "is_complete()", "update_counts()"],
+        "Agent": ["is_available()", "is_healthy()", "can_process()", "update_heartbeat()", "assign_job()", "complete_job()", "get_success_rate()"],
+        "ExtractionConflict": ["resolve()"]
+      }
+    },
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/queue_manager.py",
+      "description": "Priority queue management with game isolation",
+      "key_classes": ["QueueEntry", "GameQueue", "QueueManager"],
+      "key_methods": {
+        "QueueEntry": ["from_job()"],
+        "GameQueue": [
+          "enqueue()",
+          "enqueue_batch()",
+          "dequeue()",
+          "peek()",
+          "get_job()",
+          "complete_job()",
+          "fail_job()",
+          "cancel_job()",
+          "get_stats()",
+          "list_pending()",
+          "list_processing()",
+          "requeue_stuck_jobs()"
+        ],
+        "QueueManager": [
+          "get_queue()",
+          "enqueue()",
+          "enqueue_batch()",
+          "dequeue()",
+          "get_job()",
+          "complete_job()",
+          "fail_job()",
+          "cancel_job()",
+          "get_stats()",
+          "get_all_stats()",
+          "start()",
+          "stop()",
+          "_maintenance_loop()"
+        ]
+      },
+      "lines_of_code": 500
+    }
+  ],
+  "missing_files": [
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/agent_manager.py",
+      "description": "Agent lifecycle and work assignment",
+      "required_classes": ["AgentManager"],
+      "required_methods": [
+        "register_agent",
+        "assign_work",
+        "heartbeat",
+        "mark_busy",
+        "mark_idle",
+        "deregister_agent",
+        "get_available_agents",
+        "get_agent_by_id",
+        "update_agent_metrics"
+      ],
+      "dependencies": ["models.py", "database", "queue_manager"]
+    },
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/main.py",
+      "description": "FastAPI orchestrator application",
+      "required_endpoints": [
+        "POST /jobs/submit",
+        "GET /jobs/{job_id}/status",
+        "POST /agents/register",
+        "POST /agents/{agent_id}/heartbeat",
+        "GET /agents/{agent_id}/work",
+        "POST /jobs/{job_id}/complete",
+        "POST /batches/submit",
+        "GET /health",
+        "GET /stats/queues",
+        "GET /stats/agents"
+      ],
+      "dependencies": ["agent_manager", "queue_manager", "models"]
+    },
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/conflict_resolver.py",
+      "description": "Duplicate detection and conflict resolution",
+      "required_classes": ["ConflictResolver"],
+      "required_methods": [
+        "check_duplicate",
+        "detect_drift",
+        "resolve_conflict",
+        "log_conflict",
+        "get_pending_conflicts"
+      ],
+      "dependencies": ["models", "database"]
+    },
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/workers/base_worker.py",
+      "description": "Abstract base class for extraction workers",
+      "required_classes": ["BaseWorker"],
+      "required_abstract_methods": [
+        "extract",
+        "validate",
+        "transform"
+      ],
+      "dependencies": ["models"]
+    },
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/workers/cs2_worker.py",
+      "description": "CS2 extraction worker using HLTV",
+      "required_classes": ["CS2Worker"],
+      "dependencies": ["base_worker", "hltv_client", "models"]
+    },
+    {
+      "path": "shared/axiom-esports-data/pipeline/coordinator/workers/valorant_worker.py",
+      "description": "Valorant extraction worker using VLR",
+      "required_classes": ["ValorantWorker"],
+      "dependencies": ["base_worker", "vlr_client", "models"]
+    }
+  ],
+  "external_dependencies": {
+    "hltv_client": {
+      "path": "shared/axiom-esports-data/extraction/src/scrapers/hltv_api_client.py",
+      "key_classes": ["HLTVAsyncClient", "HLTVConfig", "RateLimiter"],
+      "key_methods": [
+        "initialize()",
+        "close()",
+        "get_results()",
+        "get_match()",
+        "get_team()",
+        "get_team_by_name()",
+        "get_player()",
+        "get_player_by_name()",
+        "get_rankings()",
+        "get_events()"
+      ],
+      "rate_limit": "1 req/sec (conservative)",
+      "library": "hltv-async-api"
+    },
+    "vlr_client": {
+      "path": "shared/axiom-esports-data/extraction/src/scrapers/vlr_resilient_client.py",
+      "key_classes": ["ResilientVLRClient", "CircuitBreaker", "ValidatedResponse"],
+      "key_methods": [
+        "fetch_with_validation()",
+        "ethical_fetch()",
+        "validate_schema()",
+        "_compute_checksum()"
+      ],
+      "rate_limit": "2 sec between requests",
+      "features": ["Circuit breaker", "Schema drift detection", "Content checksums", "Rotating user agents"],
+      "expected_schema_fields": ["player", "team", "agent", "rating", "acs", "kills", "deaths", "assists", "kast", "adr", "hs_pct", "first_blood", "first_death", "clutch_win", "clutch_attempt"]
+    },
+    "database": {
+      "tables": [
+        "extraction_jobs (via models)",
+        "extraction_agents (via models)",
+        "batches (via models)",
+        "extraction_log",
+        "schema_drift_log"
+      ],
+      "connection": "asyncpg",
+      "key_sql_functions": ["upsert_extraction_log()"]
+    }
+  },
+  "implementation_notes": [
+    "Use existing models.py - DO NOT MODIFY",
+    "Use existing queue_manager.py - DO NOT MODIFY",
+    "Python 3.11+ with type hints required",
+    "All methods must be async",
+    "Use Pydantic v2 for validation",
+    "GameType.CS and GameType.VALORANT queues are isolated",
+    "JobPriority uses integer values (0=CRITICAL, 4=BACKGROUND)",
+    "QueueManager has built-in maintenance loop for stuck jobs (10min timeout)",
+    "HLTV client requires: pip install hltv-async-api",
+    "VLR client uses aiohttp with circuit breaker pattern"
+  ]
+}

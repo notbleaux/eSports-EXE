@@ -1,0 +1,117 @@
+{
+  "task": "api_firewall",
+  "priority": "P0",
+  "estimated_effort_hours": 12,
+  "existing_files": [],
+  "missing_files": [
+    {
+      "path": "shared/api/src/middleware/firewall.py",
+      "description": "Data partition firewall middleware for FastAPI",
+      "required_classes": ["PartitionFirewall", "PartitionViolation"],
+      "required_functions": [
+        "create_firewall_middleware()",
+        "validate_game_partition()",
+        "filter_response_fields()",
+        "check_query_params()"
+      ]
+    }
+  ],
+  "required_features": [
+    "GAME_ONLY_FIELDS dictionary (CS and Valorant specific fields)",
+    "Request validation (check query params for partition violations)",
+    "Response filtering (remove cross-partition data)",
+    "Partition enforcement middleware",
+    "Detailed logging of violations",
+    "Configurable strict mode vs warn mode"
+  ],
+  "game_specific_fields": {
+    "cs_only": [
+      "weapon_",
+      "grenade_",
+      "bomb_",
+      "defuse_kit",
+      "armor_",
+      "economy_type",
+      "map_pool",
+      "hltv_rating",
+      "adr_cs",
+      "kast_cs"
+    ],
+    "valorant_only": [
+      "agent_",
+      "ability_",
+      "ultimate_",
+      "signature_",
+      "agent_role",
+      "sage_heal",
+      "omen_smoke",
+      "jett_dash",
+      "acs_val",
+      "combat_score"
+    ]
+  },
+  "partition_rules": {
+    "request_validation": [
+      "Block CS-specific fields in Valorant endpoints",
+      "Block Valorant-specific fields in CS endpoints",
+      "Validate game parameter matches endpoint",
+      "Reject mixed-game batch requests"
+    ],
+    "response_filtering": [
+      "Strip CS fields from Valorant responses",
+      "Strip Valorant fields from CS responses",
+      "Log all field removals for audit",
+      "Return 403 for strict violations"
+    ]
+  },
+  "middleware_interface": {
+    "class": "PartitionFirewall",
+    "methods": [
+      "__init__(app, config: FirewallConfig)",
+      "async __call__(scope, receive, send)",
+      "validate_request(request) -> ValidationResult",
+      "filter_response(response, game_type) -> FilteredResponse"
+    ],
+    "config_options": {
+      "strict_mode": "bool - reject vs warn",
+      "log_violations": "bool - enable audit logging",
+      "allowed_cross_fields": "list - globally allowed fields",
+      "violation_threshold": "int - alerts after N violations"
+    }
+  },
+  "dependencies": {
+    "fastapi": {
+      "pattern": "ASGI middleware",
+      "starlette": "BaseHTTPMiddleware"
+    },
+    "database": {
+      "purpose": "Audit logging of violations",
+      "tables": ["partition_violations_log"]
+    }
+  },
+  "existing_api_structure": {
+    "path": "shared/api/src/",
+    "files": [
+      "staging/ingest_service.py",
+      "staging/game_export_form.py",
+      "staging/web_export_form.py",
+      "staging/data_collection_service.py"
+    ],
+    "axiom_esports_api": {
+      "path": "shared/axiom-esports-data/api/src/",
+      "routes": ["matches.py", "players.py", "analytics.py"],
+      "middleware": ["__init__.py (empty)"],
+      "db": "db.py"
+    }
+  },
+  "implementation_notes": [
+    "Middleware must be added early in FastAPI middleware stack",
+    "Use ASGI middleware pattern for request/response interception",
+    "GAME_ONLY_FIELDS should be configurable via settings",
+    "Log violations to database for audit trail",
+    "Support both strict (block) and warn (log) modes",
+    "Field prefixes should match exact column names in database",
+    "Consider performance - don't parse large responses unnecessarily",
+    "Add request ID tracking for violation correlation"
+  ]
+}

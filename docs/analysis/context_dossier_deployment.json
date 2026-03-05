@@ -1,0 +1,118 @@
+{
+  "task": "deployment_config",
+  "priority": "P0",
+  "estimated_effort_hours": 8,
+  "existing_files": [],
+  "missing_files": [
+    {
+      "path": "render.yaml",
+      "description": "Render.com deployment configuration for FastAPI",
+      "service_type": "web_service",
+      "runtime": "python",
+      "required_sections": [
+        "services",
+        "databases (optional - if using Render Postgres)",
+        "env_vars"
+      ],
+      "key_config": {
+        "build_command": "pip install -r requirements.txt",
+        "start_command": "uvicorn main:app --host 0.0.0.0 --port $PORT",
+        "python_version": "3.11",
+        "health_check_path": "/health"
+      }
+    },
+    {
+      "path": "vercel.json",
+      "description": "Vercel deployment configuration for React",
+      "framework": "vite",
+      "required_sections": [
+        "builds",
+        "routes",
+        "env"
+      ],
+      "key_config": {
+        "build_command": "npm run build",
+        "output_directory": "dist",
+        "install_command": "npm install",
+        "framework": "vite"
+      }
+    },
+    {
+      "path": "docker-compose.yml",
+      "description": "Local development with PostgreSQL",
+      "services": [
+        "api (FastAPI)",
+        "web (React dev server)",
+        "postgres (PostgreSQL 15)",
+        "redis (optional - for caching)"
+      ],
+      "volumes": [
+        "postgres_data",
+        "redis_data"
+      ],
+      "ports": {
+        "api": "8000:8000",
+        "web": "3000:3000",
+        "postgres": "5432:5432"
+      }
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "description": "GitHub Actions CI/CD pipeline",
+      "triggers": ["push", "pull_request"],
+      "jobs": [
+        "lint (ruff, black, mypy)",
+        "test (pytest)",
+        "build (docker)",
+        "deploy (conditional on main branch)"
+      ]
+    }
+  ],
+  "infrastructure": {
+    "database": {
+      "provider": "Supabase",
+      "type": "PostgreSQL 15",
+      "extensions": ["timescaledb"],
+      "connection": "asyncpg"
+    },
+    "api": {
+      "provider": "Render",
+      "runtime": "Python 3.11",
+      "framework": "FastAPI",
+      "asgi": "uvicorn"
+    },
+    "web": {
+      "provider": "Vercel",
+      "runtime": "Node.js 20",
+      "framework": "React 18 + Vite"
+    },
+    "static": {
+      "provider": "GitHub Pages",
+      "content": "Documentation, Design System"
+    }
+  },
+  "environment_variables": {
+    "required": [
+      "DATABASE_URL",
+      "SUPABASE_URL",
+      "SUPABASE_KEY",
+      "API_SECRET_KEY",
+      "CORS_ORIGINS"
+    ],
+    "optional": [
+      "REDIS_URL",
+      "SENTRY_DSN",
+      "LOG_LEVEL"
+    ]
+  },
+  "implementation_notes": [
+    "Render.yaml should specify Python 3.11 explicitly",
+    "Vercel.json should configure SPA routing (catch-all)",
+    "Docker-compose should include health checks for postgres",
+    "CI pipeline should run on PRs and deploy on main merge",
+    "Add dependency caching in CI for faster builds",
+    "Include migration running in Render start command",
+    "Configure CORS for cross-origin between Vercel and Render",
+    "Add DATABASE_URL format: postgresql+asyncpg://user:pass@host:port/db"
+  ]
+}
