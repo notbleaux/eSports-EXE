@@ -48,8 +48,6 @@ services:
         value: "365"
       - key: RATE_LIMIT_REQUESTS_PER_MINUTE
         value: "30"
-      - key: ENABLE_WARMUP
-        value: "true"
     
     # Health check endpoint
     healthCheckPath: /health
@@ -59,27 +57,6 @@ services:
     
     # Branch to deploy
     branch: main
-
-  # ---------------------------------------------------------------------------
-  # Background Worker (Optional - for data processing)
-  # Commented out - uncomment when you need background job processing
-  # ---------------------------------------------------------------------------
-  # - type: worker
-  #   name: sator-worker
-  #   runtime: python
-  #   plan: free
-  #   region: oregon
-  #   buildCommand: |
-  #     cd shared/axiom-esports-data && \
-  #     pip install -r api/requirements.txt
-  #   startCommand: |
-  #     cd shared/axiom-esports-data && \
-  #     python -m scripts.daily_health_check
-  #   envVars:
-  #     - key: PYTHON_VERSION
-  #       value: "3.11"
-  #     - key: DATABASE_URL
-  #       sync: false
 
 # =============================================================================
 # Environment Group (Shared across services)
