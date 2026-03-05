@@ -172,7 +172,7 @@ function App() {
               key={index}
               value={item.value} 
               label={item.label} 
-            /
+            />
           ))}
         </div>
       </section>
