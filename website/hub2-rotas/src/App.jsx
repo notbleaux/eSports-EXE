@@ -5,16 +5,16 @@ import LayerToggle from './components/LayerToggle';
 import ProbabilityGauge from './components/ProbabilityGauge';
 import FormulaLibrary from './components/FormulaLibrary';
 import MatchPredictor from './components/MatchPredictor';
-import OnboardingFlow from '../shared/components/OnboardingFlow';
-import PersonalizedDashboard from '../shared/components/PersonalizedDashboard';
+import OnboardingFlow from './shared/components/OnboardingFlow';
+import PersonalizedDashboard from './shared/components/PersonalizedDashboard';
 import { analyticsLayers } from './data/analyticsLayers';
 import { 
   hasCompletedOnboarding, 
   getStoredRole,
   saveUserPreferences,
   getUserPreferences
-} from '../shared/js/userPreferences';
-import { ProgressiveDisclosureProvider } from '../shared/js/progressiveDisclosure';
+} from './shared/js/userPreferences';
+import { ProgressiveDisclosureProvider } from './shared/js/progressiveDisclosure.jsx';
 
 // Hub Bridge Component
 function HubBridge() {
