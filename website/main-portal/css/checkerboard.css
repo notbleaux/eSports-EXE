@@ -1,0 +1,225 @@
+/* Checkerboard Hero Section */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--cl-primary-black);
+  overflow: hidden;
+}
+
+/* Animated Checkerboard Background */
+.checkerboard-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(45deg, var(--gray-900) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--gray-900) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--gray-900) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--gray-900) 75%);
+  background-size: 80px 80px;
+  background-position: 0 0, 0 40px, 40px -40px, -40px 0px;
+  opacity: 0.6;
+  animation: checkerboardMove 20s linear infinite;
+}
+
+@keyframes checkerboardMove {
+  0% {
+    background-position: 0 0, 0 40px, 40px -40px, -40px 0px;
+  }
+  100% {
+    background-position: 80px 80px, 80px 120px, 120px 40px, 40px 80px;
+  }
+}
+
+/* Accent Grid Overlay */
+.checkerboard-accent {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(90deg, var(--cl-accent-hot-pink) 2px, transparent 2px),
+    linear-gradient(0deg, var(--cl-accent-hot-pink) 2px, transparent 2px);
+  background-size: 160px 160px;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.hero:hover .checkerboard-accent {
+  opacity: 0.1;
+}
+
+/* Hot Pink Accent Lines */
+.accent-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.accent-line {
+  position: absolute;
+  background: var(--cl-accent-hot-pink);
+}
+
+.accent-line--horizontal {
+  height: 2px;
+  width: 100%;
+  left: 0;
+}
+
+.accent-line--vertical {
+  width: 2px;
+  height: 100%;
+  top: 0;
+}
+
+.accent-line:nth-child(1) { top: 15%; opacity: 0.3; }
+.accent-line:nth-child(2) { top: 50%; opacity: 0.5; }
+.accent-line:nth-child(3) { top: 85%; opacity: 0.3; }
+.accent-line:nth-child(4) { left: 15%; opacity: 0.3; }
+.accent-line:nth-child(5) { left: 50%; opacity: 0.5; }
+.accent-line:nth-child(6) { left: 85%; opacity: 0.3; }
+
+/* Hero Content */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: var(--space-8);
+  max-width: 1200px;
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.3em;
+  color: var(--cl-accent-hot-pink);
+  margin-bottom: var(--space-6);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-title {
+  font-size: clamp(3rem, 12vw, var(--text-9xl));
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-8);
+}
+
+.hero-title__line {
+  display: block;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.hero-title__line--accent {
+  color: var(--cl-accent-hot-pink);
+  text-shadow: 0 0 40px rgba(255, 0, 110, 0.5);
+}
+
+.hero-tagline {
+  font-family: var(--font-esoteric);
+  font-size: clamp(1rem, 2.5vw, var(--text-2xl));
+  letter-spacing: 0.2em;
+  color: var(--gray-400);
+  margin-bottom: var(--space-12);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-8);
+  background: transparent;
+  border: 2px solid var(--cl-accent-hot-pink);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-cta:hover {
+  background: var(--cl-accent-hot-pink);
+  box-shadow: var(--shadow-glow-pink);
+  transform: translateY(-2px);
+}
+
+.hero-cta__arrow {
+  transition: transform var(--transition-base);
+}
+
+.hero-cta:hover .hero-cta__arrow {
+  transform: translateX(4px);
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: var(--space-8);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  opacity: 0;
+}
+
+.scroll-indicator__text {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+.scroll-indicator__line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--cl-accent-hot-pink), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { 
+    transform: scaleY(1);
+    opacity: 0.5;
+  }
+  50% { 
+    transform: scaleY(0.6);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: var(--space-6);
+  }
+  
+  .hero-title {
+    font-size: clamp(2.5rem, 15vw, 4rem);
+  }
+  
+  .checkerboard-bg {
+    background-size: 40px 40px;
+  }
+}
