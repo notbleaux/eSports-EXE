@@ -1,0 +1,355 @@
+/* ============================================
+   HUB 4 GAMES - THE NEXUS
+   Design Tokens Extension
+   ============================================ */
+
+:root {
+  /* ============================================
+     NEXUS COLOR SYSTEM
+     Deep Cobalt (Offline) → Neon Cyan (Live)
+     ============================================ */
+  
+  /* Cobalt Depths - Offline State */
+  --cobalt-50: #e6f0ff;
+  --cobalt-100: #cce0ff;
+  --cobalt-200: #99c2ff;
+  --cobalt-300: #66a3ff;
+  --cobalt-400: #3385ff;
+  --cobalt-500: #0055ff;
+  --cobalt-600: #0044cc;
+  --cobalt-700: #003399;
+  --cobalt-800: #002266;
+  --cobalt-900: #001133;
+  --cobalt-950: #0a0f1f;
+  --cobalt-1000: #050810;
+  
+  /* Deep Abyssal */
+  --abyssal-deep: #0a0c14;
+  --abyssal-mid: #0d1020;
+  --abyssal-light: #121628;
+  
+  /* Neon Cyan - Live State */
+  --neon-cyan: #00f0ff;
+  --neon-cyan-dim: rgba(0, 240, 255, 0.5);
+  --neon-cyan-faint: rgba(0, 240, 255, 0.2);
+  --neon-cyan-glow: rgba(0, 240, 255, 0.8);
+  
+  /* Iridescent Spectrum */
+  --iridescent-1: #ff0080;
+  --iridescent-2: #ff8c00;
+  --iridescent-3: #ffd700;
+  --iridescent-4: #00ff88;
+  --iridescent-5: #0088ff;
+  --iridescent-6: #8800ff;
+  
+  /* ============================================
+     NEXUS GLASSMORPHISM
+     Abyssal Glass Panels
+     ============================================ */
+  
+  /* Abyssal Glass - Download Cards */
+  --glass-abyssal-bg: rgba(10, 12, 20, 0.85);
+  --glass-abyssal-border: rgba(0, 240, 255, 0.15);
+  --glass-abyssal-glow: rgba(0, 240, 255, 0.1);
+  --glass-abyssal-blur: blur(20px);
+  
+  /* Live Glass - Active States */
+  --glass-live-bg: rgba(0, 240, 255, 0.08);
+  --glass-live-border: rgba(0, 240, 255, 0.3);
+  --glass-live-glow: 0 0 30px rgba(0, 240, 255, 0.2);
+  
+  /* Cobalt Glass - Offline States */
+  --glass-cobalt-bg: rgba(0, 51, 153, 0.15);
+  --glass-cobalt-border: rgba(0, 85, 255, 0.2);
+  --glass-cobalt-glow: 0 0 20px rgba(0, 85, 255, 0.15);
+  
+  /* ============================================
+     TOROIDAL/HOURGLASS ANIMATIONS
+     ============================================ */
+  
+  /* Torus Rotation */
+  --torus-spin-duration: 20s;
+  --torus-pulse-duration: 4s;
+  
+  /* Hourglass Flow */
+  --hourglass-flow-duration: 8s;
+  --hourglass-settle-duration: 2s;
+  
+  /* Vortex Transitions */
+  --vortex-in-duration: 1.2s;
+  --vortex-out-duration: 0.8s;
+  --vortex-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Bubble Physics */
+  --bubble-float-duration: 6s;
+  --bubble-physics-ease: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* ============================================
+     RESONANCE EFFECTS
+     ============================================ */
+  
+  /* Resonant Sphere */
+  --resonance-pulse: 0 0 60px rgba(0, 240, 255, 0.4);
+  --resonance-core: 0 0 100px rgba(0, 240, 255, 0.6);
+  --resonance-wave: 0 0 150px rgba(0, 240, 255, 0.2);
+  
+  /* Chemistry Orbital */
+  --orbital-glow: 0 0 20px rgba(255, 0, 128, 0.5);
+  --chemistry-trail: rgba(255, 0, 128, 0.3);
+  
+  /* ============================================
+     3D STAR TETRAHEDRON
+     ============================================ */
+  
+  --tetrahedron-size: 200px;
+  --tetrahedron-perspective: 1000px;
+  --tetrahedron-rotate-x: -20deg;
+  --tetrahedron-rotate-y: 45deg;
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS - NEXUS SPECIFIC
+   ============================================ */
+
+@keyframes torus-spin {
+  from { transform: rotateX(60deg) rotateZ(0deg); }
+  to { transform: rotateX(60deg) rotateZ(360deg); }
+}
+
+@keyframes torus-pulse {
+  0%, 100% { 
+    opacity: 0.6;
+    filter: drop-shadow(0 0 20px var(--neon-cyan-dim));
+  }
+  50% { 
+    opacity: 1;
+    filter: drop-shadow(0 0 40px var(--neon-cyan));
+  }
+}
+
+@keyframes hourglass-flow {
+  0% { 
+    transform: translateY(-100%) scaleY(0.3);
+    opacity: 0;
+  }
+  20% { 
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(0%) scaleY(1);
+    opacity: 1;
+  }
+  80% { 
+    transform: translateY(50%) scaleY(1);
+    opacity: 1;
+  }
+  100% { 
+    transform: translateY(100%) scaleY(0.3);
+    opacity: 0;
+  }
+}
+
+@keyframes vortex-in {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+    filter: blur(20px);
+  }
+  50% {
+    transform: scale(1.1) rotate(-90deg);
+    opacity: 0.8;
+    filter: blur(5px);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes vortex-out {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+    filter: blur(20px);
+  }
+}
+
+@keyframes bubble-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) scale(1.05);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-10px) scale(0.95);
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px) scale(1.02);
+  }
+}
+
+@keyframes iridescent-shift {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes chemistry-orbit {
+  from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+
+@keyframes resonance-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+    box-shadow: 0 0 40px var(--neon-cyan-dim);
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+    box-shadow: 0 0 80px var(--neon-cyan);
+  }
+}
+
+@keyframes star-tetrahedron-spin {
+  from { transform: rotateX(-20deg) rotateY(0deg); }
+  to { transform: rotateX(-20deg) rotateY(360deg); }
+}
+
+@keyframes mode-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px var(--neon-cyan-dim);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px var(--neon-cyan);
+  }
+}
+
+@keyframes download-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes matchmaking-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   NEXUS UTILITY CLASSES
+   ============================================ */
+
+/* State Colors */
+.text-offline { color: var(--cobalt-400); }
+.text-live { color: var(--neon-cyan); }
+.text-iridescent {
+  background: linear-gradient(90deg, var(--iridescent-1), var(--iridescent-3), var(--iridescent-5), var(--iridescent-1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 100%;
+  animation: iridescent-shift 5s linear infinite;
+}
+
+/* Abyssal Glass Panels */
+.glass-abyssal {
+  background: var(--glass-abyssal-bg);
+  backdrop-filter: var(--glass-abyssal-blur);
+  -webkit-backdrop-filter: var(--glass-abyssal-blur);
+  border: 1px solid var(--glass-abyssal-border);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-live {
+  background: var(--glass-live-bg);
+  border: 1px solid var(--glass-live-border);
+  box-shadow: var(--glass-live-glow);
+}
+
+.glass-cobalt {
+  background: var(--glass-cobalt-bg);
+  border: 1px solid var(--glass-cobalt-border);
+  box-shadow: var(--glass-cobalt-glow);
+}
+
+/* Glow Effects */
+.glow-neon-cyan {
+  box-shadow: 0 0 30px var(--neon-cyan-dim), 0 0 60px var(--neon-cyan-faint);
+}
+
+.glow-neon-cyan-intense {
+  box-shadow: 0 0 40px var(--neon-cyan), 0 0 80px var(--neon-cyan-dim);
+}
+
+.text-glow-neon {
+  text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan-dim);
+}
+
+/* Iridescent Effects */
+.iridescent-border {
+  border: 1px solid transparent;
+  background: linear-gradient(var(--abyssal-deep), var(--abyssal-deep)) padding-box,
+              linear-gradient(45deg, var(--iridescent-1), var(--iridescent-3), var(--iridescent-5), var(--iridescent-1)) border-box;
+  background-size: 300% 300%;
+  animation: iridescent-shift 8s linear infinite;
+}
+
+/* Animation Utilities */
+.animate-torus-spin { animation: torus-spin var(--torus-spin-duration) linear infinite; }
+.animate-bubble-float { animation: bubble-float var(--bubble-float-duration) ease-in-out infinite; }
+.animate-resonance { animation: resonance-pulse 3s ease-in-out infinite; }
+.animate-vortex-in { animation: vortex-in var(--vortex-in-duration) var(--vortex-ease) forwards; }
+.animate-vortex-out { animation: vortex-out var(--vortex-out-duration) var(--vortex-ease) forwards; }
+.animate-matchmaking { animation: matchmaking-pulse 2s ease-in-out infinite; }
+
+/* Status Indicators */
+.status-live {
+  position: relative;
+}
+
+.status-live::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--neon-cyan);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.status-offline {
+  position: relative;
+}
+
+.status-offline::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--cobalt-600);
+  border-radius: 50%;
+}

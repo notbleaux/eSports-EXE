@@ -1,0 +1,482 @@
+/* ============================================
+   HUB 4 GAMES - THE NEXUS
+   Main Stylesheet
+   ============================================ */
+
+@import url('/shared/styles/design-tokens.css');
+@import url('./nexus-tokens.css');
+
+/* ============================================
+   BASE NEXUS STYLES
+   ============================================ */
+
+.nexus-root {
+  min-height: 100vh;
+  background: var(--abyssal-deep);
+  color: var(--porcelain);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  position: relative;
+}
+
+.nexus-root::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(0, 85, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(10, 12, 20, 1) 0%, rgba(5, 8, 16, 1) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nexus-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+/* ============================================
+   NEXUS HEADER
+   ============================================ */
+
+.nexus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--glass-abyssal-border);
+}
+
+.nexus-title {
+  font-family: var(--font-header);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wider);
+  background: linear-gradient(135deg, var(--porcelain) 0%, var(--cyan-300) 50%, var(--neon-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nexus-subtitle {
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.nexus-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: all var(--duration-normal) var(--ease-harmonic);
+}
+
+.nexus-status-indicator.live {
+  background: var(--glass-live-bg);
+  border: 1px solid var(--glass-live-border);
+  color: var(--neon-cyan);
+  box-shadow: var(--glass-live-glow);
+}
+
+.nexus-status-indicator.offline {
+  background: var(--glass-cobalt-bg);
+  border: 1px solid var(--glass-cobalt-border);
+  color: var(--cobalt-400);
+}
+
+.nexus-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.nexus-status-indicator.live .nexus-status-dot {
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.nexus-status-indicator.offline .nexus-status-dot {
+  background: var(--cobalt-600);
+}
+
+/* ============================================
+   SECTION NAVIGATION
+   ============================================ */
+
+.nexus-nav {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+  padding: var(--space-2);
+  background: var(--glass-abyssal-bg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-abyssal-border);
+}
+
+.nexus-nav-button {
+  flex: 1;
+  padding: var(--space-4) var(--space-6);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  color: var(--gray-500);
+  font-family: var(--font-header);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-harmonic);
+}
+
+.nexus-nav-button:hover {
+  color: var(--porcelain);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nexus-nav-button.active {
+  color: var(--neon-cyan);
+  background: var(--glass-live-bg);
+  box-shadow: var(--glass-live-glow);
+}
+
+/* ============================================
+   MAIN SECTIONS
+   ============================================ */
+
+.nexus-section {
+  display: none;
+  animation: vortex-in var(--vortex-in-duration) var(--vortex-ease) forwards;
+}
+
+.nexus-section.active {
+  display: block;
+}
+
+.nexus-section-title {
+  font-family: var(--font-header);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--porcelain);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nexus-section-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--glass-abyssal-bg);
+  border: 1px solid var(--glass-abyssal-border);
+}
+
+/* ============================================
+   GRID LAYOUTS
+   ============================================ */
+
+.nexus-grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.nexus-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.nexus-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.nexus-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1280px) {
+  .nexus-grid-4 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .nexus-grid-3,
+  .nexus-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nexus-grid-2,
+  .nexus-grid-3,
+  .nexus-grid-4 { grid-template-columns: 1fr; }
+  
+  .nexus-content {
+    padding: var(--space-4);
+  }
+  
+  .nexus-header {
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+  }
+  
+  .nexus-title {
+    font-size: var(--text-3xl);
+  }
+  
+  .nexus-nav {
+    flex-wrap: wrap;
+  }
+  
+  .nexus-nav-button {
+    flex: 1 1 calc(50% - var(--space-2));
+  }
+}
+
+/* ============================================
+   TORUS FLOW CONTAINER
+   ============================================ */
+
+.torus-flow-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  margin-bottom: var(--space-8);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: var(--glass-abyssal-bg);
+  border: 1px solid var(--glass-abyssal-border);
+}
+
+.torus-flow-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.torus-flow-overlay {
+  position: absolute;
+  bottom: var(--space-6);
+  left: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.torus-state-label {
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--gray-500);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(10, 12, 20, 0.8);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-abyssal-border);
+}
+
+.torus-state-label.active {
+  color: var(--neon-cyan);
+  border-color: var(--glass-live-border);
+  box-shadow: var(--glass-live-glow);
+}
+
+/* ============================================
+   MATCHMAKING CONTAINER
+   ============================================ */
+
+.matchmaking-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: var(--space-8);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: var(--glass-abyssal-bg);
+  border: 1px solid var(--glass-abyssal-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   MODE SELECTOR CONTAINER
+   ============================================ */
+
+.mode-selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+  border-radius: var(--radius-2xl);
+  background: var(--glass-abyssal-bg);
+  border: 1px solid var(--glass-abyssal-border);
+}
+
+/* ============================================
+   DOWNLOAD PORTAL
+   ============================================ */
+
+.download-portal {
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.download-portal-header {
+  text-align: center;
+  margin-bottom: var(--space-10);
+}
+
+.download-portal-title {
+  font-family: var(--font-header);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--porcelain);
+  margin-bottom: var(--space-3);
+}
+
+.download-portal-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--gray-500);
+}
+
+/* ============================================
+   LIVE LOBBY
+   ============================================ */
+
+.live-lobby {
+  padding: var(--space-8);
+}
+
+.live-lobby-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-8);
+}
+
+.live-lobby-title {
+  font-family: var(--font-header);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--porcelain);
+}
+
+.live-lobby-stats {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.live-lobby-stat {
+  text-align: center;
+}
+
+.live-lobby-stat-value {
+  font-family: var(--font-data);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--neon-cyan);
+  text-shadow: 0 0 20px var(--neon-cyan-dim);
+}
+
+.live-lobby-stat-label {
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  color: var(--gray-500);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.nexus-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-16);
+  color: var(--gray-500);
+}
+
+.nexus-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--glass-abyssal-border);
+  border-top-color: var(--neon-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   ERROR STATES
+   ============================================ */
+
+.nexus-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-16);
+  text-align: center;
+}
+
+.nexus-error-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xl);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--error-red);
+  font-size: var(--text-3xl);
+}
+
+.nexus-error-message {
+  font-family: var(--font-header);
+  font-size: var(--text-xl);
+  color: var(--porcelain);
+}
+
+.nexus-error-retry {
+  padding: var(--space-3) var(--space-6);
+  background: var(--glass-abyssal-bg);
+  border: 1px solid var(--glass-abyssal-border);
+  border-radius: var(--radius-lg);
+  color: var(--porcelain);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-harmonic);
+}
+
+.nexus-error-retry:hover {
+  background: var(--glass-live-bg);
+  border-color: var(--glass-live-border);
+  color: var(--neon-cyan);
+}

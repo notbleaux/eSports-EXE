@@ -379,8 +379,7 @@ function ProbabilityCloud({
           </span>
         </div>        
         {isCollapsed && (
-          <div className="probability-display"
-003e
+          <div className="probability-display">
             <span className="prob-label">Probability</span>
             <span className="prob-value" style={{ 
               color: probability > 70 ? '#00f0ff' : probability > 40 ? '#c9b037' : '#ff6b6b'
