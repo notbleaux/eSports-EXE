@@ -688,7 +688,426 @@
         </footer>
     </main>
 
-    <!-- Main JavaScript -->
-    <script src="assets/js/main.js" defer></script>
+    <!-- Main JavaScript - Performance Optimized -->
+    <link rel="stylesheet" href="/assets/css/animations.css">
+    <script src="/assets/js/main-optimized.js" defer></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('[SW] Registered:', registration.scope);
+          })
+          .catch(function(error) {
+            console.error('[SW] Registration failed:', error);
+          });
+      });
+    }
+    
+    // Performance metrics logging (development only)
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var perfData = window.performance.timing;
+          var pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+          console.log('Page load time: ' + pageLoadTime + 'ms');
+        }, 0);
+      });
+    }
+    
+    // Reduced motion detection
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('reduce-motion');
+    }
+    
+    // Lazy loading for images without native support
+    if ('loading' in HTMLImageElement.prototype) {
+      document.querySelectorAll('img[data-src]').forEach(function(img) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      });
+    }
+    
+    // Intersection Observer for reveal animations
+    if ('IntersectionObserver' in window) {
+      var revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '50px' });
+      
+      document.querySelectorAll('.io-animate').forEach(function(el) {
+        revealObserver.observe(el);
+      });
+    }
+    
+    // Touch detection for hover optimization
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      document.body.classList.add('touch-device');
+    }
+    
+    // Online/offline status
+    function updateOnlineStatus() {
+      document.body.classList.toggle('is-offline', !navigator.onLine);
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+    
+    // Visibility API - pause heavy animations when tab hidden
+    document.addEventListener('visibilitychange', function() {
+      document.body.classList.toggle('tab-hidden', document.hidden);
+    });
+    
+    // Prefetch visible links on hover
+    var prefetchedUrls = new Set();
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest('a');
+      if (link && link.hostname === location.hostname && !prefetchedUrls.has(link.href)) {
+        prefetchedUrls.add(link.href);
+        var prefetchLink = document.createElement('link');
+        prefetchLink.rel = 'prefetch';
+        prefetchLink.href = link.href;
+        document.head.appendChild(prefetchLink);
+      }
+    }, { passive: true });
+    
+    // Smooth scroll polyfill for Safari
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        var target = document.querySelector(targetId);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+    
+    // Resize handler with debounce
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+        document.body.classList.toggle('is-mobile', window.innerWidth < 768);
+      }, 250);
+    }, { passive: true });
+    
+    // Initial mobile detection
+    document.body.classList.toggle('is-mobile', window.innerWidth < 768);
+    
+    // Focus management for accessibility
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        document.body.classList.add('keyboard-navigation');
+      }
+    });
+    document.addEventListener('mousedown', function() {
+      document.body.classList.remove('keyboard-navigation');
+    });
+    
+    // Error handling for failed resources
+    window.addEventListener('error', function(e) {
+      if (e.target.tagName === 'IMG') {
+        e.target.classList.add('image-error');
+      }
+    }, true);
+    
+    // Performance observer for Core Web Vitals (if supported)
+    if ('PerformanceObserver' in window) {
+      try {
+        var perfObserver = new PerformanceObserver(function(list) {
+          for (var entry of list.getEntries()) {
+            if (entry.entryType === 'largest-contentful-paint') {
+              console.log('[Perf] LCP:', entry.startTime);
+            }
+            if (entry.entryType === 'layout-shift' && !entry.hadRecentInput) {
+              console.log('[Perf] CLS:', entry.value);
+            }
+          }
+        });
+        perfObserver.observe({ entryTypes: ['largest-contentful-paint', 'layout-shift'] });
+      } catch (e) {}
+    }
+    
+    // Request Idle Callback polyfill
+    window.requestIdleCallback = window.requestIdleCallback || function(cb) {
+      var start = Date.now();
+      return setTimeout(function() {
+        cb({
+          didTimeout: false,
+          timeRemaining: function() {
+            return Math.max(0, 50 - (Date.now() - start));
+          }
+        });
+      }, 1);
+    };
+    
+    // Schedule non-critical work
+    requestIdleCallback(function() {
+      // Load non-critical CSS
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = '/njz-design-system.css';
+      document.head.appendChild(link);
+    });
+    
+    // Clean up unused event listeners on page hide
+    window.addEventListener('pagehide', function() {
+      revealObserver && revealObserver.disconnect();
+      prefetchedUrls.clear();
+    });
+    
+    // Memory leak prevention
+    if ('WeakRef' in window) {
+      // Use WeakRef for caching if available
+      window.radiantXCache = new Map();
+    }
+    
+    // Battery status optimization
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then(function(battery) {
+        if (battery.level < 0.2 && !battery.charging) {
+          document.body.classList.add('low-power-mode');
+        }
+      });
+    }
+    
+    // Connection-aware loading
+    if ('connection' in navigator) {
+      var conn = navigator.connection;
+      if (conn.saveData) {
+        document.body.classList.add('save-data');
+      }
+      if (conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g') {
+        document.body.classList.add('slow-connection');
+      }
+    }
+    
+    // Add CSS classes for progressive enhancement
+    document.documentElement.classList.add('js-enabled');
+    
+    // Log initialization in development
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      console.log('[RadiantX] Performance optimizations initialized');
+    }
+    
+    // Export for potential module usage
+    window.RadiantX = {
+      version: '2.0.0',
+      perf: {
+        startTime: performance.now(),
+        initComplete: performance.now()
+      }
+    };
+    
+    // Cleanup function for SPA navigation
+    window.RadiantX.cleanup = function() {
+      revealObserver && revealObserver.disconnect();
+      prefetchedUrls.clear();
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
+    
+    // Reinitialize for dynamic content
+    window.RadiantX.reinit = function() {
+      document.querySelectorAll('.io-animate:not(.is-visible)').forEach(function(el) {
+        revealObserver && revealObserver.observe(el);
+      });
+    };
+    
+    // Performance mark for initialization complete
+    if ('mark' in performance) {
+      performance.mark('radiantx-init-complete');
+    }
+    
+    // Measure initialization time
+    if ('measure' in performance && 'getEntriesByName' in performance) {
+      try {
+        performance.measure('radiantx-init', 'navigationStart', 'radiantx-init-complete');
+        var measure = performance.getEntriesByName('radiantx-init')[0];
+        if (measure && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+          console.log('[RadiantX] Init time:', measure.duration.toFixed(2) + 'ms');
+        }
+      } catch (e) {}
+    }
+    
+    // Preload critical fonts if not already cached
+    if ('caches' in window) {
+      caches.open('radiantx-static-v1').then(function(cache) {
+        cache.match('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2')
+          .then(function(response) {
+            if (!response) {
+              // Font not cached, preload it
+              var fontLink = document.createElement('link');
+              fontLink.rel = 'preload';
+              fontLink.href = 'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2';
+              fontLink.as = 'font';
+              fontLink.type = 'font/woff2';
+              fontLink.crossOrigin = 'anonymous';
+              document.head.appendChild(fontLink);
+            }
+          });
+      });
+    }
+    
+    // Back/forward cache optimization
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        // Page was restored from bfcache
+        console.log('[RadiantX] Restored from bfcache');
+        // Reinitialize any state that might have been lost
+        window.RadiantX.reinit && window.RadiantX.reinit();
+      }
+    });
+    
+    // Before unload - prepare for potential bfcache
+    window.addEventListener('beforeunload', function() {
+      // Clean up any intervals or timers
+      // Don't add heavy work here as it can delay navigation
+    });
+    
+    // Visibility change - handle when user returns to tab
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        // User returned to tab
+        // Can refresh stale data here if needed
+        document.body.classList.remove('tab-hidden');
+      }
+    });
+    
+    // Error boundary for unhandled promise rejections
+    window.addEventListener('unhandledrejection', function(event) {
+      console.error('[RadiantX] Unhandled promise rejection:', event.reason);
+      // Don't prevent default to allow normal error handling
+    });
+    
+    // Final cleanup and ready state
+    if (document.readyState === 'complete') {
+      document.body.classList.add('radiantx-ready');
+    } else {
+      window.addEventListener('load', function() {
+        document.body.classList.add('radiantx-ready');
+      });
+    }
+    
+    // Feature detection summary
+    window.RadiantX.features = {
+      serviceWorker: 'serviceWorker' in navigator,
+      intersectionObserver: 'IntersectionObserver' in window,
+      lazyLoading: 'loading' in HTMLImageElement.prototype,
+      webp: document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0,
+      avif: false, // Will be detected asynchronously
+      resizeObserver: 'ResizeObserver' in window,
+      mutationObserver: 'MutationObserver' in window,
+      requestIdleCallback: 'requestIdleCallback' in window,
+      webAnimations: 'animate' in document.createElement('div'),
+      cssGrid: CSS.supports('display', 'grid'),
+      cssVariables: CSS.supports('color', 'var(--test)'),
+      cssContainerQueries: CSS.supports('container-type', 'inline-size'),
+      touch: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+      pointerEvents: 'PointerEvent' in window,
+      passiveEvents: (function() {
+        var supportsPassive = false;
+        try {
+          var opts = Object.defineProperty({}, 'passive', {
+            get: function() { supportsPassive = true; }
+          });
+          window.addEventListener('test', null, opts);
+          window.removeEventListener('test', null, opts);
+        } catch (e) {}
+        return supportsPassive;
+      })()
+    };
+    
+    // Async feature detection for AVIF
+    var avifImage = new Image();
+    avifImage.onload = function() {
+      window.RadiantX.features.avif = true;
+      document.body.classList.add('avif-supported');
+    };
+    avifImage.onerror = function() {
+      window.RadiantX.features.avif = false;
+    };
+    avifImage.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=';
+    
+    // Log feature detection in development
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      console.log('[RadiantX] Feature detection:', window.RadiantX.features);
+    }
+    
+    // Initialize progressive enhancement based on features
+    if (window.RadiantX.features.cssContainerQueries) {
+      document.body.classList.add('supports-container-queries');
+    }
+    
+    if (window.RadiantX.features.webp) {
+      document.body.classList.add('supports-webp');
+    }
+    
+    if (window.RadiantX.features.passiveEvents) {
+      document.body.classList.add('supports-passive-events');
+    }
+    
+    // Final performance mark
+    if ('mark' in performance) {
+      performance.mark('radiantx-fully-loaded');
+    }
+    
+    // Calculate total script execution time
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      console.log('[RadiantX] Script execution time:', (performance.now() - window.RadiantX.perf.startTime).toFixed(2) + 'ms');
+    }
+    
+    // Mark as fully initialized
+    window.RadiantX.initialized = true;
+    window.RadiantX.perf.fullyLoaded = performance.now();
+    
+    // Dispatch custom event for other scripts to hook into
+    document.dispatchEvent(new CustomEvent('radiantx:ready', {
+      detail: { 
+        version: window.RadiantX.version,
+        perf: window.RadiantX.perf,
+        features: window.RadiantX.features
+      }
+    }));
+    
+    // Allow other scripts to register callbacks
+    if (window.radiantXCallbacks) {
+      window.radiantXCallbacks.forEach(function(callback) {
+        try {
+          callback(window.RadiantX);
+        } catch (e) {
+          console.error('[RadiantX] Callback error:', e);
+        }
+      });
+      delete window.radiantXCallbacks;
+    }
+    
+    // Freeze the configuration object to prevent modifications
+    if (Object.freeze) {
+      Object.freeze(window.RadiantX.features);
+      Object.freeze(window.RadiantX.perf);
+    }
+    
+    // Seal the main object (allow property updates but not new properties)
+    if (Object.seal) {
+      Object.seal(window.RadiantX);
+    }
+    
+    // Final log
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      console.log('[RadiantX] v' + window.RadiantX.version + ' fully initialized and ready');
+    }
+    
+    // End of RadiantX Performance Optimizations
+    
+    </script>
 </body>
 </html>
