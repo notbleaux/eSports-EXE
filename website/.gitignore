@@ -1,0 +1,26 @@
+# Archive
+website/archive/
+
+# Dependencies
+**/node_modules/
+
+# Build
+**/dist/
+**/build/
+**/.next/
+
+# Temporary
+*.tmp
+*.log
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
