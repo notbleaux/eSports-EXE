@@ -1,243 +1,146 @@
-# NJZ Platform v2
+# NJZ ¿!? Platform v2.0
 
-The next-generation digital ecosystem with a unified design system, abyssal aesthetics, and immersive user experiences.
+**4eva and Nvr Die**
 
-## 🎨 Design System
+A unified platform integrating 4 specialized hubs with SATOR/ROTAS twin-file infrastructure.
 
-### Abyssal Color Palette
-- **Void Black**: `#0a0a0f` - Deep space background
-- **Signal Cyan**: `#00f0ff` - Primary accent, interactive elements
-- **Alert Amber**: `#ff9f1c` - Warnings, important notifications
-- **Aged Gold**: `#c9b037` - Premium features, achievements
+## 🏛️ Architecture
 
-### Typography
-- **Display**: Space Grotesk - Headlines, titles
-- **Body**: Inter - General text, paragraphs
-- **Mono**: JetBrains Mono - Code, data
-- **Decorative**: Cinzel - Special headings
+The NJZ Platform consists of 4 interconnected hubs:
 
-### Visual Effects
-- Glassmorphism with frosted glass aesthetics
-- Fluid transitions and physics-based animations
-- WebGL-powered particle systems
-- Gradient shaders with organic motion
+| Hub | Name | Purpose | Color |
+|-----|------|---------|-------|
+| 1 | **SATOR** | The Observatory | Alert Amber `#ff9f1c` |
+| 2 | **ROTAS** | The Harmonic Layer | Signal Cyan `#00f0ff` |
+| 3 | **Information** | The Directory | Porcelain `#e8e6e3` |
+| 4 | **Games** | The Nexus | Deep Cobalt `#1e3a5f` |
 
-## 📁 Project Structure
+## 🎨 Design Tokens
 
-```
-/website-v2/
-├── /shared/                    # Shared resources
-│   ├── /styles/               # CSS design system
-│   │   ├── design-tokens.css  # Color, spacing, typography tokens
-│   │   ├── typography.css     # Font styles
-│   │   ├── animations.css     # Keyframes & animation utilities
-│   │   ├── glassmorphism.css  # Glass effect utilities
-│   │   └── global.css         # Global styles
-│   ├── /components/           # Reusable React components
-│   │   ├── Navigation.jsx     # Glassmorphic navigation
-│   │   ├── Footer.jsx         # Multi-section footer
-│   │   ├── HubCard.jsx        # Hub navigation cards
-│   │   ├── Button.jsx         # Multi-variant buttons
-│   │   └── Input.jsx          # Form inputs with validation
-│   ├── /hooks/                # Custom React hooks
-│   │   ├── useScrollAnimation.js    # GSAP ScrollTrigger
-│   │   ├── useFluidTransition.js    # Framer Motion transitions
-│   │   └── useAbyssalGradient.js    # Animated gradients
-│   ├── /js/                   # JavaScript utilities
-│   │   ├── animations.js      # GSAP animation helpers
-│   │   ├── fluid-effects.js   # Liquid/smooth effects
-│   │   └── transitions.js     # Page & state transitions
-│   ├── /vfx/                  # Visual effects components
-│   │   ├── FluidSmokeEffects.jsx     # WebGL smoke simulation
-│   │   ├── AbyssalGradientShader.jsx # Gradient shader
-│   │   └── ParticleSystems.jsx       # Particle effects
-│   └── index.js               # Central exports
-├── /hub-1-sator/              # Sator Hub (Mind/Thought)
-├── /hub-2-rotas/              # Rotas Hub (Journey/Path)
-├── /hub-3-info/               # Info Hub (Knowledge)
-└── /hub-4-games/              # Games Hub (Play)
+```css
+/* Core Palette */
+--void-black: #0a0a0f;
+--signal-cyan: #00f0ff;
+--alert-amber: #ff9f1c;
+--aged-gold: #c9b037;
+--porcelain: #e8e6e3;
+--cobalt: #1e3a5f;
 ```
 
-## 🚀 Dependencies
+## 📦 Project Structure
+
+```
+website-v2/
+├── src/
+│   ├── App.jsx                 # Main app with routing
+│   ├── main.jsx               # Entry point with error boundary
+│   ├── index.css              # Global styles with design tokens
+│   ├── hub-1-sator/
+│   │   └── SATORHub.jsx       # The Observatory
+│   ├── hub-2-rotas/
+│   │   └── ROTASHub.jsx       # The Harmonic Layer
+│   ├── hub-3-info/
+│   │   └── InformationHub.jsx # The Directory
+│   ├── hub-4-games/
+│   │   └── GamesHub.jsx       # The Nexus
+│   └── shared/
+│       ├── components/
+│       │   ├── Navigation.jsx          # Hub switcher navigation
+│       │   ├── Footer.jsx              # Platform footer
+│       │   ├── CentralGrid.jsx         # Landing page
+│       │   ├── TwinFileVisualizer.jsx  # RAWS/BASE integrity
+│       │   ├── NotificationContainer.jsx
+│       │   ├── HubWrapper.jsx          # Consistent hub layout
+│       │   └── index.js                # Component exports
+│       └── store/
+│           ├── njzStore.js    # Zustand state management
+│           └── index.js       # Store exports
+├── index.html
+├── package.json
+└── tailwind.config.js
+```
+
+## 🚀 Getting Started
 
 ```bash
-# Animation
-npm install gsap @gsap/react framer-motion
-
-# 3D/WebGL
-npm install three @react-three/fiber @react-three/drei
-
-# State Management
-npm install zustand
-
-# Types
-npm install @types/three
-```
-
-## 🌿 Git Workflow
-
-### Branches
-- `main` - Production-ready code
-- `develop` - Integration branch for features
-- `hub-1-sator` - Sator Hub development
-- `hub-2-rotas` - Rotas Hub development
-- `hub-3-info` - Info Hub development
-- `hub-4-games` - Games Hub development
-
-### Workflow
-```bash
-# Start feature development
-git checkout hub-1-sator
-git pull origin main
-
-# Make changes, commit
-git add .
-git commit -m "feat: add meditation timer"
-
-# Merge to develop when ready
-git checkout develop
-git merge hub-1-sator
-
-# Merge to main for release
-git checkout main
-git merge develop
-```
-
-## 🧩 Component Usage
-
-### Navigation
-```jsx
-import { Navigation } from './shared';
-
-const links = [
-  { label: 'Home', href: '/' },
-  { label: 'Hubs', href: '/hubs' },
-  { label: 'About', href: '/about' },
-];
-
-<Navigation 
-  links={links}
-  logo="NJZ"
-  glassEffect={true}
-/>
-```
-
-### HubCard
-```jsx
-import { HubCard } from './shared';
-
-<HubCard
-  title="Sator"
-  description="Explore the realm of mind and thought"
-  icon="🧠"
-  color="cyan"
-  href="/hub-1-sator"
-/>
-```
-
-### Button
-```jsx
-import { Button } from './shared';
-
-<Button variant="primary" size="md" icon="→">
-  Enter Hub
-</Button>
-```
-
-### VFX Background
-```jsx
-import { FluidSmokeEffects, ParticleSystems } from './shared';
-
-// Fluid smoke background
-<FluidSmokeEffects intensity={0.5} />
-
-// Particle overlay
-<ParticleSystems type="floating" count={100} color="#00f0ff" />
-```
-
-## 🎭 Animation Utilities
-
-### Scroll Animations
-```javascript
-import { useScrollAnimation, useParallax } from './shared';
-
-// Fade in on scroll
-const { ref } = useScrollAnimation({
-  from: { opacity: 0, y: 50 },
-  to: { opacity: 1, y: 0 },
-  start: 'top 80%',
-});
-
-// Parallax effect
-const { ref: parallaxRef } = useParallax(0.3);
-```
-
-### Fluid Transitions
-```javascript
-import { useFluidTransition, useStaggerChildren } from './shared';
-
-// Page transition
-const { variants } = useFluidTransition('abyssal');
-
-// Staggered list reveal
-const { containerVariants, itemVariants } = useStaggerChildren({
-  stagger: 0.1,
-});
-```
-
-## 📝 CSS Utilities
-
-### Glassmorphism
-```html
-<div class="njz-glass">Basic glass</div>
-<div class="njz-glass njz-glass-cyan">Cyan accent</div>
-<div class="njz-glass-card-hover">Hover effect</div>
-```
-
-### Typography
-```html
-<h1 class="njz-display njz-display-5xl">Title</h1>
-<p class="njz-body njz-body-lg">Body text</p>
-<code class="njz-mono">Code snippet</code>
-```
-
-### Animations
-```html
-<div class="njz-animate njz-animate-fade-in-up">Fade in</div>
-<div class="njz-animate-pulse">Pulsing</div>
-<div class="njz-hover-lift">Lift on hover</div>
-```
-
-## 🔧 Development
-
-### Install
-```bash
-cd website-v2
+# Install dependencies
 npm install
-```
 
-### Start Development
-```bash
+# Start development server
 npm run dev
-```
 
-### Build
-```bash
+# Build for production
 npm run build
 ```
 
-## 📄 License
+## 🧩 Key Features
 
-Copyright © 2024 NJZ Platform. All rights reserved.
+### 1. React Router Integration
+- Central grid landing page
+- Individual hub routes (`/sator`, `/rotas`, `/info`, `/games`)
+- Smooth page transitions with Framer Motion
+- 404 error handling
 
-## 🤝 Contributing
+### 2. Navigation Component
+- Fixed glassmorphism header
+- Desktop and mobile responsive
+- Hub switcher dropdown
+- Live status indicator
+- Animated navigation indicator
 
-1. Check out the appropriate hub branch
-2. Create feature branches from hub branches
-3. Submit PRs to the hub branch
-4. Hub leads merge to `develop`
-5. Release manager merges `develop` to `main`
+### 3. Twin-File Integrity Visualizer
+- Real-time RAWS/BASE sync status
+- SHA-256 verification display
+- Correlation score visualization
+- Compact and full-size modes
+
+### 4. Zustand State Management
+- Hub-specific state persistence
+- Twin-file integrity tracking
+- User preferences (reduced motion, etc.)
+- Notification system
+- Navigation history
+
+### 5. Framer Motion Page Transitions
+- Smooth enter/exit animations
+- Respects reduced motion preferences
+- Direction-aware transitions
+
+### 6. Consistent Hub Styling
+- HubWrapper component for unified layout
+- Glassmorphism panels
+- Design token integration
+- Responsive grid systems
+
+## 🔗 Hub Connections
+
+All hubs share:
+- Common Navigation component
+- Footer with twin-file status
+- Global notification system
+- Zustand state store
+- Design token CSS variables
+
+## 📱 Responsive Design
+
+- Mobile-first approach
+- Breakpoints: sm (640px), md (768px), lg (1024px), xl (1280px)
+- Mobile hamburger menu
+- Touch-friendly interactions
+
+## ⚡ Performance
+
+- 60fps animations
+- Lazy loading ready
+- Optimized re-renders with Zustand
+- Reduced motion support
+
+## 🔒 Error Handling
+
+- React Error Boundary
+- Graceful fallbacks
+- Console error logging
 
 ---
 
-*Designed in the abyss. Built for the future.*
+**NJZ Platform v2.0** — *Twin-file database system with SATOR/ROTAS infrastructure*

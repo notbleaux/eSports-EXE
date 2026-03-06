@@ -16,8 +16,8 @@ import {
   Settings,
   Radio
 } from 'lucide-react'
-import HubWrapper, { HubCard, HubStatCard } from '../../shared/components/HubWrapper'
-import { useNJZStore, useHubState } from '../../shared/store/njzStore'
+import HubWrapper, { HubCard, HubStatCard } from '../shared/components/HubWrapper'
+import { useNJZStore, useHubState } from '../shared/store/njzStore'
 
 // Game modes
 const GAME_MODES = [

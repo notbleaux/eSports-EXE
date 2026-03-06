@@ -1,7 +1,12 @@
+/**
+ * Enhanced Central Grid - Landing Page
+ * Features all 4 hubs with twin-file integrity visualization
+ */
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Database, BarChart3, Users, Gamepad2 } from 'lucide-react'
+import { Database, BarChart3, Users, Gamepad2, ArrowRight } from 'lucide-react'
+import TwinFileVisualizer from './TwinFileVisualizer'
 
 const hubs = [
   {
@@ -12,8 +17,10 @@ const hubs = [
     icon: Database,
     color: 'from-alert-amber to-orange-500',
     glow: 'group-hover:shadow-glow-amber',
+    borderHover: 'group-hover:border-alert-amber/50',
     path: '/sator',
-    stat: '2.4M Records'
+    stat: '2.4M Records',
+    features: ['Immutable RAWS', 'Cryptographic Verification', 'Orbital Navigation']
   },
   {
     id: 'rotas',
@@ -23,8 +30,10 @@ const hubs = [
     icon: BarChart3,
     color: 'from-signal-cyan to-blue-500',
     glow: 'group-hover:shadow-glow-cyan',
+    borderHover: 'group-hover:border-signal-cyan/50',
     path: '/rotas',
-    stat: '99.9% Accuracy'
+    stat: '99.9% Accuracy',
+    features: ['Probability Engines', 'Layer Blending', 'Predictive Models']
   },
   {
     id: 'info',
@@ -34,8 +43,10 @@ const hubs = [
     icon: Users,
     color: 'from-porcelain to-slate',
     glow: 'group-hover:shadow-[0_0_40px_rgba(232,230,227,0.2)]',
+    borderHover: 'group-hover:border-porcelain/30',
     path: '/info',
-    stat: '2,135 Teams'
+    stat: '2,135 Teams',
+    features: ['Radial Navigation', 'AI Suggestions', 'Conical Directory']
   },
   {
     id: 'games',
@@ -43,23 +54,36 @@ const hubs = [
     subtitle: 'The Nexus',
     description: 'Simulation platform with toroidal flow',
     icon: Gamepad2,
-    color: 'from-deep-cobalt to-signal-cyan',
+    color: 'from-cobalt to-signal-cyan',
     glow: 'group-hover:shadow-[0_0_40px_rgba(30,58,95,0.4)]',
+    borderHover: 'group-hover:border-cobalt/50',
     path: '/games',
-    stat: 'Live Platform'
+    stat: 'Live Platform',
+    features: ['Tactical Simulation', 'Resonant Matchmaking', 'Toroidal Flow']
   }
 ]
 
 function CentralGrid() {
   return (
     <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-      {/* Hero */}
+      {/* Hero Section */}
       <div className="max-w-7xl mx-auto text-center mb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
+          <motion.div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-mist mb-8"
+            animate={{ 
+              boxShadow: ['0 0 0 rgba(0, 240, 255, 0)', '0 0 20px rgba(0, 240, 255, 0.2)', '0 0 0 rgba(0, 240, 255, 0)']
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <span className="w-2 h-2 bg-signal-cyan rounded-full animate-pulse" />
+            <span className="text-sm font-mono text-slate">Platform v2.0 — All Hubs Online</span>
+          </motion.div>
+
           <h1 className="font-display text-hero font-bold mb-6">
             <span className="gradient-text">NJZ</span>
             <span className="text-white"> ¿!? Platform</span>
@@ -71,15 +95,19 @@ function CentralGrid() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 text-sm font-mono text-slate">
-            <span className="px-4 py-2 rounded-full bg-white/5 border border-mist">
-              RAWS <span className="text-signal-amber">↔</span> BASE
-            </span>
-            <span className="px-4 py-2 rounded-full bg-white/5 border border-mist">
-              SHA-256 Verified
-            </span>
-            <span className="px-4 py-2 rounded-full bg-white/5 border border-mist">
-              Real-time Sync
-            </span>
+            {[
+              { label: 'RAWS', value: '↔', color: 'text-alert-amber' },
+              { label: 'BASE', value: 'Sync', color: 'text-signal-cyan' },
+              { label: 'Integrity', value: '100%', color: 'text-green-400' },
+              { label: 'Latency', value: '<12ms', color: 'text-aged-gold' }
+            ].map((badge) => (
+              <span 
+                key={badge.label}
+                className="px-4 py-2 rounded-full bg-white/5 border border-mist"
+              >
+                {badge.label} <span className={badge.color}>{badge.value}</span>
+              </span>
+            ))}
           </div>
         </motion.div>
       </div>
@@ -94,12 +122,13 @@ function CentralGrid() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Link to={hub.path} className="block group">
+              <Link to={hub.path} className="block group h-full">
                 <div className={`
                   glass-panel rounded-2xl p-8 h-full
+                  border border-mist
                   transition-all duration-500
-                  hover:border-white/20
                   ${hub.glow}
+                  ${hub.borderHover}
                 `}>
                   <div className="flex items-start justify-between mb-6">
                     <div className={`
@@ -110,9 +139,16 @@ function CentralGrid() {
                       <hub.icon className="w-7 h-7 text-void-black" />
                     </div>
                     
-                    <span className="font-mono text-xs text-slate">
-                      {hub.stat}
-                    </span>
+                    <div className="text-right">
+                      <span className="font-mono text-xs text-slate block">
+                        {hub.stat}
+                      </span>
+                      <motion.div
+                        className="w-2 h-2 rounded-full bg-green-400 ml-auto mt-1"
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                    </div>
                   </div>
 
                   <h2 className="font-display text-2xl font-bold mb-2">
@@ -127,18 +163,21 @@ function CentralGrid() {
                     {hub.description}
                   </p>
 
+                  {/* Features */}
+                  <div className="space-y-2 mb-6">
+                    {hub.features.map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm text-slate">
+                        <div className="w-1 h-1 rounded-full bg-signal-cyan" />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <span className="group-hover:text-signal-cyan transition-colors">
                       Enter Hub
                     </span>
-                    <svg 
-                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </Link>
@@ -149,36 +188,34 @@ function CentralGrid() {
 
       {/* Twin File Visualization */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
         className="max-w-4xl mx-auto mt-16"
       >
-        <div className="glass-panel rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-semibold">Twin-File Integrity</h3>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <span className="text-xs text-slate font-mono">SYNCED</span>
-            </div>
-          </div>
+        <TwinFileVisualizer />
+      </motion.div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-alert-amber/10 border border-alert-amber/30">
-              <div className="text-xs text-alert-amber font-mono mb-1">RAWS</div>
-              <div className="text-sm font-mono truncate">
-                a3f7...9d2e
+      {/* Platform Stats */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        className="max-w-6xl mx-auto mt-16"
+      >
+        <div className="glass-panel rounded-2xl p-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { label: 'Total Records', value: '2.4M+' },
+              { label: 'Active Users', value: '12.8K' },
+              { label: 'Uptime', value: '99.99%' },
+              { label: 'Data Sources', value: '47' },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-3xl font-display font-bold text-signal-cyan mb-1">{stat.value}</div>
+                <div className="text-sm text-slate">{stat.label}</div>
               </div>
-              <div className="text-xs text-slate mt-1">Immutable snapshots</div>
-            </div>
-
-            <div className="p-4 rounded-lg bg-signal-cyan/10 border border-signal-cyan/30">
-              <div className="text-xs text-signal-cyan font-mono mb-1">BASE</div>
-              <div className="text-sm font-mono truncate">
-                b8e2...1c4a
-              </div>
-              <div className="text-xs text-slate mt-1">Analytics layers</div>
-            </div>
+            ))}
           </div>
         </div>
       </motion.div>

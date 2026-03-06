@@ -48,6 +48,19 @@ A complex, interconnected eSports ecosystem starting with CS/Valorant. Built on 
 - Game art/assets (you need artists/asset packs)
 - Permanent infrastructure hosting
 - Legal compliance auditing
+
+---
+
+## GitHub Access Tokens
+
+### Main Repository (notbleaux/eSports-EXE)
+- **Key ID:** [REDACTED]
+- **Type:** GitHub Personal Access Token
+- **Status:** Stored as Actions Secret
+- **Managed by:** Kimi (KIKI system)
+- **Purpose:** Git push/pull operations for eSports-EXE repository
+
+**Security Note:** Token exposure in logs or files should be avoided. Rotate if compromised.
 - Production security certification
 
 ### Proposed Skills to Create
@@ -60,3 +73,39 @@ A complex, interconnected eSports ecosystem starting with CS/Valorant. Built on 
 ---
 
 *Last updated: 2026-03-04*
+
+---
+
+## Repository Access
+
+### GitHub Clone URLs
+| Repository | Classification | HTTPS URL |
+|------------|---------------|-----------|
+| notbleaux/eSports-EXE | MAIN | https://github.com/notbleaux/eSports-EXE.git |
+| hvrryh-web/satorXrotas | LEGACY | https://github.com/hvrryh-web/satorXrotas.git |
+
+**Authentication:** Token stored under GitHub Access Tokens section
+**Local Paths:** main-repo/ | legacy-repo/
+
+---
+
+## Documentation & Guides
+
+### User Guides
+| Guide | Purpose | Location |
+|-------|---------|----------|
+| GitHub Desktop Guide | Beginner git workflow | `GITHUB_DESKTOP_USER_GUIDE.md` |
+| Repository Transfer Guide | LEGACY → MAIN transfer | `REPOSITORY_TRANSFER_GUIDE.md` |
+
+### Operational Frameworks
+| Framework | Purpose | Location |
+|-----------|---------|----------|
+| Artifact Identification | What to save to memory | `ARTIFACT_IDENTIFICATION_FRAMEWORK.md` |
+| Artifact Compression | How to compress for memory | `ARTIFACT_COMPRESSION_GUIDE.md` |
+
+### Project Memory
+| Document | Purpose | Location |
+|----------|---------|----------|
+| Project Memory | Master reference | `PROJECT_MEMORY.md` |
+| Investigation Report | Phase 1A findings | `INVESTIGATION_REPORT_Phase1A.md` |
+| Project Roadmap | 5-phase plan | `PROJECT_ROADMAP.md` |

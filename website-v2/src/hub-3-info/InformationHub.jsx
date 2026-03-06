@@ -15,8 +15,8 @@ import {
   Trophy,
   Gamepad2
 } from 'lucide-react'
-import HubWrapper, { HubCard, HubStatCard } from '../../shared/components/HubWrapper'
-import { useNJZStore, useHubState } from '../../shared/store/njzStore'
+import HubWrapper, { HubCard, HubStatCard } from '../shared/components/HubWrapper'
+import { useNJZStore, useHubState } from '../shared/store/njzStore'
 
 // Categories for radial menu
 const CATEGORIES = [
@@ -204,8 +204,7 @@ function InformationHub() {
                   <div className="flex items-center gap-4">
                     <span className="text-xs px-2 py-1 rounded bg-void-deep">{team.region}</span>
                     <span className={`text-xs px-2 py-1 rounded font-medium
-                      ${team.tier === 'S' ? 'bg-aged-gold/20 text-aged-gold' : 'bg-signal-cyan/20 text-signal-cyan'}`}
-003e
+                      ${team.tier === 'S' ? 'bg-aged-gold/20 text-aged-gold' : 'bg-signal-cyan/20 text-signal-cyan'}`}>
                       Tier {team.tier}
                     </span>
                   </div>
