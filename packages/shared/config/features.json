@@ -1,0 +1,34 @@
+{
+  "features": {
+    "cs2_simulation": {
+      "enabled": false,
+      "description": "CS2 game simulation support",
+      "rollout_percentage": 0,
+      "allowed_users": []
+    },
+    "new_rating_algorithm": {
+      "enabled": true,
+      "description": "Updated SimRating calculation v2",
+      "rollout_percentage": 10,
+      "allowed_users": ["test_user_1", "test_user_2"]
+    },
+    "beta_dashboard": {
+      "enabled": true,
+      "description": "New dashboard UI with improved navigation",
+      "rollout_percentage": 5,
+      "allowed_users": []
+    },
+    "advanced_analytics": {
+      "enabled": false,
+      "description": "Advanced analytics with machine learning predictions",
+      "rollout_percentage": 0,
+      "allowed_users": []
+    },
+    "websocket_realtime": {
+      "enabled": true,
+      "description": "Real-time updates via WebSocket",
+      "rollout_percentage": 100,
+      "allowed_users": []
+    }
+  }
+}
