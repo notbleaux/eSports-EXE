@@ -1,0 +1,504 @@
+/**
+ * NJZ Platform v2 - Animation System
+ * Fluid motion patterns and keyframe definitions
+ * 
+ * @version 2.0.0
+ * @requires design-tokens.css
+ */
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+/* Fade Animations */
+@keyframes njz-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes njz-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes njz-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes njz-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes njz-fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes njz-fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale Animations */
+@keyframes njz-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes njz-scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes njz-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Slide Animations */
+@keyframes njz-slide-in-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes njz-slide-in-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes njz-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes njz-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Pulse Animations */
+@keyframes njz-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes njz-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--signal-cyan-glow);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--signal-cyan), 0 0 60px var(--signal-cyan-subtle);
+  }
+}
+
+@keyframes njz-breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* Rotate Animations */
+@keyframes njz-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes njz-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shimmer Effect */
+@keyframes njz-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Shake Animation */
+@keyframes njz-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Abyssal Float - Subtle floating motion */
+@keyframes njz-abyssal-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(-1deg);
+  }
+}
+
+/* Signal Pulse - Cyan pulse for active states */
+@keyframes njz-signal-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--signal-cyan-subtle);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 240, 255, 0);
+  }
+}
+
+/* Gradient Shift */
+@keyframes njz-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ========================================
+   ANIMATION UTILITY CLASSES
+   ======================================== */
+
+/* Base Animation */
+.njz-animate {
+  animation-duration: var(--duration-normal);
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+}
+
+/* Fade Animations */
+.njz-animate-fade-in {
+  animation-name: njz-fade-in;
+}
+
+.njz-animate-fade-out {
+  animation-name: njz-fade-out;
+}
+
+.njz-animate-fade-in-up {
+  animation-name: njz-fade-in-up;
+}
+
+.njz-animate-fade-in-down {
+  animation-name: njz-fade-in-down;
+}
+
+.njz-animate-fade-in-left {
+  animation-name: njz-fade-in-left;
+}
+
+.njz-animate-fade-in-right {
+  animation-name: njz-fade-in-right;
+}
+
+/* Scale Animations */
+.njz-animate-scale-in {
+  animation-name: njz-scale-in;
+}
+
+.njz-animate-scale-out {
+  animation-name: njz-scale-out;
+}
+
+.njz-animate-pop-in {
+  animation-name: njz-pop-in;
+  animation-timing-function: var(--ease-spring);
+}
+
+/* Slide Animations */
+.njz-animate-slide-in-bottom {
+  animation-name: njz-slide-in-bottom;
+}
+
+.njz-animate-slide-in-top {
+  animation-name: njz-slide-in-top;
+}
+
+.njz-animate-slide-in-left {
+  animation-name: njz-slide-in-left;
+}
+
+.njz-animate-slide-in-right {
+  animation-name: njz-slide-in-right;
+}
+
+/* Continuous Animations */
+.njz-animate-pulse {
+  animation-name: njz-pulse;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.njz-animate-pulse-glow {
+  animation-name: njz-pulse-glow;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.njz-animate-breathe {
+  animation-name: njz-breathe;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.njz-animate-spin {
+  animation-name: njz-spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.njz-animate-spin-slow {
+  animation-name: njz-spin-slow;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.njz-animate-abyssal-float {
+  animation-name: njz-abyssal-float;
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.njz-animate-signal-pulse {
+  animation-name: njz-signal-pulse;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.njz-animate-gradient-shift {
+  animation-name: njz-gradient-shift;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  background-size: 200% 200%;
+}
+
+/* Shimmer Loading Effect */
+.njz-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--void-mid) 25%,
+    var(--void-light) 50%,
+    var(--void-mid) 75%
+  );
+  background-size: 200% 100%;
+  animation: njz-shimmer 1.5s infinite;
+}
+
+/* Shake Error Effect */
+.njz-animate-shake {
+  animation-name: njz-shake;
+  animation-duration: 0.5s;
+}
+
+/* ========================================
+   ANIMATION DELAYS
+   ======================================== */
+
+.njz-delay-100 { animation-delay: 100ms; }
+.njz-delay-200 { animation-delay: 200ms; }
+.njz-delay-300 { animation-delay: 300ms; }
+.njz-delay-400 { animation-delay: 400ms; }
+.njz-delay-500 { animation-delay: 500ms; }
+.njz-delay-600 { animation-delay: 600ms; }
+.njz-delay-700 { animation-delay: 700ms; }
+.njz-delay-800 { animation-delay: 800ms; }
+
+/* Stagger Children Helper */
+.njz-stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.njz-stagger-children > *:nth-child(2) { animation-delay: 100ms; }
+.njz-stagger-children > *:nth-child(3) { animation-delay: 200ms; }
+.njz-stagger-children > *:nth-child(4) { animation-delay: 300ms; }
+.njz-stagger-children > *:nth-child(5) { animation-delay: 400ms; }
+.njz-stagger-children > *:nth-child(6) { animation-delay: 500ms; }
+.njz-stagger-children > *:nth-child(7) { animation-delay: 600ms; }
+.njz-stagger-children > *:nth-child(8) { animation-delay: 700ms; }
+
+/* ========================================
+   TRANSITION UTILITIES
+   ======================================== */
+
+.njz-transition {
+  transition: all var(--transition-normal);
+}
+
+.njz-transition-fast {
+  transition: all var(--transition-fast);
+}
+
+.njz-transition-slow {
+  transition: all var(--transition-slow);
+}
+
+.njz-transition-spring {
+  transition: all var(--transition-spring);
+}
+
+.njz-transition-colors {
+  transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.njz-transition-transform {
+  transition: transform var(--transition-spring);
+}
+
+.njz-transition-opacity {
+  transition: opacity var(--transition-normal);
+}
+
+/* ========================================
+   HOVER TRANSFORM UTILITIES
+   ======================================== */
+
+.njz-hover-lift {
+  transition: transform var(--transition-spring);
+}
+
+.njz-hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.njz-hover-scale {
+  transition: transform var(--transition-spring);
+}
+
+.njz-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.njz-hover-glow:hover {
+  box-shadow: var(--glow-cyan);
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .njz-animate,
+  .njz-animate-fade-in,
+  .njz-animate-fade-out,
+  .njz-animate-fade-in-up,
+  .njz-animate-fade-in-down,
+  .njz-animate-fade-in-left,
+  .njz-animate-fade-in-right,
+  .njz-animate-scale-in,
+  .njz-animate-scale-out,
+  .njz-animate-pop-in,
+  .njz-animate-slide-in-bottom,
+  .njz-animate-slide-in-top,
+  .njz-animate-slide-in-left,
+  .njz-animate-slide-in-right {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .njz-animate-pulse,
+  .njz-animate-pulse-glow,
+  .njz-animate-breathe,
+  .njz-animate-spin,
+  .njz-animate-spin-slow,
+  .njz-animate-abyssal-float,
+  .njz-animate-signal-pulse,
+  .njz-animate-gradient-shift,
+  .njz-shimmer {
+    animation: none;
+  }
+  
+  .njz-hover-lift:hover,
+  .njz-hover-scale:hover {
+    transform: none;
+  }
+}

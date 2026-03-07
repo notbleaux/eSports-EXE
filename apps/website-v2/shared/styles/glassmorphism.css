@@ -1,0 +1,341 @@
+/**
+ * NJZ Platform v2 - Glassmorphism System
+ * Frosted glass effects and backdrop filters
+ * 
+ * @version 2.0.0
+ * @requires design-tokens.css
+ */
+
+/* ========================================
+   BASE GLASSMORPHISM
+   ======================================== */
+
+.njz-glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.njz-glass-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.njz-glass-heavy {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border);
+}
+
+/* ========================================
+   GLASS VARIANTS
+   ======================================== */
+
+/* Glass with Cyan Accent */
+.njz-glass-cyan {
+  background: rgba(0, 240, 255, 0.05);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 30px rgba(0, 240, 255, 0.1);
+}
+
+/* Glass with Amber Accent */
+.njz-glass-amber {
+  background: rgba(255, 159, 28, 0.05);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255, 159, 28, 0.15);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 30px rgba(255, 159, 28, 0.1);
+}
+
+/* Glass with Gold Accent */
+.njz-glass-gold {
+  background: rgba(201, 176, 55, 0.05);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(201, 176, 55, 0.15);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 30px rgba(201, 176, 55, 0.1);
+}
+
+/* ========================================
+   GLASS SHAPES
+   ======================================== */
+
+.njz-glass-rounded {
+  border-radius: var(--radius-lg);
+}
+
+.njz-glass-pill {
+  border-radius: var(--radius-full);
+}
+
+.njz-glass-card {
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+
+.njz-glass-panel {
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+}
+
+/* ========================================
+   GLASS INTERACTION STATES
+   ======================================== */
+
+.njz-glass-interactive {
+  cursor: pointer;
+  transition: 
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-spring);
+}
+
+.njz-glass-interactive:hover {
+  background: rgba(26, 26, 36, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.njz-glass-interactive:active {
+  transform: translateY(0);
+  transition-duration: var(--duration-fast);
+}
+
+.njz-glass-interactive:focus-visible {
+  outline: none;
+  border-color: var(--signal-cyan);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 3px var(--signal-cyan-subtle);
+}
+
+/* Interactive Cyan Variant */
+.njz-glass-interactive-cyan:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(0, 240, 255, 0.2);
+}
+
+/* ========================================
+   GLASS OVERLAYS
+   ======================================== */
+
+.njz-glass-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  z-index: var(--z-modal-backdrop);
+}
+
+.njz-glass-overlay-light {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.4);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  z-index: var(--z-modal-backdrop);
+}
+
+/* ========================================
+   GLASS NAVIGATION
+   ======================================== */
+
+.njz-glass-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 15, 0.9) 0%,
+    rgba(10, 10, 15, 0.7) 50%,
+    rgba(10, 10, 15, 0.4) 100%
+  );
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: var(--z-sticky);
+}
+
+.njz-glass-nav-scrolled {
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ========================================
+   GLASS CARDS
+   ======================================== */
+
+.njz-glass-card-hover {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: 
+    transform var(--transition-spring),
+    box-shadow var(--transition-normal);
+}
+
+.njz-glass-card-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.njz-glass-card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.njz-glass-card-hover:hover::before {
+  opacity: 1;
+}
+
+/* ========================================
+   GLASS INPUTS
+   ======================================== */
+
+.njz-glass-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  transition: 
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.njz-glass-input::placeholder {
+  color: var(--text-muted);
+}
+
+.njz-glass-input:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.njz-glass-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--signal-cyan);
+  box-shadow: 0 0 0 3px var(--signal-cyan-subtle);
+}
+
+.njz-glass-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   GLASS MODAL
+   ======================================== */
+
+.njz-glass-modal {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   EDGE HIGHLIGHTS
+   ======================================== */
+
+.njz-glass-edge-highlight {
+  position: relative;
+}
+
+.njz-glass-edge-highlight::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+}
+
+/* Top edge cyan glow */
+.njz-glass-edge-cyan::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--signal-cyan-dim) 50%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px var(--signal-cyan-glow);
+}
+
+/* ========================================
+   SAFARI/FALLBACK SUPPORT
+   ======================================== */
+
+@supports not (backdrop-filter: blur(20px)) {
+  .njz-glass,
+  .njz-glass-light,
+  .njz-glass-heavy,
+  .njz-glass-cyan,
+  .njz-glass-amber,
+  .njz-glass-gold,
+  .njz-glass-nav,
+  .njz-glass-card-hover,
+  .njz-glass-modal {
+    background: rgba(26, 26, 36, 0.95);
+  }
+  
+  .njz-glass-overlay,
+  .njz-glass-overlay-light {
+    background: rgba(10, 10, 15, 0.95);
+  }
+}
