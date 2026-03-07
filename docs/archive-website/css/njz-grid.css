@@ -1,0 +1,756 @@
+/**
+ * NJZ Quarter Grid Styles
+ * SATOR eSports - Phase 1A Implementation
+ * 
+ * Four-quadrant landing page with center NJZ button
+ * Supports responsive design (mobile-first)
+ */
+
+/* ========================================
+   CSS CUSTOM PROPERTIES
+   ======================================== */
+:root {
+  /* Core Colors */
+  --njz-bg-dark: #0a0a0f;
+  --njz-bg-card: #14141f;
+  --njz-border: #2a2a3a;
+  --njz-text-white: #ffffff;
+  --njz-text-gray: #8a8a9a;
+  
+  /* HUB Theme Colors */
+  --njz-blue: #1E3A5F;
+  --njz-blue-glow: rgba(30, 58, 95, 0.5);
+  --njz-purple: #6B46C1;
+  --njz-purple-glow: rgba(107, 70, 193, 0.5);
+  --njz-red: #FF4655;
+  --njz-red-glow: rgba(255, 70, 85, 0.5);
+  --njz-green: #00FF88;
+  --njz-green-glow: rgba(0, 255, 136, 0.3);
+  
+  /* NJZ Center Colors */
+  --njz-gold: #FFD700;
+  --njz-cyan: #00d4ff;
+  --njz-center-glow: rgba(255, 215, 0, 0.6);
+  --njz-center-glow-cyan: rgba(0, 212, 255, 0.4);
+  
+  /* Animation Timing */
+  --njz-transition-fast: 0.15s ease;
+  --njz-transition-normal: 0.3s ease;
+  --njz-transition-slow: 0.5s ease;
+  
+  /* Spacing */
+  --njz-header-height: 64px;
+  --njz-footer-height: 60px;
+  --njz-grid-gap: 2px;
+  --njz-quadrant-padding: 2rem;
+}
+
+/* ========================================
+   RESET & BASE STYLES
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--njz-bg-dark);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--njz-text-white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+.njz-container {
+  position: relative;
+  min-height: 100vh;
+  padding-top: var(--njz-header-height);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   BACKGROUND EFFECTS
+   ======================================== */
+.njz-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Grid Lines */
+.njz-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(to right, rgba(42, 42, 58, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(42, 42, 58, 0.3) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+/* Ambient Particles Container */
+.njz-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.njz-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--njz-cyan);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 8s infinite ease-in-out;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(100vh) scale(0);
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1);
+  }
+}
+
+/* ========================================
+   QUARTER GRID LAYOUT
+   ======================================== */
+.njz-quarter-grid {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, 1fr);
+  gap: var(--njz-grid-gap);
+  padding: var(--njz-grid-gap);
+  min-height: calc(100vh - var(--njz-header-height) - var(--njz-footer-height));
+  z-index: 1;
+}
+
+/* Desktop: 2x2 Grid */
+@media (min-width: 768px) {
+  .njz-quarter-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+/* ========================================
+   QUADRANT STYLES
+   ======================================== */
+.njz-quadrant {
+  position: relative;
+  background: var(--njz-bg-card);
+  border: 1px solid var(--njz-border);
+  overflow: hidden;
+  transition: all var(--njz-transition-normal);
+}
+
+.njz-quadrant:first-child {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.njz-quadrant:last-child {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant:first-child {
+    border-radius: 0.5rem 0 0 0;
+  }
+  
+  .njz-quadrant:nth-child(2) {
+    border-radius: 0 0.5rem 0 0;
+  }
+  
+  .njz-quadrant:nth-child(3) {
+    border-radius: 0 0 0 0.5rem;
+  }
+  
+  .njz-quadrant:nth-child(4) {
+    border-radius: 0 0 0.5rem 0;
+  }
+}
+
+/* Quadrant Link */
+.njz-quadrant__link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__link {
+    padding: var(--njz-quadrant-padding);
+  }
+}
+
+/* Quadrant Content */
+.njz-quadrant__content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
+
+/* Quadrant Icon */
+.njz-quadrant__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all var(--njz-transition-normal);
+}
+
+.njz-quadrant__icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--njz-text-gray);
+  transition: all var(--njz-transition-normal);
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .njz-quadrant__icon svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Quadrant Text */
+.njz-quadrant__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.njz-quadrant__number {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--njz-text-gray);
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__number {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.njz-quadrant__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--njz-text-white);
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.njz-quadrant__description {
+  font-size: 0.75rem;
+  color: var(--njz-text-gray);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__description {
+    font-size: 0.875rem;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+}
+
+/* Quadrant Arrow */
+.njz-quadrant__arrow {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all var(--njz-transition-normal);
+}
+
+.njz-quadrant__arrow svg {
+  width: 16px;
+  height: 16px;
+  color: var(--njz-text-gray);
+}
+
+@media (min-width: 768px) {
+  .njz-quadrant__arrow {
+    width: 40px;
+    height: 40px;
+    margin-top: 0.5rem;
+  }
+  
+  .njz-quadrant__arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Quadrant Glow Effect */
+.njz-quadrant__glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity var(--njz-transition-normal);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========================================
+   THEME-SPECIFIC STYLES
+   ======================================== */
+
+/* Blue Theme - Statistical Reference */
+.njz-quadrant--blue .njz-quadrant__glow {
+  background: radial-gradient(circle at center, var(--njz-blue-glow) 0%, transparent 70%);
+}
+
+.njz-quadrant--blue:hover {
+  border-color: var(--njz-blue);
+  box-shadow: 0 0 30px var(--njz-blue-glow);
+}
+
+.njz-quadrant--blue:hover .njz-quadrant__icon {
+  background: rgba(30, 58, 95, 0.2);
+}
+
+.njz-quadrant--blue:hover .njz-quadrant__icon svg {
+  color: var(--njz-blue);
+}
+
+/* Purple Theme - Advanced Analytics */
+.njz-quadrant--purple .njz-quadrant__glow {
+  background: radial-gradient(circle at center, var(--njz-purple-glow) 0%, transparent 70%);
+}
+
+.njz-quadrant--purple:hover {
+  border-color: var(--njz-purple);
+  box-shadow: 0 0 30px var(--njz-purple-glow);
+}
+
+.njz-quadrant--purple:hover .njz-quadrant__icon {
+  background: rgba(107, 70, 193, 0.2);
+}
+
+.njz-quadrant--purple:hover .njz-quadrant__icon svg {
+  color: var(--njz-purple);
+}
+
+/* Red Theme - eSports */
+.njz-quadrant--red .njz-quadrant__glow {
+  background: radial-gradient(circle at center, var(--njz-red-glow) 0%, transparent 70%);
+}
+
+.njz-quadrant--red:hover {
+  border-color: var(--njz-red);
+  box-shadow: 0 0 30px var(--njz-red-glow);
+}
+
+.njz-quadrant--red:hover .njz-quadrant__icon {
+  background: rgba(255, 70, 85, 0.2);
+}
+
+.njz-quadrant--red:hover .njz-quadrant__icon svg {
+  color: var(--njz-red);
+}
+
+/* Green Theme - Fantasy eSports */
+.njz-quadrant--green .njz-quadrant__glow {
+  background: radial-gradient(circle at center, var(--njz-green-glow) 0%, transparent 70%);
+}
+
+.njz-quadrant--green:hover {
+  border-color: var(--njz-green);
+  box-shadow: 0 0 30px var(--njz-green-glow);
+}
+
+.njz-quadrant--green:hover .njz-quadrant__icon {
+  background: rgba(0, 255, 136, 0.15);
+}
+
+.njz-quadrant--green:hover .njz-quadrant__icon svg {
+  color: var(--njz-green);
+}
+
+/* ========================================
+   HOVER EFFECTS
+   ======================================== */
+.njz-quadrant:hover {
+  transform: translateY(-2px);
+}
+
+.njz-quadrant:hover .njz-quadrant__glow {
+  opacity: 1;
+}
+
+.njz-quadrant:hover .njz-quadrant__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.njz-quadrant:hover .njz-quadrant__number {
+  color: var(--njz-text-white);
+}
+
+/* ========================================
+   CENTER NJZ BUTTON
+   ======================================== */
+.njz-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.njz-center__button {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--njz-gold) 0%, var(--njz-cyan) 100%);
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 0 20px var(--njz-center-glow),
+    0 0 40px var(--njz-center-glow-cyan),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transition: all var(--njz-transition-normal);
+  animation: njzPulse 3s infinite ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .njz-center__button {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+@keyframes njzPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px var(--njz-center-glow),
+      0 0 40px var(--njz-center-glow-cyan),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px var(--njz-center-glow),
+      0 0 60px var(--njz-center-glow-cyan),
+      0 0 90px rgba(255, 215, 0, 0.2),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.njz-center__button:hover {
+  transform: scale(1.15);
+  box-shadow: 
+    0 0 40px var(--njz-center-glow),
+    0 0 80px var(--njz-center-glow-cyan),
+    0 0 120px rgba(255, 215, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.njz-center__button:active {
+  transform: scale(0.95);
+}
+
+.njz-center__button:focus-visible {
+  outline: 2px solid var(--njz-cyan);
+  outline-offset: 4px;
+}
+
+.njz-center__icon {
+  width: 28px;
+  height: 28px;
+  color: var(--njz-bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .njz-center__icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.njz-center__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Ripple Effects */
+.njz-center__ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--njz-gold);
+  opacity: 0;
+  animation: rippleEffect 3s infinite ease-out;
+}
+
+.njz-center__ripple--delay {
+  animation-delay: 1.5s;
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* NJZ Center Label */
+.njz-center__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--njz-text-gray);
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all var(--njz-transition-normal);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .njz-center__label {
+    font-size: 0.75rem;
+  }
+}
+
+.njz-center:hover .njz-center__label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.njz-footer {
+  position: relative;
+  z-index: 10;
+  padding: 1rem 1.5rem;
+  background: var(--njz-bg-dark);
+  border-top: 1px solid var(--njz-border);
+}
+
+@media (min-width: 768px) {
+  .njz-footer {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.njz-footer__content {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .njz-footer__content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus styles */
+.njz-quadrant__link:focus-visible {
+  outline: 2px solid var(--njz-cyan);
+  outline-offset: -4px;
+  border-radius: inherit;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .njz-quadrant {
+    border-width: 2px;
+  }
+  
+  .njz-center__button {
+    border: 2px solid var(--njz-text-white);
+  }
+}
+
+/* ========================================
+   KEYBOARD NAVIGATION STATES
+   ======================================== */
+.njz-quadrant.focused {
+  outline: 2px solid var(--njz-cyan);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   ANIMATION UTILITIES
+   ======================================== */
+.njz-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered entrance animations */
+.njz-quadrant:nth-child(1) { animation-delay: 0.1s; }
+.njz-quadrant:nth-child(2) { animation-delay: 0.2s; }
+.njz-quadrant:nth-child(3) { animation-delay: 0.3s; }
+.njz-quadrant:nth-child(4) { animation-delay: 0.4s; }
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--njz-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--njz-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a4a;
+}

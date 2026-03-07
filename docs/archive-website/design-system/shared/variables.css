@@ -1,0 +1,110 @@
+/**
+ * CSS Variables Export
+ * Centralized CSS custom properties for JavaScript access
+ */
+
+/* ============================================
+   IMPORT ALL DESIGN TOKENS
+   ============================================ */
+
+@import '../porcelain-cubed/tokens/colors.css';
+@import '../porcelain-cubed/tokens/typography.css';
+@import '../porcelain-cubed/tokens/spacing.css';
+@import '../porcelain-cubed/tokens/effects.css';
+
+/* ============================================
+   VARIABLE DOCUMENTATION
+   ============================================
+
+This file exports all CSS custom properties from the Porcelain³
+Design System for use in JavaScript and external systems.
+
+Usage in JavaScript:
+  const styles = getComputedStyle(document.documentElement);
+  const primary = styles.getPropertyValue('--hub-statref-primary').trim();
+
+HUB Color Variables:
+  --hub-statref-*    : Statistical Reference (Blue Theme)
+  --hub-analytics-*  : Advanced Analytics (Purple Theme)
+  --hub-esports-*    : eSports (Red Theme)
+  --hub-fantasy-*    : Fantasy eSports (Green Theme)
+  --njz-*            : NJZ Center (Gold/Cyan)
+
+Current HUB Variables (dynamically set):
+  --hub-current-primary   : Current HUB primary color
+  --hub-current-secondary : Current HUB secondary/accent color
+  --hub-current-accent    : Current HUB accent color
+  --hub-current-glow      : Current HUB glow effect color
+  --hub-current-muted     : Current HUB muted/background color
+
+*/
+
+/* ============================================
+   HUB IDENTIFIER CLASSES
+   Used by JS to identify current HUB theme
+   ============================================ */
+
+[data-hub="statref"] {
+  --hub-current-primary: var(--hub-statref-primary);
+  --hub-current-secondary: var(--hub-statref-secondary);
+  --hub-current-accent: var(--hub-statref-accent);
+  --hub-current-glow: var(--hub-statref-glow);
+  --hub-current-muted: var(--hub-statref-muted);
+}
+
+[data-hub="analytics"] {
+  --hub-current-primary: var(--hub-analytics-primary);
+  --hub-current-secondary: var(--hub-analytics-secondary);
+  --hub-current-accent: var(--hub-analytics-accent);
+  --hub-current-glow: var(--hub-analytics-glow);
+  --hub-current-muted: var(--hub-analytics-muted);
+}
+
+[data-hub="esports"] {
+  --hub-current-primary: var(--hub-esports-primary);
+  --hub-current-secondary: var(--hub-esports-secondary);
+  --hub-current-accent: var(--hub-esports-accent);
+  --hub-current-glow: var(--hub-esports-glow);
+  --hub-current-muted: var(--hub-esports-muted);
+}
+
+[data-hub="fantasy"] {
+  --hub-current-primary: var(--hub-fantasy-primary);
+  --hub-current-secondary: var(--hub-fantasy-secondary);
+  --hub-current-accent: var(--hub-fantasy-accent);
+  --hub-current-glow: var(--hub-fantasy-glow);
+  --hub-current-muted: var(--hub-fantasy-muted);
+}
+
+/* ============================================
+   CSS VARIABLE ACCESS HELPERS
+   ============================================ */
+
+/* These classes can be used to expose specific values */
+.variable-export {
+  /* HUB Colors */
+  --export-hub-statref-primary: var(--hub-statref-primary);
+  --export-hub-statref-secondary: var(--hub-statref-secondary);
+  --export-hub-analytics-primary: var(--hub-analytics-primary);
+  --export-hub-analytics-secondary: var(--hub-analytics-secondary);
+  --export-hub-esports-primary: var(--hub-esports-primary);
+  --export-hub-esports-secondary: var(--hub-esports-secondary);
+  --export-hub-fantasy-primary: var(--hub-fantasy-primary);
+  --export-hub-fantasy-secondary: var(--hub-fantasy-secondary);
+  
+  /* NJZ Colors */
+  --export-njz-primary: var(--njz-primary);
+  --export-njz-secondary: var(--njz-secondary);
+  
+  /* Typography */
+  --export-font-display: var(--font-display);
+  --export-font-body: var(--font-body);
+  --export-font-mono: var(--font-mono);
+  
+  /* Spacing */
+  --export-space-unit: var(--space-unit);
+  
+  /* Effects */
+  --export-radius-xl: var(--radius-xl);
+  --export-shadow-xl: var(--shadow-xl);
+}

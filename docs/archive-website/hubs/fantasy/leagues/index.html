@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Leagues — SATOR Fantasy eSports</title>
+    <meta name="description" content="Join fantasy eSports leagues. Public and private leagues available for VCT Valorant and more.">
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        radiant: {
+                            black: '#0a0a0f', card: '#14141f', border: '#2a2a3a',
+                            white: '#ffffff', gray: '#8a8a9a', green: '#00FF88', cyan: '#00d4ff'
+                        }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/fantasy.css">
+</head>
+<body class="fantasy-body antialiased">
+    <!-- Navigation -->
+    <nav class="fantasy-nav">
+        <div class="fantasy-nav__container">
+            <a href="../../../index.html" class="fantasy-nav__logo">
+                <div class="fantasy-nav__logo-icon">S</div>
+                <span>SATOR</span>
+            </a>
+            <div class="fantasy-nav__links hidden md:flex">
+                <a href="../index.html" class="fantasy-nav__link">Home</a>
+                <a href="../game/index.html" class="fantasy-nav__link">Game</a>
+                <a href="index.html" class="fantasy-nav__link fantasy-nav__link--active">Leagues</a>
+                <a href="../leaderboards/index.html" class="fantasy-nav__link">Leaderboards</a>
+                <a href="../my-team/index.html" class="fantasy-nav__link">My Team</a>
+                <a href="../membership/index.html" class="fantasy-nav__link">Membership</a>
+            </div>
+            <div class="fantasy-nav__cta">
+                <a href="#create-league" class="fantasy-btn fantasy-btn--primary text-sm hidden sm:flex">Create League</a>
+                <button class="md:hidden p-2 text-white/70 hover:text-white" data-mobile-nav-toggle aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden border-t border-white/10" data-mobile-nav>
+            <div class="px-4 py-4 space-y-2">
+                <a href="../index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Home</a>
+                <a href="../game/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Game</a>
+                <a href="index.html" class="block px-4 py-2 text-radiant-green bg-white/5 rounded-lg">Leagues</a>
+                <a href="../leaderboards/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leaderboards</a>
+                <a href="../my-team/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">My Team</a>
+                <a href="../membership/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Membership</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="membership-hero">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-radiant-green/10 border border-radiant-green/30 rounded-full mb-6" data-animate="animate-fade-in-up">
+                <svg class="w-4 h-4 text-radiant-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                </svg>
+                <span class="text-sm text-radiant-green font-medium">47 Active Leagues</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4" data-animate="animate-fade-in-up">Fantasy Leagues</h1>
+            <p class="text-xl text-radiant-gray" data-animate="animate-fade-in-up">Join public leagues or create private ones to compete with friends</p>
+        </div>
+    </section>
+
+    <!-- Filter Bar -->
+    <section class="px-4">
+        <div class="leagues-filter">
+            <button class="leagues-filter__btn leagues-filter__btn--active" data-league-filter="all">All Leagues</button>
+            <button class="leagues-filter__btn" data-league-filter="public">Public</button>
+            <button class="leagues-filter__btn" data-league-filter="private">Private</button>
+            <button class="leagues-filter__btn" data-league-filter="pro">Pro Tier</button>
+            <button class="leagues-filter__btn" data-league-filter="free">Free Tier</button>
+        </div>
+    </section>
+
+    <!-- Leagues Grid -->
+    <section class="fantasy-section" style="padding-top: 1rem;">
+        <div class="leagues-grid">
+            <!-- Global Championship -->
+            <div class="league-card" data-league-card data-league-type="pro" data-league-public="false" data-animate="animate-fade-in-up">
+                <div class="league-card__header">
+                    <span class="league-card__type league-card__type--pro">Pro</span>
+                    <div class="league-card__members">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        12,547
+                    </div>
+                </div>
+                <h3 class="league-card__name">Global Championship</h3>
+                <p class="league-card__game">VCT Valorant</p>
+                <div class="league-card__standings">
+                    <div class="league-card__standings-title">Top Players</div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">1</span>
+                        <span class="league-card__player">DragonSlayer</span>
+                        <span class="league-card__points">2,847</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">2</span>
+                        <span class="league-card__player">NeonKnight</span>
+                        <span class="league-card__points">2,734</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">3</span>
+                        <span class="league-card__player">ToxicWaste</span>
+                        <span class="league-card__points">2,689</span>
+                    </div>
+                </div>
+                <div class="league-card__footer">
+                    <button class="league-card__btn league-card__btn--primary" data-modal-trigger="membership-signup">Join League</button>
+                    <a href="../leaderboards/index.html" class="league-card__btn league-card__btn--secondary">View Stats</a>
+                </div>
+            </div>
+
+            <!-- NA Regional -->
+            <div class="league-card" data-league-card data-league-type="free" data-league-public="true" data-animate="animate-fade-in-up">
+                <div class="league-card__header">
+                    <span class="league-card__type league-card__type--public">Public</span>
+                    <div class="league-card__members">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        5,234
+                    </div>
+                </div>
+                <h3 class="league-card__name">NA Regional</h3>
+                <p class="league-card__game">VCT Valorant</p>
+                <div class="league-card__standings">
+                    <div class="league-card__standings-title">Top Players</div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">1</span>
+                        <span class="league-card__player">CloudNine</span>
+                        <span class="league-card__points">2,156</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">2</span>
+                        <span class="league-card__player">SageMain</span>
+                        <span class="league-card__points">2,098</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">3</span>
+                        <span class="league-card__player">JettRider</span>
+                        <span class="league-card__points">2,045</span>
+                    </div>
+                </div>
+                <div class="league-card__footer">
+                    <button class="league-card__btn league-card__btn--primary" data-modal-trigger="membership-signup">Join League</button>
+                    <a href="../leaderboards/index.html" class="league-card__btn league-card__btn--secondary">View Stats</a>
+                </div>
+            </div>
+
+            <!-- EU Masters -->
+            <div class="league-card" data-league-card data-league-type="pro" data-league-public="true" data-animate="animate-fade-in-up">
+                <div class="league-card__header">
+                    <span class="league-card__type league-card__type--pro">Pro</span>
+                    <div class="league-card__members">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        8,341
+                    </div>
+                </div>
+                <h3 class="league-card__name">EU Masters</h3>
+                <p class="league-card__game">VCT Valorant</p>
+                <div class="league-card__standings">
+                    <div class="league-card__standings-title">Top Players</div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">1</span>
+                        <span class="league-card__player">FnaticFan</span>
+                        <span class="league-card__points">2,567</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">2</span>
+                        <span class="league-card__player">G2Gang</span>
+                        <span class="league-card__points">2,498</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">3</span>
+                        <span class="league-card__player">LiquidLove</span>
+                        <span class="league-card__points">2,432</span>
+                    </div>
+                </div>
+                <div class="league-card__footer">
+                    <button class="league-card__btn league-card__btn--primary" data-modal-trigger="membership-signup">Join League</button>
+                    <a href="../leaderboards/index.html" class="league-card__btn league-card__btn--secondary">View Stats</a>
+                </div>
+            </div>
+
+            <!-- Casual Friends -->
+            <div class="league-card" data-league-card data-league-type="free" data-league-public="true" data-animate="animate-fade-in-up">
+                <div class="league-card__header">
+                    <span class="league-card__type league-card__type--public">Public</span>
+                    <div class="league-card__members">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        52
+                    </div>
+                </div>
+                <h3 class="league-card__name">Casual Friends</h3>
+                <p class="league-card__game">Multiple Games</p>
+                <div class="league-card__standings">
+                    <div class="league-card__standings-title">Top Players</div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">1</span>
+                        <span class="league-card__player">WeekendWarrior</span>
+                        <span class="league-card__points">1,890</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">2</span>
+                        <span class="league-card__player">CasualGamer</span>
+                        <span class="league-card__points">1,756</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">3</span>
+                        <span class="league-card__player">FunTimes</span>
+                        <span class="league-card__points">1,689</span>
+                    </div>
+                </div>
+                <div class="league-card__footer">
+                    <button class="league-card__btn league-card__btn--primary" data-modal-trigger="membership-signup">Join League</button>
+                    <a href="../leaderboards/index.html" class="league-card__btn league-card__btn--secondary">View Stats</a>
+                </div>
+            </div>
+
+            <!-- VCT Predictor -->
+            <div class="league-card" data-league-card data-league-type="free" data-league-public="true" data-animate="animate-fade-in-up">
+                <div class="league-card__header">
+                    <span class="league-card__type league-card__type--public">Public</span>
+                    <div class="league-card__members">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        12,453
+                    </div>
+                </div>
+                <h3 class="league-card__name">VCT Predictor</h3>
+                <p class="league-card__game">VCT Valorant</p>
+                <div class="league-card__standings">
+                    <div class="league-card__standings-title">Top Players</div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">1</span>
+                        <span class="league-card__player">Oracle</span>
+                        <span class="league-card__points">2,987</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">2</span>
+                        <span class="league-card__player">PredictorX</span>
+                        <span class="league-card__points">2,876</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">3</span>
+                        <span class="league-card__player">Visionary</span>
+                        <span class="league-card__points">2,756</span>
+                    </div>
+                </div>
+                <div class="league-card__footer">
+                    <button class="league-card__btn league-card__btn--primary" data-modal-trigger="membership-signup">Join League</button>
+                    <a href="../leaderboards/index.html" class="league-card__btn league-card__btn--secondary">View Stats</a>
+                </div>
+            </div>
+
+            <!-- APAC Elite -->
+            <div class="league-card" data-league-card data-league-type="pro" data-league-public="true" data-animate="animate-fade-in-up">
+                <div class="league-card__header">
+                    <span class="league-card__type league-card__type--pro">Pro</span>
+                    <div class="league-card__members">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        6,789
+                    </div>
+                </div>
+                <h3 class="league-card__name">APAC Elite</h3>
+                <p class="league-card__game">VCT Valorant</p>
+                <div class="league-card__standings">
+                    <div class="league-card__standings-title">Top Players</div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">1</span>
+                        <span class="league-card__player">PaperRex</span>
+                        <span class="league-card__points">2,543</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">2</span>
+                        <span class="league-card__player">DRXDevotee</span>
+                        <span class="league-card__points">2,498</span>
+                    </div>
+                    <div class="league-card__top-player">
+                        <span class="league-card__rank">3</span>
+                        <span class="league-card__player">T1Fanatic</span>
+                        <span class="league-card__points">2,432</span>
+                    </div>
+                </div>
+                <div class="league-card__footer">
+                    <button class="league-card__btn league-card__btn--primary" data-modal-trigger="membership-signup">Join League</button>
+                    <a href="../leaderboards/index.html" class="league-card__btn league-card__btn--secondary">View Stats</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create League Form -->
+    <section id="create-league" class="fantasy-section" style="background: rgba(0, 0, 0, 0.2);">
+        <div class="create-league">
+            <h3 class="create-league__title" data-animate="animate-fade-in-up">Create Your Own League</h3>
+            <p class="text-radiant-gray mb-6" data-animate="animate-fade-in-up">Start a private league and invite your friends to compete</p>
+            <form data-form="create-league" data-animate="animate-fade-in-up">
+                <div class="form-group">
+                    <label for="league-name">League Name</label>
+                    <input type="text" id="league-name" placeholder="My Awesome League" required>
+                </div>
+                <div class="form-group">
+                    <label for="league-game">Game</label>
+                    <select id="league-game" required>
+                        <option value="">Select a game...</option>
+                        <option value="vct-valorant">VCT Valorant</option>
+                        <option value="cs2" disabled>CS2 (Coming Soon)</option>
+                        <option value="lol" disabled>League of Legends (Coming Soon)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="league-type">League Type</label>
+                    <select id="league-type" required>
+                        <option value="">Select type...</option>
+                        <option value="public">Public (Anyone can join)</option>
+                        <option value="private">Private (Invite only)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="league-max">Max Players</label>
+                    <select id="league-max" required>
+                        <option value="12">12 players</option>
+                        <option value="24">24 players</option>
+                        <option value="50">50 players</option>
+                        <option value="100">100 players</option>
+                    </select>
+                </div>
+                <button type="submit" class="fantasy-btn fantasy-btn--primary w-full">Create League</button>
+            </form>
+            <p class="mt-4 text-sm text-radiant-gray text-center">Private league creation requires Pro or Elite membership</p>
+        </div>
+    </section>
+
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay" data-modal="membership-signup">
+        <div class="modal">
+            <h3 class="modal__title">Sign In Required</h3>
+            <p class="modal__desc">Please sign in or create an account to join leagues. This is a demo - actual authentication coming soon!</p>
+            <div class="modal__actions">
+                <button class="modal__btn modal__btn--secondary" data-modal-close>Cancel</button>
+                <a href="../membership/index.html" class="modal__btn modal__btn--primary text-center">Go to Membership</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="fantasy-footer">
+        <div class="fantasy-footer__content">
+            <div class="fantasy-footer__links">
+                <a href="../index.html" class="fantasy-footer__link">Fantasy Home</a>
+                <a href="../game/index.html" class="fantasy-footer__link">Game</a>
+                <a href="../../../index.html" class="fantasy-footer__link">SATOR Home</a>
+            </div>
+            <p class="fantasy-footer__copy">© 2026 SATOR Fantasy eSports. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/fantasy.js"></script>
+</body>
+</html>

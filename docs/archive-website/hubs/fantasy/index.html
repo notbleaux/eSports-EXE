@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy eSports HUB — SATOR</title>
+    <meta name="description" content="Fantasy eSports HUB - Build your dream team, compete in leagues, and win prizes in the ultimate eSports fantasy platform.">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        radiant: {
+                            black: '#0a0a0f', card: '#14141f', border: '#2a2a3a',
+                            white: '#ffffff', gray: '#8a8a9a', green: '#00FF88', cyan: '#00d4ff'
+                        }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/fantasy.css">
+</head>
+<body class="fantasy-body antialiased">
+    <!-- Navigation -->
+    <nav class="fantasy-nav">
+        <div class="fantasy-nav__container">
+            <a href="../../index.html" class="fantasy-nav__logo">
+                <div class="fantasy-nav__logo-icon">S</div>
+                <span>SATOR</span>
+            </a>
+            <div class="fantasy-nav__links hidden md:flex">
+                <a href="index.html" class="fantasy-nav__link fantasy-nav__link--active">Home</a>
+                <a href="game/index.html" class="fantasy-nav__link">Game</a>
+                <a href="leagues/index.html" class="fantasy-nav__link">Leagues</a>
+                <a href="leaderboards/index.html" class="fantasy-nav__link">Leaderboards</a>
+                <a href="my-team/index.html" class="fantasy-nav__link">My Team</a>
+                <a href="membership/index.html" class="fantasy-nav__link">Membership</a>
+            </div>
+            <div class="fantasy-nav__cta">
+                <a href="membership/index.html" class="fantasy-btn fantasy-btn--secondary text-sm hidden sm:flex">Sign In</a>
+                <button class="md:hidden p-2 text-white/70 hover:text-white" data-mobile-nav-toggle aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden border-t border-white/10" data-mobile-nav>
+            <div class="px-4 py-4 space-y-2">
+                <a href="index.html" class="block px-4 py-2 text-radiant-green bg-white/5 rounded-lg">Home</a>
+                <a href="game/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Game</a>
+                <a href="leagues/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leagues</a>
+                <a href="leaderboards/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leaderboards</a>
+                <a href="my-team/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">My Team</a>
+                <a href="membership/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Membership</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="fantasy-hero">
+        <div class="fantasy-hero__content">
+            <div class="fantasy-hero__badge" data-animate="animate-fade-in-up">
+                <span class="fantasy-hero__badge-dot"></span>
+                <span>HUB 4/4 - Fantasy eSports</span>
+            </div>
+            <h1 class="fantasy-hero__title" data-animate="animate-fade-in-up">
+                Build Your Dream Team
+            </h1>
+            <p class="fantasy-hero__subtitle" data-animate="animate-fade-in-up">
+                Draft professional players, compete in fantasy leagues, and climb the leaderboards in the ultimate eSports fantasy platform.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4" data-animate="animate-fade-in-up">
+                <a href="leagues/index.html" class="fantasy-btn fantasy-btn--primary fantasy-btn--large">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Join League
+                </a>
+                <a href="game/download.html" class="fantasy-btn fantasy-btn--secondary fantasy-btn--large">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download Game
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="fantasy-section" style="padding-top: 0;">
+        <div class="fantasy-stats">
+            <div class="fantasy-stat" data-animate="animate-fade-in-up">
+                <div class="fantasy-stat__value" data-counter="47">0</div>
+                <div class="fantasy-stat__label">Active Leagues</div>
+            </div>
+            <div class="fantasy-stat" data-animate="animate-fade-in-up">
+                <div class="fantasy-stat__value" data-counter="52347">0</div>
+                <div class="fantasy-stat__label">Total Players</div>
+            </div>
+            <div class="fantasy-stat" data-animate="animate-fade-in-up">
+                <div class="fantasy-stat__value" data-counter="125000">0</div>
+                <div class="fantasy-stat__label">Prize Pool ($)</div>
+            </div>
+            <div class="fantasy-stat" data-animate="animate-fade-in-up">
+                <div class="fantasy-stat__value" data-counter="8921">0</div>
+                <div class="fantasy-stat__label">Matches Today</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="fantasy-section">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Why Play Fantasy eSports?</h2>
+            <p class="fantasy-section__subtitle">Experience eSports like never before with our comprehensive fantasy platform</p>
+        </div>
+        <div class="fantasy-features">
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Strategic Drafting</h3>
+                <p class="fantasy-feature__desc">Build your roster within the salary cap. Choose from real professional players across multiple eSports titles.</p>
+            </div>
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Live Scoring</h3>
+                <p class="fantasy-feature__desc">Watch your fantasy points update in real-time as matches progress. Every kill, assist, and objective counts.</p>
+            </div>
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Win Real Prizes</h3>
+                <p class="fantasy-feature__desc">Compete for cash prizes, exclusive merchandise, and bragging rights in both public and private leagues.</p>
+            </div>
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Play with Friends</h3>
+                <p class="fantasy-feature__desc">Create private leagues and invite your friends. Set your own rules, draft schedules, and compete head-to-head.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Axiom Game Section -->
+    <section class="fantasy-section" style="background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.03) 50%, transparent 100%);">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Axiom eSports Simulation Game</h2>
+            <p class="fantasy-section__subtitle">Take control of your own eSports franchise in our offline simulation</p>
+        </div>
+        <div class="max-w-4xl mx-auto px-8">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8" data-animate="animate-fade-in-up">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-24 h-24 bg-gradient-to-br from-radiant-green/20 to-radiant-cyan/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <svg class="w-12 h-12 text-radiant-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-xl font-bold text-white mb-2">Experience the Manager's Seat</h3>
+                        <p class="text-radiant-gray mb-4">Build your team from the ground up. Scout talent, manage finances, and lead your organization to championship glory in career mode.</p>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                            <a href="game/index.html" class="fantasy-btn fantasy-btn--secondary text-sm">Learn More</a>
+                            <a href="game/download.html" class="fantasy-btn fantasy-btn--primary text-sm">Download Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center p-4" data-animate="animate-fade-in-up">
+                    <div class="text-2xl font-bold text-radiant-green mb-1">Career</div>
+                    <div class="text-sm text-radiant-gray">Mode</div>
+                </div>
+                <div class="text-center p-4" data-animate="animate-fade-in-up">
+                    <div class="text-2xl font-bold text-radiant-green mb-1">Offline</div>
+                    <div class="text-sm text-radiant-gray">Gameplay</div>
+                </div>
+                <div class="text-center p-4" data-animate="animate-fade-in-up">
+                    <div class="text-2xl font-bold text-radiant-green mb-1">500+</div>
+                    <div class="text-sm text-radiant-gray">Players</div>
+                </div>
+                <div class="text-center p-4" data-animate="animate-fade-in-up">
+                    <div class="text-2xl font-bold text-radiant-green mb-1">Free</div>
+                    <div class="text-sm text-radiant-gray">Download</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="fantasy-section">
+        <div class="max-w-3xl mx-auto px-8 text-center">
+            <h2 class="fantasy-section__title mb-4" data-animate="animate-fade-in-up">Ready to Start Your Journey?</h2>
+            <p class="text-lg text-radiant-gray mb-8" data-animate="animate-fade-in-up">Join thousands of players competing in the world's most exciting eSports fantasy platform.</p>
+            <div class="flex flex-wrap justify-center gap-4" data-animate="animate-fade-in-up">
+                <a href="membership/index.html" class="fantasy-btn fantasy-btn--accent fantasy-btn--large">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    Get Started Free
+                </a>
+                <a href="leagues/index.html" class="fantasy-btn fantasy-btn--secondary fantasy-btn--large">
+                    Browse Leagues
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cross-HUB Navigation -->
+    <section class="explore-hubs" data-explore-hubs>
+        <h2 class="explore-hubs__title">Explore Other HUBs</h2>
+        <div class="explore-hubs__grid" data-explore-hubs-grid>
+            <!-- Stat Ref HUB -->
+            <a href="../stat-ref/" class="explore-hub-card explore-hub-card--statref">
+                <div class="explore-hub-card__header">
+                    <div class="explore-hub-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <span class="explore-hub-card__name">Statistical Reference</span>
+                </div>
+                <p class="explore-hub-card__description">Comprehensive player and team statistics database with advanced filtering and comparison tools.</p>
+                <div class="explore-hub-card__cta">
+                    Explore Stats
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+            
+            <!-- Analytics HUB -->
+            <a href="../analytics/" class="explore-hub-card explore-hub-card--analytics">
+                <div class="explore-hub-card__header">
+                    <div class="explore-hub-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <circle cx="5" cy="5" r="2"/>
+                            <circle cx="19" cy="5" r="2"/>
+                            <circle cx="5" cy="19" r="2"/>
+                            <circle cx="19" cy="19" r="2"/>
+                        </svg>
+                    </div>
+                    <span class="explore-hub-card__name">Advanced Analytics</span>
+                </div>
+                <p class="explore-hub-card__description">Deep performance metrics, predictive models, and the revolutionary SATOR Square visualization system.</p>
+                <div class="explore-hub-card__cta">
+                    Explore Analytics
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+            
+            <!-- eSports HUB -->
+            <a href="../esports/" class="explore-hub-card explore-hub-card--esports">
+                <div class="explore-hub-card__header">
+                    <div class="explore-hub-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <span class="explore-hub-card__name">eSports</span>
+                </div>
+                <p class="explore-hub-card__description">Live matches, tournaments, team rankings, news, and comprehensive coverage of the competitive scene.</p>
+                <div class="explore-hub-card__cta">
+                    Explore eSports
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="fantasy-footer">
+        <div class="fantasy-footer__content">
+            <div class="fantasy-footer__links">
+                <a href="../../index.html" class="fantasy-footer__link">SATOR Home</a>
+                <a href="../" class="fantasy-footer__link">HUB Selector</a>
+                <a href="membership/index.html" class="fantasy-footer__link">Membership</a>
+                <a href="game/index.html" class="fantasy-footer__link">Game</a>
+            </div>
+            <p class="fantasy-footer__copy">© 2026 SATOR Fantasy eSports. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/fantasy.js"></script>
+</body>
+</html>

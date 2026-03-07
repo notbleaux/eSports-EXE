@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership — SATOR Fantasy eSports</title>
+    <meta name="description" content="Choose your Fantasy eSports membership tier. Free, Pro, and Elite plans available.">
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        radiant: {
+                            black: '#0a0a0f', card: '#14141f', border: '#2a2a3a',
+                            white: '#ffffff', gray: '#8a8a9a', green: '#00FF88', cyan: '#00d4ff'
+                        }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/fantasy.css">
+</head>
+<body class="fantasy-body antialiased">
+    <!-- Navigation -->
+    <nav class="fantasy-nav">
+        <div class="fantasy-nav__container">
+            <a href="../../../index.html" class="fantasy-nav__logo">
+                <div class="fantasy-nav__logo-icon">S</div>
+                <span>SATOR</span>
+            </a>
+            <div class="fantasy-nav__links hidden md:flex">
+                <a href="../index.html" class="fantasy-nav__link">Home</a>
+                <a href="../game/index.html" class="fantasy-nav__link">Game</a>
+                <a href="../leagues/index.html" class="fantasy-nav__link">Leagues</a>
+                <a href="../leaderboards/index.html" class="fantasy-nav__link">Leaderboards</a>
+                <a href="../my-team/index.html" class="fantasy-nav__link">My Team</a>
+                <a href="index.html" class="fantasy-nav__link fantasy-nav__link--active">Membership</a>
+            </div>
+            <div class="fantasy-nav__cta">
+                <a href="#tiers" class="fantasy-btn fantasy-btn--primary text-sm hidden sm:flex">View Plans</a>
+                <button class="md:hidden p-2 text-white/70 hover:text-white" data-mobile-nav-toggle aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden border-t border-white/10" data-mobile-nav>
+            <div class="px-4 py-4 space-y-2">
+                <a href="../index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Home</a>
+                <a href="../game/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Game</a>
+                <a href="../leagues/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leagues</a>
+                <a href="../leaderboards/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">Leaderboards</a>
+                <a href="../my-team/index.html" class="block px-4 py-2 text-white/70 hover:text-white hover:bg-white/5 rounded-lg">My Team</a>
+                <a href="index.html" class="block px-4 py-2 text-radiant-green bg-white/5 rounded-lg">Membership</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Membership Hero -->
+    <section class="membership-hero">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-radiant-green/10 border border-radiant-green/30 rounded-full mb-6" data-animate="animate-fade-in-up">
+                <svg class="w-4 h-4 text-radiant-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm text-radiant-green font-medium">Secure & Private</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4" data-animate="animate-fade-in-up">Choose Your Membership</h1>
+            <p class="text-xl text-radiant-gray" data-animate="animate-fade-in-up">Unlock the full potential of Fantasy eSports with the plan that fits your needs</p>
+        </div>
+    </section>
+
+    <!-- Membership Tiers -->
+    <section id="tiers" class="fantasy-section">
+        <div class="tier-cards">
+            <!-- Free Tier -->
+            <div class="tier-card tier-card--free" data-animate="animate-fade-in-up">
+                <h3 class="tier-card__name">Free</h3>
+                <div class="tier-card__price">$0<span>/month</span></div>
+                <p class="tier-card__desc">Perfect for getting started with fantasy eSports</p>
+                <ul class="tier-card__features">
+                    <li class="tier-card__feature">Join up to 3 public leagues</li>
+                    <li class="tier-card__feature">3 custom dashboard views</li>
+                    <li class="tier-card__feature">View-only forum access</li>
+                    <li class="tier-card__feature">Basic player statistics</li>
+                    <li class="tier-card__feature">Standard scoring system</li>
+                    <li class="tier-card__feature">Email support</li>
+                    <li class="tier-card__feature--disabled">Private league creation</li>
+                    <li class="tier-card__feature--disabled">Advanced analytics</li>
+                    <li class="tier-card__feature--disabled">Priority support</li>
+                </ul>
+                <button class="fantasy-btn fantasy-btn--secondary tier-card__cta" data-membership-cta="free">Get Started Free</button>
+            </div>
+
+            <!-- Pro Tier -->
+            <div class="tier-card tier-card--pro" data-animate="animate-fade-in-up">
+                <div class="tier-card__badge">Most Popular</div>
+                <h3 class="tier-card__name">Pro</h3>
+                <div class="tier-card__price">$9.99<span>/month</span></div>
+                <p class="tier-card__desc">For serious fantasy players who want more</p>
+                <ul class="tier-card__features">
+                    <li class="tier-card__feature">Join unlimited public leagues</li>
+                    <li class="tier-card__feature">10 custom dashboard views</li>
+                    <li class="tier-card__feature">Full forum access (posting)</li>
+                    <li class="tier-card__feature">Advanced player statistics</li>
+                    <li class="tier-card__feature">Custom scoring systems</li>
+                    <li class="tier-card__feature">Priority email support</li>
+                    <li class="tier-card__feature">Create up to 5 private leagues</li>
+                    <li class="tier-card__feature">Match prediction tools</li>
+                    <li class="tier-card__feature--disabled">Early access features</li>
+                </ul>
+                <button class="fantasy-btn fantasy-btn--primary tier-card__cta" data-membership-cta="pro">Upgrade to Pro</button>
+            </div>
+
+            <!-- Elite Tier -->
+            <div class="tier-card tier-card--elite" data-animate="animate-fade-in-up">
+                <div class="tier-card__badge">Best Value</div>
+                <h3 class="tier-card__name">Elite</h3>
+                <div class="tier-card__price">$19.99<span>/month</span></div>
+                <p class="tier-card__desc">The ultimate fantasy eSports experience</p>
+                <ul class="tier-card__features">
+                    <li class="tier-card__feature">Everything in Pro</li>
+                    <li class="tier-card__feature">Unlimited custom views</li>
+                    <li class="tier-card__feature">Forum moderator badge</li>
+                    <li class="tier-card__feature">Real-time player data</li>
+                    <li class="tier-card__feature">AI-powered recommendations</li>
+                    <li class="tier-card__feature">24/7 live chat support</li>
+                    <li class="tier-card__feature">Unlimited private leagues</li>
+                    <li class="tier-card__feature">Early access to new features</li>
+                    <li class="tier-card__feature">Exclusive merchandise discounts</li>
+                </ul>
+                <button class="fantasy-btn fantasy-btn--accent tier-card__cta" data-membership-cta="elite">Go Elite</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="fantasy-section" style="background: rgba(0, 0, 0, 0.2);">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Feature Comparison</h2>
+            <p class="fantasy-section__subtitle">See what's included in each plan</p>
+        </div>
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Free</th>
+                        <th>Pro</th>
+                        <th>Elite</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feature-name">Public League Joins</td>
+                        <td>3 max</td>
+                        <td class="check">Unlimited</td>
+                        <td class="check">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Private League Creation</td>
+                        <td class="cross">—</td>
+                        <td>5 max</td>
+                        <td class="check">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Custom Dashboard Views</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td class="check">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Forum Access</td>
+                        <td>View only</td>
+                        <td class="check">Full posting</td>
+                        <td class="check">Full + badge</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Player Statistics</td>
+                        <td>Basic</td>
+                        <td class="check">Advanced</td>
+                        <td class="check">Real-time</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Scoring Systems</td>
+                        <td>Standard</td>
+                        <td class="check">Custom</td>
+                        <td class="check">Custom + AI</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Prediction Tools</td>
+                        <td class="cross">—</td>
+                        <td class="check">Included</td>
+                        <td class="check">Enhanced</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Early Access</td>
+                        <td class="cross">—</td>
+                        <td class="cross">—</td>
+                        <td class="check">Included</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Support</td>
+                        <td>Email</td>
+                        <td>Priority email</td>
+                        <td class="check">24/7 Live chat</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="fantasy-section">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Why Upgrade?</h2>
+            <p class="fantasy-section__subtitle">Get more out of your fantasy eSports experience</p>
+        </div>
+        <div class="fantasy-features">
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Early Access</h3>
+                <p class="fantasy-feature__desc">Elite members get first access to new features, game modes, and platform updates before anyone else.</p>
+            </div>
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Advanced Analytics</h3>
+                <p class="fantasy-feature__desc">Get detailed player performance metrics, trend analysis, and AI-powered team recommendations.</p>
+            </div>
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Private Leagues</h3>
+                <p class="fantasy-feature__desc">Create and manage your own private leagues with custom rules. Invite friends and compete head-to-head.</p>
+            </div>
+            <div class="fantasy-feature" data-animate="animate-fade-in-up">
+                <div class="fantasy-feature__icon">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                </div>
+                <h3 class="fantasy-feature__title">Priority Support</h3>
+                <p class="fantasy-feature__desc">Get help when you need it with priority email support or 24/7 live chat for Elite members.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="fantasy-section" style="background: rgba(0, 0, 0, 0.2);">
+        <div class="fantasy-section__header">
+            <h2 class="fantasy-section__title">Membership FAQ</h2>
+            <p class="fantasy-section__subtitle">Common questions about our plans</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    Can I change my plan at any time?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        Yes! You can upgrade or downgrade your plan at any time. When upgrading, you'll have immediate access to new features. When downgrading, changes take effect at the start of your next billing cycle.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    Is there a free trial for Pro or Elite?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        Yes! Both Pro and Elite plans come with a 7-day free trial. You can cancel anytime during the trial period and you won't be charged. No credit card required to start your trial.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    What happens to my data if I cancel?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        Your data is kept for 30 days after cancellation, giving you time to resubscribe if you change your mind. After 30 days, premium-only data like custom views and private leagues will be archived but can be restored if you resubscribe.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item" data-faq-item data-animate="animate-fade-in-up">
+                <button class="faq-question" data-faq-question>
+                    Do you offer refunds?
+                    <svg class="faq-question__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer__content">
+                        We offer a 30-day money-back guarantee for your first subscription payment. If you're not satisfied with your membership, contact support within 30 days for a full refund, no questions asked.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay" data-modal="membership-signup">
+        <div class="modal">
+            <h3 class="modal__title">Join SATOR Fantasy</h3>
+            <p class="modal__desc">Create your account to get started. This is a demo - actual authentication coming soon!</p>
+            <form data-form="membership-signup">
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-username">Username</label>
+                    <input type="text" id="signup-username" placeholder="FantasyChamp" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="••••••••" required>
+                </div>
+                <div class="modal__actions">
+                    <button type="button" class="modal__btn modal__btn--secondary" data-modal-close>Cancel</button>
+                    <button type="submit" class="modal__btn modal__btn--primary">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="fantasy-section">
+        <div class="max-w-2xl mx-auto px-8 text-center">
+            <h2 class="fantasy-section__title mb-4" data-animate="animate-fade-in-up">Ready to Upgrade Your Game?</h2>
+            <p class="text-lg text-radiant-gray mb-8" data-animate="animate-fade-in-up">Join thousands of players who have already taken their fantasy eSports experience to the next level.</p>
+            <div class="flex flex-wrap justify-center gap-4" data-animate="animate-fade-in-up">
+                <button class="fantasy-btn fantasy-btn--primary fantasy-btn--large" data-modal-trigger="membership-signup">
+                    Get Started Free
+                </button>
+                <a href="../index.html" class="fantasy-btn fantasy-btn--secondary fantasy-btn--large">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="fantasy-footer">
+        <div class="fantasy-footer__content">
+            <div class="fantasy-footer__links">
+                <a href="../index.html" class="fantasy-footer__link">Fantasy Home</a>
+                <a href="../game/index.html" class="fantasy-footer__link">Game</a>
+                <a href="../../../index.html" class="fantasy-footer__link">SATOR Home</a>
+            </div>
+            <p class="fantasy-footer__copy">© 2026 SATOR Fantasy eSports. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/fantasy.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!-- 
+  SATOR eXe - Global Header Template
+  ==================================
+  Enhanced navigation header with HUB switcher, search, mobile menu,
+  and breadcrumb support. Include this at the start of <body>.
+  
+  Usage:
+  1. Include this partial in your HTML
+  2. Set data-current-hub attribute on the header for HUB highlighting
+  3. The navigation will auto-initialize when DOM is ready
+-->
+
+<header class="sator-header" data-header data-current-hub="{{currentHub}}">
+    <div class="sator-header__container">
+        <div class="sator-header__inner">
+            <!-- Left: Logo + HUB Switcher -->
+            <div class="flex items-center gap-4">
+                <!-- Logo -->
+                <a href="/" class="sator-logo" aria-label="SATOR Home">
+                    <div class="sator-logo__icon">
+                        <span class="font-bold text-slate-900 text-sm">S</span>
+                    </div>
+                    <span class="sator-logo__text">SATOR</span>
+                </a>
+                
+                <!-- HUB Switcher (Desktop) -->
+                <div class="relative hidden md:block" data-hub-switcher>
+                    <button type="button" 
+                            class="hub-switcher__btn"
+                            aria-haspopup="true" 
+                            aria-expanded="false"
+                            data-hub-dropdown-btn>
+                        <span class="hub-switcher__indicator" data-hub-indicator style="background-color: #FFD700;"></span>
+                        <span data-hub-label>Select HUB</span>
+                        <svg class="hub-switcher__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    
+                    <!-- HUB Dropdown Menu -->
+                    <div class="hub-switcher__dropdown" 
+                         role="menu" 
+                         aria-orientation="vertical"
+                         data-hub-dropdown-menu>
+                        
+                        <a href="/hubs/stat-ref/" 
+                           class="hub-switcher__item"
+                           data-hub-option="statref"
+                           role="menuitem">
+                            <span class="hub-switcher__item-dot" style="background-color: #00D4FF;"></span>
+                            <span class="flex-1 font-medium">Statistical Reference</span>
+                        </a>
+                        
+                        <a href="/hubs/analytics/" 
+                           class="hub-switcher__item"
+                           data-hub-option="analytics"
+                           role="menuitem">
+                            <span class="hub-switcher__item-dot" style="background-color: #FFD700;"></span>
+                            <span class="flex-1 font-medium">Advanced Analytics</span>
+                        </a>
+                        
+                        <a href="/hubs/esports/" 
+                           class="hub-switcher__item"
+                           data-hub-option="esports"
+                           role="menuitem">
+                            <span class="hub-switcher__item-dot" style="background-color: #FF4655;"></span>
+                            <span class="flex-1 font-medium">eSports</span>
+                        </a>
+                        
+                        <a href="/hubs/fantasy/" 
+                           class="hub-switcher__item"
+                           data-hub-option="fantasy"
+                           role="menuitem">
+                            <span class="hub-switcher__item-dot" style="background-color: #00FF88;"></span>
+                            <span class="flex-1 font-medium">Fantasy eSports</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center: Desktop Navigation -->
+            <nav class="sator-nav" role="navigation" aria-label="Main navigation">
+                <a href="/" class="sator-nav__link" data-nav-link="home">Home</a>
+                <a href="/hubs/stat-ref/" class="sator-nav__link" data-nav-link="stats">Stats</a>
+                <a href="/hubs/analytics/" class="sator-nav__link" data-nav-link="analytics">Analytics</a>
+                <a href="/hubs/esports/" class="sator-nav__link" data-nav-link="esports">eSports</a>
+                <a href="/hubs/" class="sator-nav__link" data-nav-link="hubs">All HUBs</a>
+            </nav>
+            
+            <!-- Right: Search + Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Search (Desktop) -->
+                <div class="sator-search hidden lg:block" data-search>
+                    <svg class="sator-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" 
+                           class="sator-search__input" 
+                           placeholder="Search players, teams..." 
+                           data-search-input 
+                           aria-label="Search">
+                    <div class="sator-search__dropdown" data-search-dropdown>
+                        <div class="sator-search__category">Search across all HUBs</div>
+                    </div>
+                </div>
+                
+                <!-- Live Indicator -->
+                <div class="live-indicator hidden sm:flex">
+                    <span class="live-indicator__dot"></span>
+                    <span class="live-indicator__text">Live</span>
+                </div>
+                
+                <!-- User Menu (Desktop) -->
+                <div class="hidden md:block">
+                    <a href="#" class="flex items-center gap-2 px-3 py-1.5 text-sm text-white/70 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span class="hidden lg:inline">Sign In</span>
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <button type="button" 
+                        class="mobile-menu-toggle"
+                        aria-label="Toggle menu"
+                        aria-expanded="false"
+                        data-mobile-toggle>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" data-mobile-menu>
+        <div class="mobile-menu__section">
+            <div class="mobile-menu__section-title">HUBs</div>
+            <a href="/hubs/stat-ref/" class="mobile-menu__link" data-hub-option="statref">
+                <span class="mobile-menu__dot" style="background-color: #00D4FF;"></span>
+                Statistical Reference
+            </a>
+            <a href="/hubs/analytics/" class="mobile-menu__link" data-hub-option="analytics">
+                <span class="mobile-menu__dot" style="background-color: #FFD700;"></span>
+                Advanced Analytics
+            </a>
+            <a href="/hubs/esports/" class="mobile-menu__link" data-hub-option="esports">
+                <span class="mobile-menu__dot" style="background-color: #FF4655;"></span>
+                eSports
+            </a>
+            <a href="/hubs/fantasy/" class="mobile-menu__link" data-hub-option="fantasy">
+                <span class="mobile-menu__dot" style="background-color: #00FF88;"></span>
+                Fantasy eSports
+            </a>
+        </div>
+        
+        <div class="mobile-menu__section" style="border-top: 1px solid rgba(255,255,255,0.1);">
+            <div class="mobile-menu__section-title">Navigation</div>
+            <a href="/" class="mobile-menu__link" data-nav-link="home">Home</a>
+            <a href="/hubs/" class="mobile-menu__link" data-nav-link="hubs">HUB Selector</a>
+        </div>
+        
+        <div class="mobile-menu__section" style="border-top: 1px solid rgba(255,255,255,0.1);">
+            <div class="mobile-menu__section-title">Account</div>
+            <a href="#" class="mobile-menu__link">Sign In</a>
+            <a href="#" class="mobile-menu__link">Register</a>
+        </div>
+    </div>
+</header>
+
+<!-- Breadcrumb Navigation (Optional) -->
+<div class="sator-breadcrumb" data-breadcrumb-container>
+    <!-- Breadcrumbs will be injected here by JavaScript -->
+</div>
+
+<!-- Spacer for fixed header -->
+<div class="h-16"></div>
+
+<!-- Import navigation styles -->
+<link rel="stylesheet" href="/css/navigation.css">

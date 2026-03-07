@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Profile — SATOR Statistical Reference</title>
+    <meta name="description" content="Detailed player statistics, match history, and performance metrics.">
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../design-system/porcelain-cubed/main.css">
+    <link rel="stylesheet" href="../css/stat-ref.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stat: { primary: '#1E3A5F', secondary: '#00d4ff', accent: '#4A90D9' },
+                        abyss: { void: '#0a0a0f', deep: '#0D1B2A', mid: '#152A45' }
+                    },
+                    fontFamily: { 
+                        sans: ['Inter', 'system-ui', 'sans-serif'], 
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-abyss-void text-white min-h-screen hub-statref">
+    <!-- Navigation Bar -->
+    <nav class="hub-nav border-b border-white/10">
+        <div class="flex items-center gap-4">
+            <a href="../../" class="hub-nav__logo text-lg font-bold">S</a>
+            <div class="h-6 w-px bg-white/20"></div>
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-stat-secondary animate-pulse"></div>
+                <span class="font-display text-lg font-light tracking-wide">Statistical Reference</span>
+                <span class="text-xs font-mono text-white/40 bg-white/5 px-2 py-1 rounded-full">HUB 1/4</span>
+            </div>
+        </div>
+        
+        <div class="main-nav hidden md:flex">
+            <a href="../index.html" class="main-nav__item">Overview</a>
+            <a href="index.html" class="main-nav__item main-nav__item--active">Players</a>
+            <a href="../teams/index.html" class="main-nav__item">Teams</a>
+            <a href="../matches/index.html" class="main-nav__item">Matches</a>
+            <a href="../leaders/index.html" class="main-nav__item">Leaderboards</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="../compare.html" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                </svg>
+                Compare
+            </a>
+            <button class="mobile-nav__toggle md:hidden" id="mobileMenuToggle">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-nav__overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-nav__menu" id="mobileMenu">
+        <div class="mobile-nav__header">
+            <span class="font-display text-xl">Menu</span>
+            <button class="mobile-nav__close" id="mobileMenuClose">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-nav__list">
+            <a href="../index.html" class="mobile-nav__item">Overview</a>
+            <a href="index.html" class="mobile-nav__item mobile-nav__item--active">Players</a>
+            <a href="../teams/index.html" class="mobile-nav__item">Teams</a>
+            <a href="../matches/index.html" class="mobile-nav__item">Matches</a>
+            <a href="../leaders/index.html" class="mobile-nav__item">Leaderboards</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs mb-6">
+            <div class="breadcrumb__item">
+                <a href="../index.html" class="breadcrumb__link">Stat Ref</a>
+                <span class="breadcrumb__separator">/</span>
+            </div>
+            <div class="breadcrumb__item">
+                <a href="index.html" class="breadcrumb__link">Players</a>
+                <span class="breadcrumb__separator">/</span>
+            </div>
+            <span class="breadcrumb__current" id="breadcrumbName">Loading...</span>
+        </nav>
+
+        <!-- Player Header -->
+        <section class="player-header mb-8">
+            <div class="player-header__avatar" id="playerAvatar">--</div>
+            <div class="player-header__info">
+                <h1 class="player-header__name" id="playerName">Loading...</h1>
+                <div class="player-header__meta">
+                    <span class="player-header__badge">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span id="playerTeam">--</span>
+                    </span>
+                    <span class="player-header__badge" id="playerRole">--</span>
+                    <span class="player-header__badge" id="playerGame">--</span>
+                    <span class="player-header__badge" id="playerRegion">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-display font-light mb-6 flex items-center gap-3">
+                <span class="w-8 h-px bg-stat-secondary/50"></span>
+                Career Statistics
+            </h2>
+            <div class="player-stats-grid" id="playerStats">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Two Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Teammates -->
+            <section>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-display font-light flex items-center gap-3">
+                        <span class="w-8 h-px bg-stat-secondary/50"></span>
+                        Teammates
+                    </h2>
+                    <a href="../teams/template.html" class="text-sm text-stat-secondary hover:text-stat-accent transition-colors">View Team →</a>
+                </div>
+                <div class="space-y-3" id="playerTeammates">
+                    <!-- Teammates will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Recent Matches -->
+            <section>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-display font-light flex items-center gap-3">
+                        <span class="w-8 h-px bg-stat-secondary/50"></span>
+                        Recent Matches
+                    </h2>
+                    <a href="../matches/index.html" class="text-sm text-stat-secondary hover:text-stat-accent transition-colors">View All →</a>
+                </div>
+                <div class="space-y-3" id="playerMatches">
+                    <!-- Matches will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Agent/Weapon Preferences (Stub) -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-display font-light mb-6 flex items-center gap-3">
+                <span class="w-8 h-px bg-stat-secondary/50"></span>
+                Agent Preferences
+            </h2>
+            <div class="bg-white/5 border border-white/10 rounded-xl p-8 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-stat-primary/30 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-stat-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium mb-2">Detailed Agent Statistics</h3>
+                <p class="text-gray-400 mb-4">View agent pick rates, win rates, and performance by map.</p>
+                <button onclick="alert('Agent statistics feature coming soon!')" class="px-6 py-2 bg-stat-primary/30 hover:bg-stat-primary/50 border border-stat-secondary/30 rounded-lg text-stat-secondary transition-colors">
+                    Coming Soon
+                </button>
+            </div>
+        </section>
+
+        <!-- Performance Charts (Stub) -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-display font-light mb-6 flex items-center gap-3">
+                <span class="w-8 h-px bg-stat-secondary/50"></span>
+                Performance History
+            </h2>
+            <div class="bg-white/5 border border-white/10 rounded-xl p-8">
+                <div class="h-64 flex items-center justify-center border border-dashed border-white/20 rounded-lg">
+                    <div class="text-center">
+                        <svg class="w-12 h-12 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        </svg>
+                        <p class="text-gray-400">Performance charts coming soon</p>
+                        <p class="text-gray-500 text-sm mt-1">Track ACS, K/D, and rating over time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Back to Players
+                    </a>
+                </div>
+                <span class="text-gray-500 text-sm">&copy; 2026 SATOR Platform</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/stat-ref.js"></script>
+    <script>
+        // Mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('mobile-nav--open');
+                mobileMenuOverlay.classList.add('mobile-nav--open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('mobile-nav--open');
+                mobileMenuOverlay.classList.remove('mobile-nav--open');
+                document.body.style.overflow = '';
+            }
+
+            mobileMenuToggle?.addEventListener('click', openMobileMenu);
+            mobileMenuClose?.addEventListener('click', closeMobileMenu);
+            mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
+        });
+    </script>
+</body>
+</html>

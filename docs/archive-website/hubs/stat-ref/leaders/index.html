@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboards — SATOR Statistical Reference</title>
+    <meta name="description" content="Top esports player rankings by ACS, Rating, K/D, and KAST%. Compare the best players across Valorant and Counter-Strike.">
+    <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../design-system/porcelain-cubed/main.css">
+    <link rel="stylesheet" href="../css/stat-ref.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stat: { primary: '#1E3A5F', secondary: '#00d4ff', accent: '#4A90D9' },
+                        abyss: { void: '#0a0a0f', deep: '#0D1B2A', mid: '#152A45' }
+                    },
+                    fontFamily: { 
+                        sans: ['Inter', 'system-ui', 'sans-serif'], 
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-abyss-void text-white min-h-screen hub-statref">
+    <!-- Navigation Bar -->
+    <nav class="hub-nav border-b border-white/10">
+        <div class="flex items-center gap-4">
+            <a href="../../" class="hub-nav__logo text-lg font-bold">S</a>
+            <div class="h-6 w-px bg-white/20"></div>
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-stat-secondary animate-pulse"></div>
+                <span class="font-display text-lg font-light tracking-wide">Statistical Reference</span>
+                <span class="text-xs font-mono text-white/40 bg-white/5 px-2 py-1 rounded-full">HUB 1/4</span>
+            </div>
+        </div>
+        
+        <div class="main-nav hidden md:flex">
+            <a href="../index.html" class="main-nav__item">Overview</a>
+            <a href="../players/index.html" class="main-nav__item">Players</a>
+            <a href="../teams/index.html" class="main-nav__item">Teams</a>
+            <a href="../matches/index.html" class="main-nav__item">Matches</a>
+            <a href="index.html" class="main-nav__item main-nav__item--active">Leaderboards</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button class="mobile-nav__toggle md:hidden" id="mobileMenuToggle">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-nav__overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-nav__menu" id="mobileMenu">
+        <div class="mobile-nav__header">
+            <span class="font-display text-xl">Menu</span>
+            <button class="mobile-nav__close" id="mobileMenuClose">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-nav__list">
+            <a href="../index.html" class="mobile-nav__item">Overview</a>
+            <a href="../players/index.html" class="mobile-nav__item">Players</a>
+            <a href="../teams/index.html" class="mobile-nav__item">Teams</a>
+            <a href="../matches/index.html" class="mobile-nav__item">Matches</a>
+            <a href="index.html" class="mobile-nav__item mobile-nav__item--active">Leaderboards</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <nav class="breadcrumbs mb-4">
+                <div class="breadcrumb__item">
+                    <a href="../index.html" class="breadcrumb__link">Stat Ref</a>
+                    <span class="breadcrumb__separator">/</span>
+                </div>
+                <span class="breadcrumb__current">Leaderboards</span>
+            </nav>
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-display font-light">Leaderboards</h1>
+                    <p class="text-gray-400 mt-1">Top performers across all metrics</p>
+                </div>
+                
+                <!-- Game Toggle -->
+                <div class="tabs">
+                    <button class="tab tab--active" data-game="valorant">Valorant</button>
+                    <button class="tab" data-game="cs">Counter-Strike</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- ACS Leaders -->
+            <div class="leaderboard">
+                <div class="leaderboard__header">
+                    <h3 class="leaderboard__title flex items-center gap-2">
+                        <svg class="w-5 h-5 text-stat-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        ACS Leaders
+                    </h3>
+                    <span class="text-xs text-gray-400 font-mono">AVG COMBAT SCORE</span>
+                </div>
+                <div class="leaderboard__list" id="acsLeaders">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Rating Leaders -->
+            <div class="leaderboard">
+                <div class="leaderboard__header">
+                    <h3 class="leaderboard__title flex items-center gap-2">
+                        <svg class="w-5 h-5 text-stat-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                        </svg>
+                        Rating Leaders
+                    </h3>
+                    <span class="text-xs text-gray-400 font-mono">OVERALL RATING</span>
+                </div>
+                <div class="leaderboard__list" id="ratingLeaders">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- K/D Leaders -->
+            <div class="leaderboard">
+                <div class="leaderboard__header">
+                    <h3 class="leaderboard__title flex items-center gap-2">
+                        <svg class="w-5 h-5 text-stat-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        K/D Leaders
+                    </h3>
+                    <span class="text-xs text-gray-400 font-mono">KILL/DEATH RATIO</span>
+                </div>
+                <div class="leaderboard__list" id="kdLeaders">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- KAST Leaders -->
+            <div class="leaderboard">
+                <div class="leaderboard__header">
+                    <h3 class="leaderboard__title flex items-center gap-2">
+                        <svg class="w-5 h-5 text-stat-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        KAST% Leaders
+                    </h3>
+                    <span class="text-xs text-gray-400 font-mono">KILL/ASSIST/SURVIVE/TRADE</span>
+                </div>
+                <div class="leaderboard__list" id="kastLeaders">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Season Toggle Note -->
+        <div class="mt-8 p-6 bg-white/5 border border-white/10 rounded-xl">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-stat-primary/30 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-stat-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-medium mb-1">Historical Data</h3>
+                    <p class="text-gray-400 text-sm">Current leaderboards show all-time statistics. Season-specific leaderboards coming soon.</p>
+                </div>
+                <div class="ml-auto">
+                    <button onclick="alert('Season selector coming soon!')" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg text-sm transition-colors">
+                        All Time
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <a href="../index.html" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Back to Stat Ref
+                    </a>
+                </div>
+                <span class="text-gray-500 text-sm">&copy; 2026 SATOR Platform</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/stat-ref.js"></script>
+    <script>
+        // Mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('mobile-nav--open');
+                mobileMenuOverlay.classList.add('mobile-nav--open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('mobile-nav--open');
+                mobileMenuOverlay.classList.remove('mobile-nav--open');
+                document.body.style.overflow = '';
+            }
+
+            mobileMenuToggle?.addEventListener('click', openMobileMenu);
+            mobileMenuClose?.addEventListener('click', closeMobileMenu);
+            mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
+        });
+    </script>
+</body>
+</html>
