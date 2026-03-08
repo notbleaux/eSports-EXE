@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
+import './styles/mobile.css'
 
 // Error boundary for production
 class ErrorBoundary extends React.Component {

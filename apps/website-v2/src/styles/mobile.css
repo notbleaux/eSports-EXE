@@ -1,0 +1,128 @@
+/**
+ * NJZ Platform - Mobile Responsive Styles
+ * Addresses Technical Analysis: "No Mobile Strategy"
+ * Target: 60% of esports audience on mobile
+ */
+
+@layer utilities {
+  /* Safe area support for iOS */
+  .h-safe-area-inset-bottom {
+    height: env(safe-area-inset-bottom, 0px);
+  }
+  
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* Mobile Navigation Styles */
+@media (max-width: 767px) {
+  /* Hide desktop navigation elements */
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  /* Adjust main content for bottom nav */
+  main {
+    padding-bottom: 80px !important;
+  }
+  
+  /* Hub grid becomes single column */
+  .hub-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  /* Cards full width on mobile */
+  .hub-card {
+    width: 100% !important;
+    margin: 0.5rem 0 !important;
+  }
+  
+  /* Typography adjustments */
+  h1 {
+    font-size: 1.75rem !important;
+    line-height: 2rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.75rem !important;
+  }
+  
+  /* Touch-friendly buttons */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Table becomes cards */
+  .data-table {
+    display: block;
+  }
+  
+  .data-table thead {
+    display: none;
+  }
+  
+  .data-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--void-light);
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+  }
+  
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: var(--slate);
+  }
+}
+
+/* Tablet Adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hub-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* PWA Support */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+  }
+  
+  nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

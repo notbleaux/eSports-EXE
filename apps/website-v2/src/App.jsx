@@ -6,6 +6,8 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navigation from './shared/components/Navigation'
+import MobileNavigation from './shared/components/MobileNavigation'
+import RealTimeNotifications from './shared/components/RealTimeNotifications'
 import Footer from './shared/components/Footer'
 import NotificationContainer from './shared/components/NotificationContainer'
 import TwinFileVisualizer from './shared/components/TwinFileVisualizer'
@@ -94,6 +96,7 @@ function App() {
     <div className="min-h-screen bg-void text-white overflow-x-hidden">
       <RouteChangeHandler />
       <Navigation />
+      <RealTimeNotifications />
       
       <main className="relative">
         <AnimatePresence mode="wait">
@@ -166,6 +169,7 @@ function App() {
       
       <Footer />
       <NotificationContainer />
+      <MobileNavigation />
       
       {/* Fixed Twin-File Integrity Indicator */}
       <div className="fixed bottom-6 left-6 z-40 hidden md:block">
