@@ -54,13 +54,13 @@ A complex, interconnected eSports ecosystem starting with CS/Valorant. Built on 
 ## GitHub Access Tokens
 
 ### Main Repository (notbleaux/eSports-EXE)
-- **Key ID:** [REDACTED]
+- **Key ID:** [REDACTED — See SECURE_TOKENS.md]
 - **Type:** GitHub Personal Access Token
 - **Status:** Stored as Actions Secret
 - **Managed by:** Kimi (KIKI system)
 - **Purpose:** Git push/pull operations for eSports-EXE repository
 
-**Security Note:** Token exposure in logs or files should be avoided. Rotate if compromised.
+**Security Note:** Token stored securely. See `SECURE_TOKENS.md` for full details. Token exposure in logs or files should be avoided. Rotate if compromised.
 - Production security certification
 
 ### Proposed Skills to Create
