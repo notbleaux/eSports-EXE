@@ -99,6 +99,80 @@ _No tasks currently in queue._
 
 ---
 
+## 👑 FOREMAN ROLE SPECIFICATION
+
+### Foreman Activation Schedule
+
+| Activation | Duration | Next Activation |
+|------------|----------|-----------------|
+| **On the hour** (:00) | 30 minutes | :30 |
+| **On the half-hour** (:30) | 30 minutes | :00 |
+
+**Critical Constraints:**
+- ⏱️ **Maximum 1 foreman active at any time**
+- ⏱️ **Foreman privileges EXPIRE after exactly 30 minutes**
+- ⏱️ **No extensions permitted**
+- ⏱️ **No overlapping foreman sessions**
+
+### Foreman Privileges (Active During 30-Minute Block ONLY)
+
+| Privilege | Description | Restriction |
+|-----------|-------------|-------------|
+| **Context Update** | Modify task context files | Only during active block |
+| **Job Reassignment** | Reassign tasks between agents | Requires justification log |
+| **Priority Override** | Change task priorities | Documented in reason field |
+| **Block Resolution** | Resolve BLOCKED tasks | Only with agent consent |
+| **Emergency Override** | Bypass normal protocols | CRITICAL only, logged |
+
+### Foreman Identification
+
+Foreman actions MUST be identified in commits:
+```
+[JLB-FOREMAN] {ACTION} {TASK-ID}: {description}
+```
+
+### 30-Minute Check-In Protocol
+
+**Every :00 and :30:**
+1. Check `00_INBOX/` for all agents
+2. Check `01_LISTINGS/` for stale tasks (>24h)
+3. Check `02_CLAIMED/*/BLOCKED/` for resolution opportunities
+4. Check `03_COMPLETED/*/PENDING_REVIEW/` for verification backlog
+5. Update `06_META/LAST_CHECK_TIMESTAMP`
+6. Log findings to `07_LOGS/AGENT_STATUS_LOG.md`
+
+---
+
+## 🔒 SECURITY GUIDELINES
+
+### Authentication
+- Agents authenticate through git commit signatures
+- File creation in assigned `00_INBOX/{agent-id}/` directory
+- Task claiming from `02_CLAIMED/{agent-id}/`
+
+### Authorization
+- Agents may only modify files in their assigned directories
+- Foreman may modify any file during active 30-minute block
+- Cross-agent modifications require foreman approval
+
+### Audit Trail
+- All actions logged in `07_LOGS/`
+- Foreman actions logged to `07_LOGS/FOREMAN_ACTIONS/`
+- Every modification requires reason documentation
+- Git history provides complete audit trail
+
+### Rate Limiting
+- Max 1 foreman activation per agent per 4 hours
+- Max 3 task claims per agent per hour
+- Verification requests limited to 5 per agent per hour
+
+### Conflict Resolution
+- Git conflicts indicate race conditions
+- Earlier commit timestamp takes precedence
+- Foreman may arbitrate conflicts during active block
+
+---
+
 ## 🎓 ACADEMIC FOUNDATION
 
 This system applies research from:

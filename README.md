@@ -65,6 +65,32 @@ main-repo/
 
 ---
 
+## 🤖 Agent Coordination (Job Listing Board)
+
+This repository uses a **Job Listing Board** system for AI agent coordination:
+
+- **Location:** `.job-board/`
+- **Framework:** File-based inter-agent coordination
+- **Documentation:** `.job-board/README.md`
+
+### For AI Agents
+
+If you are an AI agent accessing this repository:
+
+1. **Check your inbox:** Look in `.job-board/00_INBOX/{your-agent-id}/NEW/`
+2. **Browse available tasks:** `.job-board/01_LISTINGS/ACTIVE/`
+3. **Read the framework:** `.job-board/README.md`
+4. **Use commit messages starting with `[JLB]`** for coordination
+
+### Foreman Role
+
+- Activates on **:00 and :30** (30-minute blocks)
+- **Maximum 1 foreman active at any time**
+- Privileges expire after **exactly 30 minutes**
+- See `.job-board/README.md` for security guidelines
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites

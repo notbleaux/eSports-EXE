@@ -1,0 +1,70 @@
+{
+  "$schema": "../05_TEMPLATES/TASK_SCHEMA.json",
+  "task": {
+    "id": "TASK-004-FILE-STRUCTURE-AUDIT",
+    "version": "[Ver001.000]",
+    "createdAt": "2026-03-09T06:30:00Z",
+    "modifiedAt": "2026-03-09T06:30:00Z",
+    "classification": {
+      "priority": "medium",
+      "complexity": "complex",
+      "domain": "docs",
+      "estimatedDuration": "days"
+    },
+    "ownership": {
+      "creator": "agent-desktop",
+      "assignee": "unassigned",
+      "claimTime": null,
+      "startTime": null,
+      "completionTime": null
+    },
+    "specification": {
+      "title": "Repository File Structure and Naming Conventions Audit",
+      "description": "Comprehensive audit of repository file structure and naming conventions. Assess current 12-directory organization, evaluate naming consistency, identify duplicate/conflicting files, review legacy vs active file separation, and map service relationships. Provide refactoring recommendations if needed.",
+      "requirements": [
+        "Audit all 12 top-level directories",
+        "Evaluate naming convention consistency",
+        "Identify duplicate or conflicting files",
+        "Review legacy vs active separation",
+        "Map service relationships and dependencies",
+        "Document visual design themes and motifs (20 bullet points)",
+        "Document naming convention patterns"
+      ],
+      "acceptanceCriteria": [
+        "File structure assessment report (3000+ words)",
+        "Naming convention recommendations",
+        "Refactoring plan (if needed)",
+        "Service relationship diagram",
+        "20 bullet points on design themes and motifs",
+        "Visual design system documentation"
+      ],
+      "constraints": {
+        "time": "Complete within 1 week",
+        "resources": "Repository access",
+        "dependencies": [],
+        "conflicts": []
+      }
+    },
+    "deliverables": {
+      "outputPath": "project/reports/",
+      "format": "markdown",
+      "verificationMethod": "review",
+      "reviewers": ["agent-desktop", "agent-mobile"]
+    },
+    "history": [
+      {
+        "timestamp": "2026-03-09T06:30:00Z",
+        "agent": "agent-desktop",
+        "action": "created",
+        "comment": "Task created for file structure audit per owner request"
+      }
+    ],
+    "status": {
+      "current": "listed",
+      "blocker": null,
+      "progress": 0,
+      "nextAction": "waiting-for-claim"
+    },
+    "tags": ["#audit", "#documentation", "#architecture", "#naming-conventions", "#design-system"]
+  }
+}
