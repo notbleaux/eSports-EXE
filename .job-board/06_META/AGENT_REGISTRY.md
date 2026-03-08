@@ -43,27 +43,6 @@ To register as an agent in this system:
 
 ---
 
-### agent-mobile
-- **Role:** Mobile Session Agent
-- **Capabilities:** Development, documentation, research
-- **Specializations:** To be determined by agent
-- **Status:** ✅ ACTIVE
-- **Contact:** Mobile session (independent)
-- **Registered:** 2026-03-09
-
-**Capability Ratings:**
-- Frontend: ★★★ (Expert)
-- Backend: ★★★ (Expert)
-- Data/Analytics: ★★★ (Expert)
-- Design/UI: ★★★ (Expert)
-- Documentation: ★★★ (Expert)
-- Research: ★★★ (Expert)
-
-**Communication Preferences:**
-- To be updated by agent
-
----
-
 ## 🏢 Inactive/Reserved Agent Slots
 
 | Agent ID | Status | Reserved For |
@@ -84,7 +63,6 @@ To register as an agent in this system:
 | Agent | Frontend | Backend | Data | Design | Docs | Research | QA |
 |-------|----------|---------|------|--------|------|----------|-----|
 | agent-desktop | ★★★ | ★★★ | ★★ | ★★ | ★★★ | ★★★ | ★★ |
-| agent-mobile | ★★★ | ★★★ | ★★★ | ★★★ | ★★★ | ★★★ | ★★★ |
 | agent-foreman-1 | - | - | - | - | - | - | - |
 
 ### Domain Specializations
@@ -92,7 +70,6 @@ To register as an agent in this system:
 | Agent | Valorant | CS2 | Esports | Analytics | Web | Systems |
 |-------|----------|-----|---------|-----------|-----|---------|
 | agent-desktop | ★★ | ★★ | ★★★ | ★★ | ★★★ | ★★★ |
-| agent-mobile | ★★★ | ★★★ | ★★★ | ★★★ | ★★★ | ★★★ |
 
 ---
 
@@ -105,13 +82,6 @@ To register as an agent in this system:
 - **Availability:** Variable (session-based)
 - **Foreman Eligibility:** ✅ Yes (max 1 activation per 4 hours)
 
-### agent-mobile
-- **Update Frequency:** To be specified
-- **Handoff Detail Level:** To be specified
-- **Preferred Task Types:** To be specified
-- **Availability:** Independent session
-- **Foreman Eligibility:** ✅ Yes
-
 ---
 
 ## 📊 Agent Activity Status
@@ -119,7 +89,6 @@ To register as an agent in this system:
 | Agent | Current Task | Status | Last Activity | Foreman Active |
 |-------|--------------|--------|---------------|----------------|
 | agent-desktop | Framework implementation | ACTIVE | 2026-03-09 06:20 | ⭕ NO |
-| agent-mobile | [To be updated] | UNKNOWN | [Unknown] | ⭕ NO |
 
 ---
 
@@ -167,7 +136,8 @@ Template for new agent entry:
 
 | Date | Agent | Action | Details |
 |------|-------|--------|---------|
-| 2026-03-09 | agent-desktop | Initial creation | Registry established with 2 agents |
+| 2026-03-09 | agent-desktop | Initial creation | Registry established |
+| 2026-03-09 | agent-desktop | Correction | Removed agent-mobile (never materialized) |
 
 ---
 

@@ -48,7 +48,7 @@
       "outputPath": "project/frameworks/",
       "format": "markdown",
       "verificationMethod": "review",
-      "reviewers": ["agent-desktop", "agent-mobile"]
+      "reviewers": ["agent-desktop"]
     },
     "history": [
       {

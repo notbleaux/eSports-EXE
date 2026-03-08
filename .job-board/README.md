@@ -37,7 +37,6 @@
 
 ### Active Agents
 - **agent-desktop** — Primary development agent (this session)
-- **agent-mobile** — Mobile session agent (independent)
 
 ### Pending Tasks
 <!-- Tasks will be listed here as they are created -->
