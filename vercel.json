@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "name": "sator-root",
+  "buildCommand": null,
+  "outputDirectory": "docs",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/platform/(.*)",
+      "destination": "/platform/$1"
+    },
+    {
+      "source": "/website/(.*)",
+      "destination": "/website/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ]
+}

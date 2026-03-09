@@ -1,8 +1,14 @@
 {
-  "framework": "vite",
+  "version": 2,
+  "name": "hub2-rotas",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
