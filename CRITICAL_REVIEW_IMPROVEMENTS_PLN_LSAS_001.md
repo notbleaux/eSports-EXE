@@ -1,3 +1,5 @@
+[Ver008.000]
+
 # CRITICAL REVIEW & IMPROVEMENTS
 ## SATOR-ROTAS Latin Square Auto Save Framework
 

@@ -1,3 +1,5 @@
+[Ver027.000]
+
 # 🧠 PROJECT MEMORY
 ## SATOR-eXe-ROTAS / NJZ Platform
 **Classification:** MASTER REFERENCE  

@@ -1,0 +1,51 @@
+/* ROTAS Hub Specific Styles */
+/* Size: ~6KB vs ~28KB full design system */
+
+.hub-rotas {
+  --hub-primary: var(--rotas-active, #00f0ff);
+  --hub-ellipse: var(--rotas-ellipse, rgba(0, 240, 255, 0.2));
+}
+
+/* ROTAS ellipse animations */
+.ellipse.jungian-layer {
+  transition: all var(--duration-slow, 500ms) var(--ease-harmonic, cubic-bezier(0.37, 0, 0.63, 1));
+}
+
+/* ROTAS persona visualization */
+.persona-node {
+  fill: var(--hub-primary);
+  filter: drop-shadow(0 0 8px var(--hub-ellipse));
+}
+
+/* ROTAS hub indicator */
+.hub-indicator.rotas {
+  border-color: var(--hub-ellipse);
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.hub-indicator.rotas .hub-indicator-icon {
+  color: var(--hub-primary);
+}
+
+/* ROTAS-specific animations */
+.rotas-glow {
+  animation: rotasGlow 2s ease-in-out infinite;
+}
+
+@keyframes rotasGlow {
+  0%, 100% { filter: drop-shadow(0 0 5px var(--hub-ellipse)); }
+  50% { filter: drop-shadow(0 0 15px var(--hub-ellipse)); }
+}
+
+/* ROTAS ellipse path animations */
+.ellipse-path {
+  stroke: var(--hub-primary);
+  stroke-width: 2;
+  fill: none;
+  opacity: 0.6;
+}
+
+/* ROTAS data visualization colors */
+.rotas-data-primary { color: var(--hub-primary); }
+.rotas-data-bg { background-color: var(--hub-ellipse); }
+.rotas-border { border-color: var(--hub-ellipse); }

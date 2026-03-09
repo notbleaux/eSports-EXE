@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # Free eSports Data Sources Report: Counter-Strike & Valorant
 
 **Research Date:** March 4, 2026  

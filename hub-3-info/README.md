@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Hub 3 - Information Directory
 
 **The Directory** - NJZ Platform's comprehensive esports information hub.

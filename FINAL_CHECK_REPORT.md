@@ -1,3 +1,5 @@
+[Ver005.000]
+
 # ✅ FINAL_CHECK REPORT - NJZ Platform
 
 **Date:** March 5, 2026  

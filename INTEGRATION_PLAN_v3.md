@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # SATOR-eXe-ROTAS: INTEGRATION PLAN v3.0
 ## Website Design Dossier + Master Plan Integration
 

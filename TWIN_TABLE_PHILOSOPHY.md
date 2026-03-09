@@ -1,3 +1,5 @@
+[Ver023.000]
+
 # RAWS-BASE Twin-Table Architecture
 ## SATOR-eXe-ROTAS Documentation
 

@@ -1,3 +1,5 @@
+[Ver008.000]
+
 # DIRECT ANSWER: Why Previous Agents Could Deploy And I Can't
 ## No More Evasion. Core Issue Addressed.
 

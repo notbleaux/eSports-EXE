@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # NJZ VLR API - Production-Grade Valorant Esports API
 
 A high-performance, production-ready API for Valorant esports data from VLR.gg with RAWS/BASE twin-file integrity, circuit breaker patterns, and comprehensive monitoring.

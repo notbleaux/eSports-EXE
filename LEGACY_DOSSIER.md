@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # LEGACY DOSSIER: AXIOM / SATOR ESPORTS ANALYTICS PLATFORM
 ## Historical Context & Project Evolution (2024-2026)
 

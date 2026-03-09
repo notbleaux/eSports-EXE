@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { USER_ROLES, getRoleConfig, saveUserRole } from '../../../shared/js/userPreferences';
+import { USER_ROLES, getRoleConfig, saveUserRole } from '../js/userPreferences';
 
 /**
  * Role Selection Component

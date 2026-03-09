@@ -1,0 +1,290 @@
+# ============================================
+# PERFORMANCE BUDGET CONFIGURATION
+# RadiantX Platform - Lighthouse 90+ Target
+# ============================================
+
+# Loading Performance Targets
+loading:
+  # Core Web Vitals
+  fcp:
+    target: 1000ms      # First Contentful Paint
+    warning: 1800ms
+    fail: 3000ms
+  
+  lcp:
+    target: 2500ms      # Largest Contentful Paint
+    warning: 3500ms
+    fail: 4000ms
+  
+  tti:
+    target: 3800ms      # Time to Interactive
+    warning: 4500ms
+    fail: 7300ms
+  
+  cls:
+    target: 0.1         # Cumulative Layout Shift
+    warning: 0.15
+    fail: 0.25
+  
+  tbt:
+    target: 200ms       # Total Blocking Time
+    warning: 350ms
+    fail: 600ms
+  
+  inp:
+    target: 200ms       # Interaction to Next Paint
+    warning: 350ms
+    fail: 500ms
+
+# Bundle Size Budgets
+bundles:
+  # JavaScript
+  js:
+    entrypoint:
+      target: 150KB
+      warning: 200KB
+      fail: 250KB
+    
+    async_chunks:
+      target: 100KB
+      warning: 150KB
+      fail: 200KB
+    
+    total_initial:
+      target: 500KB
+      warning: 700KB
+      fail: 1000KB
+  
+  # CSS
+  css:
+    critical:
+      target: 14KB       # Must fit in single TCP packet
+      warning: 20KB
+      fail: 28KB
+    
+    total:
+      target: 100KB
+      warning: 150KB
+      fail: 200KB
+  
+  # Images
+  images:
+    hero:
+      target: 50KB
+      warning: 100KB
+      fail: 200KB
+    
+    thumbnail:
+      target: 20KB
+      warning: 35KB
+      fail: 50KB
+    
+    icon:
+      target: 5KB
+      warning: 10KB
+      fail: 15KB
+
+# Asset Count Budgets
+counts:
+  js_files:
+    target: 5
+    warning: 8
+    fail: 12
+  
+  css_files:
+    target: 2
+    warning: 3
+    fail: 5
+  
+  font_files:
+    target: 3
+    warning: 5
+    fail: 8
+  
+  image_requests:
+    target: 15
+    warning: 25
+    fail: 40
+
+# Third-Party Budgets
+third_party:
+  total_size:
+    target: 150KB
+    warning: 250KB
+    fail: 400KB
+  
+  scripts:
+    target: 3
+    warning: 5
+    fail: 8
+  
+  domains:
+    target: 3
+    warning: 5
+    fail: 8
+
+# Request Budgets
+requests:
+  initial_page:
+    target: 20
+    warning: 30
+    fail: 50
+  
+  total_page:
+    target: 50
+    warning: 75
+    fail: 100
+
+# Timing Budgets
+timing:
+  server_response:
+    target: 200ms
+    warning: 500ms
+    fail: 1000ms
+  
+  render_blocking_resources:
+    target: 0
+    warning: 2
+    fail: 5
+  
+  dom_content_loaded:
+    target: 1500ms
+    warning: 2500ms
+    fail: 4000ms
+  
+  window_loaded:
+    target: 3000ms
+    warning: 4500ms
+    fail: 6000ms
+
+# Performance Monitoring
+monitoring:
+  # Lighthouse Score Targets
+  lighthouse:
+    performance:
+      target: 90
+      warning: 80
+      fail: 70
+    
+    accessibility:
+      target: 100
+      warning: 95
+      fail: 90
+    
+    best_practices:
+      target: 100
+      warning: 95
+      fail: 90
+    
+    seo:
+      target: 100
+      warning: 95
+      fail: 90
+  
+  # Web Vitals Thresholds
+  web_vitals:
+    report_to_console: true
+    send_to_analytics: true
+    
+    thresholds:
+      lcp_good: 2500
+      lcp_needs_improvement: 4000
+      
+      fid_good: 100
+      fid_needs_improvement: 300
+      
+      cls_good: 0.1
+      cls_needs_improvement: 0.25
+      
+      inp_good: 200
+      inp_needs_improvement: 500
+      
+      ttfb_good: 800
+      ttfb_needs_improvement: 1800
+
+# Build Optimizations
+build:
+  # Code splitting
+  code_splitting:
+    enabled: true
+    vendors: true
+    async_imports: true
+    route_based: true
+  
+  # Tree shaking
+  tree_shaking:
+    enabled: true
+    dead_code_elimination: true
+    side_effects: false
+  
+  # Minification
+  minification:
+    js: true
+    css: true
+    html: true
+  
+  # Compression
+  compression:
+    gzip: true
+    brotli: true
+    level: 9
+  
+  # Caching
+  caching:
+    static_assets: 31536000  # 1 year
+    html: 0                   # No cache
+    api: 60                   # 1 minute
+
+# Runtime Optimizations
+runtime:
+  # Lazy loading
+  lazy_loading:
+    images: true
+    iframes: true
+    videos: true
+    threshold: 200px
+  
+  # Prefetching
+  prefetching:
+    enabled: true
+    hover: true
+    visible_links: true
+  
+  # Preloading
+  preloading:
+    critical_fonts: true
+    critical_css: true
+    next_route: true
+  
+  # Service Worker
+  service_worker:
+    enabled: true
+    precache_critical: true
+    runtime_caching: true
+    background_sync: true
+
+# Mobile Optimization
+mobile:
+  # Touch targets
+  touch_target:
+    min_size: 48px
+    min_spacing: 8px
+  
+  # Viewport
+  viewport:
+    initial_scale: 1
+    width: device-width
+    user_scalable: yes
+  
+  # Font size
+  font_size:
+    min: 12px
+    base: 16px
+  
+  # Media queries
+  breakpoints:
+    sm: 640px
+    md: 768px
+    lg: 1024px
+    xl: 1280px
+    2xl: 1536px

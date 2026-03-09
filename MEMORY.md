@@ -1,3 +1,5 @@
+[Ver023.000]
+
 # MEMORY.md — Curated Long-Term Memory
 
 ## About Eli (Elijah eLohim. Nouvelles-Bleaux)

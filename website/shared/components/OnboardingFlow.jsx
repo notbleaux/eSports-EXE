@@ -5,7 +5,7 @@ import {
   FEATURE_HIGHLIGHTS, 
   TIER_OPTIONS,
   completeOnboarding 
-} from '../../../shared/js/userPreferences';
+} from '../js/userPreferences';
 import RoleSelection from './RoleSelection';
 
 /**

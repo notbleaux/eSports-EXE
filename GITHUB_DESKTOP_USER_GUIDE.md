@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # GitHub Desktop User Guide
 ## For SATOR-eXe-ROTAS / NJZ Platform Project
 

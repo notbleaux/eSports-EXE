@@ -1,3 +1,5 @@
+[Ver005.000]
+
 # NJZ Platform - Performance Optimization Report
 **Generated:** 2026-03-05  
 **Platform Version:** 2.0.0  

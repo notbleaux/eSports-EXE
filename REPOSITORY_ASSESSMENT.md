@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # SATOR-eXe-ROTAS: Comprehensive Repository Assessment & Updated Plan
 
 **Assessment Date:** March 5, 2026  

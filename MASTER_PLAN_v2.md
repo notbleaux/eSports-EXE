@@ -1,3 +1,5 @@
+[Ver024.000]
+
 # SATOR-eXe-ROTAS: MASTER PLAN v2.0
 ## Comprehensive Research-Driven Implementation Framework
 

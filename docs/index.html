@@ -3,58 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=./archive-website/">
-    <title>SATOR eXe ROTAS — Redirecting...</title>
+    <title>SATOR eXe ROTAS — eSports Analytics Platform</title>
+    <meta name="description" content="Advanced esports analytics platform for Valorant and Counter-Strike. Real-time match data, player performance metrics, and predictive insights.">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             background: #0a0a0f;
-            color: #e8e6e3;
-            font-family: 'JetBrains Mono', monospace;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            justify-content: center;
             text-align: center;
-        }
-        .container {
-            max-width: 600px;
             padding: 2rem;
         }
-        h1 {
-            color: #00f0ff;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
         }
+        
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f0ff, #c9b037);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            color: #8a8a9a;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+        }
+        
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #e8e6e3;
+        }
+        
         p {
             color: #8a8a9a;
             line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
-        a {
-            color: #00f0ff;
-            text-decoration: none;
-            border-bottom: 1px solid #00f0ff;
-        }
-        a:hover {
-            color: #c9b037;
-            border-bottom-color: #c9b037;
-        }
-        .loading {
+        
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
             margin-top: 2rem;
+        }
+        
+        .link-btn {
+            background: linear-gradient(135deg, #00f0ff20, #c9b03720);
+            border: 1px solid #00f0ff40;
+            color: #00f0ff;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .link-btn:hover {
+            background: linear-gradient(135deg, #00f0ff40, #c9b03740);
+            border-color: #00f0ff80;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+        }
+        
+        .status {
+            margin-top: 3rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.875rem;
-            color: #c9b037;
+            color: #00f0ff;
+        }
+        
+        .footer {
+            margin-top: 4rem;
+            color: #5a5a6a;
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            .links {
+                flex-direction: column;
+            }
+            .link-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚡ SATOR eXe ROTAS</h1>
-        <p>Redirecting to archive website...</p>
-        <p class="loading">If not redirected, <a href="./archive-website/">click here</a></p>
+        <h1 class="logo">SATOR eXe ROTAS</h1>
+        <p class="tagline">⚡ 4eva and Nvr Die ⚡</p>
+        
+        <h2>eSports Analytics Platform</h2>
+        <p>Advanced analytics for Valorant and Counter-Strike. Real-time match data, player performance metrics, and predictive insights.</p>
+        
+        <div class="links">
+            <a href="./platform/" class="link-btn">Launch Platform</a>
+            <a href="./website/index.html" class="link-btn">Legacy Website</a>
+            <a href="https://github.com/notbleaux/eSports-EXE" class="link-btn">View on GitHub</a>
+        </div>
+        
+        <div class="status">
+            ✅ GitHub Pages Deployment Active<br>
+            📱 Mobile Responsive | ⚡ Optimized
+        </div>
+        
+        <div class="footer">
+            © 2026 SATOR eXe ROTAS — Built with passion for esports
+        </div>
     </div>
-    <script>
-        // Immediate redirect
-        window.location.href = './archive-website/';
-    </script>
 </body>
 </html>

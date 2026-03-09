@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-dir-bg text-dir-text antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .swiss-grid {
+    @apply grid grid-cols-12 gap-6;
+  }
+  
+  .category-pill {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-200;
+  }
+  
+  .category-pill.active {
+    @apply bg-dir-nav-blue text-white;
+  }
+  
+  .category-pill.inactive {
+    @apply bg-gray-100 text-dir-muted hover:bg-gray-200;
+  }
+}

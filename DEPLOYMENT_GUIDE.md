@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # NJZ Platform Deployment Guide
 
 ## Overview

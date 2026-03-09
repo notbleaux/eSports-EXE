@@ -1,3 +1,5 @@
+[Ver004.000]
+
 ## TEAM A - PASS 3 - PHASE 3: UX/UI Final Verification (A9)
 
 **Domain:** UX/UI Polish (Final Pass)

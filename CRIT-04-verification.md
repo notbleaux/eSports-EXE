@@ -1,3 +1,5 @@
+[Ver016.000]
+
 === Verification of CRIT-04 Security Fixes ===
 
 ## 1. TutorialOverlay XSS Fix (progressiveDisclosure.js)

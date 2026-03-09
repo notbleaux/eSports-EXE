@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # ROTAS Hub 2 - The Harmonic Layer
 
 A sophisticated analytics dashboard featuring glassmorphism UI, harmonic wave visualizations, and Jungian archetype layer systems.

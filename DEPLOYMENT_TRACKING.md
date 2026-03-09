@@ -1,3 +1,5 @@
+[Ver008.000]
+
 # 🚀 NJZ PLATFORM DEPLOYMENT — LIVE TRACKING
 ## Agent Spawn Status & Execution Monitor
 

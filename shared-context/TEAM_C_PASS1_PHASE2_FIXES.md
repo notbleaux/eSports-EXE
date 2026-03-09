@@ -1,3 +1,5 @@
+[Ver018.000]
+
 # TEAM C - PASS 1 - PHASE 2: UX/UI Fixes (C2)
 
 **Agent:** C2 (UX/UI Polish & Accessibility)  

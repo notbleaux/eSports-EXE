@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # Skill: SATOR Project Coordinator
 
 ## Role

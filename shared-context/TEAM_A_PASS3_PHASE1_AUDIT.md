@@ -1,3 +1,5 @@
+[Ver017.000]
+
 # TEAM A - PASS 3 - PHASE 1: UX/UI Final Audit (A7)
 
 **Domain:** UX/UI Polish & Accessibility (Final Pass)  

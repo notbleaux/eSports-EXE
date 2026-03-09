@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # NJZ Platform Security Audit Report
 **Date:** March 5, 2026  
 **Scope:** Hub-1-SATOR & Hub Components  

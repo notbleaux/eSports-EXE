@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # NJZ ¿!? PLATFORM: COMPREHENSIVE ARCHITECTURE REVISION
 ## Critical Analysis & Implementation Plan v4.0
 

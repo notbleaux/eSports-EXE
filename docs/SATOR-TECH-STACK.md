@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Tech Stack Assessment — SATOR-eXe-ROTAS
 
 **Assessment Date:** 2026-03-04  

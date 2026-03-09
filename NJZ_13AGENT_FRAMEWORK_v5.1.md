@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # NJZ ¿!? 13-AGENT FOREMAN FRAMEWORK v5.1
 ## Refined Edition - Post-Review Updates
 

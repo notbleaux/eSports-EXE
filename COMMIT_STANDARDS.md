@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # 📋 Commit Message Standards
 ## For SATOR-eXe-ROTAS / NJZ Platform
 

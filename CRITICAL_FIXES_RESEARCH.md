@@ -1,3 +1,5 @@
+[Ver013.000]
+
 # CRITICAL FIXES: RESEARCH & RECOMMENDATIONS
 ## Pre-Agent Context Document
 

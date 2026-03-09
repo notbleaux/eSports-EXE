@@ -1,3 +1,5 @@
+[Ver004.000]
+
 # FINAL CHECK - ULTIMATE DEPLOYMENT REVIEW
 ## Agent Briefing Document
 

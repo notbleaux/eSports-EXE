@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATOR | Statistical Database Hub - NJZ</title>
+  <link rel="stylesheet" href="../njz-design-system.css">
+  <link rel="stylesheet" href="../shared/styles/hub-navigation.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-hub="sator">
+  
+  <!-- SHARED HEADER WITH HUB SWITCHER -->
+  <header class="hub-header-shared">
+    <div class="hub-header-inner">
+      <!-- Back Button -->
+      <div class="header-back">
+        <a href="../njz-central/index.html" class="back-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="back-text">NJZ Central</span>
+        </a>
+      </div>
+      
+      <!-- Hub Indicator / Switcher -->
+      <div class="hub-switcher">
+        <div class="hub-indicator sator" id="hubIndicator">
+          <span class="hub-indicator-icon">◎</span>
+          <span class="hub-indicator-name">SATOR</span>
+          <button class="hub-dropdown-toggle" id="hubDropdownToggle" aria-label="Switch hub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          
+          <!-- Hub Dropdown Menu -->
+          <div class="hub-dropdown-menu" id="hubDropdownMenu">
+            <a href="index.html" class="hub-option sator active">
+              <span class="hub-option-icon">◎</span>
+              <div class="hub-option-info">
+                <span class="hub-option-name">SATOR</span>
+                <span class="hub-option-desc">Raw Data Archive</span>
+              </div>
+            </a>
+            <a href="../hub2-rotas/index.html" class="hub-option rotas">
+              <span class="hub-option-icon">◈</span>
+              <div class="hub-option-info">
+                <span class="hub-option-name">ROTAS</span>
+                <span class="hub-option-desc">Analytics Hub</span>
+              </div>
+              <span class="hub-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <div class="header-status">
+          <span class="status-pulse"></span>
+          <span class="status-text">Live</span>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- MOBILE MENU DRAWER -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+  <nav class="mobile-menu-drawer" id="mobileMenuDrawer">
+    <div class="mobile-menu-section">
+      <h3 class="mobile-menu-title">Navigation</h3>
+      <div class="mobile-menu-links">
+        <a href="../njz-central/index.html" class="mobile-menu-link">
+          <span class="mobile-menu-link-icon">⌂</span>
+          <div class="mobile-menu-link-text">
+            <span class="mobile-menu-link-name">NJZ Central</span>
+            <span class="mobile-menu-link-desc">Command Center</span>
+          </div>
+          <span class="mobile-menu-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="mobile-menu-section">
+      <h3 class="mobile-menu-title">Hubs</h3>
+      <div class="mobile-menu-links">
+        <a href="index.html" class="mobile-menu-link sator">
+          <span class="mobile-menu-link-icon">◎</span>
+          <div class="mobile-menu-link-text">
+            <span class="mobile-menu-link-name">SATOR</span>
+            <span class="mobile-menu-link-desc">Statistical Database</span>
+          </div>
+          <span class="mobile-menu-link-arrow">→</span>
+        </a>
+        <a href="../hub2-rotas/index.html" class="mobile-menu-link rotas">
+          <span class="mobile-menu-link-icon">◈</span>
+          <div class="mobile-menu-link-text">
+            <span class="mobile-menu-link-name">ROTAS</span>
+            <span class="mobile-menu-link-desc">Analytics Hub</span>
+          </div>
+          <span class="mobile-menu-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Twin-File Bridge in Mobile Menu -->
+    <div class="mobile-menu-section">
+      <h3 class="mobile-menu-title">Data Bridge</h3>
+      <div class="hub-bridge">
+        <div class="hub-bridge-node sator">
+          <span class="hub-bridge-icon">◎</span>
+          <span class="hub-bridge-label">RAWS</span>
+          <span class="hub-bridge-desc">Raw Data</span>
+        </div>
+        <div class="hub-bridge-connector">
+          <div class="bridge-line"></div>
+          <div class="data-flow"></div>
+          <span class="bridge-status">Synced</span>
+        </div>
+        <div class="hub-bridge-node rotas">
+          <span class="hub-bridge-icon">◈</span>
+          <span class="hub-bridge-label">BASE</span>
+          <span class="hub-bridge-desc">Analytics</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- MAIN CONTENT -->
+  <main class="sator-main">
+    
+    <!-- HERO WITH CONCENTRIC RINGS -->
+    <section class="sator-hero">
+      <div class="ring-system">
+        <div class="ring ring-1" data-ring="outer">
+          <div class="data-point" style="--angle: 0deg;"></div>
+          <div class="data-point" style="--angle: 72deg;"></div>
+          <div class="data-point" style="--angle: 144deg;"></div>
+          <div class="data-point" style="--angle: 216deg;"></div>
+          <div class="data-point" style="--angle: 288deg;"></div>
+        </div>
+        <div class="ring ring-2" data-ring="middle">
+          <div class="data-point" style="--angle: 36deg;"></div>
+          <div class="data-point" style="--angle: 108deg;"></div>
+          <div class="data-point" style="--angle: 180deg;"></div>
+          <div class="data-point" style="--angle: 252deg;"></div>
+          <div class="data-point" style="--angle: 324deg;"></div>
+        </div>
+        <div class="ring ring-3" data-ring="inner">
+          <div class="data-point" style="--angle: 0deg;"></div>
+          <div class="data-point" style="--angle: 120deg;"></div>
+          <div class="data-point" style="--angle: 240deg;"></div>
+        </div>
+        <div class="ring-center">
+          <span class="center-label">RAWS</span>
+          <span class="center-count">2.4M</span>
+          <span class="center-label">Records</span>
+        </div>
+      </div>
+      
+      <div class="hero-content">
+        <h1>Statistical Database Hub</h1>
+        <p>Immutable RAWS files with cryptographic verification</p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">99.99%</span>
+            <span class="stat-label">Integrity</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="live-matches">156</span>
+            <span class="stat-label">Live Matches</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">12,847</span>
+            <span class="stat-label">Players</span>
+          </div>
+        </div>
+        
+        <!-- Cross-Hub Link -->
+        <div class="cross-hub-section">
+          <a href="../hub2-rotas/index.html" class="cross-hub-link sator-to-rotas" data-cross-hub="true" data-preserve-params="true">
+            View Analytics in ROTAS
+            <span class="hub-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- TWIN-FILE BRIDGE VISUAL -->
+    <section class="bridge-section">
+      <h2>Data Flow</h2>
+      <div class="hub-bridge">
+        <div class="hub-bridge-node sator">
+          <span class="hub-bridge-icon">◎</span>
+          <span class="hub-bridge-label">SATOR</span>
+          <span class="hub-bridge-desc">RAWS Archive</span>
+        </div>
+        <div class="hub-bridge-connector">
+          <div class="bridge-line"></div>
+          <div class="data-flow"></div>
+          <span class="bridge-status">Synced</span>
+        </div>
+        <div class="hub-bridge-node rotas">
+          <span class="hub-bridge-icon">◈</span>
+          <span class="hub-bridge-label">ROTAS</span>
+          <span class="hub-bridge-desc">Analytics Engine</span>
+        </div>
+      </div>
+      <p class="bridge-description">
+        Raw data flows from SATOR to ROTAS for analysis and probability calculations.
+        Twin-file architecture ensures data integrity across both systems.
+      </p>
+    </section>
+    
+    <!-- DATA INGRESS STREAMS -->
+    <section class="ingress-section">
+      <h2>Live Data Ingress</h2>
+      <div class="ingress-streams">
+        <div class="stream" data-stream="hltv">
+          <span class="stream-name">HLTV CS2</span>
+          <div class="stream-bar">
+            <div class="stream-fill" style="width: 85%;"></div>
+          </div>
+          <span class="stream-rate" data-rate="847">847 req/min</span>
+        </div>
+        <div class="stream" data-stream="vlr">
+          <span class="stream-name">VLR Valorant</span>
+          <div class="stream-bar">
+            <div class="stream-fill" style="width: 72%;"></div>
+          </div>
+          <span class="stream-rate" data-rate="623">623 req/min</span>
+        </div>
+        <div class="stream" data-stream="grid">
+          <span class="stream-name">GRID Open</span>
+          <div class="stream-bar">
+            <div class="stream-fill" style="width: 45%;"></div>
+          </div>
+          <span class="stream-rate" data-rate="234">234 req/min</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- RAWS FILE BROWSER -->
+    <section class="raws-browser">
+      <h2>RAWS File Archive</h2>
+      <div class="file-table">
+        <div class="table-header">
+          <span>Match ID</span>
+          <span>Game</span>
+          <span>Timestamp</span>
+          <span>Checksum</span>
+          <span>Size</span>
+          <span>Action</span>
+        </div>
+        <div class="table-body">
+          <div class="table-row">
+            <span class="match-id">CS2-2024-03-05-001</span>
+            <span class="game-tag cs">CS2</span>
+            <span class="timestamp">2024-03-05 14:32:18 UTC</span>
+            <span class="checksum" title="a7f32c8e1d9b4f5a6c8e7d9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b">a7f3...9e2d</span>
+            <span class="file-size">2.4 MB</span>
+            <button class="btn btn-sm download-btn" data-file="CS2-2024-03-05-001">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">VAL-2024-03-05-042</span>
+            <span class="game-tag val">VAL</span>
+            <span class="timestamp">2024-03-05 13:15:42 UTC</span>
+            <span class="checksum" title="b8c43d9f2e0a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c">b8c4...0a3e</span>
+            <span class="file-size">1.8 MB</span>
+            <button class="btn btn-sm download-btn" data-file="VAL-2024-03-05-042">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">CS2-2024-03-05-038</span>
+            <span class="game-tag cs">CS2</span>
+            <span class="timestamp">2024-03-05 12:58:11 UTC</span>
+            <span class="checksum" title="c9d54e0a3f1b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d">c9d5...1b4f</span>
+            <span class="file-size">3.1 MB</span>
+            <button class="btn btn-sm download-btn" data-file="CS2-2024-03-05-038">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">VAL-2024-03-05-037</span>
+            <span class="game-tag val">VAL</span>
+            <span class="timestamp">2024-03-05 11:22:55 UTC</span>
+            <span class="checksum" title="d0e65f1b4a2c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e">d0e6...2c5g</span>
+            <span class="file-size">2.0 MB</span>
+            <button class="btn btn-sm download-btn" data-file="VAL-2024-03-05-037">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">CS2-2024-03-05-036</span>
+            <span class="game-tag cs">CS2</span>
+            <span class="timestamp">2024-03-05 10:45:33 UTC</span>
+            <span class="checksum" title="e1f76a2c5b3d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f">e1f7...3d6h</span>
+            <span class="file-size">2.7 MB</span>
+            <button class="btn btn-sm download-btn" data-file="CS2-2024-03-05-036">Download</button>
+          </div>
+          <div class="table-row">
+            <span class="match-id">DOTA-2024-03-05-035</span>
+            <span class="game-tag dota">DOTA</span>
+            <span class="timestamp">2024-03-05 09:18:27 UTC</span>
+            <span class="checksum" title="f2a87b3d6c4e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a">f2a8...4e7i</span>
+            <span class="file-size">4.2 MB</span>
+            <button class="btn btn-sm download-btn" data-file="DOTA-2024-03-05-035">Download</button>
+          </div>
+        </div>
+      </div>
+      <div class="pagination">
+        <button class="btn btn-ghost pagination-prev" disabled>← Previous</button>
+        <div class="page-numbers">
+          <span class="page active">1</span>
+          <span class="page">2</span>
+          <span class="page">3</span>
+          <span class="page-dots">...</span>
+          <span class="page">42</span>
+        </div>
+        <button class="btn btn-ghost pagination-next">Next →</button>
+      </div>
+    </section>
+    
+    <!-- INTEGRITY DASHBOARD -->
+    <section class="integrity-dashboard">
+      <h2>Integrity Verification</h2>
+      <div class="integrity-grid">
+        <div class="integrity-card verified" data-check="twin-file">
+          <span class="card-icon">✓</span>
+          <span class="card-label">Twin-File Sync</span>
+          <span class="card-status">Verified</span>
+        </div>
+        <div class="integrity-card verified" data-check="sha256">
+          <span class="card-icon">✓</span>
+          <span class="card-label">SHA-256 Hashes</span>
+          <span class="card-status">Valid</span>
+        </div>
+        <div class="integrity-card verified" data-check="cross-ref">
+          <span class="card-icon">✓</span>
+          <span class="card-label">Cross-Reference</span>
+          <span class="card-status">Matched</span>
+        </div>
+      </div>
+      <div class="integrity-timestamp">
+        <span class="timestamp-label">Last Verification:</span>
+        <span class="timestamp-value" id="last-verify">2024-03-05 14:32:18 UTC</span>
+      </div>
+    </section>
+    
+  </main>
+
+  <!-- BOTTOM NAVIGATION (Mobile) -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-tabs">
+      <a href="index.html" class="nav-tab sator" data-hub="sator">
+        <span class="nav-tab-icon">◎</span>
+        <span class="nav-tab-label">SATOR</span>
+      </a>
+      <a href="../hub2-rotas/index.html" class="nav-tab rotas" data-hub="rotas">
+        <span class="nav-tab-icon">◈</span>
+        <span class="nav-tab-label">ROTAS</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- SHARED SCRIPTS -->
+  <script src="../shared/js/hub-navigation.js"></script>
+  <!-- Error Boundary - Load first to catch all errors -->
+  <script src="error-boundary.js"></script>
+  <script src="app.js"></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => console.log('SW failed:', err));
+    }
+  </script>
+</body>
+</html>

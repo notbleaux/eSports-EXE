@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # ADR-001: Adoption of Twin-Table Architecture (RAWS/BASE)
 
 ## Status

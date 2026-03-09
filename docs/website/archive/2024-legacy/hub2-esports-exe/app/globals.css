@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --exe-black: #0A0A0A;
+  --exe-hot-pink: #FF006E;
+  --exe-neon-pink: #FF1493;
+  --exe-cyan: #00F0FF;
+  --exe-electric: #39FF14;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--exe-black);
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--exe-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--exe-cyan);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--exe-hot-pink);
+}
+
+/* Seven-segment display style */
+.seven-segment {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px currentColor;
+}
+
+/* CRT screen effect base */
+.crt-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Checkerboard grid animation */
+@keyframes grid-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.grid-square {
+  animation: grid-reveal 0.5s ease-out forwards;
+}
+
+/* Neon text glow */
+.neon-text-cyan {
+  text-shadow: 0 0 10px var(--exe-cyan), 0 0 20px var(--exe-cyan), 0 0 40px var(--exe-cyan);
+}
+
+.neon-text-pink {
+  text-shadow: 0 0 10px var(--exe-hot-pink), 0 0 20px var(--exe-hot-pink), 0 0 40px var(--exe-hot-pink);
+}
+
+/* Hover effects */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Data stream text */
+.data-stream-text {
+  white-space: nowrap;
+  animation: data-scroll 20s linear infinite;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+/* Selection style */
+::selection {
+  background: var(--exe-hot-pink);
+  color: white;
+}

@@ -4,7 +4,7 @@ import {
   getStoredRole, 
   getRoleConfig,
   hasCompletedOnboarding 
-} from '../../../shared/js/userPreferences';
+} from '../js/userPreferences';
 
 /**
  * Pro Tip Tooltip Component

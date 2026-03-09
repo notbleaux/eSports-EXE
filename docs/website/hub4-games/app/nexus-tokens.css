@@ -1,0 +1,189 @@
+/* === THE NEXUS - GAMES HUB DESIGN TOKENS === */
+/* Deep cobalt for offline, neon cyan for live */
+
+:root {
+  /* NEXUS COLOR PALETTE */
+  --nexus-void: #050508;
+  --nexus-deep-cobalt: #0a1628;
+  --nexus-cobalt: #1e3a5f;
+  --nexus-cobalt-light: #2d4a7f;
+  --nexus-cobalt-glow: rgba(30, 58, 95, 0.6);
+  
+  --nexus-neon-cyan: #00f0ff;
+  --nexus-neon-cyan-dim: rgba(0, 240, 255, 0.3);
+  --nexus-neon-cyan-glow: rgba(0, 240, 255, 0.5);
+  
+  --nexus-abyss: #0d1117;
+  --nexus-abyss-light: #161b22;
+  --nexus-glass: rgba(13, 17, 23, 0.8);
+  
+  --nexus-iridescent-start: #ff006e;
+  --nexus-iridescent-mid: #8338ec;
+  --nexus-iridescent-end: #00f0ff;
+  
+  --nexus-gold: #ffd700;
+  --nexus-amber: #ff9f1c;
+  --nexus-live: #10b981;
+  
+  /* TERRESTRIAL → HARMONIC → CELESTIAL */
+  --state-terrestrial: #8b4513;
+  --state-terrestrial-glow: rgba(139, 69, 19, 0.4);
+  --state-harmonic: #c9b037;
+  --state-harmonic-glow: rgba(201, 176, 55, 0.4);
+  --state-celestial: #00f0ff;
+  --state-celestial-glow: rgba(0, 240, 255, 0.4);
+  
+  /* ANIMATION CURVES */
+  --ease-toroidal: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-harmonic: cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-vortex: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-bubble: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* DURATIONS */
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 800ms;
+  --duration-ambient: 3000ms;
+  --duration-eternal: 8000ms;
+  
+  /* SPACING */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 10rem;
+  
+  /* BORDERS */
+  --border-glass: 1px solid rgba(255, 255, 255, 0.08);
+  --border-glow-cyan: 1px solid rgba(0, 240, 255, 0.4);
+  --border-glow-cobalt: 1px solid rgba(30, 58, 95, 0.6);
+  
+  /* SHADOWS */
+  --shadow-abyss: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  --shadow-glow-cyan: 0 0 40px rgba(0, 240, 255, 0.3);
+  --shadow-glow-cobalt: 0 0 40px rgba(30, 58, 95, 0.4);
+}
+
+/* === UTILITY CLASSES === */
+
+.glass-panel {
+  background: linear-gradient(135deg, 
+    rgba(13, 17, 23, 0.9) 0%, 
+    rgba(10, 22, 40, 0.85) 100%);
+  backdrop-filter: blur(20px);
+  border: var(--border-glass);
+  box-shadow: var(--shadow-abyss);
+}
+
+.glass-cobalt {
+  background: linear-gradient(135deg,
+    rgba(30, 58, 95, 0.3) 0%,
+    rgba(13, 17, 23, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  border: var(--border-glow-cobalt);
+}
+
+.glass-cyan {
+  background: linear-gradient(135deg,
+    rgba(0, 240, 255, 0.1) 0%,
+    rgba(13, 17, 23, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  border: var(--border-glow-cyan);
+}
+
+.text-gradient-iridescent {
+  background: linear-gradient(135deg, 
+    var(--nexus-iridescent-start) 0%, 
+    var(--nexus-iridescent-mid) 50%, 
+    var(--nexus-iridescent-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, 
+    var(--nexus-neon-cyan) 0%, 
+    #00c8ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-cyan {
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.glow-cobalt {
+  box-shadow: var(--shadow-glow-cobalt);
+}
+
+/* === ANIMATIONS === */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; box-shadow: 0 0 20px currentColor; }
+  50% { opacity: 1; box-shadow: 0 0 40px currentColor; }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes bubble-float {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translate(10px, -15px) scale(1.05);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-5px, -25px) scale(0.95);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(-15px, -10px) scale(1.02);
+    opacity: 1;
+  }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+}
+
+@keyframes vortex-spin {
+  from { transform: rotate(0deg) scale(1); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes torus-flow {
+  0% { transform: rotateX(60deg) rotateZ(0deg); }
+  100% { transform: rotateX(60deg) rotateZ(360deg); }
+}
+
+@keyframes live-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 10px rgba(16, 185, 129, 0);
+  }
+}

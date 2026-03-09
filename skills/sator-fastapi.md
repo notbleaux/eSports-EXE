@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # Skill: SATOR FastAPI Developer
 
 ## Role

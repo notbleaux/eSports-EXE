@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR Cross-Hub Router
 
 Comprehensive routing system with analytics integration for the SATOR esports platform.

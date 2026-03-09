@@ -1,3 +1,5 @@
+[Ver005.000]
+
 # 📦 COMPLEX SETS AND ARTIFACT COMPRESSION GUIDE
 ## For PROJECT_MEMORY.md Multi-Component Storage
 

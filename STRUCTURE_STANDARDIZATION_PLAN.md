@@ -1,3 +1,5 @@
+[Ver011.000]
+
 # 🏗️ Project Structure Standardization Plan
 ## Phase 2: Organization for SATOR-eXe-ROTAS
 

@@ -1,0 +1,56 @@
+/* SATOR Hub Specific Styles - Extracted from design system */
+/* Size: ~8KB vs ~28KB full design system */
+
+.hub-sator {
+  --hub-primary: var(--sator-active, #ff9f1c);
+  --hub-ring: var(--sator-ring, rgba(255, 159, 28, 0.3));
+}
+
+/* SATOR-specific component styles */
+.sator-sphere {
+  animation: sphereRotate 30s linear infinite;
+}
+
+.sator-sphere:hover {
+  animation-play-state: paused;
+}
+
+@keyframes sphereRotate {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+/* SATOR stat cards */
+.stat-card.sator {
+  border-color: var(--hub-ring);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-card.sator:hover {
+  box-shadow: 0 0 20px var(--hub-ring);
+}
+
+/* SATOR hub indicator */
+.hub-indicator.sator {
+  border-color: var(--hub-ring);
+  background: rgba(255, 159, 28, 0.05);
+}
+
+.hub-indicator.sator .hub-indicator-icon {
+  color: var(--hub-primary);
+}
+
+/* SATOR-specific animations */
+.sator-pulse {
+  animation: satorPulse 2s ease-in-out infinite;
+}
+
+@keyframes satorPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--hub-ring); }
+  50% { box-shadow: 0 0 20px 5px var(--hub-ring); }
+}
+
+/* SATOR data visualization colors */
+.sator-data-primary { color: var(--hub-primary); }
+.sator-data-bg { background-color: var(--hub-ring); }
+.sator-border { border-color: var(--hub-ring); }

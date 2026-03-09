@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # RadiantX — Esports Analytics Platform
 
 A unified platform for esports analytics, news, and simulation.

@@ -1,3 +1,5 @@
+[Ver014.000]
+
 # 🎉 NJZ PLATFORM v2.0 — PRODUCTION READY
 ## Final Delivery Summary
 

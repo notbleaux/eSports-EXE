@@ -1,0 +1,164 @@
+/**
+ * Porcelain³ Spacing Tokens
+ * Consistent spacing scale for layouts and components
+ */
+
+:root {
+  /* ========================================
+     BASE SPACING SCALE (4px base)
+     ======================================== */
+  
+  --porcelain-space-0: 0;
+  --porcelain-space-1: 0.25rem;    /* 4px */
+  --porcelain-space-2: 0.5rem;     /* 8px */
+  --porcelain-space-3: 0.75rem;    /* 12px */
+  --porcelain-space-4: 1rem;       /* 16px */
+  --porcelain-space-5: 1.25rem;    /* 20px */
+  --porcelain-space-6: 1.5rem;     /* 24px */
+  --porcelain-space-7: 1.75rem;    /* 28px */
+  --porcelain-space-8: 2rem;       /* 32px */
+  --porcelain-space-9: 2.25rem;    /* 36px */
+  --porcelain-space-10: 2.5rem;    /* 40px */
+  --porcelain-space-11: 2.75rem;   /* 44px */
+  --porcelain-space-12: 3rem;      /* 48px */
+  --porcelain-space-14: 3.5rem;    /* 56px */
+  --porcelain-space-16: 4rem;      /* 64px */
+  --porcelain-space-20: 5rem;      /* 80px */
+  --porcelain-space-24: 6rem;      /* 96px */
+  --porcelain-space-28: 7rem;      /* 112px */
+  --porcelain-space-32: 8rem;      /* 128px */
+  --porcelain-space-36: 9rem;      /* 144px */
+  --porcelain-space-40: 10rem;     /* 160px */
+  --porcelain-space-44: 11rem;     /* 176px */
+  --porcelain-space-48: 12rem;     /* 192px */
+  --porcelain-space-52: 13rem;     /* 208px */
+  --porcelain-space-56: 14rem;     /* 224px */
+  --porcelain-space-60: 15rem;     /* 240px */
+  --porcelain-space-64: 16rem;     /* 256px */
+  --porcelain-space-72: 18rem;     /* 288px */
+  --porcelain-space-80: 20rem;     /* 320px */
+  --porcelain-space-96: 24rem;     /* 384px */
+
+  /* ========================================
+     LOGICAL SPACING
+     ======================================== */
+  
+  /* Component Spacing */
+  --porcelain-gap-xs: var(--porcelain-space-1);
+  --porcelain-gap-sm: var(--porcelain-space-2);
+  --porcelain-gap-md: var(--porcelain-space-4);
+  --porcelain-gap-lg: var(--porcelain-space-6);
+  --porcelain-gap-xl: var(--porcelain-space-8);
+  --porcelain-gap-2xl: var(--porcelain-space-12);
+  --porcelain-gap-3xl: var(--porcelain-space-16);
+
+  /* Section Spacing */
+  --porcelain-section-xs: var(--porcelain-space-8);
+  --porcelain-section-sm: var(--porcelain-space-12);
+  --porcelain-section-md: var(--porcelain-space-16);
+  --porcelain-section-lg: var(--porcelain-space-24);
+  --porcelain-section-xl: var(--porcelain-space-32);
+  --porcelain-section-2xl: var(--porcelain-space-48);
+
+  /* Content Spacing */
+  --porcelain-content-gap: var(--porcelain-space-4);
+  --porcelain-paragraph-gap: var(--porcelain-space-4);
+  --porcelain-heading-gap: var(--porcelain-space-2);
+  --porcelain-list-gap: var(--porcelain-space-2);
+
+  /* ========================================
+     LAYOUT SPACING
+     ======================================== */
+  
+  /* Container Padding */
+  --porcelain-container-padding-xs: var(--porcelain-space-4);
+  --porcelain-container-padding-sm: var(--porcelain-space-6);
+  --porcelain-container-padding-md: var(--porcelain-space-8);
+  --porcelain-container-padding-lg: var(--porcelain-space-12);
+  --porcelain-container-padding-xl: var(--porcelain-space-16);
+
+  /* Grid Gap */
+  --porcelain-grid-gap-xs: var(--porcelain-space-2);
+  --porcelain-grid-gap-sm: var(--porcelain-space-4);
+  --porcelain-grid-gap-md: var(--porcelain-space-6);
+  --porcelain-grid-gap-lg: var(--porcelain-space-8);
+  --porcelain-grid-gap-xl: var(--porcelain-space-12);
+
+  /* ========================================
+     COMPONENT SPACING
+     ======================================== */
+  
+  /* Button Spacing */
+  --porcelain-button-padding-x: var(--porcelain-space-6);
+  --porcelain-button-padding-y: var(--porcelain-space-3);
+  --porcelain-button-padding-x-sm: var(--porcelain-space-4);
+  --porcelain-button-padding-y-sm: var(--porcelain-space-2);
+  --porcelain-button-padding-x-lg: var(--porcelain-space-8);
+  --porcelain-button-padding-y-lg: var(--porcelain-space-4);
+
+  /* Input Spacing */
+  --porcelain-input-padding-x: var(--porcelain-space-4);
+  --porcelain-input-padding-y: var(--porcelain-space-3);
+  --porcelain-input-gap: var(--porcelain-space-2);
+
+  /* Card Spacing */
+  --porcelain-card-padding-xs: var(--porcelain-space-3);
+  --porcelain-card-padding-sm: var(--porcelain-space-4);
+  --porcelain-card-padding-md: var(--porcelain-space-6);
+  --porcelain-card-padding-lg: var(--porcelain-space-8);
+  --porcelain-card-gap: var(--porcelain-space-4);
+
+  /* ========================================
+     BORDER RADIUS
+     ======================================== */
+  
+  --porcelain-radius-none: 0;
+  --porcelain-radius-xs: 0.125rem;   /* 2px */
+  --porcelain-radius-sm: 0.25rem;    /* 4px */
+  --porcelain-radius-md: 0.375rem;   /* 6px */
+  --porcelain-radius-lg: 0.5rem;     /* 8px */
+  --porcelain-radius-xl: 0.75rem;    /* 12px */
+  --porcelain-radius-2xl: 1rem;      /* 16px */
+  --porcelain-radius-3xl: 1.5rem;    /* 24px */
+  --porcelain-radius-full: 9999px;
+
+  /* Semantic Radius */
+  --porcelain-radius-button: var(--porcelain-radius-lg);
+  --porcelain-radius-card: var(--porcelain-radius-xl);
+  --porcelain-radius-input: var(--porcelain-radius-md);
+  --porcelain-radius-pill: var(--porcelain-radius-full);
+  --porcelain-radius-container: var(--porcelain-radius-2xl);
+}
+
+/* ========================================
+   SPACING UTILITY CLASSES
+   ======================================== */
+
+/* Margin */
+.porcelain-m-0 { margin: var(--porcelain-space-0); }
+.porcelain-m-1 { margin: var(--porcelain-space-1); }
+.porcelain-m-2 { margin: var(--porcelain-space-2); }
+.porcelain-m-4 { margin: var(--porcelain-space-4); }
+.porcelain-m-6 { margin: var(--porcelain-space-6); }
+.porcelain-m-8 { margin: var(--porcelain-space-8); }
+.porcelain-m-12 { margin: var(--porcelain-space-12); }
+.porcelain-m-16 { margin: var(--porcelain-space-16); }
+
+/* Padding */
+.porcelain-p-0 { padding: var(--porcelain-space-0); }
+.porcelain-p-1 { padding: var(--porcelain-space-1); }
+.porcelain-p-2 { padding: var(--porcelain-space-2); }
+.porcelain-p-4 { padding: var(--porcelain-space-4); }
+.porcelain-p-6 { padding: var(--porcelain-space-6); }
+.porcelain-p-8 { padding: var(--porcelain-space-8); }
+.porcelain-p-12 { padding: var(--porcelain-space-12); }
+.porcelain-p-16 { padding: var(--porcelain-space-16); }
+
+/* Gap */
+.porcelain-gap-0 { gap: var(--porcelain-space-0); }
+.porcelain-gap-1 { gap: var(--porcelain-space-1); }
+.porcelain-gap-2 { gap: var(--porcelain-space-2); }
+.porcelain-gap-4 { gap: var(--porcelain-space-4); }
+.porcelain-gap-6 { gap: var(--porcelain-space-6); }
+.porcelain-gap-8 { gap: var(--porcelain-space-8); }
+.porcelain-gap-12 { gap: var(--porcelain-space-12); }

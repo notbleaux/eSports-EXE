@@ -1,3 +1,5 @@
+[Ver011.000]
+
 # PHASE 2: LATIN SQUARE EXPANSION (6×6 to 20×20)
 ## In Progress — Parallel Implementation
 

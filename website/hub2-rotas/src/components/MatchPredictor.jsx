@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useTeamData } from '../../shared/axiom-esports-data/visualization/sator-square/hooks/useTeamData';
-import { fetchWithRetry } from '../../shared/axiom-esports-data/visualization/sator-square/hooks/fetchWithRetry';
+import { useTeamData } from '../../../../main-repo/packages/shared/axiom-esports-data/visualization/sator-square/hooks/useTeamData';
+import { fetchWithRetry } from '../../../../main-repo/packages/shared/axiom-esports-data/visualization/sator-square/hooks/fetchWithRetry';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 

@@ -1,0 +1,298 @@
+/**
+ * Porcelain³ Animation Tokens
+ * Smooth, elegant transitions inspired by ceramic craftsmanship
+ */
+
+:root {
+  /* ========================================
+     DURATION TOKENS
+     ======================================== */
+  
+  /* Instant - Immediate feedback */
+  --porcelain-duration-instant: 0ms;
+  --porcelain-duration-fast: 100ms;
+  
+  /* Quick - Micro-interactions */
+  --porcelain-duration-quick: 150ms;
+  --porcelain-duration-swift: 200ms;
+  
+  /* Standard - UI transitions */
+  --porcelain-duration-normal: 250ms;
+  --porcelain-duration-standard: 300ms;
+  
+  /* Smooth - Page transitions */
+  --porcelain-duration-smooth: 400ms;
+  --porcelain-duration-slow: 500ms;
+  
+  /* Dramatic - Special moments */
+  --porcelain-duration-dramatic: 700ms;
+  --porcelain-duration-cinematic: 1000ms;
+
+  /* ========================================
+     EASING TOKENS
+     ======================================== */
+  
+  /* Linear - Constant speed */
+  --porcelain-ease-linear: linear;
+  
+  /* Standard - Smooth deceleration */
+  --porcelain-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --porcelain-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --porcelain-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Emphasis - Attention grabbing */
+  --porcelain-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --porcelain-ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --porcelain-ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  
+  /* Spring - Elastic bounce */
+  --porcelain-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --porcelain-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Smooth - Elegant movement */
+  --porcelain-ease-smooth: cubic-bezier(0.45, 0, 0.55, 1);
+  --porcelain-ease-liquid: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ========================================
+     PRESET TRANSITIONS
+     ======================================== */
+  
+  /* Color Transitions */
+  --porcelain-transition-colors: 
+    color var(--porcelain-duration-quick) var(--porcelain-ease-out),
+    background-color var(--porcelain-duration-quick) var(--porcelain-ease-out),
+    border-color var(--porcelain-duration-quick) var(--porcelain-ease-out);
+  
+  /* Transform Transitions */
+  --porcelain-transition-transform: 
+    transform var(--porcelain-duration-standard) var(--porcelain-ease-emphasized-decelerate);
+  
+  /* Opacity Transitions */
+  --porcelain-transition-opacity: 
+    opacity var(--porcelain-duration-normal) var(--porcelain-ease-out);
+  
+  /* Shadow Transitions */
+  --porcelain-transition-shadow: 
+    box-shadow var(--porcelain-duration-swift) var(--porcelain-ease-out);
+  
+  /* All Properties */
+  --porcelain-transition-all: 
+    all var(--porcelain-duration-normal) var(--porcelain-ease-out);
+  
+  /* Interactive Elements */
+  --porcelain-transition-interactive: 
+    background-color var(--porcelain-duration-quick) var(--porcelain-ease-out),
+    border-color var(--porcelain-duration-quick) var(--porcelain-ease-out),
+    color var(--porcelain-duration-quick) var(--porcelain-ease-out),
+    transform var(--porcelain-duration-swift) var(--porcelain-ease-spring),
+    box-shadow var(--porcelain-duration-swift) var(--porcelain-ease-out);
+
+  /* ========================================
+     ANIMATION KEYFRAMES REFERENCE
+     ======================================== */
+  
+  /* Fade In */
+  --porcelain-animation-fade-in: porcelain-fade-in var(--porcelain-duration-normal) var(--porcelain-ease-out) forwards;
+  
+  /* Fade Out */
+  --porcelain-animation-fade-out: porcelain-fade-out var(--porcelain-duration-normal) var(--porcelain-ease-in) forwards;
+  
+  /* Slide Up */
+  --porcelain-animation-slide-up: porcelain-slide-up var(--porcelain-duration-standard) var(--porcelain-ease-emphasized-decelerate) forwards;
+  
+  /* Slide Down */
+  --porcelain-animation-slide-down: porcelain-slide-down var(--porcelain-duration-standard) var(--porcelain-ease-emphasized-decelerate) forwards;
+  
+  /* Scale In */
+  --porcelain-animation-scale-in: porcelain-scale-in var(--porcelain-duration-standard) var(--porcelain-ease-spring) forwards;
+  
+  /* Scale Out */
+  --porcelain-animation-scale-out: porcelain-scale-out var(--porcelain-duration-normal) var(--porcelain-ease-in) forwards;
+  
+  /* Shimmer - Loading state */
+  --porcelain-animation-shimmer: porcelain-shimmer 2s var(--porcelain-ease-linear) infinite;
+  
+  /* Pulse - Attention */
+  --porcelain-animation-pulse: porcelain-pulse 2s var(--porcelain-ease-in-out) infinite;
+  
+  /* Spin - Loading */
+  --porcelain-animation-spin: porcelain-spin 1s var(--porcelain-ease-linear) infinite;
+}
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+/* Fade In */
+@keyframes porcelain-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade Out */
+@keyframes porcelain-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Slide Up */
+@keyframes porcelain-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Down */
+@keyframes porcelain-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide In Right */
+@keyframes porcelain-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale In */
+@keyframes porcelain-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scale Out */
+@keyframes porcelain-scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Shimmer - For skeleton loading */
+@keyframes porcelain-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Pulse - Attention indicator */
+@keyframes porcelain-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Spin - Loading indicator */
+@keyframes porcelain-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Bounce - Notification */
+@keyframes porcelain-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Shake - Error state */
+@keyframes porcelain-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* Float - Gentle hover */
+@keyframes porcelain-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Animation Utilities */
+.porcelain-animate-fade-in { animation: var(--porcelain-animation-fade-in); }
+.porcelain-animate-fade-out { animation: var(--porcelain-animation-fade-out); }
+.porcelain-animate-slide-up { animation: var(--porcelain-animation-slide-up); }
+.porcelain-animate-slide-down { animation: var(--porcelain-animation-slide-down); }
+.porcelain-animate-scale-in { animation: var(--porcelain-animation-scale-in); }
+.porcelain-animate-shimmer { animation: var(--porcelain-animation-shimmer); }
+.porcelain-animate-pulse { animation: var(--porcelain-animation-pulse); }
+.porcelain-animate-spin { animation: var(--porcelain-animation-spin); }
+.porcelain-animate-bounce { animation: porcelain-bounce 1s var(--porcelain-ease-spring); }
+.porcelain-animate-shake { animation: porcelain-shake 0.5s var(--porcelain-ease-out); }
+
+/* Transition Utilities */
+.porcelain-transition-colors { transition: var(--porcelain-transition-colors); }
+.porcelain-transition-transform { transition: var(--porcelain-transition-transform); }
+.porcelain-transition-opacity { transition: var(--porcelain-transition-opacity); }
+.porcelain-transition-shadow { transition: var(--porcelain-transition-shadow); }
+.porcelain-transition-all { transition: var(--porcelain-transition-all); }
+.porcelain-transition-interactive { transition: var(--porcelain-transition-interactive); }
+
+/* Duration Utilities */
+.porcelain-duration-instant { transition-duration: var(--porcelain-duration-instant); }
+.porcelain-duration-fast { transition-duration: var(--porcelain-duration-fast); }
+.porcelain-duration-quick { transition-duration: var(--porcelain-duration-quick); }
+.porcelain-duration-normal { transition-duration: var(--porcelain-duration-normal); }
+.porcelain-duration-smooth { transition-duration: var(--porcelain-duration-smooth); }
+.porcelain-duration-slow { transition-duration: var(--porcelain-duration-slow); }
+
+/* Will-Change for Performance */
+.porcelain-will-change-transform { will-change: transform; }
+.porcelain-will-change-opacity { will-change: opacity; }
+.porcelain-will-change-auto { will-change: auto; }

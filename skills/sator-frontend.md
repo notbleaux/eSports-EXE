@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # Skill: SATOR Frontend Developer
 
 ## Role

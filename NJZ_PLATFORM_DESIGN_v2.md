@@ -1,3 +1,5 @@
+[Ver004.000]
+
 # 🎨 NJZ ¿!? PLATFORM — VISUAL DESIGN IMPLEMENTATION v2.0
 ## "4eva and Nvr Die" — Abyssal Fluid Architecture
 

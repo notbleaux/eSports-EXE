@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # COMPREHENSIVE REPOSITORY REMEDIATION PLAN
 ## Professional Review, Analysis & Resolution Strategy
 

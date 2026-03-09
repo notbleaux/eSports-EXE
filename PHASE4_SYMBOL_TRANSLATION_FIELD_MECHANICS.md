@@ -1,3 +1,5 @@
+[Ver010.000]
+
 # PHASE 4: SYMBOL TRANSLATION & FIELD MECHANICS
 ## Translation Layer & Dynamic Field System
 

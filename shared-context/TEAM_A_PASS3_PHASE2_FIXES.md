@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # TEAM A - PASS 3 - PHASE 2: UX/UI Final Fixes (A8)
 
 **Domain:** UX/UI Polish & Accessibility (Final Pass)  
