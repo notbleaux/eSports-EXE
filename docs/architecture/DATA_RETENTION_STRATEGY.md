@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Data Retention & Archival Strategy
 ## Addressing Supabase 500MB Free Tier Limit
 

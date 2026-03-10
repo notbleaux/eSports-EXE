@@ -1,3 +1,5 @@
+[Ver002.000]
+
 name: pivot-table
 description: "Create PivotTables in Excel using the pivot command (pure OpenXML SDK)."
 --

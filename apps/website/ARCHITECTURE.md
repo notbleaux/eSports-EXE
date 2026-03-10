@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # SATOR eXe / ROTAS eXe — Platform Architecture
 
 ## Hierarchy

@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Editing Guide
 
 Complete reference for `docx_lib.editing`. Read this to complete any comment/revision task.

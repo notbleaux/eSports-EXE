@@ -1,3 +1,5 @@
+[Ver018.000]
+
 # SATOR / eSports-EXE Comprehensive Project Plan
 ## Phase 2: Database Integration, Refinement & Enhancement
 

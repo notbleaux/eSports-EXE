@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # CONFIDENCE_TIERS.md — Data Confidence Tier Definitions
 
 ## Overview

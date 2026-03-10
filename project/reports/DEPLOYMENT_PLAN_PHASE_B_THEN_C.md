@@ -1,3 +1,5 @@
+[Ver008.000]
+
 # COMPREHENSIVE DEPLOYMENT PLAN
 ## Option B → Option C Strategy with Full Risk Mitigation
 

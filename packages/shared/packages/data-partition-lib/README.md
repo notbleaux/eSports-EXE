@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # @sator/data-partition-lib
 
 > **Enforce data partition between SATOR game and web platform**

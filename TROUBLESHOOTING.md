@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # 🛠️ TROUBLESHOOTING.md
 ## Common Issues and Solutions
 

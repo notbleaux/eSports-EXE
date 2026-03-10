@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # NJZ ¿!? Platform v2.0
 
 **4eva and Nvr Die**

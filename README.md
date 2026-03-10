@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # 🏗️ SATOR-eXe-ROTAS / NJZ Platform
 
 **Status:** 🟢 Active Development  

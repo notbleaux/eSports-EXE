@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR Deployment Guide - Supabase + Render
 
 ## Step 1: Supabase Setup (Database)

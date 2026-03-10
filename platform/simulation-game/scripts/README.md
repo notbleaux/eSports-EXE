@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # scripts/
 
 This directory contains the core GDScript game logic for RadiantX.

@@ -1,3 +1,4 @@
+[Ver001.000]
 /**
  * Fantasy eSports HUB JavaScript
  * HUB 4/4 - Interactive functionality

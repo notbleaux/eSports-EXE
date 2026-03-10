@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # PATCH REPORT: Help HUB 5/4 Implementation
 
 **Report ID:** WEBSITE_20260304_2056_IMPLEMENT_HELP  

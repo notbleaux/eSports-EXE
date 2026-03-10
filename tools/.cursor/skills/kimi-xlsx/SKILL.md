@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: kimi-xlsx
 description: "Specialized utility for advanced manipulation, analysis, and creation of spreadsheet files, including (but not limited to) XLSX, XLSM, CSV formats. Core functionalities include formula deployment, complex formatting (including automatic currency formatting for financial tasks), data visualization, and mandatory post-processing recalculation. "

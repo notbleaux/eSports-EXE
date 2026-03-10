@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # packages/api-client/src/
 
 Placeholder for the TypeScript API client package.

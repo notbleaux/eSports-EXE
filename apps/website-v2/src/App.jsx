@@ -16,8 +16,8 @@ import CentralGrid from './shared/components/CentralGrid'
 import { SmokeBackground } from './shared/components/AnimatedBackgrounds'
 import SATORHub from './hub-1-sator/SATORHub'
 import ROTASHub from './hub-2-rotas/ROTASHub'
-import InformationHub from './hub-3-info/InformationHub'
-import GamesHub from './hub-4-games/GamesHub'
+import ArepoHub from './hub-3-arepo/ArepoHub'
+import OperaHub from './hub-4-opera/OperaHub'
 import { useNJZStore, HUBS } from './shared/store/njzStore'
 
 // Page transition wrapper
@@ -79,6 +79,7 @@ const RouteChangeHandler = () => {
 
 function App() {
   const { preferences } = useNJZStore()
+  const location = useLocation()
   
   // Check for reduced motion preference
   useEffect(() => {
@@ -131,18 +132,18 @@ function App() {
               } 
             />
             <Route 
-              path="/info" 
+              path="/arepo" 
               element={
-                <PageTransition hubId="info">
-                  <InformationHub />
+                <PageTransition hubId="arepo">
+                  <ArepoHub />
                 </PageTransition>
               } 
             />
             <Route 
-              path="/games" 
+              path="/opera" 
               element={
-                <PageTransition hubId="games">
-                  <GamesHub />
+                <PageTransition hubId="opera">
+                  <OperaHub />
                 </PageTransition>
               } 
             />

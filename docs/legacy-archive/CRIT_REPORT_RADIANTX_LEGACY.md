@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # CRIT Report: RadiantX Legacy Integration
 
 **CRIT ID:** CRIT-RADIANTX-LEGACY-20260305  

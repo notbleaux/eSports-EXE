@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # AXIOM.md — AI Agent Operational Guide
 
 ## Project Overview

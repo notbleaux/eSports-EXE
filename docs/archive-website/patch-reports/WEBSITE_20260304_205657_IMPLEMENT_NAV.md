@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # WEBSITE PATCH REPORT: Global Navigation Integration
 
 **Patch ID:** WEBSITE_20260304_205657_IMPLEMENT_NAV  

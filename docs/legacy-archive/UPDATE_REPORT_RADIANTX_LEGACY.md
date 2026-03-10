@@ -1,3 +1,5 @@
+[Ver004.000]
+
 # Update Report: RadiantX Legacy Integration
 
 **Report ID:** UPDATE-RADIANTX-20260305  

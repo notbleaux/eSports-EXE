@@ -1,3 +1,5 @@
+[Ver027.000]
+
 # SATOR/eSports-EXE Master Cross-Reference Index
 
 **Generated:** March 4, 2026  

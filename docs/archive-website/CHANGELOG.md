@@ -1,3 +1,5 @@
+[Ver008.000]
+
 # Changelog
 
 All notable changes to the SATOR eXe project will be documented in this file.

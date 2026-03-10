@@ -1,3 +1,5 @@
+[Ver009.000]
+
 # SATOR Staging System — AI Agent Data Process Guide
 
 ## Purpose

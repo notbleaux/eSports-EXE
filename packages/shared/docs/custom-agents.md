@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # Custom AI Agents
 
 RadiantX includes three specialized custom agents that can be used during AI agent sessions (such as GitHub Copilot coding agent) to assist with development tasks.

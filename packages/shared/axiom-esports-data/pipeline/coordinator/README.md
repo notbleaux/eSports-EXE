@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Central Job Coordinator
 
 Production-ready central job coordinator for dual-game esports data collection.

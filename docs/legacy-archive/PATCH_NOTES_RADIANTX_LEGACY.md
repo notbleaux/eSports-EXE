@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Patch Notes: RadiantX Legacy Archive
 
 **Patch ID:** RADIANTX-20260305-LEGACY  

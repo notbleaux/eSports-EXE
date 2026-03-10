@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: release
 description: Execute the release workflow for Kimi Code CLI packages.

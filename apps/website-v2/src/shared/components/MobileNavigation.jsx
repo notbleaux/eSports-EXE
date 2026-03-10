@@ -38,29 +38,29 @@ export const MobileNavigation = () => {
       id: 'sator', 
       icon: Orbit, 
       label: 'SATOR', 
-      path: '/hub-1',
-      color: 'text-signal-cyan'
+      path: '/sator',
+      color: 'text-alert-amber'
     },
     { 
       id: 'rotas', 
       icon: Orbit, 
       label: 'ROTAS', 
-      path: '/hub-2',
-      color: 'text-aged-gold'
+      path: '/rotas',
+      color: 'text-signal-cyan'
     },
     { 
-      id: 'info', 
+      id: 'arepo', 
       icon: Info, 
-      label: 'Info', 
-      path: '/hub-3',
+      label: 'AREPO', 
+      path: '/arepo',
       color: 'text-porcelain'
     },
     { 
-      id: 'games', 
+      id: 'opera', 
       icon: Gamepad2, 
-      label: 'Games', 
-      path: '/hub-4',
-      color: 'text-alert-amber'
+      label: 'OPERA', 
+      path: '/opera',
+      color: 'text-cobalt'
     }
   ];
 

@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # 🤝 CONTRIBUTING.md
 ## How to Contribute to SATOR-eXe-ROTAS
 

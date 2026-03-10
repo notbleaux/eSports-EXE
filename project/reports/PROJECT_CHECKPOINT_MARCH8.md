@@ -1,3 +1,5 @@
+[Ver003.000]
+
 # PROJECT CHECKPOINT: March 8, 2026
 ## SATOR-eXe-ROTAS / NJZ Platform — Progress Save
 

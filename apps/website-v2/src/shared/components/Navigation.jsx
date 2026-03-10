@@ -12,8 +12,8 @@ const navItems = [
   { path: '/', label: 'Central', icon: '◎', hubId: 'central' },
   { path: '/sator', label: 'SATOR', icon: '◎', hubId: 'sator', color: 'text-alert-amber', borderColor: 'border-alert-amber' },
   { path: '/rotas', label: 'ROTAS', icon: '◈', hubId: 'rotas', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
-  { path: '/info', label: 'Info', icon: '◉', hubId: 'info', color: 'text-porcelain', borderColor: 'border-porcelain' },
-  { path: '/games', label: 'Games', icon: '◆', hubId: 'games', color: 'text-cobalt', borderColor: 'border-cobalt' },
+  { path: '/arepo', label: 'AREPO', icon: '◉', hubId: 'arepo', color: 'text-porcelain', borderColor: 'border-porcelain' },
+  { path: '/opera', label: 'OPERA', icon: '◆', hubId: 'opera', color: 'text-cobalt', borderColor: 'border-cobalt' },
 ]
 
 function Navigation() {
@@ -183,6 +183,7 @@ function Navigation() {
                 <div className="py-4 border-t border-mist space-y-1">
                   {navItems.map((item, index) => (
                     <motion.div
+                      key={item.path}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}

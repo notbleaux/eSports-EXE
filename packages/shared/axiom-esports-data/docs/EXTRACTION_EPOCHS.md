@@ -1,3 +1,5 @@
+[Ver004.000]
+
 # EXTRACTION_EPOCHS.md — Epoch I/II/III Coverage
 
 ## Temporal Coverage

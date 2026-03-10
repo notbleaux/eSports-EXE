@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Secret Management Guide
 ## Secure Handling of API Keys and Credentials
 
