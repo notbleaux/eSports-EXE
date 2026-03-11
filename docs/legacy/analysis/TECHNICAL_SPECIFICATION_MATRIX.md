@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Technical Specification Matrix — Esports Analytics Project
 
 **Generated:** March 4, 2026  

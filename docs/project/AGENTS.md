@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # AGENTS.md — SATOR / eSports-EXE Project Guide
 
 This document provides essential information for AI coding agents working on the SATOR esports simulation and analytics platform. SATOR is a complex multi-component project with strict architectural boundaries and coding conventions.

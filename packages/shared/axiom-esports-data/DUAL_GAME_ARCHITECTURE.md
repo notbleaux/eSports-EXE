@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Dual-Game Esports Data Collection Architecture
 
 ## Concurrent CS + Valorant Data Collection System

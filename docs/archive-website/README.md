@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # SATOR — Esports Simulation Platform
 
 **SATOR** is a three-part esports simulation and analytics platform:
@@ -54,7 +56,7 @@ cd RadiantX
 # Open project.godot in Godot, press F5
 ```
 
-See the [Quick Start Guide](docs/quick_start.md) for detailed instructions.
+See the [Quick Start Guide](../../shared/docs/quick_start.md) for detailed instructions.
 
 ### Running Axiom Analytics
 
@@ -93,23 +95,23 @@ FantasyDataFilter.sanitizeForWeb()   ◄── Firewall
 API Layer → SATOR Web Platform
 ```
 
-See [docs/architecture.md](docs/architecture.md) for the game system design.
-See [axiom-esports-data/AXIOM.md](axiom-esports-data/AXIOM.md) for the analytics pipeline.
-See [docs/FIREWALL_POLICY.md](docs/FIREWALL_POLICY.md) for data partition rules.
+See [docs/architecture.md](../../shared/docs/architecture.md) for the game system design.
+See [axiom-esports-data/AXIOM.md](../../shared/axiom-esports-data/AXIOM.md) for the analytics pipeline.
+See [docs/FIREWALL_POLICY.md](../../shared/docs/FIREWALL_POLICY.md) for data partition rules.
 
 ## Documentation
 
 | Document | Purpose |
 |----------|---------|
-| [Quick Start](docs/quick_start.md) | Getting started guide |
-| [Architecture](docs/architecture.md) | System design overview |
-| [Agent Behavior](docs/agents.md) | AI agent documentation |
-| [Map Format](docs/map_format.md) | JSON map specification |
-| [Replay System](docs/replay.md) | Match replay guide |
-| [Firewall Policy](docs/FIREWALL_POLICY.md) | Data partition rules |
-| [SATOR Architecture](axiom-esports-data/docs/SATOR_ARCHITECTURE.md) | 5-layer visualization spec |
-| [Data Dictionary](axiom-esports-data/docs/DATA_DICTIONARY.md) | 37-field KCRITR schema |
-| [Custom Agents](docs/custom-agents.md) | AI agent setup for development |
+| [Quick Start](../../shared/docs/quick_start.md) | Getting started guide |
+| [Architecture](../../shared/docs/architecture.md) | System design overview |
+| [Agent Behavior](../../shared/docs/agents.md) | AI agent documentation |
+| [Map Format](../../shared/docs/map_format.md) | JSON map specification |
+| [Replay System](../../shared/docs/replay.md) | Match replay guide |
+| [Firewall Policy](../../shared/docs/FIREWALL_POLICY.md) | Data partition rules |
+| [SATOR Architecture](../../shared/axiom-esports-data/docs/SATOR_ARCHITECTURE.md) | 5-layer visualization spec |
+| [Data Dictionary](../../shared/axiom-esports-data/docs/DATA_DICTIONARY.md) | 37-field KCRITR schema |
+| [Custom Agents](../../shared/docs/custom-agents.md) | AI agent setup for development |
 | [Contributing](CONTRIBUTING.md) | Contribution guidelines |
 
 ## Map Format
@@ -129,7 +131,7 @@ See [docs/FIREWALL_POLICY.md](docs/FIREWALL_POLICY.md) for data partition rules.
 }
 ```
 
-See `maps/` for examples and [docs/map_format.md](docs/map_format.md) for the full specification.
+See `maps/` for examples and [docs/map_format.md](../../shared/docs/map_format.md) for the full specification.
 
 ## Contributing
 
@@ -138,4 +140,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, including the firewall po
 ## License
 
 - **RadiantX Game**: [MIT License](LICENSE)
-- **Axiom Esports Data**: [CC BY-NC 4.0](axiom-esports-data/LICENSE)
+- **Axiom Esports Data**: CC BY-NC 4.0 (see shared/axiom-esports-data/ for licensing details)

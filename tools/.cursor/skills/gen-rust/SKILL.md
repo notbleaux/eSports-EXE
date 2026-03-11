@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: gen-rust
 description: Sync Rust implementation with Python changes (exclude UI/login) by reviewing recent changes, mapping modules, porting logic, and updating tests.

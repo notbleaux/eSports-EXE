@@ -1,3 +1,4 @@
+[Ver006.000]
 /**
  * Help Panel Component
  * ====================

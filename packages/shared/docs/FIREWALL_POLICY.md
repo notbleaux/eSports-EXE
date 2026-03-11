@@ -1,3 +1,5 @@
+[Ver004.000]
+
 # SATOR Data Partition Firewall Policy
 
 ## Purpose

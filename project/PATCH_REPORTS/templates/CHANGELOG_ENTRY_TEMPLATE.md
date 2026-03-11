@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # Changelog Entry Template
 
 > Use this template when adding entries to LIVE.md or LEGACY.md

@@ -1,3 +1,4 @@
+[Ver001.000]
 /**
  * HUB 2/4: Advanced Analytics JavaScript
  * SATOR Square Visualization & Analytics Platform

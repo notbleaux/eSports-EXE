@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # CRIT Report - Critical Risk & Issue Tracker
 
 **Project:** SATOR/RadiantX Esports Platform  

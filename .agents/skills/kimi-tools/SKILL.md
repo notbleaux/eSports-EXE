@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: kimi-tools
 description: "通过 Python 脚本调用 kimi search 和 kimi fetch，用于网页搜索与页面抓取任务，返回结构化数据与 Markdown 内容。"

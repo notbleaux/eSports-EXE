@@ -29,26 +29,26 @@ export const HUBS = {
     path: '/rotas',
     stats: { accuracy: '99.9%', status: 'active' }
   },
-  info: {
-    id: 'info',
-    name: 'Information',
-    subtitle: 'The Directory',
+  arepo: {
+    id: 'arepo',
+    name: 'AREPO',
+    subtitle: 'Questions & Knowledge',
     description: 'Central directory with radial navigation',
     color: '#e8e6e3',
     glowColor: 'rgba(232, 230, 227, 0.2)',
     icon: '◉',
-    path: '/info',
+    path: '/arepo',
     stats: { teams: '2,135', status: 'active' }
   },
-  games: {
-    id: 'games',
-    name: 'Games',
-    subtitle: 'The Nexus',
+  opera: {
+    id: 'opera',
+    name: 'OPERA',
+    subtitle: 'Work & Simulation',
     description: 'Simulation platform with toroidal flow',
     color: '#1e3a5f',
     glowColor: 'rgba(30, 58, 95, 0.4)',
     icon: '◆',
-    path: '/games',
+    path: '/opera',
     stats: { status: 'live', players: 'Online' }
   }
 }
@@ -90,8 +90,8 @@ export const useNJZStore = create(
       hubStates: {
         sator: { activeRing: null, rotation: 0 },
         rotas: { activeLayers: ['persona'], correlation: 87.3 },
-        info: { activeSection: 'radial', selectedCategory: null },
-        games: { mode: 'simulation', connected: false }
+        arepo: { activeSection: 'radial', selectedCategory: null },
+        opera: { mode: 'simulation', connected: false }
       },
       
       // Twin-file integrity

@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # SATOR — Esports Simulation Platform
 
 **SATOR** is a three-part esports simulation and analytics platform:

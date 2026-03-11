@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # PATCH REPORT - NJZ Quarter Grid Landing Page
 
 **Report ID:** WEBSITE_20260304_2100_IMPLEMENT_NJZ  

@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR Web Platform
 
 React frontend for the SATOR esports analytics platform.

@@ -1,3 +1,4 @@
+[Ver002.000]
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [

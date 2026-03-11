@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR-eXe-ROTAS — Capabilities Assessment
 
 **Assessment Date:** 2026-03-04  

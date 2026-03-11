@@ -66,13 +66,13 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/info" className="text-sm text-slate hover:text-porcelain transition-colors flex items-center gap-2">
-                  <span className="text-porcelain">◉</span> Information
+                <Link to="/arepo" className="text-sm text-slate hover:text-porcelain transition-colors flex items-center gap-2">
+                  <span className="text-porcelain">◉</span> AREPO
                 </Link>
               </li>
               <li>
-                <Link to="/games" className="text-sm text-slate hover:text-cobalt transition-colors flex items-center gap-2">
-                  <span className="text-cobalt">◆</span> Games
+                <Link to="/opera" className="text-sm text-slate hover:text-cobalt transition-colors flex items-center gap-2">
+                  <span className="text-cobalt">◆</span> OPERA
                 </Link>
               </li>
             </ul>

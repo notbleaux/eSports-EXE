@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # DATA_DICTIONARY.md — 37-Field KCRITR Schema Reference
 
 ## Overview

@@ -1,0 +1,69 @@
+{
+  "$schema": "../05_TEMPLATES/TASK_SCHEMA.json",
+  "task": {
+    "id": "TASK-001-COMPETITOR-ANALYSIS",
+    "version": "[Ver001.000]",
+    "createdAt": "2026-03-09T06:30:00Z",
+    "modifiedAt": "2026-03-09T06:30:00Z",
+    "classification": {
+      "priority": "high",
+      "complexity": "complex",
+      "domain": "research",
+      "estimatedDuration": "days"
+    },
+    "ownership": {
+      "creator": "agent-desktop",
+      "assignee": "unassigned",
+      "claimTime": null,
+      "startTime": null,
+      "completionTime": null
+    },
+    "specification": {
+      "title": "eSports Analytics Competitor Research",
+      "description": "Research and document eSports analytics competitors including Pro-Football-Reference style sites (HLTV.org, VLR.gg), advanced analytics platforms (PFF-style for esports), statistical reference services, and information hubs. Create comprehensive competitor analysis report with feature comparison matrix.",
+      "requirements": [
+        "Research minimum 10 competitor platforms",
+        "Analyze HLTV.org for CS2 data presentation",
+        "Analyze VLR.gg for Valorant data presentation",
+        "Identify advanced analytics providers",
+        "Map information hub services",
+        "Document API availability where found"
+      ],
+      "acceptanceCriteria": [
+        "Competitor analysis report (markdown, 5000+ words)",
+        "Feature comparison matrix (table format)",
+        "API availability assessment per platform",
+        "Partnership opportunity notes",
+        "20 bullet points on visual design themes and motifs",
+        "Naming convention patterns identified"
+      ],
+      "constraints": {
+        "time": "Complete within 1 week",
+        "resources": "Web access for research",
+        "dependencies": [],
+        "conflicts": []
+      }
+    },
+    "deliverables": {
+      "outputPath": "project/reports/",
+      "format": "markdown",
+      "verificationMethod": "review",
+      "reviewers": ["agent-desktop"]
+    },
+    "history": [
+      {
+        "timestamp": "2026-03-09T06:30:00Z",
+        "agent": "agent-desktop",
+        "action": "created",
+        "comment": "Initial task creation from owner request for competitor analysis"
+      }
+    ],
+    "status": {
+      "current": "listed",
+      "blocker": null,
+      "progress": 0,
+      "nextAction": "waiting-for-claim"
+    },
+    "tags": ["#research", "#competitor-analysis", "#esports", "#valorant", "#cs2", "#market-research"]
+  }
+}

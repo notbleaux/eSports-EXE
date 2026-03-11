@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: translate-docs
 description: Translate and sync bilingual documentation.

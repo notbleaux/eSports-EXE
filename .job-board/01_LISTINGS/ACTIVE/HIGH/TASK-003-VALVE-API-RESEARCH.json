@@ -1,0 +1,69 @@
+{
+  "$schema": "../05_TEMPLATES/TASK_SCHEMA.json",
+  "task": {
+    "id": "TASK-003-VALVE-API-RESEARCH",
+    "version": "[Ver001.000]",
+    "createdAt": "2026-03-09T06:30:00Z",
+    "modifiedAt": "2026-03-09T06:30:00Z",
+    "classification": {
+      "priority": "high",
+      "complexity": "moderate",
+      "domain": "research",
+      "estimatedDuration": "days"
+    },
+    "ownership": {
+      "creator": "agent-desktop",
+      "assignee": "unassigned",
+      "claimTime": null,
+      "startTime": null,
+      "completionTime": null
+    },
+    "specification": {
+      "title": "Valve/Steam API Research for CS2 Data",
+      "description": "Research Valve and Steam APIs for Counter-Strike 2 data access. Document Steam Web API capabilities, CS2 Game State Integration options, third-party data sources (HLTV, etc.), and community data access options. Create CS2 data access strategy document.",
+      "requirements": [
+        "Research Steam Web API documentation",
+        "Investigate CS2 Game State Integration",
+        "Document third-party data sources",
+        "Assess community data access options",
+        "Identify limitations and gaps",
+        "Propose data access strategy"
+      ],
+      "acceptanceCriteria": [
+        "Valve API capabilities report (2000+ words)",
+        "CS2 data access strategy document",
+        "Third-party source comparison",
+        "Alternative data source documentation",
+        "Integration recommendations",
+        "Risk assessment for data access"
+      ],
+      "constraints": {
+        "time": "Complete within 1 week",
+        "resources": "Web access, Steam account",
+        "dependencies": [],
+        "conflicts": []
+      }
+    },
+    "deliverables": {
+      "outputPath": "project/reports/",
+      "format": "markdown",
+      "verificationMethod": "review",
+      "reviewers": ["agent-desktop"]
+    },
+    "history": [
+      {
+        "timestamp": "2026-03-09T06:30:00Z",
+        "agent": "agent-desktop",
+        "action": "created",
+        "comment": "Task created for Valve/CS2 API research per owner request"
+      }
+    ],
+    "status": {
+      "current": "listed",
+      "blocker": null,
+      "progress": 0,
+      "nextAction": "waiting-for-claim"
+    },
+    "tags": ["#research", "#api", "#cs2", "#valve", "#steam", "#integration"]
+  }
+}

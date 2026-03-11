@@ -1,0 +1,174 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "TASK_SCHEMA",
+  "title": "Job Listing Board Task Schema",
+  "description": "Schema for task specifications in the Job Listing Board system",
+  "version": "[Ver001.000]",
+  
+  "type": "object",
+  "required": ["task"],
+  "properties": {
+    "task": {
+      "type": "object",
+      "required": ["id", "version", "createdAt", "modifiedAt", "classification", "ownership", "specification", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^TASK-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "description": "Unique task identifier"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\[Ver[0-9]{3}\\.[0-9]{3}\\]$",
+          "description": "Task specification version"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of creation"
+        },
+        "modifiedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of last modification"
+        },
+        "classification": {
+          "type": "object",
+          "required": ["priority", "complexity", "domain"],
+          "properties": {
+            "priority": {
+              "type": "string",
+              "enum": ["critical", "high", "medium", "low"]
+            },
+            "complexity": {
+              "type": "string",
+              "enum": ["simple", "moderate", "complex", "research"]
+            },
+            "domain": {
+              "type": "string",
+              "enum": ["frontend", "backend", "data", "design", "docs", "research"]
+            },
+            "estimatedDuration": {
+              "type": "string",
+              "enum": ["hours", "days", "weeks"]
+            }
+          }
+        },
+        "ownership": {
+          "type": "object",
+          "required": ["creator"],
+          "properties": {
+            "creator": {
+              "type": "string",
+              "pattern": "^agent-[a-z0-9-]+$",
+              "description": "Agent ID that created the task"
+            },
+            "assignee": {
+              "type": ["string", "null"],
+              "description": "Currently assigned agent, or null if unassigned"
+            },
+            "claimTime": {
+              "type": ["string", "null"],
+              "format": "date-time"
+            },
+            "startTime": {
+              "type": ["string", "null"],
+              "format": "date-time"
+            },
+            "completionTime": {
+              "type": ["string", "null"],
+              "format": "date-time"
+            }
+          }
+        },
+        "specification": {
+          "type": "object",
+          "required": ["title", "description"],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 200
+            },
+            "description": {
+              "type": "string",
+              "minLength": 10
+            },
+            "requirements": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "acceptanceCriteria": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "constraints": {
+              "type": "object",
+              "properties": {
+                "time": { "type": ["string", "null"] },
+                "resources": { "type": ["string", "null"] },
+                "dependencies": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "conflicts": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "deliverables": {
+          "type": "object",
+          "properties": {
+            "outputPath": { "type": "string" },
+            "format": { "type": "string" },
+            "verificationMethod": {
+              "type": "string",
+              "enum": ["test", "review", "inspection", "automated"]
+            },
+            "reviewers": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["timestamp", "agent", "action"],
+            "properties": {
+              "timestamp": { "type": "string", "format": "date-time" },
+              "agent": { "type": "string" },
+              "action": { "type": "string" },
+              "comment": { "type": "string" }
+            }
+          }
+        },
+        "status": {
+          "type": "object",
+          "required": ["current"],
+          "properties": {
+            "current": {
+              "type": "string",
+              "enum": ["listed", "claimed", "active", "blocked", "review", "completed", "archived"]
+            },
+            "blocker": { "type": ["string", "null"] },
+            "progress": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "nextAction": { "type": "string" }
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

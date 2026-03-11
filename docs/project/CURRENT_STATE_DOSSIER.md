@@ -1,3 +1,5 @@
+[Ver026.000]
+
 # CURRENT STATE DOSSIER
 ## notbleaux/eSports-EXE Repository — SATOR-eXe-ROTAS Platform
 

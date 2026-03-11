@@ -1,3 +1,5 @@
+[Ver007.000]
+
 # SATOR-eXe-ROTAS Project Plan & Roadmap
 
 **Repository:** https://github.com/notbleaux/eSports-EXE  

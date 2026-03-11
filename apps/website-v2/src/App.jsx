@@ -1,6 +1,7 @@
 /**
  * Main App Component
  * Unified NJZ Platform with all 4 hubs connected
+ * Updated with Holographic UI and Animated Backgrounds
  */
 import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
@@ -12,10 +13,11 @@ import Footer from './shared/components/Footer'
 import NotificationContainer from './shared/components/NotificationContainer'
 import TwinFileVisualizer from './shared/components/TwinFileVisualizer'
 import CentralGrid from './shared/components/CentralGrid'
+import { SmokeBackground } from './shared/components/AnimatedBackgrounds'
 import SATORHub from './hub-1-sator/SATORHub'
 import ROTASHub from './hub-2-rotas/ROTASHub'
-import InformationHub from './hub-3-info/InformationHub'
-import GamesHub from './hub-4-games/GamesHub'
+import ArepoHub from './hub-3-arepo/ArepoHub'
+import OperaHub from './hub-4-opera/OperaHub'
 import { useNJZStore, HUBS } from './shared/store/njzStore'
 
 // Page transition wrapper
@@ -77,6 +79,7 @@ const RouteChangeHandler = () => {
 
 function App() {
   const { preferences } = useNJZStore()
+  const location = useLocation()
   
   // Check for reduced motion preference
   useEffect(() => {
@@ -94,6 +97,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-void text-white overflow-x-hidden">
+      {/* Animated Background */}
+      <SmokeBackground />
+      
       <RouteChangeHandler />
       <Navigation />
       <RealTimeNotifications />
@@ -126,18 +132,18 @@ function App() {
               } 
             />
             <Route 
-              path="/info" 
+              path="/arepo" 
               element={
-                <PageTransition hubId="info">
-                  <InformationHub />
+                <PageTransition hubId="arepo">
+                  <ArepoHub />
                 </PageTransition>
               } 
             />
             <Route 
-              path="/games" 
+              path="/opera" 
               element={
-                <PageTransition hubId="games">
-                  <GamesHub />
+                <PageTransition hubId="opera">
+                  <OperaHub />
                 </PageTransition>
               } 
             />

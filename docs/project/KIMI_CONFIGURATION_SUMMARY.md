@@ -1,3 +1,5 @@
+[Ver022.000]
+
 # Kimi Code / Agent / Sub-Agent Configuration Summary
 
 **Date:** 2026-03-04  

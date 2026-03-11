@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: gen-changelog
 description: Generate changelog entries for code changes.

@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Patch Report: RadiantX Legacy Archive Integration
 
 **Patch ID:** LEGACY-20260305-001-RADIANTX  

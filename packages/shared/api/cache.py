@@ -4,7 +4,6 @@ import redis
 import hashlib
 from typing import Any, Optional, Callable
 from functools import wraps
-import pickle
 
 
 class CacheManager:
@@ -16,12 +15,12 @@ class CacheManager:
         self._misses = 0
 
     def _serialize(self, value: Any) -> bytes:
-        """Serialize value to bytes."""
-        return pickle.dumps(value)
+        """Serialize value to bytes using JSON (safer than pickle)."""
+        return json.dumps(value, default=str).encode('utf-8')
 
     def _deserialize(self, data: bytes) -> Any:
-        """Deserialize bytes to value."""
-        return pickle.loads(data)
+        """Deserialize bytes to value using JSON (safer than pickle)."""
+        return json.loads(data.decode('utf-8'))
 
     def _make_key(self, prefix: str, *args, **kwargs) -> str:
         """Generate cache key from arguments."""

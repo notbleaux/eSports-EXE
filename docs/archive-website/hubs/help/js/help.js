@@ -1,3 +1,4 @@
+[Ver001.000]
 /**
  * Help Panel JavaScript
  * =====================

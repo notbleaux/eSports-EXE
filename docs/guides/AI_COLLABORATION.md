@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # 🤖 AI_COLLABORATION.md
 ## Working with AI Tools on SATOR-eXe-ROTAS
 

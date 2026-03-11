@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # PATCH REPORT: Fantasy eSports HUB Implementation
 
 **Report ID:** WEBSITE_20260304_205657_IMPLEMENT_FANTASY  

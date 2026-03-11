@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Tactical FPS Sim Core (Combat Logic Package)
 
 This repo is a **ready-to-paste** combat simulation core for a tactical FPS esport org coach/manager sim.

@@ -4,14 +4,15 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/eSports-EXE/platform/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@shared': path.resolve(__dirname, './src/shared'),
       '@hub-1': path.resolve(__dirname, './src/hub-1-sator'),
       '@hub-2': path.resolve(__dirname, './src/hub-2-rotas'),
-      '@hub-3': path.resolve(__dirname, './src/hub-3-info'),
-      '@hub-4': path.resolve(__dirname, './src/hub-4-games')
+      '@hub-3': path.resolve(__dirname, './src/hub-3-arepo'),
+      '@hub-4': path.resolve(__dirname, './src/hub-4-opera')
     }
   },
   build: {

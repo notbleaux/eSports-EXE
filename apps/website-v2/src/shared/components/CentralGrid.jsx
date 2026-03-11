@@ -36,28 +36,28 @@ const hubs = [
     features: ['Probability Engines', 'Layer Blending', 'Predictive Models']
   },
   {
-    id: 'info',
-    title: 'Information',
-    subtitle: 'The Directory',
+    id: 'arepo',
+    title: 'AREPO',
+    subtitle: 'Questions & Knowledge',
     description: 'Central directory with radial navigation',
     icon: Users,
     color: 'from-porcelain to-slate',
     glow: 'group-hover:shadow-[0_0_40px_rgba(232,230,227,0.2)]',
     borderHover: 'group-hover:border-porcelain/30',
-    path: '/info',
+    path: '/arepo',
     stat: '2,135 Teams',
     features: ['Radial Navigation', 'AI Suggestions', 'Conical Directory']
   },
   {
-    id: 'games',
-    title: 'Games',
-    subtitle: 'The Nexus',
+    id: 'opera',
+    title: 'OPERA',
+    subtitle: 'Work & Simulation',
     description: 'Simulation platform with toroidal flow',
     icon: Gamepad2,
     color: 'from-cobalt to-signal-cyan',
     glow: 'group-hover:shadow-[0_0_40px_rgba(30,58,95,0.4)]',
     borderHover: 'group-hover:border-cobalt/50',
-    path: '/games',
+    path: '/opera',
     stat: 'Live Platform',
     features: ['Tactical Simulation', 'Resonant Matchmaking', 'Toroidal Flow']
   }

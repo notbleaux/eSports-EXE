@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR_ARCHITECTURE.md — 5-Layer Visualization Specification
 
 ## Overview

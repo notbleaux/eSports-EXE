@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # docs/web/
 
 Placeholder for SATOR web platform documentation.

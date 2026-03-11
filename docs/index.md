@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # Welcome to SATOR Documentation
 
 **SATOR** (Strategic Analytics for Tactical Observation & Reporting) is a comprehensive esports analytics platform for Valorant and CS2.

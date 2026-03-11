@@ -1,3 +1,5 @@
+[Ver013.000]
+
 # SATOR Sphere Design Documentation
 ## Triangle Embedding Foil Pattern on Spherical Surface
 

@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # 🚀 DEPLOYMENT.md
 ## Deployment Guide for SATOR-eXe-ROTAS
 

@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # @sator/stats-schema
 
 > **Single source of truth for SATOR public statistics**

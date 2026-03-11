@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # Patch 001: Initial Repository Migration
 
 > Migration of satorXrotas documentation and configurations to eSports-EXE

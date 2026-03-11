@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR Platform - Free Tier Deployment Architecture
 
 ## Executive Summary

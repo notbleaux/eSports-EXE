@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Patch Report: HUB 3/4 - eSports Hub Implementation
 
 **Date:** 2026-03-04  

@@ -1,3 +1,5 @@
+[Ver006.000]
+
 # Repository Transfer Guide
 
 **Source:** `satorXrotas` (Local/Git)  

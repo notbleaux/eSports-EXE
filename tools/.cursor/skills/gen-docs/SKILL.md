@@ -1,3 +1,5 @@
+[Ver001.000]
+
 ---
 name: gen-docs
 description: Update Kimi Code CLI user documentation.

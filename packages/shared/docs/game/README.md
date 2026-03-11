@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # docs/game/
 
 Game-specific documentation is being migrated here during Phase 2.

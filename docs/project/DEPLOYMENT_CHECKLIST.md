@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # SATOR Platform Deployment Checklist
 
 Use this checklist to deploy the SATOR platform step-by-step.

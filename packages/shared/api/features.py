@@ -44,9 +44,10 @@ class FeatureManager:
         if user_id and user_id in allowed_users:
             return True
 
-        # Percentage-based rollout
+        # Percentage-based rollout using secure hash
         if user_id:
-            user_hash = int(hashlib.md5(user_id.encode()).hexdigest(), 16)
+            # Use SHA-256 instead of MD5 for security
+            user_hash = int(hashlib.sha256(user_id.encode()).hexdigest(), 16)
             rollout = feature.get("rollout_percentage", 0)
             return (user_hash % 100) < rollout
 

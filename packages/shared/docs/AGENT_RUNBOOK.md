@@ -1,3 +1,5 @@
+[Ver002.000]
+
 # Agent Runbook — Extraction Pipeline Security Check
 ## SATOR Esports Analytics Platform — RadiantX Repository
 **Version:** 1.0.0  

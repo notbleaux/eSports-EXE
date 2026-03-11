@@ -1,3 +1,4 @@
+[Ver001.000]
 /**
  * Statistical Reference HUB JavaScript
  * =====================================

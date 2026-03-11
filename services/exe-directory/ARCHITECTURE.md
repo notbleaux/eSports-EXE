@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # eXe Directory Architecture
 ## SATOR-eXe-ROTAS Central Service Registry
 
