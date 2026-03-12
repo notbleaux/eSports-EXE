@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "njz-platform",
   "buildCommand": "cd apps/website-v2 && npm install && npm run build",
   "outputDirectory": "apps/website-v2/dist",
   "framework": "vite",
@@ -41,8 +40,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "VITE_API_URL": "@vite_api_url"
-  }
+  ]
 }
