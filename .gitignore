@@ -49,3 +49,5 @@ apps/radiantx-game/build/
 .kimi/sessions/
 .kimi/.sessions/
 .kimi/auth/
+.vercel
+.env*.local
