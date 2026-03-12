@@ -1,7 +1,7 @@
 {
-  "name": "njz-platform",
+  "name": "libre-x-4njz4-tenet-platform",
   "version": "2.0.0",
-  "description": "NJZ ¿!? Platform - 4eva and Nvr Die",
+  "description": "Libre-X-eSport 4NJZ4 TENET Platform — 4eva and Nvr Die",
   "type": "module",
   "scripts": {
     "dev": "vite",

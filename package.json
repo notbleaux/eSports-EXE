@@ -1,7 +1,7 @@
 {
-  "name": "sator",
-  "version": "0.1.0",
-  "description": "SATOR esports simulation platform — monorepo root",
+  "name": "libre-x-esport-4njz4-tenet",
+  "version": "2.0.0",
+  "description": "Libre-X-eSport 4NJZ4 TENET Platform — esports simulation and analytics monorepo",
   "private": true,
   "scripts": {
     "build": "npm run build --workspaces --if-present",
@@ -15,6 +15,6 @@
     "apps/*",
     "api"
   ],
-  "keywords": ["sator", "esports", "tactical-fps", "simulation"],
+  "keywords": ["libre-x", "4njz4", "tenet", "esports", "tactical-fps", "simulation"],
   "license": "MIT"
 }

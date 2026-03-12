@@ -1,8 +1,8 @@
-[Ver001.000]
+[Ver002.000]
 
 # SATOR Hub - The Observatory
 
-Abyssal depth data visualization hub with signal-amber accents for the NJZ Platform.
+Abyssal depth data visualization hub with signal-amber accents for the Libre-X-eSport 4NJZ4 TENET Platform.
 
 ## Features
 
@@ -46,4 +46,4 @@ npm start
 
 ## License
 
-MIT - NJZ Platform
+MIT - Libre-X-eSport 4NJZ4 TENET Platform

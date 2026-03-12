@@ -1,6 +1,6 @@
-[Ver001.000]
+[Ver002.000]
 
-# 🏗️ SATOR-eXe-ROTAS / NJZ Platform
+# 🏗️ Libre-X-eSport 4NJZ4 TENET Platform
 
 **Status:** 🟢 Active Development  
 **Repository:** https://github.com/notbleaux/eSports-EXE
@@ -15,7 +15,7 @@ This repository follows professional IT project organization standards.
 main-repo/
 ├── 📁 apps/                      # Applications
 │   ├── website/                 # Original website
-│   ├── website-v2/             # NJZ 4-Hub Platform (React)
+│   ├── website-v2/             # 4NJZ4 TENET Platform (React)
 │   └── VCT Valorant eSports/   # VCT data project
 │
 ├── 📁 packages/                  # Shared packages
@@ -109,7 +109,7 @@ cd eSports-EXE
 # Install dependencies
 npm install
 
-# Run website-v2 (NJZ Platform)
+# Run website-v2 (4NJZ4 TENET Platform)
 cd apps/website-v2
 npm install
 npm run dev
@@ -121,7 +121,7 @@ npm run dev
 
 | Project | Location | Tech Stack | Status |
 |---------|----------|------------|--------|
-| **NJZ Platform** | `apps/website-v2/` | React, Vite, Tailwind | ✅ Active |
+| **4NJZ4 TENET Platform** | `apps/website-v2/` | React, Vite, Tailwind | ✅ Active |
 | **Original Website** | `apps/website/` | HTML/CSS/JS | 🟡 Legacy |
 | **Simulation Game** | `platform/simulation-game/` | Godot 4, C# | 🟡 Paused |
 | **eXe Directory** | `services/exe-directory/` | TBD | 🔵 Planned |
@@ -196,4 +196,4 @@ See `project/standards/COMMIT_STANDARDS.md` for full guidelines.
 
 ---
 
-*Last Updated: March 7, 2026*
+*Last Updated: March 12, 2026*

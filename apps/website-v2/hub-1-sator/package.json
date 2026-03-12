@@ -14,9 +14,11 @@
     "data-visualization",
     "threejs",
     "orbital-rings",
-    "njz-platform"
+    "libre-x",
+    "4njz4",
+    "tenet-platform"
   ],
-  "author": "NJZ Platform",
+  "author": "Libre-X-eSport 4NJZ4 TENET Platform",
   "license": "MIT",
   "dependencies": {
     "three": "^0.128.0"

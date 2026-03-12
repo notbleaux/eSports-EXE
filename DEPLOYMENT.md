@@ -1,11 +1,11 @@
-[Ver001.000]
+[Ver002.000]
 
 # 🚀 DEPLOYMENT.md
-## Deployment Guide for SATOR-eXe-ROTAS
+## Deployment Guide for Libre-X-eSport 4NJZ4 TENET Platform
 
-**Project:** NJZ Platform / SATOR-eXe-ROTAS  
+**Project:** Libre-X-eSport 4NJZ4 TENET Platform (formerly SATOR-eXe-ROTAS / NJZ Platform)  
 **Platforms:** Render, Vercel, GitHub Pages  
-**Last Updated:** March 7, 2026
+**Last Updated:** March 12, 2026
 
 ---
 
@@ -18,7 +18,7 @@ This project can be deployed to multiple platforms:
 
 ---
 
-## 🌐 Website-V2 (NJZ Platform) Deployment
+## 🌐 Website-V2 (4NJZ4 TENET Platform) Deployment
 
 ### Option 1: Vercel (Recommended for Frontend)
 

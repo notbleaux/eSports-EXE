@@ -1,6 +1,6 @@
-[Ver001.000]
+[Ver002.000]
 
-# NJZ ¿!? Platform v2.0
+# Libre-X-eSport 4NJZ4 TENET Platform v2.0
 
 **4eva and Nvr Die**
 
@@ -8,7 +8,7 @@ A unified platform integrating 4 specialized hubs with SATOR/ROTAS twin-file inf
 
 ## 🏛️ Architecture
 
-The NJZ Platform consists of 4 interconnected hubs:
+The 4NJZ4 TENET Platform consists of 4 interconnected hubs:
 
 | Hub | Name | Purpose | Color |
 |-----|------|---------|-------|
@@ -145,4 +145,4 @@ All hubs share:
 
 ---
 
-**NJZ Platform v2.0** — *Twin-file database system with SATOR/ROTAS infrastructure*
+**Libre-X-eSport 4NJZ4 TENET Platform v2.0** — *Twin-file database system with SATOR/ROTAS infrastructure*

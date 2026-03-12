@@ -1,9 +1,9 @@
-[Ver001.000]
+[Ver002.000]
 
 # 🤝 CONTRIBUTING.md
-## How to Contribute to SATOR-eXe-ROTAS
+## How to Contribute to Libre-X-eSport 4NJZ4 TENET Platform
 
-**Project:** NJZ Platform / SATOR-eXe-ROTAS  
+**Project:** Libre-X-eSport 4NJZ4 TENET Platform (formerly SATOR-eXe-ROTAS / NJZ Platform)  
 **Repository:** https://github.com/notbleaux/eSports-EXE
 
 ---
@@ -154,4 +154,4 @@ Resources:
 
 ---
 
-*Last Updated: March 7, 2026*
+*Last Updated: March 12, 2026*
