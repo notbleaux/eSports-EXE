@@ -32,24 +32,35 @@ export const HUBS = {
   arepo: {
     id: 'arepo',
     name: 'AREPO',
-    subtitle: 'Questions & Knowledge',
-    description: 'Central directory with radial navigation',
-    color: '#e8e6e3',
-    glowColor: 'rgba(232, 230, 227, 0.2)',
+    subtitle: 'The Directory',
+    description: 'Q&A, documentation, and knowledge base',
+    color: '#0066ff',
+    glowColor: 'rgba(0, 102, 255, 0.4)',
     icon: '◉',
     path: '/arepo',
-    stats: { teams: '2,135', status: 'active' }
+    stats: { entries: '2,135', status: 'active' }
   },
   opera: {
     id: 'opera',
     name: 'OPERA',
-    subtitle: 'Work & Simulation',
-    description: 'Simulation platform with toroidal flow',
-    color: '#1e3a5f',
-    glowColor: 'rgba(30, 58, 95, 0.4)',
+    subtitle: 'The Nexus',
+    description: 'Maps, fog of war, and spatial visualization',
+    color: '#9d4edd',
+    glowColor: 'rgba(157, 78, 221, 0.4)',
     icon: '◆',
     path: '/opera',
-    stats: { status: 'live', players: 'Online' }
+    stats: { maps: '6', status: 'active' }
+  },
+  tenet: {
+    id: 'tenet',
+    name: 'TENET',
+    subtitle: 'The Control Center',
+    description: 'Central coordination hub with SATOR Square visualization',
+    color: '#ffffff',
+    glowColor: 'rgba(255, 255, 255, 0.3)',
+    icon: '◈',
+    path: '/tenet',
+    stats: { hubs: '5', status: 'active' }
   }
 }
 
@@ -90,8 +101,9 @@ export const useNJZStore = create(
       hubStates: {
         sator: { activeRing: null, rotation: 0 },
         rotas: { activeLayers: ['persona'], correlation: 87.3 },
-        arepo: { activeSection: 'radial', selectedCategory: null },
-        opera: { mode: 'simulation', connected: false }
+        arepo: { activeSection: 'directory', selectedCategory: null },
+        opera: { selectedMap: 'ascent', viewMode: 'tactical' },
+        tenet: { activeTab: 'hubs', selectedHub: null }
       },
       
       // Twin-file integrity
@@ -187,8 +199,8 @@ export const useNJZStore = create(
           hubStates: {
             sator: { activeRing: null, rotation: 0 },
             rotas: { activeLayers: ['persona'], correlation: 87.3 },
-            info: { activeSection: 'radial', selectedCategory: null },
-            games: { mode: 'simulation', connected: false }
+            arepo: { activeSection: 'directory', selectedCategory: null },
+            opera: { selectedMap: 'ascent', viewMode: 'tactical' }
           },
           twinFile: initialTwinFileState,
           notifications: []

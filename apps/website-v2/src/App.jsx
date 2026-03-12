@@ -1,50 +1,51 @@
 /**
- * Main App Component
- * Unified NJZ Platform with all 4 hubs connected
- * Updated with Holographic UI and Animated Backgrounds
+ * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
+ * Final Integration with Navigation and QuarterGrid
+ * 
+ * [Ver002.000]
  */
-import React, { useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import Navigation from './shared/components/Navigation'
-import MobileNavigation from './shared/components/MobileNavigation'
-import RealTimeNotifications from './shared/components/RealTimeNotifications'
-import Footer from './shared/components/Footer'
-import NotificationContainer from './shared/components/NotificationContainer'
-import TwinFileVisualizer from './shared/components/TwinFileVisualizer'
-import CentralGrid from './shared/components/CentralGrid'
-import { SmokeBackground } from './shared/components/AnimatedBackgrounds'
-import SATORHub from './hub-1-sator/SATORHub'
-import ROTASHub from './hub-2-rotas/ROTASHub'
-import ArepoHub from './hub-3-arepo/ArepoHub'
-import OperaHub from './hub-4-opera/OperaHub'
-import { useNJZStore, HUBS } from './shared/store/njzStore'
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// Page transition wrapper
+// Navigation and Layout Components
+import Navigation from './components/Navigation';
+import QuarterGrid from './components/QuarterGrid';
+
+// Hub Components
+import SatorHub from './hub-1-sator/index.jsx';
+import RotasHub from './hub-2-rotas/index.jsx';
+import ArepoHub from './hub-3-arepo/index.jsx';
+import OperaHub from './hub-4-opera/index.jsx';
+import TenetHub from './hub-5-tenet/index.jsx';
+
+// Page transition wrapper with AnimatePresence
 const PageTransition = ({ children, hubId }) => {
-  const preferences = useNJZStore(state => state.preferences)
-  
   const variants = {
     initial: { 
       opacity: 0, 
-      x: preferences.reducedMotion ? 0 : -20 
+      y: 20,
+      scale: 0.98,
     },
     animate: { 
       opacity: 1, 
-      x: 0,
+      y: 0,
+      scale: 1,
       transition: {
-        duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
+        duration: 0.4,
+        ease: [0.25, 0.1, 0.25, 1],
+      },
     },
     exit: { 
       opacity: 0, 
-      x: preferences.reducedMotion ? 0 : 20,
+      y: -20,
+      scale: 0.98,
       transition: {
-        duration: 0.3
-      }
-    }
-  }
+        duration: 0.3,
+        ease: [0.25, 0.1, 0.25, 1],
+      },
+    },
+  };
 
   return (
     <motion.div
@@ -57,80 +58,66 @@ const PageTransition = ({ children, hubId }) => {
     >
       {children}
     </motion.div>
-  )
-}
+  );
+};
 
-// Route change handler
+// Route change handler - scroll to top
 const RouteChangeHandler = () => {
-  const location = useLocation()
-  const setCurrentHub = useNJZStore(state => state.setCurrentHub)
+  const location = useLocation();
   
   useEffect(() => {
-    const path = location.pathname
-    const hubId = path === '/' ? 'central' : path.replace('/', '')
-    setCurrentHub(hubId)
-    
-    // Scroll to top on route change
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [location, setCurrentHub])
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
   
-  return null
-}
+  return null;
+};
 
 function App() {
-  const { preferences } = useNJZStore()
-  const location = useLocation()
-  
-  // Check for reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (mediaQuery.matches !== preferences.reducedMotion) {
-      useNJZStore.getState().setPreference('reducedMotion', mediaQuery.matches)
-    }
-    
-    const handler = (e) => {
-      useNJZStore.getState().setPreference('reducedMotion', e.matches)
-    }
-    mediaQuery.addEventListener('change', handler)
-    return () => mediaQuery.removeEventListener('change', handler)
-  }, [])
+  const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-void text-white overflow-x-hidden">
-      {/* Animated Background */}
-      <SmokeBackground />
-      
+    <div className="min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden">
+      {/* Route change handler */}
       <RouteChangeHandler />
-      <Navigation />
-      <RealTimeNotifications />
       
+      {/* Navigation */}
+      <Navigation />
+      
+      {/* Main Content with Page Transitions */}
       <main className="relative">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
+            {/* Landing Page - QuarterGrid */}
             <Route 
               path="/" 
               element={
-                <PageTransition hubId="central">
-                  <CentralGrid />
+                <PageTransition hubId="landing">
+                  <QuarterGrid />
                 </PageTransition>
               } 
             />
+            
+            {/* SATOR Hub - The Observatory */}
             <Route 
               path="/sator" 
               element={
                 <PageTransition hubId="sator">
-                  <SATORHub />
+                  <SatorHub />
                 </PageTransition>
               } 
             />
+            
+            {/* ROTAS Hub - The Harmonic Layer */}
             <Route 
               path="/rotas" 
               element={
                 <PageTransition hubId="rotas">
-                  <ROTASHub />
+                  <RotasHub />
                 </PageTransition>
               } 
             />
+            
+            {/* AREPO Hub - The Directory */}
             <Route 
               path="/arepo" 
               element={
@@ -139,6 +126,8 @@ function App() {
                 </PageTransition>
               } 
             />
+            
+            {/* OPERA Hub - The Nexus */}
             <Route 
               path="/opera" 
               element={
@@ -148,21 +137,51 @@ function App() {
               } 
             />
             
+            {/* TENET Hub - The Center */}
+            <Route 
+              path="/tenet" 
+              element={
+                <PageTransition hubId="tenet">
+                  <TenetHub />
+                </PageTransition>
+              } 
+            />
+            
             {/* 404 Catch-all */}
             <Route 
               path="*" 
               element={
                 <PageTransition hubId="404">
-                  <div className="min-h-screen flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-6xl font-display font-bold text-signal-cyan mb-4">404</h1>
-                      <p className="text-xl text-slate mb-8">This hub doesn't exist in the NJZ universe.</p>
+                  <div className="min-h-screen flex items-center justify-center px-4">
+                    <div className="text-center max-w-md">
+                      <motion.h1 
+                        className="text-6xl md:text-8xl font-bold mb-4"
+                        style={{ 
+                          background: 'linear-gradient(135deg, #ffd700, #00d4ff, #9d4edd)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        404
+                      </motion.h1>
+                      <p className="text-xl text-white/60 mb-2">Hub Not Found</p>
+                      <p className="text-white/40 mb-8">
+                        This dimension doesn't exist in the 4NJZ4 universe.
+                      </p>
                       <a 
                         href="/" 
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-signal-cyan text-void-black 
-                                 font-medium hover:shadow-glow-cyan transition-all"
+                        className="
+                          inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                          bg-white/10 text-white font-medium
+                          border border-white/20
+                          hover:bg-white/20 hover:border-white/40
+                          transition-all duration-300
+                        "
                       >
-                        Return to Central
+                        Return to Center
                       </a>
                     </div>
                   </div>
@@ -172,17 +191,8 @@ function App() {
           </Routes>
         </AnimatePresence>
       </main>
-      
-      <Footer />
-      <NotificationContainer />
-      <MobileNavigation />
-      
-      {/* Fixed Twin-File Integrity Indicator */}
-      <div className="fixed bottom-6 left-6 z-40 hidden md:block">
-        <TwinFileVisualizer compact={true} />
-      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

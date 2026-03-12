@@ -1,0 +1,85 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:      
+      - generic [ref=e8]:
+        - text: 
+        - link [ref=e10] [cursor=pointer]:
+          - /url: index.htm
+        - navigation [ref=e12]:
+          - generic:
+            - text: 
+            - list:
+              - listitem [ref=e13]:
+                - heading "nic.io" [level=3] [ref=e14]
+                - list [ref=e15]:
+                  - listitem [ref=e16]:
+                    - link "home" [ref=e17] [cursor=pointer]:
+                      - /url: index.htm
+              - listitem [ref=e18]:
+                - heading "domain names" [level=3] [ref=e19]
+                - list [ref=e20]:
+                  - listitem [ref=e21]:
+                    - link "purchase domain" [ref=e22] [cursor=pointer]:
+                      - /url: new.htm
+                  - listitem [ref=e23]:
+                    - link "whois search" [ref=e24] [cursor=pointer]:
+                      - /url: whois-search.htm
+                  - listitem [ref=e25]:
+                    - link "services" [ref=e26] [cursor=pointer]:
+                      - /url: services.htm
+              - listitem [ref=e27]:
+                - heading "support" [level=3] [ref=e28]
+                - list [ref=e29]:
+                  - listitem [ref=e30]:
+                    - link "support center" [ref=e31] [cursor=pointer]:
+                      - /url: faq.htm
+              - listitem [ref=e32]:
+                - heading "legal" [level=3] [ref=e33]
+                - list [ref=e34]:
+                  - listitem [ref=e35]:
+                    - link "terms & conditions" [ref=e36] [cursor=pointer]:
+                      - /url: terms.htm
+                  - listitem [ref=e37]:
+                    - link "allocation rules" [ref=e38] [cursor=pointer]:
+                      - /url: rules.htm
+                  - listitem [ref=e39]:
+                    - link "policies" [ref=e40] [cursor=pointer]:
+                      - /url: policy.htm
+  - main [ref=e41]:
+    - generic [ref=e43]:
+      - heading "whois Search" [level=1] [ref=e48]
+      - generic [ref=e49]:
+        - generic [ref=e53]:
+          - textbox "Enter your domain name with us" [ref=e55]: libreauxnjz.io
+          - button "search whois" [ref=e57] [cursor=pointer]
+        - generic [ref=e78]:
+          - heading "Your WHOIS information" [level=2] [ref=e79]
+          - generic [ref=e81]: "Domain not found. >>> Last update of WHOIS database: 2026-03-12T15:09:07Z <<< Terms of Use: Access to WHOIS information is provided to assist persons in determining the contents of a domain name registration record in the registry database. The data in this record is provided by Identity Digital or the Registry Operator for informational purposes only, and accuracy is not guaranteed. This service is intended only for query-based access. You agree that you will use this data only for lawful purposes and that, under no circumstances will you use this data to (a) allow, enable, or otherwise support the transmission by e-mail, telephone, or facsimile of mass unsolicited, commercial advertising or solicitations to entities other than the data recipient's own existing customers; or (b) enable high volume, automated, electronic processes that send queries or data to the systems of Registry Operator, a Registrar, or Identity Digital except as reasonably necessary to register domain names or modify existing registrations. When using the Whois service, please consider the following: The Whois service is not a replacement for standard EPP commands to the SRS service. Whois is not considered authoritative for registered domain objects. The Whois service may be scheduled for downtime during production or OT&E maintenance periods. Queries to the Whois services are throttled. If too many queries are received from a single IP address within a specified time, the service will begin to reject further queries for a period of time to prevent disruption of Whois service access. Abuse of the Whois system through data mining is mitigated by detecting and limiting bulk query access from single sources. Where applicable, the presence of a [Non-Public Data] tag indicates that such data is not made publicly available due to applicable data privacy laws or requirements. Should you wish to contact the registrant, please refer to the Whois records available through the registrar URL listed above. Access to non-public data may be provided, upon request, where it can be reasonably confirmed that the requester holds a specific legitimate interest and a proper legal basis for accessing the withheld data. Access to this data provided by Identity Digital can be requested by submitting a request via the form found at https://www.identity.digital/about/policies/whois-layered-access/. The Registrar of Record identified in this output may have an RDDS service that can be queried for additional information on how to contact the Registrant, Admin, or Tech contact of the queried domain name. Identity Digital Inc. and Registry Operator reserve the right to modify these terms at any time. By submitting this query, you agree to abide by this policy."
+  - contentinfo [ref=e58]:
+    - generic [ref=e61]:
+      - heading ".IO domains are issued on a first come, first served basis." [level=3] [ref=e62]
+      - paragraph [ref=e63]: Obtain your own .IO domain today!
+      - paragraph [ref=e64]:
+        - link "sitemap" [ref=e65] [cursor=pointer]:
+          - /url: sitemap.htm
+        - text: "|"
+        - link "contact" [ref=e66] [cursor=pointer]:
+          - /url: contact.htm
+      - paragraph [ref=e67]:
+        - text: Registrar services powered by
+        - link "Name.com" [ref=e68] [cursor=pointer]:
+          - /url: https://name.com
+        - text: "414 14th Street #200 Denver, Colorado 80202"
+      - paragraph [ref=e69]:
+        - text: Copyright © 1997-2021 Internet Computer Bureau Ltd. All Rights Reserved.
+        - text: Greytown House, 221-227 High Street, Orpington, BR6 0NZ, United Kingdom
+        - text: VAT Number GB311515842
+  - generic [ref=e71]:
+    - generic [ref=e72]:
+      - text: This website uses cookies. Some of the cookies used are essential for parts of the site to operate. Please see our
+      - link "privacy statement" [ref=e73] [cursor=pointer]:
+        - /url: legal/legal_privacy.html
+      - text: for more details. Click to accept.
+    - generic [ref=e75]: I Accept
+  - text:  
