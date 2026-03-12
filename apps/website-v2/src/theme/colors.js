@@ -1,77 +1,83 @@
 /**
- * Porcelain³ Design System - Color Tokens
- * EXACT hex codes - do not modify
+ * Porcelain³ Design System - Enhanced Color Tokens
+ * Modernized with richer gradients and depth
  */
 
 export const colors = {
-  // Backgrounds
+  // Backgrounds - Richer dark tones
   background: {
-    primary: '#0a0a0f',
-    secondary: '#14141f',
-    tertiary: '#1a1a2e',
+    primary: '#050508',      // Deeper black
+    secondary: '#0a0a0f',    // Original primary
+    tertiary: '#12121a',     // Elevated surfaces
+    elevated: '#1a1a25',     // Cards on hover
   },
   
-  // Borders
+  // Borders - More visible
   border: {
-    subtle: '#2a2a3a',
-    hover: '#3a3a4a',
-    active: '#4a4a5a',
+    subtle: 'rgba(255, 255, 255, 0.08)',
+    default: 'rgba(255, 255, 255, 0.12)',
+    hover: 'rgba(255, 255, 255, 0.2)',
+    active: 'rgba(255, 255, 255, 0.3)',
   },
   
-  // Text
+  // Text - Better contrast
   text: {
     primary: '#ffffff',
-    secondary: '#a0a0b0',
-    muted: '#6a6a7a',
-    inverse: '#0a0a0f',
+    secondary: 'rgba(255, 255, 255, 0.7)',
+    muted: 'rgba(255, 255, 255, 0.5)',
+    disabled: 'rgba(255, 255, 255, 0.3)',
+    inverse: '#050508',
   },
   
-  // Hub Accent Colors (EXACT hex codes)
+  // Hub Accent Colors with Gradients
   hub: {
     sator: {
       base: '#ffd700',
-      glow: 'rgba(255, 215, 0, 0.4)',
+      glow: 'rgba(255, 215, 0, 0.5)',
       muted: '#bfa030',
+      gradient: 'linear-gradient(135deg, #ffd700 0%, #ffaa00 100%)',
     },
     rotas: {
       base: '#00d4ff',
-      glow: 'rgba(0, 212, 255, 0.4)',
+      glow: 'rgba(0, 212, 255, 0.5)',
       muted: '#00a0c0',
+      gradient: 'linear-gradient(135deg, #00d4ff 0%, #0099ff 100%)',
     },
     arepo: {
       base: '#0066ff',
-      glow: 'rgba(0, 102, 255, 0.4)',
+      glow: 'rgba(0, 102, 255, 0.5)',
       muted: '#0044cc',
+      gradient: 'linear-gradient(135deg, #0066ff 0%, #6600ff 100%)',
     },
     opera: {
       base: '#9d4edd',
-      glow: 'rgba(157, 78, 221, 0.4)',
+      glow: 'rgba(157, 78, 221, 0.5)',
       muted: '#7a3aaa',
+      gradient: 'linear-gradient(135deg, #9d4edd 0%, #ff00ff 100%)',
     },
     tenet: {
       base: '#ffffff',
-      glow: 'rgba(255, 255, 255, 0.3)',
+      glow: 'rgba(255, 255, 255, 0.4)',
       muted: '#c0c0d0',
+      gradient: 'linear-gradient(135deg, #ffffff 0%, #a0a0ff 100%)',
     },
   },
   
-  // Status Colors
+  // Status Colors - More vibrant
   status: {
     success: '#00ff88',
-    warning: '#ff6b00',
+    warning: '#ffaa00',
     error: '#ff4655',
     info: '#00d4ff',
     live: '#ff4655',
   },
   
-  // Porcelain Whites
-  porcelain: {
-    pristine: '#fafafa',
-    cream: '#f5f5f0',
-    ash: '#e8e8e8',
-    cloud: '#f0f0f5',
-    mist: 'rgba(255, 255, 255, 0.1)',
-    frost: 'rgba(255, 255, 255, 0.05)',
+  // Enhanced Glass Effects
+  glass: {
+    light: 'rgba(255, 255, 255, 0.05)',
+    medium: 'rgba(255, 255, 255, 0.08)',
+    heavy: 'rgba(255, 255, 255, 0.12)',
+    border: 'rgba(255, 255, 255, 0.1)',
   },
 };
 

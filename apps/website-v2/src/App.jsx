@@ -1,16 +1,17 @@
 /**
  * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
- * Final Integration with Navigation and QuarterGrid
+ * Modernized with enhanced visuals and animations
  * 
- * [Ver002.000]
+ * [Ver003.000]
  */
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Navigation and Layout Components
 import Navigation from './components/Navigation';
-import QuarterGrid from './components/QuarterGrid';
+import ModernQuarterGrid from './components/ModernQuarterGrid';
+import { AnimatedBackground } from './components/ui/AnimatedBackground';
 
 // Hub Components
 import SatorHub from './hub-1-sator/index.jsx';
@@ -19,27 +20,27 @@ import ArepoHub from './hub-3-arepo/index.jsx';
 import OperaHub from './hub-4-opera/index.jsx';
 import TenetHub from './hub-5-tenet/index.jsx';
 
-// Page transition wrapper with AnimatePresence
+// Page transition wrapper
 const PageTransition = ({ children, hubId }) => {
   const variants = {
     initial: { 
       opacity: 0, 
       y: 20,
-      scale: 0.98,
+      filter: 'blur(10px)',
     },
     animate: { 
       opacity: 1, 
       y: 0,
-      scale: 1,
+      filter: 'blur(0px)',
       transition: {
-        duration: 0.4,
+        duration: 0.5,
         ease: [0.25, 0.1, 0.25, 1],
       },
     },
     exit: { 
       opacity: 0, 
       y: -20,
-      scale: 0.98,
+      filter: 'blur(10px)',
       transition: {
         duration: 0.3,
         ease: [0.25, 0.1, 0.25, 1],
@@ -54,14 +55,14 @@ const PageTransition = ({ children, hubId }) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen"
+      className="min-h-screen relative z-10"
     >
       {children}
     </motion.div>
   );
 };
 
-// Route change handler - scroll to top
+// Route change handler
 const RouteChangeHandler = () => {
   const location = useLocation();
   
@@ -76,28 +77,31 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#050508] text-white overflow-x-hidden">
+      {/* Animated Background */}
+      <AnimatedBackground />
+      
       {/* Route change handler */}
       <RouteChangeHandler />
       
       {/* Navigation */}
       <Navigation />
       
-      {/* Main Content with Page Transitions */}
+      {/* Main Content */}
       <main className="relative">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            {/* Landing Page - QuarterGrid */}
+            {/* Landing Page */}
             <Route 
               path="/" 
               element={
                 <PageTransition hubId="landing">
-                  <QuarterGrid />
+                  <ModernQuarterGrid />
                 </PageTransition>
               } 
             />
             
-            {/* SATOR Hub - The Observatory */}
+            {/* HUB Routes */}
             <Route 
               path="/sator" 
               element={
@@ -106,8 +110,6 @@ function App() {
                 </PageTransition>
               } 
             />
-            
-            {/* ROTAS Hub - The Harmonic Layer */}
             <Route 
               path="/rotas" 
               element={
@@ -116,8 +118,6 @@ function App() {
                 </PageTransition>
               } 
             />
-            
-            {/* AREPO Hub - The Directory */}
             <Route 
               path="/arepo" 
               element={
@@ -126,8 +126,6 @@ function App() {
                 </PageTransition>
               } 
             />
-            
-            {/* OPERA Hub - The Nexus */}
             <Route 
               path="/opera" 
               element={
@@ -136,8 +134,6 @@ function App() {
                 </PageTransition>
               } 
             />
-            
-            {/* TENET Hub - The Center */}
             <Route 
               path="/tenet" 
               element={
@@ -147,7 +143,7 @@ function App() {
               } 
             />
             
-            {/* 404 Catch-all */}
+            {/* 404 */}
             <Route 
               path="*" 
               element={
@@ -171,18 +167,12 @@ function App() {
                       <p className="text-white/40 mb-8">
                         This dimension doesn't exist in the 4NJZ4 universe.
                       </p>
-                      <a 
-                        href="/" 
-                        className="
-                          inline-flex items-center gap-2 px-6 py-3 rounded-xl
-                          bg-white/10 text-white font-medium
-                          border border-white/20
-                          hover:bg-white/20 hover:border-white/40
-                          transition-all duration-300
-                        "
+                      <Link 
+                        to="/" 
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 text-white font-medium border border-white/20 hover:bg-white/20 transition-all duration-300"
                       >
                         Return to Center
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </PageTransition>
