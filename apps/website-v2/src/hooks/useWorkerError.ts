@@ -1,155 +1,40 @@
 /**
- * useWorkerError - Centralize worker error detection and recovery
- * [Ver001.000]
+ * useWorkerError - Worker error detection and recovery
+ * [Ver002.000] - Refactored to 60 lines (was 155)
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 
-export type WorkerErrorType = 'init-failed' | 'message-timeout' | 'runtime-error' | 'none'
+export type WorkerErrorType = 'init-failed' | 'timeout' | 'runtime' | null
 
 interface WorkerErrorState {
   hasError: boolean
-  errorType: WorkerErrorType
-  error: Error | null
-  retryCount: number
+  type: WorkerErrorType
+  message: string
+  canRetry: boolean
 }
 
-interface UseWorkerErrorReturn extends WorkerErrorState {
-  retry: () => void
-  fallbackToDom: () => void
-  trackInit: (promise: Promise<void>) => Promise<void>
-  trackMessage: <T>(promise: Promise<T>, timeoutMs?: number) => Promise<T>
-  onRuntimeError: (error: Error) => void
-}
-
-export function useWorkerError(maxRetries = 2): UseWorkerErrorReturn {
+export function useWorkerError(maxRetries = 2) {
   const [state, setState] = useState<WorkerErrorState>({
-    hasError: false,
-    errorType: 'none',
-    error: null,
-    retryCount: 0,
+    hasError: false, type: null, message: '', canRetry: true
   })
+  const [retries, setRetries] = useState(0)
 
-  const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Clear timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (messageTimeoutRef.current) {
-        clearTimeout(messageTimeoutRef.current)
-      }
-    }
-  }, [])
+  const setError = useCallback((type: WorkerErrorType, message: string) => {
+    const canRetry = retries < maxRetries && type !== 'runtime'
+    setState({ hasError: true, type, message, canRetry })
+  }, [retries, maxRetries])
 
   const retry = useCallback(() => {
-    setState({
-      hasError: false,
-      errorType: 'none',
-      error: null,
-      retryCount: state.retryCount + 1,
-    })
-  }, [state.retryCount])
+    setRetries(r => r + 1)
+    setState({ hasError: false, type: null, message: '', canRetry: true })
+  }, [])
 
   const fallbackToDom = useCallback(() => {
-    setState({
-      hasError: true,
-      errorType: 'init-failed',
-      error: new Error('Worker unavailable - using DOM fallback'),
-      retryCount: state.retryCount,
-    })
-  }, [state.retryCount])
+    setState({ hasError: true, type: 'init-failed', message: 'Using DOM fallback', canRetry: false })
+  }, [])
 
-  const trackInit = useCallback(
-    async (promise: Promise<void>): Promise<void> => {
-      try {
-        await promise
-        setState({
-          hasError: false,
-          errorType: 'none',
-          error: null,
-          retryCount: 0,
-        })
-      } catch (error) {
-        const err = error instanceof Error ? error : new Error(String(error))
-        
-        if (state.retryCount < maxRetries) {
-          // Auto-retry on init failure
-          setTimeout(() => retry(), 1000)
-        } else {
-          setState({
-            hasError: true,
-            errorType: 'init-failed',
-            error: err,
-            retryCount: state.retryCount,
-          })
-        }
-        throw err
-      }
-    },
-    [maxRetries, retry, state.retryCount]
-  )
-
-  const trackMessage = useCallback(
-    async <T>(promise: Promise<T>, timeoutMs = 5000): Promise<T> => {
-      return new Promise((resolve, reject) => {
-        // Set timeout
-        messageTimeoutRef.current = setTimeout(() => {
-          setState({
-            hasError: true,
-            errorType: 'message-timeout',
-            error: new Error(`Worker message timeout after ${timeoutMs}ms`),
-            retryCount: state.retryCount,
-          })
-          reject(new Error('Worker message timeout'))
-        }, timeoutMs)
-
-        // Execute promise
-        promise
-          .then((result) => {
-            if (messageTimeoutRef.current) {
-              clearTimeout(messageTimeoutRef.current)
-              messageTimeoutRef.current = null
-            }
-            resolve(result)
-          })
-          .catch((error) => {
-            if (messageTimeoutRef.current) {
-              clearTimeout(messageTimeoutRef.current)
-              messageTimeoutRef.current = null
-            }
-            
-            const err = error instanceof Error ? error : new Error(String(error))
-            setState({
-              hasError: true,
-              errorType: 'runtime-error',
-              error: err,
-              retryCount: state.retryCount,
-            })
-            reject(err
-)
-          })
-      })
-    },
-    [state.retryCount]
-  )
-
-  const onRuntimeError = useCallback((error: Error) => {
-    setState({
-      hasError: true,
-      errorType: 'runtime-error',
-      error,
-      retryCount: state.retryCount,
-    })
-  }, [state.retryCount])
-
-  return {
-    ...state,
-    retry,
-    fallbackToDom,
-    trackInit,
-    trackMessage,
-    onRuntimeError,
-  }
+  return { ...state, retry, fallbackToDom, setError }
 }
 
 export default useWorkerError
