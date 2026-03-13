@@ -21,10 +21,9 @@ import RotasHub from './hub-2-rotas/index.jsx';
 import ArepoHub from './hub-3-arepo/index.jsx';
 import OperaHub from './hub-4-opera/index.jsx';
 import TenetHub from './hub-5-tenet/index.jsx';
-import QuaternaryGrid from './components/QuaternaryGrid';
+
 import { UnifiedGrid } from './components/UnifiedGrid';
 import { useWorkerError } from './hooks/useWorkerError';
-import { useState, useCallback } from 'react';
 import { useRowHeight } from './store/staticStore';
 
 // Page transition wrapper

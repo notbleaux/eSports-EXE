@@ -19,9 +19,9 @@ import {
   ZoomOut,
   Maximize2,
 } from 'lucide-react';
-import HubWrapper, { HubCard, HubStatCard } from '../shared/components/HubWrapper';
-import { useNJZStore, useHubState } from '../shared/store/njzStore';
-import { colors } from '../theme/colors.js';
+import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
+import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { colors } from '@/theme/colors';
 import MapVisualization from './components/MapVisualization';
 import FogOverlay from './components/FogOverlay';
 import useOperaData from './hooks/useOperaData';

@@ -338,6 +338,9 @@ export const UnifiedGrid: React.FC<UnifiedGridProps> = ({
       {/* Grid container */}
       <div
         ref={parentRef}
+        role="grid"
+        aria-label="Virtualized panel grid"
+        aria-rowcount={rows}
         style={{
           height: '400px',
           overflow: 'auto',

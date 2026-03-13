@@ -29,12 +29,10 @@ export const OfflineGrid: React.FC<OfflineGridProps> = ({
   // Monitor online status
   useEffect(() => {
     const handleOnline = () => {
-      console.log('[OfflineGrid] App is online')
       setIsOnline(true)
     }
 
     const handleOffline = () => {
-      console.log('[OfflineGrid] App is offline - using cached data')
       setIsOnline(false)
       checkCacheStatus()
     }
@@ -128,6 +126,9 @@ export const OfflineGrid: React.FC<OfflineGridProps> = ({
       {/* Offline indicator */}
       {!isOnline && (
         <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
           style={{
             position: 'absolute',
             top: 8,

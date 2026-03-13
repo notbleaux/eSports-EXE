@@ -21,9 +21,9 @@ import {
   FolderTree,
   ExternalLink
 } from 'lucide-react';
-import HubWrapper, { HubCard, HubStatCard } from '../shared/components/HubWrapper';
-import { useNJZStore, useHubState } from '../shared/store/njzStore';
-import { colors } from '../theme/colors';
+import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
+import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { colors } from '@/theme/colors';
 
 // Import local components
 import DirectoryList from './components/DirectoryList';

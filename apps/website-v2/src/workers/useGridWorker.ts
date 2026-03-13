@@ -1,6 +1,8 @@
 /**
  * useGridWorker Hook - Main Thread Interface for Grid Worker
  * Manages worker lifecycle and provides typed message interface
+ * 
+ * [Ver001.000]
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -53,7 +55,12 @@ function checkSupport(): boolean {
  * React hook for managing grid worker
  */
 export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorkerReturn {
-  const { width = 800, height = 600, onError, onRenderComplete, maxRetries = 2 } = options
+  const { 
+    /* width/height reserved for future canvas sizing */
+    onError, 
+    onRenderComplete, 
+    maxRetries = 2 
+  } = options
 
   const workerRef = useRef<Worker | null>(null)
   const canvasRef = useRef<OffscreenCanvas | null>(null)
@@ -69,7 +76,12 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
   // Initialize worker on mount
   useEffect(() => {
     if (!isSupported) {
-      setError('OffscreenCanvas or Web Workers not supported')
+      const err: WorkerError = {
+        type: 'unsupported',
+        message: 'OffscreenCanvas or Web Workers not supported',
+        timestamp: Date.now(),
+      }
+      setError(err)
       return
     }
 
@@ -139,6 +151,7 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
       isMounted = false
       worker.terminate()
       workerRef.current = null
+      // Clear pending map on cleanup
       pendingRef.current.clear()
     }
   }, [isSupported, onError, onRenderComplete])
@@ -206,18 +219,27 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     []
   )
 
-  // Retry last operation
+  // Retry last operation - defined after render to avoid circular dependency
+  const retryRef = useRef<() => void>(() => {})
+  
   const retry = useCallback(() => {
-    if (retryCount >= maxRetries) return
-    
-    setRetryCount(prev => prev + 1)
-    setError(null)
-    
-    // Retry last render if panels exist
-    if (lastPanelsRef.current.length > 0) {
-      render(lastPanelsRef.current).catch(() => {})
+    retryRef.current()
+  }, [])
+  
+  // Update retry implementation when dependencies change
+  useEffect(() => {
+    retryRef.current = () => {
+      if (retryCount >= maxRetries) return
+      
+      setRetryCount(prev => prev + 1)
+      setError(null)
+      
+      // Retry last render if panels exist
+      if (lastPanelsRef.current.length > 0) {
+        render(lastPanelsRef.current).catch(() => {})
+      }
     }
-  }, [retryCount, maxRetries])
+  }, [retryCount, maxRetries, render])
 
   const canRetry = retryCount < maxRetries
 

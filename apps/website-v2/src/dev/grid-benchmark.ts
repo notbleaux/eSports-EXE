@@ -3,6 +3,15 @@
  * [Ver001.000]
  */
 
+/**
+ * Get memory usage with feature detection for Chrome-only API
+ * @returns Memory usage in bytes, or 0 if not available
+ */
+function getMemoryUsage(): number {
+  const perf = performance as any
+  return perf?.memory?.usedJSHeapSize || 0
+}
+
 export interface BenchmarkResult {
   panelCount: number
   renderTime: number
@@ -27,13 +36,13 @@ export async function measureRender(
   panelCount: number,
   renderFn: (count: number) => Promise<void>
 ): Promise<BenchmarkResult> {
-  const memoryBefore = (performance as any).memory?.usedJSHeapSize || 0
+  const memoryBefore = getMemoryUsage()
   
   const startTime = performance.now()
   await renderFn(panelCount)
   const renderTime = performance.now() - startTime
   
-  const memoryAfter = (performance as any).memory?.usedJSHeapSize || 0
+  const memoryAfter = getMemoryUsage()
   
   return {
     panelCount,

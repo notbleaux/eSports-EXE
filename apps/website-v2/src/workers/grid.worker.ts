@@ -1,6 +1,8 @@
 /**
  * Grid Worker - OffscreenCanvas Rendering Thread
  * Handles canvas-based grid rendering in a dedicated worker thread
+ * 
+ * [Ver001.000]
  */
 
 // ============================================================================
@@ -249,7 +251,7 @@ function renderCell(
     ctx.textBaseline = 'top'
 
     const maxWidth = width - 16
-    const lineHeight = 14
+    const _lineHeight = 14  // Reserved for future multi-line support
     const startY = y + titleBarHeight + 6
 
     // Simple truncation for content
