@@ -1,6 +1,6 @@
 /**
  * Service Worker - Offline-First Grid Rendering
- * [Ver001.000]
+ * [Ver002.000] - Added Worker Cache API integration
  */
 
 /// <reference lib="webworker" />
@@ -15,6 +15,10 @@ const STATIC_ASSETS = [
 
 const API_CACHE_NAME = '4njz4-api-v1'
 const API_ROUTES = ['/api/']
+
+// Grid render cache with TTL
+const GRID_CACHE_NAME = '4njz4-grid-render-v1'
+const GRID_CACHE_TTL = 60 * 60 * 1000 // 1 hour in ms
 
 // Install: Precache static assets
 self.addEventListener('install', (event: ExtendableEvent) => {
@@ -43,7 +47,11 @@ self.addEventListener('activate', (event: ExtendableEvent) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames
-            .filter((name) => name !== CACHE_NAME && name !== API_CACHE_NAME)
+            .filter((name) => 
+              name !== CACHE_NAME && 
+              name !== API_CACHE_NAME &&
+              name !== GRID_CACHE_NAME
+            )
             .map((name) => {
               console.log('[SW] Deleting old cache:', name)
               return caches.delete(name)
@@ -80,6 +88,77 @@ self.addEventListener('fetch', (event: FetchEvent) => {
   // Default: Network first, fallback to cache
   event.respondWith(networkFirst(request, CACHE_NAME))
 })
+
+// Grid Cache API
+interface GridCacheEntry {
+  timestamp: number
+  panelHash: string
+  data: unknown
+}
+
+// Generate hash from panel configuration
+function hashPanels(panels: unknown[]): string {
+  const str = JSON.stringify(panels)
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return hash.toString(16)
+}
+
+// Check if cache entry is valid (within TTL)
+function isCacheValid(entry: GridCacheEntry): boolean {
+  const age = Date.now() - entry.timestamp
+  return age < GRID_CACHE_TTL
+}
+
+// Cache grid render result
+async function cacheGridRender(
+  panels: unknown[],
+  renderData: unknown
+): Promise<void> {
+  const cache = await caches.open(GRID_CACHE_NAME)
+  const panelHash = hashPanels(panels)
+  const entry: GridCacheEntry = {
+    timestamp: Date.now(),
+    panelHash,
+    data: renderData,
+  }
+  
+  const response = new Response(JSON.stringify(entry), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'private, max-age=3600',
+    },
+  })
+  
+  await cache.put(`grid-render-${panelHash}`, response)
+  console.log('[SW] Grid render cached:', panelHash)
+}
+
+// Get cached grid render
+async function getCachedGridRender(
+  panels: unknown[]
+): Promise<GridCacheEntry | null> {
+  const cache = await caches.open(GRID_CACHE_NAME)
+  const panelHash = hashPanels(panels)
+  
+  const response = await cache.match(`grid-render-${panelHash}`)
+  if (!response) return null
+  
+  const entry: GridCacheEntry = await response.json()
+  
+  if (!isCacheValid(entry)) {
+    console.log('[SW] Grid cache expired:', panelHash)
+    await cache.delete(`grid-render-${panelHash}`)
+    return null
+  }
+  
+  console.log('[SW] Grid cache hit:', panelHash)
+  return entry
+}
 
 // Cache strategies
 async function cacheFirst(
@@ -157,11 +236,49 @@ function isStaticAsset(url: URL): boolean {
   return staticExtensions.some((ext) => url.pathname.endsWith(ext))
 }
 
-// Message handling for app communication
+// Message handling for app communication and Grid caching
 self.addEventListener('message', (event: ExtendableMessageEvent) => {
-  if (event.data === 'SKIP_WAITING') {
+  const { data } = event
+  
+  if (data === 'SKIP_WAITING') {
     self.skipWaiting()
+    return
+  }
+  
+  // Grid cache operations
+  if (data.type === 'CACHE_GRID_RENDER') {
+    const { panels, renderData } = data
+    event.waitUntil(
+      cacheGridRender(panels, renderData).then(() => {
+        event.ports[0]?.postMessage({ success: true })
+      })
+    )
+    return
+  }
+  
+  if (data.type === 'GET_CACHED_GRID') {
+    const { panels } = data
+    event.waitUntil(
+      getCachedGridRender(panels).then((entry) => {
+        event.ports[0]?.postMessage({ 
+          success: true, 
+          data: entry?.data || null,
+          timestamp: entry?.timestamp || null,
+        })
+      })
+    )
+    return
+  }
+  
+  if (data.type === 'CLEAR_GRID_CACHE') {
+    event.waitUntil(
+      caches.delete(GRID_CACHE_NAME).then(() => {
+        event.ports[0]?.postMessage({ success: true })
+      })
+    )
+    return
   }
 })
 
-export {}
+export { hashPanels, cacheGridRender, getCachedGridRender }
+export type { GridCacheEntry }
