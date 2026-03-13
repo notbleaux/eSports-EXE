@@ -1,6 +1,6 @@
 /**
- * HybridGrid - Unified Grid with Automatic Render Mode Detection
- * Uses Web Worker + OffscreenCanvas when supported, falls back to DOM rendering
+ * UnifiedGrid - Single Grid Component with Worker/DOM/Auto Modes
+ * Consolidates VirtualGrid + HybridGrid functionality
  * [Ver001.000]
  */
 
@@ -11,51 +11,74 @@ import { useCols, useRowHeight } from '../store/staticStore'
 import { usePanels } from '../store/dynamicStore'
 import { useEphemeralStore } from '../store/ephemeralStore'
 
-interface HybridGridProps {
+export type GridMode = 'worker' | 'dom' | 'auto'
+
+interface UnifiedGridProps {
+  mode?: GridMode
   rowHeight?: number
   overscan?: number
-  onPerformanceMetrics?: (metrics: { renderTime: number; visibleCount: number; mode: 'worker' | 'dom' }) => void
+  panelCount?: number
+  onPerformanceMetrics?: (metrics: {
+    renderTime: number
+    visibleCount: number
+    mode: 'worker' | 'dom'
+  }) => void
   onError?: (error: Error) => void
+  onWorkerFallback?: () => void
+  loadingComponent?: React.ReactNode
 }
 
 const GAP = 4
+const COLS = 2
 
-// Feature detection for OffscreenCanvas
-const supportsOffscreenCanvas = typeof OffscreenCanvas !== 'undefined' &&
+// Feature detection
+const supportsOffscreenCanvas = () =>
+  typeof OffscreenCanvas !== 'undefined' &&
   typeof Worker !== 'undefined' &&
   'transferControlToOffscreen' in HTMLCanvasElement.prototype
 
-export const HybridGrid: React.FC<HybridGridProps> = ({
+export const UnifiedGrid: React.FC<UnifiedGridProps> = ({
+  mode = 'auto',
   rowHeight: propRowHeight,
   overscan = 5,
+  panelCount: propPanelCount,
   onPerformanceMetrics,
   onError,
+  onWorkerFallback,
+  loadingComponent,
 }) => {
-  const renderMode = supportsOffscreenCanvas ? 'worker' : 'dom'
-  
+  // Determine actual render mode
+  const [effectiveMode, setEffectiveMode] = useState<'worker' | 'dom'>(() => {
+    if (mode === 'worker') return 'worker'
+    if (mode === 'dom') return 'dom'
+    return supportsOffscreenCanvas() ? 'worker' : 'dom'
+  })
+
   const parentRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  
+
   const staticCols = useCols()
   const staticRowHeight = useRowHeight()
   const panels = usePanels()
   const isScrolling = useEphemeralStore((state) => state.isScrolling)
-  
+
   const rowHeight = propRowHeight ?? staticRowHeight
-  const cols = staticCols
-  
+  const cols = COLS // Use fixed 2-column layout
+
   const [containerWidth, setContainerWidth] = useState(800)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [renderTime, setRenderTime] = useState(0)
+  const [workerError, setWorkerError] = useState<Error | null>(null)
 
-  const panelCount = panels.length
+  const panelCount = propPanelCount ?? panels.length
   const rows = Math.ceil(panelCount / cols)
 
   const { isReady, init, render } = useGridWorker({
     onRenderComplete: (count, time) => {
       setRenderTime(time)
-      onPerformanceMetrics?.({ renderTime: time, visibleCount: count, mode: 'worker' })
+      onPerformanceMetrics?.({ renderTime: time, visibleCount: count, mode: effectiveMode })
     },
   })
 
@@ -71,9 +94,12 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
     return () => resizeObserver.disconnect()
   }, [])
 
-  // Initialize worker canvas (worker mode only)
+  // Initialize worker with fallback
   useEffect(() => {
-    if (renderMode !== 'worker' || !canvasRef.current || !isReady || isInitialized) return
+    if (effectiveMode !== 'worker' || !canvasRef.current || !isReady || isInitialized) {
+      if (effectiveMode === 'dom') setIsLoading(false)
+      return
+    }
 
     const canvas = canvasRef.current
     const dpr = window.devicePixelRatio || 1
@@ -83,12 +109,19 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
     canvas.height = rect.height * dpr
 
     init(canvas, rect.width * dpr, rect.height * dpr)
-      .then(() => setIsInitialized(true))
-      .catch((err) => {
-        onError?.(err)
-        console.error('Worker init failed:', err)
+      .then(() => {
+        setIsInitialized(true)
+        setIsLoading(false)
       })
-  }, [renderMode, isReady, isInitialized, init, onError])
+      .catch((err) => {
+        console.error('[UnifiedGrid] Worker init failed, falling back to DOM:', err)
+        setWorkerError(err)
+        setEffectiveMode('dom')
+        onWorkerFallback?.()
+        onError?.(err)
+        setIsLoading(false)
+      })
+  }, [effectiveMode, isReady, isInitialized, init, onError, onWorkerFallback])
 
   // Virtualizer
   const virtualizer = useVirtualizer({
@@ -118,9 +151,10 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
     return result
   }, [virtualItems, cols, panelCount, panels])
 
-  // Render to worker or DOM
+  // Render timeout ref for debouncing
   const renderTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  
+
+  // Render panels
   useEffect(() => {
     if (visiblePanels.length === 0) return
 
@@ -143,47 +177,82 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
       }
     })
 
-    if (renderMode === 'worker' && isInitialized) {
-      // Debounced worker render during scroll
+    if (effectiveMode === 'worker' && isInitialized) {
+      // Debounced worker render
+      if (renderTimeoutRef.current) clearTimeout(renderTimeoutRef.current)
+
       if (isScrolling) {
-        if (renderTimeoutRef.current) clearTimeout(renderTimeoutRef.current)
         renderTimeoutRef.current = setTimeout(() => {
-          render(panelData).catch(onError)
+          render(panelData).catch((err) => {
+            console.error('[UnifiedGrid] Worker render failed:', err)
+            setEffectiveMode('dom')
+            onWorkerFallback?.()
+          })
         }, 16)
       } else {
-        render(panelData).catch(onError)
+        render(panelData).catch((err) => {
+          console.error('[UnifiedGrid] Worker render failed:', err)
+          setEffectiveMode('dom')
+          onWorkerFallback?.()
+        })
       }
     } else {
-      // DOM rendering fallback
+      // DOM render
       const startTime = performance.now()
       renderToDOM(panelData, containerRef.current)
       const time = performance.now() - startTime
       setRenderTime(time)
-      onPerformanceMetrics?.({ renderTime: time, visibleCount: panelData.length, mode: 'dom' })
+      onPerformanceMetrics?.({
+        renderTime: time,
+        visibleCount: panelData.length,
+        mode: 'dom',
+      })
     }
 
     return () => {
       if (renderTimeoutRef.current) clearTimeout(renderTimeoutRef.current)
     }
-  }, [visiblePanels, isInitialized, isScrolling, virtualItems, containerWidth, cols, rowHeight, panels, render, renderMode, onError, onPerformanceMetrics])
+  }, [
+    visiblePanels,
+    isInitialized,
+    isScrolling,
+    virtualItems,
+    containerWidth,
+    cols,
+    rowHeight,
+    panels,
+    render,
+    effectiveMode,
+    onPerformanceMetrics,
+    onWorkerFallback,
+  ])
 
-  // DOM rendering fallback
-  const renderToDOM = (panels: Array<{ id: string; x: number; y: number; width: number; height: number; title: string; content: string }>, container: HTMLDivElement | null) => {
+  // DOM rendering
+  const renderToDOM = (
+    panels: Array<{
+      id: string
+      x: number
+      y: number
+      width: number
+      height: number
+      title: string
+      content: string
+    }>,
+    container: HTMLDivElement | null
+  ) => {
     if (!container) return
-    
-    // Only update changed panels (simple diff)
-    const existing = new Set(Array.from(container.children).map(c => c.getAttribute('data-id')))
-    const current = new Set(panels.map(p => p.id))
-    
-    // Remove old panels
-    Array.from(container.children).forEach(child => {
+
+    // Simple diff
+    const existing = new Set(Array.from(container.children).map((c) => c.getAttribute('data-id')))
+    const current = new Set(panels.map((p) => p.id))
+
+    // Remove old
+    Array.from(container.children).forEach((child) => {
       const id = child.getAttribute('data-id')
-      if (id && !current.has(id)) {
-        child.remove()
-      }
+      if (id && !current.has(id)) child.remove()
     })
-    
-    // Add/update panels
+
+    // Add/update
     panels.forEach((panel) => {
       let el = container.querySelector(`[data-id="${panel.id}"]`) as HTMLElement
       if (!el) {
@@ -196,6 +265,7 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
           border-radius: 4px;
           padding: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+          transition: transform 0.1s ease;
         `
         container.appendChild(el)
       }
@@ -212,22 +282,61 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
 
   const targetMet = renderTime > 0 && renderTime < 16
 
+  // Loading skeleton
+  const defaultSkeleton = (
+    <div
+      style={{
+        height: '400px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#0a0a0f',
+        border: '1px solid rgba(157, 78, 221, 0.3)',
+        borderRadius: '8px',
+        color: '#6b7280',
+      }}
+    >
+      <div>Initializing Grid...</div>
+    </div>
+  )
+
+  if (isLoading) {
+    return <>{loadingComponent ?? defaultSkeleton}</>
+  }
+
   return (
-    <div className="hybrid-grid">
-      <div className="grid-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-        <div style={{ display: 'flex', gap: 16, fontSize: 12 }}>
-          <span style={{ color: renderMode === 'worker' ? '#4ade80' : '#fbbf24' }}>
-            Mode: {renderMode === 'worker' ? '⚡ Worker' : '🌐 DOM Fallback'}
+    <div className="unified-grid">
+      {/* Status header */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 8,
+          fontSize: 12,
+        }}
+      >
+        <div style={{ display: 'flex', gap: 16 }}>
+          <span style={{ color: effectiveMode === 'worker' ? '#4ade80' : '#fbbf24' }}>
+            Mode: {effectiveMode === 'worker' ? '⚡ Worker' : '🌐 DOM'}
+            {mode === 'auto' && ' (auto)'}
           </span>
           <span style={{ color: targetMet ? '#4ade80' : '#fbbf24' }}>
-            Render: {renderTime.toFixed(2)}ms {targetMet ? '✓' : ''}
+            Render: {renderTime > 0 ? `${renderTime.toFixed(2)}ms` : '--'}
+            {targetMet && ' ✓'}
           </span>
           <span style={{ color: '#9ca3af' }}>
             Panels: {visiblePanels.length} / {panelCount}
           </span>
         </div>
+        {workerError && (
+          <span style={{ color: '#f87171', fontSize: 11 }}>
+            Worker failed — using DOM fallback
+          </span>
+        )}
       </div>
 
+      {/* Grid container */}
       <div
         ref={parentRef}
         style={{
@@ -240,7 +349,7 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
         }}
       >
         <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
-          {renderMode === 'worker' ? (
+          {effectiveMode === 'worker' ? (
             <canvas
               ref={canvasRef}
               style={{
@@ -269,4 +378,4 @@ export const HybridGrid: React.FC<HybridGridProps> = ({
   )
 }
 
-export default HybridGrid
+export default UnifiedGrid

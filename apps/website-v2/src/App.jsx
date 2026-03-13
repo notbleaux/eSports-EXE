@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from './components/Navigation';
 import ModernQuarterGrid from './components/ModernQuarterGrid';
 import { AnimatedBackground } from './components/ui/AnimatedBackground';
+import { PanelSkeleton } from './components/grid/PanelSkeleton';
+import { PanelErrorBoundary } from './components/grid/PanelErrorBoundary';
 
 // Hub Components
 import SatorHub from './hub-1-sator/index.jsx';
@@ -20,6 +22,9 @@ import ArepoHub from './hub-3-arepo/index.jsx';
 import OperaHub from './hub-4-opera/index.jsx';
 import TenetHub from './hub-5-tenet/index.jsx';
 import QuaternaryGrid from './components/QuaternaryGrid';
+import { UnifiedGrid } from './components/UnifiedGrid';
+import { useWorkerError } from './hooks/useWorkerError';
+import { useState, useCallback } from 'react';
 
 // Page transition wrapper
 const PageTransition = ({ children, hubId }) => {
@@ -62,6 +67,87 @@ const PageTransition = ({ children, hubId }) => {
     </motion.div>
   );
 };
+
+// Dashboard Grid with Error Boundary and Loading State
+function DashboardGrid() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [metrics, setMetrics] = useState({ renderTime: 0, visibleCount: 0, mode: 'worker' });
+  const { hasError, errorType, retry, fallbackToDom } = useWorkerError(2);
+
+  const handleMetrics = useCallback((newMetrics) => {
+    setMetrics(newMetrics);
+    if (newMetrics.renderTime > 0) {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleError = useCallback((error) => {
+    console.error('[DashboardGrid] Worker error:', error);
+    fallbackToDom();
+    setIsLoading(false);
+  }, [fallbackToDom]);
+
+  const handleWorkerFallback = useCallback(() => {
+    console.log('[DashboardGrid] Worker fallback triggered');
+    setIsLoading(false);
+  }, []);
+
+  // Loading skeleton
+  if (isLoading) {
+    return (
+      <div className="p-4">
+        <PanelSkeleton variant="worker-init" title="Initializing Grid Engine..." />
+      </div>
+    );
+  }
+
+  // Error state with retry
+  if (hasError && errorType === 'init-failed') {
+    return (
+      <div className="p-4 text-center">
+        <div className="mb-4 text-red-400">
+          Grid rendering unavailable. Using fallback.
+        </div>
+        <button
+          onClick={retry}
+          className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors"
+        >
+          Retry Worker
+        </button>
+        <button
+          onClick={fallbackToDom}
+          className="ml-2 px-4 py-2 bg-purple-600/80 hover:bg-purple-500/80 rounded-lg text-sm transition-colors"
+        >
+          Use DOM Fallback
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <PanelErrorBoundary panelId="dashboard" panelTitle="Dashboard Grid" hub="TENET">
+      <div className="p-4">
+        {/* Metrics display */}
+        <div className="flex gap-4 mb-4 text-xs text-white/50">
+          <span>Mode: {metrics.mode === 'worker' ? '⚡ Worker' : '🌐 DOM'}</span>
+          <span>Render: {metrics.renderTime.toFixed(2)}ms</span>
+          <span>Panels: {metrics.visibleCount}</span>
+        </div>
+        
+        <UnifiedGrid
+          mode="auto"
+          rowHeight={100}
+          overscan={5}
+          panelCount={50}
+          onPerformanceMetrics={handleMetrics}
+          onError={handleError}
+          onWorkerFallback={handleWorkerFallback}
+          loadingComponent={<PanelSkeleton variant="grid-loading" />}
+        />
+      </div>
+    </PanelErrorBoundary>
+  );
+}
 
 // Route change handler
 const RouteChangeHandler = () => {
@@ -107,7 +193,7 @@ function App() {
               path="/dashboard" 
               element={
                 <PageTransition hubId="dashboard">
-                  <QuaternaryGrid />
+                  <DashboardGrid />
                 </PageTransition>
               } 
             />

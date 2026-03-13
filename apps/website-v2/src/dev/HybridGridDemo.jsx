@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import { HybridGrid } from '../components/HybridGrid'
+import { UnifiedGrid } from '../components/UnifiedGrid'
 import { useDynamicStore } from '../store/dynamicStore'
 
 // Generate 50 test panels
@@ -111,9 +111,11 @@ export default function HybridGridDemo() {
         </div>
       </div>
 
-      <HybridGrid
+      <UnifiedGrid
+        mode="auto"
         rowHeight={100}
         overscan={5}
+        panelCount={50}
         onPerformanceMetrics={handleMetrics}
         onError={handleError}
       />

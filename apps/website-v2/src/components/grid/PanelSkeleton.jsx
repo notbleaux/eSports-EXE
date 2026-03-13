@@ -2,9 +2,16 @@
  * PanelSkeleton - Loading placeholder for grid panels
  * Provides visual feedback while panel content loads
  * 
- * [Ver001.000]
+ * [Ver002.000] - Added variant support for worker-init, grid-loading
  */
 import { colors } from '@/theme/colors';
+
+const PORCELAIN_COLORS = {
+  base: '#00f0ff',
+  accent: '#9d4edd',
+  bg: '#0a0a0f',
+  surface: '#14141a',
+};
 
 const HUB_COLORS = {
   SATOR: colors.hub.sator,
@@ -35,12 +42,134 @@ const shimmerStyles = `
 `;
 
 /**
- * PanelSkeleton - Loading state placeholder
+ * Worker initialization skeleton with progress dots
+ */
+export function WorkerInitSkeleton({ message = 'Initializing Grid Engine...' }) {
+  return (
+    <>
+      <style>{shimmerStyles}</style>
+      <div 
+        className="w-full h-full flex flex-col items-center justify-center rounded-xl border border-white/10 bg-[#0a0a0f]"
+        role="status"
+        aria-label="Initializing grid worker"
+        aria-busy="true"
+      >
+        {/* Animated grid icon */}
+        <div className="relative w-16 h-16 mb-6">
+          <div className="absolute inset-0 grid grid-cols-2 gap-1">
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="rounded skeleton-shimmer"
+                style={{
+                  backgroundColor: i % 2 === 0 ? PORCELAIN_COLORS.base : PORCELAIN_COLORS.accent,
+                  opacity: 0.3 + (i * 0.15),
+                  animationDelay: `${i * 0.1}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Message */}
+        <p className="text-white/70 text-sm font-medium mb-4">{message}</p>
+
+        {/* Progress dots */}
+        <div className="flex gap-2">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="w-2 h-2 rounded-full"
+              style={{
+                backgroundColor: PORCELAIN_COLORS.base,
+                animation: 'pulse 1s infinite',
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        <style>{`
+          @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+          }
+        `}</style>
+      </div>
+    </>
+  );
+}
+
+/**
+ * Grid loading skeleton with 6 mock panels
+ */
+export function GridLoadingSkeleton() {
+  return (
+    <>
+      <style>{shimmerStyles}</style>
+      <div 
+        className="w-full h-full p-4 bg-[#0a0a0f]"
+        role="status"
+        aria-label="Loading grid"
+        aria-busy="true"
+      >
+        {/* Grid of 6 mock panels */}
+        <div className="grid grid-cols-2 gap-4 h-full">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <div
+              key={i}
+              className="rounded-xl border border-white/10 overflow-hidden skeleton-shimmer"
+              style={{
+                backgroundColor: 'rgba(20, 20, 26, 0.8)',
+                animationDelay: `${i * 0.1}s`,
+              }}
+            >
+              {/* Mock header */}
+              <div 
+                className="h-8 px-3 flex items-center gap-2"
+                style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+              >
+                <div 
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: PORCELAIN_COLORS.base }}
+                />
+                <div className="h-3 w-20 rounded bg-white/10" />
+              </div>
+              {/* Mock content */}
+              <div className="p-3 space-y-2">
+                <div className="h-4 w-3/4 rounded bg-white/5" />
+                <div className="h-4 w-1/2 rounded bg-white/5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/**
+ * PanelSkeleton - Loading state placeholder with variant support
  * @param {Object} props
  * @param {string} [props.hub='SATOR'] - Hub type for color theming
  * @param {string} [props.title='Loading...'] - Panel title
+ * @param {string} [props.variant='panel-loading'] - Skeleton variant
  */
-export function PanelSkeleton({ hub = 'SATOR', title = 'Loading...' }) {
+export function PanelSkeleton({ 
+  hub = 'SATOR', 
+  title = 'Loading...',
+  variant = 'panel-loading'
+}) {
+  // Handle special variants
+  if (variant === 'worker-init') {
+    return <WorkerInitSkeleton message={title} />;
+  }
+  
+  if (variant === 'grid-loading') {
+    return <GridLoadingSkeleton />;
+  }
+
+  // Default: panel-loading
   const hubColor = HUB_COLORS[hub] || colors.hub.sator;
   
   return (
