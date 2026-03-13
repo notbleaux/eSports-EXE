@@ -1,0 +1,202 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://4njz4-tenet.platform/schemas/agent-manifest.json",
+  "title": "AI Agent Manifest",
+  "description": "Schema for validating AI agent capability and authorization manifests",
+  "type": "object",
+  "required": ["manifestVersion", "agent", "capabilities", "authorization", "coordination", "quality"],
+  "properties": {
+    "manifestVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the manifest schema"
+    },
+    "agent": {
+      "type": "object",
+      "required": ["id", "name", "version", "classification"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z]+-[a-z]+-\\d{3}$",
+          "description": "Unique agent identifier: {domain}-{role}-{number}"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "description": "Human-readable agent name"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Agent software version"
+        },
+        "classification": {
+          "type": "string",
+          "enum": ["automated", "supervised", "manual"],
+          "description": "Level of human oversight required"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of creation"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of last update"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["languages", "domains"],
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["typescript", "javascript", "python", "rust", "go", "sql", "gdscript"]
+          },
+          "minItems": 1,
+          "description": "Programming languages the agent can work with"
+        },
+        "domains": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["frontend", "backend", "database", "infrastructure", "ml", "simulation"]
+          },
+          "minItems": 1,
+          "description": "Technical domains of expertise"
+        },
+        "specialties": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Specific technical specializations"
+        },
+        "limitations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Explicit capability limitations"
+        }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "required": ["scope", "constraints"],
+      "properties": {
+        "scope": {
+          "type": "object",
+          "required": ["read", "write"],
+          "properties": {
+            "read": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Glob patterns for readable paths"
+            },
+            "write": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Glob patterns for writable paths"
+            },
+            "deny": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Glob patterns explicitly denied"
+            }
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "required": ["maxFilesPerSession", "maxLinesChanged", "requiresReview", "autoCommit"],
+          "properties": {
+            "maxFilesPerSession": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Maximum files that can be modified in one session"
+            },
+            "maxLinesChanged": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5000,
+              "description": "Maximum lines that can be changed in one session"
+            },
+            "requiresReview": {
+              "type": "boolean",
+              "description": "Whether human review is mandatory"
+            },
+            "autoCommit": {
+              "type": "boolean",
+              "description": "Whether agent can commit automatically"
+            },
+            "workingHours": {
+              "type": "string",
+              "pattern": "^\\d{2}:\\d{2}-\\d{2}:\\d{2} UTC$",
+              "description": "Allowed operating hours"
+            }
+          }
+        }
+      }
+    },
+    "coordination": {
+      "type": "object",
+      "required": ["primaryContact", "conflictResolution"],
+      "properties": {
+        "primaryContact": {
+          "type": "string",
+          "format": "email",
+          "description": "Human contact for escalations"
+        },
+        "collaborators": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Other agents this agent coordinates with"
+        },
+        "conflictResolution": {
+          "type": "string",
+          "enum": ["lock-based", "negotiation", "escalation"],
+          "description": "Preferred conflict resolution strategy"
+        },
+        "communicationChannel": {
+          "type": "string",
+          "enum": ["file-based", "memory", "network"],
+          "description": "Communication mechanism"
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": ["requiredChecks", "coverageThreshold"],
+      "properties": {
+        "requiredChecks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["lint", "format", "test", "build", "audit", "typecheck"]
+          },
+          "minItems": 1,
+          "description": "Quality gates that must pass"
+        },
+        "coverageThreshold": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Required test coverage percentage"
+        },
+        "maxComplexity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum cyclomatic complexity"
+        },
+        "documentationRequired": {
+          "type": "boolean",
+          "description": "Whether documentation is mandatory"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

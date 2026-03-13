@@ -5,11 +5,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Zap, ChevronDown, Radio } from 'lucide-react'
+import { Menu, X, Zap, ChevronDown, Radio, LayoutGrid } from 'lucide-react'
 import { useNJZStore, HUBS } from '../store/njzStore'
+import { ModeToggle } from '@/components/ModeToggle'
 
 const navItems = [
   { path: '/', label: 'Central', icon: '◎', hubId: 'central' },
+  { path: '/dashboard', label: 'Grid', icon: '◈', hubId: 'grid', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
   { path: '/sator', label: 'SATOR', icon: '◎', hubId: 'sator', color: 'text-alert-amber', borderColor: 'border-alert-amber' },
   { path: '/rotas', label: 'ROTAS', icon: '◈', hubId: 'rotas', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
   { path: '/arepo', label: 'AREPO', icon: '◉', hubId: 'arepo', color: 'text-porcelain', borderColor: 'border-porcelain' },
@@ -104,6 +106,22 @@ function Navigation() {
 
             {/* Hub Switcher (Desktop) */}
             <div className="hidden lg:flex items-center gap-4">
+              {/* Mode Toggle */}
+              <ModeToggle />
+              
+              {/* Grid Link */}
+              <Link
+                to="/dashboard"
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors ${
+                  location.pathname === '/dashboard'
+                    ? 'bg-signal-cyan/20 text-signal-cyan'
+                    : 'bg-white/5 hover:bg-white/10 text-white/80'
+                }`}
+              >
+                <LayoutGrid className="w-4 h-4" />
+                <span className="text-sm">Grid</span>
+              </Link>
+              
               <div className="relative">
                 <button
                   onClick={() => setShowHubSwitcher(!showHubSwitcher)}

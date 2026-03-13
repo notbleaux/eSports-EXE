@@ -19,6 +19,7 @@ import RotasHub from './hub-2-rotas/index.jsx';
 import ArepoHub from './hub-3-arepo/index.jsx';
 import OperaHub from './hub-4-opera/index.jsx';
 import TenetHub from './hub-5-tenet/index.jsx';
+import QuaternaryGrid from './components/QuaternaryGrid';
 
 // Page transition wrapper
 const PageTransition = ({ children, hubId }) => {
@@ -97,6 +98,16 @@ function App() {
               element={
                 <PageTransition hubId="landing">
                   <ModernQuarterGrid />
+                </PageTransition>
+              } 
+            />
+            
+            {/* Dashboard Grid */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <PageTransition hubId="dashboard">
+                  <QuaternaryGrid />
                 </PageTransition>
               } 
             />
