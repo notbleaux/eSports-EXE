@@ -84,26 +84,68 @@ import { StressTest } from './dev/stress-test'
 **Output:** FPS metrics + pass/fail status
 
 ### ML Inference (Week 3)
+
+#### Basic Usage
 ```javascript
 // ML inference is available via React hook
 import { useMLInference } from '@/hooks/useMLInference'
+import { ModelLoadingIndicator } from '@/components/ui/ModelLoadingIndicator'
 
 // In component:
-const { loadModel, predict, isModelReady, isModelLoading, progress } = useMLInference({
+const { 
+  loadModel, 
+  predict, 
+  warmUp,
+  getModelInfo,
+  isModelReady, 
+  isModelLoading, 
+  isWarmedUp,
+  progress,
+  error 
+} = useMLInference({
   useWorker: true  // Use Web Worker for inference
 })
 
-// Load model
+// Load model with progress tracking
 await loadModel('/models/model.json')
+
+// Warm up for faster first prediction
+if (isModelReady && !isWarmedUp) {
+  await warmUp()
+}
 
 // Run prediction
 const result = await predict([0.1, 0.2, 0.3])
 console.log('Prediction:', result)
+
+// Get model info
+const info = getModelInfo()
+console.log('Model backend:', info?.backend)
+```
+
+#### With Loading UI
+```jsx
+{isModelLoading && (
+  <ModelLoadingIndicator 
+    progress={progress}
+    isLoading={isModelLoading}
+    error={error}
+    modelName="ML Model"
+  />
+)}
+
+{isModelReady && (
+  <button onClick={() => predict([0.1, 0.2, 0.3])}>
+    Predict
+  </button>
+)}
 ```
 
 **Expected time:** 
-- Model load: 1-3s (cached), 5-10s (network)
-- Prediction: <100ms
+- Model load (cached): ~0.8s
+- Model load (network): 4-6s
+- First prediction: 15-25ms
+- Warmed up prediction: 5-10ms
 
 **Output:** Prediction array + confidence scores
 

@@ -9,11 +9,23 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import type { MLWorkerCommand, MLWorkerResponse } from '../workers/ml.worker'
 
+export interface ModelInfo {
+  name: string
+  url: string
+  sizeBytes?: number
+  lastLoaded: Date | null
+  quantization: 'fp32' | 'int16' | 'int8' | 'unknown'
+  backend: string
+}
+
 export interface UseMLInferenceReturn {
   isModelLoading: boolean
   isModelReady: boolean
+  isWarmedUp: boolean
   loadModel: (url: string) => Promise<void>
   predict: (input: number[]) => Promise<number[]>
+  warmUp: () => Promise<void>
+  getModelInfo: () => ModelInfo | null
   error: Error | null
   progress: number
   useWorker: boolean
@@ -31,13 +43,16 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
   
   const [isModelLoading, setIsModelLoading] = useState(false)
   const [isModelReady, setIsModelReady] = useState(false)
+  const [isWarmedUp, setIsWarmedUp] = useState(false)
   const [error, setError] = useState<Error | null>(null)
   const [progress, setProgress] = useState(0)
   const [useWorker, setUseWorker] = useState(useWorkerOption)
+  const [modelInfo, setModelInfo] = useState<ModelInfo | null>(null)
 
   // Main-thread refs
   const tfRef = useRef<TFModule | null>(null)
   const modelRef = useRef<unknown>(null)
+  const modelUrlRef = useRef<string>('')
   
   // Worker refs
   const workerRef = useRef<Worker | null>(null)
@@ -85,6 +100,16 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
         switch (response.type) {
           case 'MODEL_LOADED':
             if (isMountedRef.current) {
+              const url = modelUrlRef.current
+              const modelName = url.split('/').pop()?.replace('.json', '') || 'model'
+              const info: ModelInfo = {
+                name: modelName,
+                url,
+                lastLoaded: new Date(),
+                quantization: url.includes('int8') ? 'int8' : url.includes('int16') ? 'int16' : 'fp32',
+                backend: 'webgl'
+              }
+              setModelInfo(info)
               setIsModelLoading(false)
               setIsModelReady(true)
               setProgress(100)
@@ -172,6 +197,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     setProgress(0)
 
     try {
+      // Store URL for later reference
+      modelUrlRef.current = url
+      
       if (useWorker) {
         // Worker-based loading
         const worker = initWorker()
@@ -229,6 +257,17 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       if (!isMountedRef.current) return
 
       modelRef.current = model
+      
+      // Set model info
+      const info: ModelInfo = {
+        name: modelName,
+        url,
+        lastLoaded: new Date(),
+        quantization: url.includes('int8') ? 'int8' : url.includes('int16') ? 'int16' : 'fp32',
+        backend: tf.getBackend()
+      }
+      setModelInfo(info)
+      
       setProgress(100)
       setIsModelReady(true)
     } catch (err) {
@@ -297,11 +336,38 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     }
   }, [isModelReady, useWorker])
 
+  /**
+   * Warm up model with dummy prediction
+   * Reduces latency of first real prediction
+   */
+  const warmUp = useCallback(async (): Promise<void> => {
+    if (!isModelReady || isWarmedUp) return
+    
+    try {
+      // Run dummy prediction to initialize backend
+      await predict([0, 0, 0])
+      setIsWarmedUp(true)
+      console.log('[ML] Model warmed up')
+    } catch (err) {
+      console.warn('[ML] Warm-up failed:', err)
+    }
+  }, [isModelReady, isWarmedUp, predict])
+
+  /**
+   * Get model information
+   */
+  const getModelInfo = useCallback((): ModelInfo | null => {
+    return modelInfo
+  }, [modelInfo])
+
   return {
     isModelLoading,
     isModelReady,
+    isWarmedUp,
     loadModel,
     predict,
+    warmUp,
+    getModelInfo,
     error,
     progress,
     useWorker
