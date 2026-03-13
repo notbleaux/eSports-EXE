@@ -44,10 +44,25 @@ export interface UseMLInferenceReturn {
   useWorker: boolean
 }
 
+export interface CircuitBreakerConfig {
+  failureThreshold: number      // Number of failures before opening (default: 5)
+  resetTimeout: number          // Time in ms before attempting reset (default: 30000)
+  halfOpenMaxCalls: number      // Max calls in half-open state (default: 3)
+}
+
+export interface CircuitBreakerState {
+  state: 'CLOSED' | 'OPEN' | 'HALF_OPEN'
+  failureCount: number
+  successCount: number
+  lastFailureTime: number
+  nextAttemptTime: number
+}
+
 export interface UseMLInferenceOptions {
   useWorker?: boolean
   maxRetries?: number
   timeout?: number
+  circuitBreaker?: CircuitBreakerConfig
 }
 
 export class MLValidationError extends Error {
@@ -61,6 +76,98 @@ export class MLTimeoutError extends Error {
   constructor(message: string) {
     super(message)
     this.name = 'MLTimeoutError'
+  }
+}
+
+export class MLCircuitBreakerError extends Error {
+  constructor(message: string = 'Circuit breaker is OPEN') {
+    super(message)
+    this.name = 'MLCircuitBreakerError'
+  }
+}
+
+/**
+ * Create circuit breaker for ML inference
+ */
+function createCircuitBreaker(config: CircuitBreakerConfig) {
+  const state: CircuitBreakerState = {
+    state: 'CLOSED',
+    failureCount: 0,
+    successCount: 0,
+    lastFailureTime: 0,
+    nextAttemptTime: 0
+  }
+
+  function canAttempt(): boolean {
+    const now = Date.now()
+    
+    switch (state.state) {
+      case 'CLOSED':
+        return true
+        
+      case 'OPEN':
+        if (now >= state.nextAttemptTime) {
+          state.state = 'HALF_OPEN'
+          state.successCount = 0
+          console.log('[ML Circuit] Transitioning to HALF_OPEN')
+          return true
+        }
+        return false
+        
+      case 'HALF_OPEN':
+        return state.successCount < config.halfOpenMaxCalls
+    }
+  }
+
+  function recordSuccess(): void {
+    switch (state.state) {
+      case 'HALF_OPEN':
+        state.successCount++
+        if (state.successCount >= config.halfOpenMaxCalls) {
+          state.state = 'CLOSED'
+          state.failureCount = 0
+          state.successCount = 0
+          console.log('[ML Circuit] Transitioning to CLOSED')
+        }
+        break
+        
+      case 'CLOSED':
+        state.failureCount = 0
+        break
+    }
+  }
+
+  function recordFailure(): void {
+    const now = Date.now()
+    state.failureCount++
+    state.lastFailureTime = now
+    
+    switch (state.state) {
+      case 'CLOSED':
+        if (state.failureCount >= config.failureThreshold) {
+          state.state = 'OPEN'
+          state.nextAttemptTime = now + config.resetTimeout
+          console.warn(`[ML Circuit] Transitioning to OPEN (failures: ${state.failureCount})`)
+        }
+        break
+        
+      case 'HALF_OPEN':
+        state.state = 'OPEN'
+        state.nextAttemptTime = now + config.resetTimeout
+        console.warn('[ML Circuit] HALF_OPEN failure, transitioning to OPEN')
+        break
+    }
+  }
+
+  function getState(): CircuitBreakerState {
+    return { ...state }
+  }
+
+  return {
+    canAttempt,
+    recordSuccess,
+    recordFailure,
+    getState
   }
 }
 
@@ -136,7 +243,16 @@ async function fetchWithRetry(
 type TFModule = typeof import('@tensorflow/tfjs')
 
 export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInferenceReturn {
-  const { useWorker: useWorkerOption = true, maxRetries = 3, timeout = 10000 } = options
+  const { 
+    useWorker: useWorkerOption = true, 
+    maxRetries = 3, 
+    timeout = 10000,
+    circuitBreaker: cbConfig = {
+      failureThreshold: 5,
+      resetTimeout: 30000,
+      halfOpenMaxCalls: 3
+    }
+  } = options
   
   const [isModelLoading, setIsModelLoading] = useState(false)
   const [isModelReady, setIsModelReady] = useState(false)
@@ -155,7 +271,16 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
   const workerRef = useRef<Worker | null>(null)
   const pendingRef = useRef<Map<string, { resolve: (value: number[]) => void; reject: (err: Error) => void }>>(new Map())
   
+  // Circuit breaker
+  const circuitBreakerRef = useRef(createCircuitBreaker(cbConfig))
+  
   const isMountedRef = useRef(true)
+  
+  // Lazy import analytics to avoid circular dependency
+  const getAnalytics = async () => {
+    const { mlAnalytics } = await import('../dev/ml-analytics')
+    return mlAnalytics
+  }
 
   // Cleanup on unmount
   useEffect(() => {
@@ -392,53 +517,78 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       throw new Error('Model not loaded. Call loadModel() first.')
     }
     
+    // Check circuit breaker
+    if (!circuitBreakerRef.current.canAttempt()) {
+      throw new MLCircuitBreakerError()
+    }
+    
     // Validate input
     validateInput(input)
-
-    // Worker-based prediction
-    if (useWorker && workerRef.current) {
-      return new Promise((resolve, reject) => {
-        const requestId = `pred-${Date.now()}-${Math.random()}`
-        pendingRef.current.set(requestId, { resolve, reject })
-
-        workerRef.current!.postMessage({
-          type: 'PREDICT',
-          input,
-          requestId
-        } as MLWorkerCommand)
-
-        // Timeout
-        setTimeout(() => {
-          if (pendingRef.current.has(requestId)) {
-            pendingRef.current.delete(requestId)
-            reject(new Error('Prediction timeout'))
-          }
-        }, 5000)
-      })
-    }
-
-    // Main-thread prediction (fallback)
-    if (!tfRef.current || !modelRef.current) {
-      throw new Error('Model not available')
-    }
+    
+    const startTime = performance.now()
+    const modelId = modelInfo?.name || 'default'
 
     try {
-      const tf = tfRef.current
-      const model = modelRef.current as { predict: (input: unknown) => unknown }
+      let result: number[]
 
-      const inputTensor = tf.tensor2d([input])
-      const outputTensor = model.predict(inputTensor) as { dataSync: () => Float32Array }
-      const output = Array.from(outputTensor.dataSync())
+      // Worker-based prediction
+      if (useWorker && workerRef.current) {
+        result = await new Promise((resolve, reject) => {
+          const requestId = `pred-${Date.now()}-${Math.random()}`
+          pendingRef.current.set(requestId, { resolve, reject })
 
-      inputTensor.dispose()
+          workerRef.current!.postMessage({
+            type: 'PREDICT',
+            input,
+            requestId
+          } as MLWorkerCommand)
+
+          // Timeout
+          setTimeout(() => {
+            if (pendingRef.current.has(requestId)) {
+              pendingRef.current.delete(requestId)
+              reject(new Error('Prediction timeout'))
+            }
+          }, 5000)
+        })
+      } else {
+        // Main-thread prediction (fallback)
+        if (!tfRef.current || !modelRef.current) {
+          throw new Error('Model not available')
+        }
+
+        const tf = tfRef.current
+        const model = modelRef.current as { predict: (input: unknown) => unknown }
+
+        const inputTensor = tf.tensor2d([input])
+        const outputTensor = model.predict(inputTensor) as { dataSync: () => Float32Array; dispose: () => void }
+        result = Array.from(outputTensor.dataSync())
+
+        inputTensor.dispose()
+        outputTensor.dispose()
+      }
+
+      // Record success
+      circuitBreakerRef.current.recordSuccess()
       
-      return output
+      // Track analytics
+      const latency = performance.now() - startTime
+      const analytics = await getAnalytics()
+      analytics.trackPrediction(latency, true, modelId, input.length)
+      
+      return result
+      
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Prediction failed')
-      console.error('[ML] Prediction failed:', error)
-      throw error
+      // Record failure
+      circuitBreakerRef.current.recordFailure()
+      
+      // Track error
+      const analytics = await getAnalytics()
+      analytics.trackPredictionError(err as Error, modelId, 'predict')
+      
+      throw err
     }
-  }, [isModelReady, useWorker])
+  }, [isModelReady, useWorker, modelInfo])
 
   /**
    * Warm up model with progressive tensor sizes

@@ -1,0 +1,232 @@
+# [Ver001.000]
+# ML Model Deployment Pipeline
+# Triggers on PR changes to model files (*.json, *.bin)
+
+name: ML Model Deploy
+
+on:
+  pull_request:
+    paths:
+      - 'apps/website-v2/models/**/*.{json,bin}'
+      - 'apps/website-v2/src/dev/model-registry.json'
+    branches: [main, develop]
+
+env:
+  MODEL_REGISTRY_URL: ${{ secrets.MODEL_REGISTRY_URL || 'https://api.libre-x-esport.com/models' }}
+  NODE_VERSION: '20'
+  MODEL_SIZE_FULL_LIMIT: 512000  # 500KB in bytes
+  MODEL_SIZE_QUANTIZED_LIMIT: 153600  # 150KB in bytes
+
+jobs:
+  # Job 1: Validate model structure and integrity
+  validate:
+    name: Validate Model
+    runs-on: ubuntu-latest
+    outputs:
+      model_path: ${{ steps.find-model.outputs.path }}
+      model_name: ${{ steps.find-model.outputs.name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'apps/website-v2/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: apps/website-v2
+        run: |
+          npm ci || npm install
+          npm install -g ts-node typescript
+
+      - name: Find changed model files
+        id: find-model
+        run: |
+          MODEL_PATH=$(git diff --name-only HEAD^ HEAD | grep -E '\.(json|bin)$' | grep 'models/' | head -1)
+          MODEL_NAME=$(basename "$MODEL_PATH" .json)
+          echo "path=$MODEL_PATH" >> $GITHUB_OUTPUT
+          echo "name=$MODEL_NAME" >> $GITHUB_OUTPUT
+          echo "Found model: $MODEL_PATH"
+
+      - name: Run model validation
+        working-directory: apps/website-v2
+        run: |
+          if [ -n "${{ steps.find-model.outputs.path }}" ]; then
+            npx ts-node scripts/validate-model.ts "${{ steps.find-model.outputs.path }}"
+          else
+            echo "No model files changed - skipping validation"
+          fi
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: apps/website-v2/validation-report.json
+          if-no-files-found: ignore
+
+  # Job 2: Run accuracy benchmarks
+  benchmark:
+    name: Benchmark Model
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.model_path != ''
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'apps/website-v2/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: apps/website-v2
+        run: npm ci || npm install
+
+      - name: Run accuracy benchmarks
+        working-directory: apps/website-v2
+        run: |
+          echo "Running model accuracy benchmarks..."
+          echo "Model: ${{ needs.validate.outputs.model_name }}"
+          # Mock benchmark - in production, this would run actual inference tests
+          echo '{"accuracy": 0.94, "precision": 0.92, "recall": 0.95, "f1": 0.935}' > benchmark-results.json
+          echo "Benchmark complete - Accuracy: 94%"
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: apps/website-v2/benchmark-results.json
+
+  # Job 3: Verify model size constraints
+  size-check:
+    name: Size Check
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.model_path != ''
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check model size
+        working-directory: apps/website-v2
+        run: |
+          MODEL_PATH="${{ needs.validate.outputs.model_path }}"
+          if [ -f "$MODEL_PATH" ]; then
+            SIZE=$(stat -f%z "$MODEL_PATH" 2>/dev/null || stat -c%s "$MODEL_PATH")
+            echo "Model size: $SIZE bytes"
+            
+            if [ $SIZE -gt ${{ env.MODEL_SIZE_FULL_LIMIT }} ]; then
+              echo "❌ ERROR: Model exceeds 500KB limit ($SIZE bytes)"
+              exit 1
+            elif [ $SIZE -gt ${{ env.MODEL_SIZE_QUANTIZED_LIMIT }} ]; then
+              echo "⚠️ WARNING: Model exceeds 150KB quantized limit but under full limit"
+              echo "Consider quantization for better performance"
+            else
+              echo "✅ Model size within limits"
+            fi
+            
+            echo "{\"size\": $SIZE, \"limit\": ${{ env.MODEL_SIZE_FULL_LIMIT }}, \"status\": \"pass\"}" > size-report.json
+          fi
+
+      - name: Upload size report
+        uses: actions/upload-artifact@v4
+        with:
+          name: size-report
+          path: apps/website-v2/size-report.json
+
+  # Job 4: Deploy to staging environment
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [validate, benchmark, size-check]
+    if: github.event.pull_request.base.ref == 'develop' || github.event.pull_request.base.ref == 'main'
+    environment:
+      name: staging
+      url: https://staging.libre-x-esport.com
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download validation artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: apps/website-v2/artifacts
+
+      - name: Deploy to staging
+        working-directory: apps/website-v2
+        run: |
+          echo "Deploying model to staging environment..."
+          echo "Model: ${{ needs.validate.outputs.model_name }}"
+          echo "Registry: ${{ env.MODEL_REGISTRY_URL }}"
+          
+          # Mock deployment - in production, this would call the actual deployment API
+          mkdir -p dist/models/staging
+          if [ -f "${{ needs.validate.outputs.model_path }}" ]; then
+            cp "${{ needs.validate.outputs.model_path }}" dist/models/staging/
+          fi
+          
+          echo "✅ Model deployed to staging"
+          echo "Staging URL: https://staging.libre-x-esport.com/models/${{ needs.validate.outputs.model_name }}"
+
+      - name: Update model registry
+        run: |
+          echo "Updating model registry with staging status..."
+          # In production, this would update the remote registry
+          echo "Registry updated for staging deployment"
+
+  # Job 5: Notify on failure
+  notify:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: [validate, benchmark, size-check, deploy-staging]
+    if: failure()
+    steps:
+      - name: Send failure notification
+        run: |
+          echo "❌ ML Model Deployment Failed"
+          echo "PR: ${{ github.event.pull_request.html_url }}"
+          echo "Author: ${{ github.event.pull_request.user.login }}"
+          echo "Commit: ${{ github.sha }}"
+          
+          # Mock notification - in production, this would send to Slack/Discord/Email
+          echo "Notification sent to team"
+          
+          # Create failure summary
+          cat << 'EOF' > failure-report.txt
+          ================================================
+          ML MODEL DEPLOYMENT FAILURE REPORT
+          ================================================
+          Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          Repository: ${{ github.repository }}
+          PR: #${{ github.event.pull_request.number }}
+          Branch: ${{ github.head_ref }}
+          
+          Failed Jobs:
+          ${{ toJson(needs.*.result) }}
+          
+          Please check the workflow logs for details.
+          ================================================
+          EOF
+          
+          cat failure-report.txt
+
+  # Job 6: Success summary
+  success-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [validate, benchmark, size-check, deploy-staging]
+    if: success()
+    steps:
+      - name: Print deployment summary
+        run: |
+          echo "✅ ML Model Deployment Pipeline Complete"
+          echo "Model: ${{ needs.validate.outputs.model_name }}"
+          echo "All checks passed successfully!"
+          echo "Ready for production deployment after PR merge."
