@@ -219,29 +219,15 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     []
   )
 
-  // Retry last operation - defined after render to avoid circular dependency
+  // Retry state tracking
+  const canRetry = retryCount < maxRetries
+  
+  // Retry function - will be populated after render is defined
   const retryRef = useRef<() => void>(() => {})
   
   const retry = useCallback(() => {
     retryRef.current()
   }, [])
-  
-  // Update retry implementation when dependencies change
-  useEffect(() => {
-    retryRef.current = () => {
-      if (retryCount >= maxRetries) return
-      
-      setRetryCount(prev => prev + 1)
-      setError(null)
-      
-      // Retry last render if panels exist
-      if (lastPanelsRef.current.length > 0) {
-        render(lastPanelsRef.current).catch(() => {})
-      }
-    }
-  }, [retryCount, maxRetries, render])
-
-  const canRetry = retryCount < maxRetries
 
   /**
    * Initialize worker with canvas
@@ -298,6 +284,21 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     },
     [sendMessage]
   )
+
+  // Update retry implementation when dependencies change (after render is defined)
+  useEffect(() => {
+    retryRef.current = () => {
+      if (retryCount >= maxRetries) return
+      
+      setRetryCount(prev => prev + 1)
+      setError(null)
+      
+      // Retry last render if panels exist
+      if (lastPanelsRef.current.length > 0) {
+        render(lastPanelsRef.current).catch(() => {})
+      }
+    }
+  }, [retryCount, maxRetries, render])
 
   /**
    * Render single panel with error isolation

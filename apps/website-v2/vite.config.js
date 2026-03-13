@@ -6,20 +6,28 @@ import fs from 'fs'
 // Plugin to build and copy service worker and PWA assets
 const serviceWorkerPlugin = () => ({
   name: 'service-worker',
-  writeBundle() {
-    // Copy sw.ts to dist as sw.js
-    const swSource = fs.readFileSync('./src/sw.ts', 'utf-8')
-    const swJS = swSource
-      .replace(/: \w+/g, '')
-      .replace(/: [A-Z][a-zA-Z<>]*/g, '')
-      .replace(/interface \w+ \{[^}]+\}/g, '')
-      .replace(/type \w+ = .+/g, '')
-      .replace(/import\/export type[^;]+;/g, '')
-      .replace(/\/\/.*$/gm, '')
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      .replace(/<>/g, '')
+  async writeBundle() {
+    // Use esbuild to properly compile sw.ts to sw.js
+    const esbuild = await import('esbuild')
     
-    fs.writeFileSync('./dist/sw.js', swJS)
+    try {
+      const result = await esbuild.build({
+        entryPoints: ['./src/sw.ts'],
+        bundle: false,
+        write: false,
+        format: 'esm',
+        target: 'es2020',
+        platform: 'browser',
+      })
+      
+      fs.writeFileSync('./dist/sw.js', result.outputFiles[0].text)
+      console.log('[Vite] Service Worker built with esbuild')
+    } catch (err) {
+      console.error('[Vite] Service Worker build failed:', err)
+      // Fallback: copy as-is if build fails
+      const swSource = fs.readFileSync('./src/sw.ts', 'utf-8')
+      fs.writeFileSync('./dist/sw.js', swSource)
+    }
     
     // Copy manifest and icons
     fs.copyFileSync('./public/manifest.json', './dist/manifest.json')
