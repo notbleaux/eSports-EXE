@@ -1,11 +1,14 @@
 /**
- * VirtualGrid - Windowed Rendering with @tanstack/react-virtual v3
- * Sends only visible panel IDs to worker for rendering
+ * VirtualGrid - Windowed Rendering with Granular State Selectors
+ * Uses split stores for optimal re-render performance
  */
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useGridWorker } from '../workers/useGridWorker'
+import { useCols, useRowHeight } from '../store/staticStore'
+import { usePanels } from '../store/dynamicStore'
+import { useEphemeralStore } from '../store/ephemeralStore'
 
 interface PanelData {
   id: string
@@ -14,7 +17,6 @@ interface PanelData {
 }
 
 interface VirtualGridProps {
-  panels: PanelData[]
   rowHeight?: number
   overscan?: number
   onVisibleRangeChange?: (start: number, end: number) => void
@@ -22,22 +24,31 @@ interface VirtualGridProps {
 }
 
 const GAP = 4
-const COLS = 2
 
 export const VirtualGrid: React.FC<VirtualGridProps> = ({
-  panels,
-  rowHeight = 100,
+  rowHeight: propRowHeight,
   overscan = 5,
   onVisibleRangeChange,
   onPerformanceMetrics,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  
+  // Granular store selectors - only re-render when specific state changes
+  const staticCols = useCols()
+  const staticRowHeight = useRowHeight()
+  const panels = usePanels()
+  const isScrolling = useEphemeralStore((state) => state.isScrolling)
+  
+  const rowHeight = propRowHeight ?? staticRowHeight
+  const cols = staticCols
+  
   const [containerWidth, setContainerWidth] = useState(800)
   const [isInitialized, setIsInitialized] = useState(false)
   const visibleRangeRef = useRef({ start: 0, end: 0 })
 
-  const rows = Math.ceil(panels.length / COLS)
+  const panelCount = panels.length
+  const rows = Math.ceil(panelCount / cols)
 
   const { isReady, init, render } = useGridWorker({
     onRenderComplete: (count, time) => {
@@ -76,12 +87,13 @@ export const VirtualGrid: React.FC<VirtualGridProps> = ({
       .catch(console.error)
   }, [isReady, isInitialized, init])
 
-  // Virtualizer
+  // Virtualizer with reduced re-renders during scroll
   const virtualizer = useVirtualizer({
     count: rows,
     getScrollElement: () => parentRef.current,
     estimateSize: useCallback(() => rowHeight, [rowHeight]),
     overscan,
+    scrollPaddingEnd: 0,
   })
 
   const virtualItems = virtualizer.getVirtualItems()
@@ -94,40 +106,42 @@ export const VirtualGrid: React.FC<VirtualGridProps> = ({
     const endRow = virtualItems[virtualItems.length - 1]?.index ?? 0
 
     for (let row = startRow; row <= endRow; row++) {
-      for (let col = 0; col < COLS; col++) {
-        const index = row * COLS + col
-        if (index < panels.length) {
-          ids.push(panels[index].id)
+      for (let col = 0; col < cols; col++) {
+        const index = row * cols + col
+        if (index < panelCount) {
+          ids.push(panels[index]?.i ?? `panel-${index}`)
         }
       }
     }
 
     return ids
-  }, [virtualItems, panels])
+  }, [virtualItems, cols, panelCount, panels])
 
   // Notify range change
   useEffect(() => {
     if (virtualItems.length === 0) return
-    const start = virtualItems[0].index * COLS
-    const end = Math.min((virtualItems[virtualItems.length - 1].index + 1) * COLS, panels.length)
+    const start = virtualItems[0].index * cols
+    const end = Math.min((virtualItems[virtualItems.length - 1].index + 1) * cols, panelCount)
 
     if (visibleRangeRef.current.start !== start || visibleRangeRef.current.end !== end) {
       visibleRangeRef.current = { start, end }
       onVisibleRangeChange?.(start, end)
     }
-  }, [virtualItems, panels.length, onVisibleRangeChange])
+  }, [virtualItems, cols, panelCount, onVisibleRangeChange])
 
-  // Send visible panels to worker
+  // Debounced render during scrolling to reduce worker calls
+  const renderTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  
   useEffect(() => {
     if (!isInitialized || visiblePanelIds.length === 0) return
 
-    const cellWidth = Math.floor((containerWidth - GAP * (COLS + 1)) / COLS)
+    const cellWidth = Math.floor((containerWidth - GAP * (cols + 1)) / cols)
     const cellHeight = rowHeight - GAP
 
     const visiblePanels = visiblePanelIds.map((id, index) => {
-      const panelIndex = panels.findIndex((p) => p.id === id)
-      const row = Math.floor(panelIndex / COLS)
-      const col = panelIndex % COLS
+      const panelIndex = panels.findIndex((p) => p?.i === id)
+      const row = Math.floor(panelIndex / cols)
+      const col = panelIndex % cols
 
       const virtualRow = virtualItems.find((v) => v.index === row)
       const y = (virtualRow?.start ?? row * rowHeight) + GAP
@@ -139,13 +153,25 @@ export const VirtualGrid: React.FC<VirtualGridProps> = ({
         y,
         width: cellWidth,
         height: cellHeight,
-        title: panels[panelIndex]?.title ?? '',
-        content: panels[panelIndex]?.content ?? '',
+        title: panels[panelIndex]?.title ?? `Panel ${panelIndex + 1}`,
+        content: panels[panelIndex]?.content ?? `Row ${row + 1}, Col ${col + 1}`,
       }
     })
 
-    render(visiblePanels).catch(console.error)
-  }, [isInitialized, visiblePanelIds, virtualItems, containerWidth, rowHeight, panels, render])
+    // Debounce during scroll, immediate when stopped
+    if (isScrolling) {
+      if (renderTimeoutRef.current) clearTimeout(renderTimeoutRef.current)
+      renderTimeoutRef.current = setTimeout(() => {
+        render(visiblePanels).catch(console.error)
+      }, 16) // 1 frame delay during scroll
+    } else {
+      render(visiblePanels).catch(console.error)
+    }
+
+    return () => {
+      if (renderTimeoutRef.current) clearTimeout(renderTimeoutRef.current)
+    }
+  }, [isInitialized, visiblePanelIds, isScrolling, virtualItems, containerWidth, cols, rowHeight, panels, render])
 
   return (
     <div
