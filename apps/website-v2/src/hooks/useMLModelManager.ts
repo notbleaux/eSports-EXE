@@ -6,7 +6,7 @@
  * [Ver001.000]
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useMLCacheStore, type CachedModel } from '../store/mlCacheStore'
 import { useMLInference, type ModelInfo } from './useMLInference'
 
@@ -398,7 +398,8 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
   // Calculate total memory usage
   const totalMemoryUsage = getMemoryUsage()
 
-  return {
+  // Memoize return object to prevent re-renders of consuming components
+  return useMemo(() => ({
     // State
     models,
     activeModelId,
@@ -415,7 +416,21 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
     getMemoryUsage,
     getActiveModel,
     preloadModels
-  }
+  }), [
+    models,
+    activeModelId,
+    isSwitching,
+    totalMemoryUsage,
+    loadModel,
+    switchModel,
+    unloadModel,
+    unloadAll,
+    compareModels,
+    getLoadedModelCount,
+    getMemoryUsage,
+    getActiveModel,
+    preloadModels
+  ])
 }
 
 export default useMLModelManager

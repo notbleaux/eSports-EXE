@@ -3,32 +3,22 @@
  * Loads TF.js on-demand with IndexedDB caching
  * Supports both main-thread and worker-based inference
  * 
- * [Ver001.000]
+ * [Ver002.000] - P0 Performance Fix: Tensor cleanup, dynamic imports
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 import type { MLWorkerCommand, MLWorkerResponse } from '../workers/ml.worker'
-
-export interface ModelInfo {
-  name: string
-  url: string
-  sizeBytes?: number
-  lastLoaded: Date | null
-  quantization: 'fp32' | 'int16' | 'int8' | 'unknown'
-  backend: string
-}
-
-export interface WarmUpOptions {
-  iterations?: number
-  verbose?: boolean
-  progressive?: boolean
-}
-
-export interface BatchPredictionResult {
-  results: number[][]
-  totalTime: number
-  throughput: number
-}
+import type { ModelInfo, WarmUpOptions, BatchPredictionResult } from '../types/ml'
+import { 
+  MAX_RETRIES, 
+  RETRY_BASE_DELAY_MS,
+  PREDICTION_TIMEOUT_MS,
+  MAX_INPUT_SIZE,
+  MIN_INPUT_VALUE,
+  MAX_INPUT_VALUE
+} from '../constants/ml'
+import { analyticsSync } from '../services/analyticsSync'
+import { mlLogger } from '../utils/logger'
 
 export interface UseMLInferenceReturn {
   isModelLoading: boolean
@@ -42,6 +32,10 @@ export interface UseMLInferenceReturn {
   error: Error | null
   progress: number
   useWorker: boolean
+  /** Current queue depth from worker */
+  queueDepth: number
+  /** Maximum queue size */
+  maxQueueSize: number
 }
 
 export interface CircuitBreakerConfig {
@@ -270,6 +264,11 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
   // Worker refs
   const workerRef = useRef<Worker | null>(null)
   const pendingRef = useRef<Map<string, { resolve: (value: number[]) => void; reject: (err: Error) => void }>>(new Map())
+  const abortControllersRef = useRef<Map<string, AbortController>>(new Map())
+  
+  // Queue metrics
+  const [queueDepth, setQueueDepth] = useState(0)
+  const maxQueueSize = 100 // Matches MAX_PENDING_QUEUE in worker
   
   // Circuit breaker
   const circuitBreakerRef = useRef(createCircuitBreaker(cbConfig))
@@ -286,20 +285,56 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
   useEffect(() => {
     return () => {
       isMountedRef.current = false
+      isCleaningUpRef.current = true
       
-      // Cleanup worker
+      // Abort any ongoing load operation
+      if (loadAbortRef.current) {
+        loadAbortRef.current.abort('Component unmounted')
+        loadAbortRef.current = null
+      }
+      
+      // Cancel all pending predictions
+      abortControllersRef.current.forEach((controller, requestId) => {
+        controller.abort('Component unmounted')
+        const pending = pendingRef.current.get(requestId)
+        if (pending) {
+          pending.reject(new Error('Component unmounted'))
+        }
+      })
+      abortControllersRef.current.clear()
+      pendingRef.current.clear()
+      
+      // Cleanup worker with proper disposal
       if (workerRef.current) {
-        workerRef.current.postMessage({ type: 'DISPOSE' } as MLWorkerCommand)
-        workerRef.current.terminate()
-        workerRef.current = null
+        try {
+          // Send dispose message to clean up worker resources
+          workerRef.current.postMessage({ type: 'DISPOSE' } as MLWorkerCommand)
+          
+          // Give worker a short time to cleanup before terminating
+          setTimeout(() => {
+            if (workerRef.current) {
+              workerRef.current.terminate()
+              workerRef.current = null
+            }
+          }, 100)
+        } catch (err) {
+          // Worker already terminated or errored
+          workerRef.current = null
+        }
       }
       
       // Cleanup main-thread model
       if (modelRef.current && tfRef.current) {
         try {
           (modelRef.current as { dispose?: () => void }).dispose?.()
-        } catch {}
+        } catch {
+          // Ignore dispose errors
+        }
       }
+      
+      // Clear all refs
+      tfRef.current = null
+      modelRef.current = null
     }
   }, [])
 
@@ -321,7 +356,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
 
         switch (response.type) {
           case 'MODEL_LOADED':
-            if (isMountedRef.current) {
+            if (isMountedRef.current && !isCleaningUpRef.current) {
               const url = modelUrlRef.current
               const modelName = url.split('/').pop()?.replace('.json', '') || 'model'
               const info: ModelInfo = {
@@ -339,7 +374,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
             break
 
           case 'MODEL_LOAD_ERROR':
-            if (isMountedRef.current) {
+            if (isMountedRef.current && !isCleaningUpRef.current) {
               setError(new Error(response.error))
               setIsModelLoading(false)
             }
@@ -347,6 +382,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
 
           case 'PREDICTION_RESULT':
             {
+              // Clean up abort controller
+              abortControllersRef.current.delete(response.requestId)
+              
               const pending = pendingRef.current.get(response.requestId)
               if (pending) {
                 pending.resolve(response.result)
@@ -357,12 +395,35 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
 
           case 'PREDICTION_ERROR':
             {
+              // Clean up abort controller
+              abortControllersRef.current.delete(response.requestId)
+              
               const pending = pendingRef.current.get(response.requestId)
               if (pending) {
                 pending.reject(new Error(response.error))
                 pendingRef.current.delete(response.requestId)
               }
             }
+            break
+            
+          case 'BACKPRESSURE':
+            if (isMountedRef.current) {
+              console.warn(`[ML Inference] Worker backpressure: ${response.queueDepth}/${response.maxQueueSize}`)
+            }
+            break
+            
+          case 'QUEUE_METRICS':
+            if (isMountedRef.current) {
+              setQueueDepth(response.depth)
+            }
+            break
+            
+          case 'QUEUE_OVERFLOW':
+            console.warn(`[ML Inference] Queue overflow: ${response.dropped} predictions dropped`)
+            break
+            
+          case 'DISPOSED':
+            console.log('[ML Inference] Worker disposed')
             break
         }
       }
@@ -433,7 +494,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
           
           // Simulate progress for worker loading
           const progressInterval = setInterval(() => {
-            if (isMountedRef.current && progress < 90) {
+            if (isMountedRef.current) {
               setProgress(p => Math.min(p + 10, 90))
             }
           }, 200)
@@ -507,10 +568,11 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
         setIsModelLoading(false)
       }
     }
-  }, [isModelLoading, isModelReady, useWorker, initWorker, loadTensorFlow, progress])
+  }, [isModelLoading, isModelReady, useWorker, initWorker, loadTensorFlow])
 
   /**
    * Run prediction on input data
+   * P0 FIX: Ensures tensor disposal in finally block to prevent memory leaks
    */
   const predict = useCallback(async (input: number[]): Promise<number[]> => {
     if (!isModelReady) {
@@ -527,6 +589,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     
     const startTime = performance.now()
     const modelId = modelInfo?.name || 'default'
+    
+    // Track tensors for cleanup (P0 FIX)
+    const tensorsToDispose: Array<{ dispose: () => void }> = []
 
     try {
       let result: number[]
@@ -534,7 +599,18 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       // Worker-based prediction
       if (useWorker && workerRef.current) {
         result = await new Promise((resolve, reject) => {
+          // Don't start prediction if cleaning up
+          if (isCleaningUpRef.current || !isMountedRef.current) {
+            reject(new Error('Component unmounted'))
+            return
+          }
+          
           const requestId = `pred-${Date.now()}-${Math.random()}`
+          
+          // Create abort controller for this prediction
+          const abortController = new AbortController()
+          abortControllersRef.current.set(requestId, abortController)
+          
           pendingRef.current.set(requestId, { resolve, reject })
 
           workerRef.current!.postMessage({
@@ -543,13 +619,22 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
             requestId
           } as MLWorkerCommand)
 
-          // Timeout
-          setTimeout(() => {
+          // Timeout with abort support
+          const timeoutId = setTimeout(() => {
             if (pendingRef.current.has(requestId)) {
+              abortControllersRef.current.delete(requestId)
               pendingRef.current.delete(requestId)
               reject(new Error('Prediction timeout'))
             }
           }, 5000)
+          
+          // Listen for abort
+          abortController.signal.addEventListener('abort', () => {
+            clearTimeout(timeoutId)
+            pendingRef.current.delete(requestId)
+            abortControllersRef.current.delete(requestId)
+            reject(new Error('Prediction cancelled'))
+          })
         })
       } else {
         // Main-thread prediction (fallback)
@@ -561,11 +646,12 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
         const model = modelRef.current as { predict: (input: unknown) => unknown }
 
         const inputTensor = tf.tensor2d([input])
+        tensorsToDispose.push(inputTensor)
+        
         const outputTensor = model.predict(inputTensor) as { dataSync: () => Float32Array; dispose: () => void }
+        tensorsToDispose.push(outputTensor)
+        
         result = Array.from(outputTensor.dataSync())
-
-        inputTensor.dispose()
-        outputTensor.dispose()
       }
 
       // Record success
@@ -587,6 +673,15 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       analytics.trackPredictionError(err as Error, modelId, 'predict')
       
       throw err
+    } finally {
+      // P0 FIX: Always dispose tensors, even on error paths
+      for (const tensor of tensorsToDispose) {
+        try {
+          tensor.dispose()
+        } catch (disposeErr) {
+          // Ignore disposal errors
+        }
+      }
     }
   }, [isModelReady, useWorker, modelInfo])
 
@@ -628,6 +723,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
   /**
    * Batch prediction for multiple inputs
    * 5x faster than sequential predictions
+   * P0 FIX: Ensures tensor disposal in finally block to prevent memory leaks
    */
   const predictBatch = useCallback(async (inputs: number[][]): Promise<BatchPredictionResult> => {
     if (!isModelReady) {
@@ -635,6 +731,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     }
     
     const startTime = performance.now()
+    
+    // Track tensors for cleanup (P0 FIX)
+    const tensorsToDispose: Array<{ dispose: () => void }> = []
 
     // Worker-based batch prediction
     if (useWorker && workerRef.current) {
@@ -680,7 +779,11 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       const model = modelRef.current as { predict: (input: unknown) => unknown }
 
       const inputTensor = tf.tensor2d(inputs)
+      tensorsToDispose.push(inputTensor)
+      
       const outputTensor = model.predict(inputTensor) as { dataSync: () => Float32Array; dispose: () => void }
+      tensorsToDispose.push(outputTensor)
+      
       const flatResults = Array.from(outputTensor.dataSync())
       
       // Reshape results
@@ -689,9 +792,6 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       for (let i = 0; i < inputs.length; i++) {
         results.push(flatResults.slice(i * outputSize, (i + 1) * outputSize))
       }
-
-      inputTensor.dispose()
-      outputTensor.dispose()
       
       const duration = performance.now() - startTime
       
@@ -704,6 +804,15 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       const error = err instanceof Error ? err : new Error('Batch prediction failed')
       console.error('[ML] Batch prediction failed:', error)
       throw error
+    } finally {
+      // P0 FIX: Always dispose tensors, even on error paths
+      for (const tensor of tensorsToDispose) {
+        try {
+          tensor.dispose()
+        } catch (disposeErr) {
+          // Ignore disposal errors
+        }
+      }
     }
   }, [isModelReady, useWorker])
 
@@ -725,7 +834,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     getModelInfo,
     error,
     progress,
-    useWorker
+    useWorker,
+    queueDepth,
+    maxQueueSize
   }
 }
 

@@ -1,7 +1,7 @@
 /**
  * UnifiedGrid - Single Grid Component with Worker/DOM/Auto Modes
  * Consolidates VirtualGrid + HybridGrid functionality
- * [Ver001.000]
+ * [Ver001.001]
  */
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
@@ -272,10 +272,18 @@ export const UnifiedGrid: React.FC<UnifiedGridProps> = ({
       el.style.top = `${panel.y}px`
       el.style.width = `${panel.width}px`
       el.style.height = `${panel.height}px`
-      el.innerHTML = `
-        <div style="font-weight: bold; font-size: 12px; color: #fff; margin-bottom: 4px;">${panel.title}</div>
-        <div style="font-size: 11px; color: rgba(200, 200, 220, 0.8);">${panel.content}</div>
-      `
+      // XSS-safe DOM construction - use textContent instead of innerHTML
+      const titleDiv = document.createElement('div')
+      titleDiv.style.cssText = 'font-weight: bold; font-size: 12px; color: #fff; margin-bottom: 4px;'
+      titleDiv.textContent = panel.title
+      
+      const contentDiv = document.createElement('div')
+      contentDiv.style.cssText = 'font-size: 11px; color: rgba(200, 200, 220, 0.8);'
+      contentDiv.textContent = panel.content
+      
+      el.innerHTML = '' // Clear any existing content
+      el.appendChild(titleDiv)
+      el.appendChild(contentDiv)
     })
   }
 

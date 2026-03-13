@@ -1,9 +1,9 @@
 /**
  * TENET Hub - Hub 5: The Control Center
  * White-themed center hub with SATOR Square 3D visualization
- * [Ver001.000]
+ * [Ver002.000] - P0 Performance Fix: Lazy load Three.js
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import {
   Command,
@@ -18,10 +18,14 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { colors } from '@/theme/colors';
 import HubWrapper from '@/shared/components/HubWrapper';
 import { useNJZStore } from '@/shared/store/njzStore';
-import SatorSquare from './components/SatorSquare';
+import { PanelSkeleton } from '@/components/grid/PanelSkeleton';
 import ControlPanel from './components/ControlPanel';
 import useTENETData from './hooks/useTENETData';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+
+// P0 FIX: Lazy load SatorSquare to prevent Three.js (975KB) from blocking initial load
+// Three.js is only loaded when user navigates to TENET hub
+const SatorSquare = lazy(() => import('./components/SatorSquare'));
 
 // TENET Hub Configuration - EXACT colors as specified
 const HUB_CONFIG = {
@@ -226,8 +230,14 @@ function TENETHubContent() {
                 }}
               />
               
-              {/* SATOR Square 3D Component */}
-              <SatorSquare className="relative z-10" />
+              {/* SATOR Square 3D Component - Lazy loaded with Suspense */}
+              <Suspense fallback={
+                <div className="flex items-center justify-center h-[400px]">
+                  <PanelSkeleton variant="3d-loading" title="Loading 3D Visualization..." />
+                </div>
+              }>
+                <SatorSquare className="relative z-10" />
+              </Suspense>
             </div>
 
             {/* Legend */}

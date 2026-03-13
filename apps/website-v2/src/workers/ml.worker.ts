@@ -2,7 +2,7 @@
  * ML Worker - TensorFlow.js Inference Thread
  * Handles model loading and predictions in dedicated worker
  * 
- * [Ver001.000]
+ * [Ver002.000] - Added bounded queue with backpressure
  */
 
 // ============================================================================
@@ -26,6 +26,7 @@ export type MLWorkerCommand =
   | { type: 'PREDICT_BATCH'; inputs: number[][]; requestId: string }
   | { type: 'QUANTIZE_MODEL'; bits: QuantizationBits }
   | { type: 'DISPOSE' }
+  | { type: 'GET_METRICS' }
 
 export type MLWorkerResponse =
   | { type: 'MODEL_LOADED'; modelName: string; quantized: boolean; originalSize?: number; quantizedSize?: number }
@@ -36,10 +37,19 @@ export type MLWorkerResponse =
   | { type: 'QUANTIZATION_COMPLETE'; originalSize: number; quantizedSize: number; ratio: number }
   | { type: 'DISPOSED' }
   | { type: 'READY'; timestamp: number }
+  | { type: 'QUEUE_OVERFLOW'; dropped: number; currentSize: number }
+  | { type: 'BACKPRESSURE'; queueDepth: number; maxQueueSize: number }
+  | { type: 'QUEUE_METRICS'; depth: number; maxSize: number; droppedCount: number }
 
 // ============================================================================
-// WORKER STATE
+// WORKER STATE & CONSTANTS
 // ============================================================================
+
+/** Maximum number of pending predictions in queue */
+const MAX_PENDING_QUEUE = 100
+
+/** Overflow strategy: 'reject' = reject new, 'drop-oldest' = drop oldest */
+const OVERFLOW_STRATEGY: 'reject' | 'drop-oldest' = 'drop-oldest'
 
 interface WorkerState {
   tf: typeof import('@tensorflow/tfjs') | null
@@ -49,8 +59,13 @@ interface WorkerState {
   quantization: QuantizationBits
   originalSize: number
   quantizedSize: number
-  pendingPredictions: Array<{ input: number[]; requestId: string }>
+  pendingPredictions: Array<{ input: number[]; requestId: string; timestamp: number }>
   quantizedWeights: Map<string, QuantizedWeights>
+  metrics: {
+    droppedCount: number
+    processedCount: number
+    lastBackpressureSent: number
+  }
 }
 
 const state: WorkerState = {
@@ -62,7 +77,97 @@ const state: WorkerState = {
   originalSize: 0,
   quantizedSize: 0,
   pendingPredictions: [],
-  quantizedWeights: new Map()
+  quantizedWeights: new Map(),
+  metrics: {
+    droppedCount: 0,
+    processedCount: 0,
+    lastBackpressureSent: 0
+  }
+}
+
+// ============================================================================
+// QUEUE MANAGEMENT
+// ============================================================================
+
+/**
+ * Check if queue has capacity and apply overflow strategy if full
+ * Returns true if item was accepted, false if rejected
+ */
+function checkQueueCapacity(requestId: string): boolean {
+  const currentDepth = state.pendingPredictions.length
+
+  // Send backpressure signal when queue reaches 80% capacity
+  if (currentDepth >= MAX_PENDING_QUEUE * 0.8) {
+    const now = Date.now()
+    // Throttle backpressure signals to every 100ms
+    if (now - state.metrics.lastBackpressureSent > 100) {
+      postMessage({
+        type: 'BACKPRESSURE',
+        queueDepth: currentDepth,
+        maxQueueSize: MAX_PENDING_QUEUE
+      } as MLWorkerResponse)
+      state.metrics.lastBackpressureSent = now
+    }
+  }
+
+  if (currentDepth >= MAX_PENDING_QUEUE) {
+    if (OVERFLOW_STRATEGY === 'reject') {
+      // Reject new prediction
+      postMessage({
+        type: 'PREDICTION_ERROR',
+        error: `Queue full (${MAX_PENDING_QUEUE}). Request rejected.`,
+        requestId
+      } as MLWorkerResponse)
+      return false
+    } else {
+      // Drop oldest predictions to make room
+      const dropCount = Math.ceil(MAX_PENDING_QUEUE * 0.1) // Drop 10% of queue
+      const dropped = state.pendingPredictions.splice(0, dropCount)
+      
+      // Notify about dropped predictions
+      for (const item of dropped) {
+        postMessage({
+          type: 'PREDICTION_ERROR',
+          error: 'Dropped due to queue overflow',
+          requestId: item.requestId
+        } as MLWorkerResponse)
+      }
+      
+      state.metrics.droppedCount += dropped.length
+      
+      postMessage({
+        type: 'QUEUE_OVERFLOW',
+        dropped: dropped.length,
+        currentSize: state.pendingPredictions.length
+      } as MLWorkerResponse)
+      
+      console.warn(`[ML Worker] Queue overflow: dropped ${dropped.length} oldest predictions`)
+    }
+  }
+  
+  return true
+}
+
+/**
+ * Get current queue metrics
+ */
+function getQueueMetrics(): { depth: number; maxSize: number; droppedCount: number } {
+  return {
+    depth: state.pendingPredictions.length,
+    maxSize: MAX_PENDING_QUEUE,
+    droppedCount: state.metrics.droppedCount
+  }
+}
+
+/**
+ * Send queue metrics to main thread
+ */
+function sendQueueMetrics(): void {
+  const metrics = getQueueMetrics()
+  postMessage({
+    type: 'QUEUE_METRICS',
+    ...metrics
+  } as MLWorkerResponse)
 }
 
 // ============================================================================
@@ -306,10 +411,18 @@ async function handleLoadModel(url: string, modelName: string, quantization?: Qu
 }
 
 async function handlePredict(input: number[], requestId: string): Promise<void> {
-  // If model not ready, queue the prediction
+  // If model not ready, queue the prediction with bounded capacity
   if (!state.model || !state.tf) {
-    state.pendingPredictions.push({ input, requestId })
-    console.log('[ML Worker] Prediction queued:', requestId)
+    // Check queue capacity before adding
+    if (!checkQueueCapacity(requestId)) {
+      return // Rejected
+    }
+    
+    state.pendingPredictions.push({ input, requestId, timestamp: Date.now() })
+    console.log('[ML Worker] Prediction queued:', requestId, `(queue: ${state.pendingPredictions.length}/${MAX_PENDING_QUEUE})`)
+    
+    // Send metrics update
+    sendQueueMetrics()
     return
   }
 
@@ -352,14 +465,28 @@ async function handlePredict(input: number[], requestId: string): Promise<void> 
  */
 async function handlePredictBatch(inputs: number[][], requestId: string): Promise<void> {
   if (!state.model || !state.tf) {
+    // Check if we can queue all batch items
+    if (state.pendingPredictions.length + inputs.length > MAX_PENDING_QUEUE) {
+      // Not enough room - reject entire batch
+      postMessage({
+        type: 'PREDICTION_ERROR',
+        error: `Insufficient queue capacity for batch of ${inputs.length}. Queue: ${state.pendingPredictions.length}/${MAX_PENDING_QUEUE}`,
+        requestId
+      } as MLWorkerResponse)
+      return
+    }
+    
     // Queue for later
+    const timestamp = Date.now()
     for (let i = 0; i < inputs.length; i++) {
       state.pendingPredictions.push({ 
         input: inputs[i], 
-        requestId: `${requestId}-batch-${i}` 
+        requestId: `${requestId}-batch-${i}`,
+        timestamp
       })
     }
-    console.log('[ML Worker] Batch predictions queued:', requestId)
+    console.log('[ML Worker] Batch predictions queued:', requestId, `(+${inputs.length}, queue: ${state.pendingPredictions.length}/${MAX_PENDING_QUEUE})`)
+    sendQueueMetrics()
     return
   }
 
@@ -407,18 +534,50 @@ async function processPendingPredictions(): Promise<void> {
     return
   }
 
-  console.log(`[ML Worker] Processing ${state.pendingPredictions.length} pending predictions`)
+  const queueSize = state.pendingPredictions.length
+  console.log(`[ML Worker] Processing ${queueSize} pending predictions`)
 
   // Process all pending predictions
   const pending = [...state.pendingPredictions]
   state.pendingPredictions = []
 
   for (const { input, requestId } of pending) {
+    // Check for stale predictions (older than 30 seconds)
+    const age = Date.now() - (pending.find(p => p.requestId === requestId)?.timestamp || Date.now())
+    if (age > 30000) {
+      console.warn(`[ML Worker] Dropping stale prediction: ${requestId} (age: ${age}ms)`)
+      postMessage({
+        type: 'PREDICTION_ERROR',
+        error: `Prediction stale (age: ${age}ms)`,
+        requestId
+      } as MLWorkerResponse)
+      state.metrics.droppedCount++
+      continue
+    }
+    
     await handlePredict(input, requestId)
+    state.metrics.processedCount++
   }
+  
+  // Send updated metrics
+  sendQueueMetrics()
 }
 
 function handleDispose(): void {
+  // Reject any pending predictions
+  const pendingCount = state.pendingPredictions.length
+  if (pendingCount > 0) {
+    console.log(`[ML Worker] Rejecting ${pendingCount} pending predictions due to dispose`)
+    for (const { requestId } of state.pendingPredictions) {
+      postMessage({
+        type: 'PREDICTION_ERROR',
+        error: 'Worker disposed',
+        requestId
+      } as MLWorkerResponse)
+    }
+    state.metrics.droppedCount += pendingCount
+  }
+
   // Cleanup model
   if (state.model) {
     try {
@@ -474,6 +633,10 @@ self.onmessage = (event: MessageEvent<MLWorkerCommand>) => {
 
     case 'DISPOSE':
       handleDispose()
+      break
+
+    case 'GET_METRICS':
+      sendQueueMetrics()
       break
 
     default:

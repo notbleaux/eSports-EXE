@@ -2,12 +2,68 @@
  * useStreamingInference - Real-time Streaming ML Inference Hook
  * Connects to data-stream.worker for real-time predictions with debouncing
  * 
- * [Ver001.000]
+ * [Ver002.000] - Fixed worker cleanup race conditions
  */
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useMLInference } from './useMLInference'
 import type { DataStreamCommand, DataStreamResponse, StreamData } from '../workers/data-stream.worker'
+import type { PredictionResult, StreamingMetrics } from '../types/ml'
+import { 
+  BUFFER_SIZE,
+  MAX_STREAMING_PREDICTIONS,
+  DEBOUNCE_MS,
+  LAG_GREEN_THRESHOLD_MS,
+  LAG_YELLOW_THRESHOLD_MS
+} from '../constants/ml'
+import { analyticsSync } from '../services/analyticsSync'
+import { streamingLogger } from '../utils/logger'
+
+/**
+ * Debounce hook for stable debounced callbacks
+ */
+function useDebounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lastCallTimeRef = useRef(0)
+  const fnRef = useRef(fn)
+
+  // Keep fn ref up to date
+  useEffect(() => {
+    fnRef.current = fn
+  }, [fn])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
+  return useCallback((...args: Parameters<T>) => {
+    const now = Date.now()
+    const timeSinceLastCall = now - lastCallTimeRef.current
+
+    const execute = () => {
+      lastCallTimeRef.current = Date.now()
+      fnRef.current(...args)
+    }
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    if (timeSinceLastCall >= delay) {
+      execute()
+    } else {
+      timeoutRef.current = setTimeout(execute, delay - timeSinceLastCall)
+    }
+  }, [delay])
+}
 
 export interface PredictionResult {
   id: string
@@ -110,22 +166,35 @@ export function useStreamingInference(
   // Refs
   const workerRef = useRef<Worker | null>(null)
   const isMountedRef = useRef(true)
+  const isCleaningUpRef = useRef(false)
   const predictionCountRef = useRef(0)
   const lastThroughputCalcRef = useRef(Date.now())
   const pendingDataRef = useRef<StreamData | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const activePredictionRef = useRef<boolean>(false)
 
   // ML Inference hook
   const { predict, isModelReady, loadModel } = useMLInference({ useWorker: true })
 
   // Load model on mount
   useEffect(() => {
-    if (!isModelReady) {
+    if (!isModelReady && !isCleaningUpRef.current) {
       loadModel(modelUrl).catch((err) => {
+        // Ignore errors if cleaning up
+        if (isCleaningUpRef.current || !isMountedRef.current) return
+        
         console.error('[Streaming Inference] Failed to load model:', err)
         if (isMountedRef.current) {
           setError(err instanceof Error ? err : new Error('Model load failed'))
         }
       })
+    }
+    
+    return () => {
+      // Cancel any in-progress model load
+      if (!isModelReady && isCleaningUpRef.current) {
+        // loadModel will be aborted via parent cleanup
+      }
     }
   }, [isModelReady, loadModel, modelUrl])
 
@@ -135,58 +204,60 @@ export function useStreamingInference(
   }, [maxPredictionsPerSecond])
 
   /**
-   * Process data for prediction with debouncing
+   * Process prediction data
    */
-  const processPrediction = useCallback(
-    debounce(async (data: StreamData) => {
-      if (!isModelReady || !isMountedRef.current) {
-        return
+  const processPredictionData = useCallback(async (data: StreamData) => {
+    if (!isModelReady || !isMountedRef.current) {
+      return
+    }
+
+    const startTime = performance.now()
+
+    try {
+      // Calculate lag (time between data timestamp and processing)
+      const currentLag = Date.now() - data.timestamp
+      setLag(currentLag)
+
+      // Run prediction
+      const result = await predict(data.features)
+      const latencyMs = performance.now() - startTime
+
+      // Create prediction result
+      const prediction: PredictionResult = {
+        id: data.id,
+        input: data.features,
+        output: result,
+        confidence: calculateConfidence(result),
+        modelId: 'streaming-model',
+        timestamp: new Date(),
+        latencyMs
       }
 
-      const startTime = performance.now()
+      // Update predictions (keep last 10)
+      setPredictions((prev) => [prediction, ...prev].slice(0, 10))
 
+      // Save to history store for analytics
       try {
-        // Calculate lag (time between data timestamp and processing)
-        const currentLag = Date.now() - data.timestamp
-        setLag(currentLag)
-
-        // Run prediction
-        const result = await predict(data.features)
-        const latencyMs = performance.now() - startTime
-
-        // Create prediction result
-        const prediction: PredictionResult = {
-          id: data.id,
-          input: data.features,
-          output: result,
-          confidence: calculateConfidence(result),
-          modelId: 'streaming-model',
-          timestamp: new Date(),
-          latencyMs
-        }
-
-        // Update predictions (keep last 10)
-        setPredictions((prev) => [prediction, ...prev].slice(0, 10))
-
-        // Save to history store for analytics
-        try {
-          const { usePredictionHistoryStore } = await import('../store/predictionHistoryStore')
-          usePredictionHistoryStore.getState().addPrediction(prediction)
-        } catch (e) {
-          // History store not available, continue
-        }
-
-        // Update throughput counter
-        predictionCountRef.current++
-      } catch (err) {
-        console.error('[Streaming Inference] Prediction failed:', err)
-        if (isMountedRef.current) {
-          setError(err instanceof Error ? err : new Error('Prediction failed'))
-        }
+        const { usePredictionHistoryStore } = await import('../store/predictionHistoryStore')
+        usePredictionHistoryStore.getState().addPrediction(prediction)
+      } catch (e) {
+        // History store not available, continue
       }
-    }, debounceDelay),
-    [isModelReady, predict, debounceDelay]
-  )
+
+      // Update throughput counter
+      predictionCountRef.current++
+    } catch (err) {
+      console.error('[Streaming Inference] Prediction failed:', err)
+      if (isMountedRef.current) {
+        setError(err instanceof Error ? err : new Error('Prediction failed'))
+      }
+    }
+  }, [isModelReady, predict])
+
+  /**
+   * Debounced wrapper for prediction processing
+   */
+  const processPrediction = useDebounce(processPredictionData, debounceDelay)
 
   /**
    * Calculate throughput every second
@@ -223,6 +294,11 @@ export function useStreamingInference(
       worker.onmessage = (event: MessageEvent<DataStreamResponse>) => {
         const response = event.data
 
+        // Ignore messages during cleanup
+        if (isCleaningUpRef.current) {
+          return
+        }
+
         switch (response.type) {
           case 'CONNECTED':
             if (isMountedRef.current) {
@@ -238,7 +314,7 @@ export function useStreamingInference(
             break
 
           case 'DATA':
-            if (isMountedRef.current && !isPaused) {
+            if (isMountedRef.current && !isPaused && !isCleaningUpRef.current) {
               pendingDataRef.current = response.data
               processPrediction(response.data)
             }
@@ -269,7 +345,9 @@ export function useStreamingInference(
             break
 
           case 'RECONNECTING':
-            console.log(`[Streaming Inference] Reconnecting attempt ${response.attempt} in ${response.delayMs}ms`)
+            if (!isCleaningUpRef.current) {
+              console.log(`[Streaming Inference] Reconnecting attempt ${response.attempt} in ${response.delayMs}ms`)
+            }
             break
         }
       }
@@ -306,10 +384,21 @@ export function useStreamingInference(
    * Stop streaming
    */
   const stop = useCallback(() => {
+    // Cancel any active prediction
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort('Streaming stopped')
+      abortControllerRef.current = null
+    }
+    
     if (workerRef.current) {
-      workerRef.current.postMessage({ type: 'DISCONNECT' } as DataStreamCommand)
+      try {
+        workerRef.current.postMessage({ type: 'DISCONNECT' } as DataStreamCommand)
+      } catch (err) {
+        // Worker may already be terminated
+      }
     }
     setIsStreaming(false)
+    activePredictionRef.current = false
   }, [])
 
   /**
@@ -334,20 +423,56 @@ export function useStreamingInference(
   useEffect(() => {
     return () => {
       isMountedRef.current = false
-      if (workerRef.current) {
-        workerRef.current.postMessage({ type: 'DISCONNECT' } as DataStreamCommand)
-        workerRef.current.terminate()
-        workerRef.current = null
+      isCleaningUpRef.current = true
+      
+      // Cancel any active prediction first
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort('Component unmounted')
+        abortControllerRef.current = null
       }
+      activePredictionRef.current = false
+      
+      // Stop streaming and cleanup worker
+      if (workerRef.current) {
+        try {
+          // Send disconnect first
+          workerRef.current.postMessage({ type: 'DISCONNECT' } as DataStreamCommand)
+          
+          // Give worker time to cleanup gracefully, then terminate
+          setTimeout(() => {
+            if (workerRef.current) {
+              try {
+                workerRef.current.terminate()
+              } catch (err) {
+                // Already terminated
+              }
+              workerRef.current = null
+            }
+          }, 100)
+        } catch (err) {
+          // Worker already terminated or errored
+          workerRef.current = null
+        }
+      }
+      
+      // Clear any pending data
+      pendingDataRef.current = null
     }
   }, [])
 
   // Auto-start when model is ready
   useEffect(() => {
-    if (isModelReady && !isStreaming && !error) {
+    if (isModelReady && !isStreaming && !error && !isCleaningUpRef.current) {
       start()
     }
-  }, [isModelReady, isStreaming, error, start])
+    
+    return () => {
+      // Stop streaming if model becomes unavailable
+      if (!isModelReady && isStreaming) {
+        stop()
+      }
+    }
+  }, [isModelReady, isStreaming, error, start, stop])
 
   return {
     predictions,

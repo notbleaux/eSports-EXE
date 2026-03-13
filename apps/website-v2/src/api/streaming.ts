@@ -1,12 +1,13 @@
 /**
  * Streaming API - WebSocket client for real-time predictions
  * 
- * [Ver001.000]
+ * [Ver001.001]
  */
 
 import { ML_API } from '../config/api'
 import { STREAMING_CONFIG } from '../config/models'
 import { streamingLogger } from '../utils/logger'
+import { isProduction } from '../config/environment'
 import type { StreamDataMessage, StreamPredictionMessage } from './types'
 
 export interface StreamingClientOptions {
@@ -24,20 +25,47 @@ export class StreamingClient {
   private reconnectTimeout: NodeJS.Timeout | null = null
   private heartbeatInterval: NodeJS.Timeout | null = null
   private isIntentionallyClosed = false
+  private lastUrl: string | null = null
   
   constructor(private options: StreamingClientOptions = {}) {}
+  
+  /**
+   * Enforce WSS protocol for secure connections
+   * Forces wss:// in production or when page is served over HTTPS
+   */
+  private enforceWss(url: string): string {
+    const isSecureContext = typeof window !== 'undefined' && window.location.protocol === 'https:'
+    const isProd = isProduction()
+    
+    if (url.startsWith('ws://') && (isProd || isSecureContext)) {
+      const secureUrl = url.replace('ws://', 'wss://')
+      streamingLogger.warn(`Insecure WebSocket detected. Forcing WSS: ${secureUrl}`)
+      return secureUrl
+    }
+    
+    return url
+  }
   
   /**
    * Connect to WebSocket
    */
   connect(url?: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const wsUrl = url || ML_API.streamingLocal
+      const rawUrl = url || this.lastUrl || ML_API.streamingLocal
+      const wsUrl = this.enforceWss(rawUrl)
+      
+      // Log warning if still using insecure WebSocket after enforcement
+      if (wsUrl.startsWith('ws://')) {
+        streamingLogger.warn('Using insecure WebSocket (ws://). Data may be intercepted.')
+      }
       
       streamingLogger.info(`Connecting to ${wsUrl}`)
       
       try {
         this.ws = new WebSocket(wsUrl)
+        
+        // Store URL for potential reconnection with same security enforcement
+        this.lastUrl = wsUrl
         
         this.ws.onopen = () => {
           streamingLogger.info('WebSocket connected')

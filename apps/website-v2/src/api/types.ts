@@ -13,6 +13,7 @@ export interface ApiRequestConfig {
   body?: unknown
   timeout?: number
   retry?: boolean
+  skipAuth?: boolean // Skip authentication for public endpoints
 }
 
 export interface ApiResponse<T> {
