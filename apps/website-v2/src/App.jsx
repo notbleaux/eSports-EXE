@@ -25,6 +25,7 @@ import QuaternaryGrid from './components/QuaternaryGrid';
 import { UnifiedGrid } from './components/UnifiedGrid';
 import { useWorkerError } from './hooks/useWorkerError';
 import { useState, useCallback } from 'react';
+import { useRowHeight } from './store/staticStore';
 
 // Page transition wrapper
 const PageTransition = ({ children, hubId }) => {
@@ -136,7 +137,6 @@ function DashboardGrid() {
         
         <UnifiedGrid
           mode="auto"
-          rowHeight={100}
           overscan={5}
           panelCount={50}
           onPerformanceMetrics={handleMetrics}

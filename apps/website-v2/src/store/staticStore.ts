@@ -7,6 +7,7 @@ import { create } from 'zustand'
 export interface GridConfig {
   cols: number
   rowHeight: number
+  gap: number
   margin: [number, number]
   containerPadding: [number, number]
   minW: number
@@ -16,8 +17,9 @@ export interface GridConfig {
 }
 
 const DEFAULT_CONFIG: GridConfig = {
-  cols: 6,
-  rowHeight: 80,
+  cols: 2,
+  rowHeight: 100,
+  gap: 4,
   margin: [16, 16],
   containerPadding: [16, 16],
   minW: 2,
@@ -32,3 +34,4 @@ export const useStaticStore = create<GridConfig>(() => DEFAULT_CONFIG)
 export const useGridConfig = () => useStaticStore((state) => state)
 export const useCols = () => useStaticStore((state) => state.cols)
 export const useRowHeight = () => useStaticStore((state) => state.rowHeight)
+export const useGap = () => useStaticStore((state) => state.gap)

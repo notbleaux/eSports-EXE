@@ -22,6 +22,7 @@ import { useNJZStore, useHubState } from '@/shared/store/njzStore';
 import AnalyticsWidget from './components/AnalyticsWidget';
 import PredictionCard from './components/PredictionCard';
 import useRotasData from './hooks/useRotasData';
+import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
 
 // ROTAS Hub Configuration - EXACT colors as specified
 const HUB_CONFIG = {
@@ -58,7 +59,7 @@ const ANALYTICS_LAYERS = [
   },
 ];
 
-function RotasHub() {
+function RotasHubContent() {
   const [activeLayer, setActiveLayer] = useState('surface');
   const [selectedMetric, setSelectedMetric] = useState(null);
   const { addNotification } = useNJZStore();
@@ -439,6 +440,14 @@ function RotasHub() {
         )}
       </AnimatePresence>
     </HubWrapper>
+  );
+}
+
+function RotasHub() {
+  return (
+    <PanelErrorBoundary panelId="rotas-hub" panelTitle="ROTAS Analytics" hub="ROTAS">
+      <RotasHubContent />
+    </PanelErrorBoundary>
   );
 }
 

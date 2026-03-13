@@ -6,19 +6,33 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { WorkerCommand, WorkerResponse, PanelData } from './grid.worker'
 
+export type WorkerErrorType = 'init-failed' | 'render-failed' | 'timeout' | 'unsupported' | 'unknown'
+
+export interface WorkerError {
+  type: WorkerErrorType
+  message: string
+  panelId?: string
+  timestamp: number
+}
+
 interface UseGridWorkerOptions {
   width?: number
   height?: number
-  onError?: (error: string) => void
+  onError?: (error: WorkerError) => void
   onRenderComplete?: (panelCount: number, renderTime: number) => void
+  maxRetries?: number
 }
 
 interface UseGridWorkerReturn {
   isReady: boolean
   isSupported: boolean
-  error: string | null
+  error: WorkerError | null
+  retry: () => void
+  retryCount: number
+  canRetry: boolean
   init: (canvas: HTMLCanvasElement, width: number, height: number) => Promise<void>
   render: (panels: PanelData[]) => Promise<void>
+  renderPanel: (panel: PanelData) => Promise<void>
   resize: (width: number, height: number) => Promise<void>
   clear: () => Promise<void>
   destroy: () => void
@@ -39,16 +53,18 @@ function checkSupport(): boolean {
  * React hook for managing grid worker
  */
 export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorkerReturn {
-  const { width = 800, height = 600, onError, onRenderComplete } = options
+  const { width = 800, height = 600, onError, onRenderComplete, maxRetries = 2 } = options
 
   const workerRef = useRef<Worker | null>(null)
   const canvasRef = useRef<OffscreenCanvas | null>(null)
-  const pendingRef = useRef<Map<string, { resolve: () => void; reject: (err: string) => void }>>(new Map())
+  const pendingRef = useRef<Map<string, { resolve: () => void; reject: (err: WorkerError) => void }>>(new Map())
   const messageIdRef = useRef(0)
+  const lastPanelsRef = useRef<PanelData[]>([])
 
   const [isReady, setIsReady] = useState(false)
   const [isSupported] = useState(() => checkSupport())
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<WorkerError | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   // Initialize worker on mount
   useEffect(() => {
@@ -92,20 +108,30 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
           resolvePending('CLEAR')
           break
 
-        case 'ERROR':
-          rejectPending(response.message)
-          onError?.(response.message)
-          if (isMounted) setError(response.message)
+        case 'ERROR': {
+          const workerError: WorkerError = {
+            type: classifyError(response.message),
+            message: response.message,
+            timestamp: Date.now(),
+          }
+          rejectPending(workerError)
+          onError?.(workerError)
+          if (isMounted) setError(workerError)
           break
+        }
       }
     }
 
     // Handle worker errors
     worker.onerror = (err) => {
-      const message = err.message || 'Worker error occurred'
-      rejectPending(message)
-      onError?.(message)
-      if (isMounted) setError(message)
+      const workerError: WorkerError = {
+        type: 'unknown',
+        message: err.message || 'Worker error occurred',
+        timestamp: Date.now(),
+      }
+      rejectPending(workerError)
+      onError?.(workerError)
+      if (isMounted) setError(workerError)
     }
 
     // Cleanup
@@ -127,9 +153,18 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
   }
 
   // Helper to reject pending promises
-  const rejectPending = (message: string) => {
-    pendingRef.current.forEach(({ reject }) => reject(message))
+  const rejectPending = (error: WorkerError) => {
+    pendingRef.current.forEach(({ reject }) => reject(error))
     pendingRef.current.clear()
+  }
+
+  // Classify error message to type
+  const classifyError = (message: string): WorkerErrorType => {
+    if (message.includes('INIT') || message.includes('initialize')) return 'init-failed'
+    if (message.includes('RENDER') || message.includes('render')) return 'render-failed'
+    if (message.includes('timeout') || message.includes('timed out')) return 'timeout'
+    if (message.includes('not supported')) return 'unsupported'
+    return 'unknown'
   }
 
   // Helper to send message and wait for response
@@ -137,18 +172,31 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     (command: WorkerCommand, operation: string): Promise<void> => {
       return new Promise((resolve, reject) => {
         if (!workerRef.current) {
-          reject('Worker not initialized')
+          const err: WorkerError = {
+            type: 'init-failed',
+            message: 'Worker not initialized',
+            timestamp: Date.now(),
+          }
+          reject(err)
           return
         }
 
         const id = `${operation}-${++messageIdRef.current}`
-        pendingRef.current.set(id, { resolve, reject })
+        pendingRef.current.set(id, { 
+          resolve, 
+          reject: (err: WorkerError) => reject(err)
+        })
 
         // Set timeout for operation
         setTimeout(() => {
           if (pendingRef.current.has(id)) {
             pendingRef.current.delete(id)
-            reject(`${operation} timed out`)
+            const timeoutError: WorkerError = {
+              type: 'timeout',
+              message: `${operation} timed out`,
+              timestamp: Date.now(),
+            }
+            reject(timeoutError)
           }
         }, 5000)
 
@@ -157,6 +205,21 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     },
     []
   )
+
+  // Retry last operation
+  const retry = useCallback(() => {
+    if (retryCount >= maxRetries) return
+    
+    setRetryCount(prev => prev + 1)
+    setError(null)
+    
+    // Retry last render if panels exist
+    if (lastPanelsRef.current.length > 0) {
+      render(lastPanelsRef.current).catch(() => {})
+    }
+  }, [retryCount, maxRetries])
+
+  const canRetry = retryCount < maxRetries
 
   /**
    * Initialize worker with canvas
@@ -207,10 +270,32 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
    */
   const render = useCallback(
     async (panels: PanelData[]): Promise<void> => {
+      lastPanelsRef.current = panels
       const command: WorkerCommand = { type: 'RENDER', panels }
       await sendMessage(command, 'RENDER')
     },
     [sendMessage]
+  )
+
+  /**
+   * Render single panel with error isolation
+   */
+  const renderPanel = useCallback(
+    async (panel: PanelData): Promise<void> => {
+      try {
+        await render([panel])
+      } catch (err) {
+        const workerError: WorkerError = {
+          type: 'render-failed',
+          message: err instanceof Error ? err.message : 'Panel render failed',
+          panelId: panel.id,
+          timestamp: Date.now(),
+        }
+        onError?.(workerError)
+        throw workerError
+      }
+    },
+    [render, onError]
   )
 
   /**
@@ -252,8 +337,12 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     isReady,
     isSupported,
     error,
+    retry,
+    retryCount,
+    canRetry,
     init,
     render,
+    renderPanel,
     resize,
     clear,
     destroy,

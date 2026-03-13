@@ -7,7 +7,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useGridWorker } from '../workers/useGridWorker'
-import { useCols, useRowHeight } from '../store/staticStore'
+import { useCols, useRowHeight, useGap } from '../store/staticStore'
 import { usePanels } from '../store/dynamicStore'
 import { useEphemeralStore } from '../store/ephemeralStore'
 
@@ -27,9 +27,6 @@ interface UnifiedGridProps {
   onWorkerFallback?: () => void
   loadingComponent?: React.ReactNode
 }
-
-const GAP = 4
-const COLS = 2
 
 // Feature detection
 const supportsOffscreenCanvas = () =>
@@ -60,11 +57,13 @@ export const UnifiedGrid: React.FC<UnifiedGridProps> = ({
 
   const staticCols = useCols()
   const staticRowHeight = useRowHeight()
+  const staticGap = useGap()
   const panels = usePanels()
   const isScrolling = useEphemeralStore((state) => state.isScrolling)
 
   const rowHeight = propRowHeight ?? staticRowHeight
-  const cols = COLS // Use fixed 2-column layout
+  const cols = staticCols
+  const GAP = staticGap
 
   const [containerWidth, setContainerWidth] = useState(800)
   const [isInitialized, setIsInitialized] = useState(false)

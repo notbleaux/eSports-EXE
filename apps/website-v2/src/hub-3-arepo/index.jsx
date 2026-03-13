@@ -28,6 +28,7 @@ import { colors } from '../theme/colors';
 // Import local components
 import DirectoryList from './components/DirectoryList';
 import HelpHub from './components/HelpHub';
+import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
 
 // HUB CONFIG - Exact colors as specified
 const HUB_CONFIG = {
@@ -65,7 +66,7 @@ const RECENT_QUESTIONS = [
   { id: 4, question: 'Custom data export formats', answers: 0, status: 'open' },
 ];
 
-function ArepoHub() {
+function ArepoHubContent() {
   const [activeTab, setActiveTab] = useState('directory'); // 'directory' | 'help'
   const [activeCategory, setActiveCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -348,6 +349,14 @@ function ArepoHub() {
         </div>
       </div>
     </HubWrapper>
+  );
+}
+
+function ArepoHub() {
+  return (
+    <PanelErrorBoundary panelId="arepo-hub" panelTitle="AREPO Directory" hub="AREPO">
+      <ArepoHubContent />
+    </PanelErrorBoundary>
   );
 }
 

@@ -11,6 +11,7 @@ import { colors } from '@/theme/colors';
 import { StatsGrid } from './components/StatsGrid';
 import { PlayerWidget } from './components/PlayerWidget';
 import { useSatorData } from './hooks/useSatorData';
+import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
 
 const HUB_CONFIG = {
   name: 'SATOR',
@@ -44,7 +45,7 @@ const itemVariants = {
   },
 };
 
-export function SatorHub() {
+function SatorHubContent() {
   const { stats, players, isLoading, error } = useSatorData();
 
   return (
@@ -358,6 +359,14 @@ export function SatorHub() {
         </motion.div>
       </div>
     </motion.div>
+  );
+}
+
+export function SatorHub() {
+  return (
+    <PanelErrorBoundary panelId="sator-hub" panelTitle="SATOR Observatory" hub="SATOR">
+      <SatorHubContent />
+    </PanelErrorBoundary>
   );
 }
 

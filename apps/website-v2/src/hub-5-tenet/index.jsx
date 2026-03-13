@@ -21,6 +21,7 @@ import { useNJZStore } from '@/shared/store/njzStore';
 import SatorSquare from './components/SatorSquare';
 import ControlPanel from './components/ControlPanel';
 import useTENETData from './hooks/useTENETData';
+import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
 
 // TENET Hub Configuration - EXACT colors as specified
 const HUB_CONFIG = {
@@ -40,7 +41,7 @@ const QUICK_STATS = [
   { label: 'Response', value: '12ms', icon: Zap, change: '-3ms' },
 ];
 
-function TENETHub() {
+function TENETHubContent() {
   const { addNotification } = useNJZStore();
   const {
     systemStatus,
@@ -351,6 +352,14 @@ function TENETHub() {
         </p>
       </motion.div>
     </HubWrapper>
+  );
+}
+
+function TENETHub() {
+  return (
+    <PanelErrorBoundary panelId="tenet-hub" panelTitle="TENET Control Center" hub="TENET">
+      <TENETHubContent />
+    </PanelErrorBoundary>
   );
 }
 

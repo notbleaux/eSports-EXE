@@ -25,6 +25,7 @@ import { colors } from '../theme/colors.js';
 import MapVisualization from './components/MapVisualization';
 import FogOverlay from './components/FogOverlay';
 import useOperaData from './hooks/useOperaData';
+import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
 
 // Hub Configuration with EXACT purple colors
 const HUB_CONFIG = {
@@ -61,7 +62,7 @@ const LAYERS = [
   { id: 'rotation', name: 'Rotation Paths', enabled: false },
 ];
 
-function OperaHub() {
+function OperaHubContent() {
   const [selectedMap, setSelectedMap] = useState(MAPS[0]);
   const [viewMode, setViewMode] = useState('tactical');
   const [activeLayers, setActiveLayers] = useState(
@@ -441,6 +442,14 @@ function OperaHub() {
         </div>
       </div>
     </HubWrapper>
+  );
+}
+
+function OperaHub() {
+  return (
+    <PanelErrorBoundary panelId="opera-hub" panelTitle="OPERA Nexus" hub="OPERA">
+      <OperaHubContent />
+    </PanelErrorBoundary>
   );
 }
 
