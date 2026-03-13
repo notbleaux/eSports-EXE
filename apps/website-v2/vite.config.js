@@ -1,9 +1,32 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import fs from 'fs'
+
+// Plugin to build and copy service worker
+const serviceWorkerPlugin = () => ({
+  name: 'service-worker',
+  writeBundle() {
+    // Copy sw.ts to dist as sw.js (simplified - in production use proper TS compilation)
+    const swSource = fs.readFileSync('./src/sw.ts', 'utf-8')
+    // Basic TS to JS conversion for SW (remove types)
+    const swJS = swSource
+      .replace(/: \w+/g, '')
+      .replace(/: [A-Z][a-zA-Z<>]*/g, '')
+      .replace(/interface \w+ \{[^}]+\}/g, '')
+      .replace(/type \w+ = .+/g, '')
+      .replace(/import\/export type[^;]+;/g, '')
+      .replace(/\/\/.*$/gm, '')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/<>/g, '')
+    
+    fs.writeFileSync('./dist/sw.js', swJS)
+    console.log('[Vite] Service worker built')
+  }
+})
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), serviceWorkerPlugin()],
   base: '/',
   resolve: {
     alias: {
