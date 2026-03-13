@@ -3,13 +3,12 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import fs from 'fs'
 
-// Plugin to build and copy service worker
+// Plugin to build and copy service worker and PWA assets
 const serviceWorkerPlugin = () => ({
   name: 'service-worker',
   writeBundle() {
-    // Copy sw.ts to dist as sw.js (simplified - in production use proper TS compilation)
+    // Copy sw.ts to dist as sw.js
     const swSource = fs.readFileSync('./src/sw.ts', 'utf-8')
-    // Basic TS to JS conversion for SW (remove types)
     const swJS = swSource
       .replace(/: \w+/g, '')
       .replace(/: [A-Z][a-zA-Z<>]*/g, '')
@@ -21,7 +20,16 @@ const serviceWorkerPlugin = () => ({
       .replace(/<>/g, '')
     
     fs.writeFileSync('./dist/sw.js', swJS)
-    console.log('[Vite] Service worker built')
+    
+    // Copy manifest and icons
+    fs.copyFileSync('./public/manifest.json', './dist/manifest.json')
+    
+    // Copy icons (SVG for now, PNG would be generated in production)
+    if (!fs.existsSync('./dist/icons')) fs.mkdirSync('./dist/icons')
+    fs.copyFileSync('./public/icons/icon-192x192.svg', './dist/icons/icon-192x192.svg')
+    fs.copyFileSync('./public/icons/icon-512x512.svg', './dist/icons/icon-512x512.svg')
+    
+    console.log('[Vite] PWA assets built')
   }
 })
 
