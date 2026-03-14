@@ -17,6 +17,7 @@ from fastapi import FastAPI, HTTPException, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import httpx
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -557,7 +558,7 @@ class ParityCheckCoordinator:
     def _build_count_url(self, service: ServiceInfo, table: str) -> str:
         """Build count URL for a service"""
         base = service.base_url or f"http://{service.host}:{service.port}"
-        return f"{base.rstrip('/')}/api/v1/count?table={table}"
+        return f"{base.rstrip('/')}/v1/count?table={table}"
     
     async def _fetch_count(self, url: str) -> int:
         """Fetch count from service"""
@@ -681,13 +682,22 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS
+# CORS - Secure configuration with environment-based origins
+# Default allows common local development ports
+allowed_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://localhost:4173,http://127.0.0.1:3000,http://127.0.0.1:5173"
+).split(",")
+# Strip whitespace from origins
+allowed_origins = [origin.strip() for origin in allowed_origins if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    max_age=600,  # 10 minutes preflight cache
 )
 
 # ============================================================================
@@ -701,7 +711,8 @@ async def root():
         "name": "eXe Directory",
         "version": "1.0.0",
         "system": "SATOR-eXe-ROTAS",
-        "status": "operational"
+        "status": "operational",
+        "api_version": "v1"
     }
 
 @app.get("/health")
@@ -713,16 +724,38 @@ async def directory_health():
         "timestamp": datetime.now().isoformat()
     }
 
-# Service Registration
+# v1 API Routes
+@app.get("/v1/")
+async def v1_root():
+    """v1 API info"""
+    return {
+        "name": "eXe Directory",
+        "version": "1.0.0",
+        "api_version": "v1",
+        "system": "SATOR-eXe-ROTAS",
+        "status": "operational"
+    }
+
+@app.get("/v1/health")
+async def v1_directory_health():
+    """v1 Directory self-health check"""
+    return {
+        "status": "healthy",
+        "service": "exe-directory",
+        "api_version": "v1",
+        "timestamp": datetime.now().isoformat()
+    }
+
+# Service Registration (Legacy - maintained for backward compatibility)
 @app.post("/register", response_model=Dict[str, Any])
 async def register_service(reg: ServiceRegistration):
-    """Register a new service or update existing"""
+    """Register a new service or update existing (deprecated, use /v1/register)"""
     registry = ServiceRegistry()
     return registry.register_service(reg)
 
 @app.post("/register/{service_id}/instance", response_model=Dict[str, Any])
 async def register_instance(service_id: str, inst: ServiceInstanceRegistration):
-    """Register a service instance"""
+    """Register a service instance (deprecated, use /v1/register/{service_id}/instance)"""
     registry = ServiceRegistry()
     return registry.register_instance(service_id, inst)
 
@@ -731,13 +764,13 @@ async def list_services(
     service_type: Optional[str] = Query(None, pattern="^(core|game|pipeline|platform)$"),
     active_only: bool = Query(True)
 ):
-    """List all registered services"""
+    """List all registered services (deprecated, use /v1/services)"""
     registry = ServiceRegistry()
     return registry.get_services(service_type, active_only)
 
 @app.get("/services/{service_id}", response_model=ServiceInfo)
 async def get_service(service_id: str):
-    """Get a specific service"""
+    """Get a specific service (deprecated, use /v1/services/{service_id})"""
     registry = ServiceRegistry()
     service = registry.get_service(service_id)
     if not service:
@@ -746,26 +779,125 @@ async def get_service(service_id: str):
 
 @app.delete("/services/{service_id}")
 async def deregister_service(service_id: str):
+    """Deregister a service (deprecated, use /v1/services/{service_id})"""
+    registry = ServiceRegistry()
+    if registry.deregister_service(service_id):
+        return {"message": f"Service {service_id} deregistered"}
+    raise HTTPException(status_code=404, detail="Service not found")
+
+# v1 Service Registration
+@app.post("/v1/register", response_model=Dict[str, Any])
+async def v1_register_service(reg: ServiceRegistration):
+    """Register a new service or update existing"""
+    registry = ServiceRegistry()
+    return registry.register_service(reg)
+
+@app.post("/v1/register/{service_id}/instance", response_model=Dict[str, Any])
+async def v1_register_instance(service_id: str, inst: ServiceInstanceRegistration):
+    """Register a service instance"""
+    registry = ServiceRegistry()
+    return registry.register_instance(service_id, inst)
+
+@app.get("/v1/services", response_model=List[ServiceInfo])
+async def v1_list_services(
+    service_type: Optional[str] = Query(None, pattern="^(core|game|pipeline|platform)$"),
+    active_only: bool = Query(True)
+):
+    """List all registered services"""
+    registry = ServiceRegistry()
+    return registry.get_services(service_type, active_only)
+
+@app.get("/v1/services/{service_id}", response_model=ServiceInfo)
+async def v1_get_service(service_id: str):
+    """Get a specific service"""
+    registry = ServiceRegistry()
+    service = registry.get_service(service_id)
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
+    return service
+
+@app.delete("/v1/services/{service_id}")
+async def v1_deregister_service(service_id: str):
     """Deregister a service"""
     registry = ServiceRegistry()
     if registry.deregister_service(service_id):
         return {"message": f"Service {service_id} deregistered"}
     raise HTTPException(status_code=404, detail="Service not found")
 
-# Health Check Endpoints
+# Health Check Endpoints (Legacy)
 @app.get("/health/all", response_model=List[HealthStatus])
 async def check_all_health():
-    """Check health of all services"""
+    """Check health of all services (deprecated, use /v1/health/all)"""
     return await health_orchestrator.check_all_services()
 
 @app.get("/health/{service_id}", response_model=HealthStatus)
 async def check_service_health(service_id: str):
+    """Check health of a specific service (deprecated, use /v1/health/{service_id})"""
+    return await health_orchestrator.check_service(service_id)
+
+# v1 Health Check Endpoints
+@app.get("/v1/health/all", response_model=List[HealthStatus])
+async def v1_check_all_health():
+    """Check health of all services"""
+    return await health_orchestrator.check_all_services()
+
+@app.get("/v1/health/{service_id}", response_model=HealthStatus)
+async def v1_check_service_health(service_id: str):
     """Check health of a specific service"""
     return await health_orchestrator.check_service(service_id)
 
-# Parity Check Endpoints
+# Parity Check Endpoints (Legacy)
 @app.post("/parity-check", response_model=List[ParityCheckResult])
 async def trigger_parity_check(
+    request: Optional[ParityCheckRequest] = None,
+    background_tasks: BackgroundTasks = None
+):
+    """Trigger parity validation between RAWS and BASE (deprecated, use /v1/parity-check)"""
+    req = request or ParityCheckRequest(check_all=True)
+    
+    # Run immediately for API response
+    results = await parity_coordinator.run_parity_check(
+        check_all=req.check_all
+    )
+    return results
+
+@app.get("/parity-status", response_model=ParityStatus)
+async def get_parity_status(limit: int = Query(50, ge=1, le=500)):
+    """Get RAWS/BASE synchronization status (deprecated, use /v1/parity-status)"""
+    return parity_coordinator.get_parity_status(limit)
+
+@app.get("/parity-checks/history")
+async def get_parity_history(
+    service: Optional[str] = None,
+    table: Optional[str] = None,
+    limit: int = Query(50, ge=1, le=500)
+):
+    """Get parity check history (deprecated, use /v1/parity-checks/history)"""
+    with get_db() as conn:
+        query = """
+            SELECT pc.*, pcfg.source_service, pcfg.target_service, pcfg.table_name
+            FROM parity_checks pc
+            JOIN parity_configs pcfg ON pc.config_id = pcfg.id
+            WHERE pc.status != 'running'
+        """
+        params = []
+        
+        if service:
+            query += " AND (pcfg.source_service = ? OR pcfg.target_service = ?)"
+            params.extend([service, service])
+        if table:
+            query += " AND pcfg.table_name = ?"
+            params.append(table)
+        
+        query += " ORDER BY pc.completed_at DESC LIMIT ?"
+        params.append(limit)
+        
+        rows = conn.execute(query, params).fetchall()
+        return [dict(r) for r in rows]
+
+# v1 Parity Check Endpoints
+@app.post("/v1/parity-check", response_model=List[ParityCheckResult])
+async def v1_trigger_parity_check(
     request: Optional[ParityCheckRequest] = None,
     background_tasks: BackgroundTasks = None
 ):
@@ -778,13 +910,13 @@ async def trigger_parity_check(
     )
     return results
 
-@app.get("/parity-status", response_model=ParityStatus)
-async def get_parity_status(limit: int = Query(50, ge=1, le=500)):
+@app.get("/v1/parity-status", response_model=ParityStatus)
+async def v1_get_parity_status(limit: int = Query(50, ge=1, le=500)):
     """Get RAWS/BASE synchronization status"""
     return parity_coordinator.get_parity_status(limit)
 
-@app.get("/parity-checks/history")
-async def get_parity_history(
+@app.get("/v1/parity-checks/history")
+async def v1_get_parity_history(
     service: Optional[str] = None,
     table: Optional[str] = None,
     limit: int = Query(50, ge=1, le=500)
@@ -812,10 +944,10 @@ async def get_parity_history(
         rows = conn.execute(query, params).fetchall()
         return [dict(r) for r in rows]
 
-# Data Routes
+# Data Routes (Legacy)
 @app.post("/routes")
 async def create_route(route: RouteRegistration):
-    """Register a data route"""
+    """Register a data route (deprecated, use /v1/routes)"""
     with get_db() as conn:
         cursor = conn.execute("""
             INSERT INTO data_routes 
@@ -842,6 +974,46 @@ async def create_route(route: RouteRegistration):
 
 @app.get("/routes")
 async def list_routes(active_only: bool = True):
+    """List data routes (deprecated, use /v1/routes)"""
+    with get_db() as conn:
+        query = "SELECT * FROM data_routes"
+        if active_only:
+            query += " WHERE is_active = 1"
+        query += " ORDER BY created_at DESC"
+        
+        rows = conn.execute(query).fetchall()
+        return [dict(r) for r in rows]
+
+# v1 Data Routes
+@app.post("/v1/routes")
+async def v1_create_route(route: RouteRegistration):
+    """Register a data route"""
+    with get_db() as conn:
+        cursor = conn.execute("""
+            INSERT INTO data_routes 
+            (route_id, source_service, target_service, route_type, 
+             endpoint_path, transformation_rules, retry_policy)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(route_id) DO UPDATE SET
+            source_service = excluded.source_service,
+            target_service = excluded.target_service,
+            route_type = excluded.route_type,
+            endpoint_path = excluded.endpoint_path,
+            transformation_rules = excluded.transformation_rules,
+            retry_policy = excluded.retry_policy,
+            is_active = 1
+            RETURNING *
+        """, (
+            route.route_id, route.source_service, route.target_service,
+            route.route_type, route.endpoint_path,
+            json.dumps(route.transformation_rules) if route.transformation_rules else None,
+            json.dumps(route.retry_policy) if route.retry_policy else None
+        ))
+        conn.commit()
+        return dict(cursor.fetchone())
+
+@app.get("/v1/routes")
+async def v1_list_routes(active_only: bool = True):
     """List data routes"""
     with get_db() as conn:
         query = "SELECT * FROM data_routes"
@@ -852,9 +1024,34 @@ async def list_routes(active_only: bool = True):
         rows = conn.execute(query).fetchall()
         return [dict(r) for r in rows]
 
-# System Events
+# System Events (Legacy)
 @app.get("/events")
 async def get_events(
+    service_id: Optional[str] = None,
+    severity: Optional[str] = Query(None, pattern="^(info|warning|error|critical)$"),
+    limit: int = Query(100, ge=1, le=1000)
+):
+    """Get system events (deprecated, use /v1/events)"""
+    with get_db() as conn:
+        query = "SELECT * FROM system_events WHERE 1=1"
+        params = []
+        
+        if service_id:
+            query += " AND service_id = ?"
+            params.append(service_id)
+        if severity:
+            query += " AND severity = ?"
+            params.append(severity)
+        
+        query += " ORDER BY created_at DESC LIMIT ?"
+        params.append(limit)
+        
+        rows = conn.execute(query, params).fetchall()
+        return [dict(r) for r in rows]
+
+# v1 System Events
+@app.get("/v1/events")
+async def v1_get_events(
     service_id: Optional[str] = None,
     severity: Optional[str] = Query(None, pattern="^(info|warning|error|critical)$"),
     limit: int = Query(100, ge=1, le=1000)

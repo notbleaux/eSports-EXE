@@ -611,6 +611,381 @@ async def get_collection_status() -> dict:
 
 
 # ============================================================================
+# AREPO LAYER QUERIES (Missing function added)
+# ============================================================================
+
+async def get_arepo_markers(match_id: str, round_number: int) -> list[dict]:
+    """
+    Fetch AREPO Layer 4 death stain markers for a specific round.
+    """
+    pool = await db.get_pool()
+    if not pool:
+        return []
+    
+    try:
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                """
+                SELECT 
+                    marker_id,
+                    player_id,
+                    x,
+                    y,
+                    marker_type,
+                    timestamp
+                FROM arepo_markers 
+                WHERE match_id = $1 AND round_number = $2
+                ORDER BY timestamp
+                """,
+                match_id, round_number
+            )
+            
+            return [dict(row) for row in rows]
+            
+    except Exception as e:
+        logger.error(f"Error fetching AREPO markers: {e}")
+        return []
+
+
+# ============================================================================
+# SEARCH QUERIES
+# ============================================================================
+
+async def search_players(
+    query: str,
+    game: Optional[str] = None,
+    team: Optional[str] = None,
+    region: Optional[str] = None,
+    limit: int = 20,
+    offset: int = 0,
+    sort_by: str = "relevance"
+) -> tuple[list[dict], int]:
+    """
+    Full-text search for players with relevance ranking.
+    
+    Uses PostgreSQL full-text search with fallback to trigram similarity.
+    All user inputs are parameterized to prevent SQL injection.
+    """
+    pool = await db.get_pool()
+    if not pool:
+        return [], 0
+    
+    try:
+        async with pool.acquire() as conn:
+            # Build WHERE conditions safely with parameters
+            conditions = []
+            params = []
+            param_idx = 1
+            
+            # Full-text search condition using websearch_to_tsquery for natural language
+            conditions.append(f"""
+                (
+                    p.search_vector @@ websearch_to_tsquery('english', ${param_idx})
+                    OR p.name ILIKE ${param_idx + 1}
+                    OR similarity(p.name, ${param_idx}) > 0.3
+                )
+            """)
+            params.extend([query, f"%{query}%"])
+            param_idx += 2
+            
+            # Optional filters
+            if game:
+                conditions.append(f"p.game = ${param_idx}")
+                params.append(game)
+                param_idx += 1
+            
+            if team:
+                conditions.append(f"t.name ILIKE ${param_idx}")
+                params.append(f"%{team}%")
+                param_idx += 1
+            
+            if region:
+                conditions.append(f"p.region = ${param_idx}")
+                params.append(region)
+                param_idx += 1
+            
+            where_clause = " AND ".join(conditions)
+            
+            # Determine sort order safely
+            sort_sql = {
+                "relevance": "ts_rank(p.search_vector, websearch_to_tsquery('english', $1)) DESC",
+                "name": "p.name ASC",
+                "date": "p.updated_at DESC NULLS LAST"
+            }.get(sort_by, "ts_rank(p.search_vector, websearch_to_tsquery('english', $1)) DESC")
+            
+            # Get total count
+            count_sql = f"""
+                SELECT COUNT(*) 
+                FROM players p
+                LEFT JOIN teams t ON p.current_team_id = t.id
+                WHERE {where_clause}
+            """
+            total = await conn.fetchval(count_sql, *params)
+            
+            # Get paginated results
+            # Select latest performance stats if available
+            query_sql = f"""
+                SELECT 
+                    p.id::text,
+                    p.name,
+                    p.real_name,
+                    t.name as team,
+                    p.region,
+                    p.nationality,
+                    p.role,
+                    p.game,
+                    p.created_at,
+                    p.updated_at,
+                    ts_rank(p.search_vector, websearch_to_tsquery('english', $1)) as rank,
+                    -- Latest performance stats
+                    pp.sim_rating,
+                    pp.rar_score,
+                    pp.investment_grade
+                FROM players p
+                LEFT JOIN teams t ON p.current_team_id = t.id
+                LEFT JOIN LATERAL (
+                    SELECT sim_rating, rar_score, investment_grade
+                    FROM player_performance
+                    WHERE player_id = p.id
+                    ORDER BY realworld_time DESC
+                    LIMIT 1
+                ) pp ON true
+                WHERE {where_clause}
+                ORDER BY {sort_sql}
+                LIMIT ${param_idx} OFFSET ${param_idx + 1}
+            """
+            query_params = params + [limit, offset]
+            
+            rows = await conn.fetch(query_sql, *query_params)
+            
+            results = []
+            for row in rows:
+                result = dict(row)
+                if result.get('created_at'):
+                    result['created_at'] = result['created_at'].isoformat()
+                if result.get('updated_at'):
+                    result['updated_at'] = result['updated_at'].isoformat()
+                results.append(result)
+            
+            return results, total or 0
+            
+    except Exception as e:
+        logger.error(f"Error searching players: {e}")
+        return [], 0
+
+
+async def search_teams(
+    query: str,
+    game: Optional[str] = None,
+    region: Optional[str] = None,
+    limit: int = 20,
+    offset: int = 0,
+    sort_by: str = "relevance"
+) -> tuple[list[dict], int]:
+    """
+    Full-text search for teams with relevance ranking.
+    """
+    pool = await db.get_pool()
+    if not pool:
+        return [], 0
+    
+    try:
+        async with pool.acquire() as conn:
+            conditions = []
+            params = []
+            param_idx = 1
+            
+            # Search condition
+            conditions.append(f"""
+                (
+                    t.search_vector @@ websearch_to_tsquery('english', ${param_idx})
+                    OR t.name ILIKE ${param_idx + 1}
+                    OR similarity(t.name, ${param_idx}) > 0.3
+                )
+            """)
+            params.extend([query, f"%{query}%"])
+            param_idx += 2
+            
+            if game:
+                conditions.append(f"t.game = ${param_idx}")
+                params.append(game)
+                param_idx += 1
+            
+            if region:
+                conditions.append(f"t.region = ${param_idx}")
+                params.append(region)
+                param_idx += 1
+            
+            where_clause = " AND ".join(conditions)
+            
+            sort_sql = {
+                "relevance": "ts_rank(t.search_vector, websearch_to_tsquery('english', $1)) DESC",
+                "name": "t.name ASC",
+                "date": "t.updated_at DESC NULLS LAST"
+            }.get(sort_by, "ts_rank(t.search_vector, websearch_to_tsquery('english', $1)) DESC")
+            
+            # Get total count
+            count_sql = f"""
+                SELECT COUNT(*) 
+                FROM teams t
+                WHERE {where_clause}
+            """
+            total = await conn.fetchval(count_sql, *params)
+            
+            # Get results with player count
+            query_sql = f"""
+                SELECT 
+                    t.id::text,
+                    t.name,
+                    t.location,
+                    t.region,
+                    t.game,
+                    t.created_at,
+                    t.updated_at,
+                    ts_rank(t.search_vector, websearch_to_tsquery('english', $1)) as rank,
+                    COUNT(p.id) as player_count
+                FROM teams t
+                LEFT JOIN players p ON p.current_team_id = t.id
+                WHERE {where_clause}
+                GROUP BY t.id, t.name, t.location, t.region, t.game, 
+                         t.created_at, t.updated_at, t.search_vector
+                ORDER BY {sort_sql}
+                LIMIT ${param_idx} OFFSET ${param_idx + 1}
+            """
+            query_params = params + [limit, offset]
+            
+            rows = await conn.fetch(query_sql, *query_params)
+            
+            results = []
+            for row in rows:
+                result = dict(row)
+                if result.get('created_at'):
+                    result['created_at'] = result['created_at'].isoformat()
+                if result.get('updated_at'):
+                    result['updated_at'] = result['updated_at'].isoformat()
+                results.append(result)
+            
+            return results, total or 0
+            
+    except Exception as e:
+        logger.error(f"Error searching teams: {e}")
+        return [], 0
+
+
+async def search_matches(
+    query: str,
+    game: Optional[str] = None,
+    tournament: Optional[str] = None,
+    map_name: Optional[str] = None,
+    limit: int = 20,
+    offset: int = 0,
+    sort_by: str = "relevance"
+) -> tuple[list[dict], int]:
+    """
+    Full-text search for matches with relevance ranking.
+    
+    Searches tournament names and participating team names.
+    """
+    pool = await db.get_pool()
+    if not pool:
+        return [], 0
+    
+    try:
+        async with pool.acquire() as conn:
+            conditions = []
+            params = []
+            param_idx = 1
+            
+            # Search across tournament and team names
+            conditions.append(f"""
+                (
+                    m.search_vector @@ websearch_to_tsquery('english', ${param_idx})
+                    OR m.tournament ILIKE ${param_idx + 1}
+                    OR pp.team ILIKE ${param_idx + 1}
+                    OR similarity(m.tournament, ${param_idx}) > 0.3
+                )
+            """)
+            params.extend([query, f"%{query}%"])
+            param_idx += 2
+            
+            if game:
+                conditions.append(f"m.game = ${param_idx}")
+                params.append(game)
+                param_idx += 1
+            
+            if tournament:
+                conditions.append(f"m.tournament ILIKE ${param_idx}")
+                params.append(f"%{tournament}%")
+                param_idx += 1
+            
+            if map_name:
+                conditions.append(f"m.map_name ILIKE ${param_idx}")
+                params.append(f"%{map_name}%")
+                param_idx += 1
+            
+            where_clause = " AND ".join(conditions)
+            
+            sort_sql = {
+                "relevance": "ts_rank(m.search_vector, websearch_to_tsquery('english', $1)) DESC",
+                "name": "m.tournament ASC",
+                "date": "m.match_date DESC NULLS LAST"
+            }.get(sort_by, "ts_rank(m.search_vector, websearch_to_tsquery('english', $1)) DESC")
+            
+            # Get total count
+            count_sql = f"""
+                SELECT COUNT(DISTINCT m.id)
+                FROM matches m
+                LEFT JOIN player_performance pp ON pp.match_id = m.id::text
+                WHERE {where_clause}
+            """
+            total = await conn.fetchval(count_sql, *params)
+            
+            # Get results with team names
+            query_sql = f"""
+                SELECT 
+                    m.id::text,
+                    m.tournament,
+                    m.map_name,
+                    m.game,
+                    m.match_date,
+                    m.created_at,
+                    ts_rank(m.search_vector, websearch_to_tsquery('english', $1)) as rank,
+                    COUNT(DISTINCT pp.player_id) as player_count,
+                    ARRAY_AGG(DISTINCT pp.team) FILTER (WHERE pp.team IS NOT NULL) as teams
+                FROM matches m
+                LEFT JOIN player_performance pp ON pp.match_id = m.id::text
+                WHERE {where_clause}
+                GROUP BY m.id, m.tournament, m.map_name, m.game, 
+                         m.match_date, m.created_at, m.search_vector
+                ORDER BY {sort_sql}
+                LIMIT ${param_idx} OFFSET ${param_idx + 1}
+            """
+            query_params = params + [limit, offset]
+            
+            rows = await conn.fetch(query_sql, *query_params)
+            
+            results = []
+            for row in rows:
+                result = dict(row)
+                if result.get('match_date'):
+                    result['match_date'] = result['match_date'].isoformat()
+                if result.get('created_at'):
+                    result['created_at'] = result['created_at'].isoformat()
+                # Extract first two teams as team1 and team2
+                teams = result.get('teams') or []
+                result['team1'] = teams[0] if len(teams) > 0 else None
+                result['team2'] = teams[1] if len(teams) > 1 else None
+                del result['teams']
+                results.append(result)
+            
+            return results, total or 0
+            
+    except Exception as e:
+        logger.error(f"Error searching matches: {e}")
+        return [], 0
+
+
+# ============================================================================
 # HEALTH CHECK
 # ============================================================================
 

@@ -1,0 +1,60 @@
+[Unit]
+# SATOR TRINITY + OPERA Harvest Service
+# Version: [Ver001.000]
+Description=SATOR TRINITY+OPERA Harvest Orchestrator
+Documentation=https://github.com/notbleaux/eSports-EXE/wiki/Harvest-Architecture
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+# Service Configuration
+Type=simple
+User=sator
+Group=sator
+WorkingDirectory=/opt/sator
+EnvironmentFile=/opt/sator/.env
+
+# Process Configuration
+ExecStartPre=/bin/mkdir -p /var/lib/sator /var/log/sator
+ExecStartPre=/bin/chown sator:sator /var/lib/sator /var/log/sator
+ExecStartPre=/opt/sator/venv/bin/python -m axiom_esports_data.harvest.pre_flight
+
+# Main Process
+ExecStart=/opt/sator/venv/bin/python -m axiom_esports_data.harvest.orchestrator \
+    --workers ${HARVEST_WORKERS:-2} \
+    --queue-db ${QUEUE_DB_PATH:-/var/lib/sator/queue.db} \
+    --log-file ${LOG_FILE:-/var/log/sator/harvest.log}
+
+# Restart Configuration
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Graceful Shutdown
+TimeoutStopSec=60
+KillSignal=SIGTERM
+SendSIGKILL=yes
+
+# Resource Limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Security Settings
+NoNewPrivileges=false
+ProtectSystem=false
+ProtectHome=false
+ReadWritePaths=/var/lib/sator /var/log/sator
+
+# Environment Variables (overrides from EnvironmentFile)
+Environment="PYTHONPATH=/opt/sator"
+Environment="PYTHONUNBUFFERED=1"
+Environment="QUEUE_DB_PATH=/var/lib/sator/queue.db"
+
+# Logging
+StandardOutput=append:/var/log/sator/harvest.stdout.log
+StandardError=append:/var/log/sator/harvest.stderr.log
+SyslogIdentifier=sator-harvest
+
+[Install]
+WantedBy=multi-user.target

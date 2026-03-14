@@ -1,7 +1,7 @@
 /**
  * ROTAS Hub - Module exports
  * The Harmonic Layer - Analytics and Predictions
- * [Ver001.001]
+ * [Ver002.000] - Consolidated exports
  */
 
 import RotasHub from './index.jsx';

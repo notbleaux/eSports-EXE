@@ -2,7 +2,7 @@
  * Health Check API Endpoint
  * Returns system health status for monitoring and load balancers
  * 
- * [Ver001.000]
+ * [Ver001.001] - Updated health endpoint to use /v1/ prefix
  */
 
 import { api } from './client'
@@ -166,7 +166,7 @@ async function checkAPIHealth(): Promise<APIHealth> {
   
   try {
     // Try to fetch a lightweight endpoint
-    const response = await api.get('/health/ping', { 
+    const response = await api.get('/v1/health/ping', { 
       timeout: 5000,
       retry: false 
     })

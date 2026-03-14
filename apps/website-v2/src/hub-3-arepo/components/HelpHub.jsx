@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, MessageSquare, CheckCircle, Circle, ChevronDown } from 'lucide-react';
-import { GlassCard } from '../../components/ui/GlassCard';
+import { GlassCard } from '@/components/ui/GlassCard';
 
 function HelpHub({ 
   questions, 

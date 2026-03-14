@@ -3,7 +3,7 @@
  * Manages 3+ models simultaneously with <50ms switching
  * Integrates with mlCacheStore for LRU eviction
  * 
- * [Ver001.001] - Migrated to centralized logger
+ * [Ver001.002] - Added ML Model Registry integration support
  */
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'

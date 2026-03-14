@@ -55,6 +55,9 @@ export default defineConfig({
       '@hub-5': path.resolve(__dirname, './src/hub-5-tenet')
     }
   },
+  worker: {
+    format: 'es'
+  },
   build: {
     outDir: 'dist',
     sourcemap: true,

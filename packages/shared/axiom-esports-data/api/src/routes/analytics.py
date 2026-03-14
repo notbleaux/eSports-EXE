@@ -11,7 +11,7 @@ from analytics.src.rar.decomposer import RARDecomposer
 from analytics.src.investment.grader import InvestmentGrader
 from api.src.db import get_player_record
 
-router = APIRouter(prefix="/api/analytics", tags=["analytics"])
+router = APIRouter(prefix="/v1/analytics", tags=["analytics"])
 
 _sim_calc = SimRatingCalculator()
 _rar = RARDecomposer()

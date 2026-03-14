@@ -1,33 +1,51 @@
 /**
  * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
- * Modernized with enhanced visuals and animations
+ * Modernized with enhanced visuals, animations, and code splitting
  * 
- * [Ver004.000] - Added top-level error boundaries
+ * [Ver005.000] - Added React.lazy() for route-based code splitting
  */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Navigation and Layout Components
+// Navigation and Layout Components (eager loaded for fast initial render)
 import Navigation from './components/Navigation';
 import ModernQuarterGrid from './components/ModernQuarterGrid';
 import { AnimatedBackground } from './components/ui/AnimatedBackground';
 import { PanelSkeleton } from './components/grid/PanelSkeleton';
 import { PanelErrorBoundary } from './components/grid/PanelErrorBoundary';
 
-// Error Boundaries
-import { AppErrorBoundary, MLInferenceErrorBoundary, StreamingErrorBoundary } from './components/error';
+// Error Boundaries (eager loaded for error handling)
+import { 
+  AppErrorBoundary, 
+  MLInferenceErrorBoundary, 
+  StreamingErrorBoundary,
+  HubErrorBoundary 
+} from './components/error';
 
-// Hub Components
-import SatorHub from './hub-1-sator/index.jsx';
-import RotasHub from './hub-2-rotas/index.jsx';
-import ArepoHub from './hub-3-arepo/index.jsx';
-import OperaHub from './hub-4-opera/index.jsx';
-import TenetHub from './hub-5-tenet/index.jsx';
+// Lazy load hub components for code splitting
+const SatorHub = lazy(() => import('./hub-1-sator/index.jsx'));
+const RotasHub = lazy(() => import('./hub-2-rotas/index.jsx'));
+const ArepoHub = lazy(() => import('./hub-3-arepo/index.jsx'));
+const OperaHub = lazy(() => import('./hub-4-opera/index.tsx'));
+const TenetHub = lazy(() => import('./hub-5-tenet/index.jsx'));
+
+// Lazy load heavy components
+const MLPredictionPanel = lazy(() => import('./components/MLPredictionPanel'));
+const StreamingPredictionPanel = lazy(() => import('./components/StreamingPredictionPanel'));
+const PerformanceDashboard = lazy(() => import('./performance/PerformanceDashboard'));
 
 import { UnifiedGrid } from './components/UnifiedGrid';
 import { useWorkerError } from './hooks/useWorkerError';
 import { useRowHeight } from './store/staticStore';
+import { performanceMonitor } from './monitoring/PerformanceMonitor';
+
+// Loading fallback component
+const HubLoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <PanelSkeleton variant="hub-loading" title="Loading Hub..." />
+  </div>
+);
 
 // Page transition wrapper
 const PageTransition = ({ children, hubId }) => {
@@ -151,12 +169,20 @@ function DashboardGrid() {
   );
 }
 
-// Route change handler
+// Route change handler with performance tracking
 const RouteChangeHandler = () => {
   const location = useLocation();
   
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Track route change performance
+    const routeName = location.pathname === '/' ? 'home' : location.pathname.slice(1);
+    performanceMonitor.markUserTiming(`route-${routeName}`);
+    
+    return () => {
+      performanceMonitor.measureUserTiming(`route-${routeName}`);
+    };
   }, [location.pathname]);
   
   return null;
@@ -164,6 +190,23 @@ const RouteChangeHandler = () => {
 
 function AppContent() {
   const location = useLocation();
+  const [showPerformanceDashboard, setShowPerformanceDashboard] = useState(false);
+
+  // Initialize performance monitoring
+  useEffect(() => {
+    performanceMonitor.initialize();
+    
+    // Enable performance dashboard with keyboard shortcut (Ctrl+Shift+P)
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+        e.preventDefault();
+        setShowPerformanceDashboard(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#050508] text-white overflow-x-hidden">
@@ -200,14 +243,18 @@ function AppContent() {
               } 
             />
             
-            {/* HUB Routes - Wrapped with ML Error Boundaries */}
+            {/* HUB Routes - Wrapped with HubErrorBoundary and specific error boundaries */}
             <Route 
               path="/sator" 
               element={
                 <PageTransition hubId="sator">
-                  <MLInferenceErrorBoundary>
-                    <SatorHub />
-                  </MLInferenceErrorBoundary>
+                  <HubErrorBoundary hubName="sator">
+                    <MLInferenceErrorBoundary>
+                      <Suspense fallback={<HubLoadingFallback />}>
+                        <SatorHub />
+                      </Suspense>
+                    </MLInferenceErrorBoundary>
+                  </HubErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -215,11 +262,15 @@ function AppContent() {
               path="/rotas" 
               element={
                 <PageTransition hubId="rotas">
-                  <MLInferenceErrorBoundary>
-                    <StreamingErrorBoundary>
-                      <RotasHub />
-                    </StreamingErrorBoundary>
-                  </MLInferenceErrorBoundary>
+                  <HubErrorBoundary hubName="rotas">
+                    <MLInferenceErrorBoundary>
+                      <StreamingErrorBoundary>
+                        <Suspense fallback={<HubLoadingFallback />}>
+                          <RotasHub />
+                        </Suspense>
+                      </StreamingErrorBoundary>
+                    </MLInferenceErrorBoundary>
+                  </HubErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -227,7 +278,11 @@ function AppContent() {
               path="/arepo" 
               element={
                 <PageTransition hubId="arepo">
-                  <ArepoHub />
+                  <HubErrorBoundary hubName="arepo">
+                    <Suspense fallback={<HubLoadingFallback />}>
+                      <ArepoHub />
+                    </Suspense>
+                  </HubErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -235,7 +290,11 @@ function AppContent() {
               path="/opera" 
               element={
                 <PageTransition hubId="opera">
-                  <OperaHub />
+                  <HubErrorBoundary hubName="opera">
+                    <Suspense fallback={<HubLoadingFallback />}>
+                      <OperaHub />
+                    </Suspense>
+                  </HubErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -243,7 +302,11 @@ function AppContent() {
               path="/tenet" 
               element={
                 <PageTransition hubId="tenet">
-                  <TenetHub />
+                  <HubErrorBoundary hubName="tenet">
+                    <Suspense fallback={<HubLoadingFallback />}>
+                      <TenetHub />
+                    </Suspense>
+                  </HubErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -286,6 +349,13 @@ function AppContent() {
           </Routes>
         </AnimatePresence>
       </main>
+      
+      {/* Performance Dashboard (lazy loaded) */}
+      {showPerformanceDashboard && (
+        <Suspense fallback={null}>
+          <PerformanceDashboard />
+        </Suspense>
+      )}
     </div>
   );
 }

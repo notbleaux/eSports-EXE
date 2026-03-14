@@ -11,7 +11,7 @@ from typing import Optional, List, Dict, Any
 from datetime import date, datetime, timedelta
 from enum import Enum
 
-router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
+router = APIRouter(prefix="/v1/dashboard", tags=["dashboard"])
 
 
 class MetricTrend(str, Enum):

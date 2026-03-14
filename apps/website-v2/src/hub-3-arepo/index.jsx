@@ -5,6 +5,8 @@
  * Color Theme: Royal Blue (#0066ff)
  * Glow: rgba(0, 102, 255, 0.4)
  * Muted: #0044cc
+ * 
+ * [Ver002.000] - Added comprehensive error boundaries
  */
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,7 +30,14 @@ import { colors } from '@/theme/colors';
 // Import local components
 import DirectoryList from './components/DirectoryList';
 import HelpHub from './components/HelpHub';
-import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+
+// Import error boundaries
+import { 
+  PanelErrorBoundary,
+  DataErrorBoundary,
+  HubErrorBoundary,
+  HubErrorFallback
+} from '@/components/error';
 
 // HUB CONFIG - Exact colors as specified
 const HUB_CONFIG = {
@@ -66,6 +75,9 @@ const RECENT_QUESTIONS = [
   { id: 4, question: 'Custom data export formats', answers: 0, status: 'open' },
 ];
 
+/**
+ * ArepoHubContent - Main content component for AREPO hub
+ */
 function ArepoHubContent() {
   const [activeTab, setActiveTab] = useState('directory'); // 'directory' | 'help'
   const [activeCategory, setActiveCategory] = useState(null);
@@ -197,13 +209,27 @@ function ArepoHubContent() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <DirectoryList 
-                  categories={CATEGORIES}
-                  activeCategory={activeCategory}
-                  onCategorySelect={handleCategorySelect}
-                  hubColor={HUB_CONFIG.color}
-                  hubGlow={HUB_CONFIG.glow}
-                />
+                {/* DirectoryList wrapped with DataErrorBoundary */}
+                <DataErrorBoundary
+                  hubName="AREPO"
+                  componentName="DirectoryList"
+                  compact
+                  onRetry={() => addNotification('Retrying directory load...', 'info')}
+                >
+                  <PanelErrorBoundary 
+                    panelId="arepo-directory" 
+                    panelTitle="Directory" 
+                    hub="AREPO"
+                  >
+                    <DirectoryList 
+                      categories={CATEGORIES}
+                      activeCategory={activeCategory}
+                      onCategorySelect={handleCategorySelect}
+                      hubColor={HUB_CONFIG.color}
+                      hubGlow={HUB_CONFIG.glow}
+                    />
+                  </PanelErrorBoundary>
+                </DataErrorBoundary>
               </motion.div>
             ) : (
               <motion.div
@@ -213,13 +239,27 @@ function ArepoHubContent() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <HelpHub 
-                  questions={RECENT_QUESTIONS}
-                  selectedQuestion={selectedQuestion}
-                  onQuestionClick={handleQuestionClick}
-                  hubColor={HUB_CONFIG.color}
-                  hubGlow={HUB_CONFIG.glow}
-                />
+                {/* HelpHub wrapped with DataErrorBoundary */}
+                <DataErrorBoundary
+                  hubName="AREPO"
+                  componentName="HelpHub"
+                  compact
+                  onRetry={() => addNotification('Retrying help content load...', 'info')}
+                >
+                  <PanelErrorBoundary 
+                    panelId="arepo-help" 
+                    panelTitle="Help & Q&A" 
+                    hub="AREPO"
+                  >
+                    <HelpHub 
+                      questions={RECENT_QUESTIONS}
+                      selectedQuestion={selectedQuestion}
+                      onQuestionClick={handleQuestionClick}
+                      hubColor={HUB_CONFIG.color}
+                      hubGlow={HUB_CONFIG.glow}
+                    />
+                  </PanelErrorBoundary>
+                </DataErrorBoundary>
               </motion.div>
             )}
           </AnimatePresence>
@@ -236,34 +276,40 @@ function ArepoHubContent() {
               </button>
             </div>
 
-            <div className="space-y-3">
-              {QUICK_LINKS.map((link, index) => (
-                <motion.div
-                  key={link.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-center justify-between p-4 rounded-lg bg-void-mid border border-mist 
-                           hover:border-[#0066ff]/50 transition-colors cursor-pointer group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-[#0066ff]/10 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-[#0066ff]" />
-                    </div>
-                    <div>
-                      <div className="font-medium group-hover:text-[#0066ff] transition-colors">
-                        {link.title}
+            <DataErrorBoundary
+              hubName="AREPO"
+              componentName="QuickLinks"
+              compact
+            >
+              <div className="space-y-3">
+                {QUICK_LINKS.map((link, index) => (
+                  <motion.div
+                    key={link.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-center justify-between p-4 rounded-lg bg-void-mid border border-mist 
+                             hover:border-[#0066ff]/50 transition-colors cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-[#0066ff]/10 flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-[#0066ff]" />
                       </div>
-                      <div className="text-xs text-slate capitalize">{link.category.replace('-', ' ')}</div>
+                      <div>
+                        <div className="font-medium group-hover:text-[#0066ff] transition-colors">
+                          {link.title}
+                        </div>
+                        <div className="text-xs text-slate capitalize">{link.category.replace('-', ' ')}</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-slate">{link.views} views</span>
-                    <ChevronRight className="w-4 h-4 text-slate group-hover:text-[#0066ff] transition-colors" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-slate">{link.views} views</span>
+                      <ChevronRight className="w-4 h-4 text-slate group-hover:text-[#0066ff] transition-colors" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </DataErrorBoundary>
           </HubCard>
         </div>
 
@@ -276,28 +322,34 @@ function ArepoHubContent() {
               <h3 className="font-display font-semibold">Getting Started</h3>
             </div>
 
-            <div className="space-y-2">
-              {[
-                'Platform Overview',
-                'Quick Start Guide',
-                'Authentication',
-                'API Basics',
-                'Best Practices'
-              ].map((item, index) => (
-                <motion.a
-                  key={item}
-                  href="#"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate 
-                           hover:text-white hover:bg-white/5 transition-colors group"
-                >
-                  {item}
-                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </motion.a>
-              ))}
-            </div>
+            <DataErrorBoundary
+              hubName="AREPO"
+              componentName="GettingStarted"
+              compact
+            >
+              <div className="space-y-2">
+                {[
+                  'Platform Overview',
+                  'Quick Start Guide',
+                  'Authentication',
+                  'API Basics',
+                  'Best Practices'
+                ].map((item, index) => (
+                  <motion.a
+                    key={item}
+                    href="#"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate 
+                             hover:text-white hover:bg-white/5 transition-colors group"
+                  >
+                    {item}
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </motion.a>
+                ))}
+              </div>
+            </DataErrorBoundary>
           </HubCard>
 
           {/* Community Stats */}
@@ -307,21 +359,27 @@ function ArepoHubContent() {
               <h3 className="font-display font-semibold">Community</h3>
             </div>
 
-            <div className="space-y-4">
-              {[
-                { label: 'Active Users', value: '1,247', icon: Users },
-                { label: 'Daily Questions', value: '24', icon: MessageSquare },
-                { label: 'Knowledge Base', value: '156', icon: BookOpen },
-              ].map((stat) => (
-                <div key={stat.label} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-slate">
-                    <stat.icon className="w-4 h-4" />
-                    <span className="text-sm">{stat.label}</span>
+            <DataErrorBoundary
+              hubName="AREPO"
+              componentName="CommunityStats"
+              compact
+            >
+              <div className="space-y-4">
+                {[
+                  { label: 'Active Users', value: '1,247', icon: Users },
+                  { label: 'Daily Questions', value: '24', icon: MessageSquare },
+                  { label: 'Knowledge Base', value: '156', icon: BookOpen },
+                ].map((stat) => (
+                  <div key={stat.label} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-slate">
+                      <stat.icon className="w-4 h-4" />
+                      <span className="text-sm">{stat.label}</span>
+                    </div>
+                    <span className="font-mono text-[#0066ff]">{stat.value}</span>
                   </div>
-                  <span className="font-mono text-[#0066ff]">{stat.value}</span>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </DataErrorBoundary>
           </HubCard>
 
           {/* Need Help */}
@@ -352,11 +410,30 @@ function ArepoHubContent() {
   );
 }
 
+/**
+ * ArepoHub - Root component with error boundary hierarchy
+ */
 function ArepoHub() {
   return (
-    <PanelErrorBoundary panelId="arepo-hub" panelTitle="AREPO Directory" hub="AREPO">
-      <ArepoHubContent />
-    </PanelErrorBoundary>
+    <HubErrorBoundary hubName="arepo" componentName="ArepoHub">
+      <DataErrorBoundary
+        hubName="AREPO"
+        componentName="ArepoHub"
+        fallback={
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <HubErrorFallback
+              hub="AREPO"
+              title="AREPO Directory Error"
+              message="Failed to load the knowledge base. Please try again."
+              onRetry={() => window.location.reload()}
+              onGoHome={() => window.location.href = '/'}
+            />
+          </div>
+        }
+      >
+        <ArepoHubContent />
+      </DataErrorBoundary>
+    </HubErrorBoundary>
   );
 }
 

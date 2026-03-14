@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException, Query
 from api.src.schemas.player_schema import PlayerSchema, PlayerListResponse
 from api.src.db import get_player_record, get_player_list
 
-router = APIRouter(prefix="/api/players", tags=["players"])
+router = APIRouter(prefix="/v1/players", tags=["players"])
 
 
 @router.get("/{player_id}", response_model=PlayerSchema)

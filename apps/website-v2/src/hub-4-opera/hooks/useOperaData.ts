@@ -1,20 +1,30 @@
 /**
  * useOperaData Hook
  * Data fetching and management for OPERA Hub visualization
- * [Ver001.001] - Migrated to centralized logger
+ * [Ver003.000] - Converted to TypeScript
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { logger } from '../../utils/logger';
+import { logger } from '@/utils/logger';
+import type {
+  MapData,
+  MapListItem,
+  CacheEntry,
+  PurpleTheme,
+  UseOperaDataReturn,
+} from '../types';
+
+// Cache configuration
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // Purple theme colors (exact values)
-const PURPLE = {
+const PURPLE: PurpleTheme = {
   base: '#9d4edd',
   glow: 'rgba(157, 78, 221, 0.4)',
   muted: '#7a3aaa',
 };
 
 // Mock map data - in production, this would come from an API
-const MOCK_MAP_DATA = {
+const MOCK_MAP_DATA: Record<string, MapData> = {
   ascent: {
     id: 'ascent',
     name: 'Ascent',
@@ -205,84 +215,228 @@ const MOCK_MAP_DATA = {
   },
 };
 
+// Map list for reference
+const MAP_LIST: MapListItem[] = Object.values(MOCK_MAP_DATA).map((map) => ({
+  id: map.id,
+  name: map.name,
+  game: map.game,
+}));
+
 /**
  * useOperaData - Custom hook for OPERA hub data management
- * @param {string} mapId - The ID of the map to load
- * @returns {Object} Map data, loading state, and error
+ * @param mapId - The ID of the map to load
+ * @returns Map data, loading state, and error
  */
-function useOperaData(mapId = 'ascent') {
-  const [mapData, setMapData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const cacheRef = useRef({});
+function useOperaData(mapId: string = 'ascent'): UseOperaDataReturn {
+  const [mapData, setMapData] = useState<MapData | null>(null);
+  const [mapList, setMapList] = useState<MapListItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
 
-  const fetchMapData = useCallback(async (id) => {
-    // Check cache first
-    if (cacheRef.current[id]) {
-      setMapData(cacheRef.current[id]);
-      setLoading(false);
-      return;
-    }
+  // Refs for cache management
+  const cacheRef = useRef<Record<string, CacheEntry<unknown>>>({});
 
-    setLoading(true);
-    setError(null);
+  /**
+   * Check if cached entry is valid (not expired)
+   */
+  const isCacheValid = useCallback((cacheKey: string): boolean => {
+    const cached = cacheRef.current[cacheKey];
+    if (!cached) return false;
+    return Date.now() - cached.timestamp < CACHE_DURATION;
+  }, []);
 
-    try {
-      // Simulate API call with delay
-      await new Promise((resolve) => setTimeout(resolve, 300));
+  /**
+   * Fetch map list with caching
+   */
+  const fetchMapList = useCallback(
+    async (forceRefresh: boolean = false): Promise<MapListItem[]> => {
+      const cacheKey = 'opera_map_list';
 
-      // Get mock data
-      const data = MOCK_MAP_DATA[id];
-
-      if (!data) {
-        throw new Error(`Map data not found for: ${id}`);
+      // Check cache
+      if (!forceRefresh && isCacheValid(cacheKey)) {
+        const cached = cacheRef.current[cacheKey] as CacheEntry<MapListItem[]>;
+        setMapList(cached.data);
+        return cached.data;
       }
 
-      // Cache the result
-      cacheRef.current[id] = data;
-      setMapData(data);
-    } catch (err) {
-      setError(err.message);
-      logger.error('OPERA Data Error:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        // Simulate API call with delay
+        await new Promise((resolve) => setTimeout(resolve, 200));
+
+        const data = MAP_LIST;
+
+        // Cache the result
+        cacheRef.current[cacheKey] = {
+          data,
+          timestamp: Date.now(),
+        };
+
+        setMapList(data);
+        return data;
+      } catch (err) {
+        logger.error('OPERA Map List Error:', err);
+        throw err;
+      }
+    },
+    [isCacheValid]
+  );
+
+  /**
+   * Fetch individual map data with TTL caching
+   */
+  const fetchMapData = useCallback(
+    async (id: string, forceRefresh: boolean = false): Promise<MapData | undefined> => {
+      const cacheKey = `opera_map_${id}`;
+
+      // Check cache with TTL validation
+      if (!forceRefresh && isCacheValid(cacheKey)) {
+        const cached = cacheRef.current[cacheKey] as CacheEntry<MapData>;
+        setMapData(cached.data);
+        setLoading(false);
+        return cached.data;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Simulate API call with delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // Get mock data
+        const data = MOCK_MAP_DATA[id];
+
+        if (!data) {
+          throw new Error(`Map data not found for: ${id}`);
+        }
+
+        // Cache the result with timestamp
+        cacheRef.current[cacheKey] = {
+          data,
+          timestamp: Date.now(),
+        };
+
+        setMapData(data);
+        setLastUpdated(Date.now());
+        return data;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(errorMessage);
+        logger.error('OPERA Data Error:', err);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [isCacheValid]
+  );
 
   // Fetch data when mapId changes
   useEffect(() => {
     fetchMapData(mapId);
   }, [mapId, fetchMapData]);
 
-  // Refresh function to reload data
+  // Fetch map list on mount
+  useEffect(() => {
+    fetchMapList();
+  }, [fetchMapList]);
+
+  /**
+   * Refresh function to reload data (force cache invalidation)
+   */
   const refresh = useCallback(() => {
-    fetchMapData(mapId);
+    return fetchMapData(mapId, true);
   }, [mapId, fetchMapData]);
+
+  /**
+   * Refresh all data including map list
+   */
+  const refreshAll = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([fetchMapList(true), fetchMapData(mapId, true)]);
+      setLastUpdated(Date.now());
+    } catch {
+      // Error already handled in individual fetch functions
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchMapList, fetchMapData, mapId]);
+
+  /**
+   * Invalidate specific map cache
+   */
+  const invalidateMapCache = useCallback(
+    (id: string = mapId) => {
+      delete cacheRef.current[`opera_map_${id}`];
+    },
+    [mapId]
+  );
+
+  /**
+   * Invalidate all OPERA cache
+   */
+  const clearCache = useCallback(() => {
+    cacheRef.current = {};
+    setMapData(null);
+    setMapList([]);
+    setLastUpdated(null);
+  }, []);
+
+  /**
+   * Preload map data into cache
+   */
+  const preloadMap = useCallback(
+    async (id: string): Promise<MapData | undefined> => {
+      const cacheKey = `opera_map_${id}`;
+      if (isCacheValid(cacheKey)) {
+        const cached = cacheRef.current[cacheKey] as CacheEntry<MapData>;
+        return cached.data;
+      }
+
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        const data = MOCK_MAP_DATA[id];
+        if (data) {
+          cacheRef.current[cacheKey] = {
+            data,
+            timestamp: Date.now(),
+          };
+        }
+        return data;
+      } catch (err) {
+        logger.error('OPERA Preload Error:', err);
+        return undefined;
+      }
+    },
+    [isCacheValid]
+  );
 
   // Get heatmap data for visualization
   const getHeatmapData = useCallback(() => {
-    return mapData?.heatmap || [];
+    return mapData?.heatmap ?? [];
   }, [mapData]);
 
   // Get callout by ID
   const getCallout = useCallback(
-    (calloutId) => {
-      return mapData?.callouts?.find((c) => c.id === calloutId) || null;
+    (calloutId: string) => {
+      return mapData?.callouts?.find((c) => c.id === calloutId) ?? null;
     },
     [mapData]
   );
 
   // Get site data
   const getSite = useCallback(
-    (siteId) => {
-      return mapData?.sites?.find((s) => s.id === siteId) || null;
+    (siteId: string) => {
+      return mapData?.sites?.find((s) => s.id === siteId) ?? null;
     },
     [mapData]
   );
 
   // Convert map coordinates to screen coordinates
   const mapToScreen = useCallback(
-    (mapX, mapY, canvasWidth, canvasHeight) => {
+    (mapX: number, mapY: number, canvasWidth: number, canvasHeight: number) => {
       if (!mapData?.size) return { x: 0, y: 0 };
 
       const scaleX = canvasWidth / mapData.size.width;
@@ -298,7 +452,7 @@ function useOperaData(mapId = 'ascent') {
 
   // Convert screen coordinates to map coordinates
   const screenToMap = useCallback(
-    (screenX, screenY, canvasWidth, canvasHeight) => {
+    (screenX: number, screenY: number, canvasWidth: number, canvasHeight: number) => {
       if (!mapData?.size) return { x: 0, y: 0 };
 
       const scaleX = mapData.size.width / canvasWidth;
@@ -314,9 +468,15 @@ function useOperaData(mapId = 'ascent') {
 
   return {
     mapData,
+    mapList,
     loading,
     error,
+    lastUpdated,
     refresh,
+    refreshAll,
+    invalidateMapCache,
+    clearCache,
+    preloadMap,
     getHeatmapData,
     getCallout,
     getSite,

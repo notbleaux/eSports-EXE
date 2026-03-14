@@ -1,17 +1,33 @@
 /**
  * MapVisualization Component
  * Interactive map display with tactical overlays
+ * [Ver002.000] - Converted to TypeScript
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Map, Crosshair, Navigation, AlertCircle } from 'lucide-react';
-import { colors } from '../../theme/colors.js';
+import { Navigation } from 'lucide-react';
+import type {
+  MapVisualizationProps,
+  LayerState,
+  CalloutMarker,
+  CanvasDimensions,
+  CoverZone,
+} from '../types';
 
 // Purple theme colors (exact values)
 const PURPLE = {
   base: '#9d4edd',
   glow: 'rgba(157, 78, 221, 0.4)',
   muted: '#7a3aaa',
+};
+
+// Default layer state
+const DEFAULT_LAYERS: LayerState = {
+  callouts: false,
+  spawns: false,
+  sightlines: false,
+  cover: false,
+  rotation: false,
 };
 
 /**
@@ -24,10 +40,13 @@ function MapVisualization({
   layers = {},
   viewMode = 'tactical',
   loading = false,
-}) {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+}: MapVisualizationProps): JSX.Element {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState<CanvasDimensions>({ width: 0, height: 0 });
+
+  // Merge provided layers with defaults
+  const activeLayers: LayerState = { ...DEFAULT_LAYERS, ...layers };
 
   // Handle resize
   useEffect(() => {
@@ -49,6 +68,8 @@ function MapVisualization({
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     const { width, height } = dimensions;
 
     if (!width || !height) return;
@@ -73,17 +94,17 @@ function MapVisualization({
     drawMapLayout(ctx, mapId, width, height);
 
     // Draw layers if enabled
-    if (layers.callouts) drawCallouts(ctx, mapId, width, height);
-    if (layers.spawns) drawSpawnPoints(ctx, mapId, width, height);
-    if (layers.sightlines) drawSightLines(ctx, width, height);
-    if (layers.cover) drawCoverZones(ctx, width, height);
-    if (layers.rotation) drawRotationPaths(ctx, width, height);
+    if (activeLayers.callouts) drawCallouts(ctx, mapId, width, height);
+    if (activeLayers.spawns) drawSpawnPoints(ctx, mapId, width, height);
+    if (activeLayers.sightlines) drawSightLines(ctx, width, height);
+    if (activeLayers.cover) drawCoverZones(ctx, width, height);
+    if (activeLayers.rotation) drawRotationPaths(ctx, width, height);
 
     ctx.restore();
-  }, [dimensions, zoom, layers, viewMode, mapId, mapData]);
+  }, [dimensions, zoom, activeLayers, viewMode, mapId, mapData]);
 
   // Grid pattern drawing
-  const drawGrid = (ctx, width, height) => {
+  const drawGrid = (ctx: CanvasRenderingContext2D, width: number, height: number): void => {
     const gridSize = 40;
     ctx.strokeStyle = 'rgba(157, 78, 221, 0.1)';
     ctx.lineWidth = 1;
@@ -104,12 +125,12 @@ function MapVisualization({
   };
 
   // Map layout drawing
-  const drawMapLayout = (ctx, mapId, width, height) => {
+  const drawMapLayout = (ctx: CanvasRenderingContext2D, mapId: string, width: number, height: number): void => {
     const centerX = width / 2;
     const centerY = height / 2;
 
     // Map-specific layouts
-    const layouts = {
+    const layouts: Record<string, () => void> = {
       ascent: () => drawAscentLayout(ctx, centerX, centerY),
       bind: () => drawBindLayout(ctx, centerX, centerY),
       haven: () => drawHavenLayout(ctx, centerX, centerY),
@@ -126,7 +147,7 @@ function MapVisualization({
   };
 
   // Ascent layout (open, two sites)
-  const drawAscentLayout = (ctx, cx, cy) => {
+  const drawAscentLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -156,7 +177,7 @@ function MapVisualization({
   };
 
   // Bind layout (linear, teleporters)
-  const drawBindLayout = (ctx, cx, cy) => {
+  const drawBindLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -190,7 +211,7 @@ function MapVisualization({
   };
 
   // Haven layout (three sites)
-  const drawHavenLayout = (ctx, cx, cy) => {
+  const drawHavenLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -220,7 +241,7 @@ function MapVisualization({
   };
 
   // Split layout (vertical)
-  const drawSplitLayout = (ctx, cx, cy) => {
+  const drawSplitLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -258,7 +279,7 @@ function MapVisualization({
   };
 
   // Lotus layout (three sites, rotating doors)
-  const drawLotusLayout = (ctx, cx, cy) => {
+  const drawLotusLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -294,7 +315,7 @@ function MapVisualization({
   };
 
   // Sunset layout (standard)
-  const drawSunsetLayout = (ctx, cx, cy) => {
+  const drawSunsetLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -318,7 +339,7 @@ function MapVisualization({
   };
 
   // Default layout
-  const drawDefaultLayout = (ctx, cx, cy) => {
+  const drawDefaultLayout = (ctx: CanvasRenderingContext2D, cx: number, cy: number): void => {
     ctx.strokeStyle = PURPLE.base;
     ctx.lineWidth = 2;
     ctx.fillStyle = 'rgba(157, 78, 221, 0.1)';
@@ -330,7 +351,7 @@ function MapVisualization({
   };
 
   // Draw callout markers
-  const drawCallouts = (ctx, mapId, width, height) => {
+  const drawCallouts = (ctx: CanvasRenderingContext2D, mapId: string, width: number, height: number): void => {
     const callouts = getCalloutsForMap(mapId);
     ctx.fillStyle = PURPLE.base;
     ctx.font = '12px monospace';
@@ -353,8 +374,8 @@ function MapVisualization({
   };
 
   // Get callouts for map
-  const getCalloutsForMap = (mapId) => {
-    const calloutsMap = {
+  const getCalloutsForMap = (mapId: string): CalloutMarker[] => {
+    const calloutsMap: Record<string, CalloutMarker[]> = {
       ascent: [
         { name: 'A Site', x: 0.35, y: 0.3 },
         { name: 'B Site', x: 0.65, y: 0.7 },
@@ -394,11 +415,11 @@ function MapVisualization({
       ],
     };
 
-    return calloutsMap[mapId] || [];
+    return calloutsMap[mapId] ?? [];
   };
 
   // Draw spawn points
-  const drawSpawnPoints = (ctx, mapId, width, height) => {
+  const drawSpawnPoints = (ctx: CanvasRenderingContext2D, mapId: string, width: number, height: number): void => {
     ctx.fillStyle = 'rgba(0, 255, 136, 0.6)';
 
     // Attacker spawns (bottom)
@@ -418,7 +439,7 @@ function MapVisualization({
   };
 
   // Draw sight lines
-  const drawSightLines = (ctx, width, height) => {
+  const drawSightLines = (ctx: CanvasRenderingContext2D, width: number, height: number): void => {
     ctx.strokeStyle = 'rgba(157, 78, 221, 0.3)';
     ctx.lineWidth = 1;
     ctx.setLineDash([8, 4]);
@@ -438,11 +459,11 @@ function MapVisualization({
   };
 
   // Draw cover zones
-  const drawCoverZones = (ctx, width, height) => {
+  const drawCoverZones = (ctx: CanvasRenderingContext2D, width: number, height: number): void => {
     ctx.fillStyle = 'rgba(157, 78, 221, 0.2)';
 
     // Corner cover zones
-    const zones = [
+    const zones: CoverZone[] = [
       { x: 0.15, y: 0.15, w: 0.1, h: 0.1 },
       { x: 0.75, y: 0.15, w: 0.1, h: 0.1 },
       { x: 0.15, y: 0.75, w: 0.1, h: 0.1 },
@@ -460,7 +481,7 @@ function MapVisualization({
   };
 
   // Draw rotation paths
-  const drawRotationPaths = (ctx, width, height) => {
+  const drawRotationPaths = (ctx: CanvasRenderingContext2D, width: number, height: number): void => {
     ctx.strokeStyle = 'rgba(0, 212, 255, 0.5)';
     ctx.lineWidth = 3;
     ctx.setLineDash([12, 6]);
@@ -551,7 +572,8 @@ function MapVisualization({
       </div>
 
       {/* Compass */}
-      <div className="absolute top-4 right-4 w-10 h-10 rounded-full border flex items-center justify-center bg-void-black/80"
+      <div
+        className="absolute top-4 right-4 w-10 h-10 rounded-full border flex items-center justify-center bg-void-black/80"
         style={{ borderColor: PURPLE.base }}
       >
         <Navigation className="w-4 h-4" style={{ color: PURPLE.base }} />

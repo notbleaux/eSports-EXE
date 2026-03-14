@@ -1,10 +1,11 @@
 /**
  * FogOverlay Component
  * Animated fog of war effect for map visualization
+ * [Ver002.000] - Converted to TypeScript
  */
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { colors } from '../../theme/colors.js';
+import type { FogOverlayProps, FogParticle } from '../types';
 
 // Purple theme colors (exact values)
 const PURPLE = {
@@ -21,9 +22,9 @@ function FogOverlay({
   color = PURPLE.base,
   animated = true,
   pattern = 'radial',
-}) {
-  const canvasRef = useRef(null);
-  const animationRef = useRef(null);
+}: FogOverlayProps): JSX.Element {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number | null>(null);
 
   // Canvas-based animated fog effect
   useEffect(() => {
@@ -31,6 +32,8 @@ function FogOverlay({
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     let time = 0;
 
     const resize = () => {
@@ -45,7 +48,7 @@ function FogOverlay({
     window.addEventListener('resize', resize);
 
     // Fog particles
-    const particles = Array.from({ length: 20 }, (_, i) => ({
+    const particles: FogParticle[] = Array.from({ length: 20 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       radius: 30 + Math.random() * 50,
@@ -206,7 +209,7 @@ function FogOverlay({
 }
 
 // Helper function to convert hex to rgba
-function hexToRgba(hex, alpha) {
+function hexToRgba(hex: string, alpha: number): string {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);

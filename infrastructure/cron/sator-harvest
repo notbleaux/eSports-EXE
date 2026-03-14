@@ -1,0 +1,60 @@
+#!/bin/bash
+# SATOR TRINITY + OPERA Harvest Cron Jobs
+# Location: /etc/cron.d/sator-harvest
+# Version: [Ver001.000]
+#
+# Installation: sudo cp infrastructure/cron/sator-harvest /etc/cron.d/sator-harvest
+#               sudo chmod 644 /etc/cron.d/sator-harvest
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+USER=sator
+HOME=/opt/sator
+
+# ============================================
+# Daily Harvest - 3:00 AM UTC
+# Full VLR.gg data extraction and processing
+# ============================================
+0 3 * * * sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.harvest.orchestrator --mode daily >> /var/log/sator/cron-daily.log 2>&1
+
+# ============================================
+# Worker Process Health Check - Every 5 minutes
+# Ensures harvest workers are running
+# ============================================
+*/5 * * * * sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.harvest.worker --check >> /var/log/sator/cron-worker-check.log 2>&1
+
+# ============================================
+# Turso Edge Sync - Every 5 minutes (if enabled)
+# Synchronizes edge data with primary PostgreSQL
+# ============================================
+*/5 * * * * sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.sync.turso_sync >> /var/log/sator/cron-turso-sync.log 2>&1
+
+# ============================================
+# OPERA Analytics Sync - Hourly
+# Syncs operational data to TiDB OPERA for analytics
+# ============================================
+0 * * * * sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.sync.opera_sync >> /var/log/sator/cron-opera-sync.log 2>&1
+
+# ============================================
+# Queue Maintenance - Every 15 minutes
+# Cleans up completed/failed tasks from SQLite queue
+# ============================================
+*/15 * * * * sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.queue.maintenance --retention-days 30 >> /var/log/sator/cron-queue-maint.log 2>&1
+
+# ============================================
+# Log Rotation - Daily at 2:00 AM
+# Rotates harvest logs before daily harvest
+# ============================================
+0 2 * * * root /usr/sbin/logrotate -f /etc/logrotate.d/sator-harvest >> /var/log/sator/cron-logrotate.log 2>&1
+
+# ============================================
+# Weekly Full Sync - Sunday at 4:00 AM
+# Complete data reconciliation across all components
+# ============================================
+0 4 * * 0 sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.sync.full_sync >> /var/log/sator/cron-full-sync.log 2>&1
+
+# ============================================
+# Health Check Report - Daily at 6:00 AM
+# Sends health status to monitoring
+# ============================================
+0 6 * * * sator cd /opt/sator && /opt/sator/venv/bin/python -m axiom_esports_data.monitoring.health_check --report >> /var/log/sator/cron-health.log 2>&1

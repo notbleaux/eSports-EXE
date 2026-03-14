@@ -1,10 +1,20 @@
 /**
  * useArepoData Hook
  * Data fetching and state management for AREPO Hub
- * Handles documentation, FAQs, and directory data
+ * Handles documentation, FAQs, and directory data with backend search
+ * 
+ * [Ver002.000] - Migrated to backend search API
  */
-import { useState, useEffect, useCallback } from 'react';
-import { useNJZStore } from '../../shared/store/njzStore';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useNJZStore } from '@/shared/store/njzStore';
+import { 
+  searchAll, 
+  searchPlayers, 
+  searchTeams, 
+  searchMatches,
+  getSearchSuggestions 
+} from '@/api/search';
+import { debounce } from '@/utils/debounce';
 
 // Mock data for development - replace with actual API calls
 const MOCK_DOCUMENTATION = [
@@ -97,7 +107,7 @@ const CATEGORIES = [
 ];
 
 /**
- * Custom hook for AREPO hub data management
+ * Custom hook for AREPO hub data management with backend search
  * @param {Object} options - Configuration options
  * @returns {Object} AREPO data and utilities
  */
@@ -105,10 +115,14 @@ export function useArepoData(options = {}) {
   const { 
     autoFetch = true,
     categoryFilter = null,
-    searchQuery = ''
+    searchQuery = '',
+    searchType = 'all', // 'all' | 'players' | 'teams' | 'matches'
+    useBackendSearch = true, // Toggle between client and server-side search
+    debounceMs = 300
   } = options;
 
   const addNotification = useNJZStore(state => state.addNotification);
+  const abortControllerRef = useRef(null);
   
   // State
   const [documentation, setDocumentation] = useState([]);
@@ -116,6 +130,18 @@ export function useArepoData(options = {}) {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Backend search results
+  const [searchResults, setSearchResults] = useState({
+    players: [],
+    teams: [],
+    matches: [],
+    total: 0
+  });
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  
   const [stats, setStats] = useState({
     totalDocs: 0,
     totalQuestions: 0,
@@ -154,9 +180,81 @@ export function useArepoData(options = {}) {
   }, [addNotification]);
 
   /**
-   * Search documentation and questions
+   * Backend search implementation using API
    */
-  const search = useCallback((query) => {
+  const performBackendSearch = useCallback(async (query, type = 'all') => {
+    if (!query.trim()) {
+      setSearchResults({ players: [], teams: [], matches: [], total: 0 });
+      setSearchSuggestions([]);
+      return;
+    }
+
+    setSearchLoading(true);
+    setSearchError(null);
+
+    // Cancel previous request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const results = await searchAll({
+        q: query,
+        type: type === 'all' ? undefined : type,
+        limit: 20,
+        sort: 'relevance'
+      });
+
+      setSearchResults({
+        players: results.players || [],
+        teams: results.teams || [],
+        matches: results.matches || [],
+        total: results.total || 0
+      });
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        setSearchError(err.message || 'Search failed');
+        console.error('Backend search error:', err);
+      }
+    } finally {
+      setSearchLoading(false);
+    }
+  }, []);
+
+  /**
+   * Debounced backend search
+   */
+  const debouncedBackendSearch = useRef(
+    debounce((query, type) => performBackendSearch(query, type), debounceMs)
+  ).current;
+
+  /**
+   * Fetch search suggestions for autocomplete
+   */
+  const fetchSuggestions = useCallback(async (query) => {
+    if (!query.trim() || query.length < 2) {
+      setSearchSuggestions([]);
+      return;
+    }
+
+    try {
+      const response = await getSearchSuggestions(query, 'all', 10);
+      setSearchSuggestions(response.suggestions || []);
+    } catch (err) {
+      // Silently fail for suggestions
+      setSearchSuggestions([]);
+    }
+  }, []);
+
+  const debouncedFetchSuggestions = useRef(
+    debounce((query) => fetchSuggestions(query), 150)
+  ).current;
+
+  /**
+   * Client-side search (fallback/legacy)
+   */
+  const clientSideSearch = useCallback((query) => {
     if (!query.trim()) {
       return { docs: documentation, questions: questions };
     }
@@ -177,7 +275,71 @@ export function useArepoData(options = {}) {
   }, [documentation, questions]);
 
   /**
-   * Filter by category
+   * Unified search function
+   */
+  const search = useCallback((query) => {
+    if (useBackendSearch) {
+      debouncedBackendSearch(query, searchType);
+      debouncedFetchSuggestions(query);
+      return { docs: documentation, questions: questions };
+    } else {
+      return clientSideSearch(query);
+    }
+  }, [useBackendSearch, searchType, documentation, questions, debouncedBackendSearch, debouncedFetchSuggestions, clientSideSearch]);
+
+  /**
+   * Direct search players API
+   */
+  const searchPlayersOnly = useCallback(async (query) => {
+    setSearchLoading(true);
+    try {
+      const results = await searchPlayers({ q: query, limit: 20 });
+      setSearchResults(prev => ({ ...prev, players: results.results || [] }));
+      return results.results || [];
+    } catch (err) {
+      setSearchError(err.message);
+      return [];
+    } finally {
+      setSearchLoading(false);
+    }
+  }, []);
+
+  /**
+   * Direct search teams API
+   */
+  const searchTeamsOnly = useCallback(async (query) => {
+    setSearchLoading(true);
+    try {
+      const results = await searchTeams({ q: query, limit: 20 });
+      setSearchResults(prev => ({ ...prev, teams: results.results || [] }));
+      return results.results || [];
+    } catch (err) {
+      setSearchError(err.message);
+      return [];
+    } finally {
+      setSearchLoading(false);
+    }
+  }, []);
+
+  /**
+   * Direct search matches API
+   */
+  const searchMatchesOnly = useCallback(async (query) => {
+    setSearchLoading(true);
+    try {
+      const results = await searchMatches({ q: query, limit: 20 });
+      setSearchResults(prev => ({ ...prev, matches: results.results || [] }));
+      return results.results || [];
+    } catch (err) {
+      setSearchError(err.message);
+      return [];
+    } finally {
+      setSearchLoading(false);
+    }
+  }, []);
+
+  /**
+   * Filter by category (client-side only)
    */
   const filterByCategory = useCallback((categoryId) => {
     if (!categoryId) {
@@ -253,6 +415,18 @@ export function useArepoData(options = {}) {
       .slice(0, limit);
   }, [questions]);
 
+  /**
+   * Clear search results
+   */
+  const clearSearch = useCallback(() => {
+    setSearchResults({ players: [], teams: [], matches: [], total: 0 });
+    setSearchSuggestions([]);
+    setSearchError(null);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  }, []);
+
   // Auto-fetch on mount
   useEffect(() => {
     if (autoFetch) {
@@ -260,12 +434,31 @@ export function useArepoData(options = {}) {
     }
   }, [autoFetch, fetchData]);
 
+  // Perform search when searchQuery changes
+  useEffect(() => {
+    if (searchQuery && useBackendSearch) {
+      debouncedBackendSearch(searchQuery, searchType);
+      debouncedFetchSuggestions(searchQuery);
+    }
+  }, [searchQuery, searchType, useBackendSearch, debouncedBackendSearch, debouncedFetchSuggestions]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
   // Filtered data based on current filters
-  const filteredData = searchQuery 
-    ? search(searchQuery)
-    : categoryFilter 
-      ? filterByCategory(categoryFilter)
-      : { docs: documentation, questions: questions };
+  const filteredData = useBackendSearch
+    ? { docs: documentation, questions: questions } // Backend search uses separate searchResults
+    : searchQuery 
+      ? clientSideSearch(searchQuery)
+      : categoryFilter 
+        ? filterByCategory(categoryFilter)
+        : { docs: documentation, questions: questions };
 
   return {
     // Data
@@ -274,13 +467,23 @@ export function useArepoData(options = {}) {
     categories,
     stats,
     
-    // Loading state
+    // Backend search results
+    searchResults,
+    searchSuggestions,
+    
+    // Loading states
     isLoading,
+    searchLoading,
     error,
+    searchError,
     
     // Actions
     fetchData,
     search,
+    searchPlayers: searchPlayersOnly,
+    searchTeams: searchTeamsOnly,
+    searchMatches: searchMatchesOnly,
+    clearSearch,
     filterByCategory,
     submitQuestion,
     submitAnswer,
@@ -362,6 +565,42 @@ export function useQuestion(questionId) {
   }, [fetchQuestion]);
 
   return { question, isLoading, refresh: fetchQuestion };
+}
+
+/**
+ * Hook for search with real-time suggestions
+ */
+export function useSearchSuggestions() {
+  const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchSuggestions = useCallback(async (query, type = 'all') => {
+    if (!query.trim() || query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await getSearchSuggestions(query, type, 10);
+      setSuggestions(response.suggestions || []);
+    } catch (err) {
+      setSuggestions([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const debouncedFetchSuggestions = useRef(
+    debounce((query, type) => fetchSuggestions(query, type), 150)
+  ).current;
+
+  return {
+    suggestions,
+    isLoading,
+    fetchSuggestions: debouncedFetchSuggestions,
+    clearSuggestions: () => setSuggestions([])
+  };
 }
 
 export default useArepoData;

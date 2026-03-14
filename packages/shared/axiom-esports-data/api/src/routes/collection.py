@@ -12,7 +12,7 @@ from enum import Enum
 import uuid
 import asyncio
 
-router = APIRouter(prefix="/api/collection", tags=["collection"])
+router = APIRouter(prefix="/v1/collection", tags=["collection"])
 
 
 class CollectionMode(str, Enum):

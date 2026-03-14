@@ -207,13 +207,22 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware
+# CORS middleware - Secure configuration with environment-based origins
+# Default allows common local development ports
+cors_origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://localhost:4173,http://127.0.0.1:3000,http://127.0.0.1:5173"
+).split(",")
+# Strip whitespace from origins
+cors_origins = [origin.strip() for origin in cors_origins if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    max_age=600,  # 10 minutes preflight cache
 )
 
 
@@ -227,6 +236,19 @@ async def root():
     return {
         "service": "Esports Data Coordinator",
         "version": "1.0.0",
+        "api_version": "v1",
+        "status": "running",
+        "docs": "/docs"
+    }
+
+
+@app.get("/v1/")
+async def v1_root():
+    """v1 Root endpoint."""
+    return {
+        "service": "Esports Data Coordinator",
+        "version": "1.0.0",
+        "api_version": "v1",
         "status": "running",
         "docs": "/docs"
     }
@@ -236,6 +258,7 @@ async def root():
 # Job Management Endpoints
 # -----------------------------------------------------------------------------
 
+# Legacy routes (maintained for backward compatibility)
 @app.post("/jobs", response_model=CreateJobResponse)
 async def create_job(request: CreateJobRequest):
     """
@@ -285,6 +308,7 @@ async def create_job(request: CreateJobRequest):
 
 @app.post("/jobs/batch")
 async def create_batch_jobs(jobs: List[CreateJobRequest]):
+    """Create multiple jobs in a batch (deprecated, use /v1/jobs/batch)"""
     """Create multiple jobs in a batch."""
     created = []
     duplicates = []
@@ -323,6 +347,7 @@ async def create_batch_jobs(jobs: List[CreateJobRequest]):
 
 @app.get("/jobs/{job_id}")
 async def get_job(job_id: str):
+    """Get job details by ID (deprecated, use /v1/jobs/{job_id})"""
     """Get job details by ID."""
     job = await coordinator_state.queue_manager.get_job(job_id)
     
@@ -334,6 +359,7 @@ async def get_job(job_id: str):
 
 @app.post("/jobs/{job_id}/cancel")
 async def cancel_job(job_id: str):
+    """Cancel a pending job (deprecated, use /v1/jobs/{job_id}/cancel)"""
     """Cancel a pending job."""
     cancelled = await coordinator_state.queue_manager.cancel_job(job_id)
     
@@ -349,6 +375,7 @@ async def cancel_job(job_id: str):
 
 @app.post("/agents/register")
 async def register_agent(request: RegisterAgentRequest):
+    """Register a new extraction agent (deprecated, use /v1/agents/register)"""
     """Register a new extraction agent."""
     agent = await coordinator_state.agent_manager.register_agent(
         agent_id=request.agent_id,
@@ -366,6 +393,7 @@ async def register_agent(request: RegisterAgentRequest):
 
 @app.post("/agents/{agent_id}/heartbeat", response_model=HeartbeatResponse)
 async def agent_heartbeat(agent_id: str, background_tasks: BackgroundTasks):
+    """Agent heartbeat (deprecated, use /v1/agents/{agent_id}/heartbeat)"""
     """
     Agent heartbeat - updates last seen and may return a new job assignment.
     
@@ -403,6 +431,7 @@ async def agent_heartbeat(agent_id: str, background_tasks: BackgroundTasks):
 
 @app.post("/agents/{agent_id}/jobs/{job_id}/complete")
 async def complete_job(agent_id: str, job_id: str, request: JobCompleteRequest):
+    """Report job completion (deprecated, use /v1/agents/{agent_id}/jobs/{job_id}/complete)"""
     """Report job completion."""
     result = JobResult(
         job_id=job_id,
@@ -436,6 +465,8 @@ async def complete_job(agent_id: str, job_id: str, request: JobCompleteRequest):
 
 @app.get("/agents")
 async def list_agents(
+    """List all registered agents (deprecated, use /v1/agents)"""
+
     status: Optional[str] = None,
     game: Optional[GameType] = None
 ):
@@ -449,6 +480,7 @@ async def list_agents(
 
 @app.get("/agents/{agent_id}")
 async def get_agent(agent_id: str):
+    """Get agent details (deprecated, use /v1/agents/{agent_id})"""
     """Get agent details."""
     agent = await coordinator_state.agent_manager.get_agent(agent_id)
     
@@ -460,6 +492,7 @@ async def get_agent(agent_id: str):
 
 @app.delete("/agents/{agent_id}")
 async def unregister_agent(agent_id: str):
+    """Unregister an agent (deprecated, use /v1/agents/{agent_id})"""
     """Unregister an agent."""
     success = await coordinator_state.agent_manager.unregister_agent(agent_id)
     
@@ -475,12 +508,14 @@ async def unregister_agent(agent_id: str):
 
 @app.get("/queue/stats")
 async def get_queue_stats():
+    """Get queue statistics (deprecated, use /v1/queue/stats)"""
     """Get queue statistics."""
     return coordinator_state.queue_manager.get_queue_stats()
 
 
 @app.post("/queue/rebalance")
 async def rebalance_queue():
+    """Trigger queue rebalancing (deprecated, use /v1/queue/rebalance)"""
     """Trigger queue rebalancing."""
     stats = await coordinator_state.distributor.rebalance_load()
     return {"rebalanced": True, "stats": stats}
@@ -492,6 +527,7 @@ async def rebalance_queue():
 
 @app.get("/rate-limits/{source}", response_model=RateLimitStatusResponse)
 async def get_rate_limit_status(source: str):
+    """Get rate limit status for a source (deprecated, use /v1/rate-limits/{source})"""
     """Get rate limit status for a source."""
     status = await coordinator_state.rate_limiter.get_status(source)
     return status
@@ -499,12 +535,14 @@ async def get_rate_limit_status(source: str):
 
 @app.get("/rate-limits")
 async def get_all_rate_limits():
+    """Get rate limit status for all sources (deprecated, use /v1/rate-limits)"""
     """Get rate limit status for all sources."""
     return await coordinator_state.rate_limiter.get_all_statuses()
 
 
 @app.post("/rate-limits/{source}/reset")
 async def reset_rate_limit(source: str):
+    """Reset rate limit for a source (deprecated, use /v1/rate-limits/{source}/reset)"""
     """Reset rate limit for a source."""
     await coordinator_state.rate_limiter.reset_source(source)
     return {"status": "reset", "source": source}
@@ -516,6 +554,7 @@ async def reset_rate_limit(source: str):
 
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
+    """Get comprehensive health status (deprecated, use /v1/health)"""
     """Get comprehensive health status."""
     health = await coordinator_state.health_checker.get_health_summary()
     return health
@@ -523,6 +562,7 @@ async def health_check():
 
 @app.get("/health/ready")
 async def readiness_check():
+    """Kubernetes readiness probe (deprecated, use /v1/health/ready)"""
     """Kubernetes readiness probe."""
     health = await coordinator_state.health_checker.get_health_summary()
     
@@ -534,24 +574,28 @@ async def readiness_check():
 
 @app.get("/health/live")
 async def liveness_check():
+    """Kubernetes liveness probe (deprecated, use /v1/health/live)"""
     """Kubernetes liveness probe."""
     return {"status": "alive"}
 
 
 @app.get("/metrics")
 async def get_metrics():
+    """Get coordinator metrics (deprecated, use /v1/metrics)"""
     """Get coordinator metrics."""
     return await coordinator_state.metrics.get_all_metrics()
 
 
 @app.get("/metrics/prometheus", response_class=PlainTextResponse)
 async def get_prometheus_metrics():
+    """Get metrics in Prometheus format (deprecated, use /v1/metrics/prometheus)"""
     """Get metrics in Prometheus format."""
     return coordinator_state.metrics.export_prometheus()
 
 
 @app.get("/status", response_model=CoordinatorStatusResponse)
 async def get_status():
+    """Get overall coordinator status (deprecated, use /v1/status)"""
     """Get overall coordinator status."""
     queue_stats = coordinator_state.queue_manager.get_queue_stats()
     agent_stats = coordinator_state.agent_manager.get_agent_stats()
@@ -574,6 +618,7 @@ async def get_status():
 
 @app.post("/admin/purge")
 async def purge_old_jobs(max_age_hours: int = 24):
+    """Purge old completed jobs from memory (deprecated, use /v1/admin/purge)"""
     """Purge old completed jobs from memory."""
     purged = await coordinator_state.queue_manager.purge_completed(max_age_hours)
     return {"purged": purged}
@@ -581,12 +626,347 @@ async def purge_old_jobs(max_age_hours: int = 24):
 
 @app.get("/admin/distributor/stats")
 async def get_distributor_stats():
+    """Get distributor statistics (deprecated, use /v1/admin/distributor/stats)"""
     """Get distributor statistics."""
     return coordinator_state.distributor.get_stats()
 
 
 @app.get("/admin/distributor/insights")
 async def get_distributor_insights():
+    """Get distributor performance insights (deprecated, use /v1/admin/distributor/insights)"""
+    """Get distributor performance insights."""
+    if hasattr(coordinator_state.distributor, 'get_performance_insights'):
+        return coordinator_state.distributor.get_performance_insights()
+    return {"error": "Distributor does not support insights"}
+
+
+# -----------------------------------------------------------------------------
+# v1 API Endpoints (New Versioned Routes)
+# -----------------------------------------------------------------------------
+
+@app.post("/v1/jobs", response_model=CreateJobResponse)
+async def v1_create_job(request: CreateJobRequest):
+    """Create a new extraction job."""
+    job = ExtractionJob(
+        game=request.game,
+        source=request.source,
+        job_type=request.job_type,
+        priority=request.priority,
+        epoch=request.epoch,
+        region=request.region,
+        date_start=request.date_start,
+        date_end=request.date_end,
+        dependencies=request.dependencies,
+        metadata=request.metadata
+    )
+    
+    # Check for duplicates
+    if coordinator_state.conflict_resolver:
+        duplicate = await coordinator_state.conflict_resolver.check_duplicate_job(job)
+        if duplicate:
+            return CreateJobResponse(
+                job_id=duplicate,
+                status="duplicate",
+                message=f"Equivalent job already exists: {duplicate}"
+            )
+    
+    # Enqueue job
+    enqueued = await coordinator_state.queue_manager.enqueue(job)
+    
+    if enqueued:
+        return CreateJobResponse(
+            job_id=job.id,
+            status="created",
+            message="Job created and queued"
+        )
+    else:
+        return CreateJobResponse(
+            job_id=job.id,
+            status="pending",
+            message="Job waiting for dependencies"
+        )
+
+
+@app.post("/v1/jobs/batch")
+async def v1_create_batch_jobs(jobs: List[CreateJobRequest]):
+    """Create multiple jobs in a batch."""
+    created = []
+    duplicates = []
+    
+    for request in jobs:
+        job = ExtractionJob(
+            game=request.game,
+            source=request.source,
+            job_type=request.job_type,
+            priority=request.priority,
+            epoch=request.epoch,
+            region=request.region,
+            date_start=request.date_start,
+            date_end=request.date_end,
+            dependencies=request.dependencies,
+            metadata=request.metadata
+        )
+        
+        # Check for duplicates
+        if coordinator_state.conflict_resolver:
+            duplicate = await coordinator_state.conflict_resolver.check_duplicate_job(job)
+            if duplicate:
+                duplicates.append({"job": job.id, "duplicate_of": duplicate})
+                continue
+        
+        await coordinator_state.queue_manager.enqueue(job)
+        created.append(job.id)
+    
+    return {
+        "created": len(created),
+        "duplicates": len(duplicates),
+        "job_ids": created,
+        "duplicate_details": duplicates
+    }
+
+
+@app.get("/v1/jobs/{job_id}")
+async def v1_get_job(job_id: str):
+    """Get job details by ID."""
+    job = await coordinator_state.queue_manager.get_job(job_id)
+    
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    return job
+
+
+@app.post("/v1/jobs/{job_id}/cancel")
+async def v1_cancel_job(job_id: str):
+    """Cancel a pending job."""
+    cancelled = await coordinator_state.queue_manager.cancel_job(job_id)
+    
+    if not cancelled:
+        raise HTTPException(status_code=400, detail="Job not found or cannot be cancelled")
+    
+    return {"status": "cancelled", "job_id": job_id}
+
+
+@app.post("/v1/agents/register")
+async def v1_register_agent(request: RegisterAgentRequest):
+    """Register a new extraction agent."""
+    agent = await coordinator_state.agent_manager.register_agent(
+        agent_id=request.agent_id,
+        game_specialization=request.game_specialization,
+        source_capabilities=request.source_capabilities
+    )
+    
+    return {
+        "agent_id": agent.id,
+        "status": "registered",
+        "game_specialization": [g.value for g in agent.game_specialization],
+        "source_capabilities": agent.source_capabilities
+    }
+
+
+@app.post("/v1/agents/{agent_id}/heartbeat", response_model=HeartbeatResponse)
+async def v1_agent_heartbeat(agent_id: str, background_tasks: BackgroundTasks):
+    """Agent heartbeat - updates last seen and may return a new job assignment."""
+    # Check if agent exists, create if not (for auto-registration)
+    agent = await coordinator_state.agent_manager.get_agent(agent_id)
+    
+    if not agent:
+        # Auto-register with default capabilities
+        agent = await coordinator_state.agent_manager.register_agent(
+            agent_id=agent_id,
+            game_specialization=[GameType.COUNTER_STRIKE, GameType.VALORANT],
+            source_capabilities=["hltv", "vlr", "liquipedia"]
+        )
+    
+    # Process heartbeat and potentially assign job
+    job = await coordinator_state.agent_manager.heartbeat(agent_id)
+    
+    if job:
+        return HeartbeatResponse(
+            agent_id=agent_id,
+            status=agent.status,
+            assigned_job=job,
+            message=f"New job assigned: {job.id}"
+        )
+    
+    return HeartbeatResponse(
+        agent_id=agent_id,
+        status=agent.status,
+        assigned_job=None,
+        message="No work available"
+    )
+
+
+@app.post("/v1/agents/{agent_id}/jobs/{job_id}/complete")
+async def v1_complete_job(agent_id: str, job_id: str, request: JobCompleteRequest):
+    """Report job completion."""
+    result = JobResult(
+        job_id=job_id,
+        success=request.success,
+        data=request.data,
+        error=request.error,
+        records_extracted=request.records_extracted,
+        checksum=request.checksum,
+        metadata=request.metadata
+    )
+    
+    handled = await coordinator_state.distributor.handle_job_completion(
+        agent_id, job_id, result
+    )
+    
+    if not handled:
+        raise HTTPException(status_code=400, detail="Failed to process completion")
+    
+    # Record metrics
+    await coordinator_state.metrics.record_job_completed(
+        result.job_id, 0, {"agent": agent_id}
+    )
+    
+    return {
+        "status": "recorded",
+        "agent_id": agent_id,
+        "job_id": job_id,
+        "success": request.success
+    }
+
+
+@app.get("/v1/agents")
+async def v1_list_agents(
+    status: Optional[str] = None,
+    game: Optional[GameType] = None
+):
+    """List all registered agents."""
+    agents = await coordinator_state.agent_manager.list_agents(status=status, game=game)
+    return {
+        "count": len(agents),
+        "agents": agents
+    }
+
+
+@app.get("/v1/agents/{agent_id}")
+async def v1_get_agent(agent_id: str):
+    """Get agent details."""
+    agent = await coordinator_state.agent_manager.get_agent(agent_id)
+    
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    
+    return agent
+
+
+@app.delete("/v1/agents/{agent_id}")
+async def v1_unregister_agent(agent_id: str):
+    """Unregister an agent."""
+    success = await coordinator_state.agent_manager.unregister_agent(agent_id)
+    
+    if not success:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    
+    return {"status": "unregistered", "agent_id": agent_id}
+
+
+@app.get("/v1/queue/stats")
+async def v1_get_queue_stats():
+    """Get queue statistics."""
+    return coordinator_state.queue_manager.get_queue_stats()
+
+
+@app.post("/v1/queue/rebalance")
+async def v1_rebalance_queue():
+    """Trigger queue rebalancing."""
+    stats = await coordinator_state.distributor.rebalance_load()
+    return {"rebalanced": True, "stats": stats}
+
+
+@app.get("/v1/rate-limits/{source}", response_model=RateLimitStatusResponse)
+async def v1_get_rate_limit_status(source: str):
+    """Get rate limit status for a source."""
+    status = await coordinator_state.rate_limiter.get_status(source)
+    return status
+
+
+@app.get("/v1/rate-limits")
+async def v1_get_all_rate_limits():
+    """Get rate limit status for all sources."""
+    return await coordinator_state.rate_limiter.get_all_statuses()
+
+
+@app.post("/v1/rate-limits/{source}/reset")
+async def v1_reset_rate_limit(source: str):
+    """Reset rate limit for a source."""
+    await coordinator_state.rate_limiter.reset_source(source)
+    return {"status": "reset", "source": source}
+
+
+@app.get("/v1/health", response_model=HealthResponse)
+async def v1_health_check():
+    """Get comprehensive health status."""
+    health = await coordinator_state.health_checker.get_health_summary()
+    return health
+
+
+@app.get("/v1/health/ready")
+async def v1_readiness_check():
+    """Kubernetes readiness probe."""
+    health = await coordinator_state.health_checker.get_health_summary()
+    
+    if health["status"] == "unhealthy":
+        raise HTTPException(status_code=503, detail=health)
+    
+    return {"status": "ready"}
+
+
+@app.get("/v1/health/live")
+async def v1_liveness_check():
+    """Kubernetes liveness probe."""
+    return {"status": "alive"}
+
+
+@app.get("/v1/metrics")
+async def v1_get_metrics():
+    """Get coordinator metrics."""
+    return await coordinator_state.metrics.get_all_metrics()
+
+
+@app.get("/v1/metrics/prometheus", response_class=PlainTextResponse)
+async def v1_get_prometheus_metrics():
+    """Get metrics in Prometheus format."""
+    return coordinator_state.metrics.export_prometheus()
+
+
+@app.get("/v1/status", response_model=CoordinatorStatusResponse)
+async def v1_get_status():
+    """Get overall coordinator status."""
+    queue_stats = coordinator_state.queue_manager.get_queue_stats()
+    agent_stats = coordinator_state.agent_manager.get_agent_stats()
+    metrics = await coordinator_state.metrics.get_all_metrics()
+    
+    health = await coordinator_state.health_checker.get_health_summary()
+    
+    return CoordinatorStatusResponse(
+        status=health["status"],
+        queues=queue_stats,
+        agents=agent_stats,
+        metrics=metrics,
+        timestamp=datetime.utcnow().isoformat()
+    )
+
+
+@app.post("/v1/admin/purge")
+async def v1_purge_old_jobs(max_age_hours: int = 24):
+    """Purge old completed jobs from memory."""
+    purged = await coordinator_state.queue_manager.purge_completed(max_age_hours)
+    return {"purged": purged}
+
+
+@app.get("/v1/admin/distributor/stats")
+async def v1_get_distributor_stats():
+    """Get distributor statistics."""
+    return coordinator_state.distributor.get_stats()
+
+
+@app.get("/v1/admin/distributor/insights")
+async def v1_get_distributor_insights():
     """Get distributor performance insights."""
     if hasattr(coordinator_state.distributor, 'get_performance_insights'):
         return coordinator_state.distributor.get_performance_insights()

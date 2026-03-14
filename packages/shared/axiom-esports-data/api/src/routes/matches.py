@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 
 from api.src.db import get_match_record, get_sator_events, get_arepo_markers, get_rotas_trails
 
-router = APIRouter(prefix="/api/matches", tags=["matches"])
+router = APIRouter(prefix="/v1/matches", tags=["matches"])
 
 
 @router.get("/{match_id}")

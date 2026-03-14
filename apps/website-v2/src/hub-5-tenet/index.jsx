@@ -22,6 +22,7 @@ import { PanelSkeleton } from '@/components/grid/PanelSkeleton';
 import ControlPanel from './components/ControlPanel';
 import useTENETData from './hooks/useTENETData';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+import { HubErrorBoundary } from '@/components/error';
 
 // P0 FIX: Lazy load SatorSquare to prevent Three.js (975KB) from blocking initial load
 // Three.js is only loaded when user navigates to TENET hub
@@ -367,9 +368,11 @@ function TENETHubContent() {
 
 function TENETHub() {
   return (
-    <PanelErrorBoundary panelId="tenet-hub" panelTitle="TENET Control Center" hub="TENET">
-      <TENETHubContent />
-    </PanelErrorBoundary>
+    <HubErrorBoundary hubName="tenet" componentName="TENETHub">
+      <PanelErrorBoundary panelId="tenet-hub" panelTitle="TENET Control Center" hub="TENET">
+        <TENETHubContent />
+      </PanelErrorBoundary>
+    </HubErrorBoundary>
   );
 }
 

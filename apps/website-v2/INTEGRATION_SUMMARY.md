@@ -1,4 +1,4 @@
-[Ver002.000]
+[Ver003.000] - Consolidated hub files (Phase 1.1)
 
 # NJZ Platform Integration - COMPLETE
 
@@ -96,9 +96,9 @@ website-v2/
 │   ├── main.jsx                   # Entry point + error boundary
 │   ├── index.css                  # Global styles + design tokens
 │   ├── hub-1-sator/
-│   │   └── SATORHub.jsx           # The Observatory (updated)
+│   │   ├── index.jsx              # The Observatory (consolidated)
 │   ├── hub-2-rotas/
-│   │   └── ROTASHub.jsx           # The Harmonic Layer (updated)
+│   │   ├── index.jsx              # The Harmonic Layer (consolidated)
 │   ├── hub-3-info/
 │   │   └── InformationHub.jsx     # The Directory (new)
 │   ├── hub-4-games/

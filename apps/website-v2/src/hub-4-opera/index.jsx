@@ -1,6 +1,8 @@
 /**
  * OPERA Hub - Hub 4: The Nexus
  * Maps, fog of war, and spatial visualization with purple theme
+ * 
+ * [Ver002.000] - Added comprehensive error boundaries
  */
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +20,7 @@ import {
   ZoomIn,
   ZoomOut,
   Maximize2,
+  AlertTriangle
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
@@ -25,7 +28,15 @@ import { colors } from '@/theme/colors';
 import MapVisualization from './components/MapVisualization';
 import FogOverlay from './components/FogOverlay';
 import useOperaData from './hooks/useOperaData';
-import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+
+// Import error boundaries
+import { 
+  PanelErrorBoundary,
+  DataErrorBoundary,
+  HubErrorBoundary,
+  HubErrorFallback,
+  HubErrorCompact
+} from '@/components/error';
 
 // Hub Configuration with EXACT purple colors
 const HUB_CONFIG = {
@@ -62,6 +73,137 @@ const LAYERS = [
   { id: 'rotation', name: 'Rotation Paths', enabled: false },
 ];
 
+/**
+ * CanvasErrorFallback - Specialized error UI for canvas/WebGL errors
+ */
+function CanvasErrorFallback({ onRetry, error }) {
+  const purple = { base: '#9d4edd', glow: 'rgba(157, 78, 221, 0.4)' };
+  
+  return (
+    <div 
+      className="w-full h-full flex flex-col items-center justify-center p-6 rounded-lg"
+      style={{ 
+        backgroundColor: `${purple.base}10`,
+        border: `1px solid ${purple.base}30`
+      }}
+    >
+      <div 
+        className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+        style={{ 
+          backgroundColor: `${purple.base}20`,
+          boxShadow: `0 0 20px ${purple.glow}` 
+        }}
+      >
+        <AlertTriangle className="w-8 h-8" style={{ color: purple.base }} />
+      </div>
+      
+      <h3 className="text-lg font-semibold text-white mb-2">
+        Visualization Error
+      </h3>
+      
+      <p className="text-sm text-white/60 text-center max-w-sm mb-4">
+        {error?.message || 'Failed to render the map visualization. This may be due to WebGL or canvas limitations.'}
+      </p>
+      
+      <div className="space-y-2 text-xs text-white/40 text-center mb-4">
+        <p>Try these solutions:</p>
+        <ul className="space-y-1">
+          <li>• Enable hardware acceleration in your browser</li>
+          <li>• Update your graphics drivers</li>
+          <li>• Try a different browser (Chrome recommended)</li>
+        </ul>
+      </div>
+      
+      <button
+        onClick={onRetry}
+        className="px-4 py-2 rounded-lg font-medium transition-all hover:scale-105"
+        style={{
+          backgroundColor: `${purple.base}20`,
+          color: purple.base,
+          border: `1px solid ${purple.base}40`
+        }}
+      >
+        Retry Visualization
+      </button>
+    </div>
+  );
+}
+
+/**
+ * MapVisualizationErrorBoundary - Specialized boundary for map/canvas errors
+ */
+class MapVisualizationErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      hasError: false, 
+      error: null,
+      errorType: 'unknown'
+    };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Categorize the error
+    const message = error.message.toLowerCase();
+    let errorType = 'unknown';
+    
+    if (message.includes('webgl') || message.includes('webglcontextlost')) {
+      errorType = 'webgl';
+    } else if (message.includes('canvas') || message.includes('context')) {
+      errorType = 'canvas';
+    } else if (message.includes('texture') || message.includes('shader')) {
+      errorType = 'gpu';
+    } else if (message.includes('memory') || message.includes('allocation')) {
+      errorType = 'memory';
+    }
+    
+    return { hasError: true, error, errorType };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('[MapVisualizationErrorBoundary] Map error caught:', {
+      error: error.message,
+      type: this.state.errorType,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack
+    });
+  }
+
+  handleRetry = () => {
+    // Try to restore WebGL context if possible
+    if (this.state.errorType === 'webgl') {
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        // Force canvas reset
+        const newCanvas = canvas.cloneNode(true);
+        canvas.parentNode.replaceChild(newCanvas, canvas);
+      }
+    }
+    
+    this.setState({ 
+      hasError: false, 
+      error: null,
+      errorType: 'unknown'
+    });
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <CanvasErrorFallback 
+          onRetry={this.handleRetry}
+          error={this.state.error}
+        />
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+/**
+ * OperaHubContent - Main content component for OPERA hub
+ */
 function OperaHubContent() {
   const [selectedMap, setSelectedMap] = useState(MAPS[0]);
   const [viewMode, setViewMode] = useState('tactical');
@@ -183,28 +325,42 @@ function OperaHubContent() {
               </div>
             </div>
 
-            {/* Map Visualization Container */}
+            {/* Map Visualization Container with specialized error boundary */}
             <div className="relative aspect-video bg-void-mid rounded-lg overflow-hidden">
-              {/* Map Visualization Component */}
-              <MapVisualization
-                mapId={selectedMap.id}
-                mapData={mapData}
-                zoom={zoom}
-                layers={activeLayers}
-                viewMode={viewMode}
-                loading={loading}
-              />
+              <MapVisualizationErrorBoundary>
+                <DataErrorBoundary
+                  hubName="OPERA"
+                  componentName="MapVisualization"
+                  onRetry={() => addNotification('Retrying map load...', 'info')}
+                >
+                  {/* Map Visualization Component */}
+                  <MapVisualization
+                    mapId={selectedMap.id}
+                    mapData={mapData}
+                    zoom={zoom}
+                    layers={activeLayers}
+                    viewMode={viewMode}
+                    loading={loading}
+                  />
+                </DataErrorBoundary>
+              </MapVisualizationErrorBoundary>
 
               {/* Fog Overlay */}
-              <AnimatePresence>
-                {showFog && (
-                  <FogOverlay
-                    intensity={fogIntensity}
-                    color={purple.base}
-                    animated={true}
-                  />
-                )}
-              </AnimatePresence>
+              <DataErrorBoundary
+                hubName="OPERA"
+                componentName="FogOverlay"
+                compact
+              >
+                <AnimatePresence>
+                  {showFog && (
+                    <FogOverlay
+                      intensity={fogIntensity}
+                      color={purple.base}
+                      animated={true}
+                    />
+                  )}
+                </AnimatePresence>
+              </DataErrorBoundary>
 
               {/* View Mode Indicator */}
               <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-void-black/80 backdrop-blur-sm border border-white/10">
@@ -284,24 +440,30 @@ function OperaHubContent() {
               <Compass className="w-5 h-5" style={{ color: purple.base }} />
               <h3 className="font-display font-semibold">Spatial Analysis</h3>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: 'Avg Control Time', value: '2:34', unit: 'min' },
-                { label: 'Rotation Speed', value: '14.2', unit: 'sec' },
-                { label: 'Peak Zones', value: '7', unit: 'areas' },
-                { label: 'Sight Coverage', value: '73%', unit: 'map' },
-              ].map((stat) => (
-                <div key={stat.label} className="p-4 rounded-lg bg-white/5">
-                  <div className="text-xs text-slate mb-1">{stat.label}</div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-mono font-bold" style={{ color: purple.base }}>
-                      {stat.value}
-                    </span>
-                    <span className="text-xs text-slate">{stat.unit}</span>
+            <DataErrorBoundary
+              hubName="OPERA"
+              componentName="SpatialAnalysis"
+              compact
+            >
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: 'Avg Control Time', value: '2:34', unit: 'min' },
+                  { label: 'Rotation Speed', value: '14.2', unit: 'sec' },
+                  { label: 'Peak Zones', value: '7', unit: 'areas' },
+                  { label: 'Sight Coverage', value: '73%', unit: 'map' },
+                ].map((stat) => (
+                  <div key={stat.label} className="p-4 rounded-lg bg-white/5">
+                    <div className="text-xs text-slate mb-1">{stat.label}</div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-xl font-mono font-bold" style={{ color: purple.base }}>
+                        {stat.value}
+                      </span>
+                      <span className="text-xs text-slate">{stat.unit}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </DataErrorBoundary>
           </HubCard>
         </div>
 
@@ -313,39 +475,45 @@ function OperaHubContent() {
               <Navigation className="w-5 h-5" style={{ color: purple.base }} />
               <h3 className="font-display font-semibold">Select Map</h3>
             </div>
-            <div className="space-y-2">
-              {MAPS.map((map) => (
-                <button
-                  key={map.id}
-                  onClick={() => handleMapSelect(map)}
-                  className={`w-full p-3 rounded-lg border transition-all duration-200 text-left ${
-                    selectedMap.id === map.id
-                      ? 'bg-white/10'
-                      : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                  style={{
-                    borderColor: selectedMap.id === map.id ? purple.base : 'rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-sm">{map.name}</div>
-                      <div className="text-xs text-slate">
-                        {map.size} • {map.layout}
+            <DataErrorBoundary
+              hubName="OPERA"
+              componentName="MapSelector"
+              compact
+            >
+              <div className="space-y-2">
+                {MAPS.map((map) => (
+                  <button
+                    key={map.id}
+                    onClick={() => handleMapSelect(map)}
+                    className={`w-full p-3 rounded-lg border transition-all duration-200 text-left ${
+                      selectedMap.id === map.id
+                        ? 'bg-white/10'
+                        : 'bg-white/5 hover:bg-white/10'
+                    }`}
+                    style={{
+                      borderColor: selectedMap.id === map.id ? purple.base : 'rgba(255,255,255,0.1)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-sm">{map.name}</div>
+                        <div className="text-xs text-slate">
+                          {map.size} • {map.layout}
+                        </div>
                       </div>
+                      {selectedMap.id === map.id && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: purple.base }}
+                        />
+                      )}
                     </div>
-                    {selectedMap.id === map.id && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: purple.base }}
-                      />
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
+                  </button>
+                ))}
+              </div>
+            </DataErrorBoundary>
           </HubCard>
 
           {/* Fog Settings */}
@@ -403,24 +571,30 @@ function OperaHubContent() {
               <Maximize2 className="w-5 h-5 text-slate" />
               <h3 className="font-display font-semibold">Map Properties</h3>
             </div>
-            <div className="space-y-3">
-              {[
-                { label: 'Total Area', value: '12,450', unit: 'm²' },
-                { label: 'Elevation', value: '3', unit: 'levels' },
-                { label: 'Bombsites', value: '2', unit: 'sites' },
-                { label: 'Spawn Points', value: '8', unit: 'total' },
-              ].map((prop) => (
-                <div key={prop.label} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-                  <span className="text-sm text-slate">{prop.label}</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-mono" style={{ color: purple.base }}>
-                      {prop.value}
-                    </span>
-                    <span className="text-xs text-slate">{prop.unit}</span>
+            <DataErrorBoundary
+              hubName="OPERA"
+              componentName="MapProperties"
+              compact
+            >
+              <div className="space-y-3">
+                {[
+                  { label: 'Total Area', value: '12,450', unit: 'm²' },
+                  { label: 'Elevation', value: '3', unit: 'levels' },
+                  { label: 'Bombsites', value: '2', unit: 'sites' },
+                  { label: 'Spawn Points', value: '8', unit: 'total' },
+                ].map((prop) => (
+                  <div key={prop.label} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+                    <span className="text-sm text-slate">{prop.label}</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="font-mono" style={{ color: purple.base }}>
+                        {prop.value}
+                      </span>
+                      <span className="text-xs text-slate">{prop.unit}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </DataErrorBoundary>
           </HubCard>
 
           {/* Info Card */}
@@ -445,11 +619,36 @@ function OperaHubContent() {
   );
 }
 
+/**
+ * OperaHub - Root component with error boundary hierarchy
+ */
 function OperaHub() {
   return (
-    <PanelErrorBoundary panelId="opera-hub" panelTitle="OPERA Nexus" hub="OPERA">
-      <OperaHubContent />
-    </PanelErrorBoundary>
+    <HubErrorBoundary hubName="opera" componentName="OperaHub">
+      <DataErrorBoundary
+        hubName="OPERA"
+        componentName="OperaHub"
+        fallback={
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <HubErrorFallback
+              hub="OPERA"
+              title="OPERA Nexus Error"
+              message="Failed to load the map visualization. Please check your browser supports WebGL."
+              onRetry={() => window.location.reload()}
+              onGoHome={() => window.location.href = '/'}
+            />
+          </div>
+        }
+      >
+        <PanelErrorBoundary 
+          panelId="opera-hub" 
+          panelTitle="OPERA Nexus" 
+          hub="OPERA"
+        >
+          <OperaHubContent />
+        </PanelErrorBoundary>
+      </DataErrorBoundary>
+    </HubErrorBoundary>
   );
 }
 

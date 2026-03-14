@@ -2,17 +2,32 @@
  * SATOR Hub - Hub 1: The Observatory
  * Raw data ingestion with orbital ring navigation
  * 
- * [Ver001.000]
+ * [Ver002.000] - Consolidated: Merged legacy orbital ring visualization
  */
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Database, Shield, Clock, Users, Trophy, Search, Activity } from 'lucide-react';
+import { 
+  Database, 
+  Shield, 
+  Clock, 
+  Users, 
+  Trophy, 
+  Search, 
+  Activity,
+  FileCheck 
+} from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { colors } from '@/theme/colors';
 import { StatsGrid } from './components/StatsGrid';
 import { PlayerWidget } from './components/PlayerWidget';
 import { useSatorData } from './hooks/useSatorData';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
-import { MLInferenceErrorBoundary, HubErrorFallback } from '@/components/error';
+import { 
+  MLInferenceErrorBoundary, 
+  HubErrorBoundary,
+  HubErrorFallback 
+} from '@/components/error';
+import { useNJZStore, useHubState } from '@/shared/store/njzStore';
 
 const HUB_CONFIG = {
   name: 'SATOR',
@@ -22,6 +37,21 @@ const HUB_CONFIG = {
   glow: colors.hub.sator.glow,       // rgba(255, 215, 0, 0.4)
   muted: colors.hub.sator.muted,     // #bfa030
 };
+
+// Orbital rings data (from legacy version)
+const rings = [
+  { id: 'teams', label: 'Teams', icon: Users, count: '2,847', color: '#ff9f1c' },
+  { id: 'matches', label: 'Matches', icon: Trophy, count: '156', color: '#ff9f1c' },
+  { id: 'players', label: 'Players', icon: Users, count: '12,847', color: '#ff9f1c' },
+  { id: 'tournaments', label: 'Tournaments', icon: Trophy, count: '48', color: '#ff9f1c' },
+  { id: 'history', label: 'History', icon: Clock, count: '2.4M', color: '#ff9f1c' }
+];
+
+const verificationSteps = [
+  { id: 1, label: 'SHA-256 Checksum', status: 'verified', icon: FileCheck },
+  { id: 2, label: 'Cross-reference', status: 'verified', icon: FileCheck },
+  { id: 3, label: 'Timestamp Sync', status: 'verified', icon: Clock },
+];
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -48,6 +78,33 @@ const itemVariants = {
 
 function SatorHubContent() {
   const { stats, players, isLoading, error } = useSatorData();
+  const addNotification = useNJZStore(state => state.addNotification);
+  const { state, setState } = useHubState('sator');
+  
+  // Orbital ring state (from legacy)
+  const [activeRing, setActiveRing] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Rotation animation (from legacy)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation(prev => (prev + 0.5) % 360);
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleRingClick = (ringId) => {
+    setActiveRing(activeRing === ringId ? null : ringId);
+    addNotification(`${rings.find(r => r.id === ringId)?.label} ring activated`, 'info');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      addNotification(`Searching RAWS for "${searchQuery}"...`, 'info');
+    }
+  };
 
   return (
     <motion.div
@@ -131,6 +188,125 @@ function SatorHubContent() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Player Widgets */}
         <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
+          {/* Orbital Ring System - Merged from legacy */}
+          <GlassCard 
+            className="p-6" 
+            hoverGlow={HUB_CONFIG.glow}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Database className="w-5 h-5" style={{ color: HUB_CONFIG.color }} />
+                <h2 
+                  className="text-lg font-semibold"
+                  style={{ color: HUB_CONFIG.color }}
+                >
+                  Orbital Ring System
+                </h2>
+              </div>
+              <span 
+                className="text-xs font-mono px-2 py-1 rounded"
+                style={{ 
+                  backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                  color: HUB_CONFIG.muted 
+                }}
+              >
+                Rotation: {rotation.toFixed(0)}°
+              </span>
+            </div>
+
+            {/* Orbital Visualization */}
+            <div className="relative aspect-square max-w-[500px] mx-auto py-8">
+              {/* Background glow */}
+              <div 
+                className="absolute inset-0 rounded-full blur-3xl"
+                style={{ backgroundColor: 'rgba(255, 159, 28, 0.05)' }}
+              />
+
+              {/* Center - RAWS Core */}
+              <motion.div
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              >
+                <div 
+                  className="w-28 h-28 rounded-full flex flex-col items-center justify-center"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #ff9f1c, #ea580c)',
+                    boxShadow: '0 0 40px rgba(255, 159, 28, 0.4)'
+                  }}
+                >
+                  <span className="font-bold text-xl text-black">RAWS</span>
+                  <span className="text-xs font-mono text-black/70">Immutable</span>
+                </div>
+              </motion.div>
+
+              {/* Orbital Rings */}
+              {rings.map((ring, index) => {
+                const size = 160 + index * 70;
+                const isActive = activeRing === ring.id;
+
+                return (
+                  <motion.div
+                    key={ring.id}
+                    className="absolute top-1/2 left-1/2 rounded-full cursor-pointer"
+                    style={{
+                      width: size,
+                      height: size,
+                      marginLeft: -size / 2,
+                      marginTop: -size / 2,
+                      border: `2px solid ${isActive ? ring.color : 'rgba(255, 159, 28, 0.2)'}`,
+                      boxShadow: isActive ? `0 0 30px ${ring.color}40` : 'none'
+                    }}
+                    animate={{ rotate: rotation * (index % 2 === 0 ? 1 : -1) * (1 / (index + 1)) }}
+                    transition={{ duration: 0.1, ease: 'linear' }}
+                    onClick={() => handleRingClick(ring.id)}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    {/* Ring label */}
+                    <motion.div
+                      className="absolute -top-3 left-1/2 transform -translate-x-1/2"
+                      style={{ rotate: -rotation * (index % 2 === 0 ? 1 : -1) * (1 / (index + 1)) }}
+                    >
+                      <div 
+                        className="px-3 py-1 rounded-full text-xs font-mono"
+                        style={{
+                          backgroundColor: isActive ? '#ff9f1c' : 'rgba(20, 20, 25, 0.9)',
+                          color: isActive ? '#000' : '#ff9f1c',
+                          border: isActive ? 'none' : '1px solid rgba(255, 159, 28, 0.3)'
+                        }}
+                      >
+                        {ring.label}
+                      </div>
+                    </motion.div>
+
+                    {/* Data points on ring */}
+                    {Array.from({ length: 4 + index }).map((_, i) => {
+                      const angle = (i / (4 + index)) * 360;
+                      const x = Math.cos((angle * Math.PI) / 180) * (size / 2);
+                      const y = Math.sin((angle * Math.PI) / 180) * (size / 2);
+
+                      return (
+                        <motion.div
+                          key={i}
+                          className="absolute w-2 h-2 rounded-full"
+                          style={{
+                            left: `calc(50% + ${x}px - 4px)`,
+                            top: `calc(50% + ${y}px - 4px)`,
+                            backgroundColor: ring.color,
+                            opacity: isActive ? 1 : 0.5
+                          }}
+                          animate={{ scale: isActive ? [1, 1.5, 1] : 1 }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                        />
+                      );
+                    })}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </GlassCard>
+
+          {/* Player Widgets */}
           <GlassCard 
             className="p-6" 
             hoverGlow={HUB_CONFIG.glow}
@@ -203,7 +379,7 @@ function SatorHubContent() {
               </h2>
             </div>
             
-            <div className="relative">
+            <form onSubmit={handleSearch} className="relative">
               <Search 
                 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5"
                 style={{ color: colors.text.muted }}
@@ -211,6 +387,8 @@ function SatorHubContent() {
               <input
                 type="text"
                 placeholder="Search players, teams, or matches..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/5 border transition-colors focus:outline-none focus:ring-2"
                 style={{ 
                   borderColor: colors.border.subtle,
@@ -226,6 +404,7 @@ function SatorHubContent() {
                 }}
               />
               <button
+                type="submit"
                 className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                 style={{ 
                   backgroundColor: HUB_CONFIG.color,
@@ -240,7 +419,7 @@ function SatorHubContent() {
               >
                 Query
               </button>
-            </div>
+            </form>
           </GlassCard>
         </motion.div>
 
@@ -262,30 +441,27 @@ function SatorHubContent() {
             </div>
             
             <div className="space-y-3">
-              {[
-                { label: 'SHA-256 Checksum', status: 'verified' },
-                { label: 'Cross-reference', status: 'verified' },
-                { label: 'Timestamp Sync', status: 'verified' },
-              ].map((item) => (
+              {verificationSteps.map((step) => (
                 <div 
-                  key={item.label}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
-                  style={{ borderColor: colors.border.subtle }}
+                  key={step.id}
+                  className="flex items-center gap-3 py-2"
                 >
+                  <step.icon className="w-4 h-4" style={{ color: colors.status.success }} />
                   <span className="text-sm" style={{ color: colors.text.secondary }}>
-                    {item.label}
-                  </span>
-                  <span 
-                    className="text-xs px-2 py-1 rounded font-medium"
-                    style={{ 
-                      backgroundColor: 'rgba(0, 255, 136, 0.1)',
-                      color: colors.status.success,
-                    }}
-                  >
-                    {item.status}
+                    {step.label}
                   </span>
                 </div>
               ))}
+            </div>
+
+            <div 
+              className="mt-6 pt-4 border-t flex items-center gap-2"
+              style={{ borderColor: colors.border.subtle }}
+            >
+              <Shield className="w-5 h-5" style={{ color: colors.status.success }} />
+              <span className="text-sm font-medium" style={{ color: colors.status.success }}>
+                All checks passed
+              </span>
             </div>
           </GlassCard>
 
@@ -331,6 +507,42 @@ function SatorHubContent() {
             </div>
           </GlassCard>
 
+          {/* Quick Stats - Merged from legacy */}
+          <GlassCard 
+            className="p-6" 
+            hoverGlow={HUB_CONFIG.glow}
+          >
+            <h2 
+              className="text-lg font-semibold mb-4"
+              style={{ color: HUB_CONFIG.color }}
+            >
+              Data Sources
+            </h2>
+            <div className="space-y-3">
+              {[
+                { label: 'Active APIs', value: '12', icon: Database },
+                { label: 'Queue Depth', value: '0', icon: Clock },
+                { label: 'Avg Latency', value: '12ms', icon: Trophy },
+              ].map((stat) => (
+                <div 
+                  key={stat.label}
+                  className="flex items-center justify-between py-2"
+                >
+                  <div className="flex items-center gap-2" style={{ color: colors.text.secondary }}>
+                    <stat.icon className="w-4 h-4" />
+                    <span className="text-sm">{stat.label}</span>
+                  </div>
+                  <span 
+                    className="font-mono font-medium"
+                    style={{ color: HUB_CONFIG.color }}
+                  >
+                    {stat.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+
           {/* About RAWS */}
           <GlassCard 
             className="p-6" 
@@ -365,23 +577,25 @@ function SatorHubContent() {
 
 export function SatorHub() {
   return (
-    <PanelErrorBoundary panelId="sator-hub" panelTitle="SATOR Observatory" hub="SATOR">
-      <MLInferenceErrorBoundary
-        fallback={
-          <div className="pt-12">
-            <HubErrorFallback
-              hub="SATOR"
-              title="ML Inference Error"
-              message="The SATOR Observatory encountered an ML processing error."
-              onRetry={() => window.location.reload()}
-              onGoHome={() => window.location.href = '/'}
-            />
-          </div>
-        }
-      >
-        <SatorHubContent />
-      </MLInferenceErrorBoundary>
-    </PanelErrorBoundary>
+    <HubErrorBoundary hubName="sator" componentName="SatorHub">
+      <PanelErrorBoundary panelId="sator-hub" panelTitle="SATOR Observatory" hub="SATOR">
+        <MLInferenceErrorBoundary
+          fallback={
+            <div className="pt-12">
+              <HubErrorFallback
+                hub="SATOR"
+                title="ML Inference Error"
+                message="The SATOR Observatory encountered an ML processing error."
+                onRetry={() => window.location.reload()}
+                onGoHome={() => window.location.href = '/'}
+              />
+            </div>
+          }
+        >
+          <SatorHubContent />
+        </MLInferenceErrorBoundary>
+      </PanelErrorBoundary>
+    </HubErrorBoundary>
   );
 }
 

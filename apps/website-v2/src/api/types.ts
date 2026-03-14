@@ -122,6 +122,14 @@ export interface WebSocketMessage<T = unknown> {
   id: string
 }
 
+export interface UnifiedWebSocketMessage<T = unknown> {
+  type: string
+  channel?: string
+  data: T
+  timestamp: string
+  error?: string
+}
+
 export interface StreamDataMessage {
   id: string
   features: number[]
@@ -130,6 +138,51 @@ export interface StreamDataMessage {
 
 export interface StreamPredictionMessage {
   prediction: PredictionResult
+}
+
+// Unified WebSocket Specific Types
+export interface MatchUpdateData {
+  matchId: string
+  eventType: 'kill' | 'death' | 'round_end' | 'spike_plant' | 'spike_defuse' | 'economy_update'
+  data: Record<string, unknown>
+  round?: number
+  timestamp: string
+}
+
+export interface PlayerStatsUpdateData {
+  playerId: string
+  matchId: string
+  stats: {
+    kills?: number
+    deaths?: number
+    assists?: number
+    acs?: number
+    adr?: number
+    [key: string]: unknown
+  }
+  timestamp: string
+}
+
+export interface AnalyticsUpdateData {
+  metric: string
+  value: number
+  previousValue?: number
+  change?: number
+  context: Record<string, unknown>
+  timestamp: string
+}
+
+export interface SystemNotificationData {
+  level: 'info' | 'warning' | 'error' | 'success'
+  title: string
+  message: string
+  details?: Record<string, unknown>
+  timestamp: string
+}
+
+export interface WebSocketSubscription {
+  channel: string
+  filters?: Record<string, unknown>
 }
 
 // Error Response

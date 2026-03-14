@@ -16,7 +16,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 
 # Import route modules
-from api.src.routes import players, matches, analytics, collection, dashboard, websocket
+from api.src.routes import players, matches, analytics, collection, dashboard, websocket, search, ml_models
 
 # Import database manager
 try:
@@ -179,6 +179,39 @@ async def health_check():
     return health_status
 
 
+@app.get("/v1/health", tags=["health"])
+async def v1_health_check():
+    """
+    v1 Health check endpoint.
+    
+    Returns:
+        Health status with database connectivity information.
+    """
+    health_status = {
+        "status": "healthy",
+        "service": APP_NAME.lower(),
+        "version": APP_VERSION,
+        "api_version": "v1",
+        "environment": APP_ENVIRONMENT,
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+    }
+    
+    # Check database connectivity
+    if db_pool:
+        try:
+            async with db_pool.acquire() as conn:
+                await conn.fetchval("SELECT 1")
+                health_status["database"] = "connected"
+        except Exception as e:
+            health_status["database"] = "error"
+            health_status["database_error"] = str(e)
+            logger.error(f"Health check database error: {e}")
+    else:
+        health_status["database"] = "not_configured"
+    
+    return health_status
+
+
 @app.get("/ready", tags=["health"])
 async def readiness_check():
     """
@@ -201,6 +234,28 @@ async def readiness_check():
         raise HTTPException(status_code=503, detail="Database unavailable")
 
 
+@app.get("/v1/ready", tags=["health"])
+async def v1_readiness_check():
+    """
+    v1 Readiness check for load balancers and orchestrators.
+    
+    Returns 503 if the service is not ready to accept traffic.
+    """
+    if not DATABASE_URL:
+        return {"ready": True, "mode": "stub", "api_version": "v1"}  # OK for stub mode
+    
+    if db_pool is None:
+        raise HTTPException(status_code=503, detail="Database not connected")
+    
+    try:
+        async with db_pool.acquire() as conn:
+            await conn.fetchval("SELECT 1")
+        return {"ready": True, "api_version": "v1"}
+    except Exception as e:
+        logger.error(f"Readiness check failed: {e}")
+        raise HTTPException(status_code=503, detail="Database unavailable")
+
+
 @app.get("/live", tags=["health"])
 async def liveness_check():
     """
@@ -209,6 +264,16 @@ async def liveness_check():
     Always returns 200 if the process is running.
     """
     return {"alive": True}
+
+
+@app.get("/v1/live", tags=["health"])
+async def v1_liveness_check():
+    """
+    v1 Liveness check for Kubernetes-style health monitoring.
+    
+    Always returns 200 if the process is running.
+    """
+    return {"alive": True, "api_version": "v1"}
 
 
 # ---------------------------------------------------------------------------
@@ -222,6 +287,8 @@ app.include_router(analytics.router)
 app.include_router(collection.router)
 app.include_router(dashboard.router)
 app.include_router(websocket.router)
+app.include_router(search.router)
+app.include_router(ml_models.router)
 
 
 # ---------------------------------------------------------------------------
@@ -239,10 +306,16 @@ async def root():
         "environment": APP_ENVIRONMENT,
         "documentation": "/redoc",
         "health": "/health",
+        "api_version": "v1",
         "endpoints": {
-            "players": "/api/players",
-            "matches": "/api/matches",
-            "analytics": "/api/analytics",
+            "players": "/v1/players",
+            "matches": "/v1/matches",
+            "analytics": "/v1/analytics",
+            "collection": "/v1/collection",
+            "dashboard": "/v1/dashboard",
+            "websocket": "/v1/ws",
+            "search": "/v1/search",
+            "ml_models": "/v1/ml/models",
         }
     }
 

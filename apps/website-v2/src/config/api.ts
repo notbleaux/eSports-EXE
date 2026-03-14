@@ -1,7 +1,7 @@
 /**
  * API Configuration - All API endpoints and URLs
  * 
- * [Ver001.000]
+ * [Ver001.001] - Added /v1/ prefix to health endpoints for API versioning
  */
 
 import { getEnvironment } from './environment'
@@ -10,7 +10,10 @@ const env = getEnvironment()
 
 // Base URLs
 export const API_BASE_URL = env.VITE_API_URL || 'https://api.libre-x-esport.com'
-export const WS_BASE_URL = env.VITE_WS_URL || 'wss://api.libre-x-esport.com'
+export const WS_BASE_URL = env.VITE_WS_URL || 'wss://api.libre-x-esport.com/v1/ws'
+
+// Unified WebSocket
+export const WS_UNIFIED = WS_BASE_URL
 
 // ML Service Endpoints
 export const ML_API = {
@@ -28,8 +31,8 @@ export const ML_API = {
   streamingLocal: 'ws://localhost:8080/stream',
   
   // Health
-  health: `${API_BASE_URL}/health`,
-  ready: `${API_BASE_URL}/ready`
+  health: `${API_BASE_URL}/v1/health`,
+  ready: `${API_BASE_URL}/v1/ready`
 } as const
 
 // Analytics Endpoints

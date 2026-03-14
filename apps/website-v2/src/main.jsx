@@ -1,6 +1,8 @@
 /**
  * Main Entry Point
  * NJZ Platform v2.0
+ * 
+ * [Ver003.000] - Enhanced with performance monitoring and lazy loading
  */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -9,53 +11,50 @@ import App from './App.jsx'
 import './index.css'
 import './styles/mobile.css'
 
-// Error boundary for production
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { hasError: false }
-  }
+// Use AppErrorBoundary from components/error for consistency
+import { AppErrorBoundary } from './components/error'
+import { performanceMonitor } from './monitoring/PerformanceMonitor'
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true }
-  }
+// Initialize performance monitoring immediately
+performanceMonitor.initialize();
 
-  componentDidCatch(error, errorInfo) {
-    console.error('NJZ Platform Error:', error, errorInfo)
-  }
+// Mark main script execution start
+performanceMonitor.markUserTiming('main-js-start');
 
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-void text-white p-8">
-          <div className="text-center max-w-md">
-            <h1 className="text-4xl font-display font-bold text-signal-cyan mb-4">
-              System Anomaly
-            </h1>
-            <p className="text-slate mb-8">
-              The platform encountered an unexpected error. Please refresh the page or contact support.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 rounded-lg bg-signal-cyan text-void-black font-medium hover:shadow-glow-cyan transition-all"
-            >
-              Reinitialize
-            </button>
-          </div>
-        </div>
-      )
-    }
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-    return this.props.children
-  }
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(
+root.render(
   <React.StrictMode>
-    <ErrorBoundary>
+    <AppErrorBoundary>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ErrorBoundary>
+    </AppErrorBoundary>
   </React.StrictMode>,
-)
+);
+
+// Measure main script execution
+const mainJsDuration = performanceMonitor.measureUserTiming('main-js-start');
+if (mainJsDuration) {
+  console.log('[Performance] Main JS executed in:', mainJsDuration.toFixed(2), 'ms');
+}
+
+// Preload critical chunks after initial render
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    // Preload likely navigation targets
+    const preloadHubs = ['/sator', '/rotas'];
+    
+    // Use requestIdleCallback for non-critical preloading
+    const schedulePreload = window.requestIdleCallback || window.setTimeout;
+    
+    schedulePreload(() => {
+      preloadHubs.forEach(hub => {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = hub;
+        document.head.appendChild(link);
+      });
+    }, { timeout: 2000 });
+  });
+}

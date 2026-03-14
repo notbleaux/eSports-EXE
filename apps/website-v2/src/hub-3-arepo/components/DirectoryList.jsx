@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FolderTree, ChevronRight } from 'lucide-react';
-import { GlassCard } from '../../components/ui/GlassCard';
+import { GlassCard } from '@/components/ui/GlassCard';
 
 function DirectoryList({ 
   categories, 
