@@ -1,7 +1,9 @@
 /**
  * Memory Monitor - Leak Detection Tool
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
+
+import { mlLogger } from '../utils/logger'
 
 export interface MemorySnapshot {
   timestamp: number
@@ -86,7 +88,7 @@ export function snapshot(): MemorySnapshot {
 export function trackWorkerInit(): void {
   state.workerInits++
   if (state.monitoring) {
-    console.log('[MemoryMonitor] Worker initialized. Total:', state.workerInits)
+    mlLogger.debug('[MemoryMonitor] Worker initialized. Total:', state.workerInits)
   }
 }
 
@@ -96,7 +98,7 @@ export function trackWorkerInit(): void {
 export function trackWorkerTerminate(): void {
   state.workerTerminations++
   if (state.monitoring) {
-    console.log('[MemoryMonitor] Worker terminated. Active:', 
+    mlLogger.debug('[MemoryMonitor] Worker terminated. Active:', 
                 state.workerInits - state.workerTerminations)
   }
 }
@@ -168,12 +170,12 @@ export function report(): MemoryReport {
  */
 export function start(intervalMs: number = 5000): void {
   if (state.monitoring) {
-    console.log('[MemoryMonitor] Already monitoring')
+    mlLogger.info('[MemoryMonitor] Already monitoring')
     return
   }
   
   state.monitoring = true
-  console.log('[MemoryMonitor] Started monitoring (interval:', intervalMs, 'ms)')
+  mlLogger.info('[MemoryMonitor] Started monitoring (interval:', intervalMs, 'ms)')
   
   // Take initial snapshot
   snapshot()
@@ -184,16 +186,16 @@ export function start(intervalMs: number = 5000): void {
     
     // Log if leak detected
     if (detectLeak(state.snapshots)) {
-      console.warn('[MemoryMonitor] ⚠️ Potential memory leak detected!')
-      console.warn('[MemoryMonitor] Growth rate:', 
+      mlLogger.warn('[MemoryMonitor] ⚠️ Potential memory leak detected!')
+      mlLogger.warn('[MemoryMonitor] Growth rate:', 
                    (calculateGrowthRate(state.snapshots) / 1024 / 1024).toFixed(2), 'MB/min')
-      console.warn('[MemoryMonitor] Unmounted panels:', 
+      mlLogger.warn('[MemoryMonitor] Unmounted panels:', 
                    state.panelMounts - state.panelUnmounts)
     }
     
     // Log every 12 snapshots (every minute at 5s interval)
     if (state.snapshots.length % 12 === 0) {
-      console.log('[MemoryMonitor] Heap:', (snap.jsHeapSize / 1024 / 1024).toFixed(2), 'MB')
+      mlLogger.debug('[MemoryMonitor] Heap:', (snap.jsHeapSize / 1024 / 1024).toFixed(2), 'MB')
     }
   }, intervalMs)
 }
@@ -210,8 +212,8 @@ export function stop(): void {
     state.intervalId = undefined
   }
   
-  console.log('[MemoryMonitor] Stopped monitoring')
-  console.log('[MemoryMonitor] Final report:', report())
+  mlLogger.info('[MemoryMonitor] Stopped monitoring')
+  mlLogger.info('[MemoryMonitor] Final report:', report())
 }
 
 /**
@@ -224,7 +226,7 @@ export function reset(): void {
   state.panelMounts = 0
   state.panelUnmounts = 0
   state.snapshots = []
-  console.log('[MemoryMonitor] State reset')
+  mlLogger.info('[MemoryMonitor] State reset')
 }
 
 /**

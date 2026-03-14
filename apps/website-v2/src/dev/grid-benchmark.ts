@@ -1,7 +1,9 @@
 /**
  * Grid Benchmark Suite - Performance Measurement Tool
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
+
+import { logger } from '../utils/logger'
 
 /**
  * Get memory usage with feature detection for Chrome-only API
@@ -98,10 +100,10 @@ export async function runBenchmark(
   const panelCounts = [100, 1000, 5000]
   const results: BenchmarkResult[] = []
   
-  console.log('[Benchmark] Starting grid benchmark suite...')
+  logger.info('[Benchmark] Starting grid benchmark suite...')
   
   for (const count of panelCounts) {
-    console.log(`[Benchmark] Testing ${count} panels...`)
+    logger.info(`[Benchmark] Testing ${count} panels...`)
     
     // Warm up
     await renderFn(count)
@@ -117,7 +119,7 @@ export async function runBenchmark(
     
     results.push(result)
     
-    console.log(`[Benchmark] ${count} panels: ${result.renderTime.toFixed(2)}ms render, ` +
+    logger.info(`[Benchmark] ${count} panels: ${result.renderTime.toFixed(2)}ms render, ` +
                 `${result.scrollFps} FPS, ${(result.memoryDelta / 1024 / 1024).toFixed(2)}MB memory`)
     
     // Cool down between tests
@@ -127,7 +129,7 @@ export async function runBenchmark(
   const suite: BenchmarkSuite = { results }
   saveBenchmarks(suite)
   
-  console.log('[Benchmark] Suite complete. Results saved to localStorage.')
+  logger.info('[Benchmark] Suite complete. Results saved to localStorage.')
   return suite
 }
 
@@ -140,7 +142,7 @@ export function saveBenchmarks(suite: BenchmarkSuite): void {
     const allSuites = [...existing, suite]
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allSuites.slice(-10))) // Keep last 10
   } catch (e) {
-    console.error('[Benchmark] Failed to save:', e)
+    logger.error('[Benchmark] Failed to save:', e)
   }
 }
 
@@ -185,7 +187,7 @@ export async function benchmark(
 ): Promise<void> {
   const suite = await runBenchmark(renderFn, scrollContainer)
   
-  console.table(suite.results.map(r => ({
+  logger.info('Benchmark results:', suite.results.map(r => ({
     Panels: r.panelCount,
     'Render (ms)': r.renderTime.toFixed(2),
     'Scroll FPS': r.scrollFps || 'N/A',

@@ -1,10 +1,11 @@
 /**
  * Test Runner - Unified Dev Testing Framework
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
 
 import { benchmark, exportBenchmarks, BenchmarkResult } from './grid-benchmark'
 import { monitor, report as memoryReport, MemoryReport } from './memory-monitor'
+import { logger } from '../utils/logger'
 
 export interface TestSuite {
   name: string
@@ -44,11 +45,11 @@ export async function runTests(options: {
   const startTime = performance.now()
   const suites: TestSuite[] = []
   
-  console.log('[TestRunner] Starting test suite...')
+  logger.info('[TestRunner] Starting test suite...')
   
   // 1. Grid Benchmark
   if (options.includeBenchmark && options.benchmarkRenderFn) {
-    console.log('[TestRunner] Running grid benchmarks...')
+    logger.info('[TestRunner] Running grid benchmarks...')
     try {
       // Mock implementation - in real usage would call benchmark()
       const mockResults: BenchmarkResult[] = [
@@ -61,15 +62,15 @@ export async function runTests(options: {
         timestamp: Date.now(),
         duration: 0,
       })
-      console.log('[TestRunner] Benchmarks complete')
+      logger.info('[TestRunner] Benchmarks complete')
     } catch (e) {
-      console.error('[TestRunner] Benchmark failed:', e)
+      logger.error('[TestRunner] Benchmark failed:', e)
     }
   }
   
   // 2. Memory Monitor
   if (options.includeMemory) {
-    console.log('[TestRunner] Running memory checks...')
+    logger.info('[TestRunner] Running memory checks...')
     try {
       monitor.start(1000)
       await new Promise(r => setTimeout(r, 3000)) // Monitor for 3s
@@ -82,15 +83,15 @@ export async function runTests(options: {
         timestamp: Date.now(),
         duration: 3000,
       })
-      console.log('[TestRunner] Memory check complete')
+      logger.info('[TestRunner] Memory check complete')
     } catch (e) {
-      console.error('[TestRunner] Memory check failed:', e)
+      logger.error('[TestRunner] Memory check failed:', e)
     }
   }
   
   // 3. Stress Test (placeholder - requires component)
   if (options.includeStress) {
-    console.log('[TestRunner] Stress test requires manual component mount')
+    logger.info('[TestRunner] Stress test requires manual component mount')
     suites.push({
       name: 'Stress Test',
       stress: { passed: true, averageFps: 60, minFps: 45 },
@@ -119,8 +120,8 @@ export async function runTests(options: {
   
   saveReport(report)
   
-  console.log('[TestRunner] Test suite complete')
-  console.log(`[TestRunner] Passed: ${report.summary.passed}, Failed: ${report.summary.failed}`)
+  logger.info('[TestRunner] Test suite complete')
+  logger.info(`[TestRunner] Passed: ${report.summary.passed}, Failed: ${report.summary.failed}`)
   
   return report
 }
@@ -134,7 +135,7 @@ function saveReport(report: TestReport): void {
     existing.push(report)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(existing.slice(-20))) // Keep last 20
   } catch (e) {
-    console.error('[TestRunner] Failed to save report:', e)
+    logger.error('[TestRunner] Failed to save report:', e)
   }
 }
 

@@ -2,8 +2,11 @@
  * Grid Worker - OffscreenCanvas Rendering Thread
  * Handles canvas-based grid rendering in a dedicated worker thread
  * 
- * [Ver001.000]
+ * [Ver001.001] - Added DEV conditional for console logs
  */
+
+// Debug flag - disabled in production
+const DEV = false
 
 // ============================================================================
 // MESSAGE PROTOCOL TYPES
@@ -277,11 +280,11 @@ function renderCell(
 
 export function measureRenderTime(panelCounts: number[] = [10, 20, 50]): void {
   if (!state.ctx || !state.canvas) {
-    console.error('[Worker] Cannot measure: not initialized')
+    if (DEV) console.error('[Worker] Cannot measure: not initialized')
     return
   }
 
-  console.log('[Worker] Starting render benchmark...')
+  if (DEV) console.log('[Worker] Starting render benchmark...')
 
   panelCounts.forEach((count) => {
     // Generate test panels
@@ -301,13 +304,13 @@ export function measureRenderTime(panelCounts: number[] = [10, 20, 50]): void {
     const renderTime = performance.now() - startTime
 
     const status = renderTime < 16 ? '✓ PASS' : '✗ FAIL'
-    console.log(
+    if (DEV) console.log(
       `[Worker] Render ${count} panels: ${renderTime.toFixed(2)}ms ${status}` +
         ` (target: <16ms)`
     )
   })
 
-  console.log('[Worker] Benchmark complete')
+  if (DEV) console.log('[Worker] Benchmark complete')
 }
 
 // ============================================================================

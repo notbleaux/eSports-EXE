@@ -2,10 +2,11 @@
  * ML Performance Suite - Automated ML Performance Testing
  * Benchmarks load times, prediction latency, memory usage
  * 
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
 
 import { useMLCacheStore } from '../store/mlCacheStore'
+import { mlLogger } from '../utils/logger'
 
 export interface MLPerformanceReport {
   timestamp: number
@@ -75,13 +76,13 @@ export async function runMLPerformanceTest(
     recommendations: []
   }
   
-  if (opts.verbose) console.log('[ML Perf] Starting performance test...')
+  if (opts.verbose) mlLogger.info('[ML Perf] Starting performance test...')
   
   // Import ML hook dynamically
   const { useMLInference } = await import('../hooks/useMLInference')
   
   // Test 1: Load Time Benchmark
-  if (opts.verbose) console.log('[ML Perf] Testing load times...')
+  if (opts.verbose) mlLogger.info('[ML Perf] Testing load times...')
   
   // Note: We can't actually call hooks here, so we simulate with fetch timing
   const loadStart = performance.now()
@@ -93,7 +94,7 @@ export async function runMLPerformanceTest(
   }
   
   // Test 2: Prediction Latency Distribution
-  if (opts.verbose) console.log(`[ML Perf] Running ${opts.iterations} predictions...`)
+  if (opts.verbose) mlLogger.info(`[ML Perf] Running ${opts.iterations} predictions...`)
   
   const latencies: number[] = []
   
@@ -118,7 +119,7 @@ export async function runMLPerformanceTest(
   }
   
   // Test 3: Batch Performance
-  if (opts.verbose) console.log(`[ML Perf] Testing batch of ${opts.batchSize}...`)
+  if (opts.verbose) mlLogger.info(`[ML Perf] Testing batch of ${opts.batchSize}...`)
   
   const batchStart = performance.now()
   
@@ -134,7 +135,7 @@ export async function runMLPerformanceTest(
   }
   
   // Test 4: Memory Pressure
-  if (opts.verbose) console.log('[ML Perf] Testing memory pressure...')
+  if (opts.verbose) mlLogger.info('[ML Perf] Testing memory pressure...')
   
   const baselineMemory = getMemoryUsage()
   
@@ -186,7 +187,7 @@ export async function runMLPerformanceTest(
   report.recommendations = recommendations
   
   if (opts.verbose) {
-    console.log('[ML Perf] Test complete:', report)
+    mlLogger.info('[ML Perf] Test complete:', report)
   }
   
   return report as MLPerformanceReport

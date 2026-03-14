@@ -1,9 +1,10 @@
 /**
  * useServiceWorker Hook - PWA Registration & Update Management
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { logger } from '../utils/logger'
 
 interface ServiceWorkerState {
   isSupported: boolean
@@ -34,7 +35,7 @@ export function useServiceWorker(): ServiceWorkerState & {
 
   useEffect(() => {
     if (!('serviceWorker' in navigator)) {
-      console.log('[SW] Service Worker not supported')
+      logger.info('[SW] Service Worker not supported')
       return
     }
 
@@ -48,7 +49,7 @@ export function useServiceWorker(): ServiceWorkerState & {
 
         if (!isMounted) return
 
-        console.log('[SW] Registered:', registration.scope)
+        logger.info('[SW] Registered:', registration.scope)
 
         setState((prev) => ({
           ...prev,
@@ -66,7 +67,7 @@ export function useServiceWorker(): ServiceWorkerState & {
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('[SW] Update available')
+                logger.info('[SW] Update available')
                 setState((prev) => ({
                   ...prev,
                   updateAvailable: true,
@@ -79,7 +80,7 @@ export function useServiceWorker(): ServiceWorkerState & {
 
         // Listen for controlling worker changes
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-          console.log('[SW] Controller changed - reloading for fresh content')
+        logger.info('[SW] Controller changed - reloading for fresh content')
           window.location.reload()
         })
 
@@ -91,7 +92,7 @@ export function useServiceWorker(): ServiceWorkerState & {
           }))
         }
       } catch (error) {
-        console.error('[SW] Registration failed:', error)
+        logger.error('[SW] Registration failed:', error)
       }
     }
 
@@ -99,11 +100,11 @@ export function useServiceWorker(): ServiceWorkerState & {
 
     // Listen for online/offline
     const handleOnline = () => {
-      console.log('[SW] App is online')
+      logger.info('[SW] App is online')
     }
 
     const handleOffline = () => {
-      console.log('[SW] App is offline - using cached assets')
+      logger.info('[SW] App is offline - using cached assets')
     }
 
     window.addEventListener('online', handleOnline)
@@ -119,13 +120,13 @@ export function useServiceWorker(): ServiceWorkerState & {
   const checkForUpdates = useCallback(async () => {
     if (!state.registration) return
 
-    console.log('[SW] Checking for updates...')
+    logger.info('[SW] Checking for updates...')
     await state.registration.update()
   }, [state.registration])
 
   const applyUpdate = useCallback(() => {
     if (state.waitingWorker) {
-      console.log('[SW] Applying update...')
+      logger.info('[SW] Applying update...')
       state.waitingWorker.postMessage('SKIP_WAITING')
     }
   }, [state.waitingWorker])

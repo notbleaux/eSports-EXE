@@ -1,4 +1,4 @@
-# [Ver001.000]
+# [Ver002.000] - Fixed folder path from 'website' to 'apps/website-v2'
 name: Deploy Website to GitHub Pages
 
 on:
@@ -34,10 +34,10 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: cd website && npm ci
+        run: cd apps/website-v2 && npm ci
 
       - name: Build
-        run: cd website && npm run build
+        run: cd apps/website-v2 && npm run build
         continue-on-error: true
 
       - name: Setup Pages
@@ -46,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './website'
+          path: './apps/website-v2/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment

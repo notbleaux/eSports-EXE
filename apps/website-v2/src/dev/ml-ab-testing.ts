@@ -7,6 +7,7 @@
  */
 
 import { useMLInference } from '../hooks/useMLInference'
+import { mlLogger } from '../utils/logger'
 
 export interface VariantConfig {
   id: string
@@ -211,7 +212,7 @@ export function createABTest(config: ABTestConfig) {
     
     // Create separate inference instances for each variant
     // In a real implementation, these would be separate model instances
-    console.log(`[AB Test ${id}] Initializing models...`)
+    mlLogger.info(`[AB Test ${id}] Initializing models...`)
     
     modelsLoaded = true
   }
@@ -325,7 +326,7 @@ export function createABTest(config: ABTestConfig) {
     const elapsed = Date.now() - state.startTime
     if (elapsed > maxDuration && !state.endTime) {
       state.endTime = Date.now()
-      console.log(`[AB Test ${id}] Test completed after ${(elapsed / 1000 / 60 / 60).toFixed(1)} hours`)
+      mlLogger.info(`[AB Test ${id}] Test completed after ${(elapsed / 1000 / 60 / 60).toFixed(1)} hours`)
     }
     
     return {
@@ -357,14 +358,14 @@ export function createABTest(config: ABTestConfig) {
     const stats = getStats()
     
     if (stats.winner) {
-      console.log(`[AB Test ${id}] Winner declared: Variant ${stats.winner}`)
-      console.log(`  - Confidence: ${(stats.confidence * 100).toFixed(1)}%`)
-      console.log(`  - Variant A: ${stats.variantA.predictions} predictions, ${stats.variantA.avgLatency.toFixed(1)}ms avg`)
-      console.log(`  - Variant B: ${stats.variantB.predictions} predictions, ${stats.variantB.avgLatency.toFixed(1)}ms avg`)
+      mlLogger.info(`[AB Test ${id}] Winner declared: Variant ${stats.winner}`)
+      mlLogger.info(`  - Confidence: ${(stats.confidence * 100).toFixed(1)}%`)
+      mlLogger.info(`  - Variant A: ${stats.variantA.predictions} predictions, ${stats.variantA.avgLatency.toFixed(1)}ms avg`)
+      mlLogger.info(`  - Variant B: ${stats.variantB.predictions} predictions, ${stats.variantB.avgLatency.toFixed(1)}ms avg`)
     } else {
-      console.log(`[AB Test ${id}] No clear winner yet`)
-      console.log(`  - Current confidence: ${(stats.confidence * 100).toFixed(1)}%`)
-      console.log(`  - Need ${(confidenceThreshold * 100).toFixed(0)}% confidence`)
+      mlLogger.info(`[AB Test ${id}] No clear winner yet`)
+      mlLogger.info(`  - Current confidence: ${(stats.confidence * 100).toFixed(1)}%`)
+      mlLogger.info(`  - Need ${(confidenceThreshold * 100).toFixed(0)}% confidence`)
     }
     
     return stats.winner
@@ -416,7 +417,7 @@ export function createABTest(config: ABTestConfig) {
     state.latenciesA = []
     state.latenciesB = []
     
-    console.log(`[AB Test ${id}] Test reset`)
+    mlLogger.info(`[AB Test ${id}] Test reset`)
   }
   
   return {

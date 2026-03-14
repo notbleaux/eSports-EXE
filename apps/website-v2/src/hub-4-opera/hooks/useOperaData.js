@@ -1,8 +1,10 @@
 /**
  * useOperaData Hook
  * Data fetching and management for OPERA Hub visualization
+ * [Ver001.001] - Migrated to centralized logger
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { logger } from '../../utils/logger';
 
 // Purple theme colors (exact values)
 const PURPLE = {
@@ -241,7 +243,7 @@ function useOperaData(mapId = 'ascent') {
       setMapData(data);
     } catch (err) {
       setError(err.message);
-      console.error('OPERA Data Error:', err);
+      logger.error('OPERA Data Error:', err);
     } finally {
       setLoading(false);
     }

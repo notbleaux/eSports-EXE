@@ -1,8 +1,10 @@
 /**
  * Environment Configuration - Runtime environment detection
  * 
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
+
+import { logger } from '../utils/logger'
 
 // Environment variables interface
 export interface Environment {
@@ -61,6 +63,6 @@ export function logEnvironment(): void {
   envLogged = true
   
   const env = getEnvironment()
-  console.log(`[Config] Environment: ${env.NODE_ENV}`)
-  console.log(`[Config] Debug mode: ${env.DEBUG}`)
+  logger.info(`[Config] Environment: ${env.NODE_ENV}`)
+  logger.info(`[Config] Debug mode: ${env.DEBUG}`)
 }

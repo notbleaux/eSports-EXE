@@ -3,12 +3,13 @@
  * Manages 3+ models simultaneously with <50ms switching
  * Integrates with mlCacheStore for LRU eviction
  * 
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useMLCacheStore, type CachedModel } from '../store/mlCacheStore'
 import { useMLInference, type ModelInfo } from './useMLInference'
+import { mlLogger } from '../utils/logger'
 
 export interface LoadedModel {
   id: string
@@ -192,7 +193,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
           return next
         })
         
-        console.log(`[ML Model Manager] Loaded model "${name}" (${id})`)
+        mlLogger.info(`[ML Model Manager] Loaded model "${name}" (${id})`)
         
       } catch (err) {
         // Update state to error
@@ -206,7 +207,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
           return next
         })
         
-        console.error(`[ML Model Manager] Failed to load model "${name}":`, err)
+        mlLogger.error(`[ML Model Manager] Failed to load model "${name}":`, err)
         throw err
       }
     })()
@@ -260,10 +261,10 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
       cacheStore.accessModel(id)
       
       const switchTime = performance.now() - startTime
-      console.log(`[ML Model Manager] Switched to "${model.name}" in ${switchTime.toFixed(1)}ms`)
+      mlLogger.info(`[ML Model Manager] Switched to "${model.name}" in ${switchTime.toFixed(1)}ms`)
       
       if (switchTime > SWITCH_TIMEOUT) {
-        console.warn(`[ML Model Manager] Switch time exceeded target: ${switchTime.toFixed(1)}ms > ${SWITCH_TIMEOUT}ms`)
+        mlLogger.warn(`[ML Model Manager] Switch time exceeded target: ${switchTime.toFixed(1)}ms > ${SWITCH_TIMEOUT}ms`)
       }
       
     } finally {
@@ -293,7 +294,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
       setActiveModelId(null)
     }
     
-    console.log(`[ML Model Manager] Unloaded model "${model.name}" (${id})`)
+    mlLogger.info(`[ML Model Manager] Unloaded model "${model.name}" (${id})`)
   }, [models, activeModelId, cacheStore])
 
   /**
@@ -307,7 +308,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
     // Clear cache
     cacheStore.clearCache()
     
-    console.log('[ML Model Manager] Unloaded all models')
+    mlLogger.info('[ML Model Manager] Unloaded all models')
   }, [cacheStore])
 
   /**
@@ -375,7 +376,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
   const preloadModels = useCallback(async (
     configs: Array<{ id: string; url: string; options?: LoadOptions }>
   ): Promise<void> => {
-    console.log(`[ML Model Manager] Preloading ${configs.length} models...`)
+    mlLogger.info(`[ML Model Manager] Preloading ${configs.length} models...`)
     
     const startTime = performance.now()
     
@@ -384,7 +385,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
       configs.map(({ id, url, options }) => 
         loadModel(id, url, { preload: true, ...options })
           .catch(err => {
-            console.warn(`[ML Model Manager] Failed to preload model "${id}":`, err)
+            mlLogger.warn(`[ML Model Manager] Failed to preload model "${id}":`, err)
           })
       )
     )
@@ -392,7 +393,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
     const duration = performance.now() - startTime
     const loadedCount = getLoadedModelCount()
     
-    console.log(`[ML Model Manager] Preloaded ${loadedCount}/${configs.length} models in ${duration.toFixed(0)}ms`)
+    mlLogger.info(`[ML Model Manager] Preloaded ${loadedCount}/${configs.length} models in ${duration.toFixed(0)}ms`)
   }, [loadModel, getLoadedModelCount])
 
   // Calculate total memory usage

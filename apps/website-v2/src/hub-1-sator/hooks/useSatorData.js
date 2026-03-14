@@ -2,9 +2,10 @@
  * useSatorData Hook
  * Data fetching hook for SATOR Hub
  * 
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
 import { useState, useEffect } from 'react';
+import { logger } from '../../utils/logger';
 
 // Mock player data for demonstration
 const MOCK_PLAYERS = [
@@ -92,7 +93,7 @@ export function useSatorData() {
       setPlayers(MOCK_PLAYERS);
     } catch (err) {
       setError(err.message || 'Failed to fetch SATOR data');
-      console.error('SATOR data fetch error:', err);
+      logger.error('SATOR data fetch error:', err);
     } finally {
       setIsLoading(false);
     }

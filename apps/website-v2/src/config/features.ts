@@ -1,10 +1,11 @@
 /**
  * Feature Flags - Application feature configuration
  * 
- * [Ver001.000]
+ * [Ver001.001] - Migrated to centralized logger
  */
 
 import { getEnvironment } from './environment'
+import { logger } from '../utils/logger'
 
 const env = getEnvironment()
 
@@ -90,7 +91,7 @@ export function isFeatureEnabled(feature: keyof FeatureFlags): boolean {
 // Toggle feature (development only)
 export function toggleFeature(feature: keyof FeatureFlags): void {
   if (env.NODE_ENV !== 'development') {
-    console.warn('Feature toggling only allowed in development')
+    logger.warn('Feature toggling only allowed in development')
     return
   }
   
@@ -102,8 +103,8 @@ export function toggleFeature(feature: keyof FeatureFlags): void {
       ...current,
       [feature]: newValue
     }))
-    console.log(`Feature '${feature}' ${newValue ? 'enabled' : 'disabled'}`)
+    logger.info(`Feature '${feature}' ${newValue ? 'enabled' : 'disabled'}`)
   } catch {
-    console.error('Failed to toggle feature')
+    logger.error('Failed to toggle feature')
   }
 }
