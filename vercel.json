@@ -1,9 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "npm install && npm run build",
-  "outputDirectory": "dist",
+  "buildCommand": "cd apps/website-v2 && npm install && npm run build",
+  "outputDirectory": "apps/website-v2/dist",
   "framework": "vite",
-  "installCommand": "npm install",
+  "installCommand": "cd apps/website-v2 && npm install",
+  "env": {
+    "VITE_API_URL": "https://api.libre-x-esport.com",
+    "VITE_ANALYTICS_ID": "production-analytics",
+    "VITE_ML_MODEL_URL": "https://cdn.libre-x-esport.com/models",
+    "VITE_APP_ENV": "production"
+  },
   "routes": [
     {
       "handle": "filesystem"
