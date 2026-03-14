@@ -1,0 +1,67 @@
+# SATOR TRINITY + OPERA Logrotate Configuration
+# Location: /etc/logrotate.d/sator-harvest
+# Version: [Ver001.000]
+# Install: sudo cp infrastructure/cron/logrotate-sator /etc/logrotate.d/sator-harvest
+
+/var/log/sator/*.log {
+    # Rotate daily
+    daily
+    
+    # Don't error if log file is missing
+    missingok
+    
+    # Keep 14 days of logs
+    rotate 14
+    
+    # Compress rotated logs
+    compress
+    
+    # Don't compress the most recent
+    delaycompress
+    
+    # Don't rotate empty files
+    notifempty
+    
+    # Create new file with these permissions
+    create 0644 sator sator
+    
+    # Run postrotate script once for all files
+    sharedscripts
+    
+    # Script to run after rotation
+    postrotate
+        # Reload rsyslog if running
+        if [ -f /var/run/rsyslogd.pid ]; then
+            /bin/kill -HUP $(cat /var/run/rsyslogd.pid 2> /dev/null) 2> /dev/null || true
+        fi
+        
+        # Send USR1 signal to harvest service to reopen logs
+        /bin/systemctl kill -s USR1 sator-harvest.service 2>/dev/null || true
+    endscript
+    
+    # Don't rotate if file is less than 1MB
+    minsize 1M
+    
+    # Date-based naming for rotated files
+    dateext
+    dateformat -%Y%m%d-%s
+}
+
+# Separate config for high-volume stdout/stderr logs
+/var/log/sator/harvest.stdout.log
+/var/log/sator/harvest.stderr.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    create 0644 sator sator
+    sharedscripts
+    postrotate
+        /bin/systemctl kill -s USR1 sator-harvest.service 2>/dev/null || true
+    endscript
+    # Rotate when file reaches 100MB
+    maxsize 100M
+    dateext
+}
