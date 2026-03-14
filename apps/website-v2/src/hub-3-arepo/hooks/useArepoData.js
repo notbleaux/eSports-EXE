@@ -1,8 +1,8 @@
 /**
- * useArepoData Hook
- * Data fetching and state management for AREPO Hub
- * Handles documentation, FAQs, and directory data with backend search
+ * useArepoData Hook - Cross-Reference Engine for AREPO Hub
+ * Enables cross-hub queries between SATOR (Component B) and OPERA (Component D)
  * 
+ * [Ver003.000] - Added Cross-Reference Engine functionality
  * [Ver002.000] - Migrated to backend search API
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -15,6 +15,17 @@ import {
   getSearchSuggestions 
 } from '@/api/search';
 import { debounce } from '@/utils/debounce';
+
+// Cross-reference API client
+import { 
+  getPlayerTournamentPerformance,
+  getPatchPerformanceImpact,
+  compareTeamsAcrossTournaments,
+  executeCrossHubQuery,
+  getQueryHistory,
+  saveQuery,
+  deleteSavedQuery
+} from '@/api/crossReference';
 
 // Mock data for development - replace with actual API calls
 const MOCK_DOCUMENTATION = [
@@ -107,7 +118,7 @@ const CATEGORIES = [
 ];
 
 /**
- * Custom hook for AREPO hub data management with backend search
+ * Custom hook for AREPO hub data management with cross-reference engine
  * @param {Object} options - Configuration options
  * @returns {Object} AREPO data and utilities
  */
@@ -492,6 +503,288 @@ export function useArepoData(options = {}) {
     
     // Utilities
     refresh: fetchData
+  };
+}
+
+/**
+ * Hook for Cross-Reference Engine functionality
+ * Enables cross-hub queries between SATOR and OPERA
+ */
+export function useCrossReferenceEngine() {
+  const addNotification = useNJZStore(state => state.addNotification);
+  
+  // State
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [queryHistory, setQueryHistory] = useState([]);
+  const [savedQueries, setSavedQueries] = useState([]);
+  
+  // Results state
+  const [playerTournamentResult, setPlayerTournamentResult] = useState(null);
+  const [patchImpactResult, setPatchImpactResult] = useState(null);
+  const [teamComparisonResult, setTeamComparisonResult] = useState(null);
+  const [crossHubResult, setCrossHubResult] = useState(null);
+
+  /**
+   * Cross-reference: Player + Tournament
+   * Query SATOR for player performance, OPERA for tournament metadata
+   */
+  const getPlayerTournamentStats = useCallback(async (playerId, tournamentId) => {
+    if (!playerId || !tournamentId) {
+      setError('Player ID and Tournament ID are required');
+      return null;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await getPlayerTournamentPerformance(playerId, tournamentId);
+      setPlayerTournamentResult(result);
+      
+      // Add to query history
+      addToHistory({
+        type: 'player-tournament',
+        playerId,
+        tournamentId,
+        timestamp: new Date().toISOString()
+      });
+      
+      return result;
+    } catch (err) {
+      setError(err.message || 'Failed to fetch player tournament stats');
+      addNotification('Failed to load player tournament data', 'error');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [addNotification]);
+
+  /**
+   * Cross-reference: Patch + Performance
+   * Query OPERA for patch changes, SATOR for performance before/after
+   */
+  const getPatchPerformanceImpact = useCallback(async (patchVersion, agentName) => {
+    if (!patchVersion || !agentName) {
+      setError('Patch version and agent name are required');
+      return null;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await getPatchPerformanceImpact(patchVersion, agentName);
+      setPatchImpactResult(result);
+      
+      // Add to query history
+      addToHistory({
+        type: 'patch-impact',
+        patchVersion,
+        agentName,
+        timestamp: new Date().toISOString()
+      });
+      
+      return result;
+    } catch (err) {
+      setError(err.message || 'Failed to fetch patch performance impact');
+      addNotification('Failed to load patch impact data', 'error');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [addNotification]);
+
+  /**
+   * Cross-reference: Team comparison across tournaments
+   * Query SATOR for both teams' stats, OPERA for tournament contexts
+   */
+  const compareTeamsAcrossTournaments = useCallback(async (teamA, teamB, tournaments) => {
+    if (!teamA || !teamB) {
+      setError('Both teams are required for comparison');
+      return null;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await compareTeamsAcrossTournaments(teamA, teamB, tournaments);
+      setTeamComparisonResult(result);
+      
+      // Add to query history
+      addToHistory({
+        type: 'team-comparison',
+        teamA,
+        teamB,
+        tournaments,
+        timestamp: new Date().toISOString()
+      });
+      
+      return result;
+    } catch (err) {
+      setError(err.message || 'Failed to compare teams');
+      addNotification('Failed to load team comparison data', 'error');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [addNotification]);
+
+  /**
+   * Execute custom cross-hub query
+   */
+  const executeQuery = useCallback(async (queryConfig) => {
+    if (!queryConfig || Object.keys(queryConfig).length === 0) {
+      setError('Query configuration is required');
+      return null;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await executeCrossHubQuery(queryConfig);
+      setCrossHubResult(result);
+      
+      // Add to query history
+      addToHistory({
+        type: 'custom',
+        config: queryConfig,
+        timestamp: new Date().toISOString()
+      });
+      
+      return result;
+    } catch (err) {
+      setError(err.message || 'Failed to execute cross-hub query');
+      addNotification('Failed to execute query', 'error');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [addNotification]);
+
+  /**
+   * Add query to history
+   */
+  const addToHistory = useCallback((query) => {
+    setQueryHistory(prev => {
+      const newHistory = [query, ...prev].slice(0, 50); // Keep last 50 queries
+      // Persist to localStorage
+      try {
+        localStorage.setItem('arepo_query_history', JSON.stringify(newHistory));
+      } catch (e) {
+        // Ignore storage errors
+      }
+      return newHistory;
+    });
+  }, []);
+
+  /**
+   * Load query history from localStorage
+   */
+  const loadQueryHistory = useCallback(async () => {
+    try {
+      const stored = localStorage.getItem('arepo_query_history');
+      if (stored) {
+        setQueryHistory(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error('Failed to load query history:', e);
+    }
+    
+    // Also fetch saved queries from API
+    try {
+      const saved = await getQueryHistory();
+      setSavedQueries(saved.queries || []);
+    } catch (e) {
+      // Silent fail
+    }
+  }, []);
+
+  /**
+   * Save a query for later use
+   */
+  const saveQueryForLater = useCallback(async (query, name) => {
+    try {
+      await saveQuery({ ...query, name });
+      addNotification('Query saved successfully', 'success');
+      
+      // Refresh saved queries
+      const saved = await getQueryHistory();
+      setSavedQueries(saved.queries || []);
+    } catch (err) {
+      addNotification('Failed to save query', 'error');
+    }
+  }, [addNotification]);
+
+  /**
+   * Delete a saved query
+   */
+  const deleteSavedQueryById = useCallback(async (queryId) => {
+    try {
+      await deleteSavedQuery(queryId);
+      setSavedQueries(prev => prev.filter(q => q.id !== queryId));
+      addNotification('Query deleted', 'info');
+    } catch (err) {
+      addNotification('Failed to delete query', 'error');
+    }
+  }, [addNotification]);
+
+  /**
+   * Clear all query history
+   */
+  const clearQueryHistory = useCallback(() => {
+    setQueryHistory([]);
+    try {
+      localStorage.removeItem('arepo_query_history');
+    } catch (e) {
+      // Ignore storage errors
+    }
+    addNotification('Query history cleared', 'info');
+  }, [addNotification]);
+
+  /**
+   * Clear current results
+   */
+  const clearResults = useCallback(() => {
+    setPlayerTournamentResult(null);
+    setPatchImpactResult(null);
+    setTeamComparisonResult(null);
+    setCrossHubResult(null);
+    setError(null);
+  }, []);
+
+  // Load history on mount
+  useEffect(() => {
+    loadQueryHistory();
+  }, [loadQueryHistory]);
+
+  return {
+    // Results
+    playerTournamentResult,
+    patchImpactResult,
+    teamComparisonResult,
+    crossHubResult,
+    
+    // History and saved queries
+    queryHistory,
+    savedQueries,
+    
+    // Loading and error states
+    isLoading,
+    error,
+    
+    // Actions
+    getPlayerTournamentStats,
+    getPatchPerformanceImpact,
+    compareTeamsAcrossTournaments,
+    executeQuery,
+    saveQuery: saveQueryForLater,
+    deleteSavedQuery: deleteSavedQueryById,
+    clearQueryHistory,
+    clearResults,
+    loadQueryHistory
   };
 }
 

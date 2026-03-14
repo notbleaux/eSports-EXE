@@ -1,11 +1,12 @@
 /**
- * AREPO Hub - Hub 3: The Directory
- * Q&A, documentation, and knowledge base with blue theme
+ * AREPO Hub - Hub 3: The Cross-Reference Engine
+ * Connects SATOR (Component B) and OPERA (Component D) through cross-hub queries
  * 
  * Color Theme: Royal Blue (#0066ff)
  * Glow: rgba(0, 102, 255, 0.4)
  * Muted: #0044cc
  * 
+ * [Ver003.000] - Refactored as Cross-Reference Engine
  * [Ver002.000] - Added comprehensive error boundaries
  */
 import React, { useState, useCallback } from 'react';
@@ -21,7 +22,15 @@ import {
   Users,
   Lightbulb,
   FolderTree,
-  ExternalLink
+  ExternalLink,
+  GitCompare,
+  User,
+  Trophy,
+  GitCommit,
+  Database,
+  Layers,
+  Clock,
+  History
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
@@ -31,6 +40,12 @@ import { colors } from '@/theme/colors';
 import DirectoryList from './components/DirectoryList';
 import HelpHub from './components/HelpHub';
 
+// Import Cross-Reference components
+import PlayerTournamentSearch from './components/PlayerTournamentSearch';
+import PatchImpactAnalyzer from './components/PatchImpactAnalyzer';
+import TeamComparisonTool from './components/TeamComparisonTool';
+import CrossHubQueryBuilder from './components/CrossHubQueryBuilder';
+
 // Import error boundaries
 import { 
   PanelErrorBoundary,
@@ -39,11 +54,14 @@ import {
   HubErrorFallback
 } from '@/components/error';
 
+// Import cross-reference hook
+import { useCrossReferenceEngine } from './hooks/useArepoData';
+
 // HUB CONFIG - Exact colors as specified
 const HUB_CONFIG = {
   name: 'AREPO',
-  subtitle: 'The Directory',
-  description: 'Q&A, documentation, and knowledge base',
+  subtitle: 'The Cross-Reference Engine',
+  description: 'Connect SATOR analytics with OPERA metadata through cross-hub queries',
   color: colors.hub.arepo.base,      // #0066ff
   glow: colors.hub.arepo.glow,       // rgba(0, 102, 255, 0.4)
   muted: colors.hub.arepo.muted,     // #0044cc
@@ -75,17 +93,55 @@ const RECENT_QUESTIONS = [
   { id: 4, question: 'Custom data export formats', answers: 0, status: 'open' },
 ];
 
+// Cross-reference tools configuration
+const CROSS_REFERENCE_TOOLS = [
+  {
+    id: 'player-tournament',
+    name: 'Player + Tournament',
+    description: 'Cross-reference player performance with tournament context',
+    icon: User,
+    component: PlayerTournamentSearch,
+    dataSources: ['SATOR', 'OPERA']
+  },
+  {
+    id: 'patch-impact',
+    name: 'Patch Impact Analyzer',
+    description: 'Analyze how patch changes affected agent performance',
+    icon: GitCommit,
+    component: PatchImpactAnalyzer,
+    dataSources: ['OPERA', 'SATOR']
+  },
+  {
+    id: 'team-comparison',
+    name: 'Team Comparison',
+    description: 'Compare teams across tournaments with head-to-head stats',
+    icon: GitCompare,
+    component: TeamComparisonTool,
+    dataSources: ['SATOR', 'OPERA']
+  },
+  {
+    id: 'query-builder',
+    name: 'Query Builder',
+    description: 'Build custom cross-hub queries with visual filters',
+    icon: Layers,
+    component: CrossHubQueryBuilder,
+    dataSources: ['SATOR', 'OPERA', 'ROTAS']
+  },
+];
+
 /**
  * ArepoHubContent - Main content component for AREPO hub
  */
 function ArepoHubContent() {
-  const [activeTab, setActiveTab] = useState('directory'); // 'directory' | 'help'
+  const [activeTab, setActiveTab] = useState('cross-reference'); // 'cross-reference' | 'directory' | 'help'
   const [activeCategory, setActiveCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedTool, setSelectedTool] = useState('query-builder');
   
   const addNotification = useNJZStore(state => state.addNotification);
   const { state, setState } = useHubState('arepo');
+  const { queryHistory } = useCrossReferenceEngine();
 
   const handleCategorySelect = useCallback((category) => {
     setActiveCategory(category);
@@ -104,33 +160,62 @@ function ArepoHubContent() {
     setSelectedQuestion(selectedQuestion?.id === question.id ? null : question);
   };
 
+  const handleToolSelect = (toolId) => {
+    setSelectedTool(toolId);
+    const tool = CROSS_REFERENCE_TOOLS.find(t => t.id === toolId);
+    if (tool) {
+      addNotification(`Switched to ${tool.name}`, 'info');
+    }
+  };
+
+  // Render the selected cross-reference tool
+  const renderCrossReferenceTool = () => {
+    const tool = CROSS_REFERENCE_TOOLS.find(t => t.id === selectedTool);
+    if (!tool) return null;
+    
+    const ToolComponent = tool.component;
+    return (
+      <DataErrorBoundary
+        hubName="AREPO"
+        componentName={tool.name}
+        compact
+        onRetry={() => addNotification(`Retrying ${tool.name}...`, 'info')}
+      >
+        <ToolComponent 
+          hubColor={HUB_CONFIG.color}
+          hubGlow={HUB_CONFIG.glow}
+        />
+      </DataErrorBoundary>
+    );
+  };
+
   return (
     <HubWrapper hubId="arepo">
       {/* Stats Row */}
       <div className="max-w-6xl mx-auto mb-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <HubStatCard 
+            label="Cross-Reference Queries" 
+            value={queryHistory.length.toString()} 
+            change="Today" 
+            color="cyan" 
+          />
+          <HubStatCard 
+            label="Data Sources" 
+            value="3" 
+            change="SATOR + OPERA + ROTAS" 
+            color="amber" 
+          />
+          <HubStatCard 
             label="Documentation" 
             value="247" 
             change="+12 this week" 
-            color="cyan" 
+            color="gold" 
           />
           <HubStatCard 
             label="Questions" 
             value="1,847" 
             change="94% answered" 
-            color="amber" 
-          />
-          <HubStatCard 
-            label="Contributors" 
-            value="324" 
-            change="+8 new" 
-            color="gold" 
-          />
-          <HubStatCard 
-            label="Categories" 
-            value="12" 
-            change="Organized" 
             color="green" 
           />
         </div>
@@ -138,7 +223,22 @@ function ArepoHubContent() {
 
       {/* Tab Navigation */}
       <div className="max-w-6xl mx-auto mb-8">
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <motion.button
+            onClick={() => setActiveTab('cross-reference')}
+            className={`
+              flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300
+              ${activeTab === 'cross-reference' 
+                ? 'bg-[#0066ff]/20 text-[#0066ff] border border-[#0066ff]/50' 
+                : 'text-slate hover:text-white hover:bg-white/5 border border-transparent'
+              }
+            `}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <GitCompare className="w-5 h-5" />
+            Cross-Reference
+          </motion.button>
           <motion.button
             onClick={() => setActiveTab('directory')}
             className={`
@@ -172,44 +272,208 @@ function ArepoHubContent() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Search Section */}
-          <HubCard accent="cyan">
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate" />
-              <input
-                type="text"
-                placeholder="Search documentation, FAQs, tutorials..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-void-mid rounded-lg border border-mist 
-                         focus:border-[#0066ff] focus:outline-none focus:ring-1 focus:ring-[#0066ff]
-                         text-white placeholder-slate transition-colors"
-              />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 
-                         bg-[#0066ff]/10 text-[#0066ff] rounded-lg
-                         hover:bg-[#0066ff]/20 transition-colors text-sm font-medium"
-              >
-                Search
-              </button>
-            </form>
-          </HubCard>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto">
+        <AnimatePresence mode="wait">
+          {activeTab === 'cross-reference' && (
+            <motion.div
+              key="cross-reference"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 lg:grid-cols-4 gap-8"
+            >
+              {/* Left Sidebar - Tool Selection */}
+              <div className="lg:col-span-1 space-y-4">
+                <HubCard accent="cyan">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Database className="w-5 h-5 text-[#0066ff]" />
+                    <h3 className="font-display font-semibold">Cross-Reference Tools</h3>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {CROSS_REFERENCE_TOOLS.map((tool) => {
+                      const Icon = tool.icon;
+                      const isActive = selectedTool === tool.id;
+                      
+                      return (
+                        <motion.button
+                          key={tool.id}
+                          onClick={() => handleToolSelect(tool.id)}
+                          className={`
+                            w-full p-3 rounded-lg text-left transition-all duration-200
+                            ${isActive 
+                              ? 'bg-[#0066ff]/20 border border-[#0066ff]' 
+                              : 'bg-void-mid border border-mist hover:border-[#0066ff]/50'
+                            }
+                          `}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div 
+                              className="w-10 h-10 rounded-lg flex items-center justify-center"
+                              style={{ 
+                                backgroundColor: isActive ? `${HUB_CONFIG.color}30` : 'rgba(255,255,255,0.05)'
+                              }}
+                            >
+                              <Icon 
+                                className="w-5 h-5" 
+                                style={{ color: isActive ? HUB_CONFIG.color : '#a0a0b0' }}
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div 
+                                className="font-medium text-sm truncate"
+                                style={{ color: isActive ? HUB_CONFIG.color : '#ffffff' }}
+                              >
+                                {tool.name}
+                              </div>
+                              <div className="flex items-center gap-1 mt-1">
+                                {tool.dataSources.map((source) => (
+                                  <span 
+                                    key={source}
+                                    className="text-[10px] px-1.5 py-0.5 rounded"
+                                    style={{ 
+                                      backgroundColor: source === 'SATOR' ? 'rgba(255, 215, 0, 0.2)' :
+                                                       source === 'OPERA' ? 'rgba(157, 78, 221, 0.2)' :
+                                                       'rgba(0, 212, 255, 0.2)',
+                                      color: source === 'SATOR' ? '#ffd700' :
+                                             source === 'OPERA' ? '#9d4edd' :
+                                             '#00d4ff'
+                                    }}
+                                  >
+                                    {source}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </HubCard>
 
-          {/* Tab Content */}
-          <AnimatePresence mode="wait">
-            {activeTab === 'directory' ? (
-              <motion.div
-                key="directory"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* DirectoryList wrapped with DataErrorBoundary */}
+                {/* Quick Stats */}
+                <HubCard>
+                  <div className="flex items-center gap-3 mb-4">
+                    <History className="w-5 h-5 text-[#0066ff]" />
+                    <h3 className="font-display font-semibold">Recent Queries</h3>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {queryHistory.slice(0, 5).map((query, index) => (
+                      <div 
+                        key={index}
+                        className="flex items-center gap-2 text-sm p-2 rounded-lg bg-void-mid"
+                      >
+                        <Clock className="w-3 h-3 text-slate" />
+                        <span className="capitalize text-slate">{query.type}</span>
+                        <span className="text-xs text-slate/50 ml-auto">
+                          {new Date(query.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    ))}
+                    {queryHistory.length === 0 && (
+                      <p className="text-sm text-slate text-center py-4">
+                        No queries yet. Start exploring!
+                      </p>
+                    )}
+                  </div>
+                </HubCard>
+
+                {/* Data Sources Info */}
+                <HubCard>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Database className="w-5 h-5 text-[#0066ff]" />
+                    <h3 className="font-display font-semibold">Data Sources</h3>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-lg bg-[#ffd700]/10 border border-[#ffd700]/30">
+                      <div className="flex items-center gap-2 text-[#ffd700] font-medium mb-1">
+                        <Database className="w-4 h-4" />
+                        SATOR
+                      </div>
+                      <p className="text-xs text-slate">
+                        Player performance data, match statistics, SimRating, RAR metrics
+                      </p>
+                    </div>
+                    
+                    <div className="p-3 rounded-lg bg-[#9d4edd]/10 border border-[#9d4edd]/30">
+                      <div className="flex items-center gap-2 text-[#9d4edd] font-medium mb-1">
+                        <Database className="w-4 h-4" />
+                        OPERA
+                      </div>
+                      <p className="text-xs text-slate">
+                        Tournament metadata, schedules, patch notes, circuit information
+                      </p>
+                    </div>
+                    
+                    <div className="p-3 rounded-lg bg-[#00d4ff]/10 border border-[#00d4ff]/30">
+                      <div className="flex items-center gap-2 text-[#00d4ff] font-medium mb-1">
+                        <Database className="w-4 h-4" />
+                        ROTAS
+                      </div>
+                      <p className="text-xs text-slate">
+                        Analytics from materialized views, leaderboards, rankings
+                      </p>
+                    </div>
+                  </div>
+                </HubCard>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="lg:col-span-3">
+                <PanelErrorBoundary 
+                  panelId="arepo-cross-reference" 
+                  panelTitle="Cross-Reference Engine" 
+                  hub="AREPO"
+                >
+                  {renderCrossReferenceTool()}
+                </PanelErrorBoundary>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'directory' && (
+            <motion.div
+              key="directory"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            >
+              {/* Main Content */}
+              <div className="lg:col-span-2 space-y-8">
+                {/* Search Section */}
+                <HubCard accent="cyan">
+                  <form onSubmit={handleSearch} className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate" />
+                    <input
+                      type="text"
+                      placeholder="Search documentation, FAQs, tutorials..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-12 pr-4 py-4 bg-void-mid rounded-lg border border-mist 
+                               focus:border-[#0066ff] focus:outline-none focus:ring-1 focus:ring-[#0066ff]
+                               text-white placeholder-slate transition-colors"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 
+                               bg-[#0066ff]/10 text-[#0066ff] rounded-lg
+                               hover:bg-[#0066ff]/20 transition-colors text-sm font-medium"
+                    >
+                      Search
+                    </button>
+                  </form>
+                </HubCard>
+
+                {/* Directory List */}
                 <DataErrorBoundary
                   hubName="AREPO"
                   componentName="DirectoryList"
@@ -230,181 +494,160 @@ function ArepoHubContent() {
                     />
                   </PanelErrorBoundary>
                 </DataErrorBoundary>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="help"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* HelpHub wrapped with DataErrorBoundary */}
-                <DataErrorBoundary
-                  hubName="AREPO"
-                  componentName="HelpHub"
-                  compact
-                  onRetry={() => addNotification('Retrying help content load...', 'info')}
-                >
-                  <PanelErrorBoundary 
-                    panelId="arepo-help" 
-                    panelTitle="Help & Q&A" 
-                    hub="AREPO"
-                  >
-                    <HelpHub 
-                      questions={RECENT_QUESTIONS}
-                      selectedQuestion={selectedQuestion}
-                      onQuestionClick={handleQuestionClick}
-                      hubColor={HUB_CONFIG.color}
-                      hubGlow={HUB_CONFIG.glow}
-                    />
-                  </PanelErrorBoundary>
-                </DataErrorBoundary>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
-          {/* Quick Links */}
-          <HubCard accent="cyan">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <ExternalLink className="w-5 h-5 text-[#0066ff]" />
-                <h3 className="font-display font-semibold">Popular Resources</h3>
-              </div>
-              <button className="text-sm text-slate hover:text-[#0066ff] transition-colors flex items-center gap-1">
-                View All <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            <DataErrorBoundary
-              hubName="AREPO"
-              componentName="QuickLinks"
-              compact
-            >
-              <div className="space-y-3">
-                {QUICK_LINKS.map((link, index) => (
-                  <motion.div
-                    key={link.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-center justify-between p-4 rounded-lg bg-void-mid border border-mist 
-                             hover:border-[#0066ff]/50 transition-colors cursor-pointer group"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-[#0066ff]/10 flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-[#0066ff]" />
-                      </div>
-                      <div>
-                        <div className="font-medium group-hover:text-[#0066ff] transition-colors">
-                          {link.title}
-                        </div>
-                        <div className="text-xs text-slate capitalize">{link.category.replace('-', ' ')}</div>
-                      </div>
+                {/* Quick Links */}
+                <HubCard accent="cyan">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <ExternalLink className="w-5 h-5 text-[#0066ff]" />
+                      <h3 className="font-display font-semibold">Popular Resources</h3>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="text-xs text-slate">{link.views} views</span>
-                      <ChevronRight className="w-4 h-4 text-slate group-hover:text-[#0066ff] transition-colors" />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </DataErrorBoundary>
-          </HubCard>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Getting Started */}
-          <HubCard accent="cyan">
-            <div className="flex items-center gap-3 mb-4">
-              <BookOpen className="w-5 h-5 text-[#0066ff]" />
-              <h3 className="font-display font-semibold">Getting Started</h3>
-            </div>
-
-            <DataErrorBoundary
-              hubName="AREPO"
-              componentName="GettingStarted"
-              compact
-            >
-              <div className="space-y-2">
-                {[
-                  'Platform Overview',
-                  'Quick Start Guide',
-                  'Authentication',
-                  'API Basics',
-                  'Best Practices'
-                ].map((item, index) => (
-                  <motion.a
-                    key={item}
-                    href="#"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate 
-                             hover:text-white hover:bg-white/5 transition-colors group"
-                  >
-                    {item}
-                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </motion.a>
-                ))}
-              </div>
-            </DataErrorBoundary>
-          </HubCard>
-
-          {/* Community Stats */}
-          <HubCard>
-            <div className="flex items-center gap-3 mb-4">
-              <Globe className="w-5 h-5 text-[#0066ff]" />
-              <h3 className="font-display font-semibold">Community</h3>
-            </div>
-
-            <DataErrorBoundary
-              hubName="AREPO"
-              componentName="CommunityStats"
-              compact
-            >
-              <div className="space-y-4">
-                {[
-                  { label: 'Active Users', value: '1,247', icon: Users },
-                  { label: 'Daily Questions', value: '24', icon: MessageSquare },
-                  { label: 'Knowledge Base', value: '156', icon: BookOpen },
-                ].map((stat) => (
-                  <div key={stat.label} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-slate">
-                      <stat.icon className="w-4 h-4" />
-                      <span className="text-sm">{stat.label}</span>
-                    </div>
-                    <span className="font-mono text-[#0066ff]">{stat.value}</span>
+                    <button className="text-sm text-slate hover:text-[#0066ff] transition-colors flex items-center gap-1">
+                      View All <ChevronRight className="w-4 h-4" />
+                    </button>
                   </div>
-                ))}
-              </div>
-            </DataErrorBoundary>
-          </HubCard>
 
-          {/* Need Help */}
-          <HubCard>
-            <div className="flex items-center gap-3 mb-4">
-              <HelpCircle className="w-5 h-5 text-[#0066ff]" />
-              <h3 className="font-display font-semibold">Need Help?</h3>
-            </div>
-            
-            <p className="text-sm text-slate mb-4">
-              Can't find what you're looking for? Our community and support team are here to help.
-            </p>
-            
-            <div className="space-y-2">
-              <button className="w-full px-4 py-2 bg-[#0066ff]/10 text-[#0066ff] rounded-lg text-sm font-medium
-                               hover:bg-[#0066ff]/20 transition-colors">
-                Ask a Question
-              </button>
-              <button className="w-full px-4 py-2 border border-mist text-slate rounded-lg text-sm
-                               hover:border-[#0066ff]/50 hover:text-white transition-colors">
-                Contact Support
-              </button>
-            </div>
-          </HubCard>
-        </div>
+                  <DataErrorBoundary
+                    hubName="AREPO"
+                    componentName="QuickLinks"
+                    compact
+                  >
+                    <div className="space-y-3">
+                      {QUICK_LINKS.map((link, index) => (
+                        <motion.div
+                          key={link.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="flex items-center justify-between p-4 rounded-lg bg-void-mid border border-mist 
+                                   hover:border-[#0066ff]/50 transition-colors cursor-pointer group"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-lg bg-[#0066ff]/10 flex items-center justify-center">
+                              <FileText className="w-5 h-5 text-[#0066ff]" />
+                            </div>
+                            <div>
+                              <div className="font-medium group-hover:text-[#0066ff] transition-colors">
+                                {link.title}
+                              </div>
+                              <div className="text-xs text-slate capitalize">{link.category.replace('-', ' ')}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <span className="text-xs text-slate">{link.views} views</span>
+                            <ChevronRight className="w-4 h-4 text-slate group-hover:text-[#0066ff] transition-colors" />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </DataErrorBoundary>
+                </HubCard>
+              </div>
+
+              {/* Sidebar */}
+              <div className="space-y-6">
+                {/* Getting Started */}
+                <HubCard accent="cyan">
+                  <div className="flex items-center gap-3 mb-4">
+                    <BookOpen className="w-5 h-5 text-[#0066ff]" />
+                    <h3 className="font-display font-semibold">Getting Started</h3>
+                  </div>
+
+                  <DataErrorBoundary
+                    hubName="AREPO"
+                    componentName="GettingStarted"
+                    compact
+                  >
+                    <div className="space-y-2">
+                      {[
+                        'Platform Overview',
+                        'Quick Start Guide',
+                        'Authentication',
+                        'API Basics',
+                        'Best Practices'
+                      ].map((item, index) => (
+                        <motion.a
+                          key={item}
+                          href="#"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate 
+                                   hover:text-white hover:bg-white/5 transition-colors group"
+                        >
+                          {item}
+                          <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </motion.a>
+                      ))}
+                    </div>
+                  </DataErrorBoundary>
+                </HubCard>
+
+                {/* Community Stats */}
+                <HubCard>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Globe className="w-5 h-5 text-[#0066ff]" />
+                    <h3 className="font-display font-semibold">Community</h3>
+                  </div>
+
+                  <DataErrorBoundary
+                    hubName="AREPO"
+                    componentName="CommunityStats"
+                    compact
+                  >
+                    <div className="space-y-4">
+                      {[
+                        { label: 'Active Users', value: '1,247', icon: Users },
+                        { label: 'Daily Questions', value: '24', icon: MessageSquare },
+                        { label: 'Knowledge Base', value: '156', icon: BookOpen },
+                      ].map((stat) => (
+                        <div key={stat.label} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-slate">
+                            <stat.icon className="w-4 h-4" />
+                            <span className="text-sm">{stat.label}</span>
+                          </div>
+                          <span className="font-mono text-[#0066ff]">{stat.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </DataErrorBoundary>
+                </HubCard>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'help' && (
+            <motion.div
+              key="help"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="max-w-4xl mx-auto"
+            >
+              <DataErrorBoundary
+                hubName="AREPO"
+                componentName="HelpHub"
+                compact
+                onRetry={() => addNotification('Retrying help content load...', 'info')}
+              >
+                <PanelErrorBoundary 
+                  panelId="arepo-help" 
+                  panelTitle="Help & Q&A" 
+                  hub="AREPO"
+                >
+                  <HelpHub 
+                    questions={RECENT_QUESTIONS}
+                    selectedQuestion={selectedQuestion}
+                    onQuestionClick={handleQuestionClick}
+                    hubColor={HUB_CONFIG.color}
+                    hubGlow={HUB_CONFIG.glow}
+                  />
+                </PanelErrorBoundary>
+              </DataErrorBoundary>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </HubWrapper>
   );
@@ -423,8 +666,8 @@ function ArepoHub() {
           <div className="min-h-screen flex items-center justify-center p-4">
             <HubErrorFallback
               hub="AREPO"
-              title="AREPO Directory Error"
-              message="Failed to load the knowledge base. Please try again."
+              title="AREPO Cross-Reference Engine Error"
+              message="Failed to load the cross-reference engine. Please try again."
               onRetry={() => window.location.reload()}
               onGoHome={() => window.location.href = '/'}
             />

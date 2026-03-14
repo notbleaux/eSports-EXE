@@ -1,463 +1,443 @@
 /**
- * OPERA Hub - Hub 4: The Nexus
- * Maps, fog of war, and spatial visualization with purple theme
- * [Ver002.000] - Converted to TypeScript
+ * OPERA Hub - Hub 4: eSports Hub
+ * Tournament browser, schedules, patch notes, and circuit standings
+ * [Ver003.000] - Refactored: Complete rewrite from Map Nexus to eSports Hub
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Map,
-  Layers,
-  Eye,
-  EyeOff,
-  Grid3X3,
-  Target,
-  Navigation,
-  Scan,
+  Trophy,
+  Calendar,
+  FileText,
+  BarChart3,
+  MapPin,
   Filter,
-  Compass,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
+  RefreshCw,
+  Tv,
+  Target,
+  Globe,
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
 import { colors } from '@/theme/colors';
-import MapVisualization from './components/MapVisualization';
-import FogOverlay from './components/FogOverlay';
-import useOperaData from './hooks/useOperaData';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
-import type { MapMetadata, ViewModeConfig, LayerConfig, ViewMode } from './types';
+import useOperaData from './hooks/useOperaData';
+import TournamentBrowser from './components/TournamentBrowser';
+import ScheduleViewer from './components/ScheduleViewer';
+import PatchNotesReader from './components/PatchNotesReader';
+import CircuitStandings from './components/CircuitStandings';
+import type { 
+  Tournament, 
+  TournamentFilters, 
+  CircuitRegion,
+  HubTab,
+  Patch 
+} from './types';
 
 // Hub Configuration with EXACT purple colors
 const HUB_CONFIG = {
   name: 'OPERA',
-  subtitle: 'The Nexus',
-  description: 'Maps, fog of war, and spatial visualization',
+  subtitle: 'eSports Hub',
+  description: 'Tournament browser, schedules, patch notes, and circuit standings',
   color: colors.hub.opera.base,      // #9d4edd
-  glow: colors.hub.opera.glow,       // rgba(157, 78, 221, 0.4)
+  glow: colors.hub.opera.glow,       // rgba(157, 78, 221, 0.5)
+  muted: colors.hub.opera.muted,     // #7a3aaa
 };
 
-// Available maps for visualization
-const MAPS: MapMetadata[] = [
-  { id: 'ascent', name: 'Ascent', game: 'Valorant', size: 'Medium', layout: 'Open' },
-  { id: 'bind', name: 'Bind', game: 'Valorant', size: 'Small', layout: 'Linear' },
-  { id: 'haven', name: 'Haven', game: 'Valorant', size: 'Large', layout: '3 Sites' },
-  { id: 'split', name: 'Split', game: 'Valorant', size: 'Medium', layout: 'Vertical' },
-  { id: 'lotus', name: 'Lotus', game: 'Valorant', size: 'Large', layout: '3 Sites' },
-  { id: 'sunset', name: 'Sunset', game: 'Valorant', size: 'Medium', layout: 'Standard' },
+// Tab configuration
+const TABS: { id: HubTab; label: string; icon: typeof Trophy }[] = [
+  { id: 'overview', label: 'Overview', icon: Trophy },
+  { id: 'schedule', label: 'Schedule', icon: Calendar },
+  { id: 'standings', label: 'Standings', icon: BarChart3 },
+  { id: 'patches', label: 'Patches', icon: FileText },
 ];
 
-// View modes
-const VIEW_MODES: ViewModeConfig[] = [
-  { id: 'tactical', name: 'Tactical', icon: Target, description: 'Heat maps and positioning' },
-  { id: 'fog', name: 'Fog of War', icon: EyeOff, description: 'Vision and control zones' },
-  { id: 'grid', name: 'Grid View', icon: Grid3X3, description: 'Spatial coordinates' },
-];
-
-// Layer options
-const LAYERS: LayerConfig[] = [
-  { id: 'callouts', name: 'Callouts', enabled: true },
-  { id: 'spawns', name: 'Spawn Points', enabled: true },
-  { id: 'sightlines', name: 'Sight Lines', enabled: false },
-  { id: 'cover', name: 'Cover Zones', enabled: false },
-  { id: 'rotation', name: 'Rotation Paths', enabled: false },
-];
-
-/** Active layers state type */
-interface ActiveLayersState {
-  callouts: boolean;
-  spawns: boolean;
-  sightlines: boolean;
-  cover: boolean;
-  rotation: boolean;
-}
+// Circuit configurations
+const CIRCUIT_COLORS: Record<CircuitRegion, string> = {
+  Americas: '#ff4655',
+  EMEA: '#00d4ff',
+  Pacific: '#ff9f1c',
+  China: '#ffd700',
+  International: '#9d4edd',
+};
 
 function OperaHubContent(): JSX.Element {
-  const [selectedMap, setSelectedMap] = useState<MapMetadata>(MAPS[0]);
-  const [viewMode, setViewMode] = useState<ViewMode>('tactical');
-  const [activeLayers, setActiveLayers] = useState<ActiveLayersState>(
-    LAYERS.reduce((acc, layer) => ({ ...acc, [layer.id]: layer.enabled }), {
-      callouts: false,
-      spawns: false,
-      sightlines: false,
-      cover: false,
-      rotation: false,
-    })
-  );
-  const [zoom, setZoom] = useState<number>(1);
-  const [showFog, setShowFog] = useState<boolean>(true);
-  const [fogIntensity, setFogIntensity] = useState<number>(0.6);
+  const [activeTab, setActiveTab] = useState<HubTab>('overview');
+  const [filters, setFilters] = useState<TournamentFilters>({});
+  const [selectedCircuit, setSelectedCircuit] = useState<CircuitRegion>('Americas');
+  const [selectedSeason, setSelectedSeason] = useState<string>('2026');
 
   const addNotification = useNJZStore((state) => state.addNotification);
   const { setState } = useHubState('opera');
-  const { mapData, loading } = useOperaData(selectedMap.id);
+  
+  const {
+    tournaments,
+    selectedTournament,
+    setSelectedTournament,
+    schedules,
+    patches,
+    selectedPatch,
+    setSelectedPatch,
+    standings,
+    loading,
+    error,
+    refreshTournaments,
+    refreshPatches,
+    refreshStandings,
+    theme,
+  } = useOperaData();
 
-  // Handle map selection
-  const handleMapSelect = (map: MapMetadata): void => {
-    setSelectedMap(map);
-    addNotification(`Loaded ${map.name} - ${map.layout} layout`, 'info');
-    setState({ selectedMap: map.id });
+  // Handle tournament selection
+  const handleSelectTournament = (tournament: Tournament) => {
+    setSelectedTournament(tournament);
+    setState({ selectedTournament: tournament.tournament_id });
+    addNotification(`Selected ${tournament.name}`, 'info');
+    
+    // Switch to schedule tab when selecting a tournament
+    if (activeTab === 'overview') {
+      setActiveTab('schedule');
+    }
   };
 
-  // Handle view mode change
-  const handleViewModeChange = (mode: ViewMode): void => {
-    setViewMode(mode);
-    setShowFog(mode === 'fog');
-    const viewModeName = VIEW_MODES.find((v) => v.id === mode)?.name ?? mode;
-    addNotification(`Switched to ${viewModeName} view`, 'info');
+  // Handle tab change
+  const handleTabChange = (tab: HubTab) => {
+    setActiveTab(tab);
+    addNotification(`Switched to ${tab} view`, 'info');
   };
 
-  // Toggle layer
-  const toggleLayer = (layerId: keyof ActiveLayersState): void => {
-    setActiveLayers((prev) => {
-      const newState = { ...prev, [layerId]: !prev[layerId] };
-      const layerName = LAYERS.find((l) => l.id === layerId)?.name ?? layerId;
-      addNotification(
-        `${layerName} ${newState[layerId] ? 'enabled' : 'disabled'}`,
-        'info'
-      );
-      return newState;
+  // Handle refresh
+  const handleRefresh = () => {
+    refreshTournaments();
+    refreshPatches();
+    refreshStandings(selectedCircuit, selectedSeason);
+    addNotification('Data refreshed', 'success');
+  };
+
+  // Handle circuit change for standings
+  const handleCircuitChange = (circuit: CircuitRegion) => {
+    setSelectedCircuit(circuit);
+    refreshStandings(circuit, selectedSeason);
+  };
+
+  // Handle season change for standings
+  const handleSeasonChange = (season: string) => {
+    setSelectedSeason(season);
+    refreshStandings(selectedCircuit, season);
+  };
+
+  // Get tournament counts by circuit
+  const getTournamentCounts = () => {
+    const counts: Record<string, number> = {};
+    tournaments.forEach(t => {
+      const circuit = t.circuit || 'Unknown';
+      counts[circuit] = (counts[circuit] || 0) + 1;
     });
+    return counts;
   };
 
-  // Zoom handlers
-  const handleZoomIn = (): void => setZoom((z) => Math.min(z + 0.2, 2));
-  const handleZoomOut = (): void => setZoom((z) => Math.max(z - 0.2, 0.5));
+  const tournamentCounts = getTournamentCounts();
 
-  // Purple color values (exact from requirements)
-  const purple = {
-    base: '#9d4edd',
-    glow: 'rgba(157, 78, 221, 0.4)',
-    muted: '#7a3aaa',
+  // Get upcoming matches count
+  const getUpcomingMatchesCount = () => {
+    return schedules.filter(s => s.status === 'scheduled').length;
   };
+
+  // Get active patch
+  const getActivePatch = (): Patch | undefined => {
+    return patches.find(p => p.is_active_competitive);
+  };
+
+  const activePatch = getActivePatch();
 
   return (
     <HubWrapper hubId="opera">
       {/* Stats Row */}
-      <div className="max-w-6xl mx-auto mb-12">
+      <div className="max-w-6xl mx-auto mb-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <HubStatCard
-            label="Active Maps"
-            value="6"
-            change="Updated"
-            color="cyan"
-          />
-          <HubStatCard
-            label="Data Points"
-            value="12.4K"
-            change="Per map"
-            color="amber"
-          />
-          <HubStatCard
-            label="Sight Lines"
-            value="847"
-            change="Analyzed"
+            label="Active Tournaments"
+            value={tournaments.filter(t => t.status === 'ongoing').length.toString()}
+            change="Live"
             color="green"
           />
           <HubStatCard
-            label="Coverage"
-            value="98%"
-            change="Complete"
+            label="Upcoming Matches"
+            value={getUpcomingMatchesCount().toString()}
+            change="Next 7 days"
+            color="cyan"
+          />
+          <HubStatCard
+            label="Current Patch"
+            value={activePatch?.version || '-'}
+            change="Active"
             color="gold"
+          />
+          <HubStatCard
+            label="Circuits"
+            value="4"
+            change="VCT Regions"
+            color="amber"
           />
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content - Map Visualization */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Map Viewer */}
-          <HubCard
-            accent="cyan"
-            className="relative overflow-hidden"
-            style={{ borderColor: purple.base }}
-          >
-            {/* Header */}
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Sidebar - Tournament Browser */}
+        <div className="lg:col-span-1 space-y-4">
+          <GlassCard className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Map className="w-5 h-5" style={{ color: purple.base }} />
-                <h3 className="font-display font-semibold">{selectedMap.name}</h3>
-                <span className="text-xs px-2 py-1 rounded bg-white/5 text-slate">
-                  {selectedMap.game}
-                </span>
-              </div>
               <div className="flex items-center gap-2">
-                {/* Zoom Controls */}
-                <button
-                  onClick={handleZoomOut}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                >
-                  <ZoomOut className="w-4 h-4 text-slate" />
-                </button>
-                <span className="text-xs font-mono text-slate w-12 text-center">
-                  {Math.round(zoom * 100)}%
-                </span>
-                <button
-                  onClick={handleZoomIn}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                >
-                  <ZoomIn className="w-4 h-4 text-slate" />
-                </button>
-              </div>
-            </div>
-
-            {/* Map Visualization Container */}
-            <div className="relative aspect-video bg-void-mid rounded-lg overflow-hidden">
-              {/* Map Visualization Component */}
-              <MapVisualization
-                mapId={selectedMap.id}
-                mapData={mapData}
-                zoom={zoom}
-                layers={activeLayers}
-                viewMode={viewMode}
-                loading={loading}
-              />
-
-              {/* Fog Overlay */}
-              <AnimatePresence>
-                {showFog && (
-                  <FogOverlay
-                    intensity={fogIntensity}
-                    color={purple.base}
-                    animated={true}
-                  />
-                )}
-              </AnimatePresence>
-
-              {/* View Mode Indicator */}
-              <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-void-black/80 backdrop-blur-sm border border-white/10">
-                {viewMode === 'fog' ? (
-                  <EyeOff className="w-4 h-4" style={{ color: purple.base }} />
-                ) : (
-                  <Eye className="w-4 h-4" style={{ color: purple.base }} />
-                )}
-                <span className="text-xs text-slate capitalize">{viewMode} View</span>
-              </div>
-            </div>
-
-            {/* View Mode Selector */}
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              {VIEW_MODES.map((mode) => (
-                <button
-                  key={mode.id}
-                  onClick={() => handleViewModeChange(mode.id)}
-                  className={`p-3 rounded-xl border transition-all duration-300 text-left ${
-                    viewMode === mode.id
-                      ? 'bg-white/10'
-                      : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                  style={{
-                    borderColor: viewMode === mode.id ? purple.base : 'rgba(255,255,255,0.1)',
-                    boxShadow: viewMode === mode.id ? `0 0 20px ${purple.glow}` : 'none',
-                  }}
-                >
-                  <mode.icon
-                    className="w-5 h-5 mb-2"
-                    style={{ color: viewMode === mode.id ? purple.base : '#6a6a7a' }}
-                  />
-                  <div className="font-medium text-sm">{mode.name}</div>
-                  <div className="text-xs text-slate">{mode.description}</div>
-                </button>
-              ))}
-            </div>
-          </HubCard>
-
-          {/* Layer Controls */}
-          <HubCard accent="cyan">
-            <div className="flex items-center gap-3 mb-4">
-              <Layers className="w-5 h-5" style={{ color: purple.base }} />
-              <h3 className="font-display font-semibold">Layer Controls</h3>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-              {LAYERS.map((layer) => (
-                <button
-                  key={layer.id}
-                  onClick={() => toggleLayer(layer.id)}
-                  className={`p-3 rounded-lg border transition-all duration-200 text-left ${
-                    activeLayers[layer.id]
-                      ? 'bg-white/10'
-                      : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                  style={{
-                    borderColor: activeLayers[layer.id] ? purple.base : 'rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <Scan className="w-4 h-4" style={{ color: activeLayers[layer.id] ? purple.base : '#6a6a7a' }} />
-                    <div
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        activeLayers[layer.id] ? 'bg-green-400' : 'bg-slate'
-                      }`}
-                    />
-                  </div>
-                  <div className="text-xs text-slate">{layer.name}</div>
-                </button>
-              ))}
-            </div>
-          </HubCard>
-
-          {/* Spatial Analysis */}
-          <HubCard accent="cyan">
-            <div className="flex items-center gap-3 mb-4">
-              <Compass className="w-5 h-5" style={{ color: purple.base }} />
-              <h3 className="font-display font-semibold">Spatial Analysis</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: 'Avg Control Time', value: '2:34', unit: 'min' },
-                { label: 'Rotation Speed', value: '14.2', unit: 'sec' },
-                { label: 'Peak Zones', value: '7', unit: 'areas' },
-                { label: 'Sight Coverage', value: '73%', unit: 'map' },
-              ].map((stat) => (
-                <div key={stat.label} className="p-4 rounded-lg bg-white/5">
-                  <div className="text-xs text-slate mb-1">{stat.label}</div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-mono font-bold" style={{ color: purple.base }}>
-                      {stat.value}
-                    </span>
-                    <span className="text-xs text-slate">{stat.unit}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </HubCard>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Map Selector */}
-          <HubCard accent="cyan">
-            <div className="flex items-center gap-3 mb-4">
-              <Navigation className="w-5 h-5" style={{ color: purple.base }} />
-              <h3 className="font-display font-semibold">Select Map</h3>
-            </div>
-            <div className="space-y-2">
-              {MAPS.map((map) => (
-                <button
-                  key={map.id}
-                  onClick={() => handleMapSelect(map)}
-                  className={`w-full p-3 rounded-lg border transition-all duration-200 text-left ${
-                    selectedMap.id === map.id
-                      ? 'bg-white/10'
-                      : 'bg-white/5 hover:bg-white/10'
-                  }`}
-                  style={{
-                    borderColor: selectedMap.id === map.id ? purple.base : 'rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-sm">{map.name}</div>
-                      <div className="text-xs text-slate">
-                        {map.size} • {map.layout}
-                      </div>
-                    </div>
-                    {selectedMap.id === map.id && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: purple.base }}
-                      />
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </HubCard>
-
-          {/* Fog Settings */}
-          <HubCard accent="cyan">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Filter className="w-5 h-5" style={{ color: purple.base }} />
-                <h3 className="font-display font-semibold">Fog Settings</h3>
+                <Trophy className="w-5 h-5" style={{ color: HUB_CONFIG.color }} />
+                <h2 className="font-semibold" style={{ color: HUB_CONFIG.color }}>
+                  Tournaments
+                </h2>
               </div>
               <button
-                onClick={() => setShowFog(!showFog)}
-                className={`p-2 rounded-lg transition-colors ${
-                  showFog ? 'bg-white/10' : 'bg-white/5'
-                }`}
+                onClick={handleRefresh}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                disabled={loading.tournaments}
               >
-                {showFog ? (
-                  <Eye className="w-4 h-4" style={{ color: purple.base }} />
-                ) : (
-                  <EyeOff className="w-4 h-4 text-slate" />
-                )}
+                <RefreshCw 
+                  className={`w-4 h-4 ${loading.tournaments ? 'animate-spin' : ''}`} 
+                  style={{ color: HUB_CONFIG.color }}
+                />
               </button>
             </div>
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-slate">Intensity</span>
-                  <span className="text-xs font-mono" style={{ color: purple.base }}>
-                    {Math.round(fogIntensity * 100)}%
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={fogIntensity}
-                  onChange={(e) => setFogIntensity(parseFloat(e.target.value))}
-                  className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, ${purple.base} 0%, ${purple.base} ${fogIntensity * 100}%, rgba(255,255,255,0.1) ${fogIntensity * 100}%, rgba(255,255,255,0.1) 100%)`,
-                  }}
-                />
-              </div>
-              <div className="p-3 rounded-lg bg-white/5">
-                <div className="text-xs text-slate">
-                  Fog of War visualization shows vision control areas and blind spots on the map.
-                </div>
-              </div>
-            </div>
-          </HubCard>
+            
+            <TournamentBrowser
+              tournaments={tournaments}
+              selectedTournament={selectedTournament}
+              onSelectTournament={handleSelectTournament}
+              filters={filters}
+              onFiltersChange={setFilters}
+              loading={loading.tournaments}
+            />
+          </GlassCard>
 
-          {/* Quick Stats */}
-          <HubCard>
-            <div className="flex items-center gap-3 mb-4">
-              <Maximize2 className="w-5 h-5 text-slate" />
-              <h3 className="font-display font-semibold">Map Properties</h3>
+          {/* Quick Circuit Stats */}
+          <GlassCard className="p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Globe className="w-4 h-4" style={{ color: HUB_CONFIG.color }} />
+              <span className="text-sm font-medium" style={{ color: HUB_CONFIG.color }}>
+                Circuits
+              </span>
             </div>
-            <div className="space-y-3">
-              {[
-                { label: 'Total Area', value: '12,450', unit: 'm²' },
-                { label: 'Elevation', value: '3', unit: 'levels' },
-                { label: 'Bombsites', value: '2', unit: 'sites' },
-                { label: 'Spawn Points', value: '8', unit: 'total' },
-              ].map((prop) => (
-                <div key={prop.label} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-                  <span className="text-sm text-slate">{prop.label}</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-mono" style={{ color: purple.base }}>
-                      {prop.value}
-                    </span>
-                    <span className="text-xs text-slate">{prop.unit}</span>
+            <div className="space-y-2">
+              {(['Americas', 'EMEA', 'Pacific', 'China'] as CircuitRegion[]).map(circuit => (
+                <div 
+                  key={circuit}
+                  className="flex items-center justify-between p-2 rounded-lg bg-white/5"
+                >
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: CIRCUIT_COLORS[circuit] }}
+                    />
+                    <span className="text-sm">{circuit}</span>
                   </div>
+                  <span className="text-xs font-mono opacity-60">
+                    {tournamentCounts[circuit] || 0} tournaments
+                  </span>
                 </div>
               ))}
             </div>
-          </HubCard>
+          </GlassCard>
+        </div>
 
-          {/* Info Card */}
-          <HubCard>
-            <div className="flex items-center gap-3 mb-4">
-              <Map className="w-5 h-5 text-slate" />
-              <h3 className="font-display font-semibold">About OPERA</h3>
+        {/* Main Content Area */}
+        <div className="lg:col-span-2 space-y-4">
+          {/* Tab Navigation */}
+          <GlassCard className="p-2">
+            <div className="flex flex-wrap gap-1">
+              {TABS.map(tab => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => handleTabChange(tab.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-white/10' 
+                        : 'hover:bg-white/5 opacity-70'
+                    }`}
+                    style={{
+                      color: isActive ? HUB_CONFIG.color : undefined,
+                      boxShadow: isActive ? `0 0 20px ${HUB_CONFIG.glow}` : undefined,
+                    }}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
-            <p className="text-sm text-slate mb-4">
-              The Nexus provides advanced spatial visualization for tactical analysis. 
-              Explore map layouts, sight lines, and control zones with interactive fog of war.
-            </p>
-            <div className="text-xs text-slate font-mono space-y-1">
-              <div>Renderer: WebGL 2.0</div>
-              <div>Grid: 100x100 units</div>
-              <div>Update: Real-time</div>
-            </div>
-          </HubCard>
+          </GlassCard>
+
+          {/* Tab Content */}
+          <AnimatePresence mode="wait">
+            {activeTab === 'overview' && (
+              <motion.div
+                key="overview"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-4"
+              >
+                {/* Welcome Card */}
+                <GlassCard className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Tv className="w-8 h-8" style={{ color: HUB_CONFIG.color }} />
+                    <div>
+                      <h2 className="text-xl font-semibold" style={{ color: HUB_CONFIG.color }}>
+                        Welcome to OPERA eSports Hub
+                      </h2>
+                      <p className="text-sm opacity-60">
+                        Your central source for VCT tournament data
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div className="p-4 rounded-lg bg-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Target className="w-4 h-4" style={{ color: HUB_CONFIG.color }} />
+                        <span className="font-medium">Tournaments</span>
+                      </div>
+                      <p className="text-xs opacity-60">
+                        Browse and filter tournaments across all VCT circuits including Americas, EMEA, Pacific, and China.
+                      </p>
+                    </div>
+                    
+                    <div className="p-4 rounded-lg bg-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Calendar className="w-4 h-4" style={{ color: HUB_CONFIG.color }} />
+                        <span className="font-medium">Schedules</span>
+                      </div>
+                      <p className="text-xs opacity-60">
+                        View match schedules, live scores, and results for ongoing and upcoming events.
+                      </p>
+                    </div>
+                    
+                    <div className="p-4 rounded-lg bg-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <BarChart3 className="w-4 h-4" style={{ color: HUB_CONFIG.color }} />
+                        <span className="font-medium">Standings</span>
+                      </div>
+                      <p className="text-xs opacity-60">
+                        Track circuit standings, VCT points, and qualification status for Champions and Masters.
+                      </p>
+                    </div>
+                    
+                    <div className="p-4 rounded-lg bg-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <FileText className="w-4 h-4" style={{ color: HUB_CONFIG.color }} />
+                        <span className="font-medium">Patch Notes</span>
+                      </div>
+                      <p className="text-xs opacity-60">
+                        Stay updated with the latest game patches, agent changes, and competitive updates.
+                      </p>
+                    </div>
+                  </div>
+                </GlassCard>
+
+                {/* Featured Tournament */}
+                {selectedTournament && (
+                  <GlassCard className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-medium" style={{ color: HUB_CONFIG.color }}>
+                        Selected Tournament
+                      </span>
+                      <button
+                        onClick={() => setActiveTab('schedule')}
+                        className="text-xs px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                        style={{ color: HUB_CONFIG.color }}
+                      >
+                        View Schedule →
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-12 h-12 rounded-lg flex items-center justify-center"
+                        style={{ backgroundColor: CIRCUIT_COLORS[selectedTournament.circuit || 'International'] + '20' }}
+                      >
+                        <Trophy 
+                          className="w-6 h-6" 
+                          style={{ color: CIRCUIT_COLORS[selectedTournament.circuit || 'International'] }}
+                        />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">{selectedTournament.name}</h3>
+                        <div className="flex items-center gap-2 text-xs opacity-60">
+                          <MapPin className="w-3 h-3" />
+                          {selectedTournament.circuit}
+                          <span>•</span>
+                          <Calendar className="w-3 h-3" />
+                          {new Date(selectedTournament.start_date).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+                  </GlassCard>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'schedule' && (
+              <motion.div
+                key="schedule"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ScheduleViewer
+                  schedules={schedules}
+                  tournament={selectedTournament}
+                  loading={loading.schedules}
+                />
+              </motion.div>
+            )}
+
+            {activeTab === 'standings' && (
+              <motion.div
+                key="standings"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <CircuitStandings
+                  standings={standings}
+                  circuit={selectedCircuit}
+                  season={selectedSeason}
+                  onCircuitChange={handleCircuitChange}
+                  onSeasonChange={handleSeasonChange}
+                  loading={loading.standings}
+                />
+              </motion.div>
+            )}
+
+            {activeTab === 'patches' && (
+              <motion.div
+                key="patches"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <PatchNotesReader
+                  patches={patches}
+                  selectedPatch={selectedPatch}
+                  onSelectPatch={setSelectedPatch}
+                  loading={loading.patches}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </HubWrapper>
@@ -466,7 +446,7 @@ function OperaHubContent(): JSX.Element {
 
 function OperaHub(): JSX.Element {
   return (
-    <PanelErrorBoundary panelId="opera-hub" panelTitle="OPERA Nexus" hub="OPERA">
+    <PanelErrorBoundary panelId="opera-hub" panelTitle="OPERA eSports Hub" hub="OPERA">
       <OperaHubContent />
     </PanelErrorBoundary>
   );

@@ -1,13 +1,17 @@
 /**
- * useOperaData Hook
- * Data fetching and management for OPERA Hub visualization
- * [Ver003.000] - Converted to TypeScript
+ * useOperaData Hook - eSports Hub
+ * Data fetching and management for OPERA Hub with TiDB integration
+ * [Ver004.000] - Refactored: Tournament, schedule, patch, and standings data
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { logger } from '@/utils/logger';
 import type {
-  MapData,
-  MapListItem,
+  Tournament,
+  MatchSchedule,
+  Patch,
+  CircuitStanding,
+  CircuitRegion,
+  TournamentFilters,
   CacheEntry,
   PurpleTheme,
   UseOperaDataReturn,
@@ -23,466 +27,470 @@ const PURPLE: PurpleTheme = {
   muted: '#7a3aaa',
 };
 
-// Mock map data - in production, this would come from an API
-const MOCK_MAP_DATA: Record<string, MapData> = {
-  ascent: {
-    id: 'ascent',
-    name: 'Ascent',
-    game: 'Valorant',
-    size: { width: 100, height: 100 },
-    sites: [
-      { id: 'a', name: 'A Site', x: 35, y: 30, type: 'bombsite' },
-      { id: 'b', name: 'B Site', x: 65, y: 70, type: 'bombsite' },
-    ],
-    spawns: {
-      attacker: { x: 50, y: 90 },
-      defender: { x: 50, y: 10 },
-    },
-    callouts: [
-      { id: 'tree', name: 'Tree', x: 25, y: 40 },
-      { id: 'market', name: 'Market', x: 75, y: 60 },
-      { id: 'mid', name: 'Mid', x: 50, y: 50 },
-      { id: 'link', name: 'Link', x: 60, y: 40 },
-      { id: 'main', name: 'A Main', x: 15, y: 25 },
-      { id: 'window', name: 'Window', x: 45, y: 35 },
-    ],
-    heatmap: [
-      { x: 35, y: 30, intensity: 0.9 },
-      { x: 65, y: 70, intensity: 0.85 },
-      { x: 50, y: 50, intensity: 0.7 },
-    ],
-    stats: {
-      avgControlTime: '2:34',
-      rotationSpeed: 14.2,
-      peakZones: 7,
-      sightCoverage: 73,
-    },
-  },
-  bind: {
-    id: 'bind',
-    name: 'Bind',
-    game: 'Valorant',
-    size: { width: 120, height: 80 },
-    sites: [
-      { id: 'a', name: 'A Site', x: 25, y: 50, type: 'bombsite' },
-      { id: 'b', name: 'B Site', x: 75, y: 50, type: 'bombsite' },
-    ],
-    spawns: {
-      attacker: { x: 15, y: 50 },
-      defender: { x: 85, y: 50 },
-    },
-    callouts: [
-      { id: 'hookah', name: 'Hookah', x: 50, y: 70 },
-      { id: 'showers', name: 'Showers', x: 50, y: 30 },
-      { id: 'short', name: 'Short', x: 35, y: 40 },
-      { id: 'long', name: 'Long', x: 35, y: 60 },
-    ],
-    heatmap: [
-      { x: 25, y: 50, intensity: 0.88 },
-      { x: 75, y: 50, intensity: 0.82 },
-    ],
-    stats: {
-      avgControlTime: '2:18',
-      rotationSpeed: 12.5,
-      peakZones: 6,
-      sightCoverage: 68,
-    },
-  },
-  haven: {
-    id: 'haven',
-    name: 'Haven',
-    game: 'Valorant',
-    size: { width: 100, height: 100 },
-    sites: [
-      { id: 'a', name: 'A Site', x: 25, y: 25, type: 'bombsite' },
-      { id: 'b', name: 'B Site', x: 75, y: 25, type: 'bombsite' },
-      { id: 'c', name: 'C Site', x: 50, y: 75, type: 'bombsite' },
-    ],
-    spawns: {
-      attacker: { x: 50, y: 90 },
-      defender: { x: 50, y: 10 },
-    },
-    callouts: [
-      { id: 'short', name: 'A Short', x: 35, y: 20 },
-      { id: 'long', name: 'A Long', x: 15, y: 30 },
-      { id: 'window', name: 'Window', x: 50, y: 40 },
-      { id: 'garage', name: 'Garage', x: 65, y: 35 },
-    ],
-    heatmap: [
-      { x: 25, y: 25, intensity: 0.75 },
-      { x: 75, y: 25, intensity: 0.72 },
-      { x: 50, y: 75, intensity: 0.8 },
-    ],
-    stats: {
-      avgControlTime: '2:45',
-      rotationSpeed: 16.8,
-      peakZones: 9,
-      sightCoverage: 65,
-    },
-  },
-  split: {
-    id: 'split',
-    name: 'Split',
-    game: 'Valorant',
-    size: { width: 80, height: 120 },
-    sites: [
-      { id: 'a', name: 'A Site', x: 50, y: 20, type: 'bombsite' },
-      { id: 'b', name: 'B Site', x: 50, y: 80, type: 'bombsite' },
-    ],
-    spawns: {
-      attacker: { x: 50, y: 95 },
-      defender: { x: 50, y: 5 },
-    },
-    callouts: [
-      { id: 'ramps', name: 'Ramps', x: 20, y: 35 },
-      { id: 'sewer', name: 'Sewer', x: 80, y: 65 },
-      { id: 'vent', name: 'Vent', x: 35, y: 50 },
-      { id: 'heaven', name: 'Heaven', x: 65, y: 20 },
-      { id: 'hell', name: 'Hell', x: 65, y: 80 },
-    ],
-    heatmap: [
-      { x: 50, y: 20, intensity: 0.85 },
-      { x: 50, y: 80, intensity: 0.83 },
-    ],
-    stats: {
-      avgControlTime: '2:28',
-      rotationSpeed: 11.2,
-      peakZones: 8,
-      sightCoverage: 70,
-    },
-  },
-  lotus: {
-    id: 'lotus',
-    name: 'Lotus',
-    game: 'Valorant',
-    size: { width: 100, height: 100 },
-    sites: [
-      { id: 'a', name: 'A Site', x: 20, y: 50, type: 'bombsite' },
-      { id: 'b', name: 'B Site', x: 50, y: 20, type: 'bombsite' },
-      { id: 'c', name: 'C Site', x: 80, y: 50, type: 'bombsite' },
-    ],
-    spawns: {
-      attacker: { x: 50, y: 85 },
-      defender: { x: 50, y: 15 },
-    },
-    callouts: [
-      { id: 'door', name: 'A Door', x: 35, y: 50 },
-      { id: 'main', name: 'A Main', x: 10, y: 50 },
-      { id: 'drop', name: 'Drop', x: 50, y: 50 },
-      { id: 'wall', name: 'C Wall', x: 65, y: 50 },
-    ],
-    heatmap: [
-      { x: 20, y: 50, intensity: 0.78 },
-      { x: 50, y: 20, intensity: 0.8 },
-      { x: 80, y: 50, intensity: 0.76 },
-    ],
-    stats: {
-      avgControlTime: '2:52',
-      rotationSpeed: 18.5,
-      peakZones: 10,
-      sightCoverage: 62,
-    },
-  },
-  sunset: {
-    id: 'sunset',
-    name: 'Sunset',
-    game: 'Valorant',
-    size: { width: 110, height: 90 },
-    sites: [
-      { id: 'a', name: 'A Site', x: 25, y: 50, type: 'bombsite' },
-      { id: 'b', name: 'B Site', x: 75, y: 50, type: 'bombsite' },
-    ],
-    spawns: {
-      attacker: { x: 10, y: 50 },
-      defender: { x: 90, y: 50 },
-    },
-    callouts: [
-      { id: 'elbow', name: 'Elbow', x: 40, y: 40 },
-      { id: 'market', name: 'Market', x: 50, y: 60 },
-      { id: ' CT', name: 'CT', x: 80, y: 50 },
-      { id: 'mid', name: 'Mid', x: 50, y: 50 },
-    ],
-    heatmap: [
-      { x: 25, y: 50, intensity: 0.82 },
-      { x: 75, y: 50, intensity: 0.8 },
-    ],
-    stats: {
-      avgControlTime: '2:22',
-      rotationSpeed: 13.8,
-      peakZones: 6,
-      sightCoverage: 75,
-    },
-  },
-};
+const operaLogger = logger.child('useOperaData');
 
-// Map list for reference
-const MAP_LIST: MapListItem[] = Object.values(MOCK_MAP_DATA).map((map) => ({
-  id: map.id,
-  name: map.name,
-  game: map.game,
-}));
+// Mock data for development/fallback
+const MOCK_TOURNAMENTS: Tournament[] = [
+  {
+    tournament_id: 1,
+    name: 'VCT 2026 Masters Tokyo',
+    tier: 'Masters',
+    game: 'Valorant',
+    region: 'International',
+    circuit: 'International',
+    organizer: 'Riot Games',
+    prize_pool_usd: 1000000,
+    start_date: '2026-06-01',
+    end_date: '2026-06-14',
+    status: 'upcoming',
+    season: '2026',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    tournament_id: 2,
+    name: 'VCT 2026 Americas Stage 1',
+    tier: 'Challenger',
+    game: 'Valorant',
+    region: 'Americas',
+    circuit: 'Americas',
+    organizer: 'Riot Games',
+    prize_pool_usd: 250000,
+    start_date: '2026-02-15',
+    end_date: '2026-03-30',
+    status: 'ongoing',
+    season: '2026',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    tournament_id: 3,
+    name: 'VCT 2026 EMEA Stage 1',
+    tier: 'Challenger',
+    game: 'Valorant',
+    region: 'EMEA',
+    circuit: 'EMEA',
+    organizer: 'Riot Games',
+    prize_pool_usd: 250000,
+    start_date: '2026-02-15',
+    end_date: '2026-03-30',
+    status: 'ongoing',
+    season: '2026',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    tournament_id: 4,
+    name: 'VCT 2026 Pacific Stage 1',
+    tier: 'Challenger',
+    game: 'Valorant',
+    region: 'Pacific',
+    circuit: 'Pacific',
+    organizer: 'Riot Games',
+    prize_pool_usd: 250000,
+    start_date: '2026-02-20',
+    end_date: '2026-04-05',
+    status: 'upcoming',
+    season: '2026',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    tournament_id: 5,
+    name: 'VCT 2026 China Stage 1',
+    tier: 'Challenger',
+    game: 'Valorant',
+    region: 'China',
+    circuit: 'China',
+    organizer: 'Riot Games',
+    prize_pool_usd: 250000,
+    start_date: '2026-02-25',
+    end_date: '2026-04-10',
+    status: 'upcoming',
+    season: '2026',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+];
+
+const MOCK_SCHEDULES: MatchSchedule[] = [
+  {
+    schedule_id: 1,
+    tournament_id: 2,
+    match_id: 'VCT-AM-001',
+    round_name: 'Group A',
+    stage: 'Groups',
+    team_a_id: 1,
+    team_b_id: 2,
+    team_a_name: 'Sentinels',
+    team_b_name: 'Cloud9',
+    scheduled_at: '2026-02-15T20:00:00Z',
+    stream_url: 'https://twitch.tv/valorant',
+    status: 'completed',
+    team_a_score: 2,
+    team_b_score: 1,
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    schedule_id: 2,
+    tournament_id: 2,
+    match_id: 'VCT-AM-002',
+    round_name: 'Group A',
+    stage: 'Groups',
+    team_a_id: 3,
+    team_b_id: 4,
+    team_a_name: 'NRG',
+    team_b_name: 'G2 Esports',
+    scheduled_at: '2026-02-16T20:00:00Z',
+    stream_url: 'https://twitch.tv/valorant',
+    status: 'live',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    schedule_id: 3,
+    tournament_id: 2,
+    match_id: 'VCT-AM-003',
+    round_name: 'Group B',
+    stage: 'Groups',
+    team_a_id: 5,
+    team_b_id: 6,
+    team_a_name: 'Evil Geniuses',
+    team_b_name: '100 Thieves',
+    scheduled_at: '2026-02-17T20:00:00Z',
+    stream_url: 'https://twitch.tv/valorant',
+    status: 'scheduled',
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+];
+
+const MOCK_PATCHES: Patch[] = [
+  {
+    patch_id: 1,
+    version: '8.11',
+    game: 'Valorant',
+    patch_type: 'minor',
+    release_date: '2026-01-15',
+    summary: 'Agent balance updates and bug fixes',
+    agent_changes: [
+      { agent_name: 'Jett', change_type: 'adjustment', description: 'Dash cooldown increased' },
+      { agent_name: 'Sage', change_type: 'buff', description: 'Heal amount increased' },
+    ],
+    weapon_changes: [
+      { weapon_name: 'Vandal', change_type: 'nerf', description: 'First shot accuracy reduced' },
+    ],
+    is_active_competitive: true,
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    patch_id: 2,
+    version: '8.10',
+    game: 'Valorant',
+    patch_type: 'minor',
+    release_date: '2026-01-08',
+    summary: 'Map pool updates and competitive changes',
+    map_changes: [
+      { map_name: 'Lotus', change_type: 'updated', description: 'Site C redesigned' },
+    ],
+    is_active_competitive: false,
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+];
+
+const MOCK_STANDINGS: CircuitStanding[] = [
+  {
+    standing_id: 1,
+    circuit: 'Americas',
+    season: '2026',
+    team_id: 1,
+    team_name: 'Sentinels',
+    team_tag: 'SEN',
+    points: 450,
+    rank: 1,
+    qualification_status: 'qualified_champions',
+    wins: 12,
+    losses: 2,
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    standing_id: 2,
+    circuit: 'Americas',
+    season: '2026',
+    team_id: 2,
+    team_name: 'Cloud9',
+    team_tag: 'C9',
+    points: 380,
+    rank: 2,
+    qualification_status: 'qualified_champions',
+    wins: 10,
+    losses: 4,
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+  {
+    standing_id: 3,
+    circuit: 'Americas',
+    season: '2026',
+    team_id: 3,
+    team_name: 'NRG',
+    team_tag: 'NRG',
+    points: 320,
+    rank: 3,
+    qualification_status: 'qualified_masters',
+    wins: 9,
+    losses: 5,
+    created_at: '2025-01-01T00:00:00Z',
+    updated_at: '2025-01-01T00:00:00Z',
+  },
+];
 
 /**
- * useOperaData - Custom hook for OPERA hub data management
- * @param mapId - The ID of the map to load
- * @returns Map data, loading state, and error
+ * useOperaData - Custom hook for OPERA eSports Hub data management
+ * Fetches tournaments, schedules, patches, and circuit standings from TiDB
+ * 
+ * @returns UseOperaDataReturn - Data and state for OPERA hub
  */
-function useOperaData(mapId: string = 'ascent'): UseOperaDataReturn {
-  const [mapData, setMapData] = useState<MapData | null>(null);
-  const [mapList, setMapList] = useState<MapListItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+function useOperaData(): UseOperaDataReturn {
+  // Data states
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
+  const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
+  const [schedules, setSchedules] = useState<MatchSchedule[]>([]);
+  const [patches, setPatches] = useState<Patch[]>([]);
+  const [selectedPatch, setSelectedPatch] = useState<Patch | null>(null);
+  const [standings, setStandings] = useState<CircuitStanding[]>([]);
 
-  // Refs for cache management
-  const cacheRef = useRef<Record<string, CacheEntry<unknown>>>({});
+  // Loading states
+  const [loading, setLoading] = useState({
+    tournaments: true,
+    schedules: false,
+    patches: true,
+    standings: true,
+  });
+
+  // Error state
+  const [error, setError] = useState<string | null>(null);
+
+  // Cache management
+  const cacheRef = useRef<{
+    tournaments?: CacheEntry<Tournament[]>;
+    schedules: Record<number, CacheEntry<MatchSchedule[]>>;
+    patches?: CacheEntry<Patch[]>;
+    standings: Record<string, CacheEntry<CircuitStanding[]>>;
+  }>({
+    schedules: {},
+    standings: {},
+  });
 
   /**
    * Check if cached entry is valid (not expired)
    */
-  const isCacheValid = useCallback((cacheKey: string): boolean => {
-    const cached = cacheRef.current[cacheKey];
-    if (!cached) return false;
-    return Date.now() - cached.timestamp < CACHE_DURATION;
+  const isCacheValid = useCallback(<T,>(entry?: CacheEntry<T>): boolean => {
+    if (!entry) return false;
+    return Date.now() - entry.timestamp < CACHE_DURATION;
   }, []);
 
   /**
-   * Fetch map list with caching
+   * Fetch tournaments from TiDB with caching
    */
-  const fetchMapList = useCallback(
-    async (forceRefresh: boolean = false): Promise<MapListItem[]> => {
-      const cacheKey = 'opera_map_list';
-
-      // Check cache
-      if (!forceRefresh && isCacheValid(cacheKey)) {
-        const cached = cacheRef.current[cacheKey] as CacheEntry<MapListItem[]>;
-        setMapList(cached.data);
-        return cached.data;
-      }
-
-      try {
-        // Simulate API call with delay
-        await new Promise((resolve) => setTimeout(resolve, 200));
-
-        const data = MAP_LIST;
-
-        // Cache the result
-        cacheRef.current[cacheKey] = {
-          data,
-          timestamp: Date.now(),
-        };
-
-        setMapList(data);
-        return data;
-      } catch (err) {
-        logger.error('OPERA Map List Error:', err);
-        throw err;
-      }
-    },
-    [isCacheValid]
-  );
-
-  /**
-   * Fetch individual map data with TTL caching
-   */
-  const fetchMapData = useCallback(
-    async (id: string, forceRefresh: boolean = false): Promise<MapData | undefined> => {
-      const cacheKey = `opera_map_${id}`;
-
-      // Check cache with TTL validation
-      if (!forceRefresh && isCacheValid(cacheKey)) {
-        const cached = cacheRef.current[cacheKey] as CacheEntry<MapData>;
-        setMapData(cached.data);
-        setLoading(false);
-        return cached.data;
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        // Simulate API call with delay
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
-        // Get mock data
-        const data = MOCK_MAP_DATA[id];
-
-        if (!data) {
-          throw new Error(`Map data not found for: ${id}`);
-        }
-
-        // Cache the result with timestamp
-        cacheRef.current[cacheKey] = {
-          data,
-          timestamp: Date.now(),
-        };
-
-        setMapData(data);
-        setLastUpdated(Date.now());
-        return data;
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        setError(errorMessage);
-        logger.error('OPERA Data Error:', err);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [isCacheValid]
-  );
-
-  // Fetch data when mapId changes
-  useEffect(() => {
-    fetchMapData(mapId);
-  }, [mapId, fetchMapData]);
-
-  // Fetch map list on mount
-  useEffect(() => {
-    fetchMapList();
-  }, [fetchMapList]);
-
-  /**
-   * Refresh function to reload data (force cache invalidation)
-   */
-  const refresh = useCallback(() => {
-    return fetchMapData(mapId, true);
-  }, [mapId, fetchMapData]);
-
-  /**
-   * Refresh all data including map list
-   */
-  const refreshAll = useCallback(async () => {
-    setLoading(true);
-    try {
-      await Promise.all([fetchMapList(true), fetchMapData(mapId, true)]);
-      setLastUpdated(Date.now());
-    } catch {
-      // Error already handled in individual fetch functions
-    } finally {
-      setLoading(false);
+  const fetchTournaments = useCallback(async (forceRefresh = false): Promise<void> => {
+    if (!forceRefresh && isCacheValid(cacheRef.current.tournaments)) {
+      setTournaments(cacheRef.current.tournaments!.data);
+      setLoading(prev => ({ ...prev, tournaments: false }));
+      return;
     }
-  }, [fetchMapList, fetchMapData, mapId]);
+
+    setLoading(prev => ({ ...prev, tournaments: true }));
+    setError(null);
+
+    try {
+      // TODO: Replace with actual TiDB API call
+      // const response = await fetch('/api/opera/tournaments');
+      // const data = await response.json();
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const data = MOCK_TOURNAMENTS;
+      
+      cacheRef.current.tournaments = {
+        data,
+        timestamp: Date.now(),
+      };
+      
+      setTournaments(data);
+      operaLogger.info(`Fetched ${data.length} tournaments`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to fetch tournaments';
+      setError(message);
+      operaLogger.error('Failed to fetch tournaments:', err);
+    } finally {
+      setLoading(prev => ({ ...prev, tournaments: false }));
+    }
+  }, [isCacheValid]);
 
   /**
-   * Invalidate specific map cache
+   * Fetch schedules for a tournament
    */
-  const invalidateMapCache = useCallback(
-    (id: string = mapId) => {
-      delete cacheRef.current[`opera_map_${id}`];
-    },
-    [mapId]
-  );
+  const fetchSchedules = useCallback(async (tournamentId: number, forceRefresh = false): Promise<void> => {
+    const cached = cacheRef.current.schedules[tournamentId];
+    if (!forceRefresh && isCacheValid(cached)) {
+      setSchedules(cached.data);
+      setLoading(prev => ({ ...prev, schedules: false }));
+      return;
+    }
+
+    setLoading(prev => ({ ...prev, schedules: true }));
+
+    try {
+      // TODO: Replace with actual TiDB API call
+      // const response = await fetch(`/api/opera/schedules?tournament_id=${tournamentId}`);
+      
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
+      const data = MOCK_SCHEDULES.filter(s => s.tournament_id === tournamentId);
+      
+      cacheRef.current.schedules[tournamentId] = {
+        data,
+        timestamp: Date.now(),
+      };
+      
+      setSchedules(data);
+    } catch (err) {
+      operaLogger.error('Failed to fetch schedules:', err);
+    } finally {
+      setLoading(prev => ({ ...prev, schedules: false }));
+    }
+  }, [isCacheValid]);
 
   /**
-   * Invalidate all OPERA cache
+   * Fetch patches from TiDB
+   */
+  const fetchPatches = useCallback(async (forceRefresh = false): Promise<void> => {
+    if (!forceRefresh && isCacheValid(cacheRef.current.patches)) {
+      setPatches(cacheRef.current.patches!.data);
+      setLoading(prev => ({ ...prev, patches: false }));
+      return;
+    }
+
+    setLoading(prev => ({ ...prev, patches: true }));
+
+    try {
+      // TODO: Replace with actual TiDB API call
+      // const response = await fetch('/api/opera/patches');
+      
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      const data = MOCK_PATCHES;
+      
+      cacheRef.current.patches = {
+        data,
+        timestamp: Date.now(),
+      };
+      
+      setPatches(data);
+      operaLogger.info(`Fetched ${data.length} patches`);
+    } catch (err) {
+      operaLogger.error('Failed to fetch patches:', err);
+    } finally {
+      setLoading(prev => ({ ...prev, patches: false }));
+    }
+  }, [isCacheValid]);
+
+  /**
+   * Fetch circuit standings
+   */
+  const fetchStandings = useCallback(async (
+    circuit: CircuitRegion,
+    season: string,
+    forceRefresh = false
+  ): Promise<void> => {
+    const cacheKey = `${circuit}-${season}`;
+    const cached = cacheRef.current.standings[cacheKey];
+    
+    if (!forceRefresh && isCacheValid(cached)) {
+      setStandings(cached.data);
+      setLoading(prev => ({ ...prev, standings: false }));
+      return;
+    }
+
+    setLoading(prev => ({ ...prev, standings: true }));
+
+    try {
+      // TODO: Replace with actual TiDB API call
+      // const response = await fetch(`/api/opera/standings?circuit=${circuit}&season=${season}`);
+      
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
+      const data = MOCK_STANDINGS.filter(s => s.circuit === circuit && s.season === season);
+      
+      cacheRef.current.standings[cacheKey] = {
+        data,
+        timestamp: Date.now(),
+      };
+      
+      setStandings(data);
+    } catch (err) {
+      operaLogger.error('Failed to fetch standings:', err);
+    } finally {
+      setLoading(prev => ({ ...prev, standings: false }));
+    }
+  }, [isCacheValid]);
+
+  /**
+   * Refresh functions
+   */
+  const refreshTournaments = useCallback(() => fetchTournaments(true), [fetchTournaments]);
+  const refreshSchedules = useCallback((tournamentId: number) => fetchSchedules(tournamentId, true), [fetchSchedules]);
+  const refreshPatches = useCallback(() => fetchPatches(true), [fetchPatches]);
+  const refreshStandings = useCallback((circuit: CircuitRegion, season: string) => 
+    fetchStandings(circuit, season, true), [fetchStandings]);
+
+  /**
+   * Clear all cached data
    */
   const clearCache = useCallback(() => {
-    cacheRef.current = {};
-    setMapData(null);
-    setMapList([]);
-    setLastUpdated(null);
+    cacheRef.current = {
+      schedules: {},
+      standings: {},
+    };
+    operaLogger.info('Cache cleared');
   }, []);
 
-  /**
-   * Preload map data into cache
-   */
-  const preloadMap = useCallback(
-    async (id: string): Promise<MapData | undefined> => {
-      const cacheKey = `opera_map_${id}`;
-      if (isCacheValid(cacheKey)) {
-        const cached = cacheRef.current[cacheKey] as CacheEntry<MapData>;
-        return cached.data;
-      }
+  // Initial data fetch
+  useEffect(() => {
+    fetchTournaments();
+    fetchPatches();
+    fetchStandings('Americas', '2026');
+  }, [fetchTournaments, fetchPatches, fetchStandings]);
 
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        const data = MOCK_MAP_DATA[id];
-        if (data) {
-          cacheRef.current[cacheKey] = {
-            data,
-            timestamp: Date.now(),
-          };
-        }
-        return data;
-      } catch (err) {
-        logger.error('OPERA Preload Error:', err);
-        return undefined;
-      }
-    },
-    [isCacheValid]
-  );
-
-  // Get heatmap data for visualization
-  const getHeatmapData = useCallback(() => {
-    return mapData?.heatmap ?? [];
-  }, [mapData]);
-
-  // Get callout by ID
-  const getCallout = useCallback(
-    (calloutId: string) => {
-      return mapData?.callouts?.find((c) => c.id === calloutId) ?? null;
-    },
-    [mapData]
-  );
-
-  // Get site data
-  const getSite = useCallback(
-    (siteId: string) => {
-      return mapData?.sites?.find((s) => s.id === siteId) ?? null;
-    },
-    [mapData]
-  );
-
-  // Convert map coordinates to screen coordinates
-  const mapToScreen = useCallback(
-    (mapX: number, mapY: number, canvasWidth: number, canvasHeight: number) => {
-      if (!mapData?.size) return { x: 0, y: 0 };
-
-      const scaleX = canvasWidth / mapData.size.width;
-      const scaleY = canvasHeight / mapData.size.height;
-
-      return {
-        x: mapX * scaleX,
-        y: mapY * scaleY,
-      };
-    },
-    [mapData]
-  );
-
-  // Convert screen coordinates to map coordinates
-  const screenToMap = useCallback(
-    (screenX: number, screenY: number, canvasWidth: number, canvasHeight: number) => {
-      if (!mapData?.size) return { x: 0, y: 0 };
-
-      const scaleX = mapData.size.width / canvasWidth;
-      const scaleY = mapData.size.height / canvasHeight;
-
-      return {
-        x: screenX * scaleX,
-        y: screenY * scaleY,
-      };
-    },
-    [mapData]
-  );
+  // Fetch schedules when tournament changes
+  useEffect(() => {
+    if (selectedTournament) {
+      fetchSchedules(selectedTournament.tournament_id);
+    }
+  }, [selectedTournament, fetchSchedules]);
 
   return {
-    mapData,
-    mapList,
+    tournaments,
+    selectedTournament,
+    setSelectedTournament,
+    schedules,
+    patches,
+    selectedPatch,
+    setSelectedPatch,
+    standings,
     loading,
     error,
-    lastUpdated,
-    refresh,
-    refreshAll,
-    invalidateMapCache,
+    refreshTournaments,
+    refreshSchedules,
+    refreshPatches,
+    refreshStandings,
     clearCache,
-    preloadMap,
-    getHeatmapData,
-    getCallout,
-    getSite,
-    mapToScreen,
-    screenToMap,
-    // Theme colors
     theme: PURPLE,
   };
 }
