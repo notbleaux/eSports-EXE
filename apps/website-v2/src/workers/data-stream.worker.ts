@@ -240,10 +240,10 @@ function connect(url: string): void {
             data: parsed
           } as DataStreamResponse)
         } else {
-          console.warn('[Data Stream Worker] Invalid data schema:', parsed)
+          // Invalid data schema received, dropping
         }
       } catch (err) {
-        console.warn('[Data Stream Worker] Failed to parse message:', err)
+        // Failed to parse message, dropping
       }
     }
 
@@ -262,7 +262,7 @@ function connect(url: string): void {
     }
 
     state.ws.onerror = (event: Event) => {
-      console.error('[Data Stream Worker] WebSocket error:', event)
+      // WebSocket error handled via ERROR message
 
       postMessage({
         type: 'ERROR',
@@ -355,7 +355,7 @@ self.onmessage = (event: MessageEvent<DataStreamCommand>) => {
       break
 
     default:
-      console.error('[Data Stream Worker] Unknown command:', command)
+      // Unknown command received
   }
 }
 
@@ -368,4 +368,4 @@ postMessage({
   timestamp: Date.now()
 } as DataStreamResponse)
 
-console.log('[Data Stream Worker] Initialized and ready')
+// Data Stream Worker initialized

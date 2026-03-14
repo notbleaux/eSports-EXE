@@ -19,6 +19,7 @@ import {
 } from '../constants/ml'
 import { analyticsSync } from '../services/analyticsSync'
 import { mlLogger } from '../utils/logger'
+import { api } from '../api/client'
 
 export interface UseMLInferenceReturn {
   isModelLoading: boolean
@@ -103,7 +104,7 @@ function createCircuitBreaker(config: CircuitBreakerConfig) {
         if (now >= state.nextAttemptTime) {
           state.state = 'HALF_OPEN'
           state.successCount = 0
-          console.log('[ML Circuit] Transitioning to HALF_OPEN')
+          mlLogger.debug('[ML Circuit] Transitioning to HALF_OPEN')
           return true
         }
         return false
@@ -121,7 +122,7 @@ function createCircuitBreaker(config: CircuitBreakerConfig) {
           state.state = 'CLOSED'
           state.failureCount = 0
           state.successCount = 0
-          console.log('[ML Circuit] Transitioning to CLOSED')
+          mlLogger.debug('[ML Circuit] Transitioning to CLOSED')
         }
         break
         
@@ -141,14 +142,14 @@ function createCircuitBreaker(config: CircuitBreakerConfig) {
         if (state.failureCount >= config.failureThreshold) {
           state.state = 'OPEN'
           state.nextAttemptTime = now + config.resetTimeout
-          console.warn(`[ML Circuit] Transitioning to OPEN (failures: ${state.failureCount})`)
+          mlLogger.warn(`[ML Circuit] Transitioning to OPEN (failures: ${state.failureCount})`)
         }
         break
         
       case 'HALF_OPEN':
         state.state = 'OPEN'
         state.nextAttemptTime = now + config.resetTimeout
-        console.warn('[ML Circuit] HALF_OPEN failure, transitioning to OPEN')
+        mlLogger.warn('[ML Circuit] HALF_OPEN failure, transitioning to OPEN')
         break
     }
   }
@@ -193,44 +194,22 @@ function validateInput(input: number[]): void {
 }
 
 /**
- * Fetch with exponential backoff retry
+ * Validate model URL using centralized API client
+ * Replaces direct fetchWithRetry with api client for consistent error handling
  */
-async function fetchWithRetry(
-  url: string, 
+async function validateModelUrl(
+  url: string,
   maxRetries: number = 3,
   timeout: number = 10000
-): Promise<Response> {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), timeout)
-      
-      const response = await fetch(url, { 
-        signal: controller.signal,
-        headers: { 'Accept': 'application/json' }
-      })
-      
-      clearTimeout(timeoutId)
-      
-      if (response.ok) {
-        return response
-      }
-      
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-      
-    } catch (err) {
-      if (i === maxRetries - 1) {
-        throw err
-      }
-      
-      // Exponential backoff: 1s, 2s, 4s
-      const delay = Math.pow(2, i) * 1000
-      console.log(`[ML] Retry ${i + 1}/${maxRetries} after ${delay}ms`)
-      await new Promise(r => setTimeout(r, delay))
-    }
-  }
-  
-  throw new Error('Max retries exceeded')
+): Promise<void> {
+  // Use api client with retry and timeout
+  // We use a HEAD-like GET request to validate URL accessibility
+  await api.get<void>(url, { 
+    retry: maxRetries > 0,
+    timeout,
+    // Skip auth for model URLs (they're typically public)
+    skipAuth: true 
+  })
 }
 
 // TF.js types (loaded dynamically)
@@ -408,7 +387,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
             
           case 'BACKPRESSURE':
             if (isMountedRef.current) {
-              console.warn(`[ML Inference] Worker backpressure: ${response.queueDepth}/${response.maxQueueSize}`)
+              mlLogger.warn(`[ML Inference] Worker backpressure: ${response.queueDepth}/${response.maxQueueSize}`)
             }
             break
             
@@ -419,17 +398,17 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
             break
             
           case 'QUEUE_OVERFLOW':
-            console.warn(`[ML Inference] Queue overflow: ${response.dropped} predictions dropped`)
+            mlLogger.warn(`[ML Inference] Queue overflow: ${response.dropped} predictions dropped`)
             break
             
           case 'DISPOSED':
-            console.log('[ML Inference] Worker disposed')
+            mlLogger.debug('[ML Inference] Worker disposed')
             break
         }
       }
 
       worker.onerror = (err) => {
-        console.error('[ML] Worker error:', err)
+        mlLogger.error('[ML] Worker error:', err)
         if (isMountedRef.current) {
           setError(new Error('Worker failed'))
           setUseWorker(false) // Fallback to main thread
@@ -439,7 +418,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       workerRef.current = worker
       return worker
     } catch (err) {
-      console.warn('[ML] Worker init failed, falling back to main thread:', err)
+      mlLogger.warn('[ML] Worker init failed, falling back to main thread:', err)
       setUseWorker(false)
       return null
     }
@@ -480,8 +459,8 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     setProgress(0)
 
     try {
-      // Validate URL first with retry
-      await fetchWithRetry(url, maxRetries, timeout)
+      // Validate URL first with retry using centralized API client
+      await validateModelUrl(url, maxRetries, timeout)
       
       // Store URL for later reference
       modelUrlRef.current = url
@@ -523,7 +502,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
 
       try {
         model = await tf.loadLayersModel(`indexeddb://${modelName}`)
-        console.log('[ML] Model loaded from IndexedDB cache')
+        mlLogger.debug('[ML] Model loaded from IndexedDB cache')
       } catch {
         model = await tf.loadLayersModel(url, {
           onProgress: (fraction: number) => {
@@ -535,9 +514,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
         
         try {
           await (model as { save: (path: string) => Promise<void> }).save(`indexeddb://${modelName}`)
-          console.log('[ML] Model cached to IndexedDB')
+          mlLogger.debug('[ML] Model cached to IndexedDB')
         } catch (cacheErr) {
-          console.warn('[ML] Failed to cache model:', cacheErr)
+          mlLogger.warn('[ML] Failed to cache model:', cacheErr)
         }
       }
 
@@ -561,7 +540,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       if (isMountedRef.current) {
         const error = err instanceof Error ? err : new Error('Model loading failed')
         setError(error)
-        console.error('[ML] Load failed:', error)
+        mlLogger.error('[ML] Load failed:', error)
       }
     } finally {
       if (isMountedRef.current) {
@@ -697,14 +676,14 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     const startTime = performance.now()
     
     try {
-      if (verbose) console.log('[ML] Starting warm-up...')
+      if (verbose) mlLogger.debug('[ML] Starting warm-up...')
       
       for (let i = 0; i < iterations; i++) {
         // Progressive tensor sizes to warm all code paths
         const size = progressive ? Math.pow(2, i + 4) : 16 // 16, 32, 64
         const dummyInput = new Array(size).fill(0.5)
         
-        if (verbose) console.log(`[ML] Warm-up iteration ${i + 1}/${iterations} (size: ${size})`)
+        if (verbose) mlLogger.debug(`[ML] Warm-up iteration ${i + 1}/${iterations} (size: ${size})`)
         
         await predict(dummyInput.slice(0, 3)) // Use first 3 values for prediction
       }
@@ -713,10 +692,10 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       setIsWarmedUp(true)
       
       if (verbose) {
-        console.log(`[ML] Model warmed up in ${duration.toFixed(1)}ms`)
+        mlLogger.debug(`[ML] Model warmed up in ${duration.toFixed(1)}ms`)
       }
     } catch (err) {
-      console.warn('[ML] Warm-up failed:', err)
+      mlLogger.warn('[ML] Warm-up failed:', err)
     }
   }, [isModelReady, isWarmedUp, predict])
 
@@ -802,7 +781,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       }
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Batch prediction failed')
-      console.error('[ML] Batch prediction failed:', error)
+      mlLogger.error('[ML] Batch prediction failed:', error)
       throw error
     } finally {
       // P0 FIX: Always dispose tensors, even on error paths

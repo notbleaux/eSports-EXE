@@ -106,7 +106,7 @@ export const OfflineGrid: React.FC<OfflineGridProps> = ({
         onCacheData?.({ data: response.data, timestamp: response.timestamp })
       }
     } catch (err) {
-      console.error('[OfflineGrid] Cache check failed:', err)
+      // Cache check failed
     }
   }, [onCacheData])
 
@@ -217,7 +217,7 @@ export function useGridCache() {
 
       return true
     } catch (err) {
-      console.error('[useGridCache] Failed to cache:', err)
+      // Failed to cache grid
       return false
     }
   }, [])
@@ -249,7 +249,7 @@ export function useGridCache() {
 
       return true
     } catch (err) {
-      console.error('[useGridCache] Failed to clear:', err)
+      // Failed to clear grid cache
       return false
     }
   }, [])

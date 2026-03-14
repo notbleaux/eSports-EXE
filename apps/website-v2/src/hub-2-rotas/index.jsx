@@ -1,7 +1,7 @@
 /**
  * ROTAS Hub - Hub 2: The Harmonic Layer
  * Analytics and predictive modeling with cyan theme
- * [Ver001.000]
+ * [Ver002.000] - Added ML error boundaries
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,6 +23,12 @@ import AnalyticsWidget from './components/AnalyticsWidget';
 import PredictionCard from './components/PredictionCard';
 import useRotasData from './hooks/useRotasData';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+import { 
+  MLInferenceErrorBoundary, 
+  StreamingErrorBoundary,
+  MLFeatureWrapper,
+  HubErrorFallback 
+} from '@/components/error';
 
 // ROTAS Hub Configuration - EXACT colors as specified
 const HUB_CONFIG = {
@@ -286,48 +292,70 @@ function RotasHubContent() {
 
       {/* Main Content Grid */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Analytics Widget */}
+        {/* Analytics Widget - Wrapped with MLInferenceErrorBoundary */}
         <div className="lg:col-span-2">
-          <AnalyticsWidget 
-            activeLayer={activeLayer}
-            color={HUB_CONFIG.color}
-            glow={HUB_CONFIG.glow}
-            muted={HUB_CONFIG.muted}
-            data={analytics}
-            isLoading={isLoading}
-          />
+          <MLInferenceErrorBoundary
+            fallback={
+              <HubErrorFallback
+                hub="ROTAS"
+                title="Analytics Error"
+                message="Failed to load ML analytics panel."
+                compact
+              />
+            }
+          >
+            <AnalyticsWidget 
+              activeLayer={activeLayer}
+              color={HUB_CONFIG.color}
+              glow={HUB_CONFIG.glow}
+              muted={HUB_CONFIG.muted}
+              data={analytics}
+              isLoading={isLoading}
+            />
+          </MLInferenceErrorBoundary>
         </div>
 
-        {/* Predictions Sidebar */}
+        {/* Predictions Sidebar - Wrapped with StreamingErrorBoundary */}
         <div className="space-y-6">
           {/* Prediction Cards */}
-          <GlassCard hoverGlow={HUB_CONFIG.glow} className="p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <Target className="w-5 h-5" style={{ color: HUB_CONFIG.color }} />
-              <h3 className="font-semibold" style={{ color: colors.text.primary }}>
-                Active Predictions
-              </h3>
-            </div>
-            
-            <div className="space-y-4">
-              {predictions?.map((prediction, index) => (
-                <PredictionCard
-                  key={prediction.id}
-                  prediction={prediction}
-                  color={HUB_CONFIG.color}
-                  glow={HUB_CONFIG.glow}
-                  index={index}
-                />
-              ))}
+          <StreamingErrorBoundary
+            fallback={
+              <HubErrorFallback
+                hub="ROTAS"
+                title="Streaming Error"
+                message="Failed to load prediction stream."
+                compact
+              />
+            }
+          >
+            <GlassCard hoverGlow={HUB_CONFIG.glow} className="p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <Target className="w-5 h-5" style={{ color: HUB_CONFIG.color }} />
+                <h3 className="font-semibold" style={{ color: colors.text.primary }}>
+                  Active Predictions
+                </h3>
+              </div>
               
-              {!predictions && !isLoading && (
-                <div className="text-center py-8" style={{ color: colors.text.muted }}>
-                  <Brain className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No active predictions</p>
-                </div>
-              )}
-            </div>
-          </GlassCard>
+              <div className="space-y-4">
+                {predictions?.map((prediction, index) => (
+                  <PredictionCard
+                    key={prediction.id}
+                    prediction={prediction}
+                    color={HUB_CONFIG.color}
+                    glow={HUB_CONFIG.glow}
+                    index={index}
+                  />
+                ))}
+                
+                {!predictions && !isLoading && (
+                  <div className="text-center py-8" style={{ color: colors.text.muted }}>
+                    <Brain className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No active predictions</p>
+                  </div>
+                )}
+              </div>
+            </GlassCard>
+          </StreamingErrorBoundary>
 
           {/* Correlation Score */}
           <GlassCard hoverGlow={HUB_CONFIG.glow} className="p-5">
@@ -446,7 +474,35 @@ function RotasHubContent() {
 function RotasHub() {
   return (
     <PanelErrorBoundary panelId="rotas-hub" panelTitle="ROTAS Analytics" hub="ROTAS">
-      <RotasHubContent />
+      <MLInferenceErrorBoundary
+        fallback={
+          <div className="pt-12">
+            <HubErrorFallback
+              hub="ROTAS"
+              title="ML Inference Error"
+              message="The ROTAS analytics engine encountered an error."
+              onRetry={() => window.location.reload()}
+              onGoHome={() => window.location.href = '/'}
+            />
+          </div>
+        }
+      >
+        <StreamingErrorBoundary
+          fallback={
+            <div className="pt-12">
+              <HubErrorFallback
+                hub="ROTAS"
+                title="Streaming Error"
+                message="Failed to connect to real-time analytics."
+                onRetry={() => window.location.reload()}
+                onGoHome={() => window.location.href = '/'}
+              />
+            </div>
+          }
+        >
+          <RotasHubContent />
+        </StreamingErrorBoundary>
+      </MLInferenceErrorBoundary>
     </PanelErrorBoundary>
   );
 }

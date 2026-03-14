@@ -14,6 +14,7 @@ export interface ApiRequestConfig {
   timeout?: number
   retry?: boolean
   skipAuth?: boolean // Skip authentication for public endpoints
+  signal?: AbortSignal // External AbortSignal for request cancellation
 }
 
 export interface ApiResponse<T> {

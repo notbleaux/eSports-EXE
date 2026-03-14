@@ -1,12 +1,20 @@
 /**
  * ROTAS Hub - Hub 2: The Harmonic Layer
  * Advanced analytics with ellipse layer blending
+ * 
+ * [Ver002.000] - Added ML error boundaries
  */
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Layers, Zap, Eye, Brain, Activity, TrendingUp, AlertTriangle } from 'lucide-react'
 import HubWrapper, { HubCard, HubStatCard } from '../shared/components/HubWrapper'
 import { useNJZStore, useHubState } from '../shared/store/njzStore'
+import { 
+  MLInferenceErrorBoundary, 
+  StreamingErrorBoundary,
+  MLFeatureWrapper,
+  HubErrorFallback 
+} from '../components/error'
 
 const layers = [
   { 
@@ -42,7 +50,7 @@ const mockData = [
   { metric: 'Talent Potential', value: 94.2, trend: '+3.8%', status: 'good' }
 ]
 
-function ROTASHub() {
+function ROTASHubContent() {
   const [activeLayers, setActiveLayers] = useState(['persona'])
   const [selectedMetric, setSelectedMetric] = useState(null)
   const addNotification = useNJZStore(state => state.addNotification)
@@ -431,6 +439,46 @@ function ROTASHub() {
         </div>
       </div>
     </HubWrapper>
+  )
+}
+
+/**
+ * ROTAS Hub with ML Error Boundaries
+ * Wraps the hub content with MLInferenceErrorBoundary and StreamingErrorBoundary
+ * for graceful error handling of ML analytics features
+ */
+function ROTASHub() {
+  const createErrorFallback = (title, message) => (
+    <HubWrapper hubId="rotas">
+      <div className="pt-12">
+        <HubErrorFallback
+          hub="ROTAS"
+          title={title}
+          message={message}
+          onRetry={() => window.location.reload()}
+          onGoHome={() => window.location.href = '/'}
+          onGoBack={() => window.history.back()}
+        />
+      </div>
+    </HubWrapper>
+  )
+
+  return (
+    <MLInferenceErrorBoundary
+      fallback={createErrorFallback(
+        'ROTAS Analytics Error',
+        'The ROTAS Harmonic Layer encountered an ML inference error.'
+      )}
+    >
+      <StreamingErrorBoundary
+        fallback={createErrorFallback(
+          'Streaming Connection Error',
+          'Failed to connect to the real-time analytics stream.'
+        )}
+      >
+        <ROTASHubContent />
+      </StreamingErrorBoundary>
+    </MLInferenceErrorBoundary>
   )
 }
 

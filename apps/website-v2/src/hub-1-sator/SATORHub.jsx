@@ -1,12 +1,15 @@
 /**
  * SATOR Hub - Hub 1: The Observatory
  * Raw data ingestion with orbital ring navigation
+ * 
+ * [Ver002.000] - Added ML error boundaries
  */
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Database, Shield, Clock, Users, Trophy, FileCheck, Search } from 'lucide-react'
 import HubWrapper, { HubCard, HubStatCard } from '../shared/components/HubWrapper'
 import { useNJZStore, useHubState } from '../shared/store/njzStore'
+import { MLInferenceErrorBoundary, HubErrorFallback } from '../components/error'
 
 const rings = [
   { id: 'teams', label: 'Teams', icon: Users, count: '2,847', color: '#ff9f1c' },
@@ -22,7 +25,7 @@ const verificationSteps = [
   { id: 3, label: 'Timestamp Sync', status: 'verified', icon: Clock },
 ]
 
-function SATORHub() {
+function SATORHubContent() {
   const [activeRing, setActiveRing] = useState(null)
   const [rotation, setRotation] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
@@ -276,6 +279,32 @@ function SATORHub() {
         </div>
       </div>
     </HubWrapper>
+  )
+}
+
+/**
+ * SATOR Hub with ML Error Boundary
+ * Wraps the hub content with MLInferenceErrorBoundary for graceful error handling
+ */
+function SATORHub() {
+  return (
+    <MLInferenceErrorBoundary
+      fallback={
+        <HubWrapper hubId="sator">
+          <div className="pt-12">
+            <HubErrorFallback
+              hub="SATOR"
+              title="SATOR Hub Error"
+              message="The SATOR Observatory encountered an error while loading ML features."
+              onRetry={() => window.location.reload()}
+              onGoHome={() => window.location.href = '/'}
+            />
+          </div>
+        </HubWrapper>
+      }
+    >
+      <SATORHubContent />
+    </MLInferenceErrorBoundary>
   )
 }
 

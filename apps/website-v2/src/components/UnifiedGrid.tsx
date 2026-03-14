@@ -113,7 +113,7 @@ export const UnifiedGrid: React.FC<UnifiedGridProps> = ({
         setIsLoading(false)
       })
       .catch((err) => {
-        console.error('[UnifiedGrid] Worker init failed, falling back to DOM:', err)
+        // Worker init failed, falling back to DOM
         setWorkerError(err)
         setEffectiveMode('dom')
         onWorkerFallback?.()
@@ -183,14 +183,14 @@ export const UnifiedGrid: React.FC<UnifiedGridProps> = ({
       if (isScrolling) {
         renderTimeoutRef.current = setTimeout(() => {
           render(panelData).catch((err) => {
-            console.error('[UnifiedGrid] Worker render failed:', err)
+            // Worker render failed, will fallback to DOM
             setEffectiveMode('dom')
             onWorkerFallback?.()
           })
         }, 16)
       } else {
         render(panelData).catch((err) => {
-          console.error('[UnifiedGrid] Worker render failed:', err)
+          // Worker render failed, will fallback to DOM
           setEffectiveMode('dom')
           onWorkerFallback?.()
         })

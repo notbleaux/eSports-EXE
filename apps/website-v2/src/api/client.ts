@@ -176,11 +176,32 @@ export async function request<T>(
   endpoint: string,
   config: ApiRequestConfig = {}
 ): Promise<ApiResponse<T>> {
-  const { method = 'GET', headers = {}, body, timeout = API_CONFIG.timeout, retry = true, skipAuth = false } = config
+  const { method = 'GET', headers = {}, body, timeout = API_CONFIG.timeout, retry = true, skipAuth = false, signal: externalSignal } = config
   
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeout)
+  
+  // Use external signal if provided, otherwise create our own controller
+  let controller: AbortController
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
+  
+  if (externalSignal) {
+    // If external signal provided, use it directly (caller handles timeout/cancellation)
+    controller = new AbortController()
+    
+    // Link external signal to our controller
+    if (externalSignal.aborted) {
+      controller.abort()
+    } else {
+      externalSignal.addEventListener('abort', () => controller.abort(), { once: true })
+    }
+    
+    // Still set up our own timeout
+    timeoutId = setTimeout(() => controller.abort(), timeout)
+  } else {
+    // Create our own controller with timeout
+    controller = new AbortController()
+    timeoutId = setTimeout(() => controller.abort(), timeout)
+  }
   
   let lastError: Error | null = null
   const maxRetries = retry ? API_CONFIG.retryAttempts : 0
@@ -209,7 +230,7 @@ export async function request<T>(
         signal: controller.signal
       })
       
-      clearTimeout(timeoutId)
+      if (timeoutId) clearTimeout(timeoutId)
       
       // Handle 401 Unauthorized - attempt token refresh
       if (response.status === 401 && !skipAuth) {
@@ -277,7 +298,7 @@ export async function request<T>(
     }
   }
   
-  clearTimeout(timeoutId)
+  if (timeoutId) clearTimeout(timeoutId)
   
   const apiError: ApiError = {
     message: lastError?.message || 'Request failed',
@@ -321,6 +342,29 @@ export const api = {
   
   delete: <T>(endpoint: string, config?: Omit<ApiRequestConfig, 'method'>) =>
     request<T>(endpoint, { ...config, method: 'DELETE' })
+}
+
+/**
+ * Make cancellable HTTP request with external AbortController support
+ * Allows callers to pass their own AbortController for cancellation
+ */
+export function requestCancellable<T>(
+  endpoint: string,
+  config: ApiRequestConfig = {}
+): CancellableRequest<T> {
+  const controller = new AbortController()
+  
+  const promise = request<T>(endpoint, {
+    ...config,
+    // Use provided signal if available, otherwise use our controller
+    signal: config.signal || controller.signal
+  })
+  
+  return {
+    promise,
+    controller,
+    cancel: (reason?: string) => controller.abort(reason)
+  }
 }
 
 /**

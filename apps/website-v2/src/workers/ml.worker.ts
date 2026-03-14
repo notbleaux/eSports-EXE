@@ -141,7 +141,7 @@ function checkQueueCapacity(requestId: string): boolean {
         currentSize: state.pendingPredictions.length
       } as MLWorkerResponse)
       
-      console.warn(`[ML Worker] Queue overflow: dropped ${dropped.length} oldest predictions`)
+      // Queue overflow handled via BACKPRESSURE message
     }
   }
   
@@ -187,7 +187,7 @@ async function loadTensorFlow(): Promise<typeof import('@tensorflow/tfjs')> {
     await tf.setBackend('cpu')
     
     state.tf = tf
-    console.log('[ML Worker] TensorFlow.js loaded, backend:', tf.getBackend())
+    // TensorFlow.js loaded successfully
     
     return tf
   } catch (err) {
@@ -300,7 +300,7 @@ async function quantizeModel(bits: QuantizationBits = 8): Promise<void> {
   let originalSize = 0
   let quantizedSize = 0
   
-  console.log(`[ML Worker] Quantizing model to ${bits}-bit...`)
+  // Quantization started
   
   for (const weight of model.weights) {
     const originalBytes = weight.val.size * 4 // float32 = 4 bytes
@@ -322,7 +322,7 @@ async function quantizeModel(bits: QuantizationBits = 8): Promise<void> {
   state.quantizedSize = quantizedSize
   
   const ratio = originalSize / quantizedSize
-  console.log(`[ML Worker] Quantization complete: ${(originalSize / 1024).toFixed(1)}KB → ${(quantizedSize / 1024).toFixed(1)}KB (${ratio.toFixed(1)}x smaller)`)
+  // Quantization complete
   
   postMessage({
     type: 'QUANTIZATION_COMPLETE',
@@ -356,18 +356,18 @@ async function handleLoadModel(url: string, modelName: string, quantization?: Qu
     
     try {
       model = await tf.loadLayersModel(cacheKey)
-      console.log('[ML Worker] Model loaded from cache:', modelName)
+      // Model loaded from cache
     } catch {
       // Load from network
-      console.log('[ML Worker] Loading model from:', url)
+      // Loading model from network
       model = await tf.loadLayersModel(url)
       
       // Cache for next time
       try {
         await (model as { save: (path: string) => Promise<void> }).save(cacheKey)
-        console.log('[ML Worker] Model cached:', modelName)
+        // Model cached successfully
       } catch (cacheErr) {
-        console.warn('[ML Worker] Cache failed:', cacheErr)
+        // Cache operation failed, continuing without caching
       }
     }
 
@@ -381,7 +381,7 @@ async function handleLoadModel(url: string, modelName: string, quantization?: Qu
         await quantizeModel(quantization)
         quantized = true
       } catch (quantErr) {
-        console.warn('[ML Worker] Quantization failed, using full precision:', quantErr)
+        // Quantization failed, using full precision
       }
     }
     
@@ -401,7 +401,7 @@ async function handleLoadModel(url: string, modelName: string, quantization?: Qu
   } catch (err) {
     state.isLoading = false
     const error = err instanceof Error ? err.message : 'Model load failed'
-    console.error('[ML Worker] Load failed:', error)
+    // Load error handled via MODEL_LOAD_ERROR message
     
     postMessage({ 
       type: 'MODEL_LOAD_ERROR', 
@@ -419,7 +419,7 @@ async function handlePredict(input: number[], requestId: string): Promise<void> 
     }
     
     state.pendingPredictions.push({ input, requestId, timestamp: Date.now() })
-    console.log('[ML Worker] Prediction queued:', requestId, `(queue: ${state.pendingPredictions.length}/${MAX_PENDING_QUEUE})`)
+    // Prediction queued
     
     // Send metrics update
     sendQueueMetrics()
@@ -449,7 +449,7 @@ async function handlePredict(input: number[], requestId: string): Promise<void> 
 
   } catch (err) {
     const error = err instanceof Error ? err.message : 'Prediction failed'
-    console.error('[ML Worker] Prediction error:', error)
+    // Prediction error handled via PREDICTION_ERROR message
     
     postMessage({
       type: 'PREDICTION_ERROR',
@@ -485,7 +485,7 @@ async function handlePredictBatch(inputs: number[][], requestId: string): Promis
         timestamp
       })
     }
-    console.log('[ML Worker] Batch predictions queued:', requestId, `(+${inputs.length}, queue: ${state.pendingPredictions.length}/${MAX_PENDING_QUEUE})`)
+    // Batch predictions queued
     sendQueueMetrics()
     return
   }
@@ -519,7 +519,7 @@ async function handlePredictBatch(inputs: number[][], requestId: string): Promis
 
   } catch (err) {
     const error = err instanceof Error ? err.message : 'Batch prediction failed'
-    console.error('[ML Worker] Batch prediction error:', error)
+    // Batch prediction error handled via PREDICTION_ERROR message
     
     postMessage({
       type: 'PREDICTION_ERROR',
@@ -535,7 +535,7 @@ async function processPendingPredictions(): Promise<void> {
   }
 
   const queueSize = state.pendingPredictions.length
-  console.log(`[ML Worker] Processing ${queueSize} pending predictions`)
+  // Processing pending predictions
 
   // Process all pending predictions
   const pending = [...state.pendingPredictions]
@@ -545,7 +545,7 @@ async function processPendingPredictions(): Promise<void> {
     // Check for stale predictions (older than 30 seconds)
     const age = Date.now() - (pending.find(p => p.requestId === requestId)?.timestamp || Date.now())
     if (age > 30000) {
-      console.warn(`[ML Worker] Dropping stale prediction: ${requestId} (age: ${age}ms)`)
+      // Dropping stale prediction
       postMessage({
         type: 'PREDICTION_ERROR',
         error: `Prediction stale (age: ${age}ms)`,
@@ -567,7 +567,7 @@ function handleDispose(): void {
   // Reject any pending predictions
   const pendingCount = state.pendingPredictions.length
   if (pendingCount > 0) {
-    console.log(`[ML Worker] Rejecting ${pendingCount} pending predictions due to dispose`)
+    // Rejecting pending predictions due to dispose
     for (const { requestId } of state.pendingPredictions) {
       postMessage({
         type: 'PREDICTION_ERROR',
@@ -583,7 +583,7 @@ function handleDispose(): void {
     try {
       (state.model as { dispose?: () => void }).dispose?.()
     } catch (err) {
-      console.warn('[ML Worker] Dispose error:', err)
+      // Dispose error handled silently
     }
   }
 
@@ -592,7 +592,7 @@ function handleDispose(): void {
     try {
       state.tf.dispose()
     } catch (err) {
-      console.warn('[ML Worker] TF dispose error:', err)
+      // TF dispose error handled silently
     }
   }
 
@@ -627,7 +627,7 @@ self.onmessage = (event: MessageEvent<MLWorkerCommand>) => {
 
     case 'QUANTIZE_MODEL':
       quantizeModel(command.bits).catch(err => {
-        console.error('[ML Worker] Quantization error:', err)
+        // Quantization error handled via MODEL_LOAD_ERROR message
       })
       break
 
@@ -640,7 +640,7 @@ self.onmessage = (event: MessageEvent<MLWorkerCommand>) => {
       break
 
     default:
-      console.error('[ML Worker] Unknown command:', command)
+      // Unknown command received
   }
 }
 
@@ -653,4 +653,4 @@ postMessage({
   timestamp: Date.now() 
 } as MLWorkerResponse)
 
-console.log('[ML Worker] Initialized and ready')
+// Worker initialized

@@ -83,7 +83,7 @@ export const MLPredictionPanel: React.FC<MLPredictionPanelProps> = ({
 
       setPredictions(prev => [newPrediction, ...prev].slice(0, 10)) // Keep last 10
     } catch (err) {
-      console.error('Prediction failed:', err)
+      // Prediction error handled via UI
     } finally {
       setIsPredicting(false)
     }

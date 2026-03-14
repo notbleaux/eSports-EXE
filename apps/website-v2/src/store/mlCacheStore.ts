@@ -130,7 +130,7 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
     
     // Evict if needed
     if (!get().evictIfNeeded(sizeBytes)) {
-      console.warn('[ML Cache] Cannot cache model - not enough space')
+      // Cannot cache model - not enough space
       return
     }
     
@@ -153,7 +153,7 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
       currentSize: state.currentSize + sizeBytes
     }))
     
-    console.log(`[ML Cache] Model cached: ${id} (${(sizeBytes / 1024 / 1024).toFixed(1)}MB)`)
+    // Model cached successfully
   },
 
   /**
@@ -197,7 +197,7 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
       }
     })
     
-    console.log(`[ML Cache] Model removed: ${id}`)
+    // Model removed from cache
   },
 
   /**
@@ -249,7 +249,7 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
         evictionCount: state.evictionCount + modelsToEvict.length
       }))
       
-      console.log(`[ML Cache] Evicted ${modelsToEvict.length} models, freed ${(totalFreed / 1024 / 1024).toFixed(1)}MB`)
+      // Models evicted to free space
     }
     
     // Check if we have enough space now
@@ -273,7 +273,7 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
       const sizeBytes = parseInt(response.headers.get('content-length') || '0')
       
       if (sizeBytes === 0) {
-        console.warn('[ML Cache] Cannot determine model size')
+        // Cannot determine model size for preloading
         return false
       }
       
@@ -285,11 +285,11 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
       // Cache the model entry (actual loading happens in useMLInference)
       get().cacheModel(id, url, sizeBytes, { name: id })
       
-      console.log(`[ML Cache] Preloaded model: ${id}`)
+      // Model preloaded successfully
       return true
       
     } catch (err) {
-      console.error('[ML Cache] Preload failed:', err)
+      // Preload failed
       return false
     }
   },
@@ -304,7 +304,7 @@ export const useMLCacheStore = create<MLCacheState & MLCacheActions>((set, get) 
       currentSize: 0
     })
     
-    console.log('[ML Cache] Cache cleared')
+    // Cache cleared
   },
 
   /**

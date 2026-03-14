@@ -18,6 +18,7 @@ import {
 } from '../constants/ml'
 import { analyticsSync } from '../services/analyticsSync'
 import { streamingLogger } from '../utils/logger'
+import { streamingLogger } from '../utils/logger'
 
 /**
  * Debounce hook for stable debounced callbacks
@@ -183,7 +184,7 @@ export function useStreamingInference(
         // Ignore errors if cleaning up
         if (isCleaningUpRef.current || !isMountedRef.current) return
         
-        console.error('[Streaming Inference] Failed to load model:', err)
+        streamingLogger.error('[Streaming Inference] Failed to load model:', err)
         if (isMountedRef.current) {
           setError(err instanceof Error ? err : new Error('Model load failed'))
         }
@@ -247,7 +248,7 @@ export function useStreamingInference(
       // Update throughput counter
       predictionCountRef.current++
     } catch (err) {
-      console.error('[Streaming Inference] Prediction failed:', err)
+      streamingLogger.error('[Streaming Inference] Prediction failed:', err)
       if (isMountedRef.current) {
         setError(err instanceof Error ? err : new Error('Prediction failed'))
       }
@@ -346,14 +347,14 @@ export function useStreamingInference(
 
           case 'RECONNECTING':
             if (!isCleaningUpRef.current) {
-              console.log(`[Streaming Inference] Reconnecting attempt ${response.attempt} in ${response.delayMs}ms`)
+              streamingLogger.debug(`[Streaming Inference] Reconnecting attempt ${response.attempt} in ${response.delayMs}ms`)
             }
             break
         }
       }
 
       worker.onerror = (err) => {
-        console.error('[Streaming Inference] Worker error:', err)
+        streamingLogger.error('[Streaming Inference] Worker error:', err)
         if (isMountedRef.current) {
           setError(new Error('Data stream worker failed'))
         }
@@ -362,7 +363,7 @@ export function useStreamingInference(
       workerRef.current = worker
       return worker
     } catch (err) {
-      console.error('[Streaming Inference] Failed to initialize worker:', err)
+      streamingLogger.error('[Streaming Inference] Failed to initialize worker:', err)
       if (isMountedRef.current) {
         setError(new Error('Failed to initialize data stream worker'))
       }

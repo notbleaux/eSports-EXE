@@ -2,7 +2,7 @@
  * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
  * Modernized with enhanced visuals and animations
  * 
- * [Ver003.000]
+ * [Ver004.000] - Added top-level error boundaries
  */
 import React, { useEffect, useState, useCallback } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
@@ -14,6 +14,9 @@ import ModernQuarterGrid from './components/ModernQuarterGrid';
 import { AnimatedBackground } from './components/ui/AnimatedBackground';
 import { PanelSkeleton } from './components/grid/PanelSkeleton';
 import { PanelErrorBoundary } from './components/grid/PanelErrorBoundary';
+
+// Error Boundaries
+import { AppErrorBoundary, MLInferenceErrorBoundary, StreamingErrorBoundary } from './components/error';
 
 // Hub Components
 import SatorHub from './hub-1-sator/index.jsx';
@@ -159,7 +162,7 @@ const RouteChangeHandler = () => {
   return null;
 };
 
-function App() {
+function AppContent() {
   const location = useLocation();
 
   return (
@@ -197,12 +200,14 @@ function App() {
               } 
             />
             
-            {/* HUB Routes */}
+            {/* HUB Routes - Wrapped with ML Error Boundaries */}
             <Route 
               path="/sator" 
               element={
                 <PageTransition hubId="sator">
-                  <SatorHub />
+                  <MLInferenceErrorBoundary>
+                    <SatorHub />
+                  </MLInferenceErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -210,7 +215,11 @@ function App() {
               path="/rotas" 
               element={
                 <PageTransition hubId="rotas">
-                  <RotasHub />
+                  <MLInferenceErrorBoundary>
+                    <StreamingErrorBoundary>
+                      <RotasHub />
+                    </StreamingErrorBoundary>
+                  </MLInferenceErrorBoundary>
                 </PageTransition>
               } 
             />
@@ -278,6 +287,18 @@ function App() {
         </AnimatePresence>
       </main>
     </div>
+  );
+}
+
+/**
+ * Main App component with top-level error boundary
+ * Wraps the entire application for graceful error handling
+ */
+function App() {
+  return (
+    <AppErrorBoundary>
+      <AppContent />
+    </AppErrorBoundary>
   );
 }
 
