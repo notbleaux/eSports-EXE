@@ -1,6 +1,25 @@
 /**
  * Service Worker - Offline-First Grid Rendering
- * [Ver002.000] - Added Worker Cache API integration
+ * [Ver002.001] - Added Worker Cache API integration
+ * 
+ * NOTE ON NATIVE FETCH USAGE:
+ * This service worker uses native fetch() instead of the centralized api/client.ts.
+ * This is INTENTIONAL and REQUIRED because:
+ * 
+ * 1. INFRASTRUCTURE LEVEL: Service workers operate at the browser infrastructure level,
+ *    intercepting all network requests before application code runs.
+ * 
+ * 2. NO AUTH REQUIRED: SW handles static assets and cached API responses that don't
+ *    require JWT authentication headers managed by the API client.
+ * 
+ * 3. CACHING STRATEGIES: SW implements complex caching strategies (cache-first,
+ *    network-first, stale-while-revalidate) that are not part of the API client's scope.
+ * 
+ * 4. NO RETRY NEEDED: The SW is a request interceptor, not a request initiator.
+ *    Retry logic is handled by the application layer (api/client.ts).
+ * 
+ * DO NOT migrate these fetch calls to api/client.ts - they serve different architectural
+ * purposes and operate at different abstraction levels.
  */
 
 /// <reference lib="webworker" />

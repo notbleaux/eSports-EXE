@@ -63,9 +63,9 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'animation-vendor': ['framer-motion', 'gsap', '@gsap/react'],
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei']
-          // Note: @tensorflow/tfjs is loaded dynamically via import() in useMLInference
-          // and ml.worker.ts - it's NOT bundled in the initial chunk
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
+          // Note: @tensorflow/tfjs is loaded dynamically via import() - NOT in bundle
+          'analytics': ['./src/dev/ml-analytics.ts', './src/services/analyticsSync.ts']
         }
       }
     }
