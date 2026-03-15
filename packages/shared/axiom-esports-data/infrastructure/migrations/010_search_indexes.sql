@@ -51,6 +51,7 @@ CREATE INDEX IF NOT EXISTS idx_teams_search_vector ON teams USING GIN(search_vec
 
 -- Create trigram index for team name fuzzy matching
 CREATE INDEX IF NOT EXISTS idx_teams_name_trgm ON teams USING GIN(name gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_teams_tag_trgm ON teams USING GIN(tag gin_trgm_ops);
 
 -- ============================================
 -- MATCHES TABLE SEARCH INDEXES
@@ -70,8 +71,9 @@ END $$;
 -- Create index on search vector
 CREATE INDEX IF NOT EXISTS idx_matches_search_vector ON matches USING GIN(search_vector);
 
--- Create trigram index for tournament names
-CREATE INDEX IF NOT EXISTS idx_matches_tournament_trgm ON matches USING GIN(tournament gin_trgm_ops);
+-- Create trigram index for team names in matches
+CREATE INDEX IF NOT EXISTS idx_matches_team_a_trgm ON matches USING GIN(team_a_name gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_matches_team_b_trgm ON matches USING GIN(team_b_name gin_trgm_ops);
 
 -- ============================================
 -- PLAYER_PERFORMANCE SEARCH INDEXES (for match context)
@@ -112,7 +114,8 @@ RETURNS TRIGGER AS $$
 BEGIN
     NEW.search_vector := 
         setweight(to_tsvector('english', COALESCE(NEW.name, '')), 'A') ||
-        setweight(to_tsvector('english', COALESCE(NEW.location, '')), 'B');
+        setweight(to_tsvector('english', COALESCE(NEW.tag, '')), 'B') ||
+        setweight(to_tsvector('english', COALESCE(NEW.region, '')), 'C');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -127,12 +130,14 @@ CREATE TRIGGER trigger_update_team_search_vector
     EXECUTE FUNCTION update_team_search_vector();
 
 -- Function to update match search vector
+-- Note: Uses team names since tournament name requires JOIN
 CREATE OR REPLACE FUNCTION update_match_search_vector()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.search_vector := 
-        setweight(to_tsvector('english', COALESCE(NEW.tournament, '')), 'A') ||
-        setweight(to_tsvector('english', COALESCE(NEW.map_name, '')), 'B');
+        setweight(to_tsvector('english', COALESCE(NEW.team_a_name, '')), 'A') ||
+        setweight(to_tsvector('english', COALESCE(NEW.team_b_name, '')), 'A') ||
+        setweight(to_tsvector('english', COALESCE(NEW.region, '')), 'B');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -160,13 +165,15 @@ WHERE search_vector IS NULL;
 -- Update existing team records
 UPDATE teams SET search_vector = 
     setweight(to_tsvector('english', COALESCE(name, '')), 'A') ||
-    setweight(to_tsvector('english', COALESCE(location, '')), 'B')
+    setweight(to_tsvector('english', COALESCE(tag, '')), 'B') ||
+    setweight(to_tsvector('english', COALESCE(region, '')), 'C')
 WHERE search_vector IS NULL;
 
 -- Update existing match records  
 UPDATE matches SET search_vector = 
-    setweight(to_tsvector('english', COALESCE(tournament, '')), 'A') ||
-    setweight(to_tsvector('english', COALESCE(map_name, '')), 'B')
+    setweight(to_tsvector('english', COALESCE(team_a_name, '')), 'A') ||
+    setweight(to_tsvector('english', COALESCE(team_b_name, '')), 'A') ||
+    setweight(to_tsvector('english', COALESCE(region, '')), 'B')
 WHERE search_vector IS NULL;
 
 -- ============================================

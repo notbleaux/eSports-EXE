@@ -383,10 +383,25 @@ ORDER BY scheduled_start;
 -- Active alerts summary view
 CREATE OR REPLACE VIEW v_dashboard_alerts AS
 SELECT 
-    a.*,
+    a.alert_id,
+    a.alert_uuid,
+    a.run_id,
+    a.rule_name,
+    a.severity,
+    a.status,
+    a.message,
+    a.context,
+    a.channels,
+    a.created_at,
+    a.resolved_at,
+    a.acknowledged_at,
+    a.acknowledged_by,
+    a.dedup_key,
+    a.external_refs,
+    a.resolution_notes,
     EXTRACT(EPOCH FROM (NOW() - a.created_at))/3600 as hours_open,
-    r.name as rule_name,
-    r.severity as rule_severity
+    r.name as alert_rule_display_name,
+    r.severity as alert_rule_configured_severity
 FROM pipeline_alerts a
 LEFT JOIN alert_rules r ON a.rule_name = r.rule_id
 WHERE a.status = 'firing'

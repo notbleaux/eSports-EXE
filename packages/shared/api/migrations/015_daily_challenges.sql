@@ -1,4 +1,4 @@
-[Ver001.000]
+-- [Ver001.000]
 -- Daily Challenges System Migration
 -- =================================
 -- Tables for daily video challenges, predictions, and rewards
@@ -120,7 +120,7 @@ VALUES
 
 ('daily-002', CURRENT_DATE + INTERVAL '1 day', 'prediction',
  'Match Winner Prediction',
- 'Predict the winner of tonight\'s VCT match',
+ 'Predict the winner of tonight''s VCT match',
  '{"matchId": "vct-2024-001", "teamA": "Fnatic", "teamB": "LOUD", "options": ["Fnatic", "LOUD"], "correctAnswer": null}',
  'easy', 25),
 

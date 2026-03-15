@@ -25,9 +25,17 @@ CREATE TABLE IF NOT EXISTS sator_events (
     realworld_time  TIMESTAMPTZ NOT NULL
 );
 
-SELECT create_hypertable('sator_events', 'realworld_time',
-    chunk_time_interval => INTERVAL '90 days',
-    if_not_exists => TRUE);
+-- Convert to hypertable if TimescaleDB is available
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('sator_events', 'realworld_time',
+            chunk_time_interval => INTERVAL '90 days',
+            if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'Could not create sator_events hypertable: %', SQLERRM;
+END $$;
 
 -- AREPO Layer 4: Death stain and multikill persistence markers
 CREATE TABLE IF NOT EXISTS arepo_markers (
@@ -45,9 +53,17 @@ CREATE TABLE IF NOT EXISTS arepo_markers (
     realworld_time  TIMESTAMPTZ NOT NULL
 );
 
-SELECT create_hypertable('arepo_markers', 'realworld_time',
-    chunk_time_interval => INTERVAL '90 days',
-    if_not_exists => TRUE);
+-- Convert to hypertable if TimescaleDB is available
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('arepo_markers', 'realworld_time',
+            chunk_time_interval => INTERVAL '90 days',
+            if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'Could not create arepo_markers hypertable: %', SQLERRM;
+END $$;
 
 -- ROTAS Layer 5: Rotation trail data
 CREATE TABLE IF NOT EXISTS rotas_trails (
@@ -62,9 +78,17 @@ CREATE TABLE IF NOT EXISTS rotas_trails (
     realworld_time  TIMESTAMPTZ NOT NULL
 );
 
-SELECT create_hypertable('rotas_trails', 'realworld_time',
-    chunk_time_interval => INTERVAL '90 days',
-    if_not_exists => TRUE);
+-- Convert to hypertable if TimescaleDB is available
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('rotas_trails', 'realworld_time',
+            chunk_time_interval => INTERVAL '90 days',
+            if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'Could not create rotas_trails hypertable: %', SQLERRM;
+END $$;
 
 -- Seed base map entries
 INSERT INTO map_spatial_ref (map_name, width_units, height_units) VALUES

@@ -1,4 +1,4 @@
-[Ver001.000]
+-- [Ver001.000]
 -- VLR Enhancement Migration: Derived Metrics Support
 -- ================================================
 -- Adds columns and indexes for SimRating, RAR, and other calculated metrics

@@ -1,4 +1,4 @@
-[Ver001.000]
+-- [Ver001.000]
 -- Token Economy System Migration
 -- ==============================
 -- Creates tables for NJZ token wallet, transactions, and daily claims

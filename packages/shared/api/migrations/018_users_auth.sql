@@ -1,4 +1,4 @@
-[Ver001.000]
+-- [Ver001.000]
 -- User Authentication System Migration
 -- ================================
 -- Creates tables for user accounts, authentication, and security

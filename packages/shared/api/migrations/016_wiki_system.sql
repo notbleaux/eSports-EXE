@@ -1,4 +1,4 @@
-[Ver001.000]
+-- [Ver001.000]
 -- Wiki System Migration
 -- =====================
 -- Knowledge base and help documentation system

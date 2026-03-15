@@ -1,7 +1,13 @@
 -- Migration 001: Initial 37-field KCRITR Schema
 -- Axiom Esports Data Infrastructure
 
-CREATE EXTENSION IF NOT EXISTS timescaledb;
+-- TimescaleDB extension (optional - falls back to regular table if not available)
+DO $$
+BEGIN
+    CREATE EXTENSION IF NOT EXISTS timescaledb;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'TimescaleDB not available, using standard PostgreSQL tables';
+END $$;
 
 -- Core performance records table
 CREATE TABLE IF NOT EXISTS player_performance (
@@ -58,10 +64,17 @@ CREATE TABLE IF NOT EXISTS player_performance (
     PRIMARY KEY (player_id, match_id, map_name)
 );
 
--- Convert to hypertable partitioned by time
-SELECT create_hypertable('player_performance', 'realworld_time',
-    chunk_time_interval => INTERVAL '90 days',
-    if_not_exists => TRUE);
+-- Convert to hypertable partitioned by time (only if TimescaleDB is available)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('player_performance', 'realworld_time',
+            chunk_time_interval => INTERVAL '90 days',
+            if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'Could not create hypertable: %', SQLERRM;
+END $$;
 
 -- Indexes for common query patterns
 CREATE INDEX IF NOT EXISTS idx_player_performance_player

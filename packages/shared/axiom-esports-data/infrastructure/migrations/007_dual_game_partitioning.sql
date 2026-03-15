@@ -69,19 +69,27 @@ CREATE INDEX IF NOT EXISTS idx_matches_teams ON matches (team_a_id, team_b_id);
 CREATE INDEX IF NOT EXISTS idx_matches_epoch ON matches (epoch, match_date);
 CREATE INDEX IF NOT EXISTS idx_matches_source ON matches (source, source_id);
 
--- Convert to TimescaleDB hypertable for time-series optimization
-SELECT create_hypertable('matches_cs', 'match_date', if_not_exists => TRUE);
-SELECT create_hypertable('matches_valorant', 'match_date', if_not_exists => TRUE);
-
--- Set chunk size (1 week for matches)
-SELECT set_chunk_time_interval('matches_cs', INTERVAL '7 days');
-SELECT set_chunk_time_interval('matches_valorant', INTERVAL '7 days');
+-- Convert to TimescaleDB hypertable for time-series optimization (if available)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('matches_cs', 'match_date', if_not_exists => TRUE);
+        PERFORM create_hypertable('matches_valorant', 'match_date', if_not_exists => TRUE);
+        -- Set chunk size (1 week for matches)
+        PERFORM set_chunk_time_interval('matches_cs', INTERVAL '7 days');
+        PERFORM set_chunk_time_interval('matches_valorant', INTERVAL '7 days');
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'TimescaleDB hypertable setup skipped: %', SQLERRM;
+END $$;
 
 -- ============================================
 -- 3. PARTITIONED PLAYER PERFORMANCE TABLES
 -- ============================================
+-- NOTE: Renamed to unified_player_performance to avoid conflict with 
+-- migration 001's player_performance table (different schema/purpose)
 
-CREATE TABLE IF NOT EXISTS player_performance (
+CREATE TABLE IF NOT EXISTS unified_player_performance (
     id UUID DEFAULT gen_random_uuid(),
     game game_type NOT NULL,
 
@@ -109,20 +117,27 @@ CREATE TABLE IF NOT EXISTS player_performance (
     PRIMARY KEY (id, game)
 ) PARTITION BY LIST (game);
 
-CREATE TABLE IF NOT EXISTS player_performance_cs PARTITION OF player_performance
+CREATE TABLE IF NOT EXISTS unified_player_performance_cs PARTITION OF unified_player_performance
     FOR VALUES IN ('cs');
 
-CREATE TABLE IF NOT EXISTS player_performance_valorant PARTITION OF player_performance
+CREATE TABLE IF NOT EXISTS unified_player_performance_valorant PARTITION OF unified_player_performance
     FOR VALUES IN ('valorant');
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS idx_performance_player ON player_performance (player_id, match_date DESC);
-CREATE INDEX IF NOT EXISTS idx_performance_match ON player_performance (match_id);
-CREATE INDEX IF NOT EXISTS idx_performance_team ON player_performance (team_id);
+CREATE INDEX IF NOT EXISTS idx_unified_performance_player ON unified_player_performance (player_id, match_date DESC);
+CREATE INDEX IF NOT EXISTS idx_unified_performance_match ON unified_player_performance (match_id);
+CREATE INDEX IF NOT EXISTS idx_unified_performance_team ON unified_player_performance (team_id);
 
--- Convert to hypertables
-SELECT create_hypertable('player_performance_cs', 'match_date', if_not_exists => TRUE);
-SELECT create_hypertable('player_performance_valorant', 'match_date', if_not_exists => TRUE);
+-- Convert to hypertables (if TimescaleDB available)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('unified_player_performance_cs', 'match_date', if_not_exists => TRUE);
+        PERFORM create_hypertable('unified_player_performance_valorant', 'match_date', if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'TimescaleDB hypertable setup skipped: %', SQLERRM;
+END $$;
 
 -- ============================================
 -- 4. GAME-SPECIFIC PLAYER STATS VIEWS
@@ -139,7 +154,7 @@ SELECT
     (pp.game_stats->>'first_kills')::SMALLINT as first_kills,
     (pp.game_stats->>'clutches_won')::SMALLINT as clutches_won,
     CASE WHEN pp.deaths > 0 THEN pp.kills::DECIMAL / pp.deaths ELSE pp.kills END as kdr
-FROM player_performance pp
+FROM unified_player_performance pp
 WHERE pp.game = 'cs';
 
 -- Valorant Player Stats View
@@ -154,7 +169,7 @@ SELECT
     (pp.game_stats->>'first_deaths')::SMALLINT as first_deaths,
     (pp.game_stats->>'agent')::VARCHAR as agent_played,
     CASE WHEN pp.deaths > 0 THEN pp.kills::DECIMAL / pp.deaths ELSE pp.kills END as kdr
-FROM player_performance pp
+FROM unified_player_performance pp
 WHERE pp.game = 'valorant';
 
 -- ============================================
@@ -254,7 +269,8 @@ CREATE INDEX IF NOT EXISTS idx_tournaments_status ON tournaments (status);
 -- 8. RAW EXTRACTION STORAGE (Partitioned)
 -- ============================================
 
-CREATE TABLE IF NOT EXISTS raw_extractions (
+-- NOTE: Renamed to avoid conflict with migration 003's raw_extractions
+CREATE TABLE IF NOT EXISTS partitioned_raw_extractions (
     id UUID DEFAULT gen_random_uuid(),
     game game_type NOT NULL,
     source VARCHAR(50) NOT NULL,
@@ -280,15 +296,15 @@ CREATE TABLE IF NOT EXISTS raw_extractions (
     PRIMARY KEY (id, game)
 ) PARTITION BY LIST (game);
 
-CREATE TABLE IF NOT EXISTS raw_extractions_cs PARTITION OF raw_extractions
+CREATE TABLE IF NOT EXISTS raw_extractions_cs PARTITION OF partitioned_raw_extractions
     FOR VALUES IN ('cs');
 
-CREATE TABLE IF NOT EXISTS raw_extractions_valorant PARTITION OF raw_extractions
+CREATE TABLE IF NOT EXISTS raw_extractions_valorant PARTITION OF partitioned_raw_extractions
     FOR VALUES IN ('valorant');
 
-CREATE INDEX IF NOT EXISTS idx_raw_source ON raw_extractions (game, source, source_id);
-CREATE INDEX IF NOT EXISTS idx_raw_checksum ON raw_extractions (checksum);
-CREATE INDEX IF NOT EXISTS idx_raw_processed ON raw_extractions (processed);
+CREATE INDEX IF NOT EXISTS idx_raw_source ON partitioned_raw_extractions (game, source, source_id);
+CREATE INDEX IF NOT EXISTS idx_raw_checksum ON partitioned_raw_extractions (checksum);
+CREATE INDEX IF NOT EXISTS idx_raw_processed ON partitioned_raw_extractions (processed);
 
 -- ============================================
 -- 9. AGGREGATE STATISTICS TABLES
@@ -305,7 +321,7 @@ SELECT
     AVG((game_stats->>'rating')::DECIMAL) as avg_rating,
     AVG((game_stats->>'adr')::DECIMAL) as avg_adr,
     MAX(match_date) as last_match_date
-FROM player_performance_cs
+FROM unified_player_performance_cs
 GROUP BY player_id;
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS player_career_stats_valorant AS
@@ -318,7 +334,7 @@ SELECT
     AVG((game_stats->>'acs')::DECIMAL) as avg_acs,
     AVG((game_stats->>'adr')::DECIMAL) as avg_adr,
     MAX(match_date) as last_match_date
-FROM player_performance_valorant
+FROM unified_player_performance_valorant
 GROUP BY player_id;
 
 -- Refresh indexes
@@ -350,14 +366,21 @@ $$ LANGUAGE plpgsql;
 -- Auto-vacuum tuning for high-write tables
 ALTER TABLE matches_cs SET (autovacuum_vacuum_scale_factor = 0.1);
 ALTER TABLE matches_valorant SET (autovacuum_vacuum_scale_factor = 0.1);
-ALTER TABLE player_performance_cs SET (autovacuum_vacuum_scale_factor = 0.1);
-ALTER TABLE player_performance_valorant SET (autovacuum_vacuum_scale_factor = 0.1);
+ALTER TABLE unified_player_performance_cs SET (autovacuum_vacuum_scale_factor = 0.1);
+ALTER TABLE unified_player_performance_valorant SET (autovacuum_vacuum_scale_factor = 0.1);
 
--- Compression policy for older data
-SELECT add_compression_policy('matches_cs', INTERVAL '30 days');
-SELECT add_compression_policy('matches_valorant', INTERVAL '30 days');
-SELECT add_compression_policy('player_performance_cs', INTERVAL '30 days');
-SELECT add_compression_policy('player_performance_valorant', INTERVAL '30 days');
+-- Compression policy for older data (if TimescaleDB available)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM add_compression_policy('matches_cs', INTERVAL '30 days');
+        PERFORM add_compression_policy('matches_valorant', INTERVAL '30 days');
+        PERFORM add_compression_policy('unified_player_performance_cs', INTERVAL '30 days');
+        PERFORM add_compression_policy('unified_player_performance_valorant', INTERVAL '30 days');
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'TimescaleDB compression policy setup skipped: %', SQLERRM;
+END $$;
 
 -- ============================================
 -- 12. MONITORING VIEWS
@@ -486,7 +509,7 @@ RETURNS INTEGER AS $$
 DECLARE
     deleted_count INTEGER;
 BEGIN
-    DELETE FROM raw_extractions
+    DELETE FROM partitioned_raw_extractions
     WHERE extracted_at < NOW() - INTERVAL '1 day' * retention_days
     AND processed = TRUE;
 

@@ -1,4 +1,4 @@
-[Ver001.000]
+-- [Ver001.000]
 -- Forum System Migration
 -- ======================
 -- Tables for AREPO forum: categories, threads, posts, votes, polls

@@ -3,9 +3,14 @@
 -- Provides pre-aggregated analytics for high-performance queries
 
 -- =====================================================
--- 1. Enable pg_cron Extension for Automated Refreshes
+-- 1. Enable pg_cron Extension for Automated Refreshes (if available)
 -- =====================================================
-CREATE EXTENSION IF NOT EXISTS pg_cron;
+DO $$
+BEGIN
+    CREATE EXTENSION IF NOT EXISTS pg_cron;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'pg_cron extension not available, automated refresh schedules will not be created';
+END $$;
 
 -- =====================================================
 -- 2. Add tournament_id Column to player_performance
@@ -350,35 +355,45 @@ COMMENT ON MATERIALIZED VIEW mv_tournament_summaries IS
     'Tournament-level summaries linked to OPERA for cross-platform analytics';
 
 -- =====================================================
--- 6. pg_cron Schedules for Automated Refresh
+-- 6. pg_cron Schedules for Automated Refresh (if available)
 -- Using CONCURRENTLY to avoid locks
 -- =====================================================
-
--- Remove existing schedules if any (to avoid duplicates)
-SELECT cron.unschedule('refresh-daily-stats');
-SELECT cron.unschedule('refresh-weekly-rankings');
-SELECT cron.unschedule('refresh-tournament-summaries');
-
--- Schedule 1: Daily player stats refresh every 5 minutes
-SELECT cron.schedule(
-    'refresh-daily-stats',
-    '*/5 * * * *',
-    'REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_player_stats'
-);
-
--- Schedule 2: Weekly team rankings refresh every hour
-SELECT cron.schedule(
-    'refresh-weekly-rankings',
-    '0 * * * *',
-    'REFRESH MATERIALIZED VIEW CONCURRENTLY mv_weekly_team_rankings'
-);
-
--- Schedule 3: Tournament summaries refresh every 6 hours
-SELECT cron.schedule(
-    'refresh-tournament-summaries',
-    '0 */6 * * *',
-    'REFRESH MATERIALIZED VIEW CONCURRENTLY mv_tournament_summaries'
-);
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+        -- Remove existing schedules if any (to avoid duplicates)
+        PERFORM cron.unschedule('refresh-daily-stats');
+        PERFORM cron.unschedule('refresh-weekly-rankings');
+        PERFORM cron.unschedule('refresh-tournament-summaries');
+        
+        -- Schedule 1: Daily player stats refresh every 5 minutes
+        PERFORM cron.schedule(
+            'refresh-daily-stats',
+            '*/5 * * * *',
+            'REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_player_stats'
+        );
+        
+        -- Schedule 2: Weekly team rankings refresh every hour
+        PERFORM cron.schedule(
+            'refresh-weekly-rankings',
+            '0 * * * *',
+            'REFRESH MATERIALIZED VIEW CONCURRENTLY mv_weekly_team_rankings'
+        );
+        
+        -- Schedule 3: Tournament summaries refresh every 6 hours
+        PERFORM cron.schedule(
+            'refresh-tournament-summaries',
+            '0 */6 * * *',
+            'REFRESH MATERIALIZED VIEW CONCURRENTLY mv_tournament_summaries'
+        );
+        
+        RAISE NOTICE 'pg_cron schedules created successfully';
+    ELSE
+        RAISE NOTICE 'pg_cron not available, automated refresh schedules not created';
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'Could not create pg_cron schedules: %', SQLERRM;
+END $$;
 
 -- =====================================================
 -- 7. Helper Function for Manual Refresh
@@ -465,8 +480,15 @@ COMMENT ON FUNCTION refresh_rotas_analytics IS
 -- =====================================================
 -- 8. Comments and Documentation
 -- =====================================================
-COMMENT ON EXTENSION pg_cron IS 
-    'Job scheduler for automated materialized view refreshes';
+-- Comment on pg_cron only if it exists
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+        COMMENT ON EXTENSION pg_cron IS 'Job scheduler for automated materialized view refreshes';
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    NULL;
+END $$;
 
 -- Log migration completion
 DO $$
@@ -475,5 +497,5 @@ BEGIN
     RAISE NOTICE '  - mv_daily_player_stats: 180-day rolling window, refreshed every 5 minutes';
     RAISE NOTICE '  - mv_weekly_team_rankings: Regional/global rankings, refreshed hourly';
     RAISE NOTICE '  - mv_tournament_summaries: OPERA-linked tournaments, refreshed every 6 hours';
-    RAISE NOTICE '  - pg_cron schedules: refresh-daily-stats, refresh-weekly-rankings, refresh-tournament-summaries';
+    RAISE NOTICE '  - pg_cron schedules: (optional - requires pg_cron extension)';
 END $$;

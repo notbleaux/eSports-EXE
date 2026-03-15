@@ -91,10 +91,17 @@ CREATE TABLE IF NOT EXISTS model_metrics (
     CONSTRAINT chk_metric_name CHECK (metric_name IN ('accuracy', 'precision', 'recall', 'f1_score', 'latency', 'throughput', 'memory', 'error_rate', 'custom'))
 );
 
--- Convert to hypertable for time-series data
-SELECT create_hypertable('model_metrics', 'recorded_at',
-    chunk_time_interval => INTERVAL '30 days',
-    if_not_exists => TRUE);
+-- Convert to hypertable for time-series data (if TimescaleDB available)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('model_metrics', 'recorded_at',
+            chunk_time_interval => INTERVAL '30 days',
+            if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'TimescaleDB hypertable setup skipped: %', SQLERRM;
+END $$;
 
 -- Indexes for model_metrics
 CREATE INDEX IF NOT EXISTS idx_model_metrics_model ON model_metrics(model_id, recorded_at DESC);
@@ -214,10 +221,17 @@ CREATE TABLE IF NOT EXISTS ab_test_results (
     recorded_at         TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Convert to hypertable
-SELECT create_hypertable('ab_test_results', 'recorded_at',
-    chunk_time_interval => INTERVAL '30 days',
-    if_not_exists => TRUE);
+-- Convert to hypertable (if TimescaleDB available)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'timescaledb') THEN
+        PERFORM create_hypertable('ab_test_results', 'recorded_at',
+            chunk_time_interval => INTERVAL '30 days',
+            if_not_exists => TRUE);
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'TimescaleDB hypertable setup skipped for ab_test_results: %', SQLERRM;
+END $$;
 
 -- Indexes for ab_test_results
 CREATE INDEX IF NOT EXISTS idx_ab_test_results_test ON ab_test_results(test_id, recorded_at DESC);
