@@ -16,7 +16,7 @@ from .forum_models import (
     CreateThreadRequest, CreatePostRequest, VoteRequest,
     ThreadListResponse, ThreadDetailResponse
 )
-from ...axiom_esports_data.api.src.db_manager import db
+from axiom_esports_data.api.src.db_manager import db
 
 logger = logging.getLogger(__name__)
 

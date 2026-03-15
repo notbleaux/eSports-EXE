@@ -9,8 +9,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from ...axiom_esports_data.api.src.db_manager import db
-from ..auth.auth_utils import get_optional_user, TokenData
+from axiom_esports_data.api.src.db_manager import db
+from src.auth.auth_utils import get_optional_user, TokenData
 from .service_enhanced import SatorServiceEnhanced as SatorService
 from .models import (
     PlatformStats, PlayerStats, PlayerDetail, PlayerListResponse,

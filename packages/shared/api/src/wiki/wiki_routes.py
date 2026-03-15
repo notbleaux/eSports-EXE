@@ -15,7 +15,7 @@ from .wiki_models import (
     WikiCategory, WikiArticle, WikiArticleSummary, WikiNavigationItem,
     CreateArticleRequest, UpdateArticleRequest, ArticleFeedbackRequest
 )
-from ...axiom_esports_data.api.src.db_manager import db
+from axiom_esports_data.api.src.db_manager import db
 
 logger = logging.getLogger(__name__)
 

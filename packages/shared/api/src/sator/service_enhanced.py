@@ -18,7 +18,7 @@ import asyncpg
 
 # Import metrics calculator using relative path
 # Note: metrics_calculator is in axiom-esports-data package
-from ....axiom_esports_data.analytics.src.metrics_calculator import (
+from axiom_esports_data.analytics.src.metrics_calculator import (
     MetricsCalculator, infer_role_from_agent, infer_region_from_team, get_full_team_name
 )
 from .models import (

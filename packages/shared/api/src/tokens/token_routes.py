@@ -16,7 +16,7 @@ from .token_models import (
     TokenStats, TokenLeaderboardResponse,
     TokenAwardRequest, TokenDeductRequest,
 )
-from ...axiom_esports_data.api.src.db_manager import db
+from axiom_esports_data.api.src.db_manager import db
 
 logger = logging.getLogger(__name__)
 

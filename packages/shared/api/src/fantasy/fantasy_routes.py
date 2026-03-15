@@ -17,7 +17,7 @@ from .fantasy_models import (
     CreateLeagueRequest, CreateTeamRequest, DraftPlayerRequest,
     SetLineupRequest, CreateWaiverClaimRequest, CreateTradeRequest
 )
-from ...axiom_esports_data.api.src.db_manager import db
+from axiom_esports_data.api.src.db_manager import db
 from ..tokens.token_service import TokenService
 
 logger = logging.getLogger(__name__)
