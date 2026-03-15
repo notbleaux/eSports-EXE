@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 Forum Pydantic Models
 ====================

@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 Daily Challenges Pydantic Models
 ===============================

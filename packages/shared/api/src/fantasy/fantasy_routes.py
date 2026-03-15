@@ -1,4 +1,3 @@
-[Ver002.000]
 """
 Fantasy eSports API Routes
 ==========================
