@@ -11,7 +11,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from fastapi.security import HTTPBearer
 
-from axiom_esports_data.api.src.db_manager import db
+from ...axiom_esports_data.api.src.db_manager import db
 from .auth_schemas import (
     Token, UserLogin, UserRegister, UserResponse, UserProfile,
     RefreshTokenRequest, PasswordResetRequest, PasswordReset,
