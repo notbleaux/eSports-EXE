@@ -29,6 +29,8 @@ from src.opera.opera_routes import router as opera_router
 from src.auth.auth_routes import router as auth_router
 from src.sator.routes import router as sator_router
 from src.sator.websocket import handle_websocket, ws_manager
+from src.sator.rar_routes import router as rar_router
+from src.rotas.map_routes import router as maps_router, handle_lens_websocket, simulate_lens_updates
 
 # Import database manager
 from axiom_esports_data.api.src.db_manager import db
@@ -88,10 +90,22 @@ async def lifespan(app: FastAPI):
     # Don't block on DB connection - let first request trigger it
     logger.info("API initialized (database will connect on first request)")
     
+    # Start background task for lens updates
+    lens_task = asyncio.create_task(simulate_lens_updates())
+    logger.info("Lens update simulation started")
+    
     yield
     
     # Shutdown
     logger.info("Shutting down SATOR API...")
+    
+    # Cancel background task
+    lens_task.cancel()
+    try:
+        await lens_task
+    except asyncio.CancelledError:
+        pass
+    
     try:
         await db.close()
         logger.info("Database connection closed")
@@ -256,12 +270,30 @@ app.include_router(
     tags=["sator"],
 )
 
+app.include_router(
+    rar_router,
+    prefix="/api",
+    tags=["rar"],
+)
 
-# WebSocket endpoint
+app.include_router(
+    maps_router,
+    prefix="/api",
+    tags=["maps"],
+)
+
+
+# WebSocket endpoints
 @app.websocket("/ws/sator")
 async def sator_websocket(websocket: WebSocket):
     """WebSocket endpoint for SATOR live updates."""
     await handle_websocket(websocket)
+
+
+@app.websocket("/ws/lens-updates")
+async def lens_updates_websocket(websocket: WebSocket):
+    """WebSocket endpoint for ROTAS lens real-time updates."""
+    await handle_lens_websocket(websocket)
 
 
 # Root endpoint
@@ -284,6 +316,11 @@ async def root():
             "challenges": "/api/challenges",
             "wiki": "/api/wiki",
             "opera": "/api/opera",
+            "maps": "/api/maps",
+        },
+        "websockets": {
+            "sator": "/ws/sator",
+            "lens_updates": "/ws/lens-updates",
         },
     }
 
