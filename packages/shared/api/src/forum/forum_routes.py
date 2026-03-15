@@ -17,6 +17,7 @@ from .forum_models import (
     CreateThreadRequest, CreatePostRequest, VoteRequest,
     ThreadListResponse, ThreadDetailResponse
 )
+from ...axiom_esports_data.api.src.db_manager import db
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,6 @@ router = APIRouter(prefix="/forum", tags=["forum"])
 
 async def get_forum_service() -> ForumService:
     """Get ForumService instance."""
-    from ...axiom_esports_data.api.src.db_manager import db
     return ForumService(db.pool)
 
 

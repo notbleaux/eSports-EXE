@@ -17,6 +17,8 @@ from .challenge_models import (
     DailyChallenge, ChallengeResult, ChallengeStreak, ChallengeStats,
     SubmitAnswerRequest, UserChallengeSummary, ChallengeLeaderboardEntry
 )
+from ...axiom_esports_data.api.src.db_manager import db
+from ..tokens.token_service import TokenService
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +27,6 @@ router = APIRouter(prefix="/challenges", tags=["challenges"])
 
 async def get_challenge_service() -> ChallengeService:
     """Get ChallengeService instance."""
-    from ...axiom_esports_data.api.src.db_manager import db
-    from ..tokens.token_service import TokenService
-    
     token_service = TokenService(db.pool)
     return ChallengeService(db.pool, token_service)
 

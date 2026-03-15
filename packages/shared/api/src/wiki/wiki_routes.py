@@ -16,6 +16,7 @@ from .wiki_models import (
     WikiCategory, WikiArticle, WikiArticleSummary, WikiNavigationItem,
     CreateArticleRequest, UpdateArticleRequest, ArticleFeedbackRequest
 )
+from ...axiom_esports_data.api.src.db_manager import db
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,6 @@ router = APIRouter(prefix="/wiki", tags=["wiki"])
 
 async def get_wiki_service() -> WikiService:
     """Get WikiService instance."""
-    from ...axiom_esports_data.api.src.db_manager import db
     return WikiService(db.pool)
 
 

@@ -17,13 +17,9 @@ from datetime import datetime, timedelta, date
 from typing import Optional, List, Tuple, Dict, Any
 import asyncpg
 
-import sys
-from pathlib import Path
-
-# Add path for analytics module
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "axiom-esports-data"))
-
-from analytics.src.metrics_calculator import (
+# Import metrics calculator using relative path
+# Note: metrics_calculator is in axiom-esports-data package
+from ....axiom_esports_data.analytics.src.metrics_calculator import (
     MetricsCalculator, infer_role_from_agent, infer_region_from_team, get_full_team_name
 )
 from .models import (
