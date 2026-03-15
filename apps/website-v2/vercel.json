@@ -5,10 +5,10 @@
   "framework": "vite",
   "installCommand": "npm install",
   "env": {
-    "VITE_API_URL": "https://staging-api.libre-x-esport.com",
-    "VITE_ANALYTICS_ID": "staging-analytics",
-    "VITE_ML_MODEL_URL": "https://staging-cdn.libre-x-esport.com/models",
-    "VITE_APP_ENV": "staging"
+    "VITE_API_URL": "https://sator-api.onrender.com",
+    "VITE_WS_URL": "wss://sator-api.onrender.com/v1/ws",
+    "VITE_ANALYTICS_ID": "production-analytics",
+    "VITE_APP_ENV": "production"
   },
   "routes": [
     {

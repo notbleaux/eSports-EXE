@@ -14,6 +14,9 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 # Import route modules
 from api.src.routes import players, matches, analytics, collection, dashboard, websocket, search, ml_models
@@ -49,59 +52,27 @@ APP_ENVIRONMENT = os.getenv("APP_ENVIRONMENT", "development")
 # Database configuration
 DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL")
 
-# Global database instance
-db = db  # From db_manager module
+# Initialize rate limiters
+limiter = Limiter(key_func=get_remote_address)
+auth_limiter = Limiter(key_func=get_remote_address, default_limits=["5/minute"])
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     Application lifespan manager - handles startup and shutdown events.
+    Uses lazy database initialization - connection deferred to first request.
     """
     # Startup
     logger.info(f"Starting {APP_NAME} v{APP_VERSION} in {APP_ENVIRONMENT} mode")
-    
-    global db_pool
-    if DATABASE_URL:
-        try:
-            db_pool = await asyncpg.create_pool(
-                DATABASE_URL,
-                min_size=1,
-                max_size=5,  # Conservative for free tier
-                command_timeout=30,
-                server_settings={
-                    'jit': 'off',  # Disable JIT for faster simple queries
-                }
-            )
-            logger.info("Database connection pool established")
-            
-            # Test connection
-            async with db_pool.acquire() as conn:
-                version = await conn.fetchval("SELECT version()")
-                logger.info(f"Connected to PostgreSQL: {version[:50]}...")
-                
-                # Check TimescaleDB
-                try:
-                    ts_version = await conn.fetchval(
-                        "SELECT extversion FROM pg_extension WHERE extname = 'timescaledb'"
-                    )
-                    logger.info(f"TimescaleDB version: {ts_version}")
-                except Exception:
-                    logger.warning("TimescaleDB extension not found")
-                    
-        except Exception as e:
-            logger.error(f"Failed to connect to database: {e}")
-            db_pool = None
-    else:
-        logger.warning("DATABASE_URL not set - running in stub mode")
+    logger.info("Database connection deferred to first request (lazy initialization)")
     
     yield
     
     # Shutdown
     logger.info(f"Shutting down {APP_NAME}")
-    if db_pool:
-        await db_pool.close()
-        logger.info("Database connection pool closed")
+    await db.close()
+    logger.info("Database connection pool closed")
 
 
 # Create FastAPI application
@@ -163,10 +134,10 @@ async def health_check():
         "timestamp": datetime.utcnow().isoformat() + "Z",
     }
     
-    # Check database connectivity
-    if db_pool:
+    # Check database connectivity (lazy - check if initialized)
+    if db._initialized and db.pool:
         try:
-            async with db_pool.acquire() as conn:
+            async with db.pool.acquire() as conn:
                 await conn.fetchval("SELECT 1")
                 health_status["database"] = "connected"
         except Exception as e:
@@ -174,7 +145,7 @@ async def health_check():
             health_status["database_error"] = str(e)
             logger.error(f"Health check database error: {e}")
     else:
-        health_status["database"] = "not_configured"
+        health_status["database"] = "not_initialized"
     
     return health_status
 
@@ -196,10 +167,10 @@ async def v1_health_check():
         "timestamp": datetime.utcnow().isoformat() + "Z",
     }
     
-    # Check database connectivity
-    if db_pool:
+    # Check database connectivity (lazy)
+    if db._initialized and db.pool:
         try:
-            async with db_pool.acquire() as conn:
+            async with db.pool.acquire() as conn:
                 await conn.fetchval("SELECT 1")
                 health_status["database"] = "connected"
         except Exception as e:
@@ -207,7 +178,7 @@ async def v1_health_check():
             health_status["database_error"] = str(e)
             logger.error(f"Health check database error: {e}")
     else:
-        health_status["database"] = "not_configured"
+        health_status["database"] = "not_initialized"
     
     return health_status
 
@@ -219,14 +190,15 @@ async def readiness_check():
     
     Returns 503 if the service is not ready to accept traffic.
     """
-    if not DATABASE_URL:
-        return {"ready": True, "mode": "stub"}  # OK for stub mode
+    # Lazy initialization - try to connect if not already
+    if not db._initialized:
+        await db.initialize()
     
-    if db_pool is None:
+    if not db.pool:
         raise HTTPException(status_code=503, detail="Database not connected")
     
     try:
-        async with db_pool.acquire() as conn:
+        async with db.pool.acquire() as conn:
             await conn.fetchval("SELECT 1")
         return {"ready": True}
     except Exception as e:
@@ -241,14 +213,15 @@ async def v1_readiness_check():
     
     Returns 503 if the service is not ready to accept traffic.
     """
-    if not DATABASE_URL:
-        return {"ready": True, "mode": "stub", "api_version": "v1"}  # OK for stub mode
+    # Lazy initialization - try to connect if not already
+    if not db._initialized:
+        await db.initialize()
     
-    if db_pool is None:
+    if not db.pool:
         raise HTTPException(status_code=503, detail="Database not connected")
     
     try:
-        async with db_pool.acquire() as conn:
+        async with db.pool.acquire() as conn:
             await conn.fetchval("SELECT 1")
         return {"ready": True, "api_version": "v1"}
     except Exception as e:

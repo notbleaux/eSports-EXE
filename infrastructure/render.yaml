@@ -1,120 +1,62 @@
-# =============================================================================
-# Render.com Blueprint Configuration for SATOR Platform
-# UPDATED: March 8, 2026 - Fixed paths after repository restructure
-# =============================================================================
-# This file enables "Infrastructure as Code" deployment to Render.com
-# 
-# To deploy:
-# 1. Push this file to your GitHub repository
-# 2. Go to https://dashboard.render.com/blueprints
-# 3. Connect your repository
-# 4. Render will automatically create and configure services
-# =============================================================================
+# [Ver001.000]
+# Render.com Deployment Configuration
+# SATOR API - Production Deployment
 
 services:
-  # ---------------------------------------------------------------------------
-  # FastAPI Web Service - Core API
-  # ---------------------------------------------------------------------------
+  # FastAPI Backend
   - type: web
     name: sator-api
-    runtime: python
-    plan: free
-    region: oregon  # Closest to Supabase us-east-1 region
-    
-    # Build configuration - UPDATED PATH
+    env: python
     buildCommand: |
-      cd packages/shared && \
-      pip install -r requirements.txt
-    
-    # Start command - UPDATED PATH
+      pip install -r packages/shared/axiom-esports-data/api/requirements.txt
     startCommand: |
-      cd packages/shared/api && \
+      cd packages/shared/axiom_esports_data/api && 
       uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
-    
-    # Environment variables (set in Render Dashboard)
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.11"
       - key: DATABASE_URL
-        sync: false  # Set manually in dashboard for security
+        fromDatabase:
+          name: sator-db
+          property: connectionString
       - key: REDIS_URL
-        sync: false  # Set manually in dashboard
+        fromService:
+          type: redis
+          name: sator-redis
+          property: connectionString
+      - key: APP_ENVIRONMENT
+        value: production
+      - key: APP_NAME
+        value: SATOR-API
+      - key: APP_VERSION
+        value: 2.1.0
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        value: "https://sator-platform.vercel.app,https://sator-web.onrender.com"
+      - key: JWT_SECRET_KEY
+        generateValue: true
       - key: PANDASCORE_API_KEY
         sync: false  # Set manually in dashboard
-      - key: API_PORT
-        value: "8000"
-      - key: API_WORKERS
-        value: "1"
-      - key: LOG_LEVEL
-        value: "INFO"
-      - key: APP_ENVIRONMENT
-        value: "production"
-      - key: DATA_RETENTION_DAYS
-        value: "365"
-      - key: RATE_LIMIT_REQUESTS_PER_MINUTE
-        value: "30"
-      - key: PYTHONPATH
-        value: "/opt/render/project/src/packages/shared"
-    
-    # Health check endpoint
     healthCheckPath: /health
-    
-    # Auto-deploy on push to main
     autoDeploy: true
-    
-    # Branch to deploy
-    branch: main
-    
-    # Build filters (only deploy when these change)
-    buildFilter:
-      paths:
-        - packages/shared/**
-        - infrastructure/render.yaml
-      ignoredPaths:
-        - "**/*.md"
-        - "**/tests/**"
-        - "apps/**"
-        - "docs/**"
+    plan: free  # Use 'starter' for paid tier
 
-# =============================================================================
-# Environment Group (Shared across services)
-# =============================================================================
+  # Redis for caching and rate limiting
+  - type: redis
+    name: sator-redis
+    plan: free  # 100MB, no persistence on free tier
+    ipAllowList: []  # Allow all (required for Render services)
+
+databases:
+  - name: sator-db
+    plan: free  # 1GB storage on free tier
+    databaseName: sator_production
+    user: sator_api
+
+# Environment group for shared variables
 envVarGroups:
-  - name: sator-production
+  - name: sator-shared
     envVars:
-      - key: APP_NAME
-        value: "SATOR-API"
-      - key: APP_VERSION
-        value: "2.0.0"
-      - key: FEATURE_FLAGS_PATH
-        value: "packages/shared/config/features.json"
-
-# =============================================================================
-# NOTES FOR DEPLOYMENT
-# =============================================================================
-# 
-# 1. FIRST DEPLOY:
-#    - Set DATABASE_URL in Render Dashboard before first deploy
-#    - Set REDIS_URL if using caching
-#    - Set PANDASCORE_API_KEY for legal data source
-#
-# 2. VERIFY BUILD:
-#    - Check build logs for import errors
-#    - Verify /health endpoint returns 200
-#    - Test /api/ endpoints
-#
-# 3. MONITORING:
-#    - Set up Logtail or similar for logs
-#    - Configure alerts for 500 errors
-#    - Monitor connection pool usage
-#
-# 4. TROUBLESHOOTING:
-#    - If "Module not found": Check PYTHONPATH
-#    - If DB connection fails: Verify DATABASE_URL format
-#    - If workers crash: Reduce API_WORKERS to 1
-#
-# 5. UPDATES:
-#    - This file is in infrastructure/render.yaml
-#    - Push to main triggers auto-deploy
-#    - Use Preview Environments for testing changes
-# =============================================================================
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: API_VERSION
+        value: v1
