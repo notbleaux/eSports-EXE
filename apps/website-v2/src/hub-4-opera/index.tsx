@@ -16,6 +16,7 @@ import {
   Tv,
   Target,
   Globe,
+  Swords,
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
@@ -27,6 +28,7 @@ import TournamentBrowser from './components/TournamentBrowser';
 import ScheduleViewer from './components/ScheduleViewer';
 import PatchNotesReader from './components/PatchNotesReader';
 import CircuitStandings from './components/CircuitStandings';
+import { FantasyContainer } from './components/Fantasy';
 import type { 
   Tournament, 
   TournamentFilters, 
@@ -51,6 +53,7 @@ const TABS: { id: HubTab; label: string; icon: typeof Trophy }[] = [
   { id: 'schedule', label: 'Schedule', icon: Calendar },
   { id: 'standings', label: 'Standings', icon: BarChart3 },
   { id: 'patches', label: 'Patches', icon: FileText },
+  { id: 'fantasy', label: 'Fantasy', icon: Swords },
 ];
 
 // Circuit configurations
@@ -435,6 +438,18 @@ function OperaHubContent(): JSX.Element {
                   onSelectPatch={setSelectedPatch}
                   loading={loading.patches}
                 />
+              </motion.div>
+            )}
+
+            {activeTab === 'fantasy' && (
+              <motion.div
+                key="fantasy"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FantasyContainer />
               </motion.div>
             )}
           </AnimatePresence>
