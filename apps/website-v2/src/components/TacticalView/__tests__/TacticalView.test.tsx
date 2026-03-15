@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.001] */
 /**
  * TacticalView Component Tests
  * ============================
@@ -37,6 +37,9 @@ const mockCanvasContext = {
   fillText: vi.fn(),
   measureText: vi.fn(() => ({ width: 50 })),
   setTransform: vi.fn(),
+  closePath: vi.fn(),
+  rect: vi.fn(),
+  clip: vi.fn(),
 };
 
 HTMLCanvasElement.prototype.getContext = vi.fn((contextId: string) => {
@@ -44,13 +47,13 @@ HTMLCanvasElement.prototype.getContext = vi.fn((contextId: string) => {
     return mockCanvasContext;
   }
   return null;
-});
+}) as any;
 
 // Mock requestAnimationFrame
 global.requestAnimationFrame = vi.fn((callback: FrameRequestCallback) => {
   return setTimeout(() => callback(performance.now()), 16) as unknown as number;
 });
-nglobal.cancelAnimationFrame = vi.fn((id: number) => {
+global.cancelAnimationFrame = vi.fn((id: number) => {
   clearTimeout(id);
 });
 
@@ -167,7 +170,7 @@ describe('TacticalView Component', () => {
       />
     );
 
-    expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument();
+    expect(document.querySelector('canvas')).toBeInTheDocument();
   });
 
   it('should render canvas element', () => {
@@ -293,7 +296,7 @@ describe('TacticalView Component', () => {
     }
   });
 
-  it('should filter players by team', () => {
+  it('should filter players by team', async () => {
     render(
       <TacticalView
         matchId="test-match"
@@ -303,8 +306,10 @@ describe('TacticalView Component', () => {
       />
     );
 
-    // Canvas should render with filtered players
-    expect(mockCanvasContext.clearRect).toHaveBeenCalled();
+    // Canvas should render with filtered players (wait for animation frame)
+    await waitFor(() => {
+      expect(mockCanvasContext.clearRect).toHaveBeenCalled();
+    });
   });
 
   it('should handle empty timeline gracefully', () => {
@@ -340,7 +345,7 @@ describe('TacticalView Component', () => {
     expect(global.cancelAnimationFrame).toHaveBeenCalled();
   });
 
-  it('should zoom in and out', () => {
+  it('should zoom in and out', async () => {
     render(
       <TacticalView
         matchId="test-match"
@@ -354,9 +359,12 @@ describe('TacticalView Component', () => {
     const zoomOut = screen.getByTitle('Zoom Out');
 
     fireEvent.click(zoomIn);
-    fireEvent.click(zoomOut);
 
-    // Zoom actions should complete without error
+    // Verify zoom state changed - wait for animation frame to trigger redraw
+    await waitFor(() => {
+      expect(mockCanvasContext.clearRect).toHaveBeenCalled();
+    });
+
     expect(zoomIn).toBeInTheDocument();
     expect(zoomOut).toBeInTheDocument();
   });

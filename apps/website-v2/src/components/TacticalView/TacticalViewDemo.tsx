@@ -8,6 +8,7 @@
 import React, { useState, useCallback } from 'react';
 import { TacticalView } from './TacticalView';
 import { useTacticalWebSocket } from './useTacticalWebSocket';
+import { logger } from '@/utils/logger';
 import {
   MatchTimeline,
   MapData,
@@ -343,17 +344,17 @@ export const TacticalViewDemo: React.FC = () => {
   const [currentFrame, setCurrentFrame] = useState<MatchFrame | null>(null);
 
   // WebSocket integration
-  const [wsState, wsActions] = useTacticalWebSocket({
+  const [wsState] = useTacticalWebSocket({
     matchId: MOCK_TIMELINE.matchId,
     onFrameUpdate: useCallback((frame: MatchFrame) => {
-      console.log('Frame update received:', frame.timestamp);
+      logger.debug('[TacticalViewDemo] Frame update:', frame.timestamp);
     }, []),
     onEventReceived: useCallback((event: KeyEvent) => {
-      console.log('Event received:', event.description);
+      logger.info('[TacticalViewDemo] Event received:', event.description);
       setSelectedEvent(event);
     }, []),
     onConnectionChange: useCallback((connected: boolean) => {
-      console.log('WebSocket connected:', connected);
+      logger.info('[TacticalViewDemo] Connection state:', connected);
     }, []),
     autoConnect: false, // Demo uses mock data, don't connect
   });
@@ -367,7 +368,7 @@ export const TacticalViewDemo: React.FC = () => {
   }, []);
 
   const handlePlayerSelect = useCallback((player: Player) => {
-    console.log('Player selected:', player.name);
+    logger.info('[TacticalViewDemo] Player selected:', player.name);
   }, []);
 
   return (

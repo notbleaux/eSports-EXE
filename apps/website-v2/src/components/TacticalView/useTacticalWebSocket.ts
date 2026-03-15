@@ -7,6 +7,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { MatchFrame, KeyEvent, Player } from './types';
+import { logger } from '@/utils/logger';
 
 export interface TacticalWebSocketState {
   isConnected: boolean;
@@ -59,6 +60,7 @@ export const useTacticalWebSocket = (
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const pongTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectAttemptsRef = useRef(0);
 
   const [state, setState] = useState<TacticalWebSocketState>({
     isConnected: false,
@@ -93,7 +95,7 @@ export const useTacticalWebSocket = (
         
         // Set pong timeout
         pongTimeoutRef.current = setTimeout(() => {
-          console.warn('WebSocket pong timeout');
+          logger.warn('[useTacticalWebSocket] Pong timeout, closing connection');
           wsRef.current?.close();
         }, PONG_TIMEOUT);
       }
@@ -132,15 +134,15 @@ export const useTacticalWebSocket = (
           break;
 
         case 'error':
-          console.error('WebSocket error message:', data.message);
+          logger.error('[useTacticalWebSocket] Server error:', data.message);
           setState(prev => ({ ...prev, error: data.message }));
           break;
 
         default:
-          console.log('Unknown message type:', data.type);
+          logger.debug('[useTacticalWebSocket] Unknown message type:', data.type);
       }
     } catch (err) {
-      console.error('Failed to parse WebSocket message:', err);
+      logger.error('[useTacticalWebSocket] Failed to parse message:', err);
     }
   }, [onFrameUpdate, onEventReceived, onPlayerUpdate]);
 
@@ -157,7 +159,8 @@ export const useTacticalWebSocket = (
       const ws = new WebSocket(WS_URL);
 
       ws.onopen = () => {
-        console.log('TacticalView WebSocket connected');
+        logger.info('[useTacticalWebSocket] Connected');
+        reconnectAttemptsRef.current = 0;
         setState(prev => ({
           ...prev,
           isConnected: true,
@@ -180,7 +183,7 @@ export const useTacticalWebSocket = (
       ws.onmessage = handleMessage;
 
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        logger.error('[useTacticalWebSocket] Connection error:', error);
         setState(prev => ({
           ...prev,
           error: 'Connection error occurred',
@@ -188,7 +191,7 @@ export const useTacticalWebSocket = (
       };
 
       ws.onclose = (event) => {
-        console.log('WebSocket closed:', event.code, event.reason);
+        logger.info('[useTacticalWebSocket] Closed:', event.code, event.reason);
         clearTimers();
         setState(prev => ({
           ...prev,
@@ -198,14 +201,14 @@ export const useTacticalWebSocket = (
         onConnectionChange?.(false);
 
         // Attempt reconnection if not closed cleanly
-        if (!event.wasClean && state.reconnectAttempts < maxReconnectAttempts) {
-          const delay = reconnectInterval * Math.pow(2, state.reconnectAttempts);
-          console.log(`Reconnecting in ${delay}ms... (attempt ${state.reconnectAttempts + 1})`);
+        if (!event.wasClean && reconnectAttemptsRef.current < maxReconnectAttempts) {
+          const delay = reconnectInterval * Math.pow(2, reconnectAttemptsRef.current);
+          logger.info(`[useTacticalWebSocket] Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`);
           
-          setState(prev => ({
-            ...prev,
-            reconnectAttempts: prev.reconnectAttempts + 1,
-          }));
+          setState(prev => {
+            reconnectAttemptsRef.current = prev.reconnectAttempts + 1;
+            return { ...prev, reconnectAttempts: prev.reconnectAttempts + 1 };
+          });
 
           reconnectTimeoutRef.current = setTimeout(() => {
             connect();
@@ -215,14 +218,14 @@ export const useTacticalWebSocket = (
 
       wsRef.current = ws;
     } catch (err) {
-      console.error('Failed to create WebSocket:', err);
+      logger.error('[useTacticalWebSocket] Failed to create connection:', err);
       setState(prev => ({
         ...prev,
         isConnecting: false,
         error: err instanceof Error ? err.message : 'Failed to connect',
       }));
     }
-  }, [matchId, handleMessage, onConnectionChange, startHeartbeat, clearTimers, reconnectInterval, maxReconnectAttempts, state.reconnectAttempts]);
+  }, [matchId, handleMessage, onConnectionChange, startHeartbeat, clearTimers, reconnectInterval, maxReconnectAttempts]);
 
   // Disconnect WebSocket
   const disconnect = useCallback(() => {
@@ -231,6 +234,7 @@ export const useTacticalWebSocket = (
       wsRef.current.close(1000, 'User disconnected');
       wsRef.current = null;
     }
+    reconnectAttemptsRef.current = 0;
     setState(prev => ({
       ...prev,
       isConnected: false,

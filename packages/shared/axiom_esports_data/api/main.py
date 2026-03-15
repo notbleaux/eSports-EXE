@@ -1,3 +1,4 @@
+# [Ver001.000]
 """
 SATOR API - FastAPI Application Entry Point
 Production-ready FastAPI application with health checks, CORS, and graceful startup/shutdown.
@@ -20,6 +21,9 @@ from slowapi.errors import RateLimitExceeded
 
 # Import route modules
 from api.src.routes import players, matches, analytics, collection, dashboard, websocket, search, ml_models
+
+# Import middleware
+from api.src.middleware.firewall import FirewallMiddleware
 
 # Import database manager
 try:
@@ -106,12 +110,20 @@ app.add_middleware(
     allow_origins=[origin.strip() for origin in cors_origins],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],  # Specific headers, not "*"
+    expose_headers=["X-Request-ID"],
     max_age=600,  # 10 minutes
 )
 
 # Add compression middleware
 app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# Add data partition firewall
+app.add_middleware(FirewallMiddleware)
+
+# Initialize rate limiting - slowapi integrates automatically via decorators
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 # ---------------------------------------------------------------------------
@@ -119,7 +131,8 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 # ---------------------------------------------------------------------------
 
 @app.get("/health", tags=["health"])
-async def health_check():
+@limiter.limit("60/minute")  # Health checks can be frequent
+async def health_check(request: Request):
     """
     Health check endpoint for monitoring and keepalive pings.
     
@@ -151,7 +164,8 @@ async def health_check():
 
 
 @app.get("/v1/health", tags=["health"])
-async def v1_health_check():
+@limiter.limit("60/minute")  # Health checks can be frequent
+async def v1_health_check(request: Request):
     """
     v1 Health check endpoint.
     
@@ -184,7 +198,8 @@ async def v1_health_check():
 
 
 @app.get("/ready", tags=["health"])
-async def readiness_check():
+@limiter.limit("30/minute")
+async def readiness_check(request: Request):
     """
     Readiness check for load balancers and orchestrators.
     
@@ -207,7 +222,8 @@ async def readiness_check():
 
 
 @app.get("/v1/ready", tags=["health"])
-async def v1_readiness_check():
+@limiter.limit("30/minute")
+async def v1_readiness_check(request: Request):
     """
     v1 Readiness check for load balancers and orchestrators.
     
@@ -230,7 +246,8 @@ async def v1_readiness_check():
 
 
 @app.get("/live", tags=["health"])
-async def liveness_check():
+@limiter.limit("60/minute")
+async def liveness_check(request: Request):
     """
     Liveness check for Kubernetes-style health monitoring.
     
@@ -240,7 +257,8 @@ async def liveness_check():
 
 
 @app.get("/v1/live", tags=["health"])
-async def v1_liveness_check():
+@limiter.limit("60/minute")
+async def v1_liveness_check(request: Request):
     """
     v1 Liveness check for Kubernetes-style health monitoring.
     

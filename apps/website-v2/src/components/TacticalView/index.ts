@@ -14,6 +14,7 @@ export { TimelineScrubber } from './TimelineScrubber';
 export { AgentSprite } from './AgentSprite';
 export { useTacticalWebSocket } from './useTacticalWebSocket';
 export { TacticalViewDemo } from './TacticalViewDemo';
+export { CanvasErrorBoundary } from './CanvasErrorBoundary';
 
 export type {
   // Core types

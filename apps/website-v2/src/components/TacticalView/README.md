@@ -1,4 +1,6 @@
-# TacticalView Component [Ver001.000]
+[Ver001.000]
+
+# TacticalView Component
 
 An enriched minimap tactical view for VCT (Valorant Champions Tour) matches, providing real-time visualization of agent positions, abilities, and match events.
 

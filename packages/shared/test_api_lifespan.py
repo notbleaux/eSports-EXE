@@ -1,4 +1,5 @@
-"""[Ver001.000]
+# [Ver001.000]
+"""
 API Lifespan Test Script
 ========================
 Tests the lazy initialization lifespan and critical endpoints.

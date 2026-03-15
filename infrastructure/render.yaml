@@ -8,7 +8,7 @@ services:
     name: sator-api
     env: python
     buildCommand: |
-      pip install -r packages/shared/axiom-esports-data/api/requirements.txt
+      pip install -r packages/shared/axiom_esports_data/api/requirements.txt
     startCommand: |
       cd packages/shared/axiom_esports_data/api && 
       uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1

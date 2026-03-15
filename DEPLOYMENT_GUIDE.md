@@ -1,4 +1,6 @@
-# SATOR Platform Deployment Guide [Ver001.000]
+[Ver001.000]
+
+# SATOR Platform Deployment Guide
 
 ## Overview
 

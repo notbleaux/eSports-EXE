@@ -14,6 +14,16 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@shared/*": ["src/shared/*"],
+      "@hub-1/*": ["src/hub-1-sator/*"],
+      "@hub-2/*": ["src/hub-2-rotas/*"],
+      "@hub-3/*": ["src/hub-3-arepo/*"],
+      "@hub-4/*": ["src/hub-4-opera/*"],
+      "@hub-5/*": ["src/hub-5-tenet/*"]
+    },
     "types": ["node", "vitest/globals"]
   },
   "include": ["src/**/*"],

@@ -11,29 +11,28 @@ import {
   TacticalViewProps, 
   TacticalViewState, 
   MatchFrame, 
-  AgentFrame,
   Position,
-  TeamSide,
-  PLAYBACK_SPEEDS,
-  AGENT_ROLE_COLORS
+  PLAYBACK_SPEEDS
 } from './types';
 import { TacticalControls } from './TacticalControls';
 import { TimelineScrubber } from './TimelineScrubber';
-import { AgentSprite } from './AgentSprite';
+// TODO: AgentSprite and AGENT_ROLE_COLORS to be used for enhanced sprite rendering in future update
+import { CanvasErrorBoundary } from './CanvasErrorBoundary';
+import { logger } from '@/utils/logger';
 
 const CANVAS_WIDTH = 1024;
 const CANVAS_HEIGHT = 1024;
 const FPS = 10; // Frames per second for playback
 
 export const TacticalView: React.FC<TacticalViewProps> = ({
-  matchId,
+  matchId: _matchId,
   timeline,
   mapData,
   players,
   initialState,
   onFrameChange,
-  onEventSelect,
-  onPlayerSelect,
+  onEventSelect: _onEventSelect,
+  onPlayerSelect: _onPlayerSelect,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
@@ -293,6 +292,32 @@ export const TacticalView: React.FC<TacticalViewProps> = ({
     }
   }, [currentFrame, onFrameChange]);
 
+  // Canvas context loss/restoration handling
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleContextLost = (e: Event) => {
+      e.preventDefault();
+      logger.warn('Canvas context lost');
+      setState(prev => ({ ...prev, isPlaying: false }));
+    };
+
+    const handleContextRestored = () => {
+      logger.info('Canvas context restored');
+      // Force redraw
+      draw();
+    };
+
+    canvas.addEventListener('webglcontextlost', handleContextLost);
+    canvas.addEventListener('webglcontextrestored', handleContextRestored);
+
+    return () => {
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+    };
+  }, [draw]);
+
   // Handle play/pause
   const togglePlayback = useCallback(() => {
     setState(prev => ({ ...prev, isPlaying: !prev.isPlaying }));
@@ -324,19 +349,21 @@ export const TacticalView: React.FC<TacticalViewProps> = ({
   return (
     <div className="tactical-view">
       <div className="tactical-view__canvas-container">
-        <canvas
-          ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          className="tactical-view__canvas"
-          style={{
-            width: '100%',
-            height: 'auto',
-            maxWidth: '100%',
-            background: '#1a1a2e',
-            borderRadius: '8px',
-          }}
-        />
+        <CanvasErrorBoundary>
+          <canvas
+            ref={canvasRef}
+            width={CANVAS_WIDTH}
+            height={CANVAS_HEIGHT}
+            className="tactical-view__canvas"
+            style={{
+              width: '100%',
+              height: 'auto',
+              maxWidth: '100%',
+              background: '#1a1a2e',
+              borderRadius: '8px',
+            }}
+          />
+        </CanvasErrorBoundary>
       </div>
 
       <TacticalControls

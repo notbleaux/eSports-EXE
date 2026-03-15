@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Play, Pause, SkipBack, SkipForward, ZoomIn, ZoomOut, Eye, EyeOff, Users, Heart, Activity } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, ZoomIn, ZoomOut, Eye, Users, Heart, Activity } from 'lucide-react';
 import { TacticalViewState, PLAYBACK_SPEEDS } from './types';
 
 interface TacticalControlsProps {
@@ -74,6 +74,7 @@ export const TacticalControls: React.FC<TacticalControlsProps> = ({
         <button
           onClick={onToggleTrails}
           className={`tactical-controls__toggle ${showTrails ? 'tactical-controls__toggle--active' : ''}`}
+          aria-pressed={showTrails}
           title="Show Movement Trails"
         >
           <Activity size={16} />
@@ -83,6 +84,7 @@ export const TacticalControls: React.FC<TacticalControlsProps> = ({
         <button
           onClick={onToggleVisionCones}
           className={`tactical-controls__toggle ${showVisionCones ? 'tactical-controls__toggle--active' : ''}`}
+          aria-pressed={showVisionCones}
           title="Show Vision Cones"
         >
           <Eye size={16} />
@@ -92,6 +94,7 @@ export const TacticalControls: React.FC<TacticalControlsProps> = ({
         <button
           onClick={onToggleHealthBars}
           className={`tactical-controls__toggle ${showHealthBars ? 'tactical-controls__toggle--active' : ''}`}
+          aria-pressed={showHealthBars}
           title="Show Health Bars"
         >
           <Heart size={16} />
@@ -101,6 +104,7 @@ export const TacticalControls: React.FC<TacticalControlsProps> = ({
         <button
           onClick={onTogglePlayerNames}
           className={`tactical-controls__toggle ${showPlayerNames ? 'tactical-controls__toggle--active' : ''}`}
+          aria-pressed={showPlayerNames}
           title="Show Player Names"
         >
           <Users size={16} />

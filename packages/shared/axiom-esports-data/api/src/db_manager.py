@@ -17,7 +17,7 @@ Supabase Free Tier Limits:
 import asyncpg
 import logging
 from contextlib import asynccontextmanager
-from typing import Optional, List, Any, Dict
+from typing import Optional, List, Any, Dict, Union
 import os
 import asyncio
 from datetime import datetime
@@ -87,7 +87,7 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"❌ Database initialization failed: {e}")
             self.pool = None
-            self._initialized = True
+            self._initialized = False
             raise
     
     async def _init_connection(self, conn):
@@ -240,7 +240,7 @@ async def get_players_list(
         FROM players
         WHERE map_count >= $1
     """
-    params = [min_maps]
+    params: List[Union[int, str]] = [min_maps]
     
     if region:
         query += f" AND region = ${len(params) + 1}"
@@ -263,7 +263,7 @@ async def get_player_count(
 ) -> int:
     """Get total count of players matching filters."""
     query = "SELECT COUNT(*) FROM players WHERE map_count >= $1"
-    params = [min_maps]
+    params: List[Union[int, str]] = [min_maps]
     
     if region:
         query += f" AND region = ${len(params) + 1}"

@@ -5,7 +5,7 @@
  * Match timeline scrubber with round indicators and key events.
  */
 
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { TimelineScrubberProps } from './types';
 
 export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
@@ -41,6 +41,35 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
     
     onSeek(timestamp);
   }, [totalDuration, onSeek]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const seekAmount = 5000; // 5 seconds
+    switch(e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        onSeek(Math.max(0, currentTimestamp - seekAmount));
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        onSeek(Math.min(totalDuration, currentTimestamp + seekAmount));
+        break;
+      case 'Home':
+        e.preventDefault();
+        onSeek(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        onSeek(totalDuration);
+        break;
+    }
+  }, [currentTimestamp, totalDuration, onSeek]);
+
+  // ARIA value text
+  const ariaValueText = useMemo(() => 
+    `${formatTime(currentTimestamp)} of ${formatTime(totalDuration)}`,
+    [currentTimestamp, totalDuration]
+  );
 
   // Get event icon based on type
   const getEventIcon = (type: string): string => {
@@ -83,6 +112,14 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
         ref={timelineRef}
         className="timeline-scrubber__track"
         onClick={handleTimelineClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="slider"
+        aria-label="Match timeline"
+        aria-valuenow={currentTimestamp}
+        aria-valuemin={0}
+        aria-valuemax={totalDuration}
+        aria-valuetext={ariaValueText}
       >
         {/* Progress bar */}
         <div 
@@ -117,7 +154,7 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
           
           return (
             <div
-              key={index}
+              key={`${event.timestamp}-${index}`}
               className="timeline-scrubber__event"
               style={{
                 left: `${position}%`,

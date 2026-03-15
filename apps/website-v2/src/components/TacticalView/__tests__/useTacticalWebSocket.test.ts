@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.001] */
 /**
  * useTacticalWebSocket Tests
  * ==========================
@@ -23,10 +23,11 @@ class MockWebSocket {
   onerror: ((event: Event) => void) | null = null;
 
   sentMessages: any[] = [];
+  private connectionTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(public url: string) {
-    // Simulate connection after a brief delay
-    setTimeout(() => {
+    // Simulate async connection
+    this.connectionTimeout = setTimeout(() => {
       this.readyState = MockWebSocket.OPEN;
       this.onopen?.(new Event('open'));
     }, 10);
@@ -37,23 +38,43 @@ class MockWebSocket {
   }
 
   close(code = 1000, reason = '') {
+    if (this.connectionTimeout) {
+      clearTimeout(this.connectionTimeout);
+    }
     this.readyState = MockWebSocket.CLOSED;
-    this.onclose?.({ code, reason, wasClean: true } as CloseEvent);
+    this.onclose?.(new CloseEvent('close', { code, reason, wasClean: true }));
   }
 
   // Helper to simulate incoming messages
   simulateMessage(data: any) {
-    this.onmessage?.(new MessageEvent('message', { data: JSON.stringify(data) }));
+    this.onmessage?.(new MessageEvent('message', { 
+      data: JSON.stringify(data),
+      origin: this.url
+    }));
   }
 
-  // Helper to simulate error
+  // Helper to simulate errors
   simulateError() {
     this.onerror?.(new Event('error'));
   }
+
+  // Helper to simulate unexpected close
+  simulateClose(eventInit: CloseEventInit = { code: 1006, wasClean: false }) {
+    this.readyState = MockWebSocket.CLOSED;
+    this.onclose?.(new CloseEvent('close', eventInit));
+  }
 }
 
-// Replace global WebSocket
-global.WebSocket = MockWebSocket as any;
+// Track mock instances for assertions
+const mockInstances: MockWebSocket[] = [];
+
+const originalMockWebSocket = MockWebSocket;
+(global as any).WebSocket = class extends MockWebSocket {
+  constructor(url: string) {
+    super(url);
+    mockInstances.push(this);
+  }
+};
 
 describe('useTacticalWebSocket', () => {
   const mockOptions: UseTacticalWebSocketOptions = {
@@ -66,11 +87,7 @@ describe('useTacticalWebSocket', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
+    mockInstances.length = 0;  // Reset instances
   });
 
   it('should initialize with disconnected state', () => {
@@ -109,7 +126,8 @@ describe('useTacticalWebSocket', () => {
   });
 
   it('should subscribe to match on connect', async () => {
-    const { result } = renderHook(() => useTacticalWebSocket(mockOptions));
+    const matchId = 'test-match-123';
+    const { result } = renderHook(() => useTacticalWebSocket({ ...mockOptions, matchId }));
 
     act(() => {
       result.current[1].connect();
@@ -119,8 +137,13 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     });
 
-    // Check that subscribe message was sent
-    // Note: In real implementation, we'd need to access the WebSocket instance
+    // Verify subscribe message was sent
+    const mockWs = mockInstances[0];
+    expect(mockWs).toBeDefined();
+    expect(mockWs.sentMessages).toContainEqual({
+      type: 'subscribe',
+      channel: `match:${matchId}`
+    });
   });
 
   it('should handle frame_update messages', async () => {
@@ -145,9 +168,13 @@ describe('useTacticalWebSocket', () => {
     });
 
     // Simulate receiving a frame update
-    // This would require access to the WebSocket instance in the hook
-    // For now, we verify the callback structure
-    expect(typeof mockOptions.onFrameUpdate).toBe('function');
+    const mockWs = mockInstances[0];
+    act(() => {
+      mockWs.simulateMessage({ type: 'frame_update', frame: mockFrame });
+    });
+
+    // Verify callback was called with the frame data
+    expect(mockOptions.onFrameUpdate).toHaveBeenCalledWith(mockFrame);
   });
 
   it('should handle event messages', async () => {
@@ -167,7 +194,14 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     });
 
-    expect(typeof mockOptions.onEventReceived).toBe('function');
+    // Simulate receiving an event message
+    const mockWs = mockInstances[0];
+    act(() => {
+      mockWs.simulateMessage({ type: 'event', event: mockEvent });
+    });
+
+    // Verify callback was called with the event data
+    expect(mockOptions.onEventReceived).toHaveBeenCalledWith(mockEvent);
   });
 
   it('should send seek command', async () => {
@@ -185,7 +219,12 @@ describe('useTacticalWebSocket', () => {
       result.current[1].seekToTimestamp(45000);
     });
 
-    // Verify seek message was sent (would need WebSocket instance access)
+    // Verify seek message was sent
+    const mockWs = mockInstances[0];
+    expect(mockWs.sentMessages).toContainEqual({
+      type: 'seek',
+      timestamp: 45000
+    });
   });
 
   it('should disconnect cleanly', async () => {
@@ -220,11 +259,18 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     }, { timeout: 5000 });
 
-    // Wait for ping interval (30 seconds - shortened for test)
-    // This would require modifying the hook to accept configurable intervals
+    // Verify WebSocket instance exists for heartbeat verification
+    const mockWs = mockInstances[0];
+    expect(mockWs).toBeDefined();
+    expect(mockWs.readyState).toBe(MockWebSocket.OPEN);
+    
+    // Verify connection change callback was called
+    expect(mockOptions.onConnectionChange).toHaveBeenCalledWith(true);
   });
 
   it('should attempt reconnection on unexpected close', async () => {
+    vi.useRealTimers(); // Use real timers for reconnection test
+    
     const { result } = renderHook(() => 
       useTacticalWebSocket({ 
         ...mockOptions, 
@@ -242,7 +288,18 @@ describe('useTacticalWebSocket', () => {
     });
 
     // Simulate unexpected close
-    // This would require WebSocket instance access
+    const mockWs = mockInstances[0];
+    act(() => {
+      mockWs.simulateClose({ code: 1006, reason: 'Connection lost', wasClean: false });
+    });
+
+    // Verify disconnected state
+    expect(result.current[0].isConnected).toBe(false);
+
+    // Wait for reconnection attempt
+    await waitFor(() => {
+      expect(result.current[0].reconnectAttempts).toBeGreaterThan(0);
+    }, { timeout: 5000 });
   });
 
   it('should update lastPing on ping', async () => {
@@ -268,7 +325,7 @@ describe('useTacticalWebSocket', () => {
         super(url);
         setTimeout(() => {
           this.readyState = MockWebSocket.CLOSED;
-          this.onclose?.({ code: 1006, reason: 'Connection failed', wasClean: false } as CloseEvent);
+          this.onclose?.(new CloseEvent('close', { code: 1006, reason: 'Connection failed', wasClean: false }));
         }, 10);
       }
     };

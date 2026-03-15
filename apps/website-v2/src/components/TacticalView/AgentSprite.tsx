@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { AgentSpriteProps, AgentRole, AGENT_ROLE_COLORS } from './types';
+import { AgentSpriteProps, AGENT_ROLE_COLORS } from './types';
 
 // Agent ability icons (simplified representations)
 const AGENT_ABILITY_ICONS: Record<string, string[]> = {
@@ -82,7 +82,16 @@ export const AgentSprite: React.FC<AgentSpriteProps> = ({
         cursor: onClick ? 'pointer' : 'default',
         pointerEvents: 'auto',
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`${player.name} playing ${agent.name}`}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
     >
       {/* Main agent circle */}
       <div 
@@ -226,12 +235,28 @@ export const AgentSprite: React.FC<AgentSpriteProps> = ({
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        @media (prefers-reduced-motion: no-preference) {
+          .agent-sprite__status {
+            animation: pulse 1s infinite;
+          }
+          .agent-sprite__spike-indicator {
+            animation: glow 1s infinite alternate;
+          }
+        }
+
+        /* Without animation for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          .agent-sprite__status,
+          .agent-sprite__spike-indicator {
+            animation: none;
+          }
+        }
+
         .agent-sprite__status {
           position: absolute;
           top: -8px;
           right: -8px;
           font-size: 12px;
-          animation: pulse 1s infinite;
         }
 
         @keyframes pulse {
@@ -244,7 +269,6 @@ export const AgentSprite: React.FC<AgentSpriteProps> = ({
           bottom: -8px;
           right: -8px;
           font-size: 12px;
-          animation: glow 1s infinite alternate;
         }
 
         @keyframes glow {

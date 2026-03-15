@@ -18,7 +18,6 @@ import {
 } from '../constants/ml'
 import { analyticsSync } from '../services/analyticsSync'
 import { streamingLogger } from '../utils/logger'
-import { streamingLogger } from '../utils/logger'
 
 /**
  * Debounce hook for stable debounced callbacks

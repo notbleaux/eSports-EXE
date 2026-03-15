@@ -1,4 +1,6 @@
-# Week 1 Task Summary [Ver001.000]
+[Ver001.000]
+
+# Week 1 Task Summary
 **Date**: 2026-03-15
 **Mission**: MAIN (API Deployment) + ACCESSORY (TacticalView)
 

@@ -1,0 +1,657 @@
+﻿src/api/__tests__/client.test.ts(9,10): error TS6133: 'API_CONFIG' is declared but its value is never read.
+src/api/__tests__/health.test.ts(8,48): error TS6133: 'HealthCheckResponse' is declared but its value is never read.
+src/api/__tests__/ml.test.ts(9,15): error TS6133: 'ApiRequestError' is declared but its value is never read.
+src/api/__tests__/ml.test.ts(10,1): error TS6133: 'API_BASE_URL' is declared but its value is never read.
+src/api/__tests__/ml.test.ts(119,12): error TS18046: 'response.data' is of type 'unknown'.
+src/api/__tests__/ml.test.ts(144,12): error TS18046: 'response.data' is of type 'unknown'.
+src/api/__tests__/ml.test.ts(145,12): error TS18046: 'response.data' is of type 'unknown'.
+src/api/__tests__/ml.test.ts(173,22): error TS2339: Property 'name' does not exist on type '{}'.
+src/api/__tests__/ml.test.ts(174,22): error TS2339: Property 'results' does not exist on type '{}'.
+src/api/__tests__/ml.test.ts(175,22): error TS2339: Property 'randomField' does not exist on type '{}'.
+src/api/__tests__/ml.test.ts(178,12): error TS18046: 'response.data' is of type 'unknown'.
+src/api/analytics.ts(10,1): error TS6192: All imports in import declaration are unused.
+src/api/crossReference.ts(9,1): error TS6133: 'ApiResponse' is declared but its value is never read.
+src/api/crossReference.ts(282,30): error TS2554: Expected 2-3 arguments, but got 1.
+src/api/crossReference.ts(299,3): error TS2322: Type 'unknown' is not assignable to type '{ sator: { available: boolean; last_sync: string; }; opera: { available: boolean; last_sync: string; }; rotas: { available: boolean; last_sync: string; }; }'.
+src/api/crossReference.ts(322,10): error TS18046: 'response.data' is of type 'unknown'.
+src/api/crossReference.ts(335,10): error TS18046: 'response.data' is of type 'unknown'.
+src/api/health.ts(87,5): error TS7053: Element implicitly has an 'any' type because expression of type 'WebVitalName' can't be used to index type '{ LCP?: number | undefined; FID?: number | undefined; CLS?: number | undefined; FCP?: number | undefined; TTFB?: number | undefined; }'.
+  Property 'INP' does not exist on type '{ LCP?: number | undefined; FID?: number | undefined; CLS?: number | undefined; FCP?: number | undefined; TTFB?: number | undefined; }'.
+src/api/health.ts(111,32): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/api/health.ts(112,28): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/api/health.ts(169,11): error TS6133: 'response' is declared but its value is never read.
+src/api/index.ts(11,1): error TS2308: Module './ml' has already exported a member named 'getModel'. Consider explicitly re-exporting to resolve the ambiguity.
+src/api/index.ts(11,1): error TS2308: Module './ml' has already exported a member named 'getModels'. Consider explicitly re-exporting to resolve the ambiguity.
+src/api/index.ts(16,1): error TS2308: Module './pandascore' has already exported a member named 'clearCache'. Consider explicitly re-exporting to resolve the ambiguity.
+src/api/index.ts(16,1): error TS2308: Module './pandascore' has already exported a member named 'clearCacheByType'. Consider explicitly re-exporting to resolve the ambiguity.
+src/api/ml.ts(24,3): error TS2739: Type 'ApiResponse<ModelListResponse>' is missing the following properties from type 'ModelListResponse': models, total
+src/api/ml.ts(31,3): error TS2740: Type 'ApiResponse<ModelInfoResponse>' is missing the following properties from type 'ModelInfoResponse': id, version, url, checksum, and 3 more.
+src/api/ml.ts(61,3): error TS2741: Property 'prediction' is missing in type 'ApiResponse<PredictResponse>' but required in type 'PredictResponse'.
+src/api/ml.ts(76,3): error TS2739: Type 'ApiResponse<BatchPredictResponse>' is missing the following properties from type 'BatchPredictResponse': predictions, totalTime, throughput
+src/api/ml.ts(83,3): error TS2739: Type 'ApiResponse<HealthResponse>' is missing the following properties from type 'HealthResponse': timestamp, version, uptime
+src/api/ml.ts(90,3): error TS2739: Type 'ApiResponse<ReadyResponse>' is missing the following properties from type 'ReadyResponse': ready, checks
+src/api/mlRegistry.ts(49,3): error TS2739: Type 'ApiResponse<MLModelListResponse>' is missing the following properties from type 'MLModelListResponse': models, total, offset, limit
+src/api/mlRegistry.ts(56,3): error TS2740: Type 'ApiResponse<MLModel>' is missing the following properties from type 'MLModel': id, name, version, type, and 4 more.
+src/api/mlRegistry.ts(63,3): error TS2740: Type 'ApiResponse<MLModel>' is missing the following properties from type 'MLModel': id, name, version, type, and 4 more.
+src/api/mlRegistry.ts(70,3): error TS2740: Type 'ApiResponse<MLModel>' is missing the following properties from type 'MLModel': id, name, version, type, and 4 more.
+src/api/mlRegistry.ts(77,3): error TS2322: Type 'ApiResponse<void>' is not assignable to type 'void'.
+src/api/mlRegistry.ts(87,3): error TS2740: Type 'ApiResponse<Deployment>' is missing the following properties from type 'Deployment': id, model_id, environment, deployment_type, and 2 more.
+src/api/mlRegistry.ts(95,3): error TS2322: Type 'ApiResponse<void>' is not assignable to type 'void'.
+src/api/mlRegistry.ts(105,3): error TS2740: Type 'ApiResponse<ModelMetric>' is missing the following properties from type 'ModelMetric': id, model_id, metric_name, metric_value, and 2 more.
+src/api/mlRegistry.ts(127,3): error TS2739: Type 'ApiResponse<ModelMetricsHistory>' is missing the following properties from type 'ModelMetricsHistory': model_id, metrics
+src/api/mlRegistry.ts(136,3): error TS2740: Type 'ApiResponse<ABTest>' is missing the following properties from type 'ABTest': id, name, model_a_id, model_b_id, and 7 more.
+src/api/mlRegistry.ts(155,3): error TS2740: Type 'ApiResponse<ABTest[]>' is missing the following properties from type 'ABTest[]': length, pop, push, concat, and 28 more.
+src/api/mlRegistry.ts(162,3): error TS2740: Type 'ApiResponse<ABTest>' is missing the following properties from type 'ABTest': id, name, model_a_id, model_b_id, and 7 more.
+src/api/mlRegistry.ts(169,3): error TS2740: Type 'ApiResponse<ABTest>' is missing the following properties from type 'ABTest': id, name, model_a_id, model_b_id, and 7 more.
+src/api/mlRegistry.ts(180,3): error TS2740: Type 'ApiResponse<ABTest>' is missing the following properties from type 'ABTest': id, name, model_a_id, model_b_id, and 7 more.
+src/api/mlRegistry.ts(190,3): error TS2739: Type 'ApiResponse<ModelComparison>' is missing the following properties from type 'ModelComparison': model_a, model_b, recommendation
+src/api/mlRegistry.ts(201,3): error TS2740: Type 'ApiResponse<ActiveDeployment[]>' is missing the following properties from type 'ActiveDeployment[]': length, pop, push, concat, and 28 more.
+src/api/pandascore.ts(8,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/api/pandascore.ts(17,38): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/api/riot.ts(11,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/api/riot.ts(16,34): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/api/riot.ts(17,34): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/api/riot.ts(367,20): error TS6133: 'lock' is declared but its value is never read.
+src/api/search.ts(8,1): error TS6133: 'ApiResponse' is declared but its value is never read.
+src/components/__tests__/MLPredictionPanel.test.tsx(9,1): error TS6133: 'React' is declared but its value is never read.
+src/components/__tests__/MLPredictionPanel.test.tsx(39,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: true; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: true; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(61,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: Error; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: Error; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(83,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(106,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(133,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(158,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(186,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(218,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(238,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: true; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: true; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(258,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: Error; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: false; isModelLoading: false; error: Error; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(283,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(310,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(346,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(376,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/MLPredictionPanel.test.tsx(405,49): error TS2345: Argument of type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is not assignable to parameter of type 'UseMLInferenceReturn'.
+  Type '{ loadModel: Mock<Procedure>; predict: Mock<Procedure>; isModelReady: true; isModelLoading: false; error: null; progress: number; useWorker: true; isWarmedUp: false; warmUp: Mock<...>; predictBatch: Mock<...>; getModelInfo: Mock<...>; }' is missing the following properties from type 'UseMLInferenceReturn': queueDepth, maxQueueSize
+src/components/__tests__/StreamingPredictionPanel.test.tsx(8,37): error TS6133: 'waitFor' is declared but its value is never read.
+src/components/__tests__/StreamingPredictionPanel.test.tsx(9,1): error TS6133: 'React' is declared but its value is never read.
+src/components/__tests__/StreamingPredictionPanel.test.tsx(485,26): error TS6133: 'satorContainer' is declared but its value is never read.
+src/components/__tests__/StreamingPredictionPanel.test.tsx(491,13): error TS6133: 'operaContainer' is declared but its value is never read.
+src/components/error/DataErrorBoundary.tsx(10,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/components/error/DataErrorBoundary.tsx(150,43): error TS6133: 'errorInfo' is declared but its value is never read.
+src/components/error/HubErrorBoundary.tsx(9,10): error TS6133: 'AlertTriangle' is declared but its value is never read.
+src/components/error/HubErrorBoundary.tsx(9,36): error TS6133: 'Home' is declared but its value is never read.
+src/components/error/HubErrorBoundary.tsx(9,42): error TS6133: 'ArrowLeft' is declared but its value is never read.
+src/components/error/HubErrorBoundary.tsx(10,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/components/error/HubErrorFallback.tsx(251,3): error TS6133: 'componentName' is declared but its value is never read.
+src/components/error/index.ts(11,36): error TS7016: Could not find a declaration file for module '../grid/PanelErrorBoundary'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/website-v2/src/components/grid/PanelErrorBoundary.jsx' implicitly has an 'any' type.
+src/components/error/MLFeatureWrapper.tsx(57,3): error TS6133: 'onRetry' is declared but its value is never read.
+src/components/MLPredictionPanel.tsx(10,31): error TS7016: Could not find a declaration file for module './grid/PanelSkeleton'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/website-v2/src/components/grid/PanelSkeleton.jsx' implicitly has an 'any' type.
+src/components/MLPredictionPanel.tsx(47,9): error TS6133: 'inputRef' is declared but its value is never read.
+src/components/TacticalView/__tests__/performance.test.ts(9,1): error TS6192: All imports in import declaration are unused.
+src/components/TacticalView/__tests__/performance.test.ts(10,1): error TS6133: 'React' is declared but its value is never read.
+src/components/TacticalView/__tests__/performance.test.ts(170,15): error TS6133: 'canvasX' is declared but its value is never read.
+src/components/TacticalView/__tests__/performance.test.ts(171,15): error TS6133: 'canvasY' is declared but its value is never read.
+src/components/TacticalView/__tests__/TacticalView.test.tsx(8,1): error TS6133: 'React' is declared but its value is never read.
+src/components/TacticalView/__tests__/TacticalView.test.tsx(42,1): error TS2322: Type 'Mock<(contextId: string) => { clearRect: Mock<Procedure>; fillRect: Mock<Procedure>; strokeRect: Mock<Procedure>; beginPath: Mock<...>; ... 11 more ...; setTransform: Mock<...>; } | null>' is not assignable to type '{ (contextId: "2d", options?: CanvasRenderingContext2DSettings | undefined): CanvasRenderingContext2D | null; (contextId: "bitmaprenderer", options?: ImageBitmapRenderingContextSettings | undefined): ImageBitmapRenderingContext | null; (contextId: "webgl", options?: WebGLContextAttributes | undefined): WebGLRenderin...'.
+  Type '{ clearRect: Mock<Procedure>; fillRect: Mock<Procedure>; strokeRect: Mock<Procedure>; beginPath: Mock<Procedure>; ... 11 more ...; setTransform: Mock<...>; } | null' is not assignable to type 'CanvasRenderingContext2D | null'.
+    Type '{ clearRect: Mock<Procedure>; fillRect: Mock<Procedure>; strokeRect: Mock<Procedure>; beginPath: Mock<Procedure>; ... 11 more ...; setTransform: Mock<...>; }' is missing the following properties from type 'CanvasRenderingContext2D': canvas, globalAlpha, globalCompositeOperation, drawImage, and 52 more.
+src/components/TacticalView/TacticalControls.tsx(9,23): error TS6133: 'SkipBack' is declared but its value is never read.
+src/components/TacticalView/TacticalControls.tsx(9,33): error TS6133: 'SkipForward' is declared but its value is never read.
+src/components/TacticalView/TacticalControls.tsx(10,10): error TS6133: 'TacticalViewState' is declared but its value is never read.
+src/components/TacticalView/TacticalView.tsx(14,3): error TS6133: 'AgentFrame' is declared but its value is never read.
+src/components/TacticalView/TacticalView.tsx(16,3): error TS6133: 'TeamSide' is declared but its value is never read.
+src/components/TacticalView/TacticalView.tsx(23,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/components/TacticalView/TacticalView.tsx(30,3): error TS6133: 'matchId' is declared but its value is never read.
+src/components/TacticalView/TacticalView.tsx(36,3): error TS6133: 'onEventSelect' is declared but its value is never read.
+src/components/TacticalView/TacticalView.tsx(37,3): error TS6133: 'onPlayerSelect' is declared but its value is never read.
+src/components/TacticalView/TacticalViewDemo.tsx(11,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/components/TacticalView/TacticalViewDemo.tsx(347,19): error TS6133: 'wsActions' is declared but its value is never read.
+src/components/TacticalView/TimelineScrubber.tsx(131,35): error TS6133: 'index' is declared but its value is never read.
+src/components/TacticalView/useTacticalWebSocket.ts(10,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/components/TacticalView/useTacticalWebSocket.ts(39,28): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/components/UnifiedGrid.tsx(175,33): error TS2339: Property 'content' does not exist on type 'Panel'.
+src/components/UnifiedGrid.tsx(185,36): error TS6133: 'err' is declared but its value is never read.
+src/components/UnifiedGrid.tsx(192,34): error TS6133: 'err' is declared but its value is never read.
+src/components/UnifiedGrid.tsx(245,11): error TS6133: 'existing' is declared but its value is never read.
+src/components/Wiki/HelpPanel.tsx(19,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/components/Wiki/HelpPanel.tsx(20,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/components/Wiki/HelpPanel.tsx(39,10): error TS6133: 'isSearching' is declared but its value is never read.
+src/components/Wiki/WikiArticleViewer.tsx(17,3): error TS6133: 'XCircle' is declared but its value is never read.
+src/components/Wiki/WikiArticleViewer.tsx(20,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/components/Wiki/WikiArticleViewer.tsx(21,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/components/Wiki/WikiArticleViewer.tsx(33,3): error TS6133: 'showNavigation' is declared but its value is never read.
+src/components/Wiki/WikiEditor.tsx(9,1): error TS6133: 'motion' is declared but its value is never read.
+src/components/Wiki/WikiEditor.tsx(16,3): error TS6133: 'Image' is declared but its value is never read.
+src/components/Wiki/WikiEditor.tsx(23,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/components/Wiki/WikiEditor.tsx(24,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/components/Wiki/WikiPage.tsx(12,3): error TS6133: 'BookOpen' is declared but its value is never read.
+src/components/Wiki/WikiPage.tsx(13,3): error TS6133: 'Search' is declared but its value is never read.
+src/components/Wiki/WikiPage.tsx(15,3): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/components/Wiki/WikiPage.tsx(17,3): error TS6133: 'Tag' is declared but its value is never read.
+src/components/Wiki/WikiPage.tsx(19,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/components/Wiki/WikiPage.tsx(20,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/components/Wiki/WikiPage.tsx(183,12): error TS2304: Cannot find name 'AnimatePresence'.
+src/components/Wiki/WikiPage.tsx(246,13): error TS2304: Cannot find name 'AnimatePresence'.
+src/components/Wiki/WikiSearch.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/components/Wiki/WikiSearch.tsx(24,3): error TS6133: 'isHelpOnly' is declared but its value is never read.
+src/config/environment.ts(44,31): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/config/environment.ts(45,30): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/config/environment.ts(46,42): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/config/environment.ts(47,24): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/config/index.ts(12,1): error TS2308: Module './api' has already exported a member named 'WS_BASE_URL'. Consider explicitly re-exporting to resolve the ambiguity.
+src/dev/memory-monitor.ts(67,9): error TS2322: Type '{ timestamp: number; jsHeapSize?: number | undefined; jsHeapTotal?: number | undefined; jsHeapLimit?: number | undefined; workerCount: number; panelMountCount: number; panelUnmountCount: number; }' is not assignable to type 'MemorySnapshot'.
+  Types of property 'jsHeapSize' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/dev/ml-ab-testing.ts(94,10): error TS6133: 'stdDev' is declared but its value is never read.
+src/dev/ml-ab-testing.ts(203,7): error TS6133: 'modelA' is declared but its value is never read.
+src/dev/ml-ab-testing.ts(204,7): error TS6133: 'modelB' is declared but its value is never read.
+src/dev/ml-performance-suite.ts(8,1): error TS6133: 'useMLCacheStore' is declared but its value is never read.
+src/dev/ml-performance-suite.ts(82,9): error TS6133: 'useMLInference' is declared but its value is never read.
+src/dev/ml-performance-suite.ts(160,9): error TS6133: 'finalMemory' is declared but its value is never read.
+src/dev/stress-test.tsx(75,11): error TS6133: 'scrollInterval' is declared but its value is never read.
+src/dev/test-runner.ts(6,10): error TS6133: 'benchmark' is declared but its value is never read.
+src/dev/VirtualGrid.test.tsx(2,1): error TS6133: 'renderHook' is declared but its value is never read.
+src/hooks/__tests__/useMLInference.circuit.test.ts(12,24): error TS6133: 'expect' is declared but its value is never read.
+src/hooks/__tests__/useMLInference.circuit.test.ts(12,32): error TS6133: 'vi' is declared but its value is never read.
+src/hooks/useMLInference.ts(12,1): error TS6192: All imports in import declaration are unused.
+src/hooks/useMLInference.ts(20,1): error TS6133: 'analyticsSync' is declared but its value is never read.
+src/hooks/useMLInference.ts(267,7): error TS2304: Cannot find name 'isCleaningUpRef'.
+src/hooks/useMLInference.ts(270,11): error TS2304: Cannot find name 'loadAbortRef'.
+src/hooks/useMLInference.ts(271,9): error TS2304: Cannot find name 'loadAbortRef'.
+src/hooks/useMLInference.ts(272,9): error TS2304: Cannot find name 'loadAbortRef'.
+src/hooks/useMLInference.ts(338,42): error TS2304: Cannot find name 'isCleaningUpRef'.
+src/hooks/useMLInference.ts(356,42): error TS2304: Cannot find name 'isCleaningUpRef'.
+src/hooks/useMLInference.ts(582,15): error TS2304: Cannot find name 'isCleaningUpRef'.
+src/hooks/useMLModelManager.ts(10,32): error TS6133: 'CachedModel' is declared but its value is never read.
+src/hooks/useMLModelManager.ts(11,31): error TS2614: Module '"./useMLInference"' has no exported member 'ModelInfo'. Did you mean to use 'import ModelInfo from "./useMLInference"' instead?
+src/hooks/useMLModelManager.ts(135,56): error TS6133: 'preload' is declared but its value is never read.
+src/hooks/useMLModelManagerWithRegistry.ts(115,13): error TS6133: 'params' is declared but its value is never read.
+src/hooks/useServiceWorker.ts(54,18): error TS2345: Argument of type '(prev: ServiceWorkerState) => { isRegistered: true; registration: { update: () => Promise<ServiceWorkerRegistration>; unregister: () => Promise<...>; }; isSupported: boolean; isOfflineReady: boolean; updateAvailable: boolean; waitingWorker: ServiceWorker | null; }' is not assignable to parameter of type 'SetStateAction<ServiceWorkerState>'.
+  Type '(prev: ServiceWorkerState) => { isRegistered: true; registration: { update: () => Promise<ServiceWorkerRegistration>; unregister: () => Promise<...>; }; isSupported: boolean; isOfflineReady: boolean; updateAvailable: boolean; waitingWorker: ServiceWorker | null; }' is not assignable to type '(prevState: ServiceWorkerState) => ServiceWorkerState'.
+    Call signature return types '{ isRegistered: true; registration: { update: () => Promise<ServiceWorkerRegistration>; unregister: () => Promise<boolean>; }; isSupported: boolean; isOfflineReady: boolean; updateAvailable: boolean; waitingWorker: ServiceWorker | null; }' and 'ServiceWorkerState' are incompatible.
+      The types returned by 'registration.update()' are incompatible between these types.
+        Type 'Promise<ServiceWorkerRegistration>' is not assignable to type 'Promise<void>'.
+          Type 'ServiceWorkerRegistration' is not assignable to type 'void'.
+src/hooks/useStreamingInference.ts(11,15): error TS2440: Import declaration conflicts with local declaration of 'PredictionResult'.
+src/hooks/useStreamingInference.ts(11,33): error TS2440: Import declaration conflicts with local declaration of 'StreamingMetrics'.
+src/hooks/useStreamingInference.ts(12,1): error TS6192: All imports in import declaration are unused.
+src/hooks/useStreamingInference.ts(19,1): error TS6133: 'analyticsSync' is declared but its value is never read.
+src/hooks/useStreamingInference.ts(20,10): error TS2300: Duplicate identifier 'streamingLogger'.
+src/hooks/useStreamingInference.ts(21,10): error TS2300: Duplicate identifier 'streamingLogger'.
+src/hooks/useStreamingInference.ts(108,10): error TS6133: 'debounce' is declared but its value is never read.
+src/hooks/useWebSocket.ts(179,5): error TS2451: Cannot redeclare block-scoped variable 'reconnect'.
+src/hooks/useWebSocket.ts(302,58): error TS2339: Property 'status' does not exist on type '{}'.
+src/hooks/useWebSocket.ts(440,9): error TS2451: Cannot redeclare block-scoped variable 'reconnect'.
+src/hooks/useWebSocket.ts(522,7): error TS2349: This expression is not callable.
+  Type 'Boolean' has no call signatures.
+src/hooks/useWebSocket.ts(544,5): error TS2322: Type 'boolean' is not assignable to type '() => void'.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(22,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(23,54): error TS2307: Cannot find module '@/store/predictionHistoryStore' or its corresponding type declarations.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(206,27): error TS6133: 'getStats' is declared but its value is never read.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(242,13): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(243,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(246,30): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(246,33): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(250,39): error TS7006: Parameter 'sum' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(250,44): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(255,55): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/MLAnalyticsPanel.tsx(263,34): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/MLModelRegistry.tsx(10,3): error TS6133: 'Box' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(13,3): error TS6133: 'GitBranch' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(16,3): error TS6133: 'Pause' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(19,3): error TS6133: 'XCircle' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(20,3): error TS6133: 'ChevronDown' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(23,3): error TS6133: 'Filter' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(29,3): error TS6133: 'BarChart3' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(30,3): error TS6133: 'GitCommit' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(31,3): error TS6133: 'ArrowRight' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(33,3): error TS6133: 'Trash2' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(48,3): error TS6133: 'BarChart' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(49,3): error TS6133: 'Bar' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(51,3): error TS6133: 'RadarChart' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(52,3): error TS6133: 'PolarGrid' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(53,3): error TS6133: 'PolarAngleAxis' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(54,3): error TS6133: 'PolarRadiusAxis' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(55,3): error TS6133: 'Radar' is declared but its value is never read.
+src/hub-2-rotas/MLModelRegistry.tsx(59,28): error TS2307: Cannot find module '../../api/mlRegistry' or its corresponding type declarations.
+src/hub-2-rotas/MLModelRegistry.tsx(67,8): error TS2307: Cannot find module '../../types/mlRegistry' or its corresponding type declarations.
+src/hub-2-rotas/MLModelRegistry.tsx(68,35): error TS2307: Cannot find module '../../hooks/useMLModelManager' or its corresponding type declarations.
+src/hub-2-rotas/MLModelRegistry.tsx(314,13): error TS18046: 'data' is of type 'unknown'.
+src/hub-2-rotas/MLModelRegistry.tsx(441,48): error TS7006: Parameter 'tag' implicitly has an 'any' type.
+src/hub-2-rotas/MLModelRegistry.tsx(642,38): error TS7006: Parameter 'tag' implicitly has an 'any' type.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(8,8): error TS6133: 'React' is declared but its value is never read.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(9,1): error TS6133: 'motion' is declared but its value is never read.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(27,47): error TS6133: 'Zap' is declared but its value is never read.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(28,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(29,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(30,43): error TS2307: Cannot find module '@/store/predictionHistoryStore' or its corresponding type declarations.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(257,13): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(257,16): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(270,26): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(304,26): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/ModelPerformanceCharts.tsx(332,26): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/PredictionHistory.tsx(26,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-2-rotas/PredictionHistory.tsx(27,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-2-rotas/PredictionHistory.tsx(30,3): error TS6133: 'PredictionResult' is declared but its value is never read.
+src/hub-2-rotas/PredictionHistory.tsx(32,8): error TS2307: Cannot find module '@/store/predictionHistoryStore' or its corresponding type declarations.
+src/hub-2-rotas/PredictionHistory.tsx(49,7): error TS6133: 'label' is declared but its value is never read.
+src/hub-2-rotas/PredictionHistory.tsx(121,3): error TS6133: 'muted' is declared but its value is never read.
+src/hub-2-rotas/PredictionHistory.tsx(135,47): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/hub-2-rotas/PredictionHistory.tsx(283,21): error TS2322: Type 'unknown' is not assignable to type 'Key | null | undefined'.
+src/hub-2-rotas/PredictionHistory.tsx(283,33): error TS2322: Type 'unknown' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/hub-2-rotas/PredictionHistory.tsx(284,15): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(30,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(31,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/website-v2/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(32,63): error TS2307: Cannot find module '@/api/crossReference' or its corresponding type declarations.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(455,41): error TS7006: Parameter 'source' implicitly has an 'any' type.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(530,47): error TS7006: Parameter 'query' implicitly has an 'any' type.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(530,54): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(561,36): error TS7006: Parameter 'query' implicitly has an 'any' type.
+src/hub-3-arepo/components/Forum/ForumCategoryList.tsx(17,3): error TS6133: 'Loader2' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumCategoryList.tsx(19,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumCategoryList.tsx(20,35): error TS2307: Cannot find module '@/components/error' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumContainer.tsx(8,8): error TS6133: 'React' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumContainer.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumContainer.tsx(12,53): error TS2307: Cannot find module '@/components/error' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumContainer.tsx(33,7): error TS6133: 'AREPO_THEME' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumContainer.tsx(170,9): error TS6133: 'handleQuote' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumEditor.tsx(8,40): error TS6133: 'useEffect' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumEditor.tsx(22,3): error TS6133: 'Hash' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumEditor.tsx(29,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumEditor.tsx(33,7): error TS6133: 'AREPO_THEME' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumPost.tsx(18,3): error TS6133: 'Check' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumPost.tsx(22,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumPost.tsx(260,30): error TS6133: 'isOriginalPost' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumPost.tsx(438,15): error TS2322: Type '((post: ForumPost) => void) | undefined' is not assignable to type '(() => void) | undefined'.
+  Type '(post: ForumPost) => void' is not assignable to type '() => void'.
+    Target signature provides too few arguments. Expected 1 or more, but got 0.
+src/hub-3-arepo/components/Forum/ForumReply.tsx(25,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumReply.tsx(29,7): error TS6133: 'AREPO_THEME' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadList.tsx(19,3): error TS6133: 'ArrowUpDown' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadList.tsx(21,3): error TS6133: 'Flame' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadList.tsx(23,3): error TS6133: 'Loader2' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadList.tsx(25,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumThreadList.tsx(26,35): error TS2307: Cannot find module '@/components/error' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumThreadList.tsx(30,7): error TS6133: 'AREPO_THEME' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadView.tsx(8,8): error TS6133: 'React' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadView.tsx(19,3): error TS6133: 'Loader2' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/ForumThreadView.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumThreadView.tsx(22,35): error TS2307: Cannot find module '@/components/error' or its corresponding type declarations.
+src/hub-3-arepo/components/Forum/ForumThreadView.tsx(27,7): error TS6133: 'AREPO_THEME' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/hooks/useForumData.ts(376,59): error TS6133: 'page' is declared but its value is never read.
+src/hub-3-arepo/components/Forum/index.ts(12,21): error TS2300: Duplicate identifier 'ForumPost'.
+src/hub-3-arepo/components/Forum/index.ts(32,3): error TS2300: Duplicate identifier 'ForumPost'.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(30,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(31,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/website-v2/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(32,45): error TS2307: Cannot find module '@/api/crossReference' or its corresponding type declarations.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(102,9): error TS6133: 'getDeltaColor' is declared but its value is never read.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(108,9): error TS6133: 'getDeltaIcon' is declared but its value is never read.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(311,56): error TS7006: Parameter 'buff' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(311,62): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(328,56): error TS7006: Parameter 'nerf' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(328,62): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(345,62): error TS7006: Parameter 'adj' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(345,67): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/hub-3-arepo/components/PlayerTournamentSearch.tsx(26,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/PlayerTournamentSearch.tsx(27,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/website-v2/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/PlayerTournamentSearch.tsx(28,50): error TS2307: Cannot find module '@/api/crossReference' or its corresponding type declarations.
+src/hub-3-arepo/components/PlayerTournamentSearch.tsx(41,10): error TS6133: 'playerName' is declared but its value is never read.
+src/hub-3-arepo/components/PlayerTournamentSearch.tsx(42,10): error TS6133: 'tournamentName' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/LineupLibrary.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/LineupLibrary.tsx(12,28): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/MapAnnotationTools.tsx(10,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/MapAnnotationTools.tsx(11,28): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/MapMarkers.tsx(16,3): error TS6133: 'Circle' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapSelector.tsx(10,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(10,1): error TS6192: All imports in import declaration are unused.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(12,3): error TS6133: 'ZoomIn' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(13,3): error TS6133: 'ZoomOut' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(17,3): error TS6133: 'Crosshair' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(20,3): error TS6133: 'RotateCcw' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(22,1): error TS6133: 'GlassCard' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(22,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(23,28): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(50,3): error TS6133: 'annotations' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(53,3): error TS6133: 'readOnly' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,8): error TS6133: 'HubWrapper' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,22): error TS6133: 'HubCard' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,50): error TS2307: Cannot find module '@/shared/components/HubWrapper' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(24,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(25,28): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(27,1): error TS6133: 'MapSelector' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(33,3): error TS6133: 'MapData' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(37,3): error TS6133: 'MapViewState' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(54,23): error TS6133: 'setAnnotations' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(55,19): error TS6133: 'setLineups' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(260,38): error TS6133: 'lineup' is declared but its value is never read.
+src/hub-3-arepo/components/TacticalMap/ZoomControls.tsx(11,28): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-3-arepo/components/TacticalMap/ZoomControls.tsx(12,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(14,3): error TS6133: 'Target' is declared but its value is never read.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(18,3): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(23,3): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(28,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(29,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/website-v2/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(30,43): error TS2307: Cannot find module '@/api/crossReference' or its corresponding type declarations.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(81,9): error TS6133: 'getComparisonColor' is declared but its value is never read.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(380,52): error TS7006: Parameter 'context' implicitly has an 'any' type.
+src/hub-4-opera/components/Challenges/ChallengeHistory.tsx(23,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeHistory.tsx(24,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeHistory.tsx(25,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeHistory.tsx(26,38): error TS6196: 'ChallengeAttempt' is declared but never used.
+src/hub-4-opera/components/Challenges/ChallengeResult.tsx(9,18): error TS6133: 'AnimatePresence' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/ChallengeResult.tsx(17,3): error TS6133: 'Sparkles' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/ChallengeResult.tsx(18,3): error TS6133: 'Trophy' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/ChallengeResult.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeResult.tsx(22,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeResult.tsx(23,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengesContainer.tsx(19,3): error TS6133: 'Trophy' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/ChallengesContainer.tsx(20,3): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/ChallengesContainer.tsx(23,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengesContainer.tsx(24,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengesContainer.tsx(25,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengesContainer.tsx(277,49): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ easy: string; medium: string; hard: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ easy: string; medium: string; hard: string; }'.
+src/hub-4-opera/components/Challenges/ChallengeStreak.tsx(18,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeStreak.tsx(19,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeStreak.tsx(20,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/ChallengeStreak.tsx(172,38): error TS2322: Type '{ ringColor: any; } | {}' is not assignable to type 'MotionStyle | undefined'.
+  Object literal may only specify known properties, and 'ringColor' does not exist in type 'MotionStyle'.
+src/hub-4-opera/components/Challenges/ChallengeStreak.tsx(186,74): error TS2353: Object literal may only specify known properties, and 'ringColor' does not exist in type 'Properties<string | number, string & {}>'.
+src/hub-4-opera/components/Challenges/ChallengeStreak.tsx(209,25): error TS6133: 'index' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/DailyChallengePanel.tsx(15,3): error TS6133: 'HelpCircle' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/DailyChallengePanel.tsx(19,3): error TS6133: 'Loader2' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/DailyChallengePanel.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/DailyChallengePanel.tsx(22,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/DailyChallengePanel.tsx(23,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/hooks/useChallenges.ts(101,7): error TS6133: 'API_BASE_URL' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/hooks/useChallenges.ts(101,34): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/hub-4-opera/components/Challenges/hooks/useChallenges.ts(136,43): error TS6133: 'challengeId' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/index.ts(12,21): error TS2300: Duplicate identifier 'ChallengeResult'.
+src/hub-4-opera/components/Challenges/index.ts(13,21): error TS2300: Duplicate identifier 'ChallengeStreak'.
+src/hub-4-opera/components/Challenges/index.ts(21,3): error TS2300: Duplicate identifier 'ChallengeStreak'.
+src/hub-4-opera/components/Challenges/index.ts(23,3): error TS2300: Duplicate identifier 'ChallengeResult'.
+src/hub-4-opera/components/Challenges/PredictionChallenge.tsx(19,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/PredictionChallenge.tsx(20,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/PredictionChallenge.tsx(21,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/TriviaChallenge.tsx(18,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/TriviaChallenge.tsx(19,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/TriviaChallenge.tsx(20,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/TriviaChallenge.tsx(25,7): error TS6133: 'SUCCESS_COLOR' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/TriviaChallenge.tsx(26,7): error TS6133: 'ERROR_COLOR' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/VideoChallenge.tsx(16,3): error TS6133: 'Clock' is declared but its value is never read.
+src/hub-4-opera/components/Challenges/VideoChallenge.tsx(19,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/VideoChallenge.tsx(20,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/VideoChallenge.tsx(21,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Challenges/VideoChallenge.tsx(36,10): error TS6133: 'isPlaying' is declared but its value is never read.
+src/hub-4-opera/components/CircuitStandings.tsx(6,1): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/components/CircuitStandings.tsx(8,18): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/hub-4-opera/components/CircuitStandings.tsx(8,30): error TS6133: 'TrendingDown' is declared but its value is never read.
+src/hub-4-opera/components/CircuitStandings.tsx(9,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/__tests__/FantasyContainer.test.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/__tests__/FantasyDraft.test.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyContainer.tsx(17,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyContainer.tsx(18,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(9,1): error TS6192: All imports in import declaration are unused.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(15,3): error TS6133: 'Check' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(16,3): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(17,3): error TS6133: 'DollarSign' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(23,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(24,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(32,59): error TS6198: All destructured elements are unused.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(34,18): error TS6133: 'setMyTeam' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyDraft.tsx(36,24): error TS6133: 'setMyPickNumber' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(13,3): error TS6133: 'Calendar' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(18,3): error TS6133: 'Search' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(19,3): error TS6133: 'Filter' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(22,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(23,28): error TS2307: Cannot find module '@/components/Wiki' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyLeagues.tsx(241,31): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(9,1): error TS6133: 'motion' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(12,3): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(13,3): error TS6133: 'TrendingDown' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(15,3): error TS6133: 'Calendar' is declared but its value is never read.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(22,38): error TS2307: Cannot find module '@/components/ui/GlowButton' or its corresponding type declarations.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(42,7): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(53,18): error TS18004: No value exists in scope for the shorthand property 'team_id'. Either declare one or provide an initializer.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(54,18): error TS18004: No value exists in scope for the shorthand property 'team_id'. Either declare one or provide an initializer.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(55,18): error TS18004: No value exists in scope for the shorthand property 'team_id'. Either declare one or provide an initializer.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(56,18): error TS18004: No value exists in scope for the shorthand property 'team_id'. Either declare one or provide an initializer.
+src/hub-4-opera/components/Fantasy/FantasyTeamManage.tsx(57,18): error TS18004: No value exists in scope for the shorthand property 'team_id'. Either declare one or provide an initializer.
+src/hub-4-opera/components/Live/hooks/useLiveData.ts(333,5): error TS2322: Type 'LiveMatch[]' is not assignable to type 'DetailedLiveMatch[]'.
+  Type 'LiveMatch' is missing the following properties from type 'DetailedLiveMatch': scoreA, scoreB
+src/hub-4-opera/components/Live/LiveChat.tsx(20,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveChat.tsx(21,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveChat.tsx(22,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveChat.tsx(26,7): error TS6133: 'OPERA_GLOW' is declared but its value is never read.
+src/hub-4-opera/components/Live/LiveChat.tsx(276,17): error TS2322: Type 'boolean | null' is not assignable to type 'boolean | undefined'.
+  Type 'null' is not assignable to type 'boolean | undefined'.
+src/hub-4-opera/components/Live/LiveContainer.tsx(16,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveContainer.tsx(17,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveContainer.tsx(18,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveContainer.tsx(29,7): error TS6133: 'OPERA_GLOW' is declared but its value is never read.
+src/hub-4-opera/components/Live/LiveContainer.tsx(45,32): error TS2304: Cannot find name 'DetailedLiveMatch'.
+src/hub-4-opera/components/Live/LiveEventList.tsx(15,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveEventList.tsx(16,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveEventList.tsx(17,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveMatchTicker.tsx(15,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveMatchTicker.tsx(16,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveMatchTicker.tsx(19,7): error TS6133: 'OPERA_COLOR' is declared but its value is never read.
+src/hub-4-opera/components/Live/LiveStreamCard.tsx(15,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveStreamCard.tsx(16,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveStreamCard.tsx(17,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveStreamViewer.tsx(18,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveStreamViewer.tsx(19,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveStreamViewer.tsx(20,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/components/Live/LiveStreamViewer.tsx(234,3): error TS6133: 'matchId' is declared but its value is never read.
+src/hub-4-opera/components/Live/mockData.ts(409,3): error TS2322: Type 'LiveMatch[]' is not assignable to type 'DetailedLiveMatch[]'.
+  Type 'LiveMatch' is missing the following properties from type 'DetailedLiveMatch': scoreA, scoreB
+src/hub-4-opera/components/Live/types.ts(8,1): error TS6133: 'ReactNode' is declared but its value is never read.
+src/hub-4-opera/components/PatchNotesReader.tsx(6,8): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/components/PatchNotesReader.tsx(11,3): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/hub-4-opera/components/PatchNotesReader.tsx(21,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/PatchNotesReader.tsx(95,9): error TS6133: 'renderChangeIcon' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/ELOBadge.tsx(11,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/GradeBadge.tsx(10,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/hooks/useRankingsData.ts(8,33): error TS6133: 'useRef' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/hooks/useRankingsData.ts(13,3): error TS6196: 'PlayerRole' is declared but never used.
+src/hub-4-opera/components/Rankings/hooks/useRankingsData.ts(19,7): error TS6133: 'PURPLE' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(10,62): error TS6133: 'DollarSign' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(10,74): error TS6133: 'Target' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(12,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(19,7): error TS6133: 'OPERA_GLOW' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(198,41): error TS6133: 'index' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(317,9): error TS2322: Type 'Organization[]' is not assignable to type 'Record<string, unknown>[]'.
+  Type 'Organization' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'Organization'.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(318,9): error TS2322: Type 'ColumnDef<Organization>[]' is not assignable to type 'ColumnDef<Record<string, unknown>>[]'.
+  Type 'ColumnDef<Organization>' is not assignable to type 'ColumnDef<Record<string, unknown>>'.
+    Type 'Record<string, unknown>' is missing the following properties from type 'Organization': id, name, logo, region, and 4 more.
+src/hub-4-opera/components/Rankings/OrganizationRankings.tsx(322,9): error TS2322: Type '(org: Organization, index: number) => JSX.Element' is not assignable to type '(item: Record<string, unknown>, index: number) => ReactNode'.
+  Types of parameters 'org' and 'item' are incompatible.
+    Type 'Record<string, unknown>' is missing the following properties from type 'Organization': id, name, logo, region, and 4 more.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(10,49): error TS6133: 'Target' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(12,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(19,7): error TS6133: 'OPERA_GLOW' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(179,9): error TS6133: 'RankChange' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(239,9): error TS6133: 'StatBar' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(270,9): error TS6133: 'maxStats' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(278,45): error TS6133: 'index' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(464,9): error TS2322: Type 'PlayerRanking[]' is not assignable to type 'Record<string, unknown>[]'.
+  Type 'PlayerRanking' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'PlayerRanking'.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(465,9): error TS2322: Type 'ColumnDef<PlayerRanking>[]' is not assignable to type 'ColumnDef<Record<string, unknown>>[]'.
+  Type 'ColumnDef<PlayerRanking>' is not assignable to type 'ColumnDef<Record<string, unknown>>'.
+    Type 'Record<string, unknown>' is missing the following properties from type 'PlayerRanking': id, name, tag, avatar, and 7 more.
+src/hub-4-opera/components/Rankings/PlayerRankings.tsx(469,9): error TS2322: Type '(player: PlayerRanking, index: number) => JSX.Element' is not assignable to type '(item: Record<string, unknown>, index: number) => ReactNode'.
+  Types of parameters 'player' and 'item' are incompatible.
+    Type 'Record<string, unknown>' is missing the following properties from type 'PlayerRanking': id, name, tag, avatar, and 7 more.
+src/hub-4-opera/components/Rankings/RankingsContainer.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/RankingsContainer.tsx(12,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/RankingsContainer.tsx(39,5): error TS6133: 'fetchOrgRankings' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/RankingsContainer.tsx(40,5): error TS6133: 'fetchTeamRankings' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/RankingsContainer.tsx(41,5): error TS6133: 'fetchPlayerRankings' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/RankingsFilter.tsx(10,21): error TS6133: 'Filter' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/RankingsFilter.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/RankingsFilter.tsx(12,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/RankingsFilter.tsx(15,7): error TS6133: 'OPERA_COLOR' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/RankingTable.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/RankingTable.tsx(12,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/RankingTable.tsx(13,34): error TS6196: 'ColumnDef' is declared but never used.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(10,10): error TS6133: 'Users' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(10,50): error TS6133: 'Target' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(10,58): error TS6133: 'Zap' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(12,20): error TS2307: Cannot find module '@/utils/cn' or its corresponding type declarations.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(19,7): error TS6133: 'OPERA_GLOW' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(231,41): error TS6133: 'index' is declared but its value is never read.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(337,9): error TS2322: Type 'TeamRanking[]' is not assignable to type 'Record<string, unknown>[]'.
+  Type 'TeamRanking' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'TeamRanking'.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(338,9): error TS2322: Type 'ColumnDef<TeamRanking>[]' is not assignable to type 'ColumnDef<Record<string, unknown>>[]'.
+  Type 'ColumnDef<TeamRanking>' is not assignable to type 'ColumnDef<Record<string, unknown>>'.
+    Type 'Record<string, unknown>' is missing the following properties from type 'TeamRanking': id, name, tag, logo, and 5 more.
+src/hub-4-opera/components/Rankings/TeamRankings.tsx(342,9): error TS2322: Type '(team: TeamRanking, index: number) => JSX.Element' is not assignable to type '(item: Record<string, unknown>, index: number) => ReactNode'.
+  Types of parameters 'team' and 'item' are incompatible.
+    Type 'Record<string, unknown>' is missing the following properties from type 'TeamRanking': id, name, tag, logo, and 5 more.
+src/hub-4-opera/components/ScheduleViewer.tsx(6,1): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/components/ScheduleViewer.tsx(9,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Simulator/DuelPredictor.tsx(22,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Simulator/DuelPredictor.tsx(35,83): error TS6133: 'onPredict' is declared but its value is never read.
+src/hub-4-opera/components/Simulator/PlayerH2HCompare.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Simulator/PlayerH2HCompare.tsx(444,25): error TS6133: 'diff' is declared but its value is never read.
+src/hub-4-opera/components/Simulator/PredictionHistory.tsx(24,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Simulator/SimulatorPanel.tsx(16,3): error TS6133: 'Target' is declared but its value is never read.
+src/hub-4-opera/components/Simulator/SimulatorPanel.tsx(19,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Simulator/SimulatorPanel.tsx(60,27): error TS6133: 'predictDuel' is declared but its value is never read.
+src/hub-4-opera/components/Simulator/TeamH2HCompare.tsx(11,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/Simulator/TeamH2HCompare.tsx(15,18): error TS6133: 'mockTeams' is declared but its value is never read.
+src/hub-4-opera/components/Simulator/WinProbabilityGauge.tsx(10,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/components/TournamentBrowser.tsx(6,1): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/components/TournamentBrowser.tsx(9,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/hooks/useOperaData.ts(7,24): error TS2307: Cannot find module '@/utils/logger' or its corresponding type declarations.
+src/hub-4-opera/hooks/useOperaData.ts(14,3): error TS6196: 'TournamentFilters' is declared but never used.
+src/hub-4-opera/index.tsx(6,8): error TS6133: 'React' is declared but its value is never read.
+src/hub-4-opera/index.tsx(14,3): error TS6133: 'Filter' is declared but its value is never read.
+src/hub-4-opera/index.tsx(21,22): error TS6133: 'HubCard' is declared but its value is never read.
+src/hub-4-opera/index.tsx(21,50): error TS2307: Cannot find module '@/shared/components/HubWrapper' or its corresponding type declarations.
+src/hub-4-opera/index.tsx(22,42): error TS2307: Cannot find module '@/shared/store/njzStore' or its corresponding type declarations.
+src/hub-4-opera/index.tsx(23,24): error TS2307: Cannot find module '@/theme/colors' or its corresponding type declarations.
+src/hub-4-opera/index.tsx(24,27): error TS2307: Cannot find module '@/components/ui/GlassCard' or its corresponding type declarations.
+src/hub-4-opera/index.tsx(25,36): error TS2307: Cannot find module '@/components/grid/PanelErrorBoundary' or its corresponding type declarations.
+src/hub-4-opera/index.tsx(74,40): error TS7006: Parameter 'state' implicitly has an 'any' type.
+src/hub-4-opera/index.tsx(87,5): error TS6133: 'error' is declared but its value is never read.
+src/hub-4-opera/index.tsx(91,5): error TS6133: 'theme' is declared but its value is never read.
+src/lib/api-client.ts(8,1): error TS6133: 'useAuthStore' is declared but its value is never read.
+src/lib/api-client.ts(8,30): error TS2307: Cannot find module '@/stores/authStore' or its corresponding type declarations.
+src/lib/api-client.ts(11,34): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/lib/api-client.ts(16,11): error TS6196: 'ApiError' is declared but never used.
+src/lib/api-client.ts(76,10): error TS6133: 'tokenNeedsRefresh' is declared but its value is never read.
+src/monitoring/agents/DependencyMonitor.ts(42,12): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ "@eslint/js": string; "@playwright/test": string; "@testing-library/jest-dom": string; "@testing-library/react": string; "@types/node": string; "@types/react": string; "@types/react-dom": string; ... 42 more ...; zustand: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ "@eslint/js": string; "@playwright/test": string; "@testing-library/jest-dom": string; "@testing-library/react": string; "@types/node": string; "@types/react": string; "@types/react-dom": string; ... 42 more ...; zustand: string; }'.
+src/monitoring/PerformanceMonitor.ts(16,6): error TS6196: 'PerformanceMetricType' is declared but never used.
+src/monitoring/PerformanceMonitor.ts(348,29): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(370,25): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(404,27): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(439,25): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(510,25): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(533,21): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(551,19): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(567,19): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(597,19): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(617,19): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(762,19): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/monitoring/PerformanceMonitor.ts(780,21): error TS2339: Property 'track' does not exist on type 'AnalyticsSyncService'.
+src/performance/usePerformanceMetric.ts(41,49): error TS6133: 'name' is declared but its value is never read.
+src/performance/withPerformanceTracking.tsx(20,11): error TS6133: 'threshold' is declared but its value is never read.
+src/services/__tests__/analyticsSync.test.ts(131,11): error TS6133: 'afterTime' is declared but its value is never read.
+src/services/__tests__/analyticsSync.test.ts(143,7): error TS2322: Type '"VALIDATION_ERROR"' is not assignable to type '"timeout" | "unknown" | "network" | "validation" | "inference"'.
+src/services/privacy.ts(79,3): error TS2322: Type 'string | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+src/services/privacy.ts(85,28): error TS2862: Type 'T' is generic and can only be indexed for reading.
+src/shared/store/userStore.ts(139,11): error TS6133: 'get' is declared but its value is never read.
+src/store/__tests__/mlCacheStore.test.ts(8,27): error TS6133: 'CachedModel' is declared but its value is never read.
+src/store/__tests__/mlCacheStore.test.ts(8,40): error TS6133: 'ModelMetadata' is declared but its value is never read.
+src/store/__tests__/predictionHistoryStore.test.ts(7,44): error TS6133: 'vi' is declared but its value is never read.
+src/store/__tests__/predictionHistoryStore.test.ts(8,37): error TS6133: 'PredictionResult' is declared but its value is never read.
+src/store/__tests__/predictionHistoryStore.test.ts(106,13): error TS6133: 'baseTime' is declared but its value is never read.
+src/store/dynamicStore.ts(64,11): error TS6133: 'get' is declared but its value is never read.
+src/store/mlCacheStore.ts(275,13): error TS6133: 'response' is declared but its value is never read.
+src/stores/authStore.ts(41,11): error TS6133: 'get' is declared but its value is never read.
+src/sw.ts(43,6): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(type: keyof WindowEventMap, listener: (this: Window, ev: Event | DeviceMotionEvent | DeviceOrientationEvent | GamepadEvent | ... 27 more ... | StorageEvent) => any, options?: boolean | ... 1 more ... | undefined): void', gave the following error.
+    Argument of type '"install"' is not assignable to parameter of type 'keyof WindowEventMap'.
+  Overload 2 of 3, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: ExtendableEvent) => void' is not assignable to parameter of type 'EventListenerOrEventListenerObject'.
+      Type '(event: ExtendableEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'event' and 'evt' are incompatible.
+          Property 'waitUntil' is missing in type 'Event' but required in type 'ExtendableEvent'.
+  Overload 3 of 3, '(type: keyof DedicatedWorkerGlobalScopeEventMap, listener: (this: DedicatedWorkerGlobalScope, ev: Event | ErrorEvent | MessageEvent<any> | PromiseRejectionEvent | RTCTransformEvent) => any, options?: boolean | ... 1 more ... | undefined): void', gave the following error.
+    Argument of type '"install"' is not assignable to parameter of type 'keyof DedicatedWorkerGlobalScopeEventMap'.
+src/sw.ts(53,21): error TS2339: Property 'skipWaiting' does not exist on type 'Window & typeof globalThis'.
+src/sw.ts(62,6): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(type: keyof WindowEventMap, listener: (this: Window, ev: Event | DeviceMotionEvent | DeviceOrientationEvent | GamepadEvent | ... 27 more ... | StorageEvent) => any, options?: boolean | ... 1 more ... | undefined): void', gave the following error.
+    Argument of type '"activate"' is not assignable to parameter of type 'keyof WindowEventMap'.
+  Overload 2 of 3, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: ExtendableEvent) => void' is not assignable to parameter of type 'EventListenerOrEventListenerObject'.
+      Type '(event: ExtendableEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'event' and 'evt' are incompatible.
+          Property 'waitUntil' is missing in type 'Event' but required in type 'ExtendableEvent'.
+  Overload 3 of 3, '(type: keyof DedicatedWorkerGlobalScopeEventMap, listener: (this: DedicatedWorkerGlobalScope, ev: Event | ErrorEvent | MessageEvent<any> | PromiseRejectionEvent | RTCTransformEvent) => any, options?: boolean | ... 1 more ... | undefined): void', gave the following error.
+    Argument of type '"activate"' is not assignable to parameter of type 'keyof DedicatedWorkerGlobalScopeEventMap'.
+src/sw.ts(82,21): error TS2551: Property 'clients' does not exist on type 'Window & typeof globalThis'. Did you mean 'Clients'?
+src/sw.ts(88,6): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(type: keyof WindowEventMap, listener: (this: Window, ev: Event | DeviceMotionEvent | DeviceOrientationEvent | GamepadEvent | ... 27 more ... | StorageEvent) => any, options?: boolean | ... 1 more ... | undefined): void', gave the following error.
+    Argument of type '"fetch"' is not assignable to parameter of type 'keyof WindowEventMap'.
+  Overload 2 of 3, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: FetchEvent) => void' is not assignable to parameter of type 'EventListenerOrEventListenerObject'.
+      Type '(event: FetchEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'event' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'FetchEvent': clientId, handled, preloadResponse, request, and 3 more.
+  Overload 3 of 3, '(type: keyof DedicatedWorkerGlobalScopeEventMap, listener: (this: DedicatedWorkerGlobalScope, ev: Event | ErrorEvent | MessageEvent<any> | PromiseRejectionEvent | RTCTransformEvent) => any, options?: boolean | ... 1 more ... | undefined): void', gave the following error.
+    Argument of type '"fetch"' is not assignable to parameter of type 'keyof DedicatedWorkerGlobalScopeEventMap'.
+src/sw.ts(249,3): error TS2322: Type 'Response | undefined' is not assignable to type 'Response'.
+  Type 'undefined' is not assignable to type 'Response'.
+src/sw.ts(259,34): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(type: "message", listener: (this: Window, ev: MessageEvent<any>) => any, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: ExtendableMessageEvent) => void' is not assignable to parameter of type '(this: Window, ev: MessageEvent<any>) => any'.
+      Types of parameters 'event' and 'ev' are incompatible.
+        Property 'waitUntil' is missing in type 'MessageEvent<any>' but required in type 'ExtendableMessageEvent'.
+  Overload 2 of 3, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: ExtendableMessageEvent) => void' is not assignable to parameter of type 'EventListenerOrEventListenerObject'.
+      Type '(event: ExtendableMessageEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'event' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'ExtendableMessageEvent': data, lastEventId, origin, ports, and 2 more.
+  Overload 3 of 3, '(type: "message", listener: (this: DedicatedWorkerGlobalScope, ev: MessageEvent<any>) => any, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(event: ExtendableMessageEvent) => void' is not assignable to parameter of type '(this: DedicatedWorkerGlobalScope, ev: MessageEvent<any>) => any'.
+      Types of parameters 'event' and 'ev' are incompatible.
+        Property 'waitUntil' is missing in type 'MessageEvent<any>' but required in type 'ExtendableMessageEvent'.
+src/sw.ts(263,10): error TS2339: Property 'skipWaiting' does not exist on type 'Window & typeof globalThis'.
+src/utils/cache.ts(63,29): error TS6133: 'ttl' is declared but its value is never read.
+src/utils/logger.ts(38,25): error TS6133: 'level' is declared but its value is never read.
+src/workers/data-stream.worker.ts(264,25): error TS6133: 'event' is declared but its value is never read.
+src/workers/grid.worker.ts(257,11): error TS6133: '_lineHeight' is declared but its value is never read.
+src/workers/ml.worker.ts(207,3): error TS6133: 'tf' is declared but its value is never read.
+src/workers/ml.worker.ts(268,10): error TS6133: 'dequantizeTensor' is declared but its value is never read.
+src/workers/ml.worker.ts(442,18): error TS2339: Property 'dispose' does not exist on type '{ dataSync: () => Float32Array<ArrayBufferLike>; }'.
+src/workers/ml.worker.ts(503,56): error TS2503: Cannot find namespace 'tf'.
+src/workers/ml.worker.ts(537,9): error TS6133: 'queueSize' is declared but its value is never read.
+src/workers/ml.worker.ts(629,41): error TS6133: 'err' is declared but its value is never read.
+src/workers/useGridWorker.ts(269,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<WorkerError | null>'.
