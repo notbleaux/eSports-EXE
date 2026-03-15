@@ -4,11 +4,17 @@ Aggregates all hub services: SATOR, tokens, forum, fantasy, challenges, wiki, op
 """
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
 import os
 import logging
+
+# Import rate limiting
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -24,8 +30,43 @@ from src.sator.websocket import handle_websocket, ws_manager
 # Import database manager
 from axiom_esports_data.api.src.db_manager import db
 
+# Import firewall middleware
+from axiom_esports_data.api.src.middleware.firewall import FirewallMiddleware
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# JWT Secret validation (P0 Security Fix)
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+if not JWT_SECRET_KEY:
+    if os.getenv("ENVIRONMENT") == "production":
+        raise RuntimeError("JWT_SECRET_KEY must be set in production environment!")
+    else:
+        logger.warning("JWT_SECRET_KEY not set, using development fallback!")
+        JWT_SECRET_KEY = "dev-jwt-secret-do-not-use-in-production"
+
+# Rate limiter setup (P0 Security Fix)
+limiter = Limiter(key_func=get_remote_address)
+
+
+class SecurityHeadersMiddleware:
+    """Add security headers to all responses (P0 Security Fix)."""
+    
+    async def __call__(self, request: Request, call_next):
+        response = await call_next(request)
+        # HSTS
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        # X-Frame-Options
+        response.headers["X-Frame-Options"] = "DENY"
+        # X-Content-Type-Options
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        # Content Security Policy (basic)
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+        # Referrer Policy
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        # X-XSS-Protection
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        return response
 
 
 @asynccontextmanager
@@ -72,8 +113,20 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Add middleware
+# Register rate limiter (P0 Security Fix)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Add security headers middleware (P0 Security Fix)
+app.add_middleware(SecurityHeadersMiddleware)
+
+# Add firewall middleware (P0 Security Fix)
+app.add_middleware(FirewallMiddleware)
+
+# Add compression middleware
 app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# CORS configuration (P0 Security Fix - explicit headers)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -84,19 +137,28 @@ app.add_middleware(
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allow_headers=["*"],
+    allow_headers=[
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Accept",
+        "Origin",
+        "X-Total-Count",
+        "X-Page",
+        "X-Page-Size",
+    ],  # Removed "*" (P0 Security Fix)
     expose_headers=["X-Total-Count", "X-Page", "X-Page-Size"],
 )
 
 
-# Health check endpoints (no auth required)
+# Health check endpoints (no auth required, no rate limiting)
 @app.get("/health", tags=["health"])
 async def health_check():
     """Basic health check endpoint."""
     return {
         "status": "healthy",
         "service": "sator-api",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "timestamp": __import__('datetime').datetime.utcnow().isoformat(),
     }
 
@@ -132,7 +194,7 @@ async def liveness_check():
 
 
 # Include all service routers
-# Auth routes (no prefix for /auth paths)
+# Auth routes (no prefix for /auth paths) - with rate limiting (P0 Security Fix)
 app.include_router(
     auth_router,
     tags=["authentication"],

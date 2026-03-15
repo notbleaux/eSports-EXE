@@ -7,8 +7,10 @@ from datetime import datetime, timezone
 from typing import Optional
 import os
 
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks, Request
 from fastapi.security import HTTPBearer
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from axiom_esports_data.api.src.db_manager import db
 from .auth_schemas import (
@@ -24,10 +26,15 @@ from .auth_utils import (
 router = APIRouter(prefix="/auth", tags=["authentication"])
 security = HTTPBearer()
 
+# Rate limiter: 5 requests per minute for auth endpoints (P0 Security Fix)
+auth_limiter = Limiter(key_func=get_remote_address)
+
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@auth_limiter.limit("5/minute")
 async def register(
-    request: UserRegister,
+    request: Request,
+    user_data: UserRegister,
     background_tasks: BackgroundTasks
 ):
     """
@@ -41,7 +48,7 @@ async def register(
         # Check if username exists
         existing = await conn.fetchrow(
             "SELECT id FROM users WHERE username = $1",
-            request.username
+            user_data.username
         )
         if existing:
             raise HTTPException(
@@ -50,10 +57,10 @@ async def register(
             )
         
         # Check if email exists (if provided)
-        if request.email:
+        if user_data.email:
             existing_email = await conn.fetchrow(
                 "SELECT id FROM users WHERE email = $1",
-                request.email
+                user_data.email
             )
             if existing_email:
                 raise HTTPException(
@@ -63,7 +70,7 @@ async def register(
         
         # Create user
         user_id = f"usr_{os.urandom(8).hex()}"
-        hashed_pw = hash_password(request.password)
+        hashed_pw = hash_password(user_data.password)
         
         now = datetime.now(timezone.utc)
         
@@ -73,8 +80,8 @@ async def register(
                              is_active, is_verified, created_at, updated_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             """,
-            user_id, request.username, request.email,
-            request.display_name or request.username,
+            user_id, user_data.username, user_data.email,
+            user_data.display_name or user_data.username,
             hashed_pw, True, False, now, now
         )
         
@@ -94,13 +101,14 @@ async def register(
         )
         
         # TODO: Send verification email via background task
-        # background_tasks.add_task(send_verification_email, user_id, request.email)
+        # background_tasks.add_task(send_verification_email, user_id, user_data.email)
         
         return UserResponse(**dict(user))
 
 
 @router.post("/login", response_model=Token)
-async def login(request: UserLogin):
+@auth_limiter.limit("5/minute")
+async def login(request: Request, login_data: UserLogin):
     """
     Authenticate user and return JWT tokens.
     
@@ -112,7 +120,7 @@ async def login(request: UserLogin):
         # Try to find user by username or email
         user = await conn.fetchrow(
             "SELECT * FROM users WHERE username = $1 OR email = $1",
-            request.username
+            login_data.username
         )
         
         if not user:
@@ -123,7 +131,7 @@ async def login(request: UserLogin):
             )
         
         # Verify password
-        if not verify_password(request.password, user["hashed_password"]):
+        if not verify_password(login_data.password, user["hashed_password"]):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid credentials",

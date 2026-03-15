@@ -101,6 +101,50 @@ class ResilientVLRClient:
     def _compute_checksum(self, content: str) -> str:
         return hashlib.sha256(content.encode()).hexdigest()
 
+    def _validate_schema(self, raw_html: str) -> tuple[bool, dict]:
+        """
+        Validate HTML structure contains expected VLR.gg markers.
+        
+        Returns:
+            Tuple of (is_valid, drift_fields)
+        """
+        # Expected HTML markers for VLR.gg pages
+        expected_markers = [
+            "<html",
+            "<body",
+            "vlr",
+            "match",
+            "player",
+        ]
+        
+        detected = []
+        missing = []
+        
+        html_lower = raw_html.lower()
+        for marker in expected_markers:
+            if marker in html_lower:
+                detected.append(marker)
+            else:
+                missing.append(marker)
+        
+        # Valid if at least 3 of 5 markers found (allows for some site changes)
+        is_valid = len(detected) >= 3
+        
+        drift_fields = {
+            "detected_markers": detected,
+            "missing_markers": missing,
+            "validation_threshold": 3,
+        }
+        
+        if not is_valid:
+            logger.warning(
+                "Schema validation failed for VLR response. "
+                "Detected: %s, Missing: %s",
+                detected, missing
+            )
+        
+        return is_valid, drift_fields
+
     def validate_schema(self, parsed_data: dict) -> dict:
         """
         Checks for schema drift against known VLR field set.
@@ -145,12 +189,15 @@ class ResilientVLRClient:
                     checksum = self._compute_checksum(raw)
                     self.circuit_breaker.record_success()
 
+                    # Validate schema against expected fields (P0 Security Fix)
+                    schema_valid, drift_fields = self._validate_schema(raw)
                     validated = ValidatedResponse(
                         url=url,
                         status=resp.status,
                         raw_html=raw,
                         checksum=checksum,
-                        schema_valid=True,
+                        schema_valid=schema_valid,
+                        schema_drift_fields=drift_fields,
                     )
                     self._cache[url] = validated
                     return validated
