@@ -30,7 +30,8 @@ import {
   Database,
   Layers,
   Clock,
-  History
+  History,
+  Map
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
@@ -45,6 +46,9 @@ import PlayerTournamentSearch from './components/PlayerTournamentSearch';
 import PatchImpactAnalyzer from './components/PatchImpactAnalyzer';
 import TeamComparisonTool from './components/TeamComparisonTool';
 import CrossHubQueryBuilder from './components/CrossHubQueryBuilder';
+
+// Import Tactical Map
+import { TacticalMapContainer } from './components/TacticalMap';
 
 // Import error boundaries
 import { 
@@ -133,7 +137,7 @@ const CROSS_REFERENCE_TOOLS = [
  * ArepoHubContent - Main content component for AREPO hub
  */
 function ArepoHubContent() {
-  const [activeTab, setActiveTab] = useState('cross-reference'); // 'cross-reference' | 'directory' | 'help'
+  const [activeTab, setActiveTab] = useState('cross-reference'); // 'cross-reference' | 'directory' | 'help' | 'tactical-maps'
   const [activeCategory, setActiveCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -268,6 +272,21 @@ function ArepoHubContent() {
           >
             <HelpCircle className="w-5 h-5" />
             Q&A / Help
+          </motion.button>
+          <motion.button
+            onClick={() => setActiveTab('tactical-maps')}
+            className={`
+              flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300
+              ${activeTab === 'tactical-maps' 
+                ? 'bg-[#0066ff]/20 text-[#0066ff] border border-[#0066ff]/50' 
+                : 'text-slate hover:text-white hover:bg-white/5 border border-transparent'
+              }
+            `}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Map className="w-5 h-5" />
+            Tactical Maps
           </motion.button>
         </div>
       </div>
@@ -645,6 +664,24 @@ function ArepoHubContent() {
                   />
                 </PanelErrorBoundary>
               </DataErrorBoundary>
+            </motion.div>
+          )}
+
+          {activeTab === 'tactical-maps' && (
+            <motion.div
+              key="tactical-maps"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PanelErrorBoundary 
+                panelId="arepo-tactical-maps" 
+                panelTitle="Tactical Maps" 
+                hub="AREPO"
+              >
+                <TacticalMapContainer />
+              </PanelErrorBoundary>
             </motion.div>
           )}
         </AnimatePresence>
