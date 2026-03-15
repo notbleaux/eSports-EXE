@@ -43,7 +43,7 @@ const serviceWorkerPlugin = () => ({
 
 export default defineConfig({
   plugins: [react(), serviceWorkerPlugin()],
-  base: '/',
+  base: '/eSports-EXE/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
