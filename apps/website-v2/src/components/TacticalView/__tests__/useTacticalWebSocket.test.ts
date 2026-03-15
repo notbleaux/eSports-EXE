@@ -1,80 +1,56 @@
-/** [Ver001.001] */
+/** [Ver002.000] */
 /**
  * useTacticalWebSocket Tests
  * ==========================
- * WebSocket hook testing with mock server.
+ * WebSocket hook testing with MSW (Mock Service Worker).
+ * Replaces custom MockWebSocket with MSW for better isolation and standards compliance.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { useTacticalWebSocket, UseTacticalWebSocketOptions } from '../useTacticalWebSocket';
+import { server } from '@/mocks/server';
+import { ws } from 'msw';
 
-// Mock WebSocket
-class MockWebSocket {
-  static CONNECTING = 0;
-  static OPEN = 1;
-  static CLOSING = 2;
-  static CLOSED = 3;
+// Track WebSocket clients for assertions
+const mockClients: ReturnType<typeof ws.link>['clients'] = new Map();
 
-  readyState = MockWebSocket.CONNECTING;
-  onopen: ((event: Event) => void) | null = null;
-  onclose: ((event: CloseEvent) => void) | null = null;
-  onmessage: ((event: MessageEvent) => void) | null = null;
-  onerror: ((event: Event) => void) | null = null;
-
-  sentMessages: any[] = [];
-  private connectionTimeout: ReturnType<typeof setTimeout> | null = null;
-
-  constructor(public url: string) {
-    // Simulate async connection
-    this.connectionTimeout = setTimeout(() => {
-      this.readyState = MockWebSocket.OPEN;
-      this.onopen?.(new Event('open'));
-    }, 10);
-  }
-
-  send(data: string) {
-    this.sentMessages.push(JSON.parse(data));
-  }
-
-  close(code = 1000, reason = '') {
-    if (this.connectionTimeout) {
-      clearTimeout(this.connectionTimeout);
+// MSW WebSocket handler with client tracking
+const tacticalWsHandler = ws.link('ws://localhost:8000/v1/ws').addEventListener('connection', ({ client }) => {
+  mockClients.set(client.id, client);
+  
+  // Send initial connection acknowledgment
+  client.send(JSON.stringify({ type: 'connected' }));
+  
+  // Track sent messages for assertions
+  const originalSend = client.send.bind(client);
+  const sentMessages: any[] = [];
+  
+  client.addEventListener('message', (event) => {
+    const data = JSON.parse(event.data);
+    sentMessages.push(data);
+    
+    if (data.type === 'subscribe') {
+      client.send(JSON.stringify({ 
+        type: 'subscribed', 
+        channel: data.channel 
+      }));
     }
-    this.readyState = MockWebSocket.CLOSED;
-    this.onclose?.(new CloseEvent('close', { code, reason, wasClean: true }));
-  }
-
-  // Helper to simulate incoming messages
-  simulateMessage(data: any) {
-    this.onmessage?.(new MessageEvent('message', { 
-      data: JSON.stringify(data),
-      origin: this.url
-    }));
-  }
-
-  // Helper to simulate errors
-  simulateError() {
-    this.onerror?.(new Event('error'));
-  }
-
-  // Helper to simulate unexpected close
-  simulateClose(eventInit: CloseEventInit = { code: 1006, wasClean: false }) {
-    this.readyState = MockWebSocket.CLOSED;
-    this.onclose?.(new CloseEvent('close', eventInit));
-  }
-}
-
-// Track mock instances for assertions
-const mockInstances: MockWebSocket[] = [];
-
-const originalMockWebSocket = MockWebSocket;
-(global as any).WebSocket = class extends MockWebSocket {
-  constructor(url: string) {
-    super(url);
-    mockInstances.push(this);
-  }
-};
+    
+    if (data.type === 'seek') {
+      client.send(JSON.stringify({
+        type: 'seek_complete',
+        timestamp: data.timestamp
+      }));
+    }
+  });
+  
+  // Attach helper for tests
+  (client as any).sentMessages = sentMessages;
+  (client as any).simulateMessage = (msg: any) => {
+    client.send(JSON.stringify(msg));
+  };
+});
 
 describe('useTacticalWebSocket', () => {
   const mockOptions: UseTacticalWebSocketOptions = {
@@ -85,9 +61,18 @@ describe('useTacticalWebSocket', () => {
     autoConnect: false,
   };
 
-  beforeEach(() => {
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
+    mockClients.clear();
     vi.clearAllMocks();
-    mockInstances.length = 0;  // Reset instances
+  });
+
+  afterAll(() => {
+    server.close();
   });
 
   it('should initialize with disconnected state', () => {
@@ -137,12 +122,16 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     });
 
-    // Verify subscribe message was sent
-    const mockWs = mockInstances[0];
-    expect(mockWs).toBeDefined();
-    expect(mockWs.sentMessages).toContainEqual({
-      type: 'subscribe',
-      channel: `match:${matchId}`
+    // Verify subscription message was sent
+    await waitFor(() => {
+      const clients = Array.from(mockClients.values());
+      expect(clients.length).toBeGreaterThan(0);
+      
+      const client = clients[0] as any;
+      const subscribeMsg = client.sentMessages?.find(
+        (m: any) => m.type === 'subscribe' && m.channel === `match:${matchId}`
+      );
+      expect(subscribeMsg).toBeDefined();
     });
   });
 
@@ -167,14 +156,19 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     });
 
-    // Simulate receiving a frame update
-    const mockWs = mockInstances[0];
+    // Simulate receiving a frame update via MSW
     act(() => {
-      mockWs.simulateMessage({ type: 'frame_update', frame: mockFrame });
+      const clients = Array.from(mockClients.values());
+      if (clients[0]) {
+        const client = clients[0] as any;
+        client.send(JSON.stringify({ type: 'frame_update', frame: mockFrame }));
+      }
     });
 
     // Verify callback was called with the frame data
-    expect(mockOptions.onFrameUpdate).toHaveBeenCalledWith(mockFrame);
+    await waitFor(() => {
+      expect(mockOptions.onFrameUpdate).toHaveBeenCalledWith(mockFrame);
+    });
   });
 
   it('should handle event messages', async () => {
@@ -194,14 +188,19 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     });
 
-    // Simulate receiving an event message
-    const mockWs = mockInstances[0];
+    // Simulate receiving an event message via MSW
     act(() => {
-      mockWs.simulateMessage({ type: 'event', event: mockEvent });
+      const clients = Array.from(mockClients.values());
+      if (clients[0]) {
+        const client = clients[0] as any;
+        client.send(JSON.stringify({ type: 'event', event: mockEvent }));
+      }
     });
 
     // Verify callback was called with the event data
-    expect(mockOptions.onEventReceived).toHaveBeenCalledWith(mockEvent);
+    await waitFor(() => {
+      expect(mockOptions.onEventReceived).toHaveBeenCalledWith(mockEvent);
+    });
   });
 
   it('should send seek command', async () => {
@@ -220,10 +219,13 @@ describe('useTacticalWebSocket', () => {
     });
 
     // Verify seek message was sent
-    const mockWs = mockInstances[0];
-    expect(mockWs.sentMessages).toContainEqual({
-      type: 'seek',
-      timestamp: 45000
+    await waitFor(() => {
+      const clients = Array.from(mockClients.values());
+      const client = clients[0] as any;
+      const seekMsg = client.sentMessages?.find(
+        (m: any) => m.type === 'seek' && m.timestamp === 45000
+      );
+      expect(seekMsg).toBeDefined();
     });
   });
 
@@ -247,7 +249,7 @@ describe('useTacticalWebSocket', () => {
   });
 
   it('should handle ping/pong heartbeat', async () => {
-    vi.useRealTimers(); // Use real timers for this test
+    vi.useRealTimers();
     
     const { result } = renderHook(() => useTacticalWebSocket(mockOptions));
 
@@ -259,17 +261,16 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     }, { timeout: 5000 });
 
-    // Verify WebSocket instance exists for heartbeat verification
-    const mockWs = mockInstances[0];
-    expect(mockWs).toBeDefined();
-    expect(mockWs.readyState).toBe(MockWebSocket.OPEN);
-    
-    // Verify connection change callback was called
+    // Verify connection was established
     expect(mockOptions.onConnectionChange).toHaveBeenCalledWith(true);
+    
+    // Verify clients exist
+    const clients = Array.from(mockClients.values());
+    expect(clients.length).toBeGreaterThan(0);
   });
 
   it('should attempt reconnection on unexpected close', async () => {
-    vi.useRealTimers(); // Use real timers for reconnection test
+    vi.useRealTimers();
     
     const { result } = renderHook(() => 
       useTacticalWebSocket({ 
@@ -287,10 +288,11 @@ describe('useTacticalWebSocket', () => {
       expect(result.current[0].isConnected).toBe(true);
     });
 
-    // Simulate unexpected close
-    const mockWs = mockInstances[0];
+    // Simulate unexpected close by closing all clients
     act(() => {
-      mockWs.simulateClose({ code: 1006, reason: 'Connection lost', wasClean: false });
+      mockClients.forEach((client) => {
+        client.close();
+      });
     });
 
     // Verify disconnected state
@@ -318,18 +320,14 @@ describe('useTacticalWebSocket', () => {
     expect(initialPing).toBeGreaterThanOrEqual(0);
   });
 
-  it('should handle connection errors', async () => {
-    // Override WebSocket to simulate connection failure
-    const FailingWebSocket = class extends MockWebSocket {
-      constructor(url: string) {
-        super(url);
-        setTimeout(() => {
-          this.readyState = MockWebSocket.CLOSED;
-          this.onclose?.(new CloseEvent('close', { code: 1006, reason: 'Connection failed', wasClean: false }));
-        }, 10);
-      }
-    };
-    global.WebSocket = FailingWebSocket as any;
+  it('should handle connection errors gracefully', async () => {
+    // Override handler to simulate connection failure
+    server.use(
+      ws.link('ws://localhost:8000/v1/ws').addEventListener('connection', ({ client }) => {
+        // Immediately close the connection to simulate failure
+        client.close();
+      })
+    );
 
     const { result } = renderHook(() => useTacticalWebSocket(mockOptions));
 
@@ -337,6 +335,7 @@ describe('useTacticalWebSocket', () => {
       result.current[1].connect();
     });
 
+    // Should handle the error without throwing
     await waitFor(() => {
       expect(result.current[0].isConnecting).toBe(false);
     });
