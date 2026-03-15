@@ -20,8 +20,8 @@ import {
   Zap,
   Crosshair
 } from 'lucide-react';
-import { GlassCard } from '@/components/GlassCard';
-import { Button } from '@/components/Button';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { GlowButton as Button } from '@/components/ui/GlowButton';
 import { AvailablePlayer, FantasyTeam } from './types';
 
 interface FantasyDraftProps {

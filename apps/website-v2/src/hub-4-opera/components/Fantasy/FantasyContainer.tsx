@@ -14,8 +14,8 @@ import {
   BarChart3,
   ChevronRight
 } from 'lucide-react';
-import { GlassCard } from '@/components/GlassCard';
-import { Button } from '@/components/Button';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { GlowButton as Button } from '@/components/ui/GlowButton';
 import { FantasyLeagues } from './FantasyLeagues';
 import { FantasyDraft } from './FantasyDraft';
 import { FantasyTeamManage } from './FantasyTeamManage';
