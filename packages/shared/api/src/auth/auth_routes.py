@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 Authentication Routes
 Login, registration, token refresh, password reset

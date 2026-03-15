@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 SATOR Hub API Routes
 ===================

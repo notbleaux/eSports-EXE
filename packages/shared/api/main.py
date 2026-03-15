@@ -1,4 +1,3 @@
-[Ver002.000]
 """
 SATOR API — Main FastAPI Application
 Aggregates all hub services: SATOR, tokens, forum, fantasy, challenges, wiki, opera

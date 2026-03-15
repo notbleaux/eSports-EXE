@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 SATOR Authentication Module
 JWT-based authentication for the API

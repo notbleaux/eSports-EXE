@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 SATOR Database Service
 =====================

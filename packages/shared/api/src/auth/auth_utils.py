@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 Authentication Utilities
 JWT token handling, password hashing, and FastAPI dependencies
@@ -22,7 +21,13 @@ logger = logging.getLogger(__name__)
 # JWT Configuration
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 if not SECRET_KEY:
-    # Fallback for development (should be set in production)
+    # Prevent hardcoded secrets in production
+    if os.getenv("APP_ENVIRONMENT") == "production":
+        raise RuntimeError(
+            "CRITICAL: JWT_SECRET_KEY environment variable must be set in production! "
+            "Generate a secure key with: openssl rand -hex 32"
+        )
+    # Fallback for development only
     SECRET_KEY = "dev-secret-key-change-in-production"
     logger.warning("JWT_SECRET_KEY not set, using development fallback!")
 
