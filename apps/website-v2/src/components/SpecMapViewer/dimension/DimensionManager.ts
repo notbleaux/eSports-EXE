@@ -1,280 +1,431 @@
-/** [Ver001.000] */
+/** [Ver002.000] */
 /**
- * Dimension Manager
- * =================
- * Manages 4D/3.5D/3D/2.5D/2D view modes for SpecMapViewer.
- * Handles mode switching, camera positioning, and transform matrices.
+ * DimensionManager
+ * ================
+ * Manages 4D/3.5D/3D/2.5D/2D view modes with camera matrix math.
+ * Handles smooth transitions between dimension modes.
+ * 
+ * Improvements in v2:
+ * - Exported all public interfaces
+ * - Added bounds validation
+ * - Added transition callbacks
+ * - Added matrix caching with dirty flags
+ * - Fixed memory leak in animation
  */
 
-import type { Vector2D } from '../toy-model/types'
-import type { Vector3D, DimensionMode, DimensionConfig, CameraConfig, TransformConfig, ProjectionConfig } from './types'
+export type DimensionMode = '4D' | '3.5D' | '3D' | '2.5D' | '2D';
 
-/** Preset configurations for each dimension mode */
-export const DIMENSION_PRESETS: Record<DimensionMode, DimensionConfig> = {
-  '4D': {
-    mode: '4D',
-    camera: {
-      position: { x: 32, y: 32, z: 80 },
-      target: { x: 32, y: 32, z: 0 },
-      up: { x: 0, y: 1, z: 0 },
-      fov: 60,
-      near: 0.1,
-      far: 200
-    },
-    transform: {
-      compression: 1.0,
-      rotation: 0,
-      elevation: 60,
-      pan: { x: 0, y: 0 }
-    },
-    projection: { type: 'perspective', fov: 60 }
-  },
-  '3.5D': {
-    mode: '3.5D',
-    camera: {
-      position: { x: 32, y: 48, z: 60 },
-      target: { x: 32, y: 32, z: 0 },
-      up: { x: 0, y: 0, z: 1 },
-      fov: 50,
-      near: 0.1,
-      far: 200
-    },
-    transform: {
-      compression: 0.8,
-      rotation: 0,
-      elevation: 45,
-      pan: { x: 0, y: 0 }
-    },
-    projection: { type: 'perspective', fov: 50 }
-  },
-  '3D': {
-    mode: '3D',
-    camera: {
-      position: { x: 32, y: 64, z: 40 },
-      target: { x: 32, y: 32, z: 0 },
-      up: { x: 0, y: 0, z: 1 },
-      fov: 45,
-      near: 0.1,
-      far: 200
-    },
-    transform: {
-      compression: 1.0,
-      rotation: 0,
-      elevation: 30,
-      pan: { x: 0, y: 0 }
-    },
-    projection: { type: 'perspective', fov: 45 }
-  },
-  '2.5D': {
-    mode: '2.5D',
-    camera: {
-      position: { x: 32, y: 96, z: 20 },
-      target: { x: 32, y: 32, z: 0 },
-      up: { x: 0, y: 0, z: 1 },
-      fov: 35,
-      near: 0.1,
-      far: 200
-    },
-    transform: {
-      compression: 1.2,
-      rotation: 0,
-      elevation: 15,
-      pan: { x: 0, y: 0 }
-    },
-    projection: { type: 'orthographic', orthoSize: 80 }
-  },
-  '2D': {
-    mode: '2D',
-    camera: {
-      position: { x: 32, y: 32, z: 100 },
-      target: { x: 32, y: 32, z: 0 },
-      up: { x: 0, y: 1, z: 0 },
-      fov: 30,
-      near: 0.1,
-      far: 200
-    },
-    transform: {
-      compression: 1.0,
-      rotation: 0,
-      elevation: -90,
-      pan: { x: 0, y: 0 }
-    },
-    projection: { type: 'orthographic', orthoSize: 64 }
-  }
+export interface Vector3D {
+  x: number;
+  y: number;
+  z: number;
 }
 
-export interface DimensionState {
-  config: DimensionConfig
-  transitionProgress: number
-  targetConfig?: DimensionConfig
-  isTransitioning: boolean
+export interface Vector2D {
+  x: number;
+  y: number;
+}
+
+export interface CameraState {
+  position: Vector3D;
+  target: Vector3D;
+  up: Vector3D;
+  fov: number;
+}
+
+export interface DimensionConfig {
+  mode: DimensionMode;
+  camera: CameraState;
+  projection: 'perspective' | 'orthographic';
+  near: number;
+  far: number;
+}
+
+export interface Bounds3D {
+  min: Vector3D;
+  max: Vector3D;
+}
+
+export interface TransitionOptions {
+  duration?: number;
+  easing?: 'linear' | 'easeInOut' | 'easeInOutCubic';
+  onComplete?: () => void;
+  onProgress?: (progress: number) => void;
 }
 
 export class DimensionManager {
-  private state: DimensionState
-  private transitionDuration: number = 500
-  private transitionStartTime: number = 0
+  private currentMode: DimensionMode = '2D';
+  private currentConfig: DimensionConfig;
+  private transitionStartTime: number = 0;
+  private isTransitioning: boolean = false;
+  private fromConfig: DimensionConfig | null = null;
+  private toConfig: DimensionConfig | null = null;
+  private transitionOptions: TransitionOptions | null = null;
+  private animationFrameId: number | null = null;
+  private readonly defaultTransitionDuration: number = 500;
 
-  constructor(initialMode: DimensionMode = '2D') {
-    this.state = {
-      config: this.deepClone(DIMENSION_PRESETS[initialMode]),
-      transitionProgress: 1,
-      isTransitioning: false
-    }
+  // Camera matrices
+  private viewMatrix: Float32Array = new Float32Array(16);
+  private projectionMatrix: Float32Array = new Float32Array(16);
+  private vpMatrix: Float32Array = new Float32Array(16);
+  private matricesDirty: boolean = true;
+
+  // Optional bounds for camera position
+  private bounds: Bounds3D | null = null;
+
+  // Preset configurations for each mode
+  private readonly presets: Record<DimensionMode, DimensionConfig>;
+
+  constructor(initialMode: DimensionMode = '2D', mapSize: number = 64) {
+    this.presets = this.generatePresets(mapSize);
+    this.currentMode = initialMode;
+    this.currentConfig = this.cloneConfig(this.presets[initialMode]);
+    this.updateMatrices();
   }
 
-  getConfig(): DimensionConfig {
-    if (this.state.isTransitioning && this.state.targetConfig) {
-      return this.interpolateConfig(
-        this.state.config,
-        this.state.targetConfig,
-        this.state.transitionProgress
-      )
-    }
-    return this.state.config
+  /**
+   * Generate presets based on map size
+   */
+  private generatePresets(mapSize: number): Record<DimensionMode, DimensionConfig> {
+    const center = mapSize / 2;
+    return {
+      '4D': {
+        mode: '4D',
+        camera: {
+          position: { x: center, y: center, z: mapSize * 1.5 },
+          target: { x: center, y: center, z: 0 },
+          up: { x: 0, y: 1, z: 0 },
+          fov: 60
+        },
+        projection: 'perspective',
+        near: 0.1,
+        far: mapSize * 4
+      },
+      '3.5D': {
+        mode: '3.5D',
+        camera: {
+          position: { x: center, y: mapSize * 0.75, z: mapSize * 1.2 },
+          target: { x: center, y: center, z: 0 },
+          up: { x: 0, y: 0, z: 1 },
+          fov: 50
+        },
+        projection: 'perspective',
+        near: 0.1,
+        far: mapSize * 4
+      },
+      '3D': {
+        mode: '3D',
+        camera: {
+          position: { x: center, y: mapSize, z: mapSize * 0.9 },
+          target: { x: center, y: center, z: 0 },
+          up: { x: 0, y: 0, z: 1 },
+          fov: 45
+        },
+        projection: 'perspective',
+        near: 0.1,
+        far: mapSize * 4
+      },
+      '2.5D': {
+        mode: '2.5D',
+        camera: {
+          position: { x: center, y: mapSize * 1.5, z: mapSize * 0.5 },
+          target: { x: center, y: center, z: 0 },
+          up: { x: 0, y: 0, z: 1 },
+          fov: 35
+        },
+        projection: 'orthographic',
+        near: 0.1,
+        far: mapSize * 4
+      },
+      '2D': {
+        mode: '2D',
+        camera: {
+          position: { x: center, y: center, z: mapSize * 1.8 },
+          target: { x: center, y: center, z: 0 },
+          up: { x: 0, y: 1, z: 0 },
+          fov: 30
+        },
+        projection: 'orthographic',
+        near: 0.1,
+        far: mapSize * 4
+      }
+    };
   }
 
-  getMode(): DimensionMode {
-    return this.getConfig().mode
-  }
+  /**
+   * Set dimension mode with optional smooth transition
+   */
+  setMode(mode: DimensionMode, options: TransitionOptions = {}): void {
+    if (mode === this.currentMode) return;
 
-  switchMode(mode: DimensionMode, animate: boolean = true): void {
-    if (mode === this.state.config.mode) return
-
-    const targetConfig = this.deepClone(DIMENSION_PRESETS[mode])
-
+    const animate = options.duration !== 0;
+    
     if (!animate) {
-      this.state.config = targetConfig
-      this.state.transitionProgress = 1
-      this.state.isTransitioning = false
-      return
+      this.cancelTransition();
+      this.currentMode = mode;
+      this.currentConfig = this.cloneConfig(this.presets[mode]);
+      this.markMatricesDirty();
+      options.onComplete?.();
+      return;
     }
 
-    this.state.targetConfig = targetConfig
-    this.state.transitionProgress = 0
-    this.state.isTransitioning = true
-    this.transitionStartTime = performance.now()
-    this.animateTransition()
+    // Cancel any existing transition
+    this.cancelTransition();
+
+    // Start new transition
+    this.isTransitioning = true;
+    this.fromConfig = this.cloneConfig(this.currentConfig);
+    this.toConfig = this.cloneConfig(this.presets[mode]);
+    this.transitionStartTime = performance.now();
+    this.transitionOptions = options;
+    this.currentMode = mode;
+
+    this.animateTransition();
   }
 
-  setCameraPosition(position: Partial<Vector3D>): void {
-    this.state.config.camera = {
-      ...this.state.config.camera,
-      ...position
+  /**
+   * Cancel ongoing transition
+   */
+  private cancelTransition(): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
     }
+    this.isTransitioning = false;
+    this.fromConfig = null;
+    this.toConfig = null;
+    this.transitionOptions = null;
   }
 
-  setTransform(transform: Partial<TransformConfig>): void {
-    this.state.config.transform = {
-      ...this.state.config.transform,
-      ...transform
+  /**
+   * Get current dimension mode
+   */
+  getMode(): DimensionMode {
+    return this.currentMode;
+  }
+
+  /**
+   * Get view-projection matrix for rendering
+   */
+  getCameraMatrix(): Float32Array {
+    if (this.matricesDirty) {
+      this.updateMatrices();
     }
+    return this.vpMatrix;
   }
 
-  setRotation(degrees: number): void {
-    this.state.config.transform.rotation = degrees % 360
-  }
-
-  setZoom(zoom: number): void {
-    this.state.config.transform.compression = Math.max(0.1, Math.min(3.0, zoom))
-  }
-
-  setElevation(elevation: number): void {
-    this.state.config.transform.elevation = Math.max(-90, Math.min(45, elevation))
-  }
-
-  pan(deltaX: number, deltaY: number): void {
-    this.state.config.transform.pan.x += deltaX
-    this.state.config.transform.pan.y += deltaY
-  }
-
+  /**
+   * Get separate view matrix
+   */
   getViewMatrix(): Float32Array {
-    const config = this.getConfig()
-    const { position, target, up } = config.camera
-    return this.calculateLookAt(position, target, up)
+    if (this.matricesDirty) {
+      this.updateMatrices();
+    }
+    return this.viewMatrix;
   }
 
+  /**
+   * Get separate projection matrix
+   */
   getProjectionMatrix(): Float32Array {
-    const config = this.getConfig()
-    const { projection } = config
-
-    if (projection.type === 'perspective') {
-      return this.calculatePerspective(
-        projection.fov || 45,
-        1,
-        config.camera.near,
-        config.camera.far
-      )
-    } else {
-      return this.calculateOrthographic(
-        projection.orthoSize || 64,
-        config.camera.near,
-        config.camera.far
-      )
+    if (this.matricesDirty) {
+      this.updateMatrices();
     }
+    return this.projectionMatrix;
   }
 
-  getViewProjectionMatrix(): Float32Array {
-    const view = this.getViewMatrix()
-    const proj = this.getProjectionMatrix()
-    return this.multiplyMatrices(proj, view)
+  /**
+   * Project 3D world position to 2D screen space
+   */
+  project3DTo2D(worldPos: Vector3D, viewportWidth: number, viewportHeight: number): Vector2D {
+    const vp = this.getCameraMatrix();
+    
+    // Transform to clip space
+    const x = worldPos.x;
+    const y = worldPos.y;
+    const z = worldPos.z;
+    const w = 1;
+
+    const clipX = vp[0] * x + vp[4] * y + vp[8] * z + vp[12] * w;
+    const clipY = vp[1] * x + vp[5] * y + vp[9] * z + vp[13] * w;
+    const clipW = vp[3] * x + vp[7] * y + vp[11] * z + vp[15] * w;
+
+    // Perspective divide
+    const ndcX = clipX / clipW;
+    const ndcY = clipY / clipW;
+
+    // Convert to screen space
+    return {
+      x: (ndcX + 1) * 0.5 * viewportWidth,
+      y: (1 - ndcY) * 0.5 * viewportHeight
+    };
   }
 
-  isTransitioning(): boolean {
-    return this.state.isTransitioning
+  /**
+   * Check if currently transitioning between modes
+   */
+  isAnimating(): boolean {
+    return this.isTransitioning;
   }
 
-  getTransitionProgress(): number {
-    return this.state.transitionProgress
+  /**
+   * Set optional bounds for camera position
+   */
+  setBounds(bounds: Bounds3D | null): void {
+    this.bounds = bounds;
   }
 
+  /**
+   * Get current bounds
+   */
+  getBounds(): Bounds3D | null {
+    return this.bounds;
+  }
+
+  /**
+   * Set custom camera position with optional validation
+   */
+  setCameraPosition(position: Vector3D, validate: boolean = true): void {
+    if (validate && this.bounds) {
+      position = this.clampPositionToBounds(position);
+    }
+    this.currentConfig.camera.position = position;
+    this.markMatricesDirty();
+  }
+
+  /**
+   * Set camera target/look-at point
+   */
+  setCameraTarget(target: Vector3D): void {
+    this.currentConfig.camera.target = target;
+    this.markMatricesDirty();
+  }
+
+  /**
+   * Clamp position to bounds
+   */
+  private clampPositionToBounds(pos: Vector3D): Vector3D {
+    if (!this.bounds) return pos;
+    return {
+      x: Math.max(this.bounds.min.x, Math.min(this.bounds.max.x, pos.x)),
+      y: Math.max(this.bounds.min.y, Math.min(this.bounds.max.y, pos.y)),
+      z: Math.max(this.bounds.min.z, Math.min(this.bounds.max.z, pos.z))
+    };
+  }
+
+  /**
+   * Mark matrices as needing update
+   */
+  private markMatricesDirty(): void {
+    this.matricesDirty = true;
+  }
+
+  // Private: Animate transition between modes
   private animateTransition(): void {
-    if (!this.state.isTransitioning || !this.state.targetConfig) return
+    if (!this.isTransitioning || !this.fromConfig || !this.toConfig) return;
 
-    const elapsed = performance.now() - this.transitionStartTime
-    this.state.transitionProgress = Math.min(1, elapsed / this.transitionDuration)
+    const elapsed = performance.now() - this.transitionStartTime;
+    const duration = this.transitionOptions?.duration ?? this.defaultTransitionDuration;
+    const progress = Math.min(1, elapsed / duration);
+    const eased = this.easeInOutCubic(progress);
 
-    if (this.state.transitionProgress < 1) {
-      requestAnimationFrame(() => this.animateTransition())
+    // Interpolate camera state
+    this.currentConfig.camera.position = this.lerpVector3D(
+      this.fromConfig.camera.position,
+      this.toConfig.camera.position,
+      eased
+    );
+    this.currentConfig.camera.target = this.lerpVector3D(
+      this.fromConfig.camera.target,
+      this.toConfig.camera.target,
+      eased
+    );
+    this.currentConfig.camera.fov = this.lerp(
+      this.fromConfig.camera.fov,
+      this.toConfig.camera.fov,
+      eased
+    );
+
+    this.markMatricesDirty();
+    this.transitionOptions?.onProgress?.(progress);
+
+    if (progress < 1) {
+      this.animationFrameId = requestAnimationFrame(() => this.animateTransition());
     } else {
-      this.state.config = this.state.targetConfig
-      this.state.isTransitioning = false
-      this.state.targetConfig = undefined
+      this.isTransitioning = false;
+      this.fromConfig = null;
+      this.toConfig = null;
+      this.animationFrameId = null;
+      this.transitionOptions?.onComplete?.();
+      this.transitionOptions = null;
     }
   }
 
-  private interpolateConfig(from: DimensionConfig, to: DimensionConfig, t: number): DimensionConfig {
-    const easeT = this.easeInOutCubic(t)
+  // Private: Update view and projection matrices
+  private updateMatrices(): void {
+    this.updateViewMatrix();
+    this.updateProjectionMatrix();
+    this.multiplyMatrices(this.projectionMatrix, this.viewMatrix, this.vpMatrix);
+    this.matricesDirty = false;
+  }
 
-    return {
-      mode: to.mode,
-      camera: {
-        position: this.lerpVector3D(from.camera.position, to.camera.position, easeT),
-        target: this.lerpVector3D(from.camera.target, to.camera.target, easeT),
-        up: from.camera.up,
-        fov: this.lerp(from.camera.fov, to.camera.fov, easeT),
-        near: Math.min(from.camera.near, to.camera.near),
-        far: Math.max(from.camera.far, to.camera.far)
-      },
-      transform: {
-        compression: this.lerp(from.transform.compression, to.transform.compression, easeT),
-        rotation: this.lerpAngle(from.transform.rotation, to.transform.rotation, easeT),
-        elevation: this.lerp(from.transform.elevation, to.transform.elevation, easeT),
-        pan: this.lerpVector2D(from.transform.pan, to.transform.pan, easeT)
-      },
-      projection: to.projection
+  // Private: Calculate view matrix (look-at)
+  private updateViewMatrix(): void {
+    const eye = this.currentConfig.camera.position;
+    const target = this.currentConfig.camera.target;
+    const up = this.currentConfig.camera.up;
+
+    // Forward vector (normalized)
+    const zAxis = this.normalize({
+      x: eye.x - target.x,
+      y: eye.y - target.y,
+      z: eye.z - target.z
+    });
+
+    // Right vector
+    const xAxis = this.normalize(this.cross(up, zAxis));
+
+    // Up vector (recomputed)
+    const yAxis = this.cross(zAxis, xAxis);
+
+    // Build view matrix
+    this.viewMatrix[0] = xAxis.x;  this.viewMatrix[4] = xAxis.y;  this.viewMatrix[8] = xAxis.z;   this.viewMatrix[12] = -this.dot(xAxis, eye);
+    this.viewMatrix[1] = yAxis.x;  this.viewMatrix[5] = yAxis.y;  this.viewMatrix[9] = yAxis.z;   this.viewMatrix[13] = -this.dot(yAxis, eye);
+    this.viewMatrix[2] = zAxis.x;  this.viewMatrix[6] = zAxis.y;  this.viewMatrix[10] = zAxis.z;  this.viewMatrix[14] = -this.dot(zAxis, eye);
+    this.viewMatrix[3] = 0;        this.viewMatrix[7] = 0;        this.viewMatrix[11] = 0;        this.viewMatrix[15] = 1;
+  }
+
+  // Private: Calculate projection matrix
+  private updateProjectionMatrix(): void {
+    const config = this.currentConfig;
+    const aspect = 1;
+
+    if (config.projection === 'perspective') {
+      const fovRad = (config.camera.fov * Math.PI) / 180;
+      const f = 1 / Math.tan(fovRad / 2);
+      const nf = 1 / (config.near - config.far);
+
+      this.projectionMatrix[0] = f / aspect;  this.projectionMatrix[4] = 0;  this.projectionMatrix[8] = 0;                           this.projectionMatrix[12] = 0;
+      this.projectionMatrix[1] = 0;           this.projectionMatrix[5] = f;  this.projectionMatrix[9] = 0;                           this.projectionMatrix[13] = 0;
+      this.projectionMatrix[2] = 0;           this.projectionMatrix[6] = 0;  this.projectionMatrix[10] = (config.far + config.near) * nf;  this.projectionMatrix[14] = 2 * config.far * config.near * nf;
+      this.projectionMatrix[3] = 0;           this.projectionMatrix[7] = 0;  this.projectionMatrix[11] = -1;                         this.projectionMatrix[15] = 0;
+    } else {
+      const size = 64;
+      const r = size / 2;
+      const l = -r;
+      const t = r;
+      const b = -r;
+
+      this.projectionMatrix[0] = 2 / (r - l);  this.projectionMatrix[4] = 0;           this.projectionMatrix[8] = 0;                               this.projectionMatrix[12] = -(r + l) / (r - l);
+      this.projectionMatrix[1] = 0;            this.projectionMatrix[5] = 2 / (t - b); this.projectionMatrix[9] = 0;                               this.projectionMatrix[13] = -(t + b) / (t - b);
+      this.projectionMatrix[2] = 0;            this.projectionMatrix[6] = 0;           this.projectionMatrix[10] = -2 / (config.far - config.near); this.projectionMatrix[14] = -(config.far + config.near) / (config.far - config.near);
+      this.projectionMatrix[3] = 0;            this.projectionMatrix[7] = 0;           this.projectionMatrix[11] = 0;                              this.projectionMatrix[15] = 1;
     }
   }
 
+  // Math helpers
   private lerp(a: number, b: number, t: number): number {
-    return a + (b - a) * t
-  }
-
-  private lerpVector2D(a: Vector2D, b: Vector2D, t: number): Vector2D {
-    return {
-      x: this.lerp(a.x, b.x, t),
-      y: this.lerp(a.y, b.y, t)
-    }
+    return a + (b - a) * t;
   }
 
   private lerpVector3D(a: Vector3D, b: Vector3D, t: number): Vector3D {
@@ -282,79 +433,17 @@ export class DimensionManager {
       x: this.lerp(a.x, b.x, t),
       y: this.lerp(a.y, b.y, t),
       z: this.lerp(a.z, b.z, t)
-    }
-  }
-
-  private lerpAngle(a: number, b: number, t: number): number {
-    let diff = b - a
-    while (diff > 180) diff -= 360
-    while (diff < -180) diff += 360
-    return (a + diff * t) % 360
+    };
   }
 
   private easeInOutCubic(t: number): number {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-  }
-
-  private calculateLookAt(eye: Vector3D, target: Vector3D, up: Vector3D): Float32Array {
-    const zAxis = this.normalize(this.subtract(eye, target))
-    const xAxis = this.normalize(this.cross(up, zAxis))
-    const yAxis = this.cross(zAxis, xAxis)
-
-    return new Float32Array([
-      xAxis.x, yAxis.x, zAxis.x, 0,
-      xAxis.y, yAxis.y, zAxis.y, 0,
-      xAxis.z, yAxis.z, zAxis.z, 0,
-      -this.dot(xAxis, eye), -this.dot(yAxis, eye), -this.dot(zAxis, eye), 1
-    ])
-  }
-
-  private calculatePerspective(fov: number, aspect: number, near: number, far: number): Float32Array {
-    const f = 1.0 / Math.tan((fov * Math.PI / 180) / 2)
-    const nf = 1 / (near - far)
-
-    return new Float32Array([
-      f / aspect, 0, 0, 0,
-      0, f, 0, 0,
-      0, 0, (far + near) * nf, -1,
-      0, 0, 2 * far * near * nf, 0
-    ])
-  }
-
-  private calculateOrthographic(size: number, near: number, far: number): Float32Array {
-    const r = size / 2
-    const l = -r
-    const t = r
-    const b = -r
-
-    return new Float32Array([
-      2 / (r - l), 0, 0, 0,
-      0, 2 / (t - b), 0, 0,
-      0, 0, -2 / (far - near), 0,
-      -(r + l) / (r - l), -(t + b) / (t - b), -(far + near) / (far - near), 1
-    ])
-  }
-
-  private multiplyMatrices(a: Float32Array, b: Float32Array): Float32Array {
-    const result = new Float32Array(16)
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        result[i * 4 + j] = 0
-        for (let k = 0; k < 4; k++) {
-          result[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j]
-        }
-      }
-    }
-    return result
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
 
   private normalize(v: Vector3D): Vector3D {
-    const len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
-    return len > 0 ? { x: v.x / len, y: v.y / len, z: v.z / len } : { x: 0, y: 0, z: 0 }
-  }
-
-  private subtract(a: Vector3D, b: Vector3D): Vector3D {
-    return { x: a.x - b.x, y: a.y - b.y, z: a.z - b.z }
+    const len = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    if (len === 0) return { x: 0, y: 0, z: 0 };
+    return { x: v.x / len, y: v.y / len, z: v.z / len };
   }
 
   private cross(a: Vector3D, b: Vector3D): Vector3D {
@@ -362,16 +451,34 @@ export class DimensionManager {
       x: a.y * b.z - a.z * b.y,
       y: a.z * b.x - a.x * b.z,
       z: a.x * b.y - a.y * b.x
-    }
+    };
   }
 
   private dot(a: Vector3D, b: Vector3D): number {
-    return a.x * b.x + a.y * b.y + a.z * b.z
+    return a.x * b.x + a.y * b.y + a.z * b.z;
   }
 
-  private deepClone<T>(obj: T): T {
-    return JSON.parse(JSON.stringify(obj))
+  private multiplyMatrices(a: Float32Array, b: Float32Array, out: Float32Array): void {
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        out[i * 4 + j] = 0;
+        for (let k = 0; k < 4; k++) {
+          out[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
+        }
+      }
+    }
+  }
+
+  private cloneConfig(config: DimensionConfig): DimensionConfig {
+    return JSON.parse(JSON.stringify(config));
+  }
+
+  /**
+   * Clean up resources
+   */
+  destroy(): void {
+    this.cancelTransition();
   }
 }
 
-export default DimensionManager
+export default DimensionManager;

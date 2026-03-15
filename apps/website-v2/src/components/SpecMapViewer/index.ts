@@ -1,15 +1,8 @@
-/** [Ver001.000] */
+/** [Ver002.000] */
 /**
  * SpecMapViewer
  * =============
  * Tactical map visualization with creative lens system and multi-dimensional views.
- * 
- * Features:
- * - 64x64 toy model grid representation
- * - 6 creative lenses (Tension, Ripple, Blood, Wind, Doors, Secured)
- * - 5 dimension modes (4D, 3.5D, 3D, 2.5D, 2D)
- * - Camera manipulation (zoom, rotate, pan, animate)
- * - Lens compositing system
  */
 
 // Toy Model
@@ -24,8 +17,17 @@ export * from './dimension'
 // Camera
 export * from './camera'
 
+// API
+export * from './api'
+
+// Benchmark
+export * from './benchmark'
+
+// WebGL
+export * from './webgl'
+
 // Version
-export const VERSION = '2.0.0'
+export const VERSION = '2.1.0'
 export const SPECMAPVIEWER_INFO = {
   name: 'SpecMapViewer',
   version: VERSION,
