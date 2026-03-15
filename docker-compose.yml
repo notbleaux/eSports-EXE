@@ -1,0 +1,100 @@
+[Ver001.000]
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:14-alpine
+    container_name: sator-db
+    environment:
+      POSTGRES_DB: sator
+      POSTGRES_USER: sator
+      POSTGRES_PASSWORD: sator_dev_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./packages/shared/api/migrations:/docker-entrypoint-initdb.d/api:ro
+      - ./packages/shared/axiom-esports-data/infrastructure/migrations:/docker-entrypoint-initdb.d/axiom:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sator"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sator-network
+
+  # Redis Cache (for rate limiting, sessions)
+  redis:
+    image: redis:7-alpine
+    container_name: sator-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - sator-network
+
+  # SATOR API Backend
+  api:
+    build:
+      context: ./packages/shared
+      dockerfile: api/Dockerfile
+    container_name: sator-api
+    environment:
+      DATABASE_URL: postgresql://sator:sator_dev_password@db:5432/sator
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-secret-key-change-in-production}
+      APP_ENVIRONMENT: ${APP_ENVIRONMENT:-development}
+      CORS_ORIGINS: '["http://localhost:3000", "http://localhost:5173", "http://localhost:4173"]'
+      RATE_LIMIT_REQUESTS_PER_MINUTE: "100"
+      RATE_LIMIT_BURST: "10"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./packages/shared:/app
+      - /app/__pycache__
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level info
+    networks:
+      - sator-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Frontend (Vite/React)
+  frontend:
+    build:
+      context: ./apps/website-v2
+      dockerfile: Dockerfile
+    container_name: sator-frontend
+    environment:
+      VITE_API_URL: http://localhost:8000
+      VITE_WS_URL: ws://localhost:8000/ws
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - sator-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  sator-network:
+    driver: bridge
