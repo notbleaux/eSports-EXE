@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FantasyDraft } from '../FantasyDraft';
@@ -6,11 +7,12 @@ import { FantasyDraft } from '../FantasyDraft';
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 
-// Mock GlassCard and Button
+// Mock UI components
 vi.mock('@/components/ui/GlassCard', () => ({
   GlassCard: ({ children, ...props }: any) => (
     <div data-testid="glass-card" {...props}>{children}</div>

@@ -8,7 +8,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, FileText, Loader2 } from 'lucide-react';
-import { GlassCard } from '@/components/GlassCard';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { WikiArticleSummary } from './types';
 
 interface WikiSearchProps {

@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FantasyContainer } from '../FantasyContainer';
@@ -6,8 +7,18 @@ import { FantasyContainer } from '../FantasyContainer';
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
+}));
+
+// Mock UI components
+vi.mock('@/components/ui/GlassCard', () => ({
+  GlassCard: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+}));
+
+vi.mock('@/components/ui/GlowButton', () => ({
+  GlowButton: ({ children, ...props }: any) => <button {...props}>{children}</button>,
 }));
 
 // Mock child components
