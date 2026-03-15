@@ -99,6 +99,10 @@ class DatabaseManager:
             schema='pg_catalog'
         )
     
+    async def connect(self) -> bool:
+        """Alias for initialize() - connect to database."""
+        return await self.initialize()
+    
     async def close(self):
         """Close all connections gracefully."""
         if self.pool:
