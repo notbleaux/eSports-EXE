@@ -1,4 +1,3 @@
-[Ver001.000]
 """
 Token Economy Pydantic Models
 ============================

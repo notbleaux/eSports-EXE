@@ -1,4 +1,3 @@
-[Ver002.000]
 """
 Token Economy API Routes
 =======================
