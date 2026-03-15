@@ -1,0 +1,423 @@
+/** [Ver001.000] */
+/**
+ * TacticalView Styles
+ * ===================
+ * CSS styles for the tactical view component and its children.
+ */
+
+/* ============================================================================
+   TacticalView Container
+   ============================================================================ */
+
+.tactical-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 16px;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tactical-view__canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 1024px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.tactical-view__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.tactical-view__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.tactical-view__overlay--interactive {
+  pointer-events: auto;
+}
+
+/* ============================================================================
+   Loading State
+   ============================================================================ */
+
+.tactical-view__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #74b9ff;
+}
+
+.tactical-view__loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #2d3436;
+  border-top-color: #74b9ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tactical-view__loading-text {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #b2bec3;
+}
+
+/* ============================================================================
+   Error State
+   ============================================================================ */
+
+.tactical-view__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  padding: 24px;
+  text-align: center;
+  color: #ff7675;
+}
+
+.tactical-view__error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.tactical-view__error-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.tactical-view__error-message {
+  font-size: 14px;
+  color: #b2bec3;
+  margin-bottom: 16px;
+}
+
+.tactical-view__error-retry {
+  padding: 10px 20px;
+  background: #0984e3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.tactical-view__error-retry:hover {
+  background: #74b9ff;
+}
+
+/* ============================================================================
+   Match Info Header
+   ============================================================================ */
+
+.tactical-view__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #2d3436;
+  border-radius: 8px;
+}
+
+.tactical-view__match-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tactical-view__map-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tactical-view__match-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #b2bec3;
+}
+
+.tactical-view__live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff4757;
+  font-weight: 600;
+}
+
+.tactical-view__live-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff4757;
+  border-radius: 50%;
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.tactical-view__score {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.tactical-view__score-team {
+  padding: 8px 16px;
+  border-radius: 6px;
+  min-width: 48px;
+  text-align: center;
+}
+
+.tactical-view__score-team--attacker {
+  background: #ff4757;
+  color: white;
+}
+
+.tactical-view__score-team--defender {
+  background: #3742fa;
+  color: white;
+}
+
+.tactical-view__score-divider {
+  color: #636e72;
+  font-weight: 400;
+}
+
+/* ============================================================================
+   Player Selection Panel
+   ============================================================================ */
+
+.tactical-view__player-panel {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #2d3436;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.tactical-view__player-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #1a1a2e;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tactical-view__player-chip:hover {
+  background: #16213e;
+}
+
+.tactical-view__player-chip--selected {
+  border-color: #74b9ff;
+}
+
+.tactical-view__player-chip--dead {
+  opacity: 0.5;
+}
+
+.tactical-view__player-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+}
+
+.tactical-view__player-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.tactical-view__player-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.tactical-view__player-agent {
+  font-size: 11px;
+  color: #b2bec3;
+}
+
+/* ============================================================================
+   Event Feed
+   ============================================================================ */
+
+.tactical-view__event-feed {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 280px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(26, 26, 46, 0.95);
+  border-radius: 8px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.tactical-view__event-feed-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b2bec3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.tactical-view__event-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.tactical-view__event-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tactical-view__event-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.tactical-view__event-icon--kill {
+  background: #ff4757;
+}
+
+.tactical-view__event-icon--ability {
+  background: #a29bfe;
+}
+
+.tactical-view__event-icon--spike {
+  background: #fdcb6e;
+}
+
+.tactical-view__event-text {
+  flex: 1;
+  color: #dfe6e9;
+}
+
+.tactical-view__event-time {
+  font-size: 11px;
+  color: #636e72;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ============================================================================
+   Responsive Adjustments
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .tactical-view {
+    padding: 12px;
+  }
+
+  .tactical-view__header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .tactical-view__score {
+    font-size: 20px;
+  }
+
+  .tactical-view__player-panel {
+    padding: 8px;
+  }
+
+  .tactical-view__event-feed {
+    position: static;
+    width: 100%;
+    max-height: 200px;
+    margin-top: 12px;
+  }
+}
+
+/* ============================================================================
+   Scrollbar Styling
+   ============================================================================ */
+
+.tactical-view ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.tactical-view ::-webkit-scrollbar-track {
+  background: #1a1a2e;
+  border-radius: 3px;
+}
+
+.tactical-view ::-webkit-scrollbar-thumb {
+  background: #636e72;
+  border-radius: 3px;
+}
+
+.tactical-view ::-webkit-scrollbar-thumb:hover {
+  background: #74b9ff;
+}

@@ -6,6 +6,7 @@ Login, registration, token refresh, password reset
 from datetime import datetime, timezone
 from typing import Optional
 import os
+import secrets
 
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks, Request
 from fastapi.security import HTTPBearer
@@ -68,8 +69,8 @@ async def register(
                     detail="Email already registered"
                 )
         
-        # Create user
-        user_id = f"usr_{os.urandom(8).hex()}"
+        # Create user with cryptographically secure ID
+        user_id = f"usr_{secrets.token_urlsafe(12)}"
         hashed_pw = hash_password(user_data.password)
         
         now = datetime.now(timezone.utc)
@@ -444,7 +445,7 @@ async def request_password_reset(
         
         if user:
             # Generate reset token
-            reset_token = os.urandom(32).hex()
+            reset_token = secrets.token_urlsafe(32)
             expires = datetime.now(timezone.utc) + __import__('datetime').timedelta(hours=1)
             
             await conn.execute(

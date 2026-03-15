@@ -3,13 +3,16 @@ SATOR API — Main FastAPI Application
 Aggregates all hub services: SATOR, tokens, forum, fantasy, challenges, wiki, opera
 """
 
+import os
+import logging
+import secrets
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, WebSocket, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
-import os
-import logging
 
 # Import rate limiting
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -39,7 +42,7 @@ logger = logging.getLogger(__name__)
 # JWT Secret validation (P0 Security Fix)
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 if not JWT_SECRET_KEY:
-    if os.getenv("ENVIRONMENT") == "production":
+    if os.getenv("ENVIRONMENT", "").lower() in ("production", "prod"):
         raise RuntimeError("JWT_SECRET_KEY must be set in production environment!")
     else:
         logger.warning("JWT_SECRET_KEY not set, using development fallback!")
@@ -53,7 +56,14 @@ class SecurityHeadersMiddleware:
     """Add security headers to all responses (P0 Security Fix)."""
     
     async def __call__(self, request: Request, call_next):
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            response = JSONResponse(
+                status_code=500,
+                content={"detail": "Internal Server Error"}
+            )
+        
         # HSTS
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         # X-Frame-Options
@@ -72,21 +82,21 @@ class SecurityHeadersMiddleware:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager - handles startup and shutdown."""
-    # Startup
+    # Startup - LAZY INITIALIZATION (non-blocking)
     logger.info("Starting SATOR API...")
-    try:
-        await db.connect()
-        logger.info("Database connected successfully")
-    except Exception as e:
-        logger.error(f"Database connection failed: {e}")
-        raise
+    
+    # Don't block on DB connection - let first request trigger it
+    logger.info("API initialized (database will connect on first request)")
     
     yield
     
     # Shutdown
     logger.info("Shutting down SATOR API...")
-    await db.close()
-    logger.info("Database connection closed")
+    try:
+        await db.close()
+        logger.info("Database connection closed")
+    except Exception as e:
+        logger.warning(f"Database close error (may not have been connected): {e}")
 
 
 # Create FastAPI application
@@ -107,7 +117,7 @@ app = FastAPI(
     WebSocket:
     - `/ws/sator` - Real-time SATOR updates
     """,
-    version="0.2.0",
+    version="2.1.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
@@ -158,8 +168,8 @@ async def health_check():
     return {
         "status": "healthy",
         "service": "sator-api",
-        "version": "0.2.0",
-        "timestamp": __import__('datetime').datetime.utcnow().isoformat(),
+        "version": "2.1.0",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -167,6 +177,10 @@ async def health_check():
 async def readiness_check():
     """Readiness check for orchestration platforms."""
     try:
+        # Lazy database connection
+        if not db._initialized:
+            await db.connect()
+        
         # Quick DB check
         pool = db.pool
         if pool:
@@ -183,7 +197,7 @@ async def readiness_check():
         "checks": {
             "database": db_status == "connected",
         },
-        "timestamp": __import__('datetime').datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -256,7 +270,7 @@ async def root():
     """API root - provides basic info and links."""
     return {
         "name": "SATOR Esports API",
-        "version": "0.2.0",
+        "version": "2.1.0",
         "description": "Libre-X-eSport 4NJZ4 TENET Platform",
         "documentation": "/docs",
         "health": "/health",

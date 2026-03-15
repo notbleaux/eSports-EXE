@@ -8,10 +8,9 @@ import asyncpg
 import os
 
 # Test database URL (separate from production)
-TEST_DATABASE_URL = os.getenv(
-    "TEST_DATABASE_URL",
-    "postgresql://sator:sator_dev_2025@localhost:5432/sator_test"
-)
+TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL")
+if not TEST_DATABASE_URL:
+    raise RuntimeError("TEST_DATABASE_URL environment variable must be set for testing")
 
 
 @pytest.fixture(scope="session")
