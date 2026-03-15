@@ -1,8 +1,8 @@
-[Ver001.000]
+[Ver002.000]
 """
 Daily Challenges API Routes
 ==========================
-FastAPI endpoints for daily challenges.
+FastAPI endpoints for daily challenges with JWT authentication.
 """
 
 import logging
@@ -11,6 +11,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from ..auth.auth_utils import get_current_active_user, get_optional_user, TokenData
 from .challenge_service import ChallengeService
 from .challenge_models import (
     DailyChallenge, ChallengeResult, ChallengeStreak, ChallengeStats,
@@ -24,25 +25,25 @@ router = APIRouter(prefix="/challenges", tags=["challenges"])
 
 async def get_challenge_service() -> ChallengeService:
     """Get ChallengeService instance."""
-    from ...database import get_db_pool
+    from ...axiom_esports_data.api.src.db_manager import db
     from ..tokens.token_service import TokenService
     
-    pool = await get_db_pool()
-    token_service = TokenService(pool)
-    return ChallengeService(pool, token_service)
+    token_service = TokenService(db.pool)
+    return ChallengeService(db.pool, token_service)
 
 
-async def get_current_user_id() -> str:
-    """Get current user ID from auth. Placeholder."""
-    return "user_123"
-
+# Public endpoints
 
 @router.get("/daily", response_model=Optional[DailyChallenge])
 async def get_daily_challenge(
     challenge_date: Optional[date] = Query(None, description="Date to get challenge for"),
     service: ChallengeService = Depends(get_challenge_service)
 ):
-    """Get today's daily challenge (or specific date)."""
+    """
+    Get today's daily challenge (or specific date).
+    
+    Public endpoint - no authentication required to view challenges.
+    """
     try:
         challenge = await service.get_daily_challenge(challenge_date)
         if not challenge:
@@ -60,7 +61,7 @@ async def get_upcoming_challenges(
     days: int = Query(7, ge=1, le=30),
     service: ChallengeService = Depends(get_challenge_service)
 ):
-    """Get upcoming challenges for the next N days."""
+    """Get upcoming challenges for the next N days (public)."""
     try:
         return await service.get_upcoming_challenges(days)
     except Exception as e:
@@ -68,16 +69,37 @@ async def get_upcoming_challenges(
         raise HTTPException(status_code=500, detail="Failed to load challenges")
 
 
+@router.get("/{challenge_id}/stats", response_model=ChallengeStats)
+async def get_challenge_stats(
+    challenge_id: str,
+    service: ChallengeService = Depends(get_challenge_service)
+):
+    """Get statistics for a specific challenge (public)."""
+    try:
+        return await service.get_challenge_stats(challenge_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to get challenge stats: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load stats")
+
+
+# Protected endpoints
+
 @router.post("/{challenge_id}/submit", response_model=ChallengeResult)
 async def submit_challenge_answer(
     challenge_id: str,
     request: SubmitAnswerRequest,
-    service: ChallengeService = Depends(get_challenge_service),
-    user_id: str = Depends(get_current_user_id)
+    current_user: TokenData = Depends(get_current_active_user),
+    service: ChallengeService = Depends(get_challenge_service)
 ):
-    """Submit an answer for a daily challenge."""
+    """
+    Submit an answer for a daily challenge.
+    
+    **Authentication required**
+    """
     try:
-        result = await service.submit_answer(user_id, challenge_id, request)
+        result = await service.submit_answer(current_user.user_id, challenge_id, request)
         if not result.success:
             raise HTTPException(status_code=400, detail=result.message)
         return result
@@ -88,42 +110,35 @@ async def submit_challenge_answer(
         raise HTTPException(status_code=500, detail="Failed to submit answer")
 
 
-@router.get("/{challenge_id}/stats", response_model=ChallengeStats)
-async def get_challenge_stats(
-    challenge_id: str,
+@router.get("/user/streak", response_model=ChallengeStreak)
+async def get_my_streak(
+    current_user: TokenData = Depends(get_current_active_user),
     service: ChallengeService = Depends(get_challenge_service)
 ):
-    """Get statistics for a specific challenge."""
+    """
+    Get current user's challenge streak.
+    
+    **Authentication required**
+    """
     try:
-        return await service.get_challenge_stats(challenge_id)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except Exception as e:
-        logger.error(f"Failed to get challenge stats: {e}")
-        raise HTTPException(status_code=500, detail="Failed to load stats")
-
-
-@router.get("/user/streak", response_model=ChallengeStreak)
-async def get_user_streak(
-    service: ChallengeService = Depends(get_challenge_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Get current user's challenge streak."""
-    try:
-        return await service.get_user_streak(user_id)
+        return await service.get_user_streak(current_user.user_id)
     except Exception as e:
         logger.error(f"Failed to get streak: {e}")
         raise HTTPException(status_code=500, detail="Failed to load streak")
 
 
 @router.get("/user/summary", response_model=UserChallengeSummary)
-async def get_user_summary(
-    service: ChallengeService = Depends(get_challenge_service),
-    user_id: str = Depends(get_current_user_id)
+async def get_my_summary(
+    current_user: TokenData = Depends(get_current_active_user),
+    service: ChallengeService = Depends(get_challenge_service)
 ):
-    """Get current user's challenge activity summary."""
+    """
+    Get current user's challenge activity summary.
+    
+    **Authentication required**
+    """
     try:
-        return await service.get_user_summary(user_id)
+        return await service.get_user_summary(current_user.user_id)
     except Exception as e:
         logger.error(f"Failed to get user summary: {e}")
         raise HTTPException(status_code=500, detail="Failed to load summary")
@@ -132,17 +147,37 @@ async def get_user_summary(
 @router.get("/{challenge_id}/attempted")
 async def has_attempted_challenge(
     challenge_id: str,
-    service: ChallengeService = Depends(get_challenge_service),
-    user_id: str = Depends(get_current_user_id)
+    current_user: TokenData = Depends(get_current_active_user),
+    service: ChallengeService = Depends(get_challenge_service)
 ):
-    """Check if user has attempted a challenge."""
+    """
+    Check if user has attempted a challenge.
+    
+    **Authentication required**
+    """
     try:
-        attempted = await service.has_attempted(user_id, challenge_id)
+        attempted = await service.has_attempted(current_user.user_id, challenge_id)
         return {"attempted": attempted}
     except Exception as e:
         logger.error(f"Failed to check attempt status: {e}")
         raise HTTPException(status_code=500, detail="Failed to check status")
 
+
+@router.get("/leaderboard", response_model=list[ChallengeLeaderboardEntry])
+async def get_leaderboard(
+    period: str = Query("weekly", pattern="^(daily|weekly|monthly|all_time)$"),
+    limit: int = Query(20, ge=1, le=100),
+    service: ChallengeService = Depends(get_challenge_service)
+):
+    """Get challenge leaderboard (public)."""
+    try:
+        return await service.get_leaderboard(period, limit)
+    except Exception as e:
+        logger.error(f"Failed to get leaderboard: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load leaderboard")
+
+
+# Health check
 
 @router.get("/health")
 async def challenges_health(

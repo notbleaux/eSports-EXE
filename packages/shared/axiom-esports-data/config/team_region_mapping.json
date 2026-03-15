@@ -1,0 +1,87 @@
+{
+  "_comment": "Team to Region mapping for VLR.gg data enrichment",
+  "_version": "1.0.0",
+  "_last_updated": "2026-03-15",
+  "_source": "VCT 2024-2025 official team listings",
+  
+  "Americas": {
+    "_comment": "VCT Americas teams",
+    "SEN": {"full_name": "Sentinels", "region": "Americas", "country": "US"},
+    "NRG": {"full_name": "NRG Esports", "region": "Americas", "country": "US"},
+    "C9": {"full_name": "Cloud9", "region": "Americas", "country": "US"},
+    "100T": {"full_name": "100 Thieves", "region": "Americas", "country": "US"},
+    "EG": {"full_name": "Evil Geniuses", "region": "Americas", "country": "US"},
+    "LOUD": {"full_name": "LOUD", "region": "Americas", "country": "BR"},
+    "FUR": {"full_name": "FURIA", "region": "Americas", "country": "BR"},
+    "MIBR": {"full_name": "MIBR", "region": "Americas", "country": "BR"},
+    "LEV": {"full_name": "Leviatán", "region": "Americas", "country": "AR"},
+    "KRU": {"full_name": "KRÜ Esports", "region": "Americas", "country": "AR"},
+    "G2": {"full_name": "G2 Esports", "region": "Americas", "country": "DE"}
+  },
+  
+  "EMEA": {
+    "_comment": "VCT EMEA teams",
+    "FNC": {"full_name": "Fnatic", "region": "EMEA", "country": "UK"},
+    "NAVI": {"full_name": "Natus Vincere", "region": "EMEA", "country": "UA"},
+    "VIT": {"full_name": "Team Vitality", "region": "EMEA", "country": "FR"},
+    "TL": {"full_name": "Team Liquid", "region": "EMEA", "country": "NL"},
+    "KC": {"full_name": "Karmine Corp", "region": "EMEA", "country": "FR"},
+    "BBL": {"full_name": "BBL Esports", "region": "EMEA", "country": "TR"},
+    "FUT": {"full_name": "FUT Esports", "region": "EMEA", "country": "TR"},
+    "TH": {"full_name": "Team Heretics", "region": "EMEA", "country": "ES"},
+    "GX": {"full_name": "Gentle Mates", "region": "EMEA", "country": "FR"},
+    "M8": {"full_name": "Movistar KOI", "region": "EMEA", "country": "ES"},
+    "APK": {"full_name": "Apeks", "region": "EMEA", "country": "NO"}
+  },
+  
+  "Pacific": {
+    "_comment": "VCT Pacific teams",
+    "PRX": {"full_name": "Paper Rex", "region": "Pacific", "country": "SG"},
+    "DRX": {"full_name": "DRX", "region": "Pacific", "country": "KR"},
+    "T1": {"full_name": "T1", "region": "Pacific", "country": "KR"},
+    "GEN": {"full_name": "Gen.G", "region": "Pacific", "country": "KR"},
+    "TS": {"full_name": "Team Secret", "region": "Pacific", "country": "PH"},
+    "RRQ": {"full_name": "Rex Regum Qeon", "region": "Pacific", "country": "ID"},
+    "TLN": {"full_name": "Talon Esports", "region": "Pacific", "country": "TH"},
+    "ZETA": {"full_name": "ZETA DIVISION", "region": "Pacific", "country": "JP"},
+    "DFM": {"full_name": "DetonatioN FocusMe", "region": "Pacific", "country": "JP"},
+    "GE": {"full_name": "Global Esports", "region": "Pacific", "country": "IN"},
+    "BLD": {"full_name": "Bleed Esports", "region": "Pacific", "country": "SG"}
+  },
+  
+  "China": {
+    "_comment": "VCT China teams",
+    "EDG": {"full_name": "EDward Gaming", "region": "China", "country": "CN"},
+    "FPX": {"full_name": "FunPlus Phoenix", "region": "China", "country": "CN"},
+    "BLG": {"full_name": "Bilibili Gaming", "region": "China", "country": "CN"},
+    "TE": {"full_name": "Trace Esports", "region": "China", "country": "CN"},
+    "DRG": {"full_name": "Dragon Ranger Gaming", "region": "China", "country": "CN"},
+    "AG": {"full_name": "All Gamers", "region": "China", "country": "CN"},
+    "JDG": {"full_name": "JD Gaming", "region": "China", "country": "CN"},
+    "WOL": {"full_name": "Wolves Esports", "region": "China", "country": "CN"},
+    "TYL": {"full_name": "TYLOO", "region": "China", "country": "CN"},
+    "TEC": {"full_name": "Titan Esports Club", "region": "China", "country": "CN"},
+    "XLG": {"full_name": "XiLai Gaming", "region": "China", "country": "CN"}
+  },
+  
+  "_aliases": {
+    "_comment": "Common alternative names/typos that map to canonical tags",
+    "Sentinels": "SEN",
+    "Sentinel": "SEN",
+    "Sen": "SEN",
+    "Fnatic": "FNC",
+    "Natus Vincere": "NAVI",
+    "Paper Rex": "PRX",
+    "Edward Gaming": "EDG",
+    "Cloud9": "C9",
+    "100 Thieves": "100T",
+    "Team Liquid": "TL",
+    "Team Vitality": "VIT",
+    "G2 Esports": "G2",
+    "Team Heretics": "TH",
+    "Gen.G": "GEN",
+    "FunPlus Phoenix": "FPX",
+    "Bilibili Gaming": "BLG",
+    "DRX": "DRX"
+  }
+}

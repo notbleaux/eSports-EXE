@@ -1,8 +1,8 @@
-[Ver001.000]
+[Ver002.000]
 """
 Fantasy eSports API Routes
 ==========================
-FastAPI endpoints for fantasy Valorant and CS2.
+FastAPI endpoints for fantasy Valorant and CS2 with JWT authentication.
 """
 
 import logging
@@ -10,6 +10,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from ..auth.auth_utils import get_current_active_user, require_permissions, TokenData
 from .fantasy_service import FantasyService
 from .fantasy_models import (
     FantasyLeague, FantasyTeam, FantasyTeamSummary, FantasyRoster,
@@ -25,20 +26,14 @@ router = APIRouter(prefix="/fantasy", tags=["fantasy"])
 
 async def get_fantasy_service() -> FantasyService:
     """Get FantasyService instance."""
-    from ...database import get_db_pool
+    from ...axiom_esports_data.api.src.db_manager import db
     from ..tokens.token_service import TokenService
     
-    pool = await get_db_pool()
-    token_service = TokenService(pool)
-    return FantasyService(pool, token_service)
+    token_service = TokenService(db.pool)
+    return FantasyService(db.pool, token_service)
 
 
-async def get_current_user_id() -> str:
-    """Get current user ID. Placeholder."""
-    return "user_123"
-
-
-# League Routes
+# Public endpoints
 
 @router.get("/leagues", response_model=list[FantasyLeague])
 async def list_leagues(
@@ -46,7 +41,7 @@ async def list_leagues(
     league_type: Optional[str] = Query(None, pattern="^(public|private|premium)$"),
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """List available fantasy leagues."""
+    """List available fantasy leagues (public endpoint)."""
     try:
         return await service.list_leagues(game, league_type)
     except Exception as e:
@@ -54,76 +49,17 @@ async def list_leagues(
         raise HTTPException(status_code=500, detail="Failed to load leagues")
 
 
-@router.post("/leagues", response_model=FantasyLeague, status_code=status.HTTP_201_CREATED)
-async def create_league(
-    request: CreateLeagueRequest,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Create a new fantasy league."""
-    try:
-        return await service.create_league(user_id, request)
-    except Exception as e:
-        logger.error(f"Failed to create league: {e}")
-        raise HTTPException(status_code=500, detail="Failed to create league")
-
-
 @router.get("/leagues/{league_id}", response_model=FantasyLeague)
 async def get_league(
     league_id: str,
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Get league details."""
+    """Get league details (public endpoint)."""
     league = await service.get_league(league_id)
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     return league
 
-
-# Team Routes
-
-@router.post("/teams", response_model=FantasyTeam, status_code=status.HTTP_201_CREATED)
-async def create_team(
-    request: CreateTeamRequest,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Join a league by creating a team."""
-    try:
-        return await service.create_team(user_id, request)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Failed to create team: {e}")
-        raise HTTPException(status_code=500, detail="Failed to create team")
-
-
-@router.get("/teams/my", response_model=list[FantasyTeamSummary])
-async def get_my_teams(
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Get all teams for current user."""
-    try:
-        return await service.get_user_teams(user_id)
-    except Exception as e:
-        logger.error(f"Failed to get teams: {e}")
-        raise HTTPException(status_code=500, detail="Failed to load teams")
-
-
-@router.get("/teams/{team_id}", response_model=FantasyTeam)
-async def get_team(
-    team_id: str,
-    service: FantasyService = Depends(get_fantasy_service)
-):
-    """Get team with full roster."""
-    team = await service.get_team(team_id)
-    if not team:
-        raise HTTPException(status_code=404, detail="Team not found")
-    return team
-
-
-# Draft Routes
 
 @router.get("/leagues/{league_id}/players/available", response_model=list[AvailablePlayer])
 async def get_available_players(
@@ -132,7 +68,7 @@ async def get_available_players(
     search: Optional[str] = Query(None),
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Get players available for draft."""
+    """Get players available for draft (public endpoint)."""
     try:
         league = await service.get_league(league_id)
         if not league:
@@ -144,43 +80,17 @@ async def get_available_players(
         raise HTTPException(status_code=500, detail="Failed to load players")
 
 
-@router.post("/teams/{team_id}/draft", response_model=FantasyRoster)
-async def draft_player(
+@router.get("/teams/{team_id}", response_model=FantasyTeam)
+async def get_team(
     team_id: str,
-    request: DraftPlayerRequest,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
+    service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Draft a player to your team."""
-    try:
-        # Verify team ownership
-        team = await service.get_team(team_id)
-        if not team or team.owner_id != user_id:
-            raise HTTPException(status_code=403, detail="Not your team")
-        
-        return await service.draft_player(team_id, request)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Failed to draft player: {e}")
-        raise HTTPException(status_code=500, detail="Failed to draft player")
+    """Get team with full roster (public endpoint)."""
+    team = await service.get_team(team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+    return team
 
-
-# Lineup Management
-
-@router.patch("/teams/{team_id}/lineup")
-async def set_lineup(
-    team_id: str,
-    request: SetLineupRequest,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Set starting lineup and bench."""
-    # Implementation needed
-    return {"success": True, "message": "Lineup updated"}
-
-
-# Scoring
 
 @router.get("/leagues/{league_id}/scores/{week_number}")
 async def get_weekly_scores(
@@ -188,82 +98,28 @@ async def get_weekly_scores(
     week_number: int,
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Get weekly scores for all teams."""
+    """Get weekly scores for all teams (public endpoint)."""
     # Implementation needed
     return {"league_id": league_id, "week": week_number, "scores": []}
 
-
-@router.post("/admin/calculate-scores")
-async def calculate_scores(
-    league_id: str,
-    week_number: int,
-    service: FantasyService = Depends(get_fantasy_service)
-):
-    """Admin: Calculate weekly scores (triggered by cron)."""
-    try:
-        await service.calculate_weekly_scores(league_id, week_number)
-        return {"success": True, "message": f"Scores calculated for week {week_number}"}
-    except Exception as e:
-        logger.error(f"Failed to calculate scores: {e}")
-        raise HTTPException(status_code=500, detail="Failed to calculate scores")
-
-
-# Waiver Wire
 
 @router.get("/leagues/{league_id}/waivers", response_model=list[WaiverClaim])
 async def get_waiver_claims(
     league_id: str,
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Get pending waiver claims."""
+    """Get pending waiver claims (public endpoint)."""
     return []
 
-
-@router.post("/teams/{team_id}/waivers")
-async def create_waiver_claim(
-    team_id: str,
-    request: CreateWaiverClaimRequest,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Create a waiver wire claim."""
-    return {"success": True}
-
-
-# Trades
 
 @router.get("/teams/{team_id}/trades", response_model=list[Trade])
 async def get_trades(
     team_id: str,
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Get trade offers for team."""
+    """Get trade offers for team (public endpoint)."""
     return []
 
-
-@router.post("/teams/{team_id}/trades")
-async def propose_trade(
-    team_id: str,
-    request: CreateTradeRequest,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Propose a trade."""
-    return {"success": True}
-
-
-@router.patch("/trades/{trade_id}/respond")
-async def respond_to_trade(
-    trade_id: str,
-    accept: bool,
-    service: FantasyService = Depends(get_fantasy_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Accept or reject a trade."""
-    return {"success": True}
-
-
-# Leaderboard
 
 @router.get("/leagues/{league_id}/leaderboard")
 async def get_leaderboard(
@@ -271,14 +127,12 @@ async def get_leaderboard(
     week: Optional[int] = Query(None),
     service: FantasyService = Depends(get_fantasy_service)
 ):
-    """Get league leaderboard."""
+    """Get league leaderboard (public endpoint)."""
     try:
-        # Get all teams in league
         league = await service.get_league(league_id)
         if not league:
             raise HTTPException(status_code=404, detail="League not found")
         
-        # Return mock leaderboard
         return {
             "league_id": league_id,
             "week": week,
@@ -291,6 +145,188 @@ async def get_leaderboard(
     except Exception as e:
         logger.error(f"Failed to get leaderboard: {e}")
         raise HTTPException(status_code=500, detail="Failed to load leaderboard")
+
+
+# Protected endpoints (auth required)
+
+@router.post("/leagues", response_model=FantasyLeague, status_code=status.HTTP_201_CREATED)
+async def create_league(
+    request: CreateLeagueRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Create a new fantasy league.
+    
+    **Authentication required**
+    """
+    try:
+        return await service.create_league(current_user.user_id, request)
+    except Exception as e:
+        logger.error(f"Failed to create league: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create league")
+
+
+@router.post("/teams", response_model=FantasyTeam, status_code=status.HTTP_201_CREATED)
+async def create_team(
+    request: CreateTeamRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Join a league by creating a team.
+    
+    **Authentication required**
+    """
+    try:
+        return await service.create_team(current_user.user_id, request)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to create team: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create team")
+
+
+@router.get("/teams/my", response_model=list[FantasyTeamSummary])
+async def get_my_teams(
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Get all teams for current user.
+    
+    **Authentication required**
+    """
+    try:
+        return await service.get_user_teams(current_user.user_id)
+    except Exception as e:
+        logger.error(f"Failed to get teams: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load teams")
+
+
+@router.post("/teams/{team_id}/draft", response_model=FantasyRoster)
+async def draft_player(
+    team_id: str,
+    request: DraftPlayerRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Draft a player to your team.
+    
+    **Authentication required** - Must be team owner
+    """
+    try:
+        # Verify team ownership
+        team = await service.get_team(team_id)
+        if not team or team.owner_id != current_user.user_id:
+            raise HTTPException(status_code=403, detail="Not your team")
+        
+        return await service.draft_player(team_id, request)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to draft player: {e}")
+        raise HTTPException(status_code=500, detail="Failed to draft player")
+
+
+@router.patch("/teams/{team_id}/lineup")
+async def set_lineup(
+    team_id: str,
+    request: SetLineupRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Set starting lineup and bench.
+    
+    **Authentication required** - Must be team owner
+    """
+    # Verify team ownership
+    team = await service.get_team(team_id)
+    if not team or team.owner_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not your team")
+    
+    # Implementation needed
+    return {"success": True, "message": "Lineup updated"}
+
+
+@router.post("/teams/{team_id}/waivers")
+async def create_waiver_claim(
+    team_id: str,
+    request: CreateWaiverClaimRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Create a waiver wire claim.
+    
+    **Authentication required** - Must be team owner
+    """
+    # Verify team ownership
+    team = await service.get_team(team_id)
+    if not team or team.owner_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not your team")
+    
+    return {"success": True}
+
+
+@router.post("/teams/{team_id}/trades")
+async def propose_trade(
+    team_id: str,
+    request: CreateTradeRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Propose a trade.
+    
+    **Authentication required** - Must be team owner
+    """
+    # Verify team ownership
+    team = await service.get_team(team_id)
+    if not team or team.owner_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not your team")
+    
+    return {"success": True}
+
+
+@router.patch("/trades/{trade_id}/respond")
+async def respond_to_trade(
+    trade_id: str,
+    accept: bool,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Accept or reject a trade.
+    
+    **Authentication required**
+    """
+    # Implementation needed - verify user is involved in trade
+    return {"success": True}
+
+
+# Admin endpoints
+
+@router.post("/admin/calculate-scores")
+async def calculate_scores(
+    league_id: str,
+    week_number: int,
+    current_user: TokenData = Depends(require_permissions(["admin"])),
+    service: FantasyService = Depends(get_fantasy_service)
+):
+    """
+    Admin: Calculate weekly scores (triggered by cron).
+    
+    **Requires admin permission**
+    """
+    try:
+        await service.calculate_weekly_scores(league_id, week_number)
+        return {"success": True, "message": f"Scores calculated for week {week_number}"}
+    except Exception as e:
+        logger.error(f"Failed to calculate scores: {e}")
+        raise HTTPException(status_code=500, detail="Failed to calculate scores")
 
 
 # Health

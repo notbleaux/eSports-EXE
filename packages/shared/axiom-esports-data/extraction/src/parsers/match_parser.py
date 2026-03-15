@@ -74,7 +74,8 @@ class MatchParser:
         players: list[dict] = []
 
         stat_columns = ["rating", "acs", "kills", "deaths", "assists",
-                        "kast", "adr", "hs_pct", "first_blood", "clutch_win"]
+                        "kast", "adr", "hs_pct", "first_blood", "first_death",
+                        "clutch_win", "clutch_attempt", "multi_kills"]
 
         for game_section in soup.find_all(class_="vm-stats-game"):
             for row in game_section.find_all(class_="mod-player"):

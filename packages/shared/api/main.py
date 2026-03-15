@@ -1,11 +1,11 @@
-[Ver001.000]
+[Ver002.000]
 """
 SATOR API — Main FastAPI Application
-Aggregates all hub services: tokens, forum, fantasy, challenges, wiki, opera
+Aggregates all hub services: SATOR, tokens, forum, fantasy, challenges, wiki, opera
 """
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 import os
@@ -18,6 +18,9 @@ from src.fantasy.fantasy_routes import router as fantasy_router
 from src.challenges.challenge_routes import router as challenge_router
 from src.wiki.wiki_routes import router as wiki_router
 from src.opera.opera_routes import router as opera_router
+from src.auth.auth_routes import router as auth_router
+from src.sator.routes import router as sator_router
+from src.sator.websocket import handle_websocket, ws_manager
 
 # Import database manager
 from axiom_esports_data.api.src.db_manager import db
@@ -53,14 +56,18 @@ app = FastAPI(
     Libre-X-eSport 4NJZ4 TENET Platform API
     
     Provides endpoints for:
+    - **SATOR**: Esports analytics hub (players, teams, matches, stats)
     - **Tokens**: NJZ token economy (daily claims, transfers, leaderboards)
     - **Forum**: Community discussions (threads, posts, replies)
     - **Fantasy**: Fantasy esports leagues (drafts, teams, scoring)
     - **Challenges**: Daily challenges and achievements
     - **Wiki**: Knowledge base and guides
     - **OPERA**: Tournament metadata and schedules
+    
+    WebSocket:
+    - `/ws/sator` - Real-time SATOR updates
     """,
-    version="0.1.0",
+    version="0.2.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
@@ -126,6 +133,12 @@ async def liveness_check():
 
 
 # Include all service routers
+# Auth routes (no prefix for /auth paths)
+app.include_router(
+    auth_router,
+    tags=["authentication"],
+)
+
 app.include_router(
     token_router,
     prefix="/api/tokens",
@@ -162,6 +175,19 @@ app.include_router(
     tags=["opera"],
 )
 
+app.include_router(
+    sator_router,
+    prefix="/api",
+    tags=["sator"],
+)
+
+
+# WebSocket endpoint
+@app.websocket("/ws/sator")
+async def sator_websocket(websocket: WebSocket):
+    """WebSocket endpoint for SATOR live updates."""
+    await handle_websocket(websocket)
+
 
 # Root endpoint
 @app.get("/", tags=["root"])
@@ -169,11 +195,14 @@ async def root():
     """API root - provides basic info and links."""
     return {
         "name": "SATOR Esports API",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "description": "Libre-X-eSport 4NJZ4 TENET Platform",
         "documentation": "/docs",
         "health": "/health",
+        "websocket": "/ws/sator",
         "endpoints": {
+            "sator": "/api/sator",
+            "auth": "/auth",
             "tokens": "/api/tokens",
             "forum": "/api/forum",
             "fantasy": "/api/fantasy",

@@ -1,8 +1,8 @@
-[Ver001.000]
+[Ver002.000]
 """
 Wiki API Routes
 ===============
-FastAPI endpoints for wiki/knowledge base.
+FastAPI endpoints for wiki/knowledge base with JWT authentication.
 """
 
 import logging
@@ -10,11 +10,11 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from ..auth.auth_utils import get_current_active_user, get_optional_user, require_permissions, TokenData
 from .wiki_service import WikiService
 from .wiki_models import (
     WikiCategory, WikiArticle, WikiArticleSummary, WikiNavigationItem,
-    CreateArticleRequest, UpdateArticleRequest, ArticleFeedbackRequest,
-    SearchArticlesRequest
+    CreateArticleRequest, UpdateArticleRequest, ArticleFeedbackRequest
 )
 
 logger = logging.getLogger(__name__)
@@ -24,17 +24,11 @@ router = APIRouter(prefix="/wiki", tags=["wiki"])
 
 async def get_wiki_service() -> WikiService:
     """Get WikiService instance."""
-    from ...database import get_db_pool
-    pool = await get_db_pool()
-    return WikiService(pool)
+    from ...axiom_esports_data.api.src.db_manager import db
+    return WikiService(db.pool)
 
 
-async def get_current_user_id() -> str:
-    """Get current user ID. Placeholder."""
-    return "user_123"
-
-
-# Categories
+# Public endpoints
 
 @router.get("/categories", response_model=list[WikiCategory])
 async def list_categories(
@@ -60,8 +54,6 @@ async def get_category(
         raise HTTPException(status_code=404, detail="Category not found")
     return category
 
-
-# Articles
 
 @router.get("/articles", response_model=list[WikiArticleSummary])
 async def list_articles(
@@ -106,61 +98,16 @@ async def search_articles(
 @router.get("/articles/{slug}", response_model=WikiArticle)
 async def get_article(
     slug: str,
-    service: WikiService = Depends(get_wiki_service),
-    user_id: Optional[str] = Depends(get_current_user_id)
+    current_user: Optional[TokenData] = Depends(get_optional_user),
+    service: WikiService = Depends(get_wiki_service)
 ):
     """Get article by slug."""
+    user_id = current_user.user_id if current_user else None
     article = await service.get_article_by_slug(slug, user_id)
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
     return article
 
-
-@router.post("/articles", response_model=WikiArticle, status_code=status.HTTP_201_CREATED)
-async def create_article(
-    request: CreateArticleRequest,
-    service: WikiService = Depends(get_wiki_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Create a new article."""
-    try:
-        return await service.create_article(user_id, request)
-    except Exception as e:
-        logger.error(f"Failed to create article: {e}")
-        raise HTTPException(status_code=500, detail="Failed to create article")
-
-
-@router.patch("/articles/{article_id}", response_model=WikiArticle)
-async def update_article(
-    article_id: int,
-    request: UpdateArticleRequest,
-    service: WikiService = Depends(get_wiki_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Update an existing article."""
-    article = await service.update_article(article_id, user_id, request)
-    if not article:
-        raise HTTPException(status_code=404, detail="Article not found")
-    return article
-
-
-# Article feedback
-
-@router.post("/articles/{article_id}/feedback")
-async def submit_feedback(
-    article_id: int,
-    request: ArticleFeedbackRequest,
-    service: WikiService = Depends(get_wiki_service),
-    user_id: str = Depends(get_current_user_id)
-):
-    """Submit feedback on an article."""
-    success = await service.submit_feedback(article_id, user_id, request.is_helpful, request.feedback)
-    if success:
-        return {"success": True, "message": "Feedback recorded"}
-    raise HTTPException(status_code=500, detail="Failed to record feedback")
-
-
-# Navigation
 
 @router.get("/navigation/{menu_key}", response_model=list[WikiNavigationItem])
 async def get_navigation(
@@ -204,6 +151,123 @@ async def search_help(
 ):
     """Search help articles specifically."""
     return await service.search_articles(query, is_help_only=True, limit=10)
+
+
+# Protected endpoints (auth required)
+
+@router.post("/articles", response_model=WikiArticle, status_code=status.HTTP_201_CREATED)
+async def create_article(
+    request: CreateArticleRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: WikiService = Depends(get_wiki_service)
+):
+    """
+    Create a new article.
+    
+    **Authentication required**
+    """
+    try:
+        return await service.create_article(current_user.user_id, request)
+    except Exception as e:
+        logger.error(f"Failed to create article: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create article")
+
+
+@router.patch("/articles/{article_id}", response_model=WikiArticle)
+async def update_article(
+    article_id: int,
+    request: UpdateArticleRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: WikiService = Depends(get_wiki_service)
+):
+    """
+    Update an existing article.
+    
+    **Authentication required** - Must be author or moderator
+    """
+    try:
+        # Check if user is author or moderator
+        article = await service.get_article_by_id(article_id)
+        if not article:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        is_author = article.author_id == current_user.user_id
+        is_moderator = "moderator" in current_user.permissions or "admin" in current_user.permissions
+        
+        if not (is_author or is_moderator):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized to update this article"
+            )
+        
+        updated = await service.update_article(article_id, current_user.user_id, request)
+        return updated
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to update article: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update article")
+
+
+@router.post("/articles/{article_id}/feedback")
+async def submit_feedback(
+    article_id: int,
+    request: ArticleFeedbackRequest,
+    current_user: TokenData = Depends(get_current_active_user),
+    service: WikiService = Depends(get_wiki_service)
+):
+    """
+    Submit feedback on an article.
+    
+    **Authentication required**
+    """
+    success = await service.submit_feedback(
+        article_id, current_user.user_id, request.is_helpful, request.feedback
+    )
+    if success:
+        return {"success": True, "message": "Feedback recorded"}
+    raise HTTPException(status_code=500, detail="Failed to record feedback")
+
+
+# Moderator endpoints
+
+@router.delete("/articles/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_article(
+    article_id: int,
+    current_user: TokenData = Depends(require_permissions(["moderator"])),
+    service: WikiService = Depends(get_wiki_service)
+):
+    """
+    Delete an article (moderators only).
+    
+    **Requires moderator permission**
+    """
+    try:
+        await service.delete_article(article_id)
+        return None
+    except Exception as e:
+        logger.error(f"Failed to delete article: {e}")
+        raise HTTPException(status_code=500, detail="Failed to delete article")
+
+
+@router.post("/articles/{article_id}/feature")
+async def feature_article(
+    article_id: int,
+    featured: bool = True,
+    current_user: TokenData = Depends(require_permissions(["moderator"])),
+    service: WikiService = Depends(get_wiki_service)
+):
+    """
+    Feature or unfeature an article (moderators only).
+    
+    **Requires moderator permission**
+    """
+    try:
+        await service.set_article_featured(article_id, featured)
+        return {"success": True, "featured": featured}
+    except Exception as e:
+        logger.error(f"Failed to feature article: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update article")
 
 
 # Health check

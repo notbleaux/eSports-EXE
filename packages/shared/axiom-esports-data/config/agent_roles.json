@@ -1,0 +1,205 @@
+{
+  "_comment": "Valorant agent to role mapping for automatic role inference",
+  "_version": "1.0.0",
+  "_last_updated": "2026-03-15",
+  
+  "Duelist": {
+    "_comment": "Entry fraggers and primary damage dealers",
+    "jett": {
+      "canon_name": "Jett",
+      "difficulty": "Hard",
+      "recommended_for": ["Entry", "Opener"]
+    },
+    "phoenix": {
+      "canon_name": "Phoenix",
+      "difficulty": "Easy",
+      "recommended_for": ["Entry", "Self-sufficient"]
+    },
+    "reyna": {
+      "canon_name": "Reyna",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry", "Frag-focused"]
+    },
+    "raze": {
+      "canon_name": "Raze",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry", "Site clear"]
+    },
+    "yoru": {
+      "canon_name": "Yoru",
+      "difficulty": "Hard",
+      "recommended_for": ["Entry", "Flanker"]
+    },
+    "neon": {
+      "canon_name": "Neon",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry", "Fast pace"]
+    },
+    "iso": {
+      "canon_name": "Iso",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry", "Duels"]
+    },
+    "waylay": {
+      "canon_name": "Waylay",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry", "Speed"]
+    }
+  },
+  
+  "Sentinel": {
+    "_comment": "Defensive anchors and information denial",
+    "sage": {
+      "canon_name": "Sage",
+      "difficulty": "Easy",
+      "recommended_for": ["Anchor", "Support"]
+    },
+    "cypher": {
+      "canon_name": "Cypher",
+      "difficulty": "Medium",
+      "recommended_for": ["Anchor", "Information"]
+    },
+    "killjoy": {
+      "canon_name": "Killjoy",
+      "difficulty": "Medium",
+      "recommended_for": ["Anchor", "Site lock"]
+    },
+    "chamber": {
+      "canon_name": "Chamber",
+      "difficulty": "Hard",
+      "recommended_for": ["Anchor", "Op"]
+    },
+    "deadlock": {
+      "canon_name": "Deadlock",
+      "difficulty": "Medium",
+      "recommended_for": ["Anchor", "Delay"]
+    },
+    "vyse": {
+      "canon_name": "Vyse",
+      "difficulty": "Medium",
+      "recommended_for": ["Anchor", "Retake"]
+    }
+  },
+  
+  "Controller": {
+    "_comment": "Vision denial and area control",
+    "brimstone": {
+      "canon_name": "Brimstone",
+      "difficulty": "Easy",
+      "recommended_for": ["IGL", "Simple execute"]
+    },
+    "omen": {
+      "canon_name": "Omen",
+      "difficulty": "Medium",
+      "recommended_for": ["IGL", "Flexible"]
+    },
+    "viper": {
+      "canon_name": "Viper",
+      "difficulty": "Hard",
+      "recommended_for": ["Anchor", "Post-plant"]
+    },
+    "astra": {
+      "canon_name": "Astra",
+      "difficulty": "Hard",
+      "recommended_for": ["IGL", "Global presence"]
+    },
+    "harbor": {
+      "canon_name": "Harbor",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry support", "Mobile cover"]
+    },
+    "clove": {
+      "canon_name": "Clove",
+      "difficulty": "Medium",
+      "recommended_for": ["IGL", "Post-death utility"]
+    }
+  },
+  
+  "Initiator": {
+    "_comment": "Information gathering and site entry support",
+    "sova": {
+      "canon_name": "Sova",
+      "difficulty": "Hard",
+      "recommended_for": ["Information", "Lineups"]
+    },
+    "breach": {
+      "canon_name": "Breach",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry support", "Flash assist"]
+    },
+    "skye": {
+      "canon_name": "Skye",
+      "difficulty": "Medium",
+      "recommended_for": ["IGL", "Information + Flash"]
+    },
+    "kayo": {
+      "canon_name": "KAY/O",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry support", "Anti-utility"]
+    },
+    "fade": {
+      "canon_name": "Fade",
+      "difficulty": "Medium",
+      "recommended_for": ["Information", "Reveal"]
+    },
+    "gekko": {
+      "canon_name": "Gekko",
+      "difficulty": "Medium",
+      "recommended_for": ["Site clear", "Unique utility"]
+    },
+    "tejo": {
+      "canon_name": "Tejo",
+      "difficulty": "Medium",
+      "recommended_for": ["Entry support", "Guided utility"]
+    }
+  },
+  
+  "_aliases": {
+    "_comment": "Common alternative spellings/casings",
+    "kay/o": "kayo",
+    "KAY/O": "kayo",
+    "Kay/o": "kayo",
+    "KayO": "kayo",
+    "jett": "jett",
+    "Jett": "jett",
+    "JETT": "jett",
+    "chamber": "chamber",
+    "Chamber": "chamber",
+    "CHAMBER": "chamber"
+  },
+  
+  "_role_definitions": {
+    "Duelist": {
+      "description": "Primary entry fraggers designed to create space",
+      "typical_stats": {
+        "acs_expected": 240,
+        "kast_expected": 70,
+        "first_blood_importance": "high"
+      }
+    },
+    "Sentinel": {
+      "description": "Defensive anchors who control space and information",
+      "typical_stats": {
+        "acs_expected": 200,
+        "kast_expected": 75,
+        "clutch_importance": "high"
+      }
+    },
+    "Controller": {
+      "description": "Vision denial and area control for executes",
+      "typical_stats": {
+        "acs_expected": 210,
+        "kast_expected": 78,
+        "assist_importance": "high"
+      }
+    },
+    "Initiator": {
+      "description": "Information gathering and entry support",
+      "typical_stats": {
+        "acs_expected": 220,
+        "kast_expected": 76,
+        "assist_importance": "high"
+      }
+    }
+  }
+}
