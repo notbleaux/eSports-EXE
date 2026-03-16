@@ -403,7 +403,8 @@ async def get_rar_leaderboard(
 @router.get("/rar/investment-grades")
 async def get_players_by_grade(
     grade: str = Query(..., pattern=r"^(A\+|A|B|C|D)$"),
-    limit: int = Query(50, ge=1, le=200)
+    limit: int = Query(50, ge=1, le=200),
+    pool: asyncpg.Pool = Depends(get_db_pool)
 ):
     """
     Get players filtered by investment grade.
@@ -414,15 +415,81 @@ async def get_players_by_grade(
     - B: Above average (70-84 RAR)
     - C: Average (55-69 RAR)
     - D: Below replacement (<55 RAR)
+    
+    [Ver002.000] - Implemented database query
     """
     logger.info(f"Investment grade query: grade={grade}, limit={limit}")
     
-    # TODO: Implement database query
-    return {
-        "grade": grade,
-        "count": 0,
-        "players": []
+    # Map grade to RAR score ranges
+    grade_ranges = {
+        "A+": (0.95, 2.0),  # 95-100+
+        "A": (0.85, 0.95),  # 85-94
+        "B": (0.70, 0.85),  # 70-84
+        "C": (0.55, 0.70),  # 55-69
+        "D": (0.0, 0.55)    # <55
     }
+    
+    min_rar, max_rar = grade_ranges.get(grade, (0.0, 1.0))
+    
+    try:
+        query = """
+            WITH player_stats AS (
+                SELECT 
+                    player_id,
+                    name,
+                    team,
+                    role,
+                    AVG(rar_score) as avg_rar,
+                    COUNT(DISTINCT match_id) as match_count,
+                    MAX(realworld_time) as last_match
+                FROM player_performance
+                WHERE realworld_time >= NOW() - INTERVAL '90 days'
+                  AND rar_score IS NOT NULL
+                GROUP BY player_id, name, team, role
+                HAVING COUNT(DISTINCT match_id) >= 5
+            )
+            SELECT 
+                player_id,
+                name as player_name,
+                team,
+                role,
+                ROUND((avg_rar * 100)::numeric, 2) as rar_normalized,
+                match_count,
+                last_match
+            FROM player_stats
+            WHERE avg_rar >= $1 AND avg_rar < $2
+            ORDER BY avg_rar DESC
+            LIMIT $3
+        """
+        
+        rows = await pool.fetch(query, min_rar, max_rar, limit)
+        
+        players = [
+            {
+                "player_id": str(row['player_id']),
+                "player_name": row['player_name'],
+                "team": row['team'],
+                "role": row['role'],
+                "rar_normalized": float(row['rar_normalized']),
+                "match_count": row['match_count'],
+                "last_active": row['last_match'].isoformat() if row['last_match'] else None
+            }
+            for row in rows
+        ]
+        
+        return {
+            "grade": grade,
+            "count": len(players),
+            "rarity_pct": round((len(players) / 1000) * 100, 2) if players else 0,  # Estimate
+            "players": players
+        }
+        
+    except Exception as e:
+        logger.error(f"Investment grade query failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to fetch players by grade"
+        )
 
 
 @router.get("/rar/metrics")
