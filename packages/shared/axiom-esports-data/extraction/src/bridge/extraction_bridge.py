@@ -17,7 +17,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Optional
-from uuid import UUID, uuid4, uuid5, NAMESPACE_DNS
+from uuid import UUID, uuid5, NAMESPACE_DNS
 
 from extraction.src.bridge.canonical_id import CanonicalIDResolver
 from extraction.src.bridge.field_translator import FieldTranslator
@@ -160,19 +160,6 @@ class ExtractionBridge:
             canonical_agent = agent_cid.canonical_uri
 
         return KCRITRRecord(
-            player_id=self._stable_player_id(
-                vlr_data.get("player", ""), vlr_data.get("team", "")
-            ),
-            name=vlr_data.get("player", ""),
-            team=vlr_data.get("team"),
-            region=vlr_data.get("region"),
-            role=None,  # Assigned by role_classifier.py in parsers
-            kills=self._safe_int(vlr_data.get("kills")),
-            deaths=self._safe_int(vlr_data.get("deaths")),
-            acs=self._safe_float(vlr_data.get("acs")),
-            adr=self._safe_float(vlr_data.get("adr")),
-            kast_pct=self._safe_float(vlr_data.get("kast")),
-            role_adjusted_value=None,   # Computed by analytics layer
             player_id=player_cid.stable_uuid,
             name=raw_name,
             team=raw_team or None,
@@ -182,14 +169,14 @@ class ExtractionBridge:
             deaths=self._safe_int(_get("deaths")),
             acs=self._safe_float(_get("acs")),
             adr=self._safe_float(_get("adr")),
-            kast_pct=self._safe_float(_get("kast_pct")),
-            role_adjusted_value=None,
+            kast_pct=self._safe_float(_get("kast_pct", "kast")),
+            role_adjusted_value=None,  # Computed by analytics layer
             replacement_level=None,
             rar_score=None,
             investment_grade=None,
-            headshot_pct=self._safe_float(_get("headshot_pct")),
+            headshot_pct=self._safe_float(_get("headshot_pct", "hs_pct")),
             first_blood=self._safe_int(_get("first_blood")),
-            clutch_wins=self._safe_int(_get("clutch_wins")),
+            clutch_wins=self._safe_int(_get("clutch_wins", "clutch_win")),
             agent=canonical_agent or raw_agent,
             economy_rating=None,
             adjusted_kill_value=None,

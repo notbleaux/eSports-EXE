@@ -160,10 +160,11 @@ export interface LiveContainerProps {
 export interface UseLiveDataReturn {
   currentStream: Stream | null;
   liveEvents: LiveEvent[];
-  liveMatches: DetailedLiveMatch[];
+  liveMatches: LiveMatch[];
   chatMessages: ChatMessage[];
   isLoading: boolean;
   error: Error | null;
+  isConnected: boolean;
   switchStream: (streamId: string) => void;
   refreshData: () => Promise<void>;
 }

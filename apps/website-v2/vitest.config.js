@@ -28,7 +28,18 @@ export default defineConfig({
         'src/test/',
         'e2e/',
         '**/*.config.{js,ts}',
+        'src/**/*.d.ts',
+        'src/mocks/',
+        'src/dev/',
       ],
+      thresholds: {
+        global: {
+          statements: 70,
+          branches: 70,
+          functions: 70,
+          lines: 70,
+        },
+      },
     },
   },
 })

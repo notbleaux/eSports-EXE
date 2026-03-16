@@ -1,7 +1,13 @@
 /**
  * useLiveData - Hook for managing live stream data
  * 
- * [Ver001.000]
+ * Features:
+ * - WebSocket connection for real-time updates
+ * - REST API fallback for initial load
+ * - Auto-reconnect with exponential backoff
+ * - Error handling and recovery
+ * 
+ * [Ver002.000] - Replaced mock data with actual API integration
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type {
@@ -12,10 +18,16 @@ import type {
   UseLiveDataReturn,
 } from '../types';
 
-// Simulated API delay
-const SIMULATED_DELAY = 500;
+// API Configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/v1';
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/v1/ws';
 
-// Mock data for initial load
+// Polling intervals
+const POLLING_INTERVAL = 30000; // 30 seconds for REST fallback
+const WS_RECONNECT_DELAY = 3000; // 3 seconds initial reconnect delay
+const MAX_RECONNECT_DELAY = 30000; // Max 30 seconds between reconnects
+
+// Fallback mock data for development/demo mode
 const MOCK_STREAMS: Stream[] = [
   {
     id: '1',
@@ -31,167 +43,10 @@ const MOCK_STREAMS: Stream[] = [
     title: 'Thinking Man\'s Valorant - Co-stream',
     matchId: 'match-1',
   },
-  {
-    id: '3',
-    url: 'https://www.twitch.tv/tarik',
-    platform: 'twitch',
-    title: 'tarik - VCT Watch Party',
-    matchId: 'match-2',
-  },
-];
-
-const MOCK_MATCHES: LiveMatch[] = [
-  {
-    id: 'match-1',
-    teamA: {
-      name: 'Sentinels',
-      score: 2,
-      logo: 'https://via.placeholder.com/64/ff4655/ffffff?text=SEN',
-    },
-    teamB: {
-      name: 'Fnatic',
-      score: 1,
-      logo: 'https://via.placeholder.com/64/ff6600/ffffff?text=FNC',
-    },
-    status: 'live',
-    map: 'Ascent',
-    tournament: 'VCT 2026 Masters Tokyo',
-    eta: 'LIVE',
-  },
-  {
-    id: 'match-2',
-    teamA: {
-      name: 'Cloud9',
-      score: 0,
-      logo: 'https://via.placeholder.com/64/00aeff/ffffff?text=C9',
-    },
-    teamB: {
-      name: 'EDward Gaming',
-      score: 0,
-      logo: 'https://via.placeholder.com/64/990000/ffffff?text=EDG',
-    },
-    status: 'upcoming',
-    map: 'Haven',
-    tournament: 'VCT 2026 Masters Tokyo',
-    eta: '1h 30m',
-  },
-  {
-    id: 'match-3',
-    teamA: {
-      name: 'NRG',
-      score: 13,
-      logo: 'https://via.placeholder.com/64/ccff00/000000?text=NRG',
-    },
-    teamB: {
-      name: '100 Thieves',
-      score: 11,
-      logo: 'https://via.placeholder.com/64/ff0000/ffffff?text=100T',
-    },
-    status: 'finished',
-    map: 'Bind',
-    tournament: 'VCT Americas Stage 1',
-  },
-];
-
-const MOCK_EVENTS: LiveEvent[] = [
-  {
-    id: 'event-1',
-    title: 'Sentinels vs Fnatic',
-    tournament: 'VCT 2026 Masters Tokyo',
-    startTime: new Date().toISOString(),
-    status: 'live',
-    thumbnail: 'https://via.placeholder.com/320x180/9d4edd/ffffff?text=SEN+vs+FNC',
-    viewers: 450000,
-    teams: [
-      { name: 'Sentinels', logo: 'https://via.placeholder.com/64/ff4655/ffffff?text=SEN' },
-      { name: 'Fnatic', logo: 'https://via.placeholder.com/64/ff6600/ffffff?text=FNC' },
-    ],
-  },
-  {
-    id: 'event-2',
-    title: 'Cloud9 vs EDward Gaming',
-    tournament: 'VCT 2026 Masters Tokyo',
-    startTime: new Date(Date.now() + 3600000).toISOString(),
-    status: 'upcoming',
-    thumbnail: 'https://via.placeholder.com/320x180/00aeff/ffffff?text=C9+vs+EDG',
-    teams: [
-      { name: 'Cloud9', logo: 'https://via.placeholder.com/64/00aeff/ffffff?text=C9' },
-      { name: 'EDG', logo: 'https://via.placeholder.com/64/990000/ffffff?text=EDG' },
-    ],
-  },
-  {
-    id: 'event-3',
-    title: 'NRG vs 100 Thieves',
-    tournament: 'VCT Americas Stage 1',
-    startTime: new Date(Date.now() - 7200000).toISOString(),
-    status: 'finished',
-    thumbnail: 'https://via.placeholder.com/320x180/ccff00/000000?text=NRG+vs+100T',
-    teams: [
-      { name: 'NRG', logo: 'https://via.placeholder.com/64/ccff00/000000?text=NRG' },
-      { name: '100T', logo: 'https://via.placeholder.com/64/ff0000/ffffff?text=100T' },
-    ],
-  },
-];
-
-const MOCK_MESSAGES: ChatMessage[] = [
-  {
-    id: '1',
-    user: {
-      name: 'ValorantFan123',
-      avatar: 'https://via.placeholder.com/32/9d4edd/ffffff?text=V',
-      badge: 'sub',
-    },
-    message: 'What a clutch! 🔥',
-    timestamp: new Date(Date.now() - 30000).toISOString(),
-  },
-  {
-    id: '2',
-    user: {
-      name: 'ProGamer_X',
-      avatar: 'https://via.placeholder.com/32/ff4655/ffffff?text=P',
-    },
-    message: 'Sentinels looking strong this series',
-    timestamp: new Date(Date.now() - 60000).toISOString(),
-  },
-  {
-    id: '3',
-    user: {
-      name: 'VCTModerator',
-      avatar: 'https://via.placeholder.com/32/00d4ff/ffffff?text=M',
-      badge: 'mod',
-    },
-    message: 'Remember to keep it civil in chat everyone!',
-    timestamp: new Date(Date.now() - 90000).toISOString(),
-  },
-  {
-    id: '4',
-    user: {
-      name: 'TenzFan',
-      avatar: 'https://via.placeholder.com/32/ffd700/000000?text=T',
-      badge: 'vip',
-    },
-    message: 'TenZ is on fire today 🎯',
-    timestamp: new Date(Date.now() - 120000).toISOString(),
-  },
-  {
-    id: '5',
-    user: {
-      name: 'EsportsAnalyst',
-      avatar: 'https://via.placeholder.com/32/00ff88/000000?text=E',
-      badge: 'verified',
-    },
-    message: 'Fnatic needs to adapt their strategy on defense',
-    timestamp: new Date(Date.now() - 180000).toISOString(),
-  },
 ];
 
 /**
- * Hook for managing live stream data
- * Features:
- * - Fetches live events, matches, and chat messages
- * - Auto-refresh every 30 seconds
- * - Stream switching capability
- * - Error handling
+ * Hook for managing live stream data with WebSocket and REST API
  */
 export const useLiveData = (): UseLiveDataReturn => {
   const [currentStream, setCurrentStream] = useState<Stream | null>(null);
@@ -200,57 +55,200 @@ export const useLiveData = (): UseLiveDataReturn => {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
+  const wsRef = useRef<WebSocket | null>(null);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectAttemptsRef = useRef(0);
 
   /**
-   * Fetch live events from API
+   * Fetch live events from API (REST)
    */
-  const fetchLiveEvents = useCallback(async () => {
+  const fetchLiveEvents = useCallback(async (): Promise<LiveEvent[]> => {
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/opera/live/events');
-      // const data = await response.json();
+      const response = await fetch(`${API_BASE_URL}/opera/live/events`);
       
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, SIMULATED_DELAY));
-      return MOCK_EVENTS;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.events || [];
     } catch (err) {
-      throw new Error('Failed to fetch live events');
+      console.warn('[useLiveData] Failed to fetch live events:', err);
+      // Return empty array on error - component should handle empty state
+      return [];
     }
   }, []);
 
   /**
-   * Fetch live matches from API
+   * Fetch live matches from API (REST)
    */
-  const fetchLiveMatches = useCallback(async () => {
+  const fetchLiveMatches = useCallback(async (): Promise<LiveMatch[]> => {
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/opera/live/matches');
-      // const data = await response.json();
+      const response = await fetch(`${API_BASE_URL}/opera/live/matches`);
       
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, SIMULATED_DELAY));
-      return MOCK_MATCHES;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.matches || [];
     } catch (err) {
-      throw new Error('Failed to fetch live matches');
+      console.warn('[useLiveData] Failed to fetch live matches:', err);
+      return [];
     }
   }, []);
 
   /**
-   * Fetch chat messages from API
+   * Fetch chat messages from API (REST)
    */
-  const fetchChatMessages = useCallback(async () => {
+  const fetchChatMessages = useCallback(async (): Promise<ChatMessage[]> => {
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/opera/live/chat');
-      // const data = await response.json();
+      const response = await fetch(`${API_BASE_URL}/opera/live/chat`);
       
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, SIMULATED_DELAY / 2));
-      return MOCK_MESSAGES;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return data.messages || [];
     } catch (err) {
-      throw new Error('Failed to fetch chat messages');
+      console.warn('[useLiveData] Failed to fetch chat messages:', err);
+      return [];
+    }
+  }, []);
+
+  /**
+   * Handle WebSocket messages
+   */
+  const handleWebSocketMessage = useCallback((event: MessageEvent) => {
+    try {
+      const message = JSON.parse(event.data);
+      
+      switch (message.type) {
+        case 'live_match_update':
+          setLiveMatches((prev) => {
+            const updated = message.data as LiveMatch;
+            const index = prev.findIndex((m) => m.id === updated.id);
+            if (index >= 0) {
+              const newMatches = [...prev];
+              newMatches[index] = updated;
+              return newMatches;
+            }
+            return [...prev, updated];
+          });
+          break;
+          
+        case 'live_event_update':
+          setLiveEvents((prev) => {
+            const updated = message.data as LiveEvent;
+            const index = prev.findIndex((e) => e.id === updated.id);
+            if (index >= 0) {
+              const newEvents = [...prev];
+              newEvents[index] = updated;
+              return newEvents;
+            }
+            return [...prev, updated];
+          });
+          break;
+          
+        case 'chat_message':
+          setChatMessages((prev) => {
+            const newMessage = message.data as ChatMessage;
+            // Prevent duplicates
+            if (prev.some((m) => m.id === newMessage.id)) {
+              return prev;
+            }
+            // Keep only last 100 messages
+            return [...prev, newMessage].slice(-100);
+          });
+          break;
+          
+        case 'ping':
+          // Respond to keep-alive ping
+          wsRef.current?.send(JSON.stringify({ type: 'pong' }));
+          break;
+          
+        default:
+          console.log('[useLiveData] Unknown message type:', message.type);
+      }
+    } catch (err) {
+      console.error('[useLiveData] Failed to parse WebSocket message:', err);
+    }
+  }, []);
+
+  /**
+   * Connect WebSocket for real-time updates
+   */
+  const connectWebSocket = useCallback(() => {
+    // Don't connect if already connected
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      return;
+    }
+
+    try {
+      const ws = new WebSocket(`${WS_URL}/opera/live`);
+      
+      ws.onopen = () => {
+        console.log('[useLiveData] WebSocket connected');
+        setIsConnected(true);
+        setError(null);
+        reconnectAttemptsRef.current = 0;
+        
+        // Subscribe to live data channels
+        ws.send(JSON.stringify({
+          type: 'subscribe',
+          channels: ['live_matches', 'live_events', 'chat'],
+        }));
+      };
+      
+      ws.onmessage = handleWebSocketMessage;
+      
+      ws.onerror = (err) => {
+        console.error('[useLiveData] WebSocket error:', err);
+        setError(new Error('WebSocket connection error'));
+      };
+      
+      ws.onclose = () => {
+        console.log('[useLiveData] WebSocket disconnected');
+        setIsConnected(false);
+        wsRef.current = null;
+        
+        // Attempt reconnect with exponential backoff
+        const delay = Math.min(
+          WS_RECONNECT_DELAY * Math.pow(2, reconnectAttemptsRef.current),
+          MAX_RECONNECT_DELAY
+        );
+        
+        reconnectAttemptsRef.current++;
+        
+        reconnectTimeoutRef.current = setTimeout(() => {
+          console.log(`[useLiveData] Attempting reconnect #${reconnectAttemptsRef.current}`);
+          connectWebSocket();
+        }, delay);
+      };
+      
+      wsRef.current = ws;
+    } catch (err) {
+      console.error('[useLiveData] Failed to create WebSocket:', err);
+      setError(new Error('Failed to establish real-time connection'));
+    }
+  }, [handleWebSocketMessage]);
+
+  /**
+   * Disconnect WebSocket
+   */
+  const disconnectWebSocket = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+    
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
     }
   }, []);
 
@@ -261,11 +259,19 @@ export const useLiveData = (): UseLiveDataReturn => {
     const stream = MOCK_STREAMS.find((s) => s.id === streamId);
     if (stream) {
       setCurrentStream(stream);
+      
+      // Notify server of stream switch
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({
+          type: 'switch_stream',
+          streamId,
+        }));
+      }
     }
   }, []);
 
   /**
-   * Refresh all live data
+   * Refresh all live data via REST API
    */
   const refreshData = useCallback(async () => {
     setIsLoading(true);
@@ -294,7 +300,7 @@ export const useLiveData = (): UseLiveDataReturn => {
   }, [fetchLiveEvents, fetchLiveMatches, fetchChatMessages, currentStream]);
 
   /**
-   * Start polling for live data
+   * Start REST polling as fallback
    */
   const startPolling = useCallback(() => {
     if (pollingRef.current) {
@@ -302,10 +308,13 @@ export const useLiveData = (): UseLiveDataReturn => {
     }
 
     pollingRef.current = setInterval(() => {
-      fetchLiveMatches().then(setLiveMatches).catch(console.error);
-      fetchChatMessages().then(setChatMessages).catch(console.error);
-    }, 30000); // Poll every 30 seconds
-  }, [fetchLiveMatches, fetchChatMessages]);
+      // Only poll if WebSocket is not connected
+      if (!isConnected) {
+        fetchLiveMatches().then(setLiveMatches).catch(console.error);
+        fetchChatMessages().then(setChatMessages).catch(console.error);
+      }
+    }, POLLING_INTERVAL);
+  }, [fetchLiveMatches, fetchChatMessages, isConnected]);
 
   /**
    * Stop polling
@@ -317,15 +326,22 @@ export const useLiveData = (): UseLiveDataReturn => {
     }
   }, []);
 
-  // Initial load and polling setup
+  // Initial load and real-time setup
   useEffect(() => {
+    // Load initial data via REST
     refreshData();
+    
+    // Connect WebSocket for real-time updates
+    connectWebSocket();
+    
+    // Start polling as fallback
     startPolling();
 
     return () => {
       stopPolling();
+      disconnectWebSocket();
     };
-  }, [refreshData, startPolling, stopPolling]);
+  }, [refreshData, connectWebSocket, disconnectWebSocket, startPolling, stopPolling]);
 
   return {
     currentStream,
@@ -334,6 +350,7 @@ export const useLiveData = (): UseLiveDataReturn => {
     chatMessages,
     isLoading,
     error,
+    isConnected,
     switchStream,
     refreshData,
   };
