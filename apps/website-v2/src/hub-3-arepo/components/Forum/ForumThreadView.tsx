@@ -352,7 +352,7 @@ function ForumThreadView({
 export function ForumThreadViewWithErrorBoundary(props: ForumThreadViewProps) {
   return (
     <DataErrorBoundary
-      hubName="AREPO"
+      hubName="arepo"
       componentName="ForumThreadView"
       compact
     >

@@ -420,9 +420,9 @@ function ForumContainerContent() {
  */
 export function ForumContainer() {
   return (
-    <HubErrorBoundary hubName="AREPO" componentName="ForumContainer">
+    <HubErrorBoundary hubName="arepo" componentName="ForumContainer">
       <DataErrorBoundary
-        hubName="AREPO"
+        hubName="arepo"
         componentName="ForumContainer"
         fallback={
           <GlassCard className="p-8 text-center">

@@ -27,10 +27,37 @@ from src.challenges.challenge_routes import router as challenge_router
 from src.wiki.wiki_routes import router as wiki_router
 from src.opera.opera_routes import router as opera_router
 from src.auth.auth_routes import router as auth_router
+from src.auth.oauth_routes import router as oauth_router
 from src.sator.routes import router as sator_router
 from src.sator.websocket import handle_websocket, ws_manager
 from src.sator.rar_routes import router as rar_router
 from src.rotas.map_routes import router as maps_router, handle_lens_websocket, simulate_lens_updates
+from src.betting.routes import router as betting_router
+from src.notifications.routes import router as notification_router
+
+# WebSocket Gateway (placeholder for unified gateway)
+class WebSocketGateway:
+    """Simple WebSocket gateway manager."""
+    
+    def __init__(self):
+        self.connections: dict = {}
+    
+    async def connect(self, websocket, user_id: str):
+        self.connections[user_id] = websocket
+        await websocket.accept()
+    
+    async def disconnect(self, user_id: str):
+        if user_id in self.connections:
+            del self.connections[user_id]
+    
+    async def handle_message(self, user_id: str, data: str):
+        # Placeholder message handler
+        pass
+
+gateway = WebSocketGateway()
+
+# Placeholder gateway router
+gateway_router = None  # Will be replaced if actual gateway routes exist
 
 # Import database manager
 from axiom_esports_data.api.src.db_manager import db
@@ -228,6 +255,13 @@ app.include_router(
     tags=["authentication"],
 )
 
+# OAuth routes
+app.include_router(
+    oauth_router,
+    prefix="/api/auth/oauth",
+    tags=["oauth"],
+)
+
 app.include_router(
     token_router,
     prefix="/api/tokens",
@@ -282,6 +316,26 @@ app.include_router(
     tags=["maps"],
 )
 
+app.include_router(
+    betting_router,
+    prefix="/api/betting",
+    tags=["betting"],
+)
+
+# Include gateway router only if defined
+if gateway_router:
+    app.include_router(
+        gateway_router,
+        prefix="/api",
+        tags=["gateway"],
+    )
+
+app.include_router(
+    notification_router,
+    prefix="/api",
+    tags=["notifications"],
+)
+
 
 # WebSocket endpoints
 @app.websocket("/ws/sator")
@@ -294,6 +348,42 @@ async def sator_websocket(websocket: WebSocket):
 async def lens_updates_websocket(websocket: WebSocket):
     """WebSocket endpoint for ROTAS lens real-time updates."""
     await handle_lens_websocket(websocket)
+
+
+@app.websocket("/ws/gateway")
+async def unified_gateway(websocket: WebSocket):
+    """
+    Unified WebSocket gateway for TENET platform.
+    
+    Single connection endpoint that supports multiplexed channels
+    for data updates, chat, and live events.
+    
+    **Channels:**
+    - `global` - All connected users
+    - `match:{id}` - Specific match channel
+    - `lobby:{id}` - Specific lobby channel
+    - `team:{id}` - Specific team channel
+    - `hub:{name}` - Specific hub channel (sator, rotas, arepo, opera, tenet)
+    
+    **Message Types:**
+    - `subscribe` - Subscribe to a channel
+    - `unsubscribe` - Unsubscribe from a channel
+    - `chat_message` - Send a chat message
+    - `ping` - Heartbeat ping
+    - `pong` - Heartbeat response
+    """
+    import secrets
+    user_id = f"user_{secrets.token_hex(8)}"
+    
+    await gateway.connect(websocket, user_id)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await gateway.handle_message(user_id, data)
+    except Exception as e:
+        logger.info(f"WebSocket connection closed for {user_id}: {e}")
+    finally:
+        await gateway.disconnect(user_id)
 
 
 # Root endpoint
@@ -317,6 +407,7 @@ async def root():
             "wiki": "/api/wiki",
             "opera": "/api/opera",
             "maps": "/api/maps",
+            "betting": "/api/betting",
         },
         "websockets": {
             "sator": "/ws/sator",

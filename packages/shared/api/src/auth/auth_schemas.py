@@ -1,11 +1,17 @@
 """
+[Ver001.000]
 Authentication Pydantic Schemas
+OAuth + 2FA Implementation
 """
 
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
+
+# ============================================================================
+# Token Schemas
+# ============================================================================
 
 class Token(BaseModel):
     """JWT token response."""
@@ -116,6 +122,112 @@ class PasswordChange(BaseModel):
 class RefreshTokenRequest(BaseModel):
     """Token refresh request."""
     refresh_token: str
+
+
+# ============================================================================
+# 2FA Schemas
+# ============================================================================
+
+class TwoFactorSetupRequest(BaseModel):
+    """Request to initialize 2FA setup."""
+    pass  # No fields needed, uses authenticated user
+
+
+class TwoFactorSetupResponse(BaseModel):
+    """Response with 2FA setup information."""
+    secret: str = Field(..., description="TOTP secret (show only once)")
+    qr_code: str = Field(..., description="Base64 encoded QR code image")
+    manual_entry_key: str = Field(..., description="Manual entry key for authenticator apps")
+
+
+class TwoFactorEnableRequest(BaseModel):
+    """Request to enable 2FA after setup."""
+    verification_code: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$")
+
+
+class TwoFactorEnableResponse(BaseModel):
+    """Response after enabling 2FA."""
+    enabled: bool = True
+    backup_codes: List[str] = Field(..., description="10 backup codes (show only once)")
+
+
+class TwoFactorVerifyRequest(BaseModel):
+    """Request to verify 2FA code during login."""
+    temp_token: str = Field(..., description="Temporary token from initial login")
+    code: str = Field(..., min_length=6, max_length=8, description="TOTP code or backup code")
+    is_backup_code: bool = Field(default=False, description="Whether this is a backup code")
+
+
+class TwoFactorDisableRequest(BaseModel):
+    """Request to disable 2FA."""
+    password: str = Field(..., description="Current password for verification")
+
+
+class TwoFactorStatusResponse(BaseModel):
+    """2FA status for a user."""
+    enabled: bool
+    enabled_at: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+
+
+class TwoFactorRegenerateBackupCodesRequest(BaseModel):
+    """Request to regenerate backup codes."""
+    password: str = Field(..., description="Current password for verification")
+
+
+class TwoFactorRegenerateBackupCodesResponse(BaseModel):
+    """Response with new backup codes."""
+    backup_codes: List[str] = Field(..., description="10 new backup codes (show only once)")
+
+
+# ============================================================================
+# OAuth Schemas
+# ============================================================================
+
+class OAuthLoginRequest(BaseModel):
+    """Request for OAuth login (mobile/non-browser flows)."""
+    provider: str = Field(..., pattern=r"^(discord|google|github)$")
+    access_token: str = Field(..., description="OAuth access token from provider")
+
+
+class OAuthLinkRequest(BaseModel):
+    """Request to link OAuth account."""
+    provider: str = Field(..., pattern=r"^(discord|google|github)$")
+    access_token: str = Field(..., description="OAuth access token from provider")
+
+
+class OAuthAccountResponse(BaseModel):
+    """OAuth account information."""
+    id: int
+    provider: str
+    provider_account_id: str
+    provider_email: Optional[str] = None
+    provider_username: Optional[str] = None
+    provider_avatar_url: Optional[str] = None
+    is_primary: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class OAuthProviderResponse(BaseModel):
+    """OAuth provider information."""
+    name: str
+    display_name: str
+    configured: bool
+    auth_url: str
+
+
+# ============================================================================
+# Extended Token Schema for 2FA
+# ============================================================================
+
+class TokenWithTwoFactor(BaseModel):
+    """Token response when 2FA is required."""
+    requires_two_factor: bool = True
+    temp_token: str = Field(..., description="Temporary token to complete 2FA")
+    message: str = "Two-factor authentication required"
 
 
 class AuthError(BaseModel):

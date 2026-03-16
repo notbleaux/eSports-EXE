@@ -420,7 +420,7 @@ function ForumThreadList({
 export function ForumThreadListWithErrorBoundary(props: ForumThreadListProps) {
   return (
     <DataErrorBoundary
-      hubName="AREPO"
+      hubName="arepo"
       componentName="ForumThreadList"
       compact
     >

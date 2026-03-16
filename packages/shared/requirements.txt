@@ -12,6 +12,14 @@ python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
 slowapi>=0.1.9
 
+# OAuth + 2FA Dependencies
+pyotp>=2.9.0
+qrcode>=7.4.2
+cryptography>=41.0.0
+
+# Push Notifications
+pywebpush>=1.14.0
+
 # Testing
 pytest>=7.4.0
 pytest-asyncio>=0.21.0

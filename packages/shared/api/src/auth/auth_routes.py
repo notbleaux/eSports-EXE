@@ -1,6 +1,7 @@
 """
+[Ver001.000]
 Authentication Routes
-Login, registration, token refresh, password reset
+Login, registration, token refresh, password reset, OAuth, 2FA
 """
 
 from datetime import datetime, timezone
@@ -17,11 +18,19 @@ from axiom_esports_data.api.src.db_manager import db
 from .auth_schemas import (
     Token, TokenData, UserLogin, UserRegister, UserResponse, UserProfile,
     RefreshTokenRequest, PasswordResetRequest, PasswordReset,
-    PasswordChange, UserUpdate
+    PasswordChange, UserUpdate, TokenWithTwoFactor,
+    TwoFactorSetupResponse, TwoFactorEnableRequest, TwoFactorEnableResponse,
+    TwoFactorVerifyRequest, TwoFactorDisableRequest, TwoFactorStatusResponse,
+    TwoFactorRegenerateBackupCodesRequest, TwoFactorRegenerateBackupCodesResponse
 )
 from .auth_utils import (
     create_access_token, create_refresh_token, verify_token,
     hash_password, verify_password, get_current_user, get_current_active_user
+)
+from .two_factor import (
+    setup_two_factor, enable_two_factor, disable_two_factor,
+    verify_two_factor, verify_backup_code_login, get_two_factor_status,
+    regenerate_backup_codes, create_temp_token, is_two_factor_enabled
 )
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -114,7 +123,8 @@ async def login(request: Request, login_data: UserLogin):
     Authenticate user and return JWT tokens.
     
     - Accepts username or email as login identifier
-    - Returns access token (15 min) and refresh token (7 days)
+    - If 2FA is enabled, returns a temp_token for 2FA verification
+    - Otherwise, returns full access token and refresh token
     - Updates last_login timestamp
     """
     async with db.pool.acquire() as conn:
@@ -144,6 +154,18 @@ async def login(request: Request, login_data: UserLogin):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Account is deactivated"
+            )
+        
+        # Check if 2FA is enabled
+        two_factor_enabled = await is_two_factor_enabled(user["id"])
+        
+        if two_factor_enabled:
+            # Return temp token for 2FA verification
+            temp_token = await create_temp_token(user["id"])
+            return TokenWithTwoFactor(
+                requires_two_factor=True,
+                temp_token=temp_token,
+                message="Two-factor authentication required"
             )
         
         # Update last login
@@ -502,3 +524,182 @@ async def reset_password(request: PasswordReset):
         )
         
         return {"message": "Password reset successfully"}
+
+
+# ============================================================================
+# Two-Factor Authentication Endpoints
+# ============================================================================
+
+@router.post("/2fa/setup", response_model=TwoFactorSetupResponse)
+async def two_factor_setup(
+    current_user: TokenData = Depends(get_current_active_user)
+):
+    """
+    Initialize 2FA setup.
+    
+    Returns:
+        - TOTP secret (show only once)
+        - QR code as base64 image
+        - Manual entry key
+    """
+    # Get user email
+    async with db.pool.acquire() as conn:
+        user = await conn.fetchrow(
+            "SELECT email FROM users WHERE id = $1",
+            current_user.user_id
+        )
+        email = user["email"] or current_user.username
+    
+    result = await setup_two_factor(current_user.user_id, email)
+    return TwoFactorSetupResponse(**result)
+
+
+@router.post("/2fa/enable", response_model=TwoFactorEnableResponse)
+async def two_factor_enable(
+    request: TwoFactorEnableRequest,
+    current_user: TokenData = Depends(get_current_active_user)
+):
+    """
+    Enable 2FA after verification.
+    
+    Requires the user to verify a TOTP code from their authenticator app.
+    Returns backup codes that should be saved securely.
+    """
+    try:
+        result = await enable_two_factor(current_user.user_id, request.verification_code)
+        return TwoFactorEnableResponse(**result)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+
+@router.post("/2fa/verify", response_model=Token)
+async def two_factor_verify(request: TwoFactorVerifyRequest):
+    """
+    Complete login with 2FA verification.
+    
+    Used after initial login returns a temp_token.
+    Accepts either TOTP code or backup code.
+    """
+    # Verify temp token
+    from .two_factor import verify_temp_token
+    user_id = await verify_temp_token(request.temp_token)
+    
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired temporary token"
+        )
+    
+    # Verify 2FA code
+    if request.is_backup_code:
+        valid = await verify_backup_code_login(user_id, request.code)
+    else:
+        valid = await verify_two_factor(user_id, request.code)
+    
+    if not valid:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid verification code"
+        )
+    
+    # Generate full tokens
+    async with db.pool.acquire() as conn:
+        user = await conn.fetchrow(
+            "SELECT * FROM users WHERE id = $1",
+            user_id
+        )
+        
+        if not user or not user["is_active"]:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User not found or inactive"
+            )
+        
+        # Get permissions
+        permissions = await conn.fetch(
+            "SELECT permission FROM user_permissions WHERE user_id = $1",
+            user_id
+        )
+        perm_list = [p["permission"] for p in permissions]
+        
+        # Create tokens
+        token_data = {
+            "sub": user_id,
+            "username": user["username"],
+            "email": user["email"],
+            "permissions": perm_list,
+            "is_active": user["is_active"],
+        }
+        
+        access_token, access_expires = create_access_token(token_data)
+        refresh_token, refresh_expires = create_refresh_token({"sub": user_id})
+        
+        # Store refresh token
+        now = datetime.now(timezone.utc)
+        await conn.execute(
+            """
+            INSERT INTO refresh_tokens (token, user_id, expires_at, created_at)
+            VALUES ($1, $2, $3, $4)
+            """,
+            refresh_token, user_id, refresh_expires, now
+        )
+        
+        return Token(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            token_type="bearer",
+            expires_in=15 * 60,
+            expires_at=access_expires
+        )
+
+
+@router.post("/2fa/disable")
+async def two_factor_disable(
+    request: TwoFactorDisableRequest,
+    current_user: TokenData = Depends(get_current_active_user)
+):
+    """
+    Disable 2FA for the current user.
+    
+    Requires password verification for security.
+    """
+    try:
+        await disable_two_factor(current_user.user_id, request.password)
+        return {"message": "Two-factor authentication disabled successfully"}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+
+@router.get("/2fa/status", response_model=TwoFactorStatusResponse)
+async def two_factor_status(
+    current_user: TokenData = Depends(get_current_active_user)
+):
+    """Get 2FA status for the current user."""
+    result = await get_two_factor_status(current_user.user_id)
+    return TwoFactorStatusResponse(**result)
+
+
+@router.post("/2fa/backup-codes/regenerate", response_model=TwoFactorRegenerateBackupCodesResponse)
+async def two_factor_regenerate_backup_codes(
+    request: TwoFactorRegenerateBackupCodesRequest,
+    current_user: TokenData = Depends(get_current_active_user)
+):
+    """
+    Generate new backup codes.
+    
+    Invalidates all existing backup codes. Returns new codes (show only once).
+    """
+    try:
+        result = await regenerate_backup_codes(current_user.user_id, request.password)
+        return TwoFactorRegenerateBackupCodesResponse(**result)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )

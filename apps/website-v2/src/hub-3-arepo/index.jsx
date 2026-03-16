@@ -180,7 +180,7 @@ function ArepoHubContent() {
     const ToolComponent = tool.component;
     return (
       <DataErrorBoundary
-        hubName="AREPO"
+        hubName="arepo"
         componentName={tool.name}
         compact
         onRetry={() => addNotification(`Retrying ${tool.name}...`, 'info')}
@@ -449,7 +449,7 @@ function ArepoHubContent() {
                 <PanelErrorBoundary 
                   panelId="arepo-cross-reference" 
                   panelTitle="Cross-Reference Engine" 
-                  hub="AREPO"
+                  hub="arepo"
                 >
                   {renderCrossReferenceTool()}
                 </PanelErrorBoundary>
@@ -494,7 +494,7 @@ function ArepoHubContent() {
 
                 {/* Directory List */}
                 <DataErrorBoundary
-                  hubName="AREPO"
+                  hubName="arepo"
                   componentName="DirectoryList"
                   compact
                   onRetry={() => addNotification('Retrying directory load...', 'info')}
@@ -502,7 +502,7 @@ function ArepoHubContent() {
                   <PanelErrorBoundary 
                     panelId="arepo-directory" 
                     panelTitle="Directory" 
-                    hub="AREPO"
+                    hub="arepo"
                   >
                     <DirectoryList 
                       categories={CATEGORIES}
@@ -527,7 +527,7 @@ function ArepoHubContent() {
                   </div>
 
                   <DataErrorBoundary
-                    hubName="AREPO"
+                    hubName="arepo"
                     componentName="QuickLinks"
                     compact
                   >
@@ -573,7 +573,7 @@ function ArepoHubContent() {
                   </div>
 
                   <DataErrorBoundary
-                    hubName="AREPO"
+                    hubName="arepo"
                     componentName="GettingStarted"
                     compact
                   >
@@ -610,7 +610,7 @@ function ArepoHubContent() {
                   </div>
 
                   <DataErrorBoundary
-                    hubName="AREPO"
+                    hubName="arepo"
                     componentName="CommunityStats"
                     compact
                   >
@@ -645,7 +645,7 @@ function ArepoHubContent() {
               className="max-w-4xl mx-auto"
             >
               <DataErrorBoundary
-                hubName="AREPO"
+                hubName="arepo"
                 componentName="HelpHub"
                 compact
                 onRetry={() => addNotification('Retrying help content load...', 'info')}
@@ -653,7 +653,7 @@ function ArepoHubContent() {
                 <PanelErrorBoundary 
                   panelId="arepo-help" 
                   panelTitle="Help & Q&A" 
-                  hub="AREPO"
+                  hub="arepo"
                 >
                   <HelpHub 
                     questions={RECENT_QUESTIONS}
@@ -678,7 +678,7 @@ function ArepoHubContent() {
               <PanelErrorBoundary 
                 panelId="arepo-tactical-maps" 
                 panelTitle="Tactical Maps" 
-                hub="AREPO"
+                hub="arepo"
               >
                 <TacticalMapContainer />
               </PanelErrorBoundary>
@@ -697,12 +697,12 @@ function ArepoHub() {
   return (
     <HubErrorBoundary hubName="arepo" componentName="ArepoHub">
       <DataErrorBoundary
-        hubName="AREPO"
+        hubName="arepo"
         componentName="ArepoHub"
         fallback={
           <div className="min-h-screen flex items-center justify-center p-4">
             <HubErrorFallback
-              hub="AREPO"
+              hub="arepo"
               title="AREPO Cross-Reference Engine Error"
               message="Failed to load the cross-reference engine. Please try again."
               onRetry={() => window.location.reload()}

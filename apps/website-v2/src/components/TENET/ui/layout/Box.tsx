@@ -8,7 +8,7 @@
 import React from 'react';
 
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
-  as?: keyof JSX.IntrinsicElements;
+  as?: 'div' | 'span' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'main';
   p?: string | number;
   px?: string | number;
   py?: string | number;
@@ -29,7 +29,8 @@ export const Box = React.forwardRef<HTMLDivElement, BoxProps>(
       ...style,
     };
     
-    return <Component ref={ref} style={customStyles} {...props} />;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return <Component ref={ref as any} style={customStyles} {...props} />;
   }
 );
 

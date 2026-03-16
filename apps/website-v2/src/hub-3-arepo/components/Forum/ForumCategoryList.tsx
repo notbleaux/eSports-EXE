@@ -256,7 +256,7 @@ function ForumCategoryList({
 export function ForumCategoryListWithErrorBoundary(props: ForumCategoryListProps) {
   return (
     <DataErrorBoundary
-      hubName="AREPO"
+      hubName="arepo"
       componentName="ForumCategoryList"
       compact
     >

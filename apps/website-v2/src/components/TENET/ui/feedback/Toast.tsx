@@ -5,7 +5,7 @@
  * Non-blocking notification messages.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export interface ToastProps {
   id: string;

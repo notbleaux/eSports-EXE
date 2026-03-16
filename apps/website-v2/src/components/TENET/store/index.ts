@@ -8,6 +8,8 @@
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { WSMessage, WebSocketState } from '../types/websocket';
+import type { PushSubscription, NotificationPreferences, PermissionStatus } from '../services/pushNotifications';
 
 // ============================================================================
 // Type Definitions
@@ -74,6 +76,33 @@ export interface UIState {
 }
 
 // ============================================================================
+// OAuth Types
+// ============================================================================
+
+export type OAuthProviderType = 'discord' | 'google' | 'github';
+
+export interface OAuthAccount {
+  id: number;
+  provider: OAuthProviderType;
+  providerAccountId: string;
+  providerEmail?: string;
+  providerUsername?: string;
+  providerAvatarUrl?: string;
+  isPrimary: boolean;
+  createdAt: string;
+}
+
+// ============================================================================
+// 2FA Types
+// ============================================================================
+
+export interface TwoFactorState {
+  enabled: boolean;
+  pendingSetup: boolean;
+  tempToken: string | null;
+}
+
+// ============================================================================
 // Store State Interface
 // ============================================================================
 
@@ -95,6 +124,21 @@ interface TENETState {
   
   // Hub-specific data (lazy loaded)
   hubData: Record<HubType, Record<string, unknown>>;
+  
+  // WebSocket
+  websocket: WebSocketState;
+  
+  // Push Notifications
+  pushEnabled: boolean;
+  pushPermission: PermissionStatus;
+  pushSubscription: PushSubscription | null;
+  notificationPreferences: NotificationPreferences;
+  
+  // OAuth
+  oauthAccounts: OAuthAccount[];
+  
+  // 2FA
+  twoFactor: TwoFactorState;
 }
 
 interface TENETActions {
@@ -130,6 +174,30 @@ interface TENETActions {
   // Hub data actions
   setHubData: (hub: HubType, key: string, data: unknown) => void;
   getHubData: (hub: HubType, key: string) => unknown;
+  
+  // WebSocket actions
+  setWebSocketConnected: (connected: boolean) => void;
+  setWebSocketError: (error: string | null) => void;
+  subscribeChannel: (channel: string) => void;
+  unsubscribeChannel: (channel: string) => void;
+  addWebSocketMessage: (message: WSMessage) => void;
+  clearWebSocketMessages: (channel?: string) => void;
+  
+  // Push notification actions
+  setPushEnabled: (enabled: boolean) => void;
+  setPushPermission: (permission: PermissionStatus) => void;
+  setPushSubscription: (subscription: PushSubscription | null) => void;
+  setNotificationPreferences: (prefs: NotificationPreferences) => void;
+  updateCategoryPreference: (category: keyof NotificationPreferences['categories'], enabled: boolean) => void;
+  
+  // OAuth actions
+  setOAuthAccounts: (accounts: OAuthAccount[]) => void;
+  addOAuthAccount: (account: OAuthAccount) => void;
+  removeOAuthAccount: (provider: OAuthProviderType) => void;
+  
+  // 2FA actions
+  setTwoFactorEnabled: (enabled: boolean) => void;
+  setTwoFactorPending: (pending: boolean, tempToken?: string | null) => void;
 }
 
 // ============================================================================
@@ -169,6 +237,37 @@ const initialState: TENETState = {
     arepo: {},
     opera: {},
     tenet: {},
+  },
+  
+  websocket: {
+    connected: false,
+    error: null,
+    channels: [],
+    messages: {},
+    lastMessage: null,
+  },
+  
+  pushEnabled: false,
+  pushPermission: 'default',
+  pushSubscription: null,
+  notificationPreferences: {
+    globalEnabled: true,
+    categories: {
+      match_start: true,
+      match_end: true,
+      odds_change: false,
+      bet_won: true,
+      bet_lost: true,
+      system: true,
+    },
+  },
+  
+  oauthAccounts: [],
+  
+  twoFactor: {
+    enabled: false,
+    pendingSetup: false,
+    tempToken: null,
   },
 };
 
@@ -355,6 +454,134 @@ export const useTENETStore = create<TENETState & TENETActions>()(
           getHubData: (hub, key) => {
             return get().hubData[hub][key];
           },
+          
+          // WebSocket actions
+          setWebSocketConnected: (connected) => {
+            set((state) => {
+              state.websocket.connected = connected;
+            });
+          },
+          
+          setWebSocketError: (error) => {
+            set((state) => {
+              state.websocket.error = error;
+            });
+          },
+          
+          subscribeChannel: (channel) => {
+            set((state) => {
+              if (!state.websocket.channels.includes(channel)) {
+                state.websocket.channels.push(channel);
+              }
+              if (!state.websocket.messages[channel]) {
+                state.websocket.messages[channel] = [];
+              }
+            });
+          },
+          
+          unsubscribeChannel: (channel) => {
+            set((state) => {
+              state.websocket.channels = state.websocket.channels.filter(
+                (c) => c !== channel
+              );
+            });
+          },
+          
+          addWebSocketMessage: (message) => {
+            set((state) => {
+              state.websocket.lastMessage = message;
+              const channel = message.channel;
+              if (!state.websocket.messages[channel]) {
+                state.websocket.messages[channel] = [];
+              }
+              state.websocket.messages[channel].push(message);
+              // Keep only last 500 messages per channel
+              if (state.websocket.messages[channel].length > 500) {
+                state.websocket.messages[channel] = state.websocket.messages[channel].slice(-500);
+              }
+            });
+          },
+          
+          clearWebSocketMessages: (channel) => {
+            set((state) => {
+              if (channel) {
+                state.websocket.messages[channel] = [];
+              } else {
+                state.websocket.messages = {};
+              }
+            });
+          },
+          
+          // Push notification actions
+          setPushEnabled: (enabled) => {
+            set((state) => {
+              state.pushEnabled = enabled;
+            });
+          },
+          
+          setPushPermission: (permission) => {
+            set((state) => {
+              state.pushPermission = permission;
+            });
+          },
+          
+          setPushSubscription: (subscription) => {
+            set((state) => {
+              state.pushSubscription = subscription;
+            });
+          },
+          
+          setNotificationPreferences: (prefs) => {
+            set((state) => {
+              state.notificationPreferences = prefs;
+            });
+          },
+          
+          updateCategoryPreference: (category, enabled) => {
+            set((state) => {
+              state.notificationPreferences.categories[category] = enabled;
+            });
+          },
+          
+          // OAuth actions
+          setOAuthAccounts: (accounts) => {
+            set((state) => {
+              state.oauthAccounts = accounts;
+            });
+          },
+          
+          addOAuthAccount: (account) => {
+            set((state) => {
+              const exists = state.oauthAccounts.find(
+                a => a.provider === account.provider
+              );
+              if (!exists) {
+                state.oauthAccounts.push(account);
+              }
+            });
+          },
+          
+          removeOAuthAccount: (provider) => {
+            set((state) => {
+              state.oauthAccounts = state.oauthAccounts.filter(
+                a => a.provider !== provider
+              );
+            });
+          },
+          
+          // 2FA actions
+          setTwoFactorEnabled: (enabled) => {
+            set((state) => {
+              state.twoFactor.enabled = enabled;
+            });
+          },
+          
+          setTwoFactorPending: (pending, tempToken = null) => {
+            set((state) => {
+              state.twoFactor.pendingSetup = pending;
+              state.twoFactor.tempToken = tempToken;
+            });
+          },
         }),
         {
           name: 'tenet-store',
@@ -368,6 +595,7 @@ export const useTENETStore = create<TENETState & TENETActions>()(
             search: {
               recentSearches: state.search.recentSearches,
             },
+            notificationPreferences: state.notificationPreferences,
           }),
         }
       )
@@ -402,5 +630,21 @@ export const useSearchQuery = () => useTENETStore((state) => state.search.query)
 export const useSearchResults = () => useTENETStore((state) => state.search.results);
 export const useNotifications = () => useTENETStore((state) => state.notifications);
 export const useUnreadCount = () => useTENETStore((state) => state.unreadCount);
+
+// Push notification selectors
+export const usePushEnabled = () => useTENETStore((state) => state.pushEnabled);
+export const usePushPermission = () => useTENETStore((state) => state.pushPermission);
+export const usePushSubscription = () => useTENETStore((state) => state.pushSubscription);
+export const useNotificationPreferences = () => useTENETStore((state) => state.notificationPreferences);
+
+// OAuth selectors
+export const useOAuthAccounts = () => useTENETStore((state) => state.oauthAccounts);
+export const useHasOAuthProvider = (provider: OAuthProviderType) => 
+  useTENETStore((state) => state.oauthAccounts.some(a => a.provider === provider));
+
+// 2FA selectors
+export const useTwoFactorState = () => useTENETStore((state) => state.twoFactor);
+export const useIsTwoFactorEnabled = () => useTENETStore((state) => state.twoFactor.enabled);
+export const useIsTwoFactorPending = () => useTENETStore((state) => state.twoFactor.pendingSetup);
 
 export default useTENETStore;
