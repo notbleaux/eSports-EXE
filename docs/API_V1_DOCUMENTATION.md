@@ -1,4 +1,4 @@
-[Ver001.000]
+[Ver002.000]
 
 # API v1 Documentation — Libre-X-eSport 4NJZ4 TENET Platform
 
@@ -11,14 +11,17 @@
 ## Table of Contents
 
 1. [Authentication](#authentication)
-2. [Players API](#players-api)
-3. [Matches API](#matches-api)
-4. [Analytics API](#analytics-api)
-5. [Search API](#search-api)
-6. [WebSocket API](#websocket-api)
-7. [Health & Status](#health--status)
-8. [Error Handling](#error-handling)
-9. [Rate Limiting](#rate-limiting)
+2. [Authentication API](#authentication-api)
+3. [Players API](#players-api)
+4. [Matches API](#matches-api)
+5. [Analytics API](#analytics-api)
+6. [Search API](#search-api)
+7. [Betting API](#betting-api)
+8. [WebSocket API](#websocket-api)
+9. [Health & Status](#health--status)
+10. [Error Handling](#error-handling)
+11. [Rate Limiting](#rate-limiting)
+12. [Environment Variables](#environment-variables)
 
 ---
 
@@ -46,6 +49,84 @@ username=<username>&password=<password>
   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
   "token_type": "bearer",
   "expires_in": 3600
+}
+```
+
+---
+
+## Authentication API
+
+### OAuth Login
+
+Initiate OAuth flow with provider.
+
+```bash
+GET /auth/oauth/{provider}/login
+```
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| provider | string | Yes | Provider: discord, google, github |
+
+**Response:**
+Redirects to OAuth provider authorization page.
+
+### OAuth Callback
+
+Callback from OAuth provider.
+
+```bash
+GET /auth/oauth/{provider}/callback?code={code}&state={state}
+```
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| provider | string | Yes | Provider name |
+| code | string | Yes | Authorization code |
+| state | string | Yes | CSRF protection token |
+
+**Response:**
+```json
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGci...",
+  "token_type": "bearer",
+  "expires_in": 3600
+}
+```
+
+### 2FA Setup
+
+Initialize 2FA setup for user.
+
+```bash
+POST /auth/2fa/setup
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "secret": "JBSWY3DPEHPK3PXP",
+  "qr_code": "data:image/png;base64,iVBORw0KGgo...",
+  "backup_codes": ["ABCD-1234-EFGH", "WXYZ-5678-IJKL"]
+}
+```
+
+### 2FA Verify
+
+Verify TOTP code during login.
+
+```bash
+POST /auth/2fa/verify
+```
+
+**Request Body:**
+```json
+{
+  "temp_token": "eyJ0eXAiOiJKV1QiLCJhbGci...",
+  "totp_code": "123456"
 }
 ```
 
@@ -342,6 +423,46 @@ GET /v1/analytics/leaderboard
   "generated_at": "2026-03-15T10:00:00Z"
 }
 ```
+
+---
+
+## Betting API
+
+### Get Match Odds
+
+Get current odds for a match.
+
+```bash
+GET /api/betting/matches/{match_id}/odds
+```
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| match_id | string | Yes | Match identifier |
+
+**Response:**
+```json
+{
+  "match_id": "match_123",
+  "team_a_decimal": 1.85,
+  "team_b_decimal": 2.10,
+  "team_a_american": -118,
+  "team_b_american": 110,
+  "last_updated": "2026-03-16T10:30:00Z"
+}
+```
+
+### Calculate Odds
+
+Force recalculation of odds.
+
+```bash
+POST /api/betting/matches/{match_id}/odds/calculate
+Authorization: Bearer {token}
+```
+
+**Rate Limit:** 5 requests per minute
 
 ---
 
@@ -715,6 +836,37 @@ X-RateLimit-Reset: 1710507600
   }
 }
 ```
+
+---
+
+## Environment Variables
+
+### Required
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| DATABASE_URL | PostgreSQL connection | postgresql://... |
+| REDIS_URL | Redis connection | redis://... |
+| JWT_SECRET_KEY | JWT signing key | secret-key |
+
+### OAuth Providers
+
+| Variable | Description |
+|----------|-------------|
+| DISCORD_CLIENT_ID | Discord app ID |
+| DISCORD_CLIENT_SECRET | Discord app secret |
+| GOOGLE_CLIENT_ID | Google app ID |
+| GOOGLE_CLIENT_SECRET | Google app secret |
+| GITHUB_CLIENT_ID | GitHub app ID |
+| GITHUB_CLIENT_SECRET | GitHub app secret |
+
+### Push Notifications
+
+| Variable | Description |
+|----------|-------------|
+| VAPID_PUBLIC_KEY | VAPID public key |
+| VAPID_PRIVATE_KEY | VAPID private key |
+| VAPID_CLAIMS_EMAIL | Admin email |
 
 ---
 

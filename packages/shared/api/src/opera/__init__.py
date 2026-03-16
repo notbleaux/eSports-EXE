@@ -14,13 +14,14 @@ Modules:
     tidb_client — TiDB connection pooling and CRUD operations
 
 Usage:
+    import os
     from api.src.opera import TiDBOperaClient
     
     client = TiDBOperaClient(
         host="tidb.example.com",
         port=4000,
         user="opera",
-        password="secret",
+        password=os.getenv("TIDB_PASSWORD", ""),
         database="opera_metadata"
     )
     

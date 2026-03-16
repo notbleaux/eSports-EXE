@@ -136,13 +136,17 @@ class VAPIDKeyManager:
             private_key_bytes
         ).decode("ascii").rstrip("=")
         
-        email = os.getenv("VAPID_CLAIMS_EMAIL", "admin@example.com")
+        email = os.getenv("VAPID_CLAIMS_EMAIL")
+        if not email:
+            email = "admin@example.com"
+            logger.warning("VAPID_CLAIMS_EMAIL not set, using example email. Set this in production!")
         
         return f"""# VAPID Keys for Web Push Notifications
 # Generated: {datetime.utcnow().isoformat()}
 VAPID_PUBLIC_KEY={self._public_key_b64}
 VAPID_PRIVATE_KEY={private_key_b64}
 VAPID_CLAIMS_EMAIL={email}
+# NOTE: Replace VAPID_CLAIMS_EMAIL with a valid email in production
 """
 
 
@@ -331,8 +335,16 @@ class PushService:
             logger.warning(f"No subscriptions found for user {user_id}")
             return logs
         
+        vapid_email = os.getenv("VAPID_CLAIMS_EMAIL")
+        if not vapid_email:
+            vapid_email = "admin@example.com"
+            if os.getenv("APP_ENVIRONMENT") == "production":
+                logger.error("VAPID_CLAIMS_EMAIL must be set in production environment!")
+                raise RuntimeError("VAPID_CLAIMS_EMAIL environment variable is required in production")
+            logger.warning("VAPID_CLAIMS_EMAIL not set, using example email")
+        
         vapid_claims = {
-            "sub": f"mailto:{os.getenv('VAPID_CLAIMS_EMAIL', 'admin@example.com')}",
+            "sub": f"mailto:{vapid_email}",
             "exp": int((datetime.utcnow() + timedelta(hours=1)).timestamp())
         }
         

@@ -28,8 +28,10 @@ Example:
     ))
 """
 
+import ast
 import json
 import logging
+import operator
 import os
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -127,6 +129,126 @@ class RunInstance:
         return self.records_failed / total
 
 
+class SafeConditionEvaluator:
+    """
+    Safe expression evaluator for alert conditions.
+    
+    Restricts evaluation to simple comparisons and arithmetic operations
+    without allowing arbitrary code execution.
+    """
+    
+    # Allowed operators
+    _operators = {
+        ast.Eq: operator.eq,
+        ast.NotEq: operator.ne,
+        ast.Lt: operator.lt,
+        ast.LtE: operator.le,
+        ast.Gt: operator.gt,
+        ast.GtE: operator.ge,
+        ast.And: operator.and_,
+        ast.Or: operator.or_,
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.Mod: operator.mod,
+        ast.USub: operator.neg,
+        ast.Not: operator.not_,
+        ast.In: lambda x, y: x in y,
+        ast.NotIn: lambda x, y: x not in y,
+    }
+    
+    @classmethod
+    def evaluate(cls, condition: str, context: dict) -> bool:
+        """
+        Safely evaluate a condition expression.
+        
+        Args:
+            condition: String expression like 'status == "failed"'
+            context: Dictionary of available variables
+            
+        Returns:
+            Boolean result of the expression
+        """
+        try:
+            tree = ast.parse(condition, mode='eval')
+            return bool(cls._eval_node(tree.body, context))
+        except Exception as e:
+            logger.error(f"Failed to evaluate condition '{condition}': {e}")
+            return False
+    
+    @classmethod
+    def _eval_node(cls, node: ast.AST, context: dict) -> Any:
+        """Recursively evaluate AST nodes."""
+        if isinstance(node, ast.BoolOp):
+            op = cls._operators.get(type(node.op))
+            if op is None:
+                raise ValueError(f"Unsupported boolean operator: {type(node.op)}")
+            values = [cls._eval_node(v, context) for v in node.values]
+            result = values[0]
+            for v in values[1:]:
+                result = op(result, v)
+            return result
+            
+        elif isinstance(node, ast.Compare):
+            left = cls._eval_node(node.left, context)
+            for op, comparator in zip(node.ops, node.comparators):
+                op_func = cls._operators.get(type(op))
+                if op_func is None:
+                    raise ValueError(f"Unsupported comparison: {type(op)}")
+                right = cls._eval_node(comparator, context)
+                if not op_func(left, right):
+                    return False
+                left = right
+            return True
+            
+        elif isinstance(node, ast.BinOp):
+            left = cls._eval_node(node.left, context)
+            right = cls._eval_node(node.right, context)
+            op = cls._operators.get(type(node.op))
+            if op is None:
+                raise ValueError(f"Unsupported binary operator: {type(node.op)}")
+            return op(left, right)
+            
+        elif isinstance(node, ast.UnaryOp):
+            operand = cls._eval_node(node.operand, context)
+            op = cls._operators.get(type(node.op))
+            if op is None:
+                raise ValueError(f"Unsupported unary operator: {type(node.op)}")
+            return op(operand)
+            
+        elif isinstance(node, ast.Name):
+            if node.id in context:
+                return context[node.id]
+            raise ValueError(f"Unknown variable: {node.id}")
+            
+        elif isinstance(node, ast.Attribute):
+            obj = cls._eval_node(node.value, context)
+            return getattr(obj, node.attr)
+            
+        elif isinstance(node, ast.Constant):
+            return node.value
+            
+        elif isinstance(node, ast.Str):  # Python < 3.8 compatibility
+            return node.s
+            
+        elif isinstance(node, ast.Num):  # Python < 3.8 compatibility
+            return node.n
+            
+        elif isinstance(node, ast.List):
+            return [cls._eval_node(e, context) for e in node.elts]
+            
+        elif isinstance(node, ast.Tuple):
+            return tuple(cls._eval_node(e, context) for e in node.elts)
+            
+        elif isinstance(node, ast.Dict):
+            return {cls._eval_node(k, context): cls._eval_node(v, context) 
+                    for k, v in zip(node.keys, node.values)}
+            
+        else:
+            raise ValueError(f"Unsupported expression type: {type(node)}")
+
+
 @dataclass
 class AlertRule:
     """Alert rule definition."""
@@ -152,7 +274,7 @@ class AlertRule:
                 "records_processed": run.records_processed,
                 "records_failed": run.records_failed,
             }
-            return bool(eval(self.condition, {"__builtins__": {}}, context))
+            return SafeConditionEvaluator.evaluate(self.condition, context)
         except Exception as e:
             logger.error(f"Error evaluating alert rule '{self.name}': {e}")
             return False

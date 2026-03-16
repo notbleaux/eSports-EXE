@@ -1,10 +1,12 @@
 """
-[Ver001.000]
-Betting Routes - Match odds API endpoints
+[Ver002.000]
+Betting Routes - Match odds API endpoints with Redis caching
 """
 
 import logging
 import uuid
+import os
+import json
 from typing import Optional, List
 from datetime import datetime
 
@@ -29,6 +31,9 @@ from .models import BetStatus, OddsFormat, Bet, OddsHistory, Leaderboard
 # Import database manager
 from axiom_esports_data.api.src.db_manager import db
 
+# Import Redis cache
+from ....cache import CacheManager
+
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["betting"])
 
@@ -37,6 +42,146 @@ odds_engine = OddsEngine(db_pool=db)
 
 # Initialize limiter for rate limiting
 limiter = Limiter(key_func=get_remote_address)
+
+# Initialize Redis cache
+redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
+try:
+    cache = CacheManager(redis_url)
+    logger.info(f"✅ Redis cache initialized for betting routes")
+except Exception as e:
+    logger.warning(f"⚠️ Failed to initialize Redis cache: {e}")
+    cache = None
+
+
+# ============================================================================
+# Cache Helper Functions
+# ============================================================================
+
+def _make_odds_cache_key(match_id: str, format: str = "decimal") -> str:
+    """Generate cache key for odds data."""
+    return f"betting:odds:{match_id}:{format}"
+
+
+def _make_leaderboard_cache_key(period: str, limit: int) -> str:
+    """Generate cache key for leaderboard data."""
+    return f"betting:leaderboard:{period}:{limit}"
+
+
+def _make_history_cache_key(match_id: str, limit: int) -> str:
+    """Generate cache key for odds history."""
+    return f"betting:history:{match_id}:{limit}"
+
+
+async def get_cached_odds(match_id: str, format: str = "decimal") -> Optional[OddsResponse]:
+    """
+    Get odds from cache or return None if not cached/stale.
+    Cache TTL: 30 seconds for live data freshness.
+    """
+    if not cache:
+        return None
+        
+    try:
+        cache_key = _make_odds_cache_key(match_id, format)
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            # Check if data is fresh (less than 30 seconds old)
+            cached_time = datetime.fromisoformat(cached_data.get('cached_at', '2000-01-01'))
+            age_seconds = (datetime.utcnow() - cached_time).total_seconds()
+            
+            if age_seconds < 30:  # 30 second TTL
+                logger.debug(f"Cache HIT for odds {match_id} (age: {age_seconds:.1f}s)")
+                # Convert cached dict back to OddsResponse
+                return OddsResponse(**cached_data['data'])
+            else:
+                logger.debug(f"Cache STALE for odds {match_id} (age: {age_seconds:.1f}s)")
+                
+    except Exception as e:
+        logger.warning(f"Cache read error for odds {match_id}: {e}")
+        
+    return None
+
+
+async def set_cached_odds(match_id: str, odds_response: OddsResponse, format: str = "decimal"):
+    """Cache odds response with 30 second TTL."""
+    if not cache:
+        return
+        
+    try:
+        cache_key = _make_odds_cache_key(match_id, format)
+        cache_data = {
+            'data': odds_response.model_dump(),
+            'cached_at': datetime.utcnow().isoformat()
+        }
+        cache.set(cache_key, cache_data, ttl=30)  # 30 seconds
+        logger.debug(f"Cached odds for {match_id}")
+    except Exception as e:
+        logger.warning(f"Cache write error for odds {match_id}: {e}")
+
+
+async def get_cached_leaderboard(period: str, limit: int) -> Optional[BettingLeaderboardResponse]:
+    """
+    Get leaderboard from cache.
+    Cache TTL: 60 seconds (leaderboard changes less frequently).
+    """
+    if not cache:
+        return None
+        
+    try:
+        cache_key = _make_leaderboard_cache_key(period, limit)
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            cached_time = datetime.fromisoformat(cached_data.get('cached_at', '2000-01-01'))
+            age_seconds = (datetime.utcnow() - cached_time).total_seconds()
+            
+            if age_seconds < 60:  # 60 second TTL
+                entries = [LeaderboardEntry(**e) for e in cached_data['data']['entries']]
+                return BettingLeaderboardResponse(
+                    entries=entries,
+                    total_entries=cached_data['data']['total_entries'],
+                    generated_at=datetime.fromisoformat(cached_data['data']['generated_at'])
+                )
+                
+    except Exception as e:
+        logger.warning(f"Cache read error for leaderboard: {e}")
+        
+    return None
+
+
+async def set_cached_leaderboard(period: str, limit: int, response: BettingLeaderboardResponse):
+    """Cache leaderboard with 60 second TTL."""
+    if not cache:
+        return
+        
+    try:
+        cache_key = _make_leaderboard_cache_key(period, limit)
+        cache_data = {
+            'data': {
+                'entries': [e.model_dump() for e in response.entries],
+                'total_entries': response.total_entries,
+                'generated_at': response.generated_at.isoformat()
+            },
+            'cached_at': datetime.utcnow().isoformat()
+        }
+        cache.set(cache_key, cache_data, ttl=60)  # 60 seconds
+        logger.debug(f"Cached leaderboard for {period}")
+    except Exception as e:
+        logger.warning(f"Cache write error for leaderboard: {e}")
+
+
+async def invalidate_odds_cache(match_id: str):
+    """Invalidate odds cache for a specific match."""
+    if not cache:
+        return
+        
+    try:
+        for format in ["decimal", "american", "fractional"]:
+            cache_key = _make_odds_cache_key(match_id, format)
+            cache.delete(cache_key)
+        logger.debug(f"Invalidated odds cache for {match_id}")
+    except Exception as e:
+        logger.warning(f"Cache invalidation error for {match_id}: {e}")
 
 
 # ============================================================================
@@ -188,20 +333,29 @@ async def get_match_odds(
     format: Optional[str] = Query("decimal", pattern=r"^(decimal|american|fractional)$")
 ):
     """
-    Get current odds for a match.
+    Get current odds for a match with Redis caching.
     
     Returns calculated odds based on team factors, head-to-head history,
-    and current match context.
+    and current match context. Results are cached for 30 seconds.
     
     - **match_id**: Unique match identifier
     - **format**: Odds format preference (decimal, american, fractional)
     """
     try:
-        # Check cache first
-        cached = await _get_cached_odds(match_id)
-        if cached:
-            logger.info(f"Returning cached odds for match {match_id}")
-            return _odds_result_to_response(cached)
+        # Check Redis cache first (fast, distributed)
+        cached_response = await get_cached_odds(match_id, format)
+        if cached_response:
+            logger.info(f"Returning Redis cached odds for match {match_id}")
+            return cached_response
+        
+        # Check in-memory cache as fallback
+        cached_result = await _get_cached_odds(match_id)
+        if cached_result:
+            logger.info(f"Returning memory cached odds for match {match_id}")
+            response = _odds_result_to_response(cached_result)
+            # Also cache in Redis for next time
+            await set_cached_odds(match_id, response, format)
+            return response
         
         # Get match context
         context = await _get_match_context(match_id)
@@ -214,13 +368,19 @@ async def get_match_odds(
         # Calculate odds
         result = await odds_engine.calculate_odds(context, is_live=False)
         
-        # Cache the result
+        # Cache in memory
         odds_engine.live_matches[match_id] = result
+        
+        # Convert to response
+        response = _odds_result_to_response(result)
+        
+        # Cache in Redis
+        await set_cached_odds(match_id, response, format)
         
         # Store in history
         await _store_odds_history(result, trigger="api_request")
         
-        return _odds_result_to_response(result)
+        return response
         
     except HTTPException:
         raise
@@ -365,15 +525,21 @@ async def get_betting_leaderboard(
     period: str = Query("all_time", pattern=r"^(all_time|monthly|weekly)$")
 ):
     """
-    Get top bettors leaderboard.
+    Get top bettors leaderboard with Redis caching.
     
     Returns ranked list of top performing bettors based on
-    win rate, ROI, and profit/loss.
+    win rate, ROI, and profit/loss. Results are cached for 60 seconds.
     
     - **limit**: Number of entries to return (1-100)
     - **period**: Time period filter (all_time, monthly, weekly)
     """
     try:
+        # Check Redis cache first
+        cached_response = await get_cached_leaderboard(period, limit)
+        if cached_response:
+            logger.info(f"Returning cached leaderboard for {period}")
+            return cached_response
+        
         entries = []
         
         # Try to get from database
@@ -462,11 +628,16 @@ async def get_betting_leaderboard(
                 )
             ][:limit]
         
-        return BettingLeaderboardResponse(
+        response = BettingLeaderboardResponse(
             entries=entries,
             total_entries=len(entries),
             generated_at=datetime.utcnow()
         )
+        
+        # Cache in Redis
+        await set_cached_leaderboard(period, limit, response)
+        
+        return response
         
     except Exception as e:
         logger.error(f"Error fetching betting leaderboard: {e}")
@@ -563,12 +734,34 @@ async def betting_health_check():
     """
     Health check for betting service.
     
-    Returns service status and odds engine health.
+    Returns service status, odds engine health, and cache metrics.
     """
-    return {
+    health_data = {
         "status": "healthy",
         "service": "betting",
         "odds_engine": "initialized",
         "cached_matches": len(odds_engine.live_matches),
         "timestamp": datetime.utcnow().isoformat()
     }
+    
+    # Add cache metrics if available
+    if cache:
+        try:
+            cache_metrics = cache.get_metrics()
+            health_data["cache"] = {
+                "status": "connected",
+                "hit_rate": f"{cache_metrics['hit_rate']:.1f}%",
+                "hits": cache_metrics['hits'],
+                "misses": cache_metrics['misses']
+            }
+        except Exception as e:
+            health_data["cache"] = {
+                "status": "error",
+                "error": str(e)
+            }
+    else:
+        health_data["cache"] = {
+            "status": "disabled"
+        }
+        
+    return health_data

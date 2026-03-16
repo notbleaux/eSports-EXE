@@ -18,7 +18,7 @@ Usage:
         host="tidb.example.com",
         port=4000,
         user="opera",
-        password="secret",
+        password=os.getenv("TIDB_PASSWORD", ""),
         database="opera_metadata"
     )
     

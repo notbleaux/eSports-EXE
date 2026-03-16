@@ -576,7 +576,8 @@ async def two_factor_enable(
 
 
 @router.post("/2fa/verify", response_model=Token)
-async def two_factor_verify(request: TwoFactorVerifyRequest):
+@auth_limiter.limit("5/15minute")
+async def two_factor_verify(request: Request, request_data: TwoFactorVerifyRequest):
     """
     Complete login with 2FA verification.
     
@@ -585,7 +586,7 @@ async def two_factor_verify(request: TwoFactorVerifyRequest):
     """
     # Verify temp token
     from .two_factor import verify_temp_token
-    user_id = await verify_temp_token(request.temp_token)
+    user_id = await verify_temp_token(request_data.temp_token)
     
     if not user_id:
         raise HTTPException(
@@ -594,10 +595,10 @@ async def two_factor_verify(request: TwoFactorVerifyRequest):
         )
     
     # Verify 2FA code
-    if request.is_backup_code:
-        valid = await verify_backup_code_login(user_id, request.code)
+    if request_data.is_backup_code:
+        valid = await verify_backup_code_login(user_id, request_data.code)
     else:
-        valid = await verify_two_factor(user_id, request.code)
+        valid = await verify_two_factor(user_id, request_data.code)
     
     if not valid:
         raise HTTPException(

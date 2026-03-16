@@ -222,6 +222,10 @@ class TestWebSocketChannelSecurity:
         await gateway.connect(ws1, user1)
         await gateway.connect(ws2, user2)
         
+        # Clear the connection/auth messages
+        ws1.send_text.reset_mock()
+        ws2.send_text.reset_mock()
+        
         # Only user1 subscribes to channel
         channel = "match:test_match"
         await gateway._subscribe(user1, channel)
@@ -235,7 +239,7 @@ class TestWebSocketChannelSecurity:
         )
         await gateway.broadcast_to_channel(channel, message)
         
-        # Only user1 should receive
+        # Only user1 should receive the data update
         ws1.send_text.assert_called_once()
         ws2.send_text.assert_not_called()
     

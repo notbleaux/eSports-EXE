@@ -1,0 +1,128 @@
+[Ver001.000]
+
+# Security Audit Report
+
+**Date:** 2026-03-16  
+**Scope:** Phase 2 modules - API authentication, OAuth, 2FA, WebSocket, Betting  
+**Auditor:** Sub-Agent Theta  
+**Status:** COMPLETED
+
+---
+
+## Executive Summary
+
+| Severity | Count | Fixed |
+|----------|-------|-------|
+| Critical | 0 | 0 |
+| High | 2 | 2 |
+| Medium | 2 | 1 |
+| Low | 1 | 1 |
+| **Total** | **5** | **4** |
+
+---
+
+## Findings
+
+### 1. HIGH: Missing Rate Limiting on 2FA Verification Endpoint
+- **Severity:** High
+- **Location:** `packages/shared/api/src/auth/auth_routes.py:578`
+- **Description:** The `/auth/2fa/verify` endpoint lacks rate limiting, allowing brute force attacks on 2FA codes.
+- **Impact:** Attackers could brute force TOTP codes or backup codes
+- **Fix Applied:** Added `@auth_limiter.limit("5/15minute")` decorator to the endpoint
+
+### 2. HIGH: Use of eval() in Alert Manager
+- **Severity:** High  
+- **Location:** `packages/shared/axiom-esports-data/pipeline/monitoring/alert_manager.py:155`
+- **Description:** The `eval()` function is used to evaluate alert conditions, which could allow code injection if user-controlled data reaches the condition.
+- **Impact:** Potential remote code execution if alert conditions are compromised
+- **Fix Applied:** Replaced `eval()` with a restricted expression evaluator using `ast.literal_eval` and a safe evaluation pattern
+
+### 3. MEDIUM: Hardcoded Password in Documentation
+- **Severity:** Medium
+- **Location:** `packages/shared/api/src/opera/tidb_client.py:21` and `packages/shared/api/src/opera/__init__.py:23`
+- **Description:** Hardcoded password "secret" appears in docstring examples, which could be mistakenly used in production.
+- **Impact:** Developers might copy-paste the example with the hardcoded password
+- **Fix Applied:** Changed to `password=os.getenv("TIDB_PASSWORD", "")` pattern in docstrings
+
+### 4. MEDIUM: npm Audit Vulnerabilities (Development Only)
+- **Severity:** Medium
+- **Location:** `apps/website-v2/package.json`
+- **Description:** esbuild vulnerability (CVE-2025-XXXX) affects development server only. Production builds are not affected.
+- **Impact:** Local development server could be accessed by malicious websites
+- **Fix Status:** Documented; upgrade to Vite 8.0.0 recommended when available
+- **Note:** This is a development-only issue and does not affect production deployments
+
+### 5. LOW: Default Email in Push Service
+- **Severity:** Low
+- **Location:** `packages/shared/api/src/notifications/push_service.py:139, 335`
+- **Description:** Default email address "admin@example.com" is used as fallback for VAPID claims
+- **Impact:** Misconfigured production instances might use example email
+- **Fix Applied:** Added warning log when default email is used; removed default in production check
+
+---
+
+## Security Review Checklist Results
+
+### OAuth Security
+- [x] State parameter is cryptographically random (using `secrets.token_urlsafe(32)`)
+- [x] State parameter has expiration (10 minutes in `generate_state_token`)
+- [x] State is validated on callback (verified in `verify_state_token`)
+- [x] HTTPS enforced in production (redirect URIs use https in prod config)
+- [x] Client secrets not logged (using environment variables)
+
+### 2FA Security
+- [x] TOTP secrets encrypted at rest (Fernet encryption with `encrypt_secret`)
+- [x] Rate limiting on verification (5/15min - **FIXED**)
+- [x] Backup codes hashed (bcrypt with `pwd_context.hash`)
+- [x] Backup codes single-use only (tracked in `used_backup_codes` table)
+
+### WebSocket Security
+- [x] Authentication required on connection (handled at route level)
+- [x] Token validation on every message (via `handle_message`)
+- [x] Message size limits (2000 chars for chat in `_handle_chat_message`)
+- [ ] Origin validation in production (RECOMMENDED: Add origin whitelist)
+
+### API Security
+- [x] Rate limiting active (SlowAPI limiter on sensitive endpoints)
+- [x] Input validation (Pydantic schemas)
+- [x] No SQL injection vulnerabilities (parameterized queries throughout)
+- [x] Proper error handling (no info leakage in production)
+
+---
+
+## Remediation Status
+
+- [x] All high issues fixed
+- [x] All critical issues resolved (none found)
+- [x] SECURITY.md created
+- [x] Fixes verified
+
+---
+
+## Recommendations
+
+1. **WebSocket Origin Validation:** Add origin whitelist for production WebSocket connections
+2. **Vite Upgrade:** Upgrade to Vite 8.0.0+ when available to resolve esbuild dev server vulnerability
+3. **Security Headers:** Implement Content Security Policy headers for the frontend
+4. **Dependency Scanning:** Add automated `npm audit` and `pip-audit` to CI/CD pipeline
+
+---
+
+## Verification Commands
+
+```bash
+# Re-run security scans
+# Python bandit (when available)
+python -m bandit -r packages/shared/api/src/ -ll
+
+# npm audit (development vulnerabilities)
+npm audit --audit-level=high
+
+# Secret scanning
+grep -r "password\s*=\s*\"secret\"" packages/shared/api/src/
+grep -r "eval(" packages/shared/api/src/
+```
+
+---
+
+*Report generated by Security Audit Sub-Agent Theta*

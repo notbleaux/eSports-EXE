@@ -1,4 +1,4 @@
-[Ver001.000]
+[Ver002.000]
 
 # Deployment Guide — 4NJZ4 TENET Platform
 
@@ -253,6 +253,56 @@ curl -I https://libre-x-esport.com
 
 # Run smoke tests
 ./scripts/smoke-tests.sh
+```
+
+---
+
+## Phase 2 Deployment
+
+### Database Migration
+
+```bash
+psql $DATABASE_URL -f packages/shared/api/migrations/019_oauth_2fa.sql
+```
+
+### Environment Variables
+
+Add to `.env`:
+```bash
+# OAuth
+DISCORD_CLIENT_ID=
+DISCORD_CLIENT_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+# 2FA
+ENCRYPTION_KEY=$(python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")
+
+# Push
+VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
+VAPID_CLAIMS_EMAIL=
+```
+
+### OAuth Provider Setup
+See [OAUTH_SETUP.md](OAUTH_SETUP.md)
+
+### VAPID Key Generation
+See [PUSH_NOTIFICATIONS.md](PUSH_NOTIFICATIONS.md)
+
+### Verification
+
+```bash
+# Test OAuth
+curl http://localhost:8000/auth/oauth/discord/login
+
+# Test WebSocket
+wscat -c ws://localhost:8000/ws/gateway
+
+# Test Push
+curl http://localhost:8000/api/notifications/vapid-public-key
 ```
 
 ---

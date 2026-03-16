@@ -275,6 +275,7 @@ export const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({
         {state.qrCode && (
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
             <img
+              data-testid="2fa-qr-code"
               src={state.qrCode}
               alt="2FA QR Code"
               style={{
@@ -296,15 +297,18 @@ export const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({
           <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.5rem' }}>
             Manual entry key (if QR doesn't work):
           </p>
-          <code style={{
-            display: 'block',
-            fontFamily: 'monospace',
-            fontSize: '0.875rem',
-            wordBreak: 'break-all',
-            backgroundColor: '#E5E7EB',
-            padding: '0.5rem',
-            borderRadius: '0.25rem',
-          }}>
+          <code
+            data-testid="2fa-secret"
+            style={{
+              display: 'block',
+              fontFamily: 'monospace',
+              fontSize: '0.875rem',
+              wordBreak: 'break-all',
+              backgroundColor: '#E5E7EB',
+              padding: '0.5rem',
+              borderRadius: '0.25rem',
+            }}
+          >
             {state.secret}
           </code>
         </div>
@@ -338,6 +342,7 @@ export const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({
 
         <div style={{ marginBottom: '1.5rem' }}>
           <input
+            data-testid="totp-input"
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
@@ -429,6 +434,7 @@ export const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({
 
         <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
           <button
+            data-testid="copy-backup-codes"
             onClick={copyBackupCodes}
             style={{ ...secondaryButtonStyles, flex: 1 }}
           >

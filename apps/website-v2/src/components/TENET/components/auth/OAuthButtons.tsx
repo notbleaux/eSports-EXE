@@ -212,6 +212,7 @@ export const OAuthButtons: React.FC<OAuthButtonsProps> = ({
         return (
           <button
             key={provider}
+            data-testid={`${provider}-oauth-button`}
             onClick={() => handleOAuthClick(provider)}
             style={{
               display: 'flex',
@@ -271,6 +272,9 @@ export const OAuthButton: React.FC<OAuthButtonProps> = ({
   className = '',
 }) => {
   const config = PROVIDER_CONFIG[provider];
+  
+  return (
+  const config = PROVIDER_CONFIG[provider];
   const Icon = config.icon;
   
   const sizeConfig = {
@@ -281,8 +285,8 @@ export const OAuthButton: React.FC<OAuthButtonProps> = ({
   
   const s = sizeConfig[size];
   
-  return (
     <button
+      data-testid={`${provider}-oauth-button`}
       onClick={onClick}
       className={className}
       style={{
