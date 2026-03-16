@@ -11,7 +11,7 @@ import hashlib
 import hmac
 import logging
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone, timezone
 from typing import Any, Callable, Optional
 from uuid import uuid4
 
@@ -67,7 +67,7 @@ class PipelineScheduler:
         if not croniter.is_valid(cron):
             raise ValueError(f"Invalid cron expression: {cron}")
         
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         # Calculate next run time
         itr = croniter(cron, now)
@@ -187,7 +187,7 @@ class PipelineScheduler:
         )
         
         # Update job stats
-        job.last_run_at = datetime.utcnow()
+        job.last_run_at = datetime.now(timezone.utc)
         job.run_count += 1
         job.updated_at = job.last_run_at
         
@@ -224,7 +224,7 @@ class PipelineScheduler:
         if secret is None:
             secret = hashlib.sha256(str(uuid4()).encode()).hexdigest()[:32]
         
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         job = ScheduledJob(
             job_id=str(uuid4()),
@@ -268,7 +268,7 @@ class PipelineScheduler:
         Returns:
             ScheduledJob
         """
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         job = ScheduledJob(
             job_id=str(uuid4()),
@@ -308,7 +308,7 @@ class PipelineScheduler:
         event = {
             "type": event_type,
             "data": event_data,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         
         # Check all event jobs
@@ -339,7 +339,7 @@ class PipelineScheduler:
                 run_ids.append(run.run_id)
                 
                 # Update job stats
-                job.last_run_at = datetime.utcnow()
+                job.last_run_at = datetime.now(timezone.utc)
                 job.run_count += 1
                 job.updated_at = job.last_run_at
                 
@@ -400,7 +400,7 @@ class PipelineScheduler:
             return False
         
         job.status = JobStatus.PAUSED
-        job.updated_at = datetime.utcnow()
+        job.updated_at = datetime.now(timezone.utc)
         
         if self.state_store:
             await self.state_store.save_scheduled_job(job)
@@ -418,11 +418,11 @@ class PipelineScheduler:
             return False
         
         job.status = JobStatus.ACTIVE
-        job.updated_at = datetime.utcnow()
+        job.updated_at = datetime.now(timezone.utc)
         
         # Recalculate next run for cron jobs
         if job.cron_expression and CRONITER_AVAILABLE:
-            itr = croniter(job.cron_expression, datetime.utcnow())
+            itr = croniter(job.cron_expression, datetime.now(timezone.utc))
             job.next_run_at = itr.get_next(datetime)
         
         if self.state_store:
@@ -477,7 +477,7 @@ class PipelineScheduler:
     
     async def _check_cron_jobs(self) -> None:
         """Check and trigger due cron jobs."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         # Reload jobs from store to get updates
         if self.state_store:

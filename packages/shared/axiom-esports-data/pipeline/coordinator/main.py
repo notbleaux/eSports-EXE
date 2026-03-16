@@ -13,7 +13,7 @@ import asyncio
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Depends
@@ -608,7 +608,7 @@ async def get_status():
         queues=queue_stats,
         agents=agent_stats,
         metrics=metrics,
-        timestamp=datetime.utcnow().isoformat()
+        timestamp=datetime.now(timezone.utc).isoformat()
     )
 
 
@@ -948,7 +948,7 @@ async def v1_get_status():
         queues=queue_stats,
         agents=agent_stats,
         metrics=metrics,
-        timestamp=datetime.utcnow().isoformat()
+        timestamp=datetime.now(timezone.utc).isoformat()
     )
 
 

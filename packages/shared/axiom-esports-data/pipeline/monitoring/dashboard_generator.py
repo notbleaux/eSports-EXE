@@ -20,7 +20,7 @@ Example:
 import json
 import os
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from pathlib import Path
 
@@ -654,7 +654,7 @@ class DashboardGenerator:
     <div class="header">
         <h1>🔮 {self.config.title}</h1>
         <div style="display: flex; align-items: center; gap: 16px;">
-            <span class="last-updated">Last updated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC</span>
+            <span class="last-updated">Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC</span>
             <button class="refresh-btn" onclick="location.reload()">Refresh</button>
         </div>
     </div>

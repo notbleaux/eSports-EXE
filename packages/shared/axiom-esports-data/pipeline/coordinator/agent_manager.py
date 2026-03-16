@@ -4,7 +4,7 @@ Agent lifecycle and assignment management.
 
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Any, Set
 
 from .models import Agent, ExtractionJob, GameType, JobStatus, JobResult
@@ -140,7 +140,7 @@ class AgentManager:
                 return None
             
             agent = self.agents[agent_id]
-            agent.last_heartbeat = datetime.utcnow()
+            agent.last_heartbeat = datetime.now(timezone.utc)
             
             # If agent was offline, mark as idle
             if agent.status == "offline":
@@ -281,7 +281,7 @@ class AgentManager:
     async def _check_agent_health(self):
         """Check for stale agents and handle timeouts."""
         async with self._lock:
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             stale_agents: List[str] = []
             
             for agent_id, agent in self.agents.items():

@@ -34,7 +34,7 @@ import logging
 import operator
 import os
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional, Any, Callable
 from pathlib import Path
@@ -431,7 +431,7 @@ class AlertManager:
             last_time = self._last_alert_time.get(name)
             if last_time:
                 cooldown = rule.cooldown_minutes * 60
-                if (datetime.utcnow() - last_time).total_seconds() < cooldown:
+                if (datetime.now(timezone.utc) - last_time).total_seconds() < cooldown:
                     continue
             
             # Evaluate rule
@@ -461,7 +461,7 @@ class AlertManager:
                 )
                 
                 triggered.append(alert)
-                self._last_alert_time[name] = datetime.utcnow()
+                self._last_alert_time[name] = datetime.now(timezone.utc)
                 
                 # Send immediately
                 self.send_alert(alert)
@@ -497,7 +497,7 @@ class AlertManager:
             if alert.rule == rule_name and alert.status == AlertStatus.FIRING:
                 if run_id is None or alert.run_id == run_id:
                     alert.status = AlertStatus.RESOLVED
-                    alert.resolved_at = datetime.utcnow()
+                    alert.resolved_at = datetime.now(timezone.utc)
                     logger.info(f"Resolved alert: {rule_name}")
         
         self._save_history()

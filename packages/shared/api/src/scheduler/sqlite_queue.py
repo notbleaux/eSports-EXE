@@ -16,7 +16,7 @@ import sqlite3
 import threading
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -332,7 +332,7 @@ class SQLiteTaskQueue:
             HarvestTask if available, None otherwise
         """
         conn = self._get_connection()
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(timezone.utc).isoformat()
         
         # Build query with optional filters
         type_filter = ""
@@ -369,7 +369,7 @@ class SQLiteTaskQueue:
                 return None
             
             task_id = row["task_id"]
-            started_at = datetime.utcnow().isoformat()
+            started_at = datetime.now(timezone.utc).isoformat()
             
             # Claim the task
             conn.execute("""
@@ -415,7 +415,7 @@ class SQLiteTaskQueue:
             True if task was found and updated
         """
         conn = self._get_connection()
-        completed_at = datetime.utcnow().isoformat()
+        completed_at = datetime.now(timezone.utc).isoformat()
         
         conn.execute("""
             UPDATE task_queue
@@ -466,7 +466,7 @@ class SQLiteTaskQueue:
                 self.BASE_RETRY_DELAY * (2 ** task.retry_count),
                 self.MAX_RETRY_DELAY
             )
-            next_scheduled = datetime.utcnow() + timedelta(seconds=delay)
+            next_scheduled = datetime.now(timezone.utc) + timedelta(seconds=delay)
             
             conn.execute("""
                 UPDATE task_queue
@@ -500,7 +500,7 @@ class SQLiteTaskQueue:
                 task.retry_count,
                 task.max_retries,
                 task.created_at.isoformat(),
-                datetime.utcnow().isoformat(),
+                datetime.now(timezone.utc).isoformat(),
                 task.error_message,
                 error_message
             ))
@@ -544,7 +544,7 @@ class SQLiteTaskQueue:
         avg_processing_time = row["avg_seconds"] if row and row["avg_seconds"] else 0
         
         # Throughput (completed per minute, last hour)
-        one_hour_ago = (datetime.utcnow() - timedelta(hours=1)).isoformat()
+        one_hour_ago = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
         cursor = conn.execute("""
             SELECT COUNT(*) as count
             FROM task_queue
@@ -669,7 +669,7 @@ class SQLiteTaskQueue:
                 priority=row["priority"],
                 retry_count=0,
                 max_retries=max_retries or row["max_retries"],
-                created_at=datetime.utcnow(),
+                created_at=datetime.now(timezone.utc),
             )
             self.enqueue(task)
             
@@ -694,7 +694,7 @@ class SQLiteTaskQueue:
             Number of tasks removed
         """
         conn = self._get_connection()
-        cutoff = (datetime.utcnow() - timedelta(days=days)).isoformat()
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         
         conn.execute("""
             DELETE FROM task_queue

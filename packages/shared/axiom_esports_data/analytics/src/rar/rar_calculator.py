@@ -10,7 +10,7 @@ Formula: RAR = SimRating × (1 - Volatility) × Consistency_Bonus × Confidence_
 import logging
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .volatility import VolatilityCalculator, VolatilityResult
 from .decomposer import RARDecomposer, RARResult as RoleRARResult
@@ -179,7 +179,7 @@ class RARCalculator:
             trend_direction=vol_result.trend_direction,
             trend_strength=vol_result.trend_strength,
             sample_size=len(performance_history),
-            calculation_timestamp=datetime.utcnow().isoformat(),
+            calculation_timestamp=datetime.now(timezone.utc).isoformat(),
             risk_level=risk_level,
             risk_factors=self._identify_risk_factors(
                 vol_result, confidence, vol_result.trend_direction
@@ -322,7 +322,7 @@ class RARCalculator:
                 # Return minimal result on error
                 results.append(CompleteRARResult(
                     player_id=data.get("player_id", "unknown"),
-                    calculation_timestamp=datetime.utcnow().isoformat()
+                    calculation_timestamp=datetime.now(timezone.utc).isoformat()
                 ))
         return results
 

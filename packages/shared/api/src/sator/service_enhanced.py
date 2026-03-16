@@ -12,7 +12,7 @@ This enhanced version includes:
 """
 
 import logging
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from typing import Optional, List, Tuple, Dict, Any
 import asyncpg
 
@@ -68,7 +68,7 @@ class SatorServiceEnhanced:
             )
             
             # Live matches
-            three_hours_ago = datetime.utcnow() - timedelta(hours=3)
+            three_hours_ago = datetime.now(timezone.utc) - timedelta(hours=3)
             matches_live = await conn.fetchval(
                 """
                 SELECT COUNT(DISTINCT match_id) FROM player_performance 
@@ -113,7 +113,7 @@ class SatorServiceEnhanced:
             # Data freshness
             last_update = await conn.fetchval(
                 "SELECT MAX(extraction_timestamp) FROM player_performance"
-            ) or datetime.utcnow()
+            ) or datetime.now(timezone.utc)
             
             freshness = self._calculate_freshness(last_update)
             
@@ -150,7 +150,7 @@ class SatorServiceEnhanced:
         if not last_update:
             return "Stale"
         
-        age = datetime.utcnow() - last_update
+        age = datetime.now(timezone.utc) - last_update
         if age < timedelta(minutes=5):
             return "Live"
         elif age < timedelta(hours=1):
@@ -166,10 +166,11 @@ class SatorServiceEnhanced:
         
         Supported metrics: sim_rating, rar_score, acs, adr, kast_pct
         """
-        # Validate metric
-        valid_metrics = ["sim_rating", "rar_score", "acs", "adr", "kast_pct"]
-        if metric not in valid_metrics:
-            metric = "sim_rating"
+        # SECURITY FIX: Whitelist validation for ORDER BY column (SQL Injection prevention)
+        # See: Round 2b Zeta Security Fixes
+        ALLOWED_METRICS = ["sim_rating", "rar_score", "acs", "adr", "kast_pct"]
+        if metric not in ALLOWED_METRICS:
+            raise ValueError(f"Invalid metric: {metric}. Allowed: {ALLOWED_METRICS}")
         
         async with self.pool.acquire() as conn:
             rows = await conn.fetch(

@@ -44,7 +44,7 @@ test.describe('Mobile Responsiveness', () => {
       
       // Menu should be visible
       const menu = page.locator('nav, [role="navigation"], .mobile-menu').first()
-      expect(await menu.isVisible().catch(() => false) || true).toBeTruthy()
+      await expect(menu).toBeVisible()
     }
   })
 

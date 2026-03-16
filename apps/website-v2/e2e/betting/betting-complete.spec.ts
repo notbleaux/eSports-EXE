@@ -37,7 +37,7 @@ test.describe('Complete Betting Flows', () => {
         const historyChart = page.locator('[data-testid="odds-chart"]').or(
           page.locator('[class*="chart"], [class*="history"]')
         );
-        expect(await historyChart.isVisible().catch(() => false) || true).toBeTruthy();
+        await expect(historyChart).toBeVisible();
       }
     } else {
       test.info().annotations.push({
@@ -68,7 +68,7 @@ test.describe('Complete Betting Flows', () => {
         page.locator('text=/loading|updating|recalculating/i')
       );
       
-      expect(await loadingIndicator.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(loadingIndicator).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'info',
@@ -193,7 +193,7 @@ test.describe('Complete Betting Flows', () => {
       const betSlip = page.locator('[data-testid="bet-slip"]').or(
         page.locator('[class*="bet-slip"], [class*="betslip"]')
       );
-      expect(await betSlip.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(betSlip).toBeVisible();
 
       // Enter stake
       const stakeInput = page.locator('[data-testid="stake-input"]').or(
@@ -254,7 +254,7 @@ test.describe('Complete Betting Flows', () => {
 
       // Verify history table or list
       const historyTable = page.locator('table, [class*="bet-list"], [data-testid="bet-list"]').first();
-      expect(await historyTable.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(historyTable).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'info',
@@ -314,7 +314,8 @@ test.describe('Complete Betting Flows', () => {
       const value = await stakeInput.inputValue();
       const hasError = await errorMessage.isVisible().catch(() => false);
       
-      expect(hasError || value !== '-10' || true).toBeTruthy();
+      // Either error is shown OR negative value was rejected/filtered
+      expect(hasError || value !== '-10').toBe(true);
     }
   });
 });

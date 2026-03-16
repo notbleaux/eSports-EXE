@@ -117,7 +117,7 @@ async def register(
 
 
 @router.post("/login", response_model=Token)
-@auth_limiter.limit("5/minute")
+@auth_limiter.limit("10/minute")  # SECURITY FIX: Increased but still rate-limited (Round 2b)
 async def login(request: Request, login_data: UserLogin):
     """
     Authenticate user and return JWT tokens.

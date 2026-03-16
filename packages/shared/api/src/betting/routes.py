@@ -8,7 +8,7 @@ import uuid
 import os
 import json
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Query, Request, status, Depends
 from pydantic import BaseModel, Field
@@ -32,7 +32,7 @@ from .models import BetStatus, OddsFormat, Bet, OddsHistory, Leaderboard
 from axiom_esports_data.api.src.db_manager import db
 
 # Import Redis cache
-from ....cache import CacheManager
+from cache import CacheManager
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["betting"])
@@ -87,7 +87,7 @@ async def get_cached_odds(match_id: str, format: str = "decimal") -> Optional[Od
         if cached_data:
             # Check if data is fresh (less than 30 seconds old)
             cached_time = datetime.fromisoformat(cached_data.get('cached_at', '2000-01-01'))
-            age_seconds = (datetime.utcnow() - cached_time).total_seconds()
+            age_seconds = (datetime.now(timezone.utc) - cached_time).total_seconds()
             
             if age_seconds < 30:  # 30 second TTL
                 logger.debug(f"Cache HIT for odds {match_id} (age: {age_seconds:.1f}s)")
@@ -111,7 +111,7 @@ async def set_cached_odds(match_id: str, odds_response: OddsResponse, format: st
         cache_key = _make_odds_cache_key(match_id, format)
         cache_data = {
             'data': odds_response.model_dump(),
-            'cached_at': datetime.utcnow().isoformat()
+            'cached_at': datetime.now(timezone.utc).isoformat()
         }
         cache.set(cache_key, cache_data, ttl=30)  # 30 seconds
         logger.debug(f"Cached odds for {match_id}")
@@ -133,7 +133,7 @@ async def get_cached_leaderboard(period: str, limit: int) -> Optional[BettingLea
         
         if cached_data:
             cached_time = datetime.fromisoformat(cached_data.get('cached_at', '2000-01-01'))
-            age_seconds = (datetime.utcnow() - cached_time).total_seconds()
+            age_seconds = (datetime.now(timezone.utc) - cached_time).total_seconds()
             
             if age_seconds < 60:  # 60 second TTL
                 entries = [LeaderboardEntry(**e) for e in cached_data['data']['entries']]
@@ -162,7 +162,7 @@ async def set_cached_leaderboard(period: str, limit: int, response: BettingLeade
                 'total_entries': response.total_entries,
                 'generated_at': response.generated_at.isoformat()
             },
-            'cached_at': datetime.utcnow().isoformat()
+            'cached_at': datetime.now(timezone.utc).isoformat()
         }
         cache.set(cache_key, cache_data, ttl=60)  # 60 seconds
         logger.debug(f"Cached leaderboard for {period}")
@@ -317,7 +317,7 @@ async def _get_cached_odds(match_id: str) -> Optional[OddsResult]:
     if match_id in odds_engine.live_matches:
         cached = odds_engine.live_matches[match_id]
         # Check if cache is still fresh (less than 5 minutes old)
-        cache_age = (datetime.utcnow() - cached.last_updated).total_seconds()
+        cache_age = (datetime.now(timezone.utc) - cached.last_updated).total_seconds()
         if cache_age < 300:  # 5 minutes
             return cached
     return None
@@ -506,7 +506,7 @@ async def calculate_odds(
             success=True,
             odds=_odds_result_to_response(result),
             message="Odds recalculated successfully",
-            calculated_at=datetime.utcnow()
+            calculated_at=datetime.now(timezone.utc)
         )
         
     except HTTPException:
@@ -631,7 +631,7 @@ async def get_betting_leaderboard(
         response = BettingLeaderboardResponse(
             entries=entries,
             total_entries=len(entries),
-            generated_at=datetime.utcnow()
+            generated_at=datetime.now(timezone.utc)
         )
         
         # Cache in Redis
@@ -741,7 +741,7 @@ async def betting_health_check():
         "service": "betting",
         "odds_engine": "initialized",
         "cached_matches": len(odds_engine.live_matches),
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
     
     # Add cache metrics if available

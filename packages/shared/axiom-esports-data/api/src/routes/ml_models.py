@@ -4,7 +4,7 @@ ML Model Registry API — Model management, versioning, and A/B testing endpoint
 [Ver001.000] - Initial implementation
 """
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query, status

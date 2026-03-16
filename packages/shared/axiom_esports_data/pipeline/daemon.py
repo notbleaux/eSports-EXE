@@ -15,7 +15,7 @@ import logging
 import signal
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 
@@ -67,7 +67,7 @@ class PipelineDaemon:
     
     async def start(self) -> None:
         """Start the daemon."""
-        self._started_at = datetime.utcnow()
+        self._started_at = datetime.now(timezone.utc)
         
         # Setup logging
         self._setup_logging()
@@ -336,7 +336,7 @@ class PipelineDaemon:
     
     async def health_check(self) -> HealthStatus:
         """Return health status for monitoring."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         uptime_seconds = (
             (now - self._started_at).total_seconds()
             if self._started_at else 0

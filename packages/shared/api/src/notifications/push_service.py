@@ -9,7 +9,7 @@ import os
 import logging
 import base64
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, List, Dict, Any, Tuple
 from urllib.parse import urlparse
 
@@ -142,7 +142,7 @@ class VAPIDKeyManager:
             logger.warning("VAPID_CLAIMS_EMAIL not set, using example email. Set this in production!")
         
         return f"""# VAPID Keys for Web Push Notifications
-# Generated: {datetime.utcnow().isoformat()}
+# Generated: {datetime.now(timezone.utc).isoformat()}
 VAPID_PUBLIC_KEY={self._public_key_b64}
 VAPID_PRIVATE_KEY={private_key_b64}
 VAPID_CLAIMS_EMAIL={email}
@@ -345,7 +345,7 @@ class PushService:
         
         vapid_claims = {
             "sub": f"mailto:{vapid_email}",
-            "exp": int((datetime.utcnow() + timedelta(hours=1)).timestamp())
+            "exp": int((datetime.now(timezone.utc) + timedelta(hours=1)).timestamp())
         }
         
         # Get private key in PEM format for pywebpush
@@ -357,7 +357,7 @@ class PushService:
         
         for subscription in subscriptions:
             log = NotificationLog(
-                id=f"notif_{datetime.utcnow().timestamp()}_{hash(subscription.endpoint) % 10000}",
+                id=f"notif_{datetime.now(timezone.utc).timestamp()}_{hash(subscription.endpoint) % 10000}",
                 user_id=user_id,
                 subscription_endpoint=subscription.endpoint,
                 category=category,
@@ -368,7 +368,7 @@ class PushService:
                 data={
                     **(message.data or {}),
                     "category": category.value,
-                    "notification_id": f"notif_{datetime.utcnow().timestamp()}"
+                    "notification_id": f"notif_{datetime.now(timezone.utc).timestamp()}"
                 },
             )
             
@@ -433,7 +433,7 @@ class PushService:
     
     async def get_stats(self) -> NotificationStats:
         """Get notification statistics."""
-        today = datetime.utcnow().date()
+        today = datetime.now(timezone.utc).date()
         
         total_subs = sum(len(subs) for subs in self._subscriptions.values())
         

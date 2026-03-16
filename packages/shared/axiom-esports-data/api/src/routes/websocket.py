@@ -13,7 +13,7 @@ This module provides a unified WebSocket server with:
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, HTTPException, status
 from typing import Optional, Dict, Set, List, Callable, Any
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 import json
 import asyncio
@@ -68,7 +68,7 @@ class WebSocketMessage:
     type: str
     channel: Optional[str] = None
     data: Dict[str, Any] = field(default_factory=dict)
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     error: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
@@ -196,7 +196,7 @@ class ConnectionInfo:
     @property
     def connection_duration(self) -> float:
         """Get connection duration in seconds."""
-        return (datetime.utcnow() - self.connected_at).total_seconds()
+        return (datetime.now(timezone.utc) - self.connected_at).total_seconds()
 
 
 class UnifiedConnectionManager:
@@ -573,7 +573,7 @@ class UnifiedConnectionManager:
             "anonymous_connections": total_connections - authenticated,
             "active_channels": len(self.channels),
             "channel_subscriptions": channel_stats,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
     
     def get_connection_info(self, connection_id: str) -> Optional[Dict[str, Any]]:

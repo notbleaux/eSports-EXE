@@ -7,7 +7,7 @@ HTTP endpoints for gateway management and control.
 
 import logging
 from typing import Dict, List, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel, Field
@@ -90,7 +90,7 @@ async def get_gateway_status() -> GatewayStatus:
         status="healthy",
         connected_users=gateway.get_online_count(),
         active_channels=len(gateway.channels),
-        timestamp=datetime.utcnow().isoformat(),
+        timestamp=datetime.now(timezone.utc).isoformat(),
     )
 
 
@@ -150,9 +150,9 @@ async def broadcast_message(request: BroadcastRequest) -> BroadcastResponse:
             type=request.type,
             channel=request.channel,
             payload=request.payload,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             sender_id=request.sender_id or "server",
-            message_id=f"broadcast_{datetime.utcnow().timestamp()}",
+            message_id=f"broadcast_{datetime.now(timezone.utc).timestamp()}",
         )
         
         if request.channel == "global":
@@ -167,7 +167,7 @@ async def broadcast_message(request: BroadcastRequest) -> BroadcastResponse:
         return BroadcastResponse(
             success=True,
             recipients=recipients,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
         )
     
     except Exception as e:
@@ -190,7 +190,7 @@ async def get_presence() -> PresenceResponse:
             user_id=user_id,
             status=presence_data.get("status", "unknown"),
             channels=list(presence_data.get("channels", set())),
-            last_seen=presence_data.get("last_seen", datetime.utcnow()).isoformat(),
+            last_seen=presence_data.get("last_seen", datetime.now(timezone.utc)).isoformat(),
         ))
     
     return PresenceResponse(
@@ -216,7 +216,7 @@ async def get_channel_presence(channel: str) -> PresenceResponse:
                 user_id=user_id,
                 status=presence_data.get("status", "unknown"),
                 channels=list(presence_data.get("channels", set())),
-                last_seen=presence_data.get("last_seen", datetime.utcnow()).isoformat(),
+                last_seen=presence_data.get("last_seen", datetime.now(timezone.utc)).isoformat(),
             ))
     
     return PresenceResponse(

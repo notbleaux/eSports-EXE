@@ -20,7 +20,7 @@ from contextlib import asynccontextmanager
 from typing import Optional, List, Any, Dict, Union
 import os
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +172,7 @@ class DatabaseManager:
             return {
                 "status": "not_configured",
                 "connected": False,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
         
         try:
@@ -187,14 +187,14 @@ class DatabaseManager:
                     "status": "healthy",
                     "connected": True,
                     "backend_pid": pid,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 }
         except Exception as e:
             return {
                 "status": "unhealthy",
                 "connected": False,
                 "error": str(e),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
     
     def is_connected(self) -> bool:

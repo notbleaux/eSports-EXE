@@ -77,7 +77,7 @@ test.describe('Accessibility', () => {
     })
     
     // Focus indicators should be present
-    expect(hasOutline || true).toBeTruthy()
+    expect(hasOutline).toBe(true)
   })
 
   test('ARIA labels on navigation', async ({ page }) => {
@@ -89,7 +89,7 @@ test.describe('Accessibility', () => {
     
     // At least one landmark should exist
     const hasLandmarks = await navLandmark.count() > 0 || await mainLandmark.count() > 0
-    expect(hasLandmarks || true).toBeTruthy()
+    expect(hasLandmarks).toBe(true)
   })
 
   test('images have alt text', async ({ page }) => {

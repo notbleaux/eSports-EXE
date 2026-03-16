@@ -4,7 +4,7 @@ Provides visibility into queues, agents, conflicts, and data freshness.
 """
 
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 import asyncpg
@@ -69,7 +69,7 @@ class PipelineDashboard:
             "agents": await self._get_agent_overview(),
             "data_freshness": await self._get_data_freshness(),
             "conflicts": await self._get_conflict_summary(),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
     
     async def _get_queue_overview(self) -> Dict:

@@ -3,7 +3,7 @@ Pydantic models for all coordinator entities.
 """
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Literal, Any
 from enum import Enum
 
@@ -111,18 +111,18 @@ class ExtractionJob(BaseModel):
         """Mark job as started by an agent."""
         self.status = JobStatus.PROCESSING
         self.assigned_agent = agent_id
-        self.started_at = datetime.utcnow()
+        self.started_at = datetime.now(timezone.utc)
     
     def mark_completed(self) -> None:
         """Mark job as successfully completed."""
         self.status = JobStatus.COMPLETED
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(timezone.utc)
     
     def mark_failed(self, error: str) -> None:
         """Mark job as failed with error message."""
         self.status = JobStatus.FAILED
         self.error_message = error
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(timezone.utc)
     
     def can_retry(self) -> bool:
         """Check if job can be retried."""
@@ -173,7 +173,7 @@ class Agent(BaseModel):
     
     def update_heartbeat(self) -> None:
         """Update agent heartbeat timestamp."""
-        self.last_heartbeat = datetime.utcnow()
+        self.last_heartbeat = datetime.now(timezone.utc)
     
     def assign_job(self, job_id: str) -> None:
         """Assign a job to this agent."""

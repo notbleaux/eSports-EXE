@@ -25,7 +25,7 @@ test.describe('Error Scenarios', () => {
     
     // Should have a way back home
     const homeLink = page.locator('a[href="/"], a:has-text("Home"), button:has-text("Home")').first()
-    expect(await homeLink.count() > 0 || true).toBeTruthy()
+    expect(await homeLink.count()).toBeGreaterThan(0)
   })
 
   test('error boundary catches runtime errors', async ({ page }) => {

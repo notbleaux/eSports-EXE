@@ -6,7 +6,7 @@ Business logic for fantasy Valorant and CS2.
 
 import logging
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from typing import List, Optional, Dict, Any
 

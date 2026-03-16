@@ -18,7 +18,7 @@ import hashlib
 import logging
 import asyncio
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, asdict
@@ -142,7 +142,7 @@ class BackupManager:
     
     def _generate_backup_filename(self, backup_type: BackupType) -> str:
         """Generate a unique backup filename."""
-        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         db_name = self.db_config["database"]
         
         filename = f"{db_name}_{backup_type.value}_{timestamp}.sql"
@@ -167,7 +167,7 @@ class BackupManager:
         Returns:
             BackupResult with operation status
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         filename = self._generate_backup_filename(BackupType.FULL)
         backup_path = self.backup_dir / filename
         
@@ -238,7 +238,7 @@ class BackupManager:
             if self.config.verify_backup:
                 verification_passed = await self._verify_backup(backup_path)
             
-            duration = (datetime.utcnow() - start_time).total_seconds()
+            duration = (datetime.now(timezone.utc) - start_time).total_seconds()
             
             logger.info(f"Full backup completed: {filename} ({file_size} bytes, {duration:.2f}s)")
             
@@ -272,7 +272,7 @@ class BackupManager:
     
     async def create_schema_backup(self) -> BackupResult:
         """Create a schema-only backup."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         filename = self._generate_backup_filename(BackupType.SCHEMA_ONLY)
         backup_path = self.backup_dir / filename
         
@@ -316,7 +316,7 @@ class BackupManager:
             
             checksum = self._calculate_checksum(backup_path)
             file_size = backup_path.stat().st_size
-            duration = (datetime.utcnow() - start_time).total_seconds()
+            duration = (datetime.now(timezone.utc) - start_time).total_seconds()
             
             logger.info(f"Schema backup completed: {filename}")
             
@@ -424,7 +424,7 @@ class BackupManager:
         Returns:
             Number of backups removed
         """
-        cutoff_date = datetime.utcnow() - timedelta(days=self.config.retention_days)
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=self.config.retention_days)
         removed_count = 0
         
         try:

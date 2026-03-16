@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import AsyncIterator, Dict, Optional
 
 from bs4 import BeautifulSoup
@@ -101,7 +101,7 @@ class ValorantExtractor(BaseExtractor):
                 'event': self._extract_event(soup),
                 'players': self._extract_player_stats(soup),
                 'agents': self._extract_agent_compositions(soup),
-                'extracted_at': datetime.utcnow().isoformat()
+                'extracted_at': datetime.now(timezone.utc).isoformat()
             }
             
             return match_data
@@ -304,7 +304,7 @@ class ValorantExtractor(BaseExtractor):
                 'region': self._extract_player_region(soup),
                 'stats': self._extract_career_stats(soup),
                 'agents': self._extract_agent_stats(soup),
-                'extracted_at': datetime.utcnow().isoformat()
+                'extracted_at': datetime.now(timezone.utc).isoformat()
             }
     
     def _extract_player_name(self, soup: BeautifulSoup) -> str:

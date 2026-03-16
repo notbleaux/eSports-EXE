@@ -23,21 +23,22 @@ export const TEST_CONFIG = {
 /**
  * Test User Credentials
  * NOTE: These are test-only credentials for E2E testing
+ * Uses environment variables with secure fallbacks
  */
 export const TEST_USERS = {
   standard: {
-    username: 'testuser',
-    password: 'TestPass123!',
-    email: 'test@example.com',
+    username: process.env.TEST_USERNAME || 'testuser',
+    password: process.env.TEST_PASSWORD || 'TestPass123!',
+    email: process.env.TEST_EMAIL || 'test@example.com',
   },
   twoFactor: {
-    username: '2fauser',
-    password: 'TestPass123!',
-    totpSecret: 'JBSWY3DPEHPK3PXP', // Test TOTP secret
+    username: process.env.TEST_2FA_USERNAME || '2fauser',
+    password: process.env.TEST_2FA_PASSWORD || 'TestPass123!',
+    totpSecret: process.env.TEST_TOTP_SECRET || 'JBSWY3DPEHPK3PXP',
   },
   admin: {
-    username: 'admin',
-    password: 'AdminPass123!',
+    username: process.env.TEST_ADMIN_USERNAME || 'admin',
+    password: process.env.TEST_ADMIN_PASSWORD || 'AdminPass123!',
   },
 } as const;
 

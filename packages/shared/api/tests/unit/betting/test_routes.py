@@ -5,7 +5,7 @@ Betting Routes Unit Tests - 90%+ coverage target
 
 import pytest
 import pytest_asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch, Mock
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
@@ -68,7 +68,7 @@ def mock_odds_result():
             recent_form="WLWLW"
         ),
         is_live=False,
-        last_updated=datetime.utcnow(),
+        last_updated=datetime.now(timezone.utc),
         confidence_score=0.85,
         cash_out_available=False,
         cash_out_multiplier=0.0
@@ -219,7 +219,7 @@ async def test_get_match_odds_error():
 async def test_get_odds_history_success():
     """Test successful odds history retrieval."""
     mock_row = {
-        "timestamp": datetime.utcnow(),
+        "timestamp": datetime.now(timezone.utc),
         "team_a_decimal": 1.85,
         "team_b_decimal": 2.10,
         "team_a_probability": 0.540,
@@ -591,7 +591,7 @@ async def test_end_to_end_odds_flow(mock_match_context):
                             recent_form=""
                         ),
                         is_live=False,
-                        last_updated=datetime.utcnow(),
+                        last_updated=datetime.now(timezone.utc),
                         confidence_score=0.5,
                         cash_out_available=False,
                         cash_out_multiplier=0.0

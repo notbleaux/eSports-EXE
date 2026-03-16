@@ -4,7 +4,7 @@ SATOR Pydantic Models
 Data models for SATOR hub API responses.
 """
 
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from typing import Optional, List
 from pydantic import BaseModel, Field
 

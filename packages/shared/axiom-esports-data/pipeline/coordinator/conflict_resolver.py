@@ -6,7 +6,7 @@ import hashlib
 import json
 import logging
 from typing import Optional, Dict, Any, List, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from .models import ExtractionJob, GameType, JobStatus
 
@@ -269,7 +269,7 @@ class ConflictResolver:
                 logger.warning(f"Redis lock failed, falling back to memory: {e}")
         
         # Fallback to in-memory lock
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         if lock_key in self._lock_cache:
             lock_time = self._lock_cache[lock_key]
             if now - lock_time < timedelta(seconds=timeout):
@@ -306,7 +306,7 @@ class ConflictResolver:
         Returns:
             Number of locks cleaned up
         """
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         max_age = timedelta(minutes=max_age_minutes)
         
         to_remove = [

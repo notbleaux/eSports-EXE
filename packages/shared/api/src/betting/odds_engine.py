@@ -8,7 +8,7 @@ Formula: Weighted factors with dynamic adjustment and cash-out support.
 import logging
 from dataclasses import dataclass
 from typing import Optional, Dict, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -184,7 +184,7 @@ class OddsEngine:
             team_b_factors=team_b_factors,
             head_to_head=h2h,
             is_live=is_live,
-            last_updated=datetime.utcnow(),
+            last_updated=datetime.now(timezone.utc),
             confidence_score=confidence,
             cash_out_available=cash_out_avail,
             cash_out_multiplier=cash_out_mult,

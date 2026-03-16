@@ -8,7 +8,7 @@ Full flow tests from subscription to notification delivery.
 import pytest
 import pytest_asyncio
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock, patch, Mock
 
 import sys

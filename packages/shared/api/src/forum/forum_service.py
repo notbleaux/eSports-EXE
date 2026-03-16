@@ -5,7 +5,7 @@ Business logic for AREPO forum.
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone, timezone
 from typing import List, Optional, Tuple
 
 import asyncpg
@@ -59,13 +59,17 @@ class ForumService:
         user_id: Optional[str] = None
     ) -> Tuple[List[ThreadSummary], int]:
         """List threads with pagination. Returns (threads, total_count)."""
-        valid_sort_columns = {
+        # SECURITY FIX: Strict whitelist validation for ORDER BY column (SQL Injection prevention)
+        # See: Round 2b Zeta Security Fixes
+        ALLOWED_SORT_COLUMNS = {
             "last_post_at": "t.last_post_at",
             "created_at": "t.created_at",
             "views": "t.views",
             "upvotes": "t.upvotes",
         }
-        sort_column = valid_sort_columns.get(sort_by, "t.last_post_at")
+        if sort_by not in ALLOWED_SORT_COLUMNS:
+            raise ValueError(f"Invalid sort_by: {sort_by}. Allowed: {list(ALLOWED_SORT_COLUMNS.keys())}")
+        sort_column = ALLOWED_SORT_COLUMNS[sort_by]
         
         offset = (page - 1) * page_size
         
@@ -152,7 +156,7 @@ class ForumService:
                 if request.is_poll and request.poll_options:
                     poll_options = [{"option": opt, "votes": 0} for opt in request.poll_options[:10]]
                     if request.poll_duration_hours:
-                        poll_ends_at = datetime.utcnow() + timedelta(hours=request.poll_duration_hours)
+                        poll_ends_at = datetime.now(timezone.utc) + timedelta(hours=request.poll_duration_hours)
                 
                 # Create thread
                 row = await conn.fetchrow(

@@ -6,7 +6,7 @@ Critical WebSocket Authentication Tests
 import pytest
 import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import WebSocket
 
@@ -100,7 +100,7 @@ class TestWebSocketAuth:
             type=MessageType.AUTH.value,
             channel="global",
             payload={},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_auth(user_id, auth_msg)
@@ -155,7 +155,7 @@ class TestWebSocketAuth:
             type=MessageType.PING.value,
             channel="global",
             payload={},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_ping(user_id, ping_msg)
@@ -235,7 +235,7 @@ class TestWebSocketChannelSecurity:
             type=MessageType.DATA_UPDATE.value,
             channel=channel,
             payload={"data": "test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         await gateway.broadcast_to_channel(channel, message)
         
@@ -288,7 +288,7 @@ class TestWebSocketMessageValidation:
             type=MessageType.CHAT_MESSAGE.value,
             channel="match:test",
             payload={"content": long_content, "username": "test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_chat_message(user_id, msg)
@@ -309,7 +309,7 @@ class TestWebSocketMessageValidation:
             type=MessageType.CHAT_MESSAGE.value,
             channel="match:test",
             payload={"content": "", "username": "test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_chat_message(user_id, msg)
@@ -331,7 +331,7 @@ class TestWebSocketMessageValidation:
             type=MessageType.CHAT_MESSAGE.value,
             channel="match:test_match",
             payload={"content": "Hello world!", "username": "test_user"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_chat_message(user_id, msg)

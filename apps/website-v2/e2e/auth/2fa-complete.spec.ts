@@ -39,7 +39,7 @@ test.describe('Complete 2FA Flows', () => {
 
       // Verify manual entry instructions
       const instructions = page.locator('text=/manual|enter|authenticator/i').first();
-      expect(await instructions.isVisible().catch(() => false)).toBeTruthy();
+      await expect(instructions).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'warning',
@@ -122,7 +122,7 @@ test.describe('Complete 2FA Flows', () => {
         const copyButton = page.locator('[data-testid="copy-backup-codes"]').or(
           page.locator('button:has-text("Copy")')
         );
-        expect(await copyButton.isVisible().catch(() => false)).toBeTruthy();
+        await expect(copyButton).toBeVisible();
       }
     } else {
       test.info().annotations.push({
@@ -159,7 +159,7 @@ test.describe('Complete 2FA Flows', () => {
 
         if (await confirmInput.isVisible().catch(() => false)) {
           // Enter password to confirm
-          await confirmInput.fill('password123');
+          await confirmInput.fill(process.env.TEST_PASSWORD || 'TestPass123!');
           
           const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Disable")').last();
           await confirmButton.click();
@@ -211,7 +211,7 @@ test.describe('Complete 2FA Flows', () => {
                          bodyText.toLowerCase().includes('error') ||
                          bodyText.toLowerCase().includes('incorrect');
 
-        expect(await errorMessage.isVisible().catch(() => false) || hasError).toBeTruthy();
+        expect(await errorMessage.isVisible().catch(() => false) || hasError).toBe(true);
       }
     }
   });
@@ -293,7 +293,7 @@ test.describe('Complete 2FA Flows', () => {
       const passwordInput = page.locator('input[type="password"]').first();
       
       if (await passwordInput.isVisible().catch(() => false)) {
-        await passwordInput.fill('password123');
+        await passwordInput.fill(process.env.TEST_PASSWORD || 'TestPass123!');
         
         const continueButton = page.locator('button:has-text("Continue")');
         await continueButton.click();
@@ -301,7 +301,7 @@ test.describe('Complete 2FA Flows', () => {
         // Should proceed to QR code step
         await page.waitForTimeout(1000);
         const qrCode = page.locator('[data-testid="2fa-qr-code"]');
-        expect(await qrCode.isVisible().catch(() => false) || true).toBeTruthy();
+        await expect(qrCode).toBeVisible();
       }
     }
   });
@@ -322,7 +322,7 @@ test.describe('Complete 2FA Flows', () => {
         page.locator('button, a').first()
       );
       
-      expect(await recoveryOptions.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(recoveryOptions).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'info',

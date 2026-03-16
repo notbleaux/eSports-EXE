@@ -6,6 +6,7 @@
  */
 
 import { WSMessage, MessageType } from '../types/websocket';
+import { logger } from '@/utils/logger';
 
 // ============================================================================
 // Types
@@ -71,7 +72,7 @@ export class WebSocketClient {
 
   async connect(): Promise<void> {
     if (this.ws?.readyState === WebSocket.OPEN) {
-      console.log('[WebSocket] Already connected');
+      logger.info('[WebSocket] Already connected');
       return;
     }
 
@@ -82,7 +83,7 @@ export class WebSocketClient {
         this.ws = new WebSocket(this.options.url);
 
         this.ws.onopen = () => {
-          console.log('[WebSocket] Connected');
+          logger.info('[WebSocket] Connected');
           this.setState('connected');
           this.reconnectAttempts = 0;
           this.startHeartbeat();
@@ -96,7 +97,7 @@ export class WebSocketClient {
         };
 
         this.ws.onclose = (event) => {
-          console.log(`[WebSocket] Closed: ${event.code} - ${event.reason}`);
+          logger.info(`[WebSocket] Closed: ${event.code} - ${event.reason}`);
           this.cleanup();
           this.setState('disconnected');
           this.options.onDisconnect();
@@ -107,7 +108,7 @@ export class WebSocketClient {
         };
 
         this.ws.onerror = (error) => {
-          console.error('[WebSocket] Error:', error);
+          logger.error('[WebSocket] Error:', error);
           this.options.onError(new Error('WebSocket connection error'));
           reject(error);
         };
@@ -130,7 +131,7 @@ export class WebSocketClient {
     }
 
     this.setState('disconnected');
-    console.log('[WebSocket] Disconnected');
+    logger.info('[WebSocket] Disconnected');
   }
 
   // ========================================================================
@@ -157,7 +158,7 @@ export class WebSocketClient {
         sender_id: this.userId,
       };
       await this.send(subscribeMessage);
-      console.log(`[WebSocket] Subscribed to ${channel}`);
+      logger.info(`[WebSocket] Subscribed to ${channel}`);
     }
   }
 
@@ -184,7 +185,7 @@ export class WebSocketClient {
         sender_id: this.userId,
       };
       await this.send(unsubscribeMessage);
-      console.log(`[WebSocket] Unsubscribed from ${channel}`);
+      logger.info(`[WebSocket] Unsubscribed from ${channel}`);
     }
   }
 
@@ -206,7 +207,7 @@ export class WebSocketClient {
     } else {
       // Queue message for when connection is restored
       this.messageQueue.push(message);
-      console.log('[WebSocket] Message queued (connection not ready)');
+      logger.info('[WebSocket] Message queued (connection not ready)');
     }
   }
 
@@ -229,12 +230,12 @@ export class WebSocketClient {
           try {
             callback(message);
           } catch (error) {
-            console.error('[WebSocket] Subscription callback error:', error);
+            logger.error('[WebSocket] Subscription callback error:', error);
           }
         });
       }
     } catch (error) {
-      console.error('[WebSocket] Failed to parse message:', error);
+      logger.error('[WebSocket] Failed to parse message:', error);
     }
   }
 
@@ -263,13 +264,13 @@ export class WebSocketClient {
       ? this.options.reconnectIntervals[this.reconnectAttempts]
       : this.options.maxReconnectInterval;
 
-    console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1})`);
+    logger.info(`[WebSocket] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts + 1})`);
 
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
       this.reconnectAttempts++;
       this.connect().catch((error) => {
-        console.error('[WebSocket] Reconnect failed:', error);
+        logger.error('[WebSocket] Reconnect failed:', error);
       });
     }, delay);
   }

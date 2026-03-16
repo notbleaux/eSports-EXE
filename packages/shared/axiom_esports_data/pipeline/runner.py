@@ -11,7 +11,7 @@ import logging
 import signal
 import time
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Callable, Optional
 from uuid import uuid4
 
@@ -58,7 +58,7 @@ class PipelineRunner:
         Returns RunInstance with run_id for tracking.
         """
         run_id = str(uuid4())
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         run = RunInstance(
             run_id=run_id,
@@ -92,7 +92,7 @@ class PipelineRunner:
     async def _execute_run(self, run: RunInstance, config: PipelineConfig) -> None:
         """Execute the pipeline run."""
         run.status = RunStatus.RUNNING
-        run.started_at = datetime.utcnow()
+        run.started_at = datetime.now(timezone.utc)
         run.updated_at = run.started_at
         run.metrics.start_time = run.started_at
         
@@ -130,7 +130,7 @@ class PipelineRunner:
             
             # Mark as completed
             run.status = RunStatus.COMPLETED
-            run.completed_at = datetime.utcnow()
+            run.completed_at = datetime.now(timezone.utc)
             run.metrics.end_time = run.completed_at
             run.metrics.duration_seconds = (
                 run.completed_at - run.started_at
@@ -145,21 +145,21 @@ class PipelineRunner:
             
         except asyncio.CancelledError:
             run.status = RunStatus.CANCELLED
-            run.completed_at = datetime.utcnow()
+            run.completed_at = datetime.now(timezone.utc)
             self._log(run, "WARNING", "Pipeline run cancelled", "runner")
             raise
             
         except Exception as e:
             run.status = RunStatus.FAILED
             run.error_message = str(e)
-            run.completed_at = datetime.utcnow()
+            run.completed_at = datetime.now(timezone.utc)
             run.metrics.end_time = run.completed_at
             
             self._log(run, "ERROR", f"Pipeline run failed: {e}", "runner")
             self._log(run, "ERROR", traceback.format_exc(), "runner")
             
         finally:
-            run.updated_at = datetime.utcnow()
+            run.updated_at = datetime.now(timezone.utc)
             
             if self.state_store:
                 await self.state_store.save_run(run)
@@ -283,7 +283,7 @@ class PipelineRunner:
     ) -> None:
         """Add a log entry to the run."""
         entry = LogEntry(
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             level=level,
             message=message,
             source=source,

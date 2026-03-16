@@ -7,7 +7,7 @@ Endpoints for managing data extraction from external sources (VLR.gg, HLTV, etc.
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
 from pydantic import BaseModel, Field
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 import uuid
 import asyncio
@@ -114,7 +114,7 @@ async def start_collection(
         job_id=job_id,
         status="queued",
         request=request,
-        logs=[f"[{datetime.utcnow().isoformat()}] Job queued with priority {request.priority}"]
+        logs=[f"[{datetime.now(timezone.utc).isoformat()}] Job queued with priority {request.priority}"]
     )
     
     job_store[job_id] = status
@@ -178,8 +178,8 @@ async def cancel_collection(job_id: str):
         )
     
     job.status = "cancelled"
-    job.completed_at = datetime.utcnow()
-    job.logs.append(f"[{datetime.utcnow().isoformat()}] Job cancelled by user")
+    job.completed_at = datetime.now(timezone.utc)
+    job.logs.append(f"[{datetime.now(timezone.utc).isoformat()}] Job cancelled by user")
     
     logger.info(f"Collection job {job_id} cancelled")
     return {"job_id": job_id, "status": "cancelled"}
@@ -226,8 +226,8 @@ async def run_collection_job(job_id: str, request: CollectionRequest):
     
     job = job_store[job_id]
     job.status = "running"
-    job.started_at = datetime.utcnow()
-    job.logs.append(f"[{datetime.utcnow().isoformat()}] Job started")
+    job.started_at = datetime.now(timezone.utc)
+    job.logs.append(f"[{datetime.now(timezone.utc).isoformat()}] Job started")
     
     try:
         # Import pipeline orchestrator
@@ -243,7 +243,7 @@ async def run_collection_job(job_id: str, request: CollectionRequest):
             
             job.progress.stage = f"processing_epoch_{epoch}"
             job.progress.current_epoch = epoch
-            job.logs.append(f"[{datetime.utcnow().isoformat()}] Processing epoch {epoch}")
+            job.logs.append(f"[{datetime.now(timezone.utc).isoformat()}] Processing epoch {epoch}")
             
             # Simulate pipeline execution (replace with actual call)
             # result = await run_pipeline(
@@ -259,18 +259,18 @@ async def run_collection_job(job_id: str, request: CollectionRequest):
         
         # Mark as completed
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         job.progress.stage = "completed"
         job.progress.percent = 100
-        job.logs.append(f"[{datetime.utcnow().isoformat()}] Job completed successfully")
+        job.logs.append(f"[{datetime.now(timezone.utc).isoformat()}] Job completed successfully")
         
         logger.info(f"Collection job {job_id} completed: {job.progress.records_processed} records")
         
     except Exception as e:
         job.status = "failed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         job.error_message = str(e)
-        job.logs.append(f"[{datetime.utcnow().isoformat()}] ERROR: {str(e)}")
+        job.logs.append(f"[{datetime.now(timezone.utc).isoformat()}] ERROR: {str(e)}")
         logger.error(f"Collection job {job_id} failed: {e}")
 
 

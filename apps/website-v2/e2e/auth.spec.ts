@@ -45,9 +45,9 @@ test.describe('Authentication', () => {
       return
     }
     
-    // Fill in test credentials (will fail, but tests the flow)
-    await emailInput.fill('test@example.com')
-    await passwordInput.fill('password123')
+    // Fill in test credentials from environment (will fail, but tests the flow)
+    await emailInput.fill(process.env.TEST_EMAIL || 'test@example.com')
+    await passwordInput.fill(process.env.TEST_PASSWORD || 'TestPass123!')
     
     // Attempt login
     await submitButton.click()
@@ -76,8 +76,8 @@ test.describe('Authentication', () => {
       return
     }
     
-    await emailInput.fill('invalid@example.com')
-    await passwordInput.fill('wrongpassword')
+    await emailInput.fill(process.env.TEST_INVALID_EMAIL || 'invalid@example.com')
+    await passwordInput.fill(process.env.TEST_INVALID_PASSWORD || 'wrongpassword')
     await submitButton.click()
     
     await page.waitForTimeout(1000)
@@ -135,7 +135,7 @@ test.describe('Authentication', () => {
       return
     }
     
-    await emailInput.fill('test@example.com')
+    await emailInput.fill(process.env.TEST_EMAIL || 'test@example.com')
     
     const submitButton = page.locator('button[type="submit"]').first()
     await submitButton.click()

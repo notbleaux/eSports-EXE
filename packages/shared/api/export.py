@@ -7,7 +7,7 @@ import csv
 import json
 import io
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Query, Response
 from fastapi.responses import StreamingResponse
 import httpx
@@ -142,7 +142,7 @@ class DataExporter:
             'tournament': dict(tournament),
             'statistics': dict(matches[0]),
             'leaderboard': [dict(row) for row in leaderboard],
-            'exported_at': datetime.utcnow().isoformat()
+            'exported_at': datetime.now(timezone.utc).isoformat()
         }
 
 

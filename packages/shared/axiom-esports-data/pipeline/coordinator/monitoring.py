@@ -6,7 +6,7 @@ import asyncio
 import logging
 import time
 from typing import Dict, Any, List, Optional, Callable
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass, field
 from collections import defaultdict, deque
 import json
@@ -44,7 +44,7 @@ class MetricSeries:
     
     def get_average(self, window_seconds: int = 300) -> float:
         """Get average over a time window."""
-        cutoff = datetime.utcnow() - timedelta(seconds=window_seconds)
+        cutoff = datetime.now(timezone.utc) - timedelta(seconds=window_seconds)
         values = [p.value for p in self.points if p.timestamp > cutoff]
         return sum(values) / len(values) if values else 0.0
 
@@ -213,7 +213,7 @@ class CoordinatorMetrics:
                 "counters": dict(self._counters),
                 "gauges": dict(self._gauges),
                 "latency_percentiles": self.get_latency_percentiles(),
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
     
     def export_prometheus(self) -> str:
@@ -328,7 +328,7 @@ class HealthChecker:
         for result in results:
             if result.get("status") != "healthy":
                 alert = {
-                    "timestamp": datetime.utcnow().isoformat(),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
                     "check": result.get("name"),
                     "severity": result.get("severity", "warning"),
                     "message": result.get("message"),
@@ -346,7 +346,7 @@ class HealthChecker:
         self._alerts.extend(alerts)
         
         # Keep only recent alerts
-        cutoff = datetime.utcnow() - timedelta(hours=24)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
         self._alerts = [
             a for a in self._alerts
             if datetime.fromisoformat(a["timestamp"]) > cutoff
@@ -525,7 +525,7 @@ class HealthChecker:
             "status": overall,
             "checks": checks,
             "alerts": self._alerts[-10:],  # Last 10 alerts
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
 
@@ -538,7 +538,7 @@ async def record_job_metrics(
     error: Optional[str] = None
 ):
     """Record metrics for a job completion."""
-    duration = (datetime.utcnow() - start_time).total_seconds()
+    duration = (datetime.now(timezone.utc) - start_time).total_seconds()
     
     labels = {
         "game": job.game.value if isinstance(job.game, GameType) else str(job.game),

@@ -4,7 +4,7 @@ Betting Routes - Database models for betting system
 """
 
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass
 from enum import Enum
 
@@ -51,9 +51,9 @@ class Bet:
     
     def __post_init__(self):
         if self.created_at is None:
-            self.created_at = datetime.utcnow()
+            self.created_at = datetime.now(timezone.utc)
         if self.updated_at is None:
-            self.updated_at = datetime.utcnow()
+            self.updated_at = datetime.now(timezone.utc)
 
 
 @dataclass
@@ -112,7 +112,7 @@ class Leaderboard:
     
     def __post_init__(self):
         if self.updated_at is None:
-            self.updated_at = datetime.utcnow()
+            self.updated_at = datetime.now(timezone.utc)
 
 
 @dataclass
@@ -151,7 +151,7 @@ class UserBettingStats:
     
     def __post_init__(self):
         if self.updated_at is None:
-            self.updated_at = datetime.utcnow()
+            self.updated_at = datetime.now(timezone.utc)
 
 
 # SQL Table Definitions for PostgreSQL/asyncpg

@@ -8,7 +8,7 @@ Uses PostgreSQL for storage with asyncpg for async operations.
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 

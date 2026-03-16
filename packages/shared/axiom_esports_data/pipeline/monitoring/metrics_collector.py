@@ -23,7 +23,7 @@ Example:
 import time
 import threading
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Callable
 from contextlib import contextmanager
 from collections import defaultdict
@@ -345,7 +345,7 @@ class MetricsCollector:
         """Export all metrics in Prometheus exposition format."""
         lines = [
             "# Axiom Pipeline Metrics",
-            f"# Generated at {datetime.utcnow().isoformat()}Z",
+            f"# Generated at {datetime.now(timezone.utc).isoformat()}",
             "",
         ]
         

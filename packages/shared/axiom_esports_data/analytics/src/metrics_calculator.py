@@ -308,10 +308,10 @@ class MetricsCalculator:
         """
         async with self.pool.acquire() as conn:
             # Get recent vs older performance
-            from datetime import datetime, timedelta
+            from datetime import datetime, timedelta, timezone
             
-            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-            ninety_days_ago = datetime.utcnow() - timedelta(days=90)
+            thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
+            ninety_days_ago = datetime.now(timezone.utc) - timedelta(days=90)
             
             recent = await conn.fetchrow(
                 """

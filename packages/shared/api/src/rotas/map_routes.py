@@ -26,7 +26,7 @@ from enum import Enum
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, status
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Import rate limiter from main app context
 from slowapi import Limiter
@@ -336,7 +336,7 @@ async def get_lens_data(map_id: str, request: LensDataRequest) -> LensDataRespon
             map_id=map_id,
             lens_types=request.lens_types,
             lens_data=lens_data,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             update_interval=1000,
         )
     except Exception as e:
@@ -564,7 +564,7 @@ async def handle_lens_websocket(websocket: WebSocket):
                             "map_id": map_id,
                             "lens_type": lens_type,
                             "data": generator(map_id),
-                            "timestamp": datetime.utcnow().isoformat(),
+                            "timestamp": datetime.now(timezone.utc).isoformat(),
                         })
             
             elif action == "ping":
@@ -612,7 +612,7 @@ async def simulate_lens_updates():
                         "map_id": map_id,
                         "lens_type": "tension",
                         "data": generate_tension_data(map_id),
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
                     }
                     await manager.broadcast_to_map(map_id, update)
         except Exception as e:
@@ -663,7 +663,7 @@ def generate_blood_data(map_id: str) -> dict:
             eliminations.append({
                 "x": site["x"] + (hash(f"{map_id}_blood_{i}_{int(time.time())}") % 100 - 50),
                 "y": site["y"] + (hash(f"{map_id}_blood_{i+100}_{int(time.time())}") % 100 - 50),
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "weapon": "vandal" if i % 2 == 0 else "phantom",
             })
     return {"eliminations": eliminations, "total": len(eliminations)}

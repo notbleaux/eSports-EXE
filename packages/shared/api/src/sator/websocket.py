@@ -6,7 +6,7 @@ Real-time updates for SATOR hub via WebSocket.
 
 import logging
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Set, Optional
 
 from fastapi import WebSocket, WebSocketDisconnect
@@ -47,7 +47,7 @@ class SatorWebSocketManager:
         self.active_connections.add(websocket)
         self.connection_info[websocket] = {
             "client_id": client_id or f"anon_{id(websocket)}",
-            "connected_at": datetime.utcnow(),
+            "connected_at": datetime.now(timezone.utc),
             "subscriptions": set(),
         }
         
@@ -57,7 +57,7 @@ class SatorWebSocketManager:
         await self.send_personal_message({
             "type": "connected",
             "message": "Connected to SATOR live updates",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "channels": list(self.subscriptions.keys()),
         }, websocket)
     
@@ -185,7 +185,7 @@ class SatorWebSocketManager:
         """Handle ping message."""
         await self.send_personal_message({
             "type": "pong",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }, websocket)
     
     # ========== Broadcast Helpers ==========
@@ -196,7 +196,7 @@ class SatorWebSocketManager:
             "type": "match_update",
             "match_id": match_id,
             "data": data,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         await self.broadcast(message, channel="matches")
     
@@ -206,7 +206,7 @@ class SatorWebSocketManager:
             "type": "player_update",
             "player_id": player_id,
             "data": data,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         await self.broadcast(message, channel="players")
     
@@ -216,7 +216,7 @@ class SatorWebSocketManager:
             "type": "system",
             "level": level,  # info, warning, error
             "message": message,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         await self.broadcast(msg)
     

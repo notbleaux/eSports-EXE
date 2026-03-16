@@ -46,7 +46,7 @@ test.describe('Complete WebSocket Flows', () => {
       page.locator('text=/subscribed|connected/i').first()
     );
     
-    expect(await channelStatus.isVisible().catch(() => false) || true).toBeTruthy();
+    await expect(channelStatus).toBeVisible();
   });
 
   test('Unsubscribe from specific channel', async ({ page }) => {
@@ -77,7 +77,7 @@ test.describe('Complete WebSocket Flows', () => {
           page.locator('text=/unsubscribed|disconnected/i').first()
         );
         
-        expect(await status.isVisible().catch(() => false) || true).toBeTruthy();
+        await expect(status).toBeVisible();
       }
     }
   });
@@ -192,7 +192,7 @@ test.describe('Complete WebSocket Flows', () => {
     // Connection should remain stable
     const stillConnected = status2.toLowerCase().includes('connected') ||
                           status1 === status2;
-    expect(stillConnected || true).toBeTruthy();
+    expect(stillConnected).toBe(true);
   });
 
   test('Channel filtering and routing', async ({ page }) => {

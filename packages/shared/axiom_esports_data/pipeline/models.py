@@ -6,7 +6,7 @@ Core data models for pipeline scheduling, execution, and state management.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum, auto
 from typing import Any, Optional
 from uuid import uuid4

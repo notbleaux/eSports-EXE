@@ -4,7 +4,7 @@ Wiki Pydantic Models
 Data models for wiki/knowledge base system.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 from pydantic import BaseModel, Field
 

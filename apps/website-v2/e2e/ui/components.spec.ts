@@ -343,7 +343,7 @@ test.describe('UI Component Interactions', () => {
 
       // Look for toast
       const toast = page.locator('[data-testid="toast"], [role="alert"], .toast').first();
-      expect(await toast.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(toast).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'info',

@@ -7,7 +7,7 @@ Production-ready FastAPI application with health checks, CORS, and graceful star
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 import asyncpg
@@ -144,7 +144,7 @@ async def health_check(request: Request):
         "service": APP_NAME.lower(),
         "version": APP_VERSION,
         "environment": APP_ENVIRONMENT,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     
     # Check database connectivity (lazy - check if initialized)
@@ -178,7 +178,7 @@ async def v1_health_check(request: Request):
         "version": APP_VERSION,
         "api_version": "v1",
         "environment": APP_ENVIRONMENT,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     
     # Check database connectivity (lazy)
@@ -326,7 +326,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={
             "error": "Internal server error",
             "message": str(exc) if APP_ENVIRONMENT == "development" else "An unexpected error occurred",
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
     )
 
@@ -342,7 +342,7 @@ async def database_exception_handler(request: Request, exc: asyncpg.PostgresErro
         content={
             "error": "Database error",
             "message": "A database error occurred" if APP_ENVIRONMENT == "production" else str(exc),
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
     )
 
@@ -356,11 +356,11 @@ async def log_requests(request: Request, call_next):
     """
     Log all incoming requests for monitoring and debugging.
     """
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     
     response = await call_next(request)
     
-    duration = (datetime.utcnow() - start_time).total_seconds()
+    duration = (datetime.now(timezone.utc) - start_time).total_seconds()
     
     logger.info(
         f"{request.method} {request.url.path} - {response.status_code} - {duration:.3f}s"

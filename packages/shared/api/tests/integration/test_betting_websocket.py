@@ -8,7 +8,7 @@ Tests for odds updates broadcast via WebSocket and live match data flow.
 import pytest
 import asyncio
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import sys
@@ -76,7 +76,7 @@ class TestOddsUpdateBroadcasts:
                 "confidence_score": odds_result.confidence_score,
                 "last_updated": odds_result.last_updated.isoformat()
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:test_match", odds_update)
@@ -123,7 +123,7 @@ class TestOddsUpdateBroadcasts:
                     "team_b_decimal": odds_result.team_b_decimal
                 }
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:live_match", match_event)
@@ -160,7 +160,7 @@ class TestOddsUpdateBroadcasts:
                 "team_a_decimal": 1.85,
                 "team_b_decimal": 2.10
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:multi_test", odds_update)
@@ -195,7 +195,7 @@ class TestOddsUpdateBroadcasts:
             type=MessageType.ODDS_UPDATE.value,
             channel="match:private",
             payload={"match_id": "private", "odds": "1.90"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:private", odds_update)
@@ -239,7 +239,7 @@ class TestOddsUpdateBroadcasts:
                     "team_b": odds_result.team_b_decimal
                 }
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:cashout_test", cashout_update)
@@ -307,7 +307,7 @@ class TestLiveMatchIntegration:
                 },
                 "score_change": {"team_a": 1, "team_b": 0}
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:live_updates", update)
@@ -337,7 +337,7 @@ class TestLiveMatchIntegration:
                 "final_score": {"team_a": 2, "team_b": 1},
                 "winner": "team_a"
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:ended_match", match_end)
@@ -378,7 +378,7 @@ class TestBettingGatewayEdgeCases:
             type=MessageType.ODDS_UPDATE.value,
             channel="match:temp",
             payload={"match_id": "temp", "odds": "1.90"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         # Should not raise error
@@ -419,7 +419,7 @@ class TestBettingGatewayEdgeCases:
             type=MessageType.ODDS_UPDATE.value,
             channel="match:large_payload",
             payload=large_payload,
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:large_payload", update)

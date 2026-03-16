@@ -210,7 +210,7 @@ async def get_trends(
     import random
     
     data_points = []
-    base_date = datetime.utcnow() - timedelta(days=days)
+    base_date = datetime.now(timezone.utc) - timedelta(days=days)
     
     if granularity == "day":
         step = 1
@@ -293,7 +293,7 @@ async def get_dashboard_health():
     """Get dashboard data health status."""
     return {
         "status": "healthy",
-        "last_data_update": (datetime.utcnow() - timedelta(hours=2)).isoformat(),
+        "last_data_update": (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat(),
         "data_freshness": "2 hours",
         "cache_status": "warm",
         "api_latency_ms": 45

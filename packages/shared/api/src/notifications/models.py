@@ -5,7 +5,7 @@ Notification Models — Push Subscription and Preferences
 Web Push Protocol models for browser push notifications
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, Field, ConfigDict
@@ -161,7 +161,7 @@ class NotificationLog(BaseModel):
     
     def mark_sent(self):
         """Mark notification as sent."""
-        self.sent_at = datetime.utcnow()
+        self.sent_at = datetime.now(timezone.utc)
         self.status = "sent"
     
     def mark_delivered(self):
@@ -170,7 +170,7 @@ class NotificationLog(BaseModel):
     
     def mark_clicked(self):
         """Mark notification as clicked by user."""
-        self.clicked_at = datetime.utcnow()
+        self.clicked_at = datetime.now(timezone.utc)
         self.status = "clicked"
     
     def mark_failed(self, error: str):

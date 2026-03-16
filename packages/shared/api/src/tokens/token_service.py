@@ -5,7 +5,7 @@ Core business logic for the NJZ token economy.
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Tuple
 
 import asyncpg
@@ -81,7 +81,7 @@ class TokenService:
                 
                 last_claim = row['last_daily_claim']
                 current_balance = row['balance']
-                now = datetime.utcnow()
+                now = datetime.now(timezone.utc)
                 
                 if last_claim:
                     cooldown_end = last_claim + timedelta(hours=DAILY_CLAIM_COOLDOWN_HOURS)
@@ -173,7 +173,7 @@ class TokenService:
                         updated_at = $3
                     RETURNING balance
                     """,
-                    request.user_id, request.amount, datetime.utcnow()
+                    request.user_id, request.amount, datetime.now(timezone.utc)
                 )
                 
                 new_balance = row['balance']
@@ -219,7 +219,7 @@ class TokenService:
                     SET balance = $1, total_spent = total_spent + $2, updated_at = $3
                     WHERE user_id = $4
                     """,
-                    new_balance, request.amount, datetime.utcnow(), request.user_id
+                    new_balance, request.amount, datetime.now(timezone.utc), request.user_id
                 )
                 
                 await conn.execute(
@@ -377,7 +377,7 @@ class TokenService:
             return 0
         
         last_claim_date = row['claim_date']
-        today = datetime.utcnow().date()
+        today = datetime.now(timezone.utc).date()
         
         if last_claim_date == today:
             return row['streak_count']

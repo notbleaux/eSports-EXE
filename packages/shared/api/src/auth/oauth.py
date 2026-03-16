@@ -1,8 +1,11 @@
 """
-[Ver001.000]
+[Ver001.001]
 OAuth + 2FA Implementation
 ==========================
 OAuth client configuration and utilities for Discord, Google, and GitHub.
+
+[Ver001.001] Changes:
+- Added enforce_https() for production HTTPS enforcement
 """
 
 import os
@@ -11,7 +14,25 @@ from typing import Optional, Dict, Any
 from datetime import datetime, timezone, timedelta
 
 import httpx
+from fastapi import HTTPException, status
 from axiom_esports_data.api.src.db_manager import db
+
+
+def enforce_https(request_url: str) -> None:
+    """
+    Enforce HTTPS in production environment.
+    
+    Raises HTTPException if HTTP is used in production.
+    """
+    is_production = os.getenv("APP_ENVIRONMENT") == "production"
+    is_https = request_url.startswith("https://")
+    is_localhost = "localhost" in request_url or "127.0.0.1" in request_url
+    
+    if is_production and not is_https and not is_localhost:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="HTTPS required in production environment"
+        )
 
 
 # OAuth Provider Configuration

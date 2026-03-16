@@ -21,7 +21,7 @@ import argparse
 import asyncio
 import json
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, List, Dict
 from dataclasses import dataclass
 from enum import Enum
@@ -58,7 +58,7 @@ def format_timestamp(ts: Optional[datetime]) -> str:
             ts = datetime.fromisoformat(ts.replace('Z', '+00:00'))
         except:
             return ts
-    ago = datetime.utcnow() - ts.replace(tzinfo=None)
+    ago = datetime.now(timezone.utc) - ts.replace(tzinfo=None)
     if ago.total_seconds() < 60:
         return f"{int(ago.total_seconds())}s ago"
     elif ago.total_seconds() < 3600:
@@ -553,7 +553,7 @@ class QueueManagerCLI:
             success_rate = (agent['total_jobs_completed'] / total * 100) if total > 0 else 100
             
             # Check if offline
-            is_offline = agent['last_heartbeat'] < datetime.utcnow() - timedelta(minutes=5)
+            is_offline = agent['last_heartbeat'] < datetime.now(timezone.utc) - timedelta(minutes=5)
             
             status = agent['status']
             if is_offline:
@@ -612,7 +612,7 @@ class QueueManagerCLI:
         total = agent['total_jobs_completed'] + agent['total_jobs_failed']
         success_rate = (agent['total_jobs_completed'] / total * 100) if total > 0 else 100
         
-        is_offline = agent['last_heartbeat'] < datetime.utcnow() - timedelta(minutes=5)
+        is_offline = agent['last_heartbeat'] < datetime.now(timezone.utc) - timedelta(minutes=5)
         
         fields = [
             ("ID", agent['id']),

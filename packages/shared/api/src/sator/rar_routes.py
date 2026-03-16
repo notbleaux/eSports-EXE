@@ -11,27 +11,51 @@ Endpoints:
 - GET  /api/sator/rar/leaderboard             - RAR leaderboard
 - GET  /api/sator/rar/investment-grades       - Players by grade
 
-[Ver001.000]
+[Ver002.000] - Added database queries for leaderboard and investment grades
 """
 import logging
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, status, Depends
 from pydantic import BaseModel, Field
+import asyncpg
 
 # Import RAR components
-from axiom_esports_data.analytics.src.rar import (
-    RARCalculator, CompleteRARResult,
-    VolatilityCalculator, VolatilityResult
-)
+try:
+    from axiom_esports_data.analytics.src.rar import (
+        RARCalculator, CompleteRARResult,
+        VolatilityCalculator, VolatilityResult
+    )
+except ImportError:
+    # Fallback for when axiom_esports_data is not available
+    RARCalculator = None
+    VolatilityCalculator = None
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sator", tags=["rar"])
 
-# Initialize calculators
-rar_calc = RARCalculator()
-vol_calc = VolatilityCalculator()
+# Initialize calculators (lazy load)
+_rar_calc = None
+_vol_calc = None
+
+def get_rar_calc():
+    global _rar_calc
+    if _rar_calc is None and RARCalculator is not None:
+        _rar_calc = RARCalculator()
+    return _rar_calc
+
+def get_vol_calc():
+    global _vol_calc
+    if _vol_calc is None and VolatilityCalculator is not None:
+        _vol_calc = VolatilityCalculator()
+    return _vol_calc
+
+# Database dependency
+async def get_db_pool() -> asyncpg.Pool:
+    """Get database pool from app state."""
+    from ..database import get_pool
+    return await get_pool()
 
 
 # ============================================================================
@@ -185,7 +209,7 @@ async def calculate_player_rar(request: RARCalculationRequest):
             trend_strength=result.trend_strength,
             risk_level=result.risk_level,
             sample_size=result.sample_size,
-            calculation_timestamp=result.calculation_timestamp or datetime.utcnow().isoformat(),
+            calculation_timestamp=result.calculation_timestamp or datetime.now(timezone.utc).isoformat(),
             risk_factors=result.risk_factors
         )
         
@@ -240,7 +264,7 @@ async def batch_calculate_rar(request: BatchRARRequest):
                 trend_strength=result.trend_strength,
                 risk_level=result.risk_level,
                 sample_size=result.sample_size,
-                calculation_timestamp=result.calculation_timestamp or datetime.utcnow().isoformat(),
+                calculation_timestamp=result.calculation_timestamp or datetime.now(timezone.utc).isoformat(),
                 risk_factors=result.risk_factors
             ))
             
@@ -287,7 +311,8 @@ async def calculate_volatility_endpoint(
 async def get_rar_leaderboard(
     limit: int = Query(100, ge=1, le=500),
     min_matches: int = Query(10, ge=5),
-    role: Optional[str] = Query(None)
+    role: Optional[str] = Query(None),
+    pool: asyncpg.Pool = Depends(get_db_pool)
 ):
     """
     Get RAR leaderboard - top rated players.
@@ -296,23 +321,83 @@ async def get_rar_leaderboard(
     - limit: Number of players to return (1-500)
     - min_matches: Minimum matches for eligibility
     - role: Filter by role (optional)
+    
+    [Ver002.000] - Implemented database query using player_performance table
     """
-    # This would query the database in production
-    # For now, return placeholder response
     logger.info(f"Leaderboard requested: limit={limit}, min_matches={min_matches}, role={role}")
     
-    # TODO: Implement database query
-    return [
-        LeaderboardEntry(
-            rank=1,
-            player_id="example_1",
-            player_name="Example Player",
-            team="Example Team",
-            rar_normalized=92.5,
-            investment_grade="A",
-            trend_direction="stable"
+    try:
+        # Build query with optional role filter
+        role_filter = "AND role = $3" if role else ""
+        params = [min_matches, limit, role] if role else [min_matches, limit]
+        
+        query = f"""
+            WITH player_stats AS (
+                SELECT 
+                    player_id,
+                    name,
+                    team,
+                    role,
+                    AVG(rar_score) as avg_rar,
+                    AVG(sim_rating) as avg_sim_rating,
+                    COUNT(DISTINCT match_id) as match_count,
+                    MAX(realworld_time) as last_match,
+                    CASE 
+                        WHEN AVG(rar_score) >= 0.95 THEN 'A+'
+                        WHEN AVG(rar_score) >= 0.85 THEN 'A'
+                        WHEN AVG(rar_score) >= 0.70 THEN 'B'
+                        WHEN AVG(rar_score) >= 0.55 THEN 'C'
+                        ELSE 'D'
+                    END as grade
+                FROM player_performance
+                WHERE realworld_time >= NOW() - INTERVAL '90 days'
+                  AND rar_score IS NOT NULL
+                {role_filter}
+                GROUP BY player_id, name, team, role
+                HAVING COUNT(DISTINCT match_id) >= $1
+            )
+            SELECT 
+                ROW_NUMBER() OVER (ORDER BY avg_rar DESC) as rank,
+                player_id,
+                name as player_name,
+                team,
+                ROUND((avg_rar * 100)::numeric, 2) as rar_normalized,
+                grade as investment_grade,
+                CASE 
+                    WHEN avg_rar > LAG(avg_rar) OVER (ORDER BY avg_rar DESC) * 1.05 THEN 'rising'
+                    WHEN avg_rar < LAG(avg_rar) OVER (ORDER BY avg_rar DESC) * 0.95 THEN 'falling'
+                    ELSE 'stable'
+                END as trend_direction
+            FROM player_stats
+            ORDER BY avg_rar DESC
+            LIMIT $2
+        """
+        
+        rows = await pool.fetch(query, *params)
+        
+        if not rows:
+            # Return empty list with proper structure if no data
+            return []
+        
+        return [
+            LeaderboardEntry(
+                rank=row['rank'],
+                player_id=str(row['player_id']),
+                player_name=row['player_name'],
+                team=row['team'],
+                rar_normalized=float(row['rar_normalized']),
+                investment_grade=row['investment_grade'],
+                trend_direction=row['trend_direction'] or 'stable'
+            )
+            for row in rows
+        ]
+        
+    except Exception as e:
+        logger.error(f"Leaderboard query failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to fetch leaderboard"
         )
-    ]
 
 
 @router.get("/rar/investment-grades")
@@ -358,5 +443,5 @@ async def get_rar_system_metrics():
             "D": 0
         },
         "system_health": "healthy",
-        "last_update": datetime.utcnow().isoformat()
+        "last_update": datetime.now(timezone.utc).isoformat()
     }

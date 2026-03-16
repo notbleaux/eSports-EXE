@@ -6,7 +6,7 @@ import logging
 import asyncio
 from typing import Optional, Dict, Any
 from dataclasses import asdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # Import existing components
 from .calculator import SimRatingCalculator, SimRatingResult

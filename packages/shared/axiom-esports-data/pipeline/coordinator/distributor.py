@@ -5,7 +5,7 @@ Job distribution logic for the esports data pipeline.
 import asyncio
 import logging
 from typing import List, Optional, Dict, Any, Callable
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dataclasses import dataclass
 
 from .models import (
@@ -86,7 +86,7 @@ class JobDistributor:
         
         if job:
             self._stats["jobs_distributed"] += 1
-            self._stats["last_distribution"] = datetime.utcnow().isoformat()
+            self._stats["last_distribution"] = datetime.now(timezone.utc).isoformat()
             
             # Trigger callbacks
             for callback in self._distribution_callbacks:
@@ -136,7 +136,7 @@ class JobDistributor:
         
         if batch.size() > 0:
             self._stats["jobs_batched"] += batch.size()
-            self._stats["last_distribution"] = datetime.utcnow().isoformat()
+            self._stats["last_distribution"] = datetime.now(timezone.utc).isoformat()
             
             # Trigger callbacks
             for callback in self._batch_callbacks:
@@ -295,7 +295,7 @@ class JobDistributor:
         # Check for stale distributions
         if self._stats["last_distribution"]:
             last_dist = datetime.fromisoformat(self._stats["last_distribution"])
-            if datetime.utcnow() - last_dist > timedelta(minutes=5):
+            if datetime.now(timezone.utc) - last_dist > timedelta(minutes=5):
                 health_score -= 20  # No recent distributions
         
         status = "healthy" if health_score >= 80 else "degraded" if health_score >= 50 else "unhealthy"
@@ -406,7 +406,7 @@ class SmartDistributor(JobDistributor):
         self._agent_job_type_affinity[agent_id][job_type] = new_type_score
         
         # Update hourly patterns
-        hour = datetime.utcnow().hour
+        hour = datetime.now(timezone.utc).hour
         if hour not in self._hourly_patterns:
             self._hourly_patterns[hour] = {"success": 0, "failure": 0}
         

@@ -9,6 +9,45 @@ import { test, expect } from '@playwright/test';
 test.describe('All OAuth Providers', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
+    
+    // Mock OAuth provider responses
+    await page.route('**/auth/oauth/discord/callback**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'mock-discord-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          refresh_token: 'mock-refresh-token',
+        })
+      });
+    });
+    
+    await page.route('**/auth/oauth/google/callback**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'mock-google-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          refresh_token: 'mock-refresh-token',
+        })
+      });
+    });
+    
+    await page.route('**/auth/oauth/github/callback**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'mock-github-token',
+          token_type: 'Bearer',
+          scope: 'user:email',
+        })
+      });
+    });
   });
 
   test('Google OAuth flow initiates redirect', async ({ page }) => {
@@ -160,7 +199,7 @@ test.describe('All OAuth Providers', () => {
                      bodyText.toLowerCase().includes('cancelled') ||
                      bodyText.toLowerCase().includes('error');
 
-    expect(await errorMessage.isVisible().catch(() => false) || hasError).toBeTruthy();
+    expect(await errorMessage.isVisible().catch(() => false) || hasError).toBe(true);
   });
 
   test('OAuth error handling - invalid state', async ({ page }) => {

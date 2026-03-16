@@ -84,28 +84,37 @@ limiter = Limiter(key_func=get_remote_address)
 class SecurityHeadersMiddleware:
     """Add security headers to all responses (P0 Security Fix)."""
     
-    async def __call__(self, request: Request, call_next):
+    def __init__(self, app):
+        self.app = app
+    
+    async def __call__(self, scope, receive, send):
+        async def send_with_security_headers(message):
+            if message["type"] == "http.response.start":
+                headers = list(message.get("headers", []))
+                # HSTS
+                headers.append([b"strict-transport-security", b"max-age=31536000; includeSubDomains"])
+                # X-Frame-Options
+                headers.append([b"x-frame-options", b"DENY"])
+                # X-Content-Type-Options
+                headers.append([b"x-content-type-options", b"nosniff"])
+                # Content Security Policy (basic)
+                headers.append([b"content-security-policy", b"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"])
+                # Referrer Policy
+                headers.append([b"referrer-policy", b"strict-origin-when-cross-origin"])
+                # X-XSS-Protection
+                headers.append([b"x-xss-protection", b"1; mode=block"])
+                message["headers"] = headers
+            await send(message)
+        
         try:
-            response = await call_next(request)
-        except Exception as exc:
+            await self.app(scope, receive, send_with_security_headers)
+        except Exception:
+            # Return error response with security headers
             response = JSONResponse(
                 status_code=500,
                 content={"detail": "Internal Server Error"}
             )
-        
-        # HSTS
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-        # X-Frame-Options
-        response.headers["X-Frame-Options"] = "DENY"
-        # X-Content-Type-Options
-        response.headers["X-Content-Type-Options"] = "nosniff"
-        # Content Security Policy (basic)
-        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
-        # Referrer Policy
-        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        # X-XSS-Protection
-        response.headers["X-XSS-Protection"] = "1; mode=block"
-        return response
+            await response(scope, receive, send_with_security_headers)
 
 
 @asynccontextmanager

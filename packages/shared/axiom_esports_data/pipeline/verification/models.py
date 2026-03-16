@@ -4,7 +4,7 @@ Pydantic models for data verification framework.
 Defines validation result structures, duplicate detection results,
 and confidence scoring outputs used across the verification pipeline.
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Optional
 
@@ -92,7 +92,7 @@ class ValidationResult(BaseModel):
             errors=self.errors + other.errors,
             warnings=self.warnings + other.warnings,
             confidence=(self.confidence + other.confidence) / 2,
-            validated_at=datetime.utcnow()
+            validated_at=datetime.now(timezone.utc)
         )
 
 

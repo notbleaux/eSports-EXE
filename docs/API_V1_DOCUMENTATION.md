@@ -1,4 +1,4 @@
-[Ver002.000]
+[Ver002.001]
 
 # API v1 Documentation — Libre-X-eSport 4NJZ4 TENET Platform
 
@@ -583,20 +583,20 @@ GET /v1/search/suggestions?q={partial}
 ### Connection
 
 ```
-wss://api.libre-x-esport.com/v1/ws
+wss://api.libre-x-esport.com/ws/gateway
 ```
 
 ### Authentication
 
 Connect with token:
 ```
-wss://api.libre-x-esport.com/v1/ws?token=<jwt_token>
+wss://api.libre-x-esport.com/ws/gateway?token=<jwt_token>
 ```
 
 Or authenticate after connection:
 ```json
 {
-  "action": "authenticate",
+  "type": "authenticate",
   "token": "<jwt_token>"
 }
 ```
@@ -607,7 +607,7 @@ Or authenticate after connection:
 
 ```json
 {
-  "action": "subscribe",
+  "type": "subscribe",
   "channel": "match:12345",
   "filters": {
     "events": ["kill", "round_end", "plant"]
@@ -619,7 +619,7 @@ Or authenticate after connection:
 
 ```json
 {
-  "action": "unsubscribe",
+  "type": "unsubscribe",
   "channel": "match:12345"
 }
 ```
@@ -628,7 +628,7 @@ Or authenticate after connection:
 
 ```json
 {
-  "action": "ping"
+  "type": "ping"
 }
 ```
 

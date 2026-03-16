@@ -5,7 +5,7 @@ Validates player performance records against the canonical KCRITR schema,
 ensuring all required fields are present with correct types and values.
 """
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional
 from uuid import UUID
 

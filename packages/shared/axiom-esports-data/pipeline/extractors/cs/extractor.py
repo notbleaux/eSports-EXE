@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import AsyncIterator, Dict, Optional
 
 from bs4 import BeautifulSoup
@@ -99,7 +99,7 @@ class CSExtractor(BaseExtractor):
                 'date': self._extract_date(soup),
                 'event': self._extract_event(soup),
                 'players': self._extract_player_stats(soup),
-                'extracted_at': datetime.utcnow().isoformat()
+                'extracted_at': datetime.now(timezone.utc).isoformat()
             }
             
             return match_data
@@ -205,7 +205,7 @@ class CSExtractor(BaseExtractor):
                 'name': self._extract_player_name(soup),
                 'team': self._extract_player_team(soup),
                 'stats': self._extract_career_stats(soup),
-                'extracted_at': datetime.utcnow().isoformat()
+                'extracted_at': datetime.now(timezone.utc).isoformat()
             }
     
     def _extract_player_name(self, soup: BeautifulSoup) -> str:

@@ -20,7 +20,7 @@ import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
@@ -130,7 +130,7 @@ class HarvestOrchestrator:
             List of scheduled task IDs
         """
         if date is None:
-            date = datetime.utcnow() - timedelta(days=1)
+            date = datetime.now(timezone.utc) - timedelta(days=1)
         
         task_ids = []
         
@@ -395,7 +395,7 @@ class HarvestOrchestrator:
         """
         num_workers = num_workers or self.max_workers
         self.running = True
-        self.stats["start_time"] = datetime.utcnow()
+        self.stats["start_time"] = datetime.now(timezone.utc)
         
         # Setup signal handlers for graceful shutdown
         def signal_handler(signum, frame):
@@ -454,7 +454,7 @@ class HarvestOrchestrator:
     def _log_metrics(self) -> None:
         """Log current queue and worker metrics."""
         metrics = self.queue.get_metrics()
-        runtime = datetime.utcnow() - self.stats["start_time"]
+        runtime = datetime.now(timezone.utc) - self.stats["start_time"]
         
         logger.info(
             f"Queue metrics: pending={metrics['pending']}, "
@@ -483,7 +483,7 @@ class HarvestOrchestrator:
         """
         metrics = self.queue.get_metrics()
         runtime = (
-            datetime.utcnow() - self.stats["start_time"]
+            datetime.now(timezone.utc) - self.stats["start_time"]
             if self.stats["start_time"] else timedelta(0)
         )
         

@@ -6,7 +6,7 @@ Business logic for wiki/knowledge base.
 
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 
 import asyncpg

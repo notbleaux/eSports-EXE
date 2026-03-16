@@ -9,7 +9,7 @@ Calculates confidence tier (1-100) based on:
 - Semantic consistency
 """
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from pipeline.verification.models import (
@@ -264,7 +264,7 @@ class ConfidenceCalculator:
             if match_date.tzinfo:
                 match_date = match_date.replace(tzinfo=None)
             
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             age_days = (now - match_date).days
             
             if age_days <= self.FRESH_DAYS:

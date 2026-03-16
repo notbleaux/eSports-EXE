@@ -9,7 +9,7 @@ import logging
 import json
 from typing import Dict, Set, Callable, Optional
 from dataclasses import dataclass, asdict
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 from fastapi import WebSocket, WebSocketDisconnect
@@ -66,7 +66,7 @@ class WSMessage:
             type=data.get("type", "unknown"),
             channel=data.get("channel", "global"),
             payload=data.get("payload", {}),
-            timestamp=data.get("timestamp", datetime.utcnow().isoformat()),
+            timestamp=data.get("timestamp", datetime.now(timezone.utc).isoformat()),
             sender_id=data.get("sender_id"),
             message_id=data.get("message_id"),
         )
@@ -99,7 +99,7 @@ class ChatMessage:
                 "reactions": self.reactions or {},
                 "edited": self.edited,
             },
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
             sender_id=self.user_id,
             message_id=self.id,
         )
@@ -148,14 +148,14 @@ class WebSocketGateway:
             old_ws = self.connections[user_id]
             try:
                 await old_ws.close(code=1008, reason="New connection established")
-            except:
-                pass
+            except Exception as e:
+                logger.debug(f"Error closing old connection: {e}")
         
         self.connections[user_id] = websocket
         self.presence[user_id] = {
             "status": "online",
             "channels": set(),
-            "last_seen": datetime.utcnow(),
+            "last_seen": datetime.now(timezone.utc),
         }
         
         logger.info(f"User {user_id} connected. Total: {len(self.connections)}")
@@ -165,7 +165,7 @@ class WebSocketGateway:
             type=MessageType.AUTH.value,
             channel="global",
             payload={"status": "connected", "user_id": user_id},
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
         ))
     
     async def disconnect(self, user_id: str):
@@ -190,7 +190,7 @@ class WebSocketGateway:
             
             # Update last seen
             if user_id in self.presence:
-                self.presence[user_id]["last_seen"] = datetime.utcnow()
+                self.presence[user_id]["last_seen"] = datetime.now(timezone.utc)
             
             # Route to handler
             handler = self.handlers.get(msg.type)
@@ -202,7 +202,7 @@ class WebSocketGateway:
                     type=MessageType.ERROR.value,
                     channel="global",
                     payload={"error": f"Unknown message type: {msg.type}"},
-                    timestamp=datetime.utcnow().isoformat(),
+                    timestamp=datetime.now(timezone.utc).isoformat(),
                 ))
         
         except json.JSONDecodeError:
@@ -211,7 +211,7 @@ class WebSocketGateway:
                 type=MessageType.ERROR.value,
                 channel="global",
                 payload={"error": "Invalid JSON"},
-                timestamp=datetime.utcnow().isoformat(),
+                timestamp=datetime.now(timezone.utc).isoformat(),
             ))
         except Exception as e:
             logger.error(f"Error handling message from {user_id}: {e}")
@@ -223,7 +223,7 @@ class WebSocketGateway:
             type=MessageType.AUTH.value,
             channel="global",
             payload={"status": "authenticated", "user_id": user_id},
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
         ))
     
     async def _handle_subscribe(self, user_id: str, msg: WSMessage):
@@ -241,7 +241,7 @@ class WebSocketGateway:
                 type=MessageType.CHAT_HISTORY.value,
                 channel=channel,
                 payload={"messages": history},
-                timestamp=datetime.utcnow().isoformat(),
+                timestamp=datetime.now(timezone.utc).isoformat(),
             ))
     
     async def _handle_unsubscribe(self, user_id: str, msg: WSMessage):
@@ -260,18 +260,18 @@ class WebSocketGateway:
                 type=MessageType.ERROR.value,
                 channel=channel,
                 payload={"error": "Message too long or empty"},
-                timestamp=datetime.utcnow().isoformat(),
+                timestamp=datetime.now(timezone.utc).isoformat(),
             ))
             return
         
         # Create chat message
         chat_msg = ChatMessage(
-            id=f"msg_{datetime.utcnow().timestamp()}_{user_id}",
+            id=f"msg_{datetime.now(timezone.utc).timestamp()}_{user_id}",
             room_id=channel.replace("match:", "").replace("lobby:", ""),
             user_id=user_id,
             username=msg.payload.get("username", "Anonymous"),
             content=content,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             reply_to=msg.payload.get("reply_to"),
         )
         
@@ -293,7 +293,7 @@ class WebSocketGateway:
             type=MessageType.PONG.value,
             channel="global",
             payload={},
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(timezone.utc).isoformat(),
         ))
     
     async def _subscribe(self, user_id: str, channel: str):
@@ -336,7 +336,8 @@ class WebSocketGateway:
         for user_id in self.channels[channel]:
             try:
                 await self.send_to_user(user_id, message)
-            except Exception:
+            except Exception as e:
+                logger.debug(f"Error broadcasting to {user_id}: {e}")
                 disconnected.append(user_id)
         
         # Clean up disconnected users

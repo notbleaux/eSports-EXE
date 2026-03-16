@@ -10,7 +10,7 @@ Validates data integrity at multiple levels:
 """
 import hashlib
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from pipeline.verification.models import (
@@ -338,7 +338,7 @@ class IntegrityVerifier:
             ValidationResult with temporal validation details
         """
         result = ValidationResult(is_valid=True)
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         # Parse date if string
         if isinstance(match_date, str):

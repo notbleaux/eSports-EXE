@@ -5,7 +5,7 @@ Database queries for SATOR hub analytics.
 """
 
 import logging
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from typing import Optional, List, Tuple, Dict, Any
 import asyncpg
 
@@ -50,7 +50,7 @@ class SatorService:
             )
             
             # Live matches (simplified - matches from last 3 hours)
-            three_hours_ago = datetime.utcnow() - timedelta(hours=3)
+            three_hours_ago = datetime.now(timezone.utc) - timedelta(hours=3)
             matches_live = await conn.fetchval(
                 """
                 SELECT COUNT(DISTINCT match_id) FROM player_performance 
@@ -87,7 +87,7 @@ class SatorService:
             # Data freshness
             last_update = await conn.fetchval(
                 "SELECT MAX(extraction_timestamp) FROM player_performance"
-            ) or datetime.utcnow()
+            ) or datetime.now(timezone.utc)
             
             freshness = self._calculate_freshness(last_update)
             
@@ -109,7 +109,7 @@ class SatorService:
         if not last_update:
             return "Stale"
         
-        age = datetime.utcnow() - last_update
+        age = datetime.now(timezone.utc) - last_update
         if age < timedelta(minutes=5):
             return "Live"
         elif age < timedelta(hours=1):
@@ -301,8 +301,8 @@ class SatorService:
             recent_matches = [dict(r) for r in recent]
             
             # Rating trend (compare last 30 days vs previous 30 days)
-            thirty_days_ago = datetime.utcnow() - timedelta(days=30)
-            sixty_days_ago = datetime.utcnow() - timedelta(days=60)
+            thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
+            sixty_days_ago = datetime.now(timezone.utc) - timedelta(days=60)
             
             recent_rating = await conn.fetchval(
                 """
@@ -456,7 +456,7 @@ class SatorService:
             for row in rows:
                 # Determine status based on time
                 match_time = row['realworld_time']
-                now = datetime.utcnow()
+                now = datetime.now(timezone.utc)
                 
                 if match_time > now:
                     match_status = "upcoming"
@@ -584,7 +584,7 @@ class SatorService:
         async with self.pool.acquire() as conn:
             last_update = await conn.fetchval(
                 "SELECT MAX(extraction_timestamp) FROM player_performance"
-            ) or datetime.utcnow()
+            ) or datetime.now(timezone.utc)
             
             # Check materialized view refresh
             mv_last_refresh = await conn.fetchval(

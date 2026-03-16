@@ -100,7 +100,7 @@ test.describe('ML Prediction Flow', () => {
                           bodyText.includes('%') ||
                           await confidenceDisplay.count() > 0
     
-    expect(hasConfidence || true).toBeTruthy()
+    expect(hasConfidence).toBe(true)
   })
 
   test('prediction loading state', async ({ page }) => {

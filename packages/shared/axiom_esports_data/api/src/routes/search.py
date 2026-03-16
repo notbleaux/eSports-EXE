@@ -8,7 +8,7 @@ trigram-based fuzzy matching for typo tolerance.
 """
 import hashlib
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Literal, Optional
 
 from fastapi import APIRouter, HTTPException, Query, Request
@@ -34,7 +34,7 @@ def _check_rate_limit(client_id: str) -> bool:
     Check if client has exceeded rate limit.
     Returns True if allowed, False if rate limited.
     """
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     window_start = now.timestamp() - RATE_LIMIT_WINDOW_SECONDS
     
     # Get client's request history
@@ -189,7 +189,7 @@ async def search_all(
     
     Falls back to trigram fuzzy matching for partial matches.
     """
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     
     # Rate limiting
     client_id = _get_client_id(request)
@@ -259,7 +259,7 @@ async def search_all(
             results.total += match_total
         
         # Calculate execution time
-        execution_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+        execution_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
         results.execution_ms = execution_ms
         
         return results
@@ -298,7 +298,7 @@ async def search_players_endpoint(
     
     Supports fuzzy matching for typo tolerance.
     """
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     
     # Rate limiting
     client_id = _get_client_id(request)
@@ -319,7 +319,7 @@ async def search_players_endpoint(
             sort_by=sort
         )
         
-        execution_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+        execution_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
         
         return PlayerSearchResponse(
             query=q,
@@ -364,7 +364,7 @@ async def search_teams_endpoint(
     - Team locations/countries
     - Region codes
     """
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     
     # Rate limiting
     client_id = _get_client_id(request)
@@ -384,7 +384,7 @@ async def search_teams_endpoint(
             sort_by=sort
         )
         
-        execution_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+        execution_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
         
         return TeamSearchResponse(
             query=q,
@@ -430,7 +430,7 @@ async def search_matches_endpoint(
     - Team names (participating teams)
     - Map names
     """
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     
     # Rate limiting
     client_id = _get_client_id(request)
@@ -451,7 +451,7 @@ async def search_matches_endpoint(
             sort_by=sort
         )
         
-        execution_ms = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+        execution_ms = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
         
         return MatchSearchResponse(
             query=q,

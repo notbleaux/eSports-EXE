@@ -9,7 +9,7 @@ import pytest
 import pytest_asyncio
 import asyncio
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch, call
 
 import sys
@@ -78,7 +78,7 @@ class TestWebSocketGatewayFull:
                 type=MessageType.CHAT_MESSAGE.value,
                 channel=channel,
                 payload={"content": f"Message {i}", "username": "test"},
-                timestamp=datetime.utcnow().isoformat()
+                timestamp=datetime.now(timezone.utc).isoformat()
             )
             await gateway._handle_chat_message(user_id, msg)
         
@@ -111,7 +111,7 @@ class TestWebSocketGatewayFull:
             type=MessageType.DATA_UPDATE.value,
             channel="match:test",
             payload={"data": "update"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         await gateway.broadcast_to_channel("match:test", message)
         
@@ -364,7 +364,7 @@ class TestMessageTypes:
             type=MessageType.AUTH.value,
             channel="global",
             payload={},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_auth(user_id, auth_msg)
@@ -385,7 +385,7 @@ class TestMessageTypes:
             type=MessageType.SUBSCRIBE.value,
             channel="global",
             payload={"channel": "match:test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_subscribe(user_id, sub_msg)
@@ -408,7 +408,7 @@ class TestMessageTypes:
             type=MessageType.UNSUBSCRIBE.value,
             channel="global",
             payload={"channel": "match:test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_unsubscribe(user_id, unsub_msg)
@@ -427,7 +427,7 @@ class TestMessageTypes:
             type=MessageType.PING.value,
             channel="global",
             payload={},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_ping(user_id, ping_msg)
@@ -452,7 +452,7 @@ class TestBroadcastOperations:
             type=MessageType.DATA_UPDATE.value,
             channel="match:nonexistent",
             payload={"data": "test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         # Should not raise
@@ -481,7 +481,7 @@ class TestBroadcastOperations:
             type=MessageType.DATA_UPDATE.value,
             channel="global",
             payload={"announcement": "test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_all(message)
@@ -511,7 +511,7 @@ class TestBroadcastOperations:
             type=MessageType.DATA_UPDATE.value,
             channel="match:test",
             payload={"data": "test"},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway.broadcast_to_channel("match:test", message)
@@ -531,7 +531,7 @@ class TestChatMessageHandling:
             user_id="user_123",
             username="TestUser",
             content="Hello world",
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             reply_to="msg_456",
             reactions={"👍": 5}
         )
@@ -565,7 +565,7 @@ class TestChatMessageHandling:
                 "username": "TestUser",
                 "reply_to": "original_msg_id"
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_chat_message(user_id, msg)
@@ -589,7 +589,7 @@ class TestChatMessageHandling:
                 "content": "Test message",
                 "username": "TestUser"
             },
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         await gateway._handle_chat_message(user_id, msg)
@@ -651,7 +651,7 @@ class TestErrorHandling:
             type="test",
             channel="global",
             payload={},
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.now(timezone.utc).isoformat()
         )
         
         # Should not raise

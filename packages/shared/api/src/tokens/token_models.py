@@ -4,7 +4,7 @@ Token Economy Pydantic Models
 Data models for the NJZ token system.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import List, Optional
 

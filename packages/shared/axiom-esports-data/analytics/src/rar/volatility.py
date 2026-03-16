@@ -7,7 +7,7 @@ import logging
 import statistics
 from dataclasses import dataclass
 from typing import List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 

@@ -4,7 +4,7 @@ Records are never modified after first write.
 """
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -66,7 +66,7 @@ class RawRepository:
             "vlr_match_id": vlr_match_id,
             "http_status": http_status,
             "schema_version": schema_version,
-            "extracted_at": datetime.utcnow().isoformat(),
+            "extracted_at": datetime.now(timezone.utc).isoformat(),
             "separation_flag": 0,  # Always 0 for raw records
             "raw_html_length": len(raw_html),
         }

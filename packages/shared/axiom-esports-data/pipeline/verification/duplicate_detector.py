@@ -9,7 +9,7 @@ Detects duplicates at multiple levels:
 """
 import hashlib
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 from typing import Any, Optional, Protocol
 

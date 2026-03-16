@@ -6,7 +6,7 @@ Critical Betting Functionality Tests
 import pytest
 import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch, Mock
-from datetime import datetime
+from datetime import datetime, timezone
 
 import sys
 import os

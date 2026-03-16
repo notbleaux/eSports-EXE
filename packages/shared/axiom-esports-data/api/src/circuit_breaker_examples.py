@@ -7,7 +7,7 @@ Practical examples of using circuit breakers for different service types.
 import asyncio
 import os
 from typing import Optional, Dict, List, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 import httpx
 
@@ -49,7 +49,7 @@ async def get_player_by_id(player_id: str) -> Optional[Dict]:
         "name": f"Player_{player_id}",
         "team": "SATOR Esports",
         "rating": 1.25,
-        "updated_at": datetime.utcnow().isoformat()
+        "updated_at": datetime.now(timezone.utc).isoformat()
     }
 
 
@@ -76,7 +76,7 @@ async def get_match_by_id(match_id: str) -> Optional[Dict]:
         "score_a": 13,
         "score_b": 11,
         "status": "completed",
-        "played_at": datetime.utcnow().isoformat()
+        "played_at": datetime.now(timezone.utc).isoformat()
     }
 
 
@@ -328,7 +328,7 @@ async def calculate_sim_rating_batch(player_ids: List[str]) -> List[Dict]:
             "player_id": pid,
             "rating": rating,
             "confidence": 0.85,
-            "calculated_at": datetime.utcnow().isoformat()
+            "calculated_at": datetime.now(timezone.utc).isoformat()
         })
     return results
 
@@ -373,7 +373,7 @@ async def generate_team_analytics(team_id: str, match_history: int = 10) -> Dict
             "improving": True,
             "momentum_score": 7.5
         },
-        "generated_at": datetime.utcnow().isoformat()
+        "generated_at": datetime.now(timezone.utc).isoformat()
     }
 
 
@@ -405,7 +405,7 @@ async def predict_match_outcome(team_a_id: str, team_b_id: str) -> Dict:
             "head_to_head",
             "map_pool_strength"
         ],
-        "predicted_at": datetime.utcnow().isoformat()
+        "predicted_at": datetime.now(timezone.utc).isoformat()
     }
 
 

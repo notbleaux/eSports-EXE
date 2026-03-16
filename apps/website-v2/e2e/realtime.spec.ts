@@ -75,7 +75,7 @@ test.describe('Real-time Updates', () => {
     // Also check for any dynamic content areas
     const dynamicContent = page.locator('[data-live], [data-polling], .real-time').first()
     
-    expect(hasEventStream || await dynamicContent.count() > 0 || true).toBeTruthy()
+    expect(hasEventStream || await dynamicContent.count() > 0).toBe(true)
   })
 
   test('WebSocket message handling', async ({ page }) => {

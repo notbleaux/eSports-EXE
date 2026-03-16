@@ -19,7 +19,7 @@ import asyncio
 import hashlib
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional
 
@@ -113,13 +113,13 @@ class MigrationRunner:
         
         # Execute migration
         print(f"  🔄 Applying {version}...", end=" ", flush=True)
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         try:
             async with self.conn.transaction():
                 await self.conn.execute(content)
                 
-                execution_time = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+                execution_time = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
                 
                 await self.conn.execute("""
                     INSERT INTO schema_migrations (version, checksum, execution_time_ms, status)
@@ -131,7 +131,7 @@ class MigrationRunner:
                 print(f"✅ ({execution_time}ms)")
                 
         except Exception as e:
-            execution_time = int((datetime.utcnow() - start_time).total_seconds() * 1000)
+            execution_time = int((datetime.now(timezone.utc) - start_time).total_seconds() * 1000)
             
             await self.conn.execute("""
                 INSERT INTO schema_migrations (version, checksum, execution_time_ms, status)

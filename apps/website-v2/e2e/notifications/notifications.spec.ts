@@ -38,7 +38,7 @@ test.describe('Push Notification Flows', () => {
 
         // Verify enabled state
         const enabled = page.locator('text=/enabled|on|active/i').first();
-        expect(await enabled.isVisible().catch(() => false) || true).toBeTruthy();
+        await expect(enabled).toBeVisible();
       }
     } else {
       test.info().annotations.push({
@@ -71,7 +71,7 @@ test.describe('Push Notification Flows', () => {
 
         // Verify disabled state
         const disabled = page.locator('text=/disabled|off|inactive/i').first();
-        expect(await disabled.isVisible().catch(() => false) || true).toBeTruthy();
+        await expect(disabled).toBeVisible();
       }
     }
   });
@@ -115,7 +115,7 @@ test.describe('Push Notification Flows', () => {
         const success = page.locator('[data-testid="toast-success"]').or(
           page.locator('text=/saved|success/i').first()
         );
-        expect(await success.isVisible().catch(() => false) || true).toBeTruthy();
+        await expect(success).toBeVisible();
       }
     }
   });
@@ -138,7 +138,7 @@ test.describe('Push Notification Flows', () => {
         page.locator('[role="alert"], .toast, .notification')
       );
 
-      expect(await notification.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(notification).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'info',
@@ -259,7 +259,7 @@ test.describe('Push Notification Flows', () => {
         page.locator('[class*="notification-list"], ul, table')
       );
 
-      expect(await historyList.isVisible().catch(() => false) || true).toBeTruthy();
+      await expect(historyList).toBeVisible();
     } else {
       test.info().annotations.push({
         type: 'info',

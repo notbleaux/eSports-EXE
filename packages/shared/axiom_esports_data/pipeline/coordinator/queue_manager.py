@@ -7,7 +7,7 @@ import heapq
 import logging
 from typing import List, Optional, Dict, Set, Tuple
 from collections import deque
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .models import ExtractionJob, Agent, GameType, JobStatus, QueueStats
 
@@ -364,7 +364,7 @@ class QueueManager:
             Number of jobs purged
         """
         async with self._lock:
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             to_purge = []
             
             for job_id, job in self._jobs.items():

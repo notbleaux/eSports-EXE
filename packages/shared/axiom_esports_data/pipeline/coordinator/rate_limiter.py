@@ -6,7 +6,7 @@ import asyncio
 import logging
 from typing import Dict, Optional, Tuple
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 import time
 
@@ -112,7 +112,7 @@ class RateLimitState:
         self._cleanup_old_requests()
         
         # Check backoff
-        if self.backoff_until and datetime.utcnow() < self.backoff_until:
+        if self.backoff_until and datetime.now(timezone.utc) < self.backoff_until:
             return True
         
         minute_count, hour_count = self.get_current_usage()
@@ -146,7 +146,7 @@ class RateLimitState:
                 self.config.retry_after_seconds * (2 ** (self.consecutive_failures - 1)),
                 3600  # Max 1 hour backoff
             )
-            self.backoff_until = datetime.utcnow() + timedelta(seconds=backoff_seconds)
+            self.backoff_until = datetime.now(timezone.utc) + timedelta(seconds=backoff_seconds)
             logger.warning(
                 f"Rate limit backoff activated until {self.backoff_until} "
                 f"({self.consecutive_failures} consecutive failures)"
@@ -362,7 +362,7 @@ class RateLimiter:
             return 0.0
         
         if state.backoff_until:
-            wait = (state.backoff_until - datetime.utcnow()).total_seconds()
+            wait = (state.backoff_until - datetime.now(timezone.utc)).total_seconds()
             if wait > 0:
                 return wait
         

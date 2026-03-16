@@ -8,7 +8,7 @@ stubs in the original db.py file.
 """
 import logging
 from typing import Any, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import json
 
 from api.src.db_manager import db

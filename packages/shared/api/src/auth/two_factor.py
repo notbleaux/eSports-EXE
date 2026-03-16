@@ -27,16 +27,15 @@ logger = logging.getLogger(__name__)
 # Password hashing for backup codes
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Encryption key for TOTP secrets (should be set in environment)
+# SECURITY FIX: Removed weak 2FA fallback (Round 2b Zeta)
+# Encryption key for TOTP secrets MUST be set in environment
 TOTP_ENCRYPTION_KEY = os.getenv("TOTP_ENCRYPTION_KEY", "")
 if not TOTP_ENCRYPTION_KEY:
-    if os.getenv("APP_ENVIRONMENT") == "production":
-        raise RuntimeError(
-            "CRITICAL: TOTP_ENCRYPTION_KEY environment variable must be set in production!"
-        )
-    # Fallback for development only
-    TOTP_ENCRYPTION_KEY = "dev-totp-key-do-not-use-in-production-32bytes!"
-    logger.warning("TOTP_ENCRYPTION_KEY not set, using development fallback!")
+    # ENFORCE: Always require encryption key - no weak fallbacks allowed
+    raise RuntimeError(
+        "CRITICAL: TOTP_ENCRYPTION_KEY environment variable must be set! "
+        "Generate a secure key with: python -c \"import secrets; print(secrets.token_urlsafe(32))\""
+    )
 
 
 def _get_encryption_key() -> bytes:
