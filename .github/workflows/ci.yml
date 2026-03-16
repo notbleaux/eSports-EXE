@@ -278,9 +278,68 @@ EOF
           cd apps/website-v2
           npm run lint || echo "Linting issues found"
 
+  load-tests:
+    runs-on: ubuntu-latest
+    needs: [python-tests]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Locust
+        run: pip install locust
+      
+      - name: Start API server in background
+        run: |
+          pip install -r packages/shared/requirements.txt
+          cd packages/shared/api
+          python -c "
+import asyncio
+import sys
+sys.path.insert(0, 'src')
+from src.main import app
+import uvicorn
+uvicorn.run(app, host='127.0.0.1', port=8000, log_level='warning')
+          " &
+          
+          # Wait for server to start
+          sleep 10
+          
+          # Verify server is running
+          curl -f http://127.0.0.1:8000/health || exit 1
+        env:
+          DATABASE_URL: postgresql://localhost:5432/sator_test
+          REDIS_URL: redis://localhost:6379/0
+          JWT_SECRET_KEY: test-key
+          TOTP_ENCRYPTION_KEY: test-key
+          APP_ENVIRONMENT: testing
+      
+      - name: Run Locust load tests (smoke test)
+        run: |
+          cd tests/load
+          locust -f locustfile.py \
+            --headless \
+            -u 10 \
+            -r 2 \
+            --run-time 1m \
+            --host http://127.0.0.1:8000 \
+            --html locust-report.html || echo "Load tests completed with warnings"
+      
+      - name: Upload load test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-report
+          path: tests/load/locust-report.html
+          if-no-files-found: ignore
+
   test-summary:
     runs-on: ubuntu-latest
-    needs: [python-tests, typescript-tests, godot-tests, playwright-e2e-tests, lint-and-format]
+    needs: [python-tests, typescript-tests, godot-tests, playwright-e2e-tests, lint-and-format, load-tests]
     if: always()
     steps:
       - name: Test Summary
@@ -291,6 +350,7 @@ EOF
           echo "Godot Tests: ${{ needs.godot-tests.result }}"
           echo "Playwright E2E Tests: ${{ needs.playwright-e2e-tests.result }}"
           echo "Lint and Format: ${{ needs.lint-and-format.result }}"
+          echo "Load Tests: ${{ needs.load-tests.result }}"
           
           # Fail if any required tests failed
           if [[ "${{ needs.python-tests.result }}" == "failure" ]] || \

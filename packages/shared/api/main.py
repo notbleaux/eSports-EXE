@@ -1,23 +1,34 @@
 """
 SATOR API — Main FastAPI Application
 Aggregates all hub services: SATOR, tokens, forum, fantasy, challenges, wiki, opera
+
+[Ver002.000] - Added Prometheus metrics endpoint
 """
 
 import os
 import logging
 import secrets
+import time
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, WebSocket, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 
 # Import rate limiting
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+
+# Import Prometheus client (optional)
+try:
+    from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
+    PROMETHEUS_AVAILABLE = True
+except ImportError:
+    PROMETHEUS_AVAILABLE = False
+    logging.warning("Prometheus client not installed. Metrics endpoint will be limited.")
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -255,6 +266,90 @@ async def readiness_check():
 async def liveness_check():
     """Liveness check - basic process health."""
     return {"status": "alive"}
+
+
+# Prometheus Metrics (if available)
+if PROMETHEUS_AVAILABLE:
+    # Request counter
+    REQUEST_COUNT = Counter(
+        'http_requests_total',
+        'Total HTTP requests',
+        ['method', 'endpoint', 'status']
+    )
+    
+    # Request latency histogram
+    REQUEST_LATENCY = Histogram(
+        'http_request_duration_seconds',
+        'HTTP request latency',
+        ['method', 'endpoint']
+    )
+    
+    # Active connections gauge
+    ACTIVE_CONNECTIONS = Gauge(
+        'websocket_active_connections',
+        'Number of active WebSocket connections'
+    )
+    
+    # Database connections gauge
+    DB_CONNECTIONS = Gauge(
+        'db_connections_active',
+        'Active database connections'
+    )
+
+
+@app.get("/metrics", tags=["monitoring"])
+async def metrics():
+    """
+    Prometheus metrics endpoint.
+    
+    Returns metrics in Prometheus exposition format.
+    Requires prometheus-client package.
+    """
+    if not PROMETHEUS_AVAILABLE:
+        # Return basic stats if Prometheus not available
+        return JSONResponse({
+            "status": "metrics_unavailable",
+            "message": "prometheus-client not installed",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        })
+    
+    return PlainTextResponse(
+        content=generate_latest(),
+        media_type=CONTENT_TYPE_LATEST
+    )
+
+
+# Request timing middleware
+@app.middleware("http")
+async def metrics_middleware(request: Request, call_next):
+    """Track request metrics for Prometheus."""
+    if not PROMETHEUS_AVAILABLE:
+        return await call_next(request)
+    
+    start_time = time.time()
+    
+    try:
+        response = await call_next(request)
+        status_code = response.status_code
+    except Exception as e:
+        status_code = 500
+        raise e
+    finally:
+        duration = time.time() - start_time
+        
+        # Record metrics
+        REQUEST_COUNT.labels(
+            method=request.method,
+            endpoint=request.url.path,
+            status=status_code
+        ).inc()
+        
+        REQUEST_LATENCY.labels(
+            method=request.method,
+            endpoint=request.url.path
+        ).observe(duration)
+    
+    return response
 
 
 # Include all service routers

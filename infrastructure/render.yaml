@@ -1,6 +1,7 @@
-# [Ver001.000]
+# [Ver003.000]
 # Render.com Deployment Configuration
 # SATOR API - Production Deployment
+# NOTE: Using FREE TIER ONLY - No paid services
 
 services:
   # FastAPI Backend
@@ -8,9 +9,9 @@ services:
     name: sator-api
     env: python
     buildCommand: |
-      pip install -r packages/shared/axiom_esports_data/api/requirements.txt
+      pip install -r packages/shared/api/requirements.txt
     startCommand: |
-      cd packages/shared/axiom_esports_data/api && 
+      cd packages/shared/api && 
       uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
     envVars:
       - key: DATABASE_URL
@@ -34,21 +35,34 @@ services:
         value: "https://sator-platform.vercel.app,https://sator-web.onrender.com"
       - key: JWT_SECRET_KEY
         generateValue: true
+      - key: TOTP_ENCRYPTION_KEY
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
       - key: PANDASCORE_API_KEY
         sync: false  # Set manually in dashboard
+      # FREE TIER: Single worker only (no multi-worker on free)
+      # FREE TIER: Pool sizes optimized for free tier limits
+      - key: DB_POOL_MIN_SIZE
+        value: "2"
+      - key: DB_POOL_MAX_SIZE
+        value: "5"
     healthCheckPath: /health
     autoDeploy: true
-    plan: free  # Use 'starter' for paid tier
+    plan: free  # FREE TIER - No costs incurred
 
   # Redis for caching and rate limiting
   - type: redis
     name: sator-redis
-    plan: free  # 100MB, no persistence on free tier
+    plan: free  # FREE TIER - 100MB limit, no persistence
     ipAllowList: []  # Allow all (required for Render services)
 
 databases:
+  # NOTE: Using external free database (Supabase) 
+  # Render free PostgreSQL has been discontinued
+  # Supabase free tier: 500MB, 2GB/month transfer
   - name: sator-db
-    plan: free  # 1GB storage on free tier
+    plan: free  # Placeholder - actual DB is Supabase
     databaseName: sator_production
     user: sator_api
 
@@ -60,3 +74,5 @@ envVarGroups:
         value: 3.11.0
       - key: API_VERSION
         value: v1
+      - key: DEPLOYMENT_TYPE
+        value: "free-tier"
