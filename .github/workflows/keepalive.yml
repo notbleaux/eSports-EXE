@@ -1,0 +1,43 @@
+# [Ver001.000]
+# Keepalive Workflow - Prevent Render Free Tier Cold Starts
+# Pings the API every 10 minutes during business hours (6am-10pm UTC)
+# This keeps the Render instance warm and prevents ~30s cold start delay
+
+name: Keep Alive
+
+on:
+  schedule:
+    # Every 10 minutes from 6am to 10pm UTC (16 hours)
+    # Covers US East morning through US West evening
+    - cron: '*/10 6-22 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  ping-production:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Ping Production API
+        run: |
+          echo "Pinging production API at $(date -u)"
+          curl -sf https://api.libre-x-esport.com/health || echo "Ping failed (may be deploying)"
+        timeout-minutes: 2
+
+  ping-staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Ping Staging API
+        run: |
+          echo "Pinging staging API at $(date -u)"
+          curl -sf https://api-staging.libre-x-esport.com/health || echo "Ping failed (may be deploying)"
+        timeout-minutes: 2
+
+  # Log the keepalive activity
+  log-activity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Keepalive
+        run: |
+          echo "Keepalive ping completed at $(date -u)"
+          echo "Next ping in 10 minutes (if within business hours)"
