@@ -1,0 +1,88 @@
+{
+  "version": "1.0.0",
+  "totalComponents": 50,
+  "categories": {
+    "primitives": {
+      "count": 15,
+      "components": [
+        "Button",
+        "ButtonGroup",
+        "IconButton",
+        "Input",
+        "Textarea",
+        "Select",
+        "Checkbox",
+        "Radio",
+        "Switch",
+        "Label",
+        "Badge",
+        "Avatar",
+        "Icon",
+        "Spinner",
+        "Skeleton"
+      ]
+    },
+    "composite": {
+      "count": 15,
+      "components": [
+        "Card",
+        "CardHeader",
+        "CardBody",
+        "CardFooter",
+        "Modal",
+        "ModalOverlay",
+        "ModalContent",
+        "ModalHeader",
+        "ModalBody",
+        "ModalFooter",
+        "Dropdown",
+        "DropdownTrigger",
+        "DropdownMenu",
+        "DropdownItem",
+        "Accordion"
+      ]
+    },
+    "layout": {
+      "count": 10,
+      "components": [
+        "Box",
+        "Stack",
+        "HStack",
+        "VStack",
+        "Grid",
+        "Container",
+        "Center",
+        "Spacer",
+        "Divider",
+        "AspectRatio"
+      ]
+    },
+    "feedback": {
+      "count": 5,
+      "components": [
+        "Toast",
+        "Alert",
+        "Progress",
+        "CircularProgress",
+        "Tooltip"
+      ]
+    },
+    "data-display": {
+      "count": 5,
+      "components": [
+        "Table",
+        "TableHead",
+        "TableBody",
+        "TableRow",
+        "TableCell"
+      ]
+    }
+  },
+  "dependencies": {
+    "primitives": [],
+    "composite": ["primitives"],
+    "layout": [],
+    "feedback": ["primitives"],
+    "data-display": ["primitives"]
+  }
+}
