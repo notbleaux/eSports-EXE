@@ -1,40 +1,41 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { FantasyContainer } from '../FantasyContainer';
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+    div: ({ children, ...props }) => <div {...props}>{children}</div>,
+    button: ({ children, ...props }) => <button {...props}>{children}</button>,
   },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
+  AnimatePresence: ({ children }) => <>{children}</>,
 }));
 
 // Mock UI components
 vi.mock('@/components/ui/GlassCard', () => ({
-  GlassCard: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  GlassCard: ({ children, ...props }) => <div role=\"button\" tabIndex={0} {...props}>{children}</div>,
 }));
 
 vi.mock('@/components/ui/GlowButton', () => ({
-  GlowButton: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  GlowButton: ({ children, ...props }) => <button type=\"button\" role=\"button\" {...props}>{children}</button>,
 }));
 
 // Mock child components
 vi.mock('../FantasyLeagues', () => ({
-  FantasyLeagues: () => <div data-testid="fantasy-leagues">Fantasy Leagues</div>,
+  FantasyLeagues: () => <div data-testid=\"fantasy-leagues\">Fantasy Leagues</div>,
 }));
 
 vi.mock('../FantasyDraft', () => ({
-  FantasyDraft: ({ leagueId }: any) => (
-    <div data-testid="fantasy-draft">Draft Room - {leagueId}</div>
+  FantasyDraft: ({ leagueId }) => (
+    <div data-testid=\"fantasy-draft\">Draft Room - {leagueId}</div>
   ),
 }));
 
 vi.mock('../FantasyTeamManage', () => ({
-  FantasyTeamManage: ({ teamId }: any) => (
-    <div data-testid="fantasy-team">Team Manager - {teamId}</div>
+  FantasyTeamManage: ({ teamId }) => (
+    <div data-testid=\"fantasy-team\">Team Manager - {teamId}</div>
   ),
 }));
 
@@ -55,10 +56,11 @@ describe('FantasyContainer', () => {
     expect(screen.getByText('Enter Draft')).toBeInTheDocument();
   });
 
-  it('navigates to leagues view when clicking Browse Leagues', () => {
+  it('navigates to leagues view when clicking Browse Leagues', async () => {
+    const user = userEvent.setup();
     render(<FantasyContainer />);
     
-    fireEvent.click(screen.getByText('Browse Leagues'));
+    await user.click(screen.getByText('Browse Leagues'));
     
     expect(screen.getByTestId('fantasy-leagues')).toBeInTheDocument();
     expect(screen.getByText('← Back to Fantasy')).toBeInTheDocument();
@@ -70,7 +72,6 @@ describe('FantasyContainer', () => {
     expect(screen.getByText('Valorant Scoring')).toBeInTheDocument();
     expect(screen.getByText('CS2 Scoring')).toBeInTheDocument();
     
-    // Check for specific scoring rules - these appear multiple times (once per game)
     const killElements = screen.getAllByText('Kill');
     expect(killElements.length).toBeGreaterThanOrEqual(2);
     
@@ -88,36 +89,39 @@ describe('FantasyContainer', () => {
     expect(screen.getByText('Win Tokens')).toBeInTheDocument();
   });
 
-  it('navigates back to overview from leagues view', () => {
+  it('navigates back to overview from leagues view', async () => {
+    const user = userEvent.setup();
     render(<FantasyContainer />);
     
     // Navigate to leagues
-    fireEvent.click(screen.getByText('Browse Leagues'));
+    await user.click(screen.getByText('Browse Leagues'));
     expect(screen.getByTestId('fantasy-leagues')).toBeInTheDocument();
     
     // Navigate back
-    fireEvent.click(screen.getByText('← Back to Fantasy'));
+    await user.click(screen.getByText('← Back to Fantasy'));
     expect(screen.getByText(/Draft your dream team/)).toBeInTheDocument();
   });
 
-  it('shows my teams view with team card', () => {
+  it('shows my teams view with team card', async () => {
+    const user = userEvent.setup();
     render(<FantasyContainer />);
     
-    fireEvent.click(screen.getByText('My Teams'));
+    await user.click(screen.getByText('My Teams'));
     
     expect(screen.getByText('My Fantasy Teams')).toBeInTheDocument();
     expect(screen.getByText('Super Senstrels')).toBeInTheDocument();
     expect(screen.getByText('VCT Champions Fantasy')).toBeInTheDocument();
   });
 
-  it('navigates to team management from teams view', () => {
+  it('navigates to team management from teams view', async () => {
+    const user = userEvent.setup();
     render(<FantasyContainer />);
     
     // Go to my teams
-    fireEvent.click(screen.getByText('My Teams'));
+    await user.click(screen.getByText('My Teams'));
     
     // Click on team card
-    fireEvent.click(screen.getByText('Super Senstrels'));
+    await user.click(screen.getByText('Super Senstrels'));
     
     expect(screen.getByTestId('fantasy-team')).toBeInTheDocument();
   });

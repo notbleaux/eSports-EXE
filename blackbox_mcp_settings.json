@@ -1,0 +1,9 @@
+{
+  "github.com/render-oss/render-mcp-server": {
+    "command": "C:/Program Files/Go/bin/go.exe",
+    "args": ["run", "./render-mcp-server/main.go"],
+    "env": {
+      "RENDER_API_KEY": "${RENDER_API_KEY}"
+    }
+  }
+}

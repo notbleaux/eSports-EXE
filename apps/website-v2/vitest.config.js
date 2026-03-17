@@ -30,16 +30,16 @@ export default defineConfig({
         '**/*.config.{js,ts}',
         'src/**/*.d.ts',
         'src/mocks/',
-        'src/dev/',
+        'src/dev/'
       ],
       thresholds: {
         global: {
           statements: 80,
           branches: 80,
           functions: 80,
-          lines: 80,
-        },
-      },
-    },
-  },
+          lines: 82
+        }
+      }
+    }
+  }
 })

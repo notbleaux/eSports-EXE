@@ -575,7 +575,22 @@ function SatorHubContent() {
   );
 }
 
+import FluidHubLayout from '@/components/layout/FluidHubLayout';
+import { useParallax } from '@/utils/fluid.js';
+
+export function SatorHubContent() {
 export function SatorHub() {
+  return (
+    <FluidHubLayout hub="sator">
+      {/* Parallax Hero */}
+      <div className="relative h-screen flex items-center justify-center mb-12 overflow-hidden">
+        <div ref={useParallax().ref} style={useParallax().parallaxStyle} className="absolute inset-0 bg-gradient-to-br from-gold to-amber opacity-20" />
+        {/* Content already exists */}
+      </div>
+      <SatorHubContent />
+    </FluidHubLayout>
+  );
+}
   return (
     <HubErrorBoundary hubName="sator" componentName="SatorHub">
       <PanelErrorBoundary panelId="sator-hub" panelTitle="SATOR Observatory" hub="SATOR">
