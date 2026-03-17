@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./packages/shared/api/migrations:/docker-entrypoint-initdb.d/api:ro
-      - ./packages/shared/axiom-esports-data/infrastructure/migrations:/docker-entrypoint-initdb.d/axiom:ro
+      - ./packages/shared/axiom_esports_data/infrastructure/migrations:/docker-entrypoint-initdb.d/axiom:ro
     ports:
       - "5432:5432"
     healthcheck:

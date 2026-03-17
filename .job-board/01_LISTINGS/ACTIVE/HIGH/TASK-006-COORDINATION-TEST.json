@@ -1,0 +1,29 @@
+{
+  "taskId": "TASK-006",
+  "title": "Multi-Agent Coordination System Test",
+  "description": "Execute comprehensive test of the three-agent coordination system (Kimi CLI, VS Code, Open-Claw Cloud) to verify file locking, message passing, and workflow execution.",
+  "priority": "HIGH",
+  "status": "ACTIVE",
+  "created": "2026-03-17T23:58:00Z",
+  "dueDate": "2026-03-18T23:59:00Z",
+  "requester": "sator-kimi-cli-001",
+  "assignee": null,
+  "tags": ["coordination", "testing", "multi-agent", "jlb"],
+  "acceptanceCriteria": [
+    "All three agents successfully communicate via JLB channels",
+    "File locking mechanism prevents conflicts",
+    "Webhook events are received and processed",
+    "Shared state is updated by all agents",
+    "Test file contains all three agent signatures"
+  ],
+  "workflow": ".agents/workflows/test-coordination.json",
+  "estimatedEffort": "2 hours",
+  "actualEffort": null,
+  "dependencies": [],
+  "blocks": [],
+  "metadata": {
+    "testType": "integration",
+    "agentsInvolved": ["sator-kimi-cli-001", "sator-vscode-001", "sator-openclaw-001"],
+    "systemsTested": ["JLB", "ACP", "Webhooks", "File Locks", "Shared State"]
+  }
+}

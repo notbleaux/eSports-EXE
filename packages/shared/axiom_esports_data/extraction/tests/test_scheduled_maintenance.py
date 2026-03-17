@@ -21,11 +21,11 @@ import pytest
 # ---------------------------------------------------------------------------
 
 def _import_script(name: str):
-    """Import a script module from axiom-esports-data/scripts/ by name."""
+    """Import a script module from axiom_esports_data/scripts/ by name."""
     scripts_dir = Path(__file__).parent.parent.parent / "scripts"
     if str(scripts_dir) not in sys.path:
         sys.path.insert(0, str(scripts_dir))
-    # We need the parent (axiom-esports-data/) on the path too so that
+    # We need the parent (axiom_esports_data/) on the path too so that
     # analytics/extraction imports inside the scripts resolve correctly.
     axiom_dir = scripts_dir.parent
     if str(axiom_dir) not in sys.path:

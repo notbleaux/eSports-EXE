@@ -1,0 +1,119 @@
+{
+  "$schema": "../schemas/workflow.schema.json",
+  "workflowId": "WF-TEST-001",
+  "name": "Multi-Agent Coordination Test",
+  "description": "Test workflow to verify coordination between Kimi CLI, VS Code, and Open-Claw agents",
+  "version": "1.0.0",
+  "created": "2026-03-17T23:58:00Z",
+  "status": "ready",
+  "steps": [
+    {
+      "stepId": 1,
+      "name": "Lock Test File",
+      "description": "Kimi CLI locks a test file",
+      "agent": "sator-kimi-cli-001",
+      "action": "acquire_lock",
+      "params": {
+        "filePath": "test-coordination.md",
+        "reason": "Testing coordination workflow"
+      },
+      "validation": {
+        "type": "file_exists",
+        "path": ".agents/active/sator-kimi-cli-001/locks/test-coordination.md.json"
+      }
+    },
+    {
+      "stepId": 2,
+      "name": "Create Test File",
+      "description": "Kimi CLI creates the test file",
+      "agent": "sator-kimi-cli-001",
+      "action": "create_file",
+      "params": {
+        "filePath": "test-coordination.md",
+        "content": "# Coordination Test File\n\nCreated by: Kimi CLI\nTimestamp: {timestamp}\n\n## Agent Signatures\n\n- [ ] Kimi CLI\n- [ ] VS Code Agent\n- [ ] Open-Claw Cloud\n"
+      },
+      "dependsOn": [1]
+    },
+    {
+      "stepId": 3,
+      "name": "Broadcast Creation",
+      "description": "Notify other agents of file creation",
+      "agent": "sator-kimi-cli-001",
+      "action": "send_message",
+      "params": {
+        "channel": "broadcast",
+        "message": "Created test-coordination.md for multi-agent test"
+      },
+      "dependsOn": [2]
+    },
+    {
+      "stepId": 4,
+      "name": "VS Code Review",
+      "description": "VS Code agent reviews and signs the file",
+      "agent": "sator-vscode-001",
+      "action": "edit_file",
+      "params": {
+        "filePath": "test-coordination.md",
+        "operation": "replace",
+        "target": "- [ ] VS Code Agent",
+        "replacement": "- [x] VS Code Agent (reviewed at {timestamp})"
+      },
+      "dependsOn": [3]
+    },
+    {
+      "stepId": 5,
+      "name": "Request Open-Claw Review",
+      "description": "Request Open-Claw to review the coordination test",
+      "agent": "sator-vscode-001",
+      "action": "send_message",
+      "params": {
+        "to": "sator-openclaw-001",
+        "channel": "cloud-team",
+        "message": "Please review test-coordination.md and add your signature"
+      },
+      "dependsOn": [4]
+    },
+    {
+      "stepId": 6,
+      "name": "Open-Claw Review",
+      "description": "Open-Claw reviews and signs (simulated via webhook)",
+      "agent": "sator-openclaw-001",
+      "action": "webhook_event",
+      "params": {
+        "eventType": "review.completed",
+        "filePath": "test-coordination.md",
+        "signature": "Open-Claw Cloud Agent"
+      },
+      "dependsOn": [5]
+    },
+    {
+      "stepId": 7,
+      "name": "Update Shared State",
+      "description": "Update shared state with test completion",
+      "agent": "sator-kimi-cli-001",
+      "action": "update_state",
+      "params": {
+        "key": "last_coordination_test",
+        "value": "{timestamp}"
+      },
+      "dependsOn": [6]
+    },
+    {
+      "stepId": 8,
+      "name": "Release Lock",
+      "description": "Release the file lock",
+      "agent": "sator-kimi-cli-001",
+      "action": "release_lock",
+      "params": {
+        "filePath": "test-coordination.md"
+      },
+      "dependsOn": [7]
+    }
+  ],
+  "successCriteria": {
+    "allStepsCompleted": true,
+    "fileSignatures": 3,
+    "lockReleased": true,
+    "stateUpdated": true
+  }
+}
