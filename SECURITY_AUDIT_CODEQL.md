@@ -68,10 +68,18 @@ exec(f"from {module_path} import {import_name}")
 
 | Category | Count | Status |
 |----------|-------|--------|
-| Critical | 1 | Pending Fix |
+| Critical | 1 | ✅ Fixed |
 | High | 0 | - |
-| Medium | 4 | Pending Fix |
-| Low | 2 | Optional |
+| Medium | 4 | ✅ Fixed |
+| Low | 2 | ✅ Fixed |
+
+### Fixes Applied (2026-03-17)
+- ✅ `scripts/phase2_precheck.py:136` - Replaced `exec()` with `importlib.import_module()`
+- ✅ `packages/shared/api/cache.py:28` - Replaced MD5 with SHA-256
+- ✅ `packages/shared/axiom-esports-data/api/src/circuit_breaker_examples.py:341` - Replaced MD5 with SHA-256  
+- ✅ `packages/shared/axiom-esports-data/pipeline/coordinator/conflict_resolver.py:337,340` - Replaced MD5 with SHA-256
+- ✅ `packages/shared/api/src/auth/auth_routes.py:471` - Cleaned up inline `__import__`
+- ✅ `packages/shared/api/src/staging/data_collection_service.py:371` - Cleaned up inline `__import__`
 
 ---
 
