@@ -1,1 +1,0 @@
-﻿# Axiom Esports Data Package
