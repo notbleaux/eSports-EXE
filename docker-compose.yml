@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   db:
@@ -49,7 +47,9 @@ services:
       DATABASE_URL: postgresql://sator:sator_dev_password@db:5432/sator
       REDIS_URL: redis://redis:6379/0
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-secret-key-change-in-production}
+      TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY:-dev-totp-key-change-in-production}
       APP_ENVIRONMENT: ${APP_ENVIRONMENT:-development}
+      PYTHONPATH: /app:/app/api
       CORS_ORIGINS: '["http://localhost:3000", "http://localhost:5173", "http://localhost:4173"]'
       RATE_LIMIT_REQUESTS_PER_MINUTE: "100"
       RATE_LIMIT_BURST: "10"
@@ -63,11 +63,12 @@ services:
     volumes:
       - ./packages/shared:/app
       - /app/__pycache__
+    working_dir: /app/api
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level info
     networks:
       - sator-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
