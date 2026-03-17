@@ -5,10 +5,19 @@
   "private": true,
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "dev": "echo 'Game: open project.godot in Godot 4 | API (Phase 3): cd api && npm run dev'",
+    "dev": "echo 'Use: npm run dev:api | npm run dev:web | npm run setup'",
+    "dev:api": "cd packages/shared/api && python -m uvicorn main:app --reload --port 8000 --host 0.0.0.0",
+    "dev:web": "cd apps/website-v2 && npm run dev",
+    "setup": "powershell -ExecutionPolicy Bypass -File scripts/setup-local.ps1",
+    "setup:reset": "powershell -ExecutionPolicy Bypass -File scripts/setup-local.ps1 -ResetDatabase",
+    "docker:up": "docker-compose up -d db redis",
+    "docker:down": "docker-compose down",
+    "docker:reset": "docker-compose down -v",
     "test:firewall": "npm run test --workspace=packages/data-partition-lib",
     "validate:schema": "npm run validate:schema --workspace=packages/stats-schema",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test:e2e": "cd apps/website-v2 && npx playwright test",
+    "test:unit": "cd apps/website-v2 && npm run test:run"
   },
   "workspaces": [
     "packages/*",
