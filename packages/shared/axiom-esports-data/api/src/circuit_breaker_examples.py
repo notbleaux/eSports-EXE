@@ -337,8 +337,9 @@ async def _calculate_sim_rating(player_id: str) -> float:
     """Internal rating calculation (simulated)."""
     await asyncio.sleep(0.05)
     # Simulated calculation based on player_id hash
+    # SECURITY FIX: Use SHA-256 instead of MD5
     import hashlib
-    hash_val = int(hashlib.md5(player_id.encode()).hexdigest(), 16)
+    hash_val = int(hashlib.sha256(player_id.encode()).hexdigest(), 16)
     base_rating = 0.8 + (hash_val % 100) / 100 * 0.9  # Range: 0.8 - 1.7
     return round(base_rating, 2)
 

@@ -330,14 +330,15 @@ class ConflictResolver:
             data: Data to checksum (will be JSON serialized)
             
         Returns:
-            MD5 checksum string
+            SHA-256 checksum string
         """
+        # SECURITY FIX: Use SHA-256 instead of MD5 for data integrity
         try:
             json_str = json.dumps(data, sort_keys=True, default=str)
-            return hashlib.md5(json_str.encode()).hexdigest()
+            return hashlib.sha256(json_str.encode()).hexdigest()
         except Exception as e:
             logger.error(f"Error computing checksum: {e}")
-            return hashlib.md5(str(data).encode()).hexdigest()
+            return hashlib.sha256(str(data).encode()).hexdigest()
     
     async def record_extraction(
         self,

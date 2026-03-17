@@ -468,7 +468,8 @@ async def request_password_reset(
         if user:
             # Generate reset token
             reset_token = secrets.token_urlsafe(32)
-            expires = datetime.now(timezone.utc) + __import__('datetime').timedelta(hours=1)
+            from datetime import timedelta
+            expires = datetime.now(timezone.utc) + timedelta(hours=1)
             
             await conn.execute(
                 """

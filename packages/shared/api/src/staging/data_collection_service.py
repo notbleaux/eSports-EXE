@@ -18,6 +18,7 @@ Safety Protocols:
 import json
 import logging
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -368,7 +369,7 @@ class DataCollectionService:
         self._collection_log.append({
             "source": source,
             "records_collected": count,
-            "timestamp": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         })
 
 

@@ -25,7 +25,8 @@ class CacheManager:
     def _make_key(self, prefix: str, *args, **kwargs) -> str:
         """Generate cache key from arguments."""
         key_data = f"{prefix}:{args}:{kwargs}"
-        return f"cache:{hashlib.md5(key_data.encode()).hexdigest()}"
+        # SECURITY FIX: Use SHA-256 instead of MD5 (MD5 is cryptographically broken)
+        return f"cache:{hashlib.sha256(key_data.encode()).hexdigest()}"
 
     def get(self, key: str) -> Optional[Any]:
         """Get value from cache."""

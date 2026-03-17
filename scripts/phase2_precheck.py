@@ -131,12 +131,25 @@ class Phase2PreCheck:
         """Check if Python module can be imported"""
         name = f"Import: {import_name}"
         
+        # SECURITY FIX: Use importlib instead of exec() to prevent code injection
+        import importlib
+        
+        # Validate module path (whitelist allowed characters)
+        import re
+        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)*$', module_path):
+            return CheckResult(name, False, f"Invalid module path: {module_path}")
+        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', import_name):
+            return CheckResult(name, False, f"Invalid import name: {import_name}")
+        
         try:
             sys.path.insert(0, str(self.root / "packages/shared/api"))
-            exec(f"from {module_path} import {import_name}")
+            module = importlib.import_module(module_path)
+            getattr(module, import_name)  # Verify attribute exists
             return CheckResult(name, True, "Import successful")
         except ImportError as e:
             return CheckResult(name, False, f"Import failed: {e}")
+        except AttributeError as e:
+            return CheckResult(name, False, f"Attribute not found: {e}")
         except Exception as e:
             return CheckResult(name, False, f"Error: {e}")
     
