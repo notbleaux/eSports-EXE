@@ -31,3 +31,7 @@ common/physics_jitter_fix=0.0
 
 renderer/rendering_method="forward_plus"
 renderer/rendering_method.mobile="forward_plus"
+
+[autoload]
+
+RotasIntegration="*res://scripts/RotasIntegration.gd"

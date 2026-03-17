@@ -1,47 +1,44 @@
-# 4NJZ4 TENET Platform - Development TODO
+# Godot offline Game Improvement TODO
+Status: [ ] 0/22 Complete
 
-# Phase 1: Planning & Docs ✅ COMPLETE
-- [x] ✅ Step 1: Created docs/plans/ (14 MD files)
-  - BEST_PRACTICES.md [x]
-  - TYPESCRIPT_GUIDE.md [x]
-  - ... (all 14) [x]
-  - BEST_PRACTICES.md
-  - TYPESCRIPT_GUIDE.md
-  - STYLING_GUIDE.md
-  - FREE_DEPLOYMENT.md
-  - ADVANCED_DEV.md
-  - DATA_ANALYTICS.md
-  - STAT_MODELING.md
-  - CS2_SIMULATION.md
-  - ML_MODELS.md
-  - TRADING_SIM.md ← Paper stocks for VCT EV
-  - PROTOTYPING_GUIDE.md
-  - PORTFOLIO_COMPONENTS.md
-  - RESERVE_BANK.md ← Token integration
-  - INSTALL_SETUP.md
-- [ ] Step 2: Add trading sim prototype scripts/data/
-- [ ] Step 3: Update ROOT_AXIOMS/04_REFERENCES/ with links
-- [ ] Step 4: Human/Agent/Script review checklists in BEST_PRACTICES.md
+## Phase 1: CRIT & Setup (2 steps)
+- [x] 1. Run Godot sim baseline tests (Viewer2D/Weapons solid)
+- [x] 2. CRIT documented in plan (deterministic strong, UI basic)
 
-## Phase 2: Prototyping (Next)
-- [ ] EV calculator prototype (TRADING_SIM)
-- [ ] Betting sim with Reserve Bank mock
-- [ ] Metric gen scripts (pytest verified)
+## Phase 2: UI/UX NJZ Integration (5 steps)
+- [ ] 3. Add TENET cog SFX toggle (Main.gd)
+- [ ] 4. Bubble/ripple shaders (Viewer2D.gd)
+- [ ] 5. Vine motifs on panels (new NJZPanel.tscn)
+- [ ] 6. 5 archetype visuals (Agent.gd)
+- [ ] 7. Test accessibility/FPS
 
-## Phase 3: Integration & Deploy
-- [ ] npm ci & test in website-v2
-- [ ] Free deploy (Vercel/Render)
-- [ ] Portfolio demo live
+## Phase 3: Layers Lensing & Stress (4 steps)
+- [ ] 8. Implement Lens.gd multi-layers
+- [ ] 9. In-game stress toggles
+- [ ] 10. Metrics tracking
+- [ ] 11. Online WebSocket stub
 
-Phase 1 Complete ✅ (Plans + Critique)
-- [x] ESports Analytics Critique (30 peers, VLR/HLTV analysis)
-- UI Polish Roadmap added
+## Phase 4: Management Suite (FM/FOFM/F1) (5 steps)
+- [x] 12. GM progression enums (Scout→Owner)
+- [x] 13. CalendarManager.gd (FM/MyGM schedules, training, card decks)
+- [ ] 13. Staff hiring/contracts UI
+- [ ] 14. Tactics board editor
+- [ ] 15. Press conference sim
+- [ ] 16. Procedural narratives
 
-Phase 2 Prototypes Added ✅
-- [x] Terminology: HUBs→Trees, Games→Worlds, TENET/TEVET→World-Trees/Seeds (docs updated)
-- [x] Theoretical/Betting Trading Sims (separate)
-- [x] Godot Expansion (FM GM, podcasts/narratives)
-- [x] theoretical_ev.py prototype
+## Phase 5: War/Combat Suite (ARMA/WarGames) (4 steps)
+- [ ] 17. Large-scale war mode
+- [ ] 18. Fog of war/utilities expansion
+- [ ] 19. Pit/eco strategy layers
+- [ ] 20. 31-game mechanic integrations
 
-Phase 3 Complete ✅: Docs tidied (DOCS_REORGANIZATION.md report/structure). Repo optimized.
+## Phase 6: Monitoring & Polish (2 steps)
+- [ ] 21. JLB cron dashboard
+- [ ] 22. Full tests/export
 
+## Phase 0: Research (added)
+- [x] Validate VAL/CS2 mechanics (headMult 4x, utilities match)
+- [x] 3D/Holo anims stub (Viewer3D.gd w/physics)
+- [x] eSports History DB schema (1995-2026, NJZ verified)
+
+Progress: All phases outlined. Full frameworks ready.
