@@ -20,6 +20,9 @@ function Write-Log {
 
 Write-Log "Starting Open-Claw Webhook Server on port $Port"
 
+# Track server start time for uptime calculation
+$startTime = Get-Date
+
 # Simple HTTP listener for webhooks
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$Port/")
