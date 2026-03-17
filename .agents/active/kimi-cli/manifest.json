@@ -1,0 +1,49 @@
+{
+  "$schema": "../../registry/schemas/agent-manifest.schema.json",
+  "manifestVersion": "1.0.0",
+  "agent": {
+    "id": "sator-kimi-cli-001",
+    "name": "Kimi Code CLI Agent",
+    "version": "1.0.0",
+    "classification": "manual",
+    "created": "2026-03-17T23:58:00Z",
+    "updated": "2026-03-17T23:58:00Z"
+  },
+  "capabilities": {
+    "languages": ["typescript", "python", "javascript", "rust", "gdscript"],
+    "domains": ["frontend", "backend", "database", "infrastructure", "documentation"],
+    "specialties": ["full-stack", "coordination", "architecture", "code-review"],
+    "limitations": ["requires-human-prompt", "no-direct-ide-integration"]
+  },
+  "authorization": {
+    "scope": {
+      "read": ["**/*"],
+      "write": ["**/*"],
+      "deny": [".secrets/**", "**/*.key", "**/*.pem"]
+    },
+    "constraints": {
+      "maxFilesPerSession": 50,
+      "maxLinesChanged": 2000,
+      "requiresReview": false,
+      "autoCommit": false
+    }
+  },
+  "coordination": {
+    "primaryContact": "user-terminal",
+    "conflictResolution": "jlb-protocol",
+    "communicationChannel": ".agents/channels/cli-team/",
+    "jobBoardInbox": ".job-board/00_INBOX/kimi-cli-001/"
+  },
+  "quality": {
+    "requiredChecks": ["lint", "typecheck"],
+    "coverageThreshold": 80
+  },
+  "runtime": {
+    "type": "cli",
+    "mcpServers": ["postgres", "redis", "github", "playwright", "context7"],
+    "integration": {
+      "acpPort": 8080,
+      "acpHost": "localhost"
+    }
+  }
+}

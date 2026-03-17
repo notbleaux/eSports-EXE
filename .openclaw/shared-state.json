@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-03-18T00:03:00+11:00",
+  "active_agents": ["kimi-cli", "kimi-vscode"],
+  "current_task": null,
+  "shared_context": {
+    "working_directory": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE",
+    "git_branch": "main",
+    "open_files": [],
+    "todo_list": [],
+    "recent_commits": [],
+    "pending_reviews": []
+  },
+  "agent_states": {
+    "openclaw-cloud": {
+      "status": "standby",
+      "last_ping": null,
+      "capabilities": ["architecture", "review", "planning"]
+    },
+    "kimi-cli": {
+      "status": "active",
+      "last_ping": "2026-03-18T00:03:00+11:00",
+      "capabilities": ["file_operations", "terminal", "git", "testing"]
+    },
+    "kimi-vscode": {
+      "status": "active",
+      "last_ping": "2026-03-18T00:03:00+11:00",
+      "capabilities": ["editing", "debugging", "intellisense", "inline_chat"]
+    }
+  },
+  "mcp_servers": {
+    "github": { "status": "connected", "last_used": null },
+    "context7": { "status": "connected", "last_used": null },
+    "playwright": { "status": "connected", "last_used": null }
+  }
+}

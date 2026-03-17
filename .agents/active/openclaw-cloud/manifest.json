@@ -1,0 +1,49 @@
+{
+  "$schema": "../../registry/schemas/agent-manifest.schema.json",
+  "manifestVersion": "1.0.0",
+  "agent": {
+    "id": "sator-openclaw-001",
+    "name": "Open-Claw Cloud Agent",
+    "version": "1.0.0",
+    "classification": "automated",
+    "created": "2026-03-17T23:58:00Z",
+    "updated": "2026-03-17T23:58:00Z"
+  },
+  "capabilities": {
+    "languages": ["python", "typescript", "javascript"],
+    "domains": ["backend", "data-pipeline", "analytics", "devops"],
+    "specialties": ["scheduled-tasks", "monitoring", "reporting", "data-processing"],
+    "limitations": ["no-frontend-ui", "batch-operations-only", "read-preferential"]
+  },
+  "authorization": {
+    "scope": {
+      "read": ["**/*"],
+      "write": ["data/**", "reports/**", "logs/**"],
+      "deny": ["src/**", "apps/**", "packages/**", "infrastructure/production/**"]
+    },
+    "constraints": {
+      "maxFilesPerSession": 10,
+      "maxLinesChanged": 100,
+      "requiresReview": true,
+      "autoCommit": true
+    }
+  },
+  "coordination": {
+    "primaryContact": "cloud-scheduler",
+    "conflictResolution": "jlb-protocol",
+    "communicationChannel": ".agents/channels/cloud-team/",
+    "jobBoardInbox": ".job-board/00_INBOX/openclaw-cloud-001/"
+  },
+  "quality": {
+    "requiredChecks": ["test"],
+    "coverageThreshold": 90
+  },
+  "runtime": {
+    "type": "cloud",
+    "schedule": "cron",
+    "integration": {
+      "webhookUrl": "${OPENCLAW_WEBHOOK_URL}",
+      "apiKey": "${OPENCLAW_API_KEY}"
+    }
+  }
+}

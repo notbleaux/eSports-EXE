@@ -1,0 +1,50 @@
+{
+  "$schema": "../../registry/schemas/agent-manifest.schema.json",
+  "manifestVersion": "1.0.0",
+  "agent": {
+    "id": "sator-vscode-001",
+    "name": "VS Code IDE Agent",
+    "version": "1.0.0",
+    "classification": "supervised",
+    "created": "2026-03-17T23:58:00Z",
+    "updated": "2026-03-17T23:58:00Z"
+  },
+  "capabilities": {
+    "languages": ["typescript", "python", "javascript", "rust"],
+    "domains": ["frontend", "backend"],
+    "specialties": ["intellisense", "refactoring", "debugging", "inline-editing"],
+    "limitations": ["workspace-scoped", "requires-ide-open"]
+  },
+  "authorization": {
+    "scope": {
+      "read": ["**/*"],
+      "write": ["src/**", "apps/**", "packages/**"],
+      "deny": ["infrastructure/production/**", ".github/workflows/**"]
+    },
+    "constraints": {
+      "maxFilesPerSession": 20,
+      "maxLinesChanged": 1000,
+      "requiresReview": true,
+      "autoCommit": false
+    }
+  },
+  "coordination": {
+    "primaryContact": "vscode-extension",
+    "conflictResolution": "jlb-protocol",
+    "communicationChannel": ".agents/channels/ide-team/",
+    "jobBoardInbox": ".job-board/00_INBOX/vscode-agent-001/"
+  },
+  "quality": {
+    "requiredChecks": ["lint", "format", "typecheck"],
+    "coverageThreshold": 80
+  },
+  "runtime": {
+    "type": "ide",
+    "editor": "vscode",
+    "integration": {
+      "acpPort": 8080,
+      "acpHost": "localhost",
+      "usesKimiExtension": true
+    }
+  }
+}

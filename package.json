@@ -24,6 +24,16 @@
     "apps/*",
     "api"
   ],
-  "keywords": ["libre-x", "4njz4", "tenet", "esports", "tactical-fps", "simulation"],
-  "license": "MIT"
+  "keywords": [
+    "libre-x",
+    "4njz4",
+    "tenet",
+    "esports",
+    "tactical-fps",
+    "simulation"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@agentclientprotocol/sdk": "^0.16.1"
+  }
 }
