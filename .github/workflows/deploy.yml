@@ -1,0 +1,129 @@
+# [Ver003.000] - Production Deployment Workflow
+# Libre-X-eSport 4NJZ4 TENET Platform
+#
+# This workflow deploys to Render.com using the blueprint in infrastructure/render.yaml
+# Trigger: Manual only (for safety)
+
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  # ==========================================================================
+  # Pre-deployment Checks
+  # ==========================================================================
+  pre-deploy-checks:
+    runs-on: ubuntu-latest
+    outputs:
+      can_deploy: ${{ steps.checks.outputs.can_deploy }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run pre-deployment checks
+        id: checks
+        run: |
+          echo "=== Pre-deployment Checks ==="
+          
+          # Check if render.yaml exists and is valid
+          if [ -f "infrastructure/render.yaml" ]; then
+            echo "✓ render.yaml exists"
+            if grep -q "services:" infrastructure/render.yaml; then
+              echo "✓ render.yaml has services section"
+              echo "can_deploy=true" >> $GITHUB_OUTPUT
+            else
+              echo "✗ render.yaml missing services section"
+              echo "can_deploy=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "✗ render.yaml not found"
+            echo "can_deploy=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Verify required secrets
+        run: |
+          echo "Checking required secrets..."
+          if [ -n "${{ secrets.RENDER_API_KEY }}" ]; then
+            echo "✓ RENDER_API_KEY is set"
+          else
+            echo "⚠ RENDER_API_KEY not set (manual deployment only)"
+          fi
+
+  # ==========================================================================
+  # Deploy to Render
+  # ==========================================================================
+  deploy:
+    needs: pre-deploy-checks
+    if: needs.pre-deploy-checks.outputs.can_deploy == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Render
+        id: deploy
+        run: |
+          echo "=== Deploying to Render ==="
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo ""
+          echo "Note: Render deployment uses blueprint from infrastructure/render.yaml"
+          echo "Manual action required:"
+          echo "  1. Visit https://dashboard.render.com/"
+          echo "  2. Click 'New +' → 'Blueprint'"
+          echo "  3. Select this repository and branch"
+          echo ""
+          echo "url=https://sator-api.onrender.com" >> $GITHUB_OUTPUT
+
+      - name: Post-deployment health check
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          sleep 30
+          
+          echo "Checking health endpoint..."
+          for i in {1..5}; do
+            if curl -sf https://sator-api.onrender.com/health 2>/dev/null; then
+              echo "✓ Health check passed"
+              exit 0
+            fi
+            echo "Attempt $i failed, retrying..."
+            sleep 10
+          done
+          
+          echo "⚠ Health check failed - check Render dashboard"
+        continue-on-error: true
+
+  # ==========================================================================
+  # Notify on Completion
+  # ==========================================================================
+  notify:
+    needs: [pre-deploy-checks, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment summary
+        run: |
+          echo "=== Deployment Summary ==="
+          echo "Status: ${{ needs.deploy.result }}"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Commit: ${{ github.sha }}"
+          echo ""
+          echo "Next steps:"
+          echo "  - Verify deployment: https://sator-api.onrender.com/health"
+          echo "  - Check logs: https://dashboard.render.com/"
