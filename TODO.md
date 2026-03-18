@@ -2,13 +2,13 @@
 Status: In Progress | Plan Approved
 
 ## Steps
-### 1. Create .vscode/settings.json [PENDING]
+### 1. Create .vscode/settings.json [✅ COMPLETE]
  - Godot project path
  - Python/TS linters/formatters
  - MCP servers config
  - KIMI/Moonshot API (using key: 19cfe41e-51a2-88b7-8000-000047c146b7)
 
-### 2. Update .vscode/extensions.json [PENDING]
+### 2. Update .vscode/extensions.json [✅ COMPLETE]
  - Add 'ManicAgency.tenets-mcp-server' to recommendations
  - Ensure Godot Tools, MCP, KIMI present
 
