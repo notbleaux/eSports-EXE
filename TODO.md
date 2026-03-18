@@ -1,44 +1,24 @@
-# Godot offline Game Improvement TODO
-Status: [ ] 0/22 Complete
+# Deployment Fix TODO
+## Phase 1: Fix TS Build Errors (Priority 1)
+- [ ] Create missing utils/logger.ts
+- [ ] Create utils/cn.ts (tailwind-merge)
+- [ ] Create theme/colors.ts
+- [ ] Create components/ui/GlassCard.tsx
+- [ ] Create components/ui/GlowButton.tsx
+- [ ] Add vite-env.d.ts for import.meta.env typing
+- [ ] Fix api/mlRegistry.ts type mismatches
+- [ ] Fix TacticalView.test.tsx canvas mock
+- [ ] Relax ESLint no-unused-vars to warn
+- [ ] cd apps/website-v2 && npm run typecheck (0 errors)
 
-## Phase 1: CRIT & Setup (2 steps)
-- [x] 1. Run Godot sim baseline tests (Viewer2D/Weapons solid)
-- [x] 2. CRIT documented in plan (deterministic strong, UI basic)
+## Phase 2: Deploy & Verify
+- [ ] npm run build (success)
+- [ ] vercel --prod
+- [ ] curl https://sator-api.onrender.com/health
+- [ ] docker compose up -d
+- [ ] ./scripts/health-check-all.sh
 
-## Phase 2: UI/UX NJZ Integration (5 steps)
-- [ ] 3. Add TENET cog SFX toggle (Main.gd)
-- [ ] 4. Bubble/ripple shaders (Viewer2D.gd)
-- [ ] 5. Vine motifs on panels (new NJZPanel.tscn)
-- [ ] 6. 5 archetype visuals (Agent.gd)
-- [ ] 7. Test accessibility/FPS
+## Phase 3: MCP & Connectivity
+- [ ] go run render-mcp-server/main.go
+- [ ] Test MCP postgres/redis connections
 
-## Phase 3: Layers Lensing & Stress (4 steps)
-- [ ] 8. Implement Lens.gd multi-layers
-- [ ] 9. In-game stress toggles
-- [ ] 10. Metrics tracking
-- [ ] 11. Online WebSocket stub
-
-## Phase 4: Management Suite (FM/FOFM/F1) (5 steps)
-- [x] 12. GM progression enums (Scout→Owner)
-- [x] 13. CalendarManager.gd (FM/MyGM schedules, training, card decks)
-- [ ] 13. Staff hiring/contracts UI
-- [ ] 14. Tactics board editor
-- [ ] 15. Press conference sim
-- [ ] 16. Procedural narratives
-
-## Phase 5: War/Combat Suite (ARMA/WarGames) (4 steps)
-- [ ] 17. Large-scale war mode
-- [ ] 18. Fog of war/utilities expansion
-- [ ] 19. Pit/eco strategy layers
-- [ ] 20. 31-game mechanic integrations
-
-## Phase 6: Monitoring & Polish (2 steps)
-- [ ] 21. JLB cron dashboard
-- [ ] 22. Full tests/export
-
-## Phase 0: Research (added)
-- [x] Validate VAL/CS2 mechanics (headMult 4x, utilities match)
-- [x] 3D/Holo anims stub (Viewer3D.gd w/physics)
-- [x] eSports History DB schema (1995-2026, NJZ verified)
-
-Progress: All phases outlined. Full frameworks ready.

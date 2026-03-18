@@ -1,18 +1,14 @@
-# Release a lock on a file
 param(
-    [Parameter(Mandatory=$true)]
     [string]$AgentId,
-    
-    [Parameter(Mandatory=$true)]
     [string]$FilePath
 )
 
-$safeName = $FilePath -replace '[\/\\]', '_'
-$lockFile = ".agents/active/$AgentId/locks/${safeName}.json"
+$lockHash = (Get-FileHash $FilePath).Hash
+$lockFile = \".agents/active/$AgentId/locks/$lockHash.json\"
 
 if (Test-Path $lockFile) {
     Remove-Item $lockFile
-    Write-Host "🔓 Lock released on $FilePath" -ForegroundColor Green
+    Write-Output \"Lock released for \$FilePath\"
 } else {
-    Write-Host "ℹ️  No lock found for $FilePath" -ForegroundColor Yellow
+    Write-Warning \"No lock found for \$AgentId on \$FilePath\"
 }
