@@ -1,24 +1,32 @@
-# Deployment Fix TODO
-## Phase 1: Fix TS Build Errors (Priority 1)
-- [ ] Create missing utils/logger.ts
-- [ ] Create utils/cn.ts (tailwind-merge)
-- [ ] Create theme/colors.ts
-- [ ] Create components/ui/GlassCard.tsx
-- [ ] Create components/ui/GlowButton.tsx
-- [ ] Add vite-env.d.ts for import.meta.env typing
-- [ ] Fix api/mlRegistry.ts type mismatches
-- [ ] Fix TacticalView.test.tsx canvas mock
-- [ ] Relax ESLint no-unused-vars to warn
-- [ ] cd apps/website-v2 && npm run typecheck (0 errors)
+# VSCode Extensions Configuration for eSports-EXE & MoonshotAI/KIMI
+Status: In Progress | Plan Approved
 
-## Phase 2: Deploy & Verify
-- [ ] npm run build (success)
-- [ ] vercel --prod
-- [ ] curl https://sator-api.onrender.com/health
-- [ ] docker compose up -d
-- [ ] ./scripts/health-check-all.sh
+## Steps
+### 1. Create .vscode/settings.json [PENDING]
+ - Godot project path
+ - Python/TS linters/formatters
+ - MCP servers config
+ - KIMI/Moonshot API (using key: 19cfe41e-51a2-88b7-8000-000047c146b7)
 
-## Phase 3: MCP & Connectivity
-- [ ] go run render-mcp-server/main.go
-- [ ] Test MCP postgres/redis connections
+### 2. Update .vscode/extensions.json [PENDING]
+ - Add 'ManicAgency.tenets-mcp-server' to recommendations
+ - Ensure Godot Tools, MCP, KIMI present
+
+### 3. Configure MCP for Tenets & Moonshot [PENDING]
+ - blackbox_mcp_settings.json: Add Tenets & KIMI servers
+ - mcp-config.json: Add Moonshot LLM server if applicable
+
+### 4. Disable unuseful extensions [PENDING]
+ - Remove multicoder references (none found)
+ - Keep MCP Debugger, Godot Tools
+
+### 5. Verification [PENDING]
+ - VSCode Reload
+ - `kimi mcp list`
+ - Open Godot project
+ - Check Tenets MCP output
+
+### 6. Followups [PENDING]
+ - Run `setup-local.ps1` for venv
+ - Test Godot --headless platform/simulation-game/
 

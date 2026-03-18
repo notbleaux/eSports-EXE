@@ -1,0 +1,74 @@
+{
+  "name": "sator-vscode-acp-extension",
+  "version": "0.0.1",
+  "description": "SATOR VSCode ACP Extension for Kimi integration",
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "vscode": "^1.85.0"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "acp.startKimi",
+        "title": "ACP: Start Kimi Agent"
+      },
+      {
+        "command": "acp.startBridge",
+        "title": "ACP: Start Bridge Agent"
+      },
+      {
+        "command": "acp.stop",
+        "title": "ACP: Stop Agent"
+      },
+      {
+        "command": "acp.newSession",
+        "title": "ACP: New Session"
+      },
+      {
+        "command": "acp.openChat",
+        "title": "ACP: Open Chat"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "acp",
+          "title": "ACP Agents",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": [
+      {
+        "id": "acpSessions",
+        "name": "Sessions",
+        "type": "webview"
+      }
+    ]
+  }
+}
