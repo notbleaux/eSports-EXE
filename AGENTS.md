@@ -1,42 +1,40 @@
-[Ver003.000]
+[Ver004.000]
 
 # AGENTS.md — Libre-X-eSport 4NJZ4 TENET Platform
 
 **Purpose:** This file provides essential context for AI coding agents working on the Libre-X-eSport 4NJZ4 TENET Platform project.  
 **Project:** Libre-X-eSport 4NJZ4 TENET Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)  
 **Repository:** https://github.com/notbleaux/eSports-EXE  
-**Last Updated:** 2026-03-15
+**Last Updated:** 2026-03-19
 
 ---
 
 ## 📋 Project Overview
 
-Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platform focused on tactical FPS games (Valorant with planned Counter-Strike support). The platform provides:
+Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platform focused on tactical FPS games (Valorant with planned Counter-Strike 2 support). The platform provides:
 
 - **SATOR Analytics:** Advanced player metrics (SimRating, RAR) with confidence weighting
 - **eXe Directory:** Service registry and coordination hub
 - **ROTAS Simulation:** Deterministic tactical FPS match simulation (Godot 4)
-- **4NJZ4 TENET Platform:** 4-hub web interface (SATOR, ROTAS, AREPO, OPERA) + Central Hub
+- **4NJZ4 TENET Platform:** 5-hub web interface (SATOR, ROTAS, AREPO, OPERA, TENET Central Hub)
 - **Pandascore Integration:** Official API for legal esports data access
 
 ### Key Components
 
 | Component | Location | Technology | Status |
 |-----------|----------|------------|--------|
-| **4NJZ4 TENET Platform** | `apps/website-v2/` | React 18, Vite, Tailwind | ✅ Active v2.1 |
-| **API Backend** | `packages/shared/axiom-esports-data/api/` | FastAPI, Python 3.11+ | ✅ Active v2.1 |
-| **Original Website** | `apps/website/` | HTML/CSS/JS Static | 🟡 Legacy |
+| **4NJZ4 TENET Platform** | `apps/website-v2/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.0 |
+| **API Backend** | `packages/shared/api/` | FastAPI, Python 3.11+ | ✅ Active |
+| **Data Pipeline** | `packages/shared/axiom-esports-data/` | Python, PostgreSQL, asyncpg | ✅ Active |
 | **Simulation Game** | `platform/simulation-game/` | Godot 4, GDScript, C# | 🟡 Paused |
-| **Data Pipeline** | `packages/shared/axiom-esports-data/` | Python, PostgreSQL | ✅ Active |
-| **eXe Directory** | `services/exe-directory/` | TBD | 🔵 Planned |
 | **VCT Data** | `apps/VCT Valorant eSports/` | Python, FastAPI | ✅ Active |
 
 ### Version Information
 
-- **Current Version:** 2.1.0
-- **API Version:** v1 (stable)
-- **WebSocket Protocol:** v1 (unified endpoint)
-- **Last Major Update:** Phase 4.4 (Documentation)
+- **Current Version:** 2.0.0
+- **API Version:** v1
+- **WebSocket Protocol:** v1
+- **Last Updated:** March 2026
 
 ---
 
@@ -47,16 +45,16 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 ```
 /
 ├── apps/                          # Applications
-│   ├── website/                  # Static legacy website
-│   ├── website-v2/               # 4NJZ4 TENET Platform (React + Vite)
+│   ├── website-v2/               # 4NJZ4 TENET Platform (React + Vite) - MAIN
 │   └── VCT Valorant eSports/     # VCT data project
 │
 ├── packages/                      # Shared packages
 │   └── shared/                   # Shared libraries
 │       ├── api/                  # FastAPI REST components
 │       ├── axiom-esports-data/   # Complete data pipeline
-│       ├── apps/                 # sator-web, radiantx-game
-│       └── packages/             # @sator/data-partition-lib, @sator/stats-schema
+│       └── packages/             # @sator/* libraries
+│           ├── data-partition-lib/   # Security firewall library
+│           └── stats-schema/         # Stats validation schemas
 │
 ├── platform/                      # Simulation platform
 │   └── simulation-game/          # Godot 4 project
@@ -65,23 +63,20 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 │   └── exe-directory/            # Service registry (planned)
 │
 ├── tests/                         # Test suites
-│   ├── e2e/                      # Playwright E2E (95+ tests)
-│   ├── integration/              # Python integration (35+ tests)
-│   ├── unit/godot/               # Godot unit tests (70+ tests)
-│   └── load/                     # Load testing (Locust)
+│   ├── e2e/                      # Playwright E2E tests
+│   ├── integration/              # Python integration tests
+│   ├── unit/                     # Python unit tests
+│   └── load/                     # Load testing (Locust, k6)
 │
 ├── docs/                          # Documentation
 │   ├── API_V1_DOCUMENTATION.md   # API reference
 │   ├── ARCHITECTURE_V2.md        # System architecture
-│   ├── CHANGELOG_MASTER.md       # All changes from Phases 1-4
-│   ├── MIGRATION_GUIDE.md        # Migration from v2.0
+│   ├── CHANGELOG_MASTER.md       # All changes
 │   ├── DEPLOYMENT_GUIDE.md       # Deployment instructions
-│   ├── MONITORING_GUIDE.md       # Monitoring & alerting
 │   └── TROUBLESHOOTING_GUIDE.md  # Troubleshooting
 │
 ├── infrastructure/                # Deployment configs
-│   ├── render.yaml               # Render deployment
-│   └── scripts/                  # Deployment scripts
+│   └── render.yaml               # Render deployment
 │
 ├── .job-board/                   # AI agent coordination system
 ├── .agents/skills/               # Project-specific AI skills
@@ -93,17 +88,18 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 | Layer | Technology | Version |
 |-------|------------|---------|
 | **Frontend** | React, Vite, Tailwind CSS | React 18, Vite 5 |
+| **Language** | TypeScript | 5.9+ |
 | **3D/Visualization** | Three.js, React Three Fiber, D3.js | Three 0.158 |
 | **Animation** | Framer Motion, GSAP | Framer Motion 10, GSAP 3.12 |
 | **State Management** | Zustand, TanStack Query | 4.4+, 5.90+ |
 | **Virtualization** | @tanstack/react-virtual | 3.13.22 |
 | **ML** | TensorFlow.js, ONNX Runtime | 4.22.0, 1.20.1 |
 | **Backend API** | FastAPI (Python) | 3.11+ |
-| **Database** | PostgreSQL + TimescaleDB | 15+ |
+| **Database** | PostgreSQL (Supabase) | 15+ |
 | **Cache** | Redis | 7+ |
 | **Game Engine** | Godot 4 | 4.2+ |
 | **Game Languages** | GDScript, C# | .NET 6+ |
-| **Testing** | Playwright, Vitest, GUT | Latest |
+| **Testing** | Playwright, Vitest, pytest, GUT | Latest |
 | **Package Manager** | npm (workspaces) | Node 18+ |
 | **CI/CD** | GitHub Actions | — |
 
@@ -132,9 +128,9 @@ npm run validate:schema
 
 ### Website-V2 (4NJZ4 TENET Platform)
 
-```bash
-cd apps/website-v2
+Location: `apps/website-v2/`
 
+```bash
 # Development server
 npm run dev
 
@@ -157,16 +153,25 @@ npm run test
 npx playwright test
 ```
 
-### Data Pipeline (Python)
+### API Backend (FastAPI)
+
+Location: `packages/shared/api/`
 
 ```bash
-cd packages/shared
+# Run API development server
+uvicorn main:app --reload --port 8000 --host 0.0.0.0
 
+# Or from root
+npm run dev:api
+```
+
+### Data Pipeline (Python)
+
+Location: `packages/shared/`
+
+```bash
 # Install Python dependencies
 pip install -r requirements.txt
-
-# Run API
-uvicorn axiom-esports-data.api.main:app --reload
 
 # Run tests
 pytest
@@ -175,11 +180,29 @@ pytest
 pytest --cov=packages/shared/ --cov-report=xml
 ```
 
+### Docker Development
+
+```bash
+# Start database and cache services
+docker-compose up -d db redis
+
+# Start full stack (API + Frontend)
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# Reset with data loss
+docker-compose down -v
+```
+
 ### Godot Simulation
+
+Location: `platform/simulation-game/`
 
 ```bash
 # Open in Godot Editor
-godot --editor platform/simulation-game/project.godot
+godot --editor project.godot
 
 # Run headless tests
 godot --headless --script tests/run_tests.gd
@@ -239,6 +262,21 @@ All documents MUST include version header:
 | All | trailing-whitespace | Auto-fix |
 | All | end-of-file-fixer | Auto-fix |
 
+### TypeScript Path Mapping
+
+```typescript
+// tsconfig.json paths
+{
+  "@/*": ["src/*"],
+  "@shared/*": ["src/shared/*"],
+  "@hub-1/*": ["src/hub-1-sator/*"],
+  "@hub-2/*": ["src/hub-2-rotas/*"],
+  "@hub-3/*": ["src/hub-3-arepo/*"],
+  "@hub-4/*": ["src/hub-4-opera/*"],
+  "@hub-5/*": ["src/hub-5-tenet/*"]
+}
+```
+
 ---
 
 ## 🧪 Testing Instructions
@@ -247,48 +285,36 @@ All documents MUST include version header:
 
 ```
 tests/
-├── e2e/                         # Playwright E2E tests (95+)
-│   ├── hub-navigation.spec.ts
-│   ├── search.spec.ts
-│   ├── realtime.spec.ts
-│   ├── auth.spec.ts
-│   ├── errors.spec.ts
-│   ├── mobile.spec.ts
-│   ├── accessibility.spec.ts
-│   ├── visualization.spec.ts
-│   ├── ml-prediction.spec.ts
-│   ├── export.spec.ts
-│   ├── critical-path.spec.ts
-│   └── health.spec.ts
-│
-├── integration/                 # Python integration tests (35+)
-│   ├── conftest.py
+├── e2e/                         # Playwright E2E tests
+│   ├── specmap-viewer.spec.ts
+│   ├── websocket.spec.ts
 │   ├── test_api_endpoints.py
-│   ├── test_user_flows.py
+│   └── test_user_flows.py
+│
+├── integration/                 # Python integration tests
+│   ├── conftest.py
 │   ├── test_api_firewall.py
-│   ├── test_cold_start_resilience.py
+│   ├── test_auth.py
 │   ├── test_database_connection.py
-│   ├── test_dedup_redundancy.py
 │   └── test_pipeline_e2e.py
 │
-├── unit/godot/                  # Godot unit tests (70+)
-│   ├── test_combat_resolver.gd
-│   ├── test_duel_resolver.gd
-│   ├── test_economy_simulation.gd
-│   ├── test_player_movement.gd
-│   ├── test_weapon_mechanics.gd
-│   └── test_round_management.gd
+├── unit/                        # Python unit tests
+│   └── test_health.py
 │
 └── load/                        # Load testing
+    ├── k6-load-test.js
     └── locustfile.py
 ```
 
 ### Running Tests
 
 ```bash
-# E2E tests
+# E2E tests (Playwright)
 cd apps/website-v2
 npx playwright test
+
+# Python unit tests
+pytest tests/unit/ -v
 
 # Python integration tests
 pytest tests/integration/ -v
@@ -299,9 +325,6 @@ pytest tests/e2e/ -v
 # Godot tests
 cd platform/simulation-game
 godot --headless --script tests/run_tests.gd
-
-# Firewall tests
-npm run test:firewall
 
 # Load testing
 locust -f tests/load/locustfile.py
@@ -323,60 +346,6 @@ The following checks run automatically on commit:
 
 ---
 
-## 🛡️ Error Boundary Strategy (website-v2)
-
-### Hierarchy
-
-Error boundaries are implemented in a hierarchical pattern:
-
-```
-AppErrorBoundary (Top-level)
-├── HubErrorBoundary (Hub-level)
-│   ├── DataErrorBoundary (API/Data errors)
-│   ├── MLInferenceErrorBoundary (ML errors)
-│   ├── StreamingErrorBoundary (WebSocket errors)
-│   └── PanelErrorBoundary (Component-level)
-```
-
-### Error Boundary Types
-
-| Boundary | Location | Purpose | Recovery |
-|----------|----------|---------|----------|
-| `AppErrorBoundary` | `components/error/` | Top-level, catches all | Full reload, navigate home |
-| `HubErrorBoundary` | `components/error/` | Hub-specific theming | Reset hub, switch hubs |
-| `DataErrorBoundary` | `components/error/` | API/data fetching errors | Exponential backoff retry |
-| `MLInferenceErrorBoundary` | `components/error/` | ML model/prediction errors | Retry model, cached preds |
-| `StreamingErrorBoundary` | `components/error/` | WebSocket/streaming errors | Auto-reconnect |
-| `PanelErrorBoundary` | `components/grid/` | Grid panel errors | Panel reload, close |
-
-### Hub Configuration
-
-Each hub has at least 2 levels of error boundaries:
-
-- **SATOR**: HubErrorBoundary → MLInferenceErrorBoundary → PanelErrorBoundary
-- **ROTAS**: HubErrorBoundary → MLInferenceErrorBoundary → StreamingErrorBoundary → PanelErrorBoundary  
-- **AREPO**: HubErrorBoundary → DataErrorBoundary → PanelErrorBoundary
-- **OPERA**: HubErrorBoundary → DataErrorBoundary → PanelErrorBoundary + MapVisualizationErrorBoundary
-- **TENET**: HubErrorBoundary → PanelErrorBoundary
-
-### Error Logging
-
-All boundaries use centralized logger:
-```typescript
-import { logger } from '@/utils/logger'
-
-logger.error('[Component] Error:', error)
-```
-
-### UI Consistency
-
-- Use `HubErrorFallback` for consistent theming
-- GlassCard styling with hub-specific colors
-- Retry functionality in all boundaries
-- Technical details only in development
-
----
-
 ## 🚀 Deployment
 
 ### Platforms
@@ -384,31 +353,33 @@ logger.error('[Component] Error:', error)
 | Platform | Use Case | Config File |
 |----------|----------|-------------|
 | **Vercel** | Frontend hosting | `vercel.json` |
-| **Render** | Full-stack apps | `infrastructure/render.yaml` |
-| **GitHub Pages** | Static sites | `.github/workflows/static.yml` |
+| **Render** | API backend | `infrastructure/render.yaml` |
 | **Supabase** | PostgreSQL | Dashboard config |
 | **Upstash** | Redis | Dashboard config |
 
 ### Environment Variables by Platform
 
-**Vercel:**
+**Vercel (Frontend):**
 - `VITE_API_URL` — Backend API endpoint (include `/v1`)
 - `VITE_WS_URL` — WebSocket endpoint
 
-**Render:**
+**Render (Backend):**
 - `DATABASE_URL` — PostgreSQL connection (use pooler port 6543)
 - `REDIS_URL` — Redis connection (TLS)
 - `PANDASCORE_API_KEY` — Pandascore API key
 - `APP_ENVIRONMENT` — production/development
+- `JWT_SECRET_KEY` — JWT signing key
+- `TOTP_ENCRYPTION_KEY` — 2FA encryption key
 
 ### Deployment Commands
 
 ```bash
 # Vercel (manual)
+cd apps/website-v2
 vercel --prod
 
 # Render (via blueprint)
-# Push to main triggers auto-deploy
+# Push to main triggers auto-deploy via render.yaml
 ```
 
 ---
@@ -445,23 +416,26 @@ const webSafeData = sanitizeForWeb(gameData);
 
 Sensitive configuration (NEVER commit):
 ```bash
-# .env.example
-databases:
-  DATABASE_URL=postgresql://user:pass@localhost/sator
-  REDIS_URL=redis://localhost:6379
-  
-api_keys:
-  GITHUB_TOKEN=ghp_xxxxxxxxxxxx
-  VLR_API_KEY=your_api_key_here
-  PANDASCORE_API_KEY=pc_live_xxxxxxxx
+# API Keys
+PANDASCORE_API_KEY=pc_live_xxxxxxxx
+RIOT_API_KEY=RGAPI-xxxxxxxx
+JWT_SECRET_KEY=generate_with_openssl_rand_hex_32
+TOTP_ENCRYPTION_KEY=generate_with_openssl_rand_hex_32
+
+# Database (Supabase)
+DATABASE_URL=postgresql://postgres:[password]@db.[ref].supabase.co:5432/postgres
+
+# Redis (Upstash)
+REDIS_URL=rediss://default:[password]@[host]:6379
 ```
 
 ### Security Headers (Vercel)
 
+Configured in `vercel.json`:
 - `X-Frame-Options: DENY`
 - `X-Content-Type-Options: nosniff`
 - `Referrer-Policy: strict-origin-when-cross-origin`
-- `Content-Security-Policy` (configured in vercel.json)
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
 
 ### Secrets Detection
 
@@ -524,51 +498,16 @@ Project-specific skills in `.agents/skills/`:
 | This File | `AGENTS.md` | Agent coordination |
 | API Docs | `docs/API_V1_DOCUMENTATION.md` | Complete API reference |
 | Architecture | `docs/ARCHITECTURE_V2.md` | System design |
-| Changelog | `docs/CHANGELOG_MASTER.md` | All changes from Phases 1-4 |
-| Migration | `docs/MIGRATION_GUIDE.md` | Upgrading from v2.0 |
+| Changelog | `docs/CHANGELOG_MASTER.md` | All changes |
 | Deployment | `docs/DEPLOYMENT_GUIDE.md` | Deployment instructions |
-| Monitoring | `docs/MONITORING_GUIDE.md` | Monitoring & alerting |
 | Troubleshooting | `docs/TROUBLESHOOTING_GUIDE.md` | Troubleshooting guide |
 | Contributing | `CONTRIBUTING.md` | Contribution guidelines |
-| Tech Stack | `docs/SATOR-TECH-STACK.md` | Technology assessment |
-| Guides | `docs/guides/` | User guides |
-
----
-
-## 🆕 New in v2.1 (Phase 4.4)
-
-### API Changes
-- New `/v1/` prefix for all API endpoints
-- Unified WebSocket endpoint (`/v1/ws`)
-- Full-text search API with fuzzy matching
-- Pandascore integration for legal data
-
-### New Components
-- DataErrorBoundary for API errors
-- HubErrorBoundary for hub-specific handling
-- Virtual scrolling with @tanstack/react-virtual
-- React Scheduler for priority-based updates
-
-### New Dependencies
-```json
-{
-  "@tanstack/react-virtual": "^3.13.22",
-  "scheduler": "^0.21.0",
-  "ws": "^8.14.0"
-}
-```
-
-### Testing
-- 200+ tests across E2E, integration, and unit
-- Playwright E2E test suite (95+ tests)
-- Godot GUT test framework (70+ tests)
-- Fixed CI/CD test execution
 
 ---
 
 ## ⚠️ Important Notes for Agents
 
-1. **Version All Documents:** Use `[VerMMM.mmm]` format
+1. **Version All Documents:** Use `[VerMMM.mmm]` format at the top
 2. **Conventional Commits:** Follow `type(scope): description - context` format
 3. **Data Partition:** Never expose game-only fields to web platform
 4. **No Secrets:** Never commit credentials; use environment variables
@@ -576,35 +515,28 @@ Project-specific skills in `.agents/skills/`:
 6. **Job Board:** Check `.job-board/` for task coordination
 7. **Skills Available:** Use `.agents/skills/` for domain-specific guidance
 8. **API v1:** All new API work should use `/v1/` prefix
-9. **Error Boundaries:** Use 2+ level hierarchy for all hubs
-10. **Documentation:** Update relevant docs when making changes
+9. **Pre-commit:** Install hooks with `pre-commit install`
 
 ---
 
 ## 🔗 Quick References
 
 ### VS Code Settings
+
+Configured in `.vscode/settings.json`:
 - Tab size: 2 spaces
 - Python formatter: Black
-- TypeScript: Relative imports
+- TypeScript: Path mapping enabled
 - File associations: `*.gd` → GDScript
 
 ### CI/CD Workflows
-- `ci.yml` — Python/TypeScript/Godot tests, linting
-- `deploy.yml` — GitHub Pages deployment
-- `security.yml` — Security scanning
-- `static.yml` — Static site deployment
-- `keepalive.yml` — Cold start mitigation
 
-### Database Migrations (axiom-esports-data)
-1. `001_initial_schema.sql`
-2. `002_sator_layers.sql`
-3. `003_dual_storage.sql` (Twin-table implementation)
-4. `004_extraction_log.sql`
-5. `005_staging_system.sql`
-6. `006_performance_indexes.sql`
+- `.github/workflows/ci.yml` — Python/TypeScript tests, linting, security
+- `.github/workflows/deploy.yml` — Deployment automation
+- `.github/workflows/static.yml` — Static site deployment
 
 ### API Endpoints (v1)
+
 - `/v1/players/*` — Player management
 - `/v1/matches/*` — Match data
 - `/v1/analytics/*` — Analytics and rankings
@@ -613,6 +545,14 @@ Project-specific skills in `.agents/skills/`:
 - `/health` — Health check
 - `/ready` — Readiness check
 - `/metrics` — Prometheus metrics
+
+### Ports (Development)
+
+- Web: http://localhost:5173
+- API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+- PostgreSQL: localhost:5432
+- Redis: localhost:6379
 
 ---
 

@@ -1,64 +1,137 @@
-[Ver001.000]
-
 ---
 name: kimi-tools
-description: "通过 Python 脚本调用 kimi search 和 kimi fetch，用于网页搜索与页面抓取任务，返回结构化数据与 Markdown 内容。"
-compatibility: "需要 Kimi Code 订阅(KIMI_CODE_API_KEY)、Python 3.9+，网络访问权限。"
+description: "Repository tools and utilities for Libre-X-eSport 4NJZ4 TENET Platform. USE FOR: file operations, script execution, development workflow automation."
+license: MIT
+metadata:
+  author: SATOR Team
+  version: "1.0.0"
 ---
 
-# Kimi API Tools
+# Kimi Tools for 4NJZ4 TENET Platform
 
-## 前置条件
+> **REPOSITORY UTILITIES**
+>
+> Helper tools and scripts for common development tasks.
 
-- 需要可用的 Kimi Code 订阅，并设置为环境变量：`KIMI_CODE_API_KEY`
-- 需要 Python 3.9 或更高版本，视环境采用 `python3` 或 `python` 命令
-- 需要网络可访问权限
+## Available Tools
 
-## 快速开始
-
-1. 设置 API Key：`export KIMI_CODE_API_KEY=...`
-2. 先用 `kimi_search.py` 做关键词检索。
-3. 再用 `kimi_fetch.py` 按 URL 抓取正文。
-
-## 脚本说明
-
-### `scripts/kimi_search.py`
-
-调用 `POST /search`。
+### File Operations
 
 ```bash
-python ./scripts/kimi_search.py \
-  --query "短剧创作指南" \
-  --limit 5 \
-  --timeout-seconds 30
+# Read file content
+ReadFile(path: string, line_offset?: number, n_lines?: number)
+
+# Write file content
+WriteFile(path: string, content: string, mode?: "overwrite" | "append")
+
+# Replace strings in file
+StrReplaceFile(path: string, edit: {old: string, new: string})
+
+# Search file content
+Grep(pattern: string, path?: string, type?: string)
+
+# List files
+Glob(pattern: string)
 ```
 
-参数：
-
-- `--query` -> 搜索关键词（必填）
-- `--limit` -> 返回结果数量（1-20，默认 5）
-- `--include-content` -> 是否启用页面抓取（默认 false）
-- `--timeout-seconds` -> 超时时间（默认 30 秒）
-
-### `scripts/kimi_fetch.py`
-
-调用 `POST /fetch`。
+### Shell Commands
 
 ```bash
-python ./scripts/kimi_fetch.py \
-  --url "https://example.com" \
-  --timeout-seconds 30
+# Execute shell command
+Shell(command: string, timeout?: number)
 ```
 
-参数：
+### Web Operations
 
-- `--url` -> 目标 URL（必填）
-- `--timeout-seconds` -> 超时时间（默认 30 秒）
+```bash
+# Search web
+SearchWeb(query: string, limit?: number)
 
-## 逃生通道
+# Fetch URL
+FetchURL(url: string)
+```
 
-若环境中没有 `KIMI_CODE_API_KEY`，可通过 `--api-key` 参数传入，但非常不建议在命令行中暴露敏感信息。
+## Common Workflows
 
-## Agent 使用约定
+### Find and Replace Across Files
 
-- 按需开启 `--include-content` 与 `--limit`，以控制 token 成本。
+```bash
+# Find all occurrences
+grep -r "old_pattern" --include="*.ts" --include="*.tsx" .
+
+# Replace with confirmation
+find . -name "*.ts" -o -name "*.tsx" | xargs sed -i 's/old_pattern/new_pattern/g'
+```
+
+### Run Tests
+
+```bash
+# Python tests
+cd packages/shared
+pytest
+
+# TypeScript tests
+cd apps/website-v2
+npm run test
+
+# E2E tests
+npx playwright test
+```
+
+### Type Check
+
+```bash
+# Root level
+npm run typecheck
+
+# Website only
+cd apps/website-v2
+npm run typecheck
+```
+
+## Repository Structure Commands
+
+```bash
+# Show directory tree (PowerShell)
+Get-ChildItem -Recurse -Directory | Select-Object FullName
+
+# Find large files
+Get-ChildItem -Recurse -File | Sort-Object Length -Descending | Select-Object -First 20 Name, Length
+
+# Count files by type
+Get-ChildItem -Recurse -File -Filter "*.ts" | Measure-Object
+```
+
+## Development Shortcuts
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Start only database
+docker-compose up -d db redis
+
+# Run API
+cd packages/shared/api
+uvicorn main:app --reload --port 8000
+
+# Run web dev server
+cd apps/website-v2
+npm run dev
+```
+
+## Environment Setup
+
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate (PowerShell)
+.venv\Scripts\Activate.ps1
+
+# Install Python deps
+pip install -r packages/shared/requirements.txt
+
+# Install Node deps
+npm install
+```
