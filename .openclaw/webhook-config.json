@@ -1,0 +1,56 @@
+{
+  "version": "1.0",
+  "webhook": {
+    "enabled": true,
+    "endpoint": "${OPENCLAW_WEBHOOK_URL}",
+    "local_fallback": "http://localhost:3001/webhook",
+    "events": [
+      "task.created",
+      "task.completed",
+      "task.failed",
+      "review.requested",
+      "review.completed",
+      "agent.status_changed",
+      "file.locked",
+      "file.unlocked"
+    ],
+    "retry_policy": {
+      "max_retries": 3,
+      "backoff_ms": 1000
+    }
+  },
+  "agents": {
+    "openclaw-cloud": {
+      "webhook_url": "${OPENCLAW_CLOUD_WEBHOOK_URL}",
+      "api_key": "${OPENCLAW_API_KEY}",
+      "capabilities": ["architecture", "review", "planning"],
+      "notification_rules": {
+        "on_task_created": true,
+        "on_review_requested": true,
+        "on_architecture_decision": true
+      }
+    },
+    "kimi-cli": {
+      "local_acp": "stdio",
+      "capabilities": ["implementation", "testing", "coordination"],
+      "notification_rules": {
+        "on_task_assigned": true,
+        "on_implementation_required": true
+      }
+    },
+    "kimi-vscode": {
+      "vscode_channel": "kimi-code://acp",
+      "capabilities": ["editing", "debugging", "inline_review"],
+      "notification_rules": {
+        "on_file_locked": true,
+        "on_inline_edit": true
+      }
+    }
+  },
+  "jlb_integration": {
+    "enabled": true,
+    "inbox_base": ".job-board/00_INBOX",
+    "broadcast_channel": ".agents/channels/broadcast",
+    "sync_interval_sec": 30
+  }
+}

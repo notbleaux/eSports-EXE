@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "bridge_name": "OpenClaw-Kimi-Bridge",
+  "agents": [
+    {
+      "id": "openclaw-cloud",
+      "type": "cloud",
+      "endpoint": "https://api.openclaw.ai/v1/acp",
+      "capabilities": ["code_analysis", "architecture_review", "planning"],
+      "auth": {
+        "type": "oauth2",
+        "token_endpoint": "https://auth.openclaw.ai/token"
+      }
+    },
+    {
+      "id": "kimi-cli",
+      "type": "local",
+      "endpoint": "stdio",
+      "capabilities": ["file_operations", "terminal", "code_execution"],
+      "command": "kimi acp --stdio"
+    },
+    {
+      "id": "kimi-vscode",
+      "type": "ide",
+      "endpoint": "vscode-extension",
+      "capabilities": ["editing", "debugging", "intellisense"],
+      "channel": "kimi-code://acp"
+    }
+  ],
+  "collaboration_modes": {
+    "distributed_tasking": {
+      "description": "Distribute tasks across all agents based on capabilities",
+      "enabled": true,
+      "task_routing": {
+        "planning": ["openclaw-cloud"],
+        "implementation": ["kimi-cli", "kimi-vscode"],
+        "review": ["openclaw-cloud", "kimi-vscode"]
+      }
+    },
+    "context_sharing": {
+      "description": "Share context between agents via MCP",
+      "enabled": true,
+      "sync_interval_ms": 5000,
+      "shared_contexts": ["file_tree", "git_status", "errors", "todo_list"]
+    },
+    "consensus_decisions": {
+      "description": "Require consensus for major architectural decisions",
+      "enabled": true,
+      "min_agents": 2,
+      "timeout_sec": 300
+    }
+  },
+  "mcp_integration": {
+    "shared_servers": ["github", "context7", "playwright"],
+    "agent_specific": {
+      "openclaw-cloud": ["azure-deploy", "azure-diagnostics"],
+      "kimi-cli": ["filesystem", "terminal"],
+      "kimi-vscode": ["workspace", "debug"]
+    }
+  }
+}

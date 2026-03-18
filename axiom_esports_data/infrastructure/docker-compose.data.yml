@@ -1,0 +1,63 @@
+# docker-compose.data.yml - Phase 6 Local Dev Stack
+# TimescaleDB + Redis + Celery for data pipeline
+version: '3.8'
+
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: tenet_timescale
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sator
+      POSTGRES_USER: sator
+      POSTGRES_PASSWORD: tenet2024
+      TIMESCALEDB_TELEMETRY: 'off'
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    command: postgres -c shared_preload_libraries=timescaledb
+
+  redis:
+    image: redis:7-alpine
+    container_name: tenet_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy volatile-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  celery-worker:
+    build: ../../packages/shared/data-collection
+    container_name: tenet_celery
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://sator:tenet2024@timescaledb:5432/sator
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - timescaledb
+      - redis
+    command: celery -A scheduler worker --loglevel=info --concurrency=4
+
+  celery-beat:
+    build: ../../packages/shared/data-collection  
+    container_name: tenet_beat
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://sator:tenet2024@timescaledb:5432/sator
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - timescaledb
+      - redis
+      - celery-worker
+    command: celery -A scheduler beat --loglevel=info
+
+volumes:
+  timescale_data:
+  redis_data:
+
+networks:
+  default:
+    name: tenet-network

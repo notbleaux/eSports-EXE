@@ -1,3 +1,2 @@
 api
-axiom-esports-data
 axiom_esports_data

@@ -17,6 +17,9 @@ var timeline_slider: HSlider
 var save_replay_button: Button
 var load_replay_button: Button
 
+# NJZ
+var cog: NJZCog
+
 # Match state
 var team_a_agents: Array[Agent] = []
 var team_b_agents: Array[Agent] = []
@@ -49,10 +52,7 @@ func _ready():
 	# Start a match
 	_start_new_match()
 
-func _setup_ui():
-	"""Setup HUD elements with accessibility improvements"""
-	# Minimum touch target size for accessibility
-	const MIN_TOUCH_TARGET: int = 48
+cog.position = Vector2(1150, 10)\n	cog.mouse_entered.connect(func(): cog.is_spinning = true)\n	cog.gui_input.connect(_on_cog_clicked)
 	
 	# Time label
 	time_label = Label.new()

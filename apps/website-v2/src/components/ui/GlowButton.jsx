@@ -18,6 +18,17 @@ export function GlowButton({
   disabled = false,
   className,
 }) {
+import { useReducedMotion, Ripple, useViscousSFX } from '@/utils/fluid.js';
+const reducedMotion = useReducedMotion();
+
+  const { animateViscous } = useViscousSFX();
+  const motionProps = disabled || reducedMotion ? {} : {
+    whileHover: {
+      scale: 1.05,
+      boxShadow: `0 0 30px ${glowColor}`,
+    },
+    whileTap: { scale: 0.95 }
+  };
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
@@ -52,15 +63,7 @@ export function GlowButton({
         disabled && 'opacity-50 cursor-not-allowed',
         className
       )}
-      whileHover={
-        disabled
-          ? {}
-          : {
-              scale: 1.05,
-              boxShadow: `0 0 30px ${glowColor}`,
-            }
-      }
-      whileTap={disabled ? {} : { scale: 0.95 }}
+      {...motionProps}
       onClick={onClick}
       disabled={disabled}
     >

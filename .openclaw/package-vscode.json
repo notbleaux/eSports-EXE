@@ -1,0 +1,134 @@
+{
+  "name": "vscode-acp-client",
+  "displayName": "ACP Client",
+  "description": "Agent Client Protocol (ACP) integration for VS Code:",
+  "version": "1.0.0",
+  "publisher": "openclaw",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Debuggers",
+    "Other"
+  ],
+  "keywords": [
+    "acp",
+    "agent",
+    "ai",
+    "mcp",
+    "kimi"
+  ],
+  "activationEvents": [
+    "onCommand:acp.startKimi",
+    "onCommand:acp.startBridge"
+  ],
+  "main": "./out/vscode-extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "acp.startKimi",
+        "title": "Start Kimi Agent",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.startBridge",
+        "title": "Start OpenClaw Bridge",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.stop",
+        "title": "Stop Agent",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.newSession",
+        "title": "New Session",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.openChat",
+        "title": "Open Chat",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.sendPrompt",
+        "title": "Send Prompt",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.setMode",
+        "title": "Set Mode",
+        "category": "ACP"
+      },
+      {
+        "command": "acp.cancel",
+        "title": "Cancel",
+        "category": "ACP"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "acpSessions",
+          "name": "ACP Sessions",
+          "when": "acp.connected"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "acp.startKimi",
+          "when": "!acp.connected"
+        },
+        {
+          "command": "acp.startBridge",
+          "when": "!acp.connected"
+        },
+        {
+          "command": "acp.stop",
+          "when": "acp.connected"
+        },
+        {
+          "command": "acp.newSession",
+          "when": "acp.connected"
+        },
+        {
+          "command": "acp.sendPrompt",
+          "when": "acp.connected"
+        },
+        {
+          "command": "acp.setMode",
+          "when": "acp.connected"
+        },
+        {
+          "command": "acp.cancel",
+          "when": "acp.connected"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "acp.openChat",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "acp.connected"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.x"
+  },
+  "dependencies": {
+    "@agentclientprotocol/sdk": "^1.0.0"
+  }
+}

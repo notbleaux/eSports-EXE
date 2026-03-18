@@ -1,0 +1,129 @@
+# OpenClaw Agent Manifest for eSports-EXE Project
+# This file defines how multiple AI agents collaborate on this codebase
+
+project:
+  name: "eSports-EXE"
+  type: "esports_analytics_platform"
+  repository: "https://github.com/notbleaux/eSports-EXE"
+  
+agents:
+  - name: "OpenClaw-Cloud"
+    role: "architect"
+    responsibilities:
+      - High-level architecture decisions
+      - Code review and quality gates
+      - Security auditing
+      - Performance optimization recommendations
+    triggers:
+      - "@openclaw review"
+      - "@cloud architect"
+      - PR creation
+    
+  - name: "Kimi-CLI"
+    role: "implementer"
+    responsibilities:
+      - File operations and code generation
+      - Terminal command execution
+      - Testing and validation
+      - Git operations
+    triggers:
+      - "@kimi implement"
+      - "@cli fix"
+      - Terminal commands
+    
+  - name: "Kimi-VSCode"
+    role: "editor"
+    responsibilities:
+      - Real-time code editing
+      - Debugging assistance
+      - IntelliSense and navigation
+      - Inline suggestions
+    triggers:
+      - Auto-trigger on file open
+      - "@editor help"
+      - Debug sessions
+
+collaboration:
+  # How agents share information
+  shared_state:
+    location: ".openclaw/shared-state.json"
+    auto_sync: true
+    
+  # Task delegation rules
+  delegation:
+    planning:
+      primary: "OpenClaw-Cloud"
+      fallback: "Kimi-VSCode"
+    
+    implementation:
+      primary: "Kimi-CLI"
+      support: ["Kimi-VSCode"]
+    
+    review:
+      primary: "OpenClaw-Cloud"
+      secondary: "Kimi-VSCode"
+  
+  # Communication protocols
+  protocols:
+    acp:
+      enabled: true
+      transport: "stdio"
+      
+    mcp:
+      enabled: true
+      servers:
+        - github
+        - context7
+        - playwright
+
+workflows:
+  feature_development:
+    steps:
+      1: 
+        agent: "OpenClaw-Cloud"
+        action: "Create architecture plan"
+        output: ".openclaw/plans/{feature}.md"
+      2:
+        agent: "Kimi-CLI"
+        action: "Implement based on plan"
+        input: ".openclaw/plans/{feature}.md"
+      3:
+        agent: "Kimi-VSCode"
+        action: "Review and refine"
+        inline: true
+      4:
+        agent: "OpenClaw-Cloud"
+        action: "Final review and approval"
+        gate: true
+  
+  bug_fix:
+    steps:
+      1:
+        agent: "Kimi-CLI"
+        action: "Diagnose and reproduce"
+      2:
+        agent: "Kimi-VSCode"
+        action: "Implement fix"
+        inline: true
+      3:
+        agent: "OpenClaw-Cloud"
+        action: "Verify fix and edge cases"
+        gate: true
+
+# Project-specific context
+context:
+  tech_stack:
+    - React 18 + Vite + Tailwind
+    - FastAPI + Python 3.11+
+    - PostgreSQL + TimescaleDB
+    - Godot 4
+    
+  conventions:
+    - "Use conventional commits: type(scope): message"
+    - "Version documents: [VerMMM.mmm]"
+    - "Data partition firewall between game/web"
+    
+  important_files:
+    - "AGENTS.md"
+    - "docs/API_V1_DOCUMENTATION.md"
+    - "docs/ARCHITECTURE_V2.md"
