@@ -1,0 +1,131 @@
+{
+  "version": "1.0",
+  "eventTypes": [
+    {
+      "id": "kill",
+      "label": "Kill",
+      "category": "combat",
+      "color": "#FF5C5C",
+      "bgColor": "rgba(255, 92, 92, 0.15)",
+      "icon": "crosshair",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Player eliminated an opponent"
+    },
+    {
+      "id": "ability",
+      "label": "Ability Used",
+      "category": "utility",
+      "color": "#00C8FF",
+      "bgColor": "rgba(0, 200, 255, 0.15)",
+      "icon": "zap",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Agent ability was activated"
+    },
+    {
+      "id": "plant",
+      "label": "Spike Planted",
+      "category": "objective",
+      "color": "#FFB86B",
+      "bgColor": "rgba(255, 184, 107, 0.15)",
+      "icon": "target",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Spike was planted at a site"
+    },
+    {
+      "id": "defuse",
+      "label": "Spike Defused",
+      "category": "objective",
+      "color": "#00C48C",
+      "bgColor": "rgba(0, 196, 140, 0.15)",
+      "icon": "shield",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Spike was defused"
+    },
+    {
+      "id": "round_start",
+      "label": "Round Start",
+      "category": "round",
+      "color": "#6B6F76",
+      "bgColor": "rgba(107, 111, 118, 0.15)",
+      "icon": "play",
+      "iconSvg": "<svg>...</svg>",
+      "description": "New round began"
+    },
+    {
+      "id": "round_end",
+      "label": "Round End",
+      "category": "round",
+      "color": "#6B6F76",
+      "bgColor": "rgba(107, 111, 118, 0.15)",
+      "icon": "flag",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Round concluded"
+    },
+    {
+      "id": "first_blood",
+      "label": "First Blood",
+      "category": "combat",
+      "color": "#FF8A8A",
+      "bgColor": "rgba(255, 138, 138, 0.15)",
+      "icon": "droplet",
+      "iconSvg": "<svg>...</svg>",
+      "description": "First kill of the round"
+    },
+    {
+      "id": "clutch",
+      "label": "Clutch",
+      "category": "combat",
+      "color": "#FFD700",
+      "bgColor": "rgba(255, 215, 0, 0.15)",
+      "icon": "star",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Player won a 1vX situation"
+    },
+    {
+      "id": "ace",
+      "label": "Ace",
+      "category": "combat",
+      "color": "#FF5C5C",
+      "bgColor": "rgba(255, 92, 92, 0.25)",
+      "icon": "award",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Player eliminated entire enemy team"
+    },
+    {
+      "id": "trade",
+      "label": "Trade",
+      "category": "combat",
+      "color": "#8A6CFF",
+      "bgColor": "rgba(138, 108, 255, 0.15)",
+      "icon": "repeat",
+      "iconSvg": "<svg>...</svg>",
+      "description": "Quick return kill after teammate death"
+    }
+  ],
+  "severities": [
+    {
+      "level": "critical",
+      "color": "#FF5C5C",
+      "priority": 1,
+      "description": "Game-changing moments (ace, clutch win)"
+    },
+    {
+      "level": "high",
+      "color": "#FFB86B",
+      "priority": 2,
+      "description": "Important objective events (plant, defuse)"
+    },
+    {
+      "level": "medium",
+      "color": "#00C8FF",
+      "priority": 3,
+      "description": "Combat events (kill, trade)"
+    },
+    {
+      "level": "low",
+      "color": "#6B6F76",
+      "priority": 4,
+      "description": "Routine events (ability use, round markers)"
+    }
+  ]
+}

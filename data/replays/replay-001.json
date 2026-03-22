@@ -1,0 +1,181 @@
+{
+  "id": "replay-001",
+  "matchId": "match-2026-03-22-01",
+  "version": "1.0",
+  "metadata": {
+    "duration": 2456,
+    "rounds": 24,
+    "date": "2026-03-22T08:30:00Z",
+    "map": "Ascent",
+    "tournament": "VCT Masters Tokyo",
+    "patch": "8.05"
+  },
+  "teams": {
+    "red": {
+      "name": "Red Ravens",
+      "tag": "RAV",
+      "score": 13,
+      "players": [
+        { "id": "rav-tenz", "name": "TenZ", "agent": "Jett", "kills": 24, "deaths": 14, "assists": 3 },
+        { "id": "rav-suygetsu", "name": "SuYgetsu", "agent": "Cypher", "kills": 18, "deaths": 16, "assists": 5 },
+        { "id": "rav-shao", "name": "Shao", "agent": "Omen", "kills": 16, "deaths": 15, "assists": 8 },
+        { "id": "rav-zyppan", "name": "Zyppan", "agent": "Raze", "kills": 22, "deaths": 17, "assists": 4 },
+        { "id": "rav-sacy", "name": "Sacy", "agent": "Sova", "kills": 15, "deaths": 13, "assists": 12 }
+      ]
+    },
+    "blue": {
+      "name": "Blue Bastion",
+      "tag": "BST",
+      "score": 11,
+      "players": [
+        { "id": "bst-aspas", "name": "aspas", "agent": "Reyna", "kills": 26, "deaths": 18, "assists": 2 },
+        { "id": "bst-less", "name": "Less", "agent": "Killjoy", "kills": 14, "deaths": 16, "assists": 4 },
+        { "id": "bst-saadhak", "name": "Saadhak", "agent": "Brimstone", "kills": 12, "deaths": 19, "assists": 9 },
+        { "id": "bst-cauanzin", "name": "Cauanzin", "agent": "Phoenix", "kills": 19, "deaths": 20, "assists": 6 },
+        { "id": "bst-tuyz", "name": "tuyz", "agent": "Fade", "kills": 17, "deaths": 17, "assists": 7 }
+      ]
+    }
+  },
+  "rounds": [
+    { "round": 1, "winner": "blue", "winType": "elimination", "duration": 85 },
+    { "round": 2, "winner": "red", "winType": "elimination", "duration": 92 },
+    { "round": 3, "winner": "blue", "winType": "spike", "duration": 105 },
+    { "round": 4, "winner": "red", "winType": "elimination", "duration": 78 },
+    { "round": 5, "winner": "red", "winType": "elimination", "duration": 88 },
+    { "round": 6, "winner": "blue", "winType": "spike", "duration": 112 },
+    { "round": 7, "winner": "red", "winType": "elimination", "duration": 95 },
+    { "round": 8, "winner": "blue", "winType": "elimination", "duration": 102 },
+    { "round": 9, "winner": "red", "winType": "spike", "duration": 98 },
+    { "round": 10, "winner": "red", "winType": "elimination", "duration": 87 },
+    { "round": 11, "winner": "blue", "winType": "elimination", "duration": 91 },
+    { "round": 12, "winner": "red", "winType": "elimination", "duration": 84 }
+  ],
+  "keyframes": [
+    { "timestamp": 0, "round": 1, "type": "round_start", "data": { "team": "red", "score": { "red": 0, "blue": 0 } } },
+    { "timestamp": 85, "round": 1, "type": "round_end", "data": { "winner": "blue", "winType": "elimination" } },
+    { "timestamp": 177, "round": 2, "type": "round_start", "data": { "team": "blue", "score": { "red": 0, "blue": 1 } } },
+    { "timestamp": 269, "round": 2, "type": "round_end", "data": { "winner": "red", "winType": "elimination" } },
+    { "timestamp": 374, "round": 3, "type": "round_start", "data": { "team": "red", "score": { "red": 1, "blue": 1 } } },
+    { "timestamp": 479, "round": 3, "type": "round_end", "data": { "winner": "blue", "winType": "spike" } }
+  ],
+  "events": [
+    {
+      "timestamp": 23,
+      "round": 1,
+      "type": "kill",
+      "player": "aspas",
+      "target": "TenZ",
+      "weapon": "Vandal",
+      "headshot": true,
+      "position": { "x": 0.65, "y": 0.32 }
+    },
+    {
+      "timestamp": 41,
+      "round": 1,
+      "type": "ability",
+      "player": "Sacy",
+      "ability": "Recon Bolt",
+      "position": { "x": 0.72, "y": 0.45 }
+    },
+    {
+      "timestamp": 58,
+      "round": 1,
+      "type": "kill",
+      "player": "Less",
+      "target": "Zyppan",
+      "weapon": "Phantom",
+      "headshot": false,
+      "position": { "x": 0.58, "y": 0.28 }
+    },
+    {
+      "timestamp": 76,
+      "round": 1,
+      "type": "plant",
+      "player": "aspas",
+      "site": "A",
+      "position": { "x": 0.74, "y": 0.25 }
+    },
+    {
+      "timestamp": 82,
+      "round": 1,
+      "type": "kill",
+      "player": "aspas",
+      "target": "Shao",
+      "weapon": "Vandal",
+      "headshot": false,
+      "position": { "x": 0.71, "y": 0.30 }
+    },
+    {
+      "timestamp": 124,
+      "round": 2,
+      "type": "kill",
+      "player": "TenZ",
+      "target": "Less",
+      "weapon": "Operator",
+      "headshot": true,
+      "position": { "x": 0.45, "y": 0.60 }
+    },
+    {
+      "timestamp": 156,
+      "round": 2,
+      "type": "kill",
+      "player": "Zyppan",
+      "target": "Cauanzin",
+      "weapon": "Phantom",
+      "headshot": false,
+      "position": { "x": 0.52, "y": 0.55 }
+    },
+    {
+      "timestamp": 201,
+      "round": 2,
+      "type": "defuse",
+      "player": "Saadhak",
+      "site": "B",
+      "position": { "x": 0.28, "y": 0.70 },
+      "interrupted": true
+    },
+    {
+      "timestamp": 245,
+      "round": 3,
+      "type": "kill",
+      "player": "tuyz",
+      "target": "Sacy",
+      "weapon": "Spectre",
+      "headshot": false,
+      "position": { "x": 0.38, "y": 0.42 }
+    },
+    {
+      "timestamp": 289,
+      "round": 3,
+      "type": "ability",
+      "player": "Shao",
+      "ability": "Paranoia",
+      "position": { "x": 0.48, "y": 0.48 }
+    },
+    {
+      "timestamp": 312,
+      "round": 3,
+      "type": "plant",
+      "player": "Saadhak",
+      "site": "B",
+      "position": { "x": 0.28, "y": 0.70 }
+    },
+    {
+      "timestamp": 378,
+      "round": 3,
+      "type": "round_end",
+      "winner": "blue",
+      "winType": "spike"
+    }
+  ],
+  "economy": {
+    "red": [1900, 2900, 3400, 4100, 4800, 3200, 3800, 4400, 5000, 5600, 4200, 4800],
+    "blue": [1900, 2900, 3400, 4100, 3800, 4400, 3200, 3800, 4400, 5000, 5600, 4200]
+  },
+  "stats": {
+    "firstBloods": { "red": 14, "blue": 10 },
+    "clutches": { "red": 3, "blue": 2 },
+    "aceRounds": [],
+    "avgRoundDuration": 102
+  }
+}

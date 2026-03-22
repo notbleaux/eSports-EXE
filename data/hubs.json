@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "hubs": [
+    {
+      "id": "analytics",
+      "name": "Analytics Hub",
+      "shortName": "Analytics",
+      "tagline": "Deep insights into match performance",
+      "description": "Comprehensive match statistics, player performance metrics, and team analytics. Explore win rates, economy trends, and clutch statistics.",
+      "accent": "#00C8FF",
+      "accentName": "Electric Cyan",
+      "icon": "bar-chart-2",
+      "defaultTab": "overview",
+      "tabs": [
+        {
+          "id": "overview",
+          "label": "Overview",
+          "icon": "layout-dashboard",
+          "description": "High-level match summary and key statistics"
+        },
+        {
+          "id": "players",
+          "label": "Players",
+          "icon": "users",
+          "description": "Individual player performance and comparisons"
+        },
+        {
+          "id": "rounds",
+          "label": "Rounds",
+          "icon": "rotate-ccw",
+          "description": "Round-by-round breakdown and analysis"
+        },
+        {
+          "id": "economy",
+          "label": "Economy",
+          "icon": "wallet",
+          "description": "Team economy trends and buy patterns"
+        }
+      ],
+      "features": [
+        "Real-time match statistics",
+        "Player performance comparisons",
+        "Round-by-round analysis",
+        "Economy tracking",
+        "Clutch statistics"
+      ],
+      "url": "/hubs/analytics"
+    },
+    {
+      "id": "events",
+      "name": "Events Hub",
+      "shortName": "Events",
+      "tagline": "Live tournaments and upcoming matches",
+      "description": "Track live tournaments, view upcoming match schedules, and browse historical results. Filter by game, region, and tournament tier.",
+      "accent": "#FFB86B",
+      "accentName": "Warm Orange",
+      "icon": "calendar",
+      "defaultTab": "live",
+      "tabs": [
+        {
+          "id": "live",
+          "label": "Live Now",
+          "icon": "radio",
+          "description": "Matches currently in progress"
+        },
+        {
+          "id": "upcoming",
+          "label": "Upcoming",
+          "icon": "clock",
+          "description": "Scheduled matches and tournaments"
+        },
+        {
+          "id": "results",
+          "label": "Results",
+          "icon": "trophy",
+          "description": "Completed matches and tournament outcomes"
+        },
+        {
+          "id": "schedule",
+          "label": "Schedule",
+          "icon": "calendar-days",
+          "description": "Full tournament calendar and brackets"
+        }
+      ],
+      "features": [
+        "Live match tracking",
+        "Tournament brackets",
+        "Match schedules",
+        "Result history",
+        "VOD links"
+      ],
+      "url": "/hubs/events"
+    },
+    {
+      "id": "replays",
+      "name": "Replays Hub",
+      "shortName": "Replays",
+      "tagline": "Match replays and VOD review",
+      "description": "Watch match replays with interactive timeline, event markers, and contextual statistics. Bookmark key moments and share with your team.",
+      "accent": "#8A6CFF",
+      "accentName": "Purple",
+      "icon": "play-circle",
+      "defaultTab": "library",
+      "tabs": [
+        {
+          "id": "library",
+          "label": "Library",
+          "icon": "film",
+          "description": "Browse available match replays"
+        },
+        {
+          "id": "bookmarks",
+          "label": "Bookmarks",
+          "icon": "bookmark",
+          "description": "Your saved moments and clips"
+        },
+        {
+          "id": "shared",
+          "label": "Shared",
+          "icon": "share-2",
+          "description": "Replays shared with you"
+        }
+      ],
+      "features": [
+        "Interactive timeline",
+        "Event markers",
+        "Slow-motion replay",
+        "Bookmarking",
+        "Sharing"
+      ],
+      "url": "/hubs/replays"
+    }
+  ],
+  "meta": {
+    "totalHubs": 3,
+    "version": "1.0",
+    "lastUpdated": "2026-03-22T10:00:00Z"
+  }
+}

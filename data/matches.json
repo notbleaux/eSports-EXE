@@ -1,0 +1,146 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-03-22T10:00:00Z",
+  "matches": [
+    {
+      "id": "match-2026-03-22-01",
+      "teams": {
+        "red": {
+          "name": "Red Ravens",
+          "tag": "RAV",
+          "logo": "/assets/teams/ravens.svg"
+        },
+        "blue": {
+          "name": "Blue Bastion",
+          "tag": "BST",
+          "logo": "/assets/teams/bastion.svg"
+        }
+      },
+      "score": {
+        "red": 13,
+        "blue": 11
+      },
+      "date": "2026-03-22T08:30:00Z",
+      "duration": 2456,
+      "replayId": "replay-001",
+      "status": "completed",
+      "map": "Ascent",
+      "tournament": "VCT Masters Tokyo",
+      "stage": "Quarterfinals",
+      "vodUrl": "https://youtube.com/watch?v=example1"
+    },
+    {
+      "id": "match-2026-03-22-02",
+      "teams": {
+        "red": {
+          "name": "Sentinels",
+          "tag": "SEN",
+          "logo": "/assets/teams/sentinels.svg"
+        },
+        "blue": {
+          "name": "Cloud9",
+          "tag": "C9",
+          "logo": "/assets/teams/cloud9.svg"
+        }
+      },
+      "score": {
+        "red": 2,
+        "blue": 1
+      },
+      "date": "2026-03-22T14:00:00Z",
+      "duration": null,
+      "replayId": null,
+      "status": "live",
+      "map": "Bind",
+      "tournament": "VCT Masters Tokyo",
+      "stage": "Semifinals",
+      "vodUrl": "https://twitch.tv/valorant"
+    },
+    {
+      "id": "match-2026-03-23-01",
+      "teams": {
+        "red": {
+          "name": "Fnatic",
+          "tag": "FNC",
+          "logo": "/assets/teams/fnatic.svg"
+        },
+        "blue": {
+          "name": "Team Liquid",
+          "tag": "TL",
+          "logo": "/assets/teams/liquid.svg"
+        }
+      },
+      "score": null,
+      "date": "2026-03-23T16:00:00Z",
+      "duration": null,
+      "replayId": null,
+      "status": "upcoming",
+      "map": "Haven",
+      "tournament": "VCT Masters Tokyo",
+      "stage": "Semifinals",
+      "vodUrl": null
+    },
+    {
+      "id": "match-2026-03-20-01",
+      "teams": {
+        "red": {
+          "name": "DRX",
+          "tag": "DRX",
+          "logo": "/assets/teams/drx.svg"
+        },
+        "blue": {
+          "name": "Paper Rex",
+          "tag": "PRX",
+          "logo": "/assets/teams/prx.svg"
+        }
+      },
+      "score": {
+        "red": 8,
+        "blue": 13
+      },
+      "date": "2026-03-20T12:00:00Z",
+      "duration": 3124,
+      "replayId": "replay-002",
+      "status": "completed",
+      "map": "Icebox",
+      "tournament": "VCT Masters Tokyo",
+      "stage": "Group Stage",
+      "vodUrl": "https://youtube.com/watch?v=example2"
+    },
+    {
+      "id": "match-2026-03-19-01",
+      "teams": {
+        "red": {
+          "name": "EDward Gaming",
+          "tag": "EDG",
+          "logo": "/assets/teams/edg.svg"
+        },
+        "blue": {
+          "name": "Gen.G",
+          "tag": "GEN",
+          "logo": "/assets/teams/geng.svg"
+        }
+      },
+      "score": {
+        "red": 13,
+        "blue": 10
+      },
+      "date": "2026-03-19T09:00:00Z",
+      "duration": 2876,
+      "replayId": "replay-003",
+      "status": "completed",
+      "map": "Lotus",
+      "tournament": "VCT Masters Tokyo",
+      "stage": "Group Stage",
+      "vodUrl": "https://youtube.com/watch?v=example3"
+    }
+  ],
+  "meta": {
+    "total": 5,
+    "filters": {
+      "status": ["completed", "live", "upcoming"],
+      "tournaments": ["VCT Masters Tokyo"],
+      "maps": ["Ascent", "Bind", "Haven", "Icebox", "Lotus"]
+    }
+  }
+}
