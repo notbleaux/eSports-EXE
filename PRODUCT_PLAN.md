@@ -432,11 +432,11 @@ pages/
 
 | Document | Purpose |
 |----------|---------|
-| **MVP_v2.md** | One-page MVP specification |
-| **STYLE_BRIEF_v2.md** | Visual style brief with tokens |
+| **MVP.md** | One-page MVP specification |
+| **STYLE_BRIEF.md** | Visual style brief with tokens |
 | **HUB_BLUEPRINTS.md** | Annotated wireframes for all hubs |
-| **CRIT_TEMPLATE_v2.md** | Review session template |
-| **INDEX.md** | Complete deliverables index |
+| **SPRINT_BACKLOG.md** | Detailed sprint tickets with acceptance criteria |
+| **DELIVERABLES_INDEX.md** | Complete deliverables index |
 
 ---
 
