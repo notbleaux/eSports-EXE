@@ -276,7 +276,7 @@ export function usePanelErrorBoundary(
     panelTitle,
     hub,
     onClose,
-    onError: (error: Error, errorInfo: ErrorInfo, panelId: string): void => {
+    onError: (error: Error, _errorInfo: ErrorInfo, panelId: string): void => {
       // Could send to analytics service
       console.error(`Panel ${panelId} error:`, error);
     }

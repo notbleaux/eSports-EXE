@@ -176,3 +176,95 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 ---
 
 *All deliverables reviewed and committed. Ready for implementation.*
+
+
+---
+
+## 📋 UNIFIED MASTER PLAN — March 23, 2026
+
+**New Addition:** Comprehensive development coordination document synthesizing MVP, Style Briefs, CRIT templates, and three parallel development pipelines.
+
+### Master Plan Document
+
+| Document | Purpose | Location |
+|----------|---------|----------|
+| **Unified Master Plan** | Central coordination, 3 pipelines, 98 agents, 536 hours | `docs/UNIFIED_MASTER_PLAN.md` |
+
+### Three Development Pipelines
+
+| Pipeline | Master Plan | Agents | Hours | Duration | Status |
+|----------|-------------|--------|-------|----------|--------|
+| **Heroes & Mascots** | `docs/HEROES_MASCOTS_MASTER_PLAN.md` | 32 | 168h | 4 weeks | Wave 1.1 Ready |
+| **Help & Accessibility** | `docs/HELP_ACCESSIBILITY_INTEGRATION_MASTER_PLAN.md` | 30 | 144h | 3.5 weeks | Wave 1.1 Ready |
+| **SpecMapViewer V2** | `docs/SPECMAPVIEWER_V2_EXPANSION_MASTER_PLAN.md` | 36 | 224h | 5.5 weeks | Wave 1.1 Ready |
+| **TOTAL** | — | **98** | **536h** | **13 weeks** | **Implementation Ready** |
+
+### Job Listing Board (JLB)
+
+**Coordination Center:** `.job-board/README.md`
+
+**Tracking Documents:**
+- `.job-board/FOREMAN_HEROES_MASCOTS_TRACKING.md`
+- `.job-board/FOREMAN_HELP_ACCESSIBILITY_TRACKING.md`
+- `.job-board/FOREMAN_SPECMAPVIEWER_V2_TRACKING.md`
+
+**Active Task Files (Wave 1.1):**
+- `WAVE_1_1_AGENT_1A_SOL_LUN.md`
+- `WAVE_1_1_AGENT_1B_BIN_FAT.md`
+- `WAVE_1_1_AGENT_1C_UNI_VILLAINS.md`
+- `HELP_WAVE_1_1_AGENT_1A_CONTENT_SCHEMA.md`
+- `HELP_WAVE_1_1_AGENT_1B_CONTEXT_ENGINE.md`
+- `HELP_WAVE_1_1_AGENT_1C_KNOWLEDGE_GRAPH.md`
+- `SPEC_WAVE_1_1_AGENT_1A_LENS_FRAMEWORK.md`
+- `SPEC_WAVE_1_1_AGENT_1B_ANALYTICAL_LENSES.md`
+- `SPEC_WAVE_1_1_AGENT_1C_TACTICAL_LENSES.md`
+
+### Pipeline Deliverables
+
+**Pipeline 1: Heroes & Mascots**
+- 5 Heroes (Sol, Lun, Bin, Fat, Uni)
+- 4 Mascots (CheCat, CheBun, NyxiaCat, LunariaBunny)
+- 3 Villains (ADORE, HYBER, Vexor)
+- 13 Seasonal Styling Suites
+- Mascot Editor with 13-tier economy
+
+**Pipeline 2: Help & Accessibility**
+- Unified Help System (single content source)
+- WCAG 2.2 AA compliance
+- Game-Web Integration (bidirectional sync)
+- Knowledge Graph with search/recommendations
+
+**Pipeline 3: SpecMapViewer V2**
+- 20+ Lens Ecosystem (tactical, analytical, broadcast, creative)
+- Real-Time Data Pipeline (WebSocket, 20 TPS)
+- ML Prediction Engine (TensorFlow.js)
+- Professional Broadcast Tools
+- Multi-User Collaboration (10+ users)
+- Mobile Companion App
+
+### Unified Quality Gates
+
+| Gate | Criterion | Pipeline |
+|------|-----------|----------|
+| G1 | Design System compliance | All |
+| G2 | Heroes & Mascots complete | 1 |
+| G3 | Unified help functional | 2 |
+| G4 | WCAG 2.2 AA compliance | 2 |
+| G5 | 20+ lenses at 60fps | 3 |
+| G6 | Real-time <100ms | 3 |
+| G7 | ML 70%+ accuracy | 3 |
+| G8 | Cross-pipeline integration | All |
+| G9 | Lighthouse >90 | All |
+| G10 | 80% test coverage | All |
+
+### Updated Quick Links
+
+- **Unified Master Plan**: `docs/UNIFIED_MASTER_PLAN.md` ⭐ NEW
+- **Job Board**: `.job-board/README.md` ⭐ NEW
+- **Pipeline 1**: `docs/HEROES_MASCOTS_MASTER_PLAN.md`
+- **Pipeline 2**: `docs/HELP_ACCESSIBILITY_INTEGRATION_MASTER_PLAN.md`
+- **Pipeline 3**: `docs/SPECMAPVIEWER_V2_EXPANSION_MASTER_PLAN.md`
+
+---
+
+*Unified Master Plan added March 23, 2026. All three pipelines ready for agent deployment.*

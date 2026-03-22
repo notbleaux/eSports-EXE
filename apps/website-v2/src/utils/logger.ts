@@ -1,9 +1,7 @@
-/** [Ver002.000] */
+/** [Ver002.001] */
 /**
  * logger.ts - Structured logging utility
  * Compatible with browser console and server-side logging
- *
- * [Ver001.000]
  */
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';

@@ -6,7 +6,6 @@
  */
 
 import { api } from './client'
-import type { ApiResponse } from './types'
 
 // ============================================================================
 // TYPES
@@ -279,7 +278,7 @@ export async function deleteSavedQuery(queryId: string): Promise<void> {
  * Execute a saved query
  */
 export async function executeSavedQuery(queryId: string): Promise<CrossHubQueryResult> {
-  const response = await api.post<CrossHubQueryResult>(`/v1/cross-reference/saved-queries/${queryId}/execute`)
+  const response = await api.post<CrossHubQueryResult>(`/v1/cross-reference/saved-queries/${queryId}/execute`, {})
   return response.data
 }
 
@@ -295,7 +294,11 @@ export async function getDataSourcesStatus(): Promise<{
   opera: { available: boolean; last_sync: string }
   rotas: { available: boolean; last_sync: string }
 }> {
-  const response = await api.get('/v1/cross-reference/data-sources')
+  const response = await api.get<{
+    sator: { available: boolean; last_sync: string }
+    opera: { available: boolean; last_sync: string }
+    rotas: { available: boolean; last_sync: string }
+  }>('/v1/cross-reference/data-sources')
   return response.data
 }
 
@@ -318,7 +321,15 @@ export async function getAvailableTournaments(
   if (circuit) params.append('circuit', circuit)
   if (season) params.append('season', season)
   
-  const response = await api.get(`/v1/cross-reference/tournaments?${params.toString()}`)
+  const response = await api.get<{ tournaments: Array<{
+    id: string
+    name: string
+    circuit: string
+    season: string
+    start_date: string
+    end_date: string
+    status: string
+  }> }>(`/v1/cross-reference/tournaments?${params.toString()}`)
   return response.data.tournaments
 }
 
@@ -331,7 +342,12 @@ export async function getAvailablePatches(): Promise<Array<{
   game_version: string
   change_summary: string
 }>> {
-  const response = await api.get('/v1/cross-reference/patches')
+  const response = await api.get<{ patches: Array<{
+    version: string
+    release_date: string
+    game_version: string
+    change_summary: string
+  }> }>('/v1/cross-reference/patches')
   return response.data.patches
 }
 

@@ -8,13 +8,16 @@
  * Personal API keys have rate limits: 20 req/s, 100 req/2min
  */
 
-import { logger } from '@/utils/logger';
+import { logger } from '../utils/logger'
 
 const apiLogger = logger.child('RiotAPI');
 
+// Environment access helper for Vite env variables
+const env = (import.meta as unknown as { env: Record<string, string> }).env
+
 // Environment variable for Riot API key (should be server-side in production)
-const RIOT_API_KEY = (import.meta as unknown as { env: Record<string, string> }).env.VITE_RIOT_API_KEY || '';
-const RIOT_API_URL = (import.meta as unknown as { env: Record<string, string> }).env.VITE_RIOT_API_URL || 'http://localhost:8000/api/riot'; // Proxy through backend
+const RIOT_API_KEY = env.VITE_RIOT_API_KEY || '';
+const RIOT_API_URL = env.VITE_RIOT_API_URL || 'http://localhost:8000/api/riot'; // Proxy through backend
 
 // Cache configuration
 const CACHE_TTL = {
@@ -364,7 +367,7 @@ const cache = new SimpleCache();
 
 class RateLimiter {
   private requests: number[] = [];
-  private readonly lock = new Map<string, Promise<void>>();
+
 
   async throttle(): Promise<void> {
     const now = Date.now();

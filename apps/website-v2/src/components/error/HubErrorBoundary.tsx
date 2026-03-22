@@ -6,8 +6,8 @@
  */
 
 import React, { Component, type ReactNode } from 'react'
-import { AlertTriangle, RefreshCw, Home, ArrowLeft, Layers } from 'lucide-react'
-import { logger } from '@/utils/logger'
+import { RefreshCw, Layers } from 'lucide-react'
+import { logger } from '../../utils/logger'
 import { HubErrorFallback } from './HubErrorFallback'
 
 interface Props {

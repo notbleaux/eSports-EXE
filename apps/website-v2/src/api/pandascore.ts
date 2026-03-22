@@ -5,7 +5,7 @@
  * [Ver001.000] - Initial implementation for SATOR hub
  */
 
-import { logger } from '@/utils/logger';
+import { logger } from '../utils/logger'
 
 const PANDASCORE_API_URL = 'https://api.pandascore.co';
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -14,7 +14,7 @@ const RATE_LIMIT_DELAY = 1000; // 1 second between calls (1000 calls/day limit)
 const apiLogger = logger.child('Pandascore');
 
 // Environment variable for Pandascore token
-const PANDASCORE_TOKEN = (import.meta as unknown as { env: Record<string, string> }).env.VITE_PANDASCORE_TOKEN || '';
+const PANDASCORE_TOKEN = import.meta.env.VITE_PANDASCORE_TOKEN || '';
 
 // ============================================================================
 // Type Definitions

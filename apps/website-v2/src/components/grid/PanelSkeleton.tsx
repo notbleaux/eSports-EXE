@@ -2,9 +2,10 @@
  * PanelSkeleton - Loading placeholder for grid panels
  * Provides visual feedback while panel content loads
  * 
- * [Ver002.000] - Added variant support for worker-init, grid-loading
+ * [Ver003.000] - Converted to TypeScript
  */
 import { colors } from '@/theme/colors';
+import type { ReactNode } from 'react';
 
 const PORCELAIN_COLORS = {
   base: '#00f0ff',
@@ -20,6 +21,15 @@ const HUB_COLORS = {
   OPERA: colors.hub.opera,
   TENET: colors.hub.tenet,
 };
+
+type HubType = 'SATOR' | 'ROTAS' | 'AREPO' | 'OPERA' | 'TENET';
+type SkeletonVariant = 'panel-loading' | 'worker-init' | 'grid-loading' | 'hub-loading' | '3d-loading';
+
+/** Props for WorkerInitSkeleton component */
+interface WorkerInitSkeletonProps {
+  /** Message to display during initialization */
+  message?: string;
+}
 
 /**
  * Shimmer animation styles
@@ -44,7 +54,7 @@ const shimmerStyles = `
 /**
  * Worker initialization skeleton with progress dots
  */
-export function WorkerInitSkeleton({ message = 'Initializing Grid Engine...' }) {
+export function WorkerInitSkeleton({ message = 'Initializing Grid Engine...' }: WorkerInitSkeletonProps): ReactNode {
   return (
     <>
       <style>{shimmerStyles}</style>
@@ -103,7 +113,7 @@ export function WorkerInitSkeleton({ message = 'Initializing Grid Engine...' }) 
 /**
  * Grid loading skeleton with 6 mock panels
  */
-export function GridLoadingSkeleton() {
+export function GridLoadingSkeleton(): ReactNode {
   return (
     <>
       <style>{shimmerStyles}</style>
@@ -148,18 +158,24 @@ export function GridLoadingSkeleton() {
   );
 }
 
+/** Props for PanelSkeleton component */
+interface PanelSkeletonProps {
+  /** Hub type for color theming */
+  hub?: HubType;
+  /** Panel title */
+  title?: string;
+  /** Skeleton variant for different loading states */
+  variant?: SkeletonVariant;
+}
+
 /**
  * PanelSkeleton - Loading state placeholder with variant support
- * @param {Object} props
- * @param {string} [props.hub='SATOR'] - Hub type for color theming
- * @param {string} [props.title='Loading...'] - Panel title
- * @param {string} [props.variant='panel-loading'] - Skeleton variant
  */
 export function PanelSkeleton({ 
   hub = 'SATOR', 
   title = 'Loading...',
   variant = 'panel-loading'
-}) {
+}: PanelSkeletonProps): ReactNode {
   // Handle special variants
   if (variant === 'worker-init') {
     return <WorkerInitSkeleton message={title} />;
@@ -270,10 +286,16 @@ export function PanelSkeleton({
   );
 }
 
+/** Props for PanelSkeletonCompact component */
+interface PanelSkeletonCompactProps {
+  /** Hub type for color theming */
+  hub?: HubType;
+}
+
 /**
  * Compact skeleton for minimized panels
  */
-export function PanelSkeletonCompact({ hub = 'SATOR' }) {
+export function PanelSkeletonCompact({ hub = 'SATOR' }: PanelSkeletonCompactProps): ReactNode {
   const hubColor = HUB_COLORS[hub] || colors.hub.sator;
   
   return (
@@ -311,7 +333,7 @@ export function PanelSkeletonCompact({ hub = 'SATOR' }) {
 /**
  * Hub loader skeleton for route transitions
  */
-export function HubLoader() {
+export function HubLoader(): ReactNode {
   return (
     <>
       <style>{shimmerStyles}</style>

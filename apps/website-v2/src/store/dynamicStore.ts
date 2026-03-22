@@ -29,7 +29,7 @@ export interface GroupView {
   isDefault: boolean
 }
 
-interface DynamicState {
+export interface DynamicState {
   panels: Panel[]
   groupViews: GroupView[]
   currentGroupId: string

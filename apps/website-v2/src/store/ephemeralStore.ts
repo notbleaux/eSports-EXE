@@ -21,7 +21,7 @@ export interface ScrollState {
   isScrolling: boolean
 }
 
-interface EphemeralState extends DragState, HoverState, ScrollState {
+export interface EphemeralState extends DragState, HoverState, ScrollState {
   // Actions
   setHoveredPanel: (id: string | null) => void
   setHoveredResizeHandle: (handle: string | null) => void

@@ -5,7 +5,6 @@
  */
 
 import { api, apiCancellable } from './client'
-import type { ApiResponse } from './types'
 
 // ============================================================================
 // TYPES

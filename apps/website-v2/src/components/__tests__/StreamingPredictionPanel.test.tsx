@@ -1,7 +1,7 @@
 /**
  * StreamingPredictionPanel Tests - P0 Test Coverage
  * 
- * [Ver001.000]
+ * [Ver002.000] - Added type imports and createMockReturn helper
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
@@ -18,7 +18,25 @@ vi.mock('../../hooks/useStreamingInference', () => ({
 }))
 
 import { StreamingPredictionPanel } from '../StreamingPredictionPanel'
-import { useStreamingInference } from '../../hooks/useStreamingInference'
+import { useStreamingInference, type UseStreamingInferenceReturn } from '../../hooks/useStreamingInference'
+
+/**
+ * Helper to create properly typed mock return values
+ */
+const createMockReturn = (overrides: Partial<UseStreamingInferenceReturn> = {}): UseStreamingInferenceReturn => ({
+  predictions: [],
+  isStreaming: false,
+  isPaused: false,
+  lag: 0,
+  throughput: 0,
+  bufferSize: 0,
+  error: null,
+  pause: mockPause,
+  resume: mockResume,
+  start: mockStart,
+  stop: mockStop,
+  ...overrides
+})
 
 describe('StreamingPredictionPanel', () => {
   beforeEach(() => {
@@ -32,19 +50,12 @@ describe('StreamingPredictionPanel', () => {
 
   describe('Connection Status Display', () => {
     it('should show connected status when streaming', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10.5,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -53,19 +64,7 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show disconnected status when not streaming', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
-        isStreaming: false,
-        isPaused: false,
-        lag: 0,
-        throughput: 0,
-        bufferSize: 0,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn())
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -73,19 +72,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show paused status when streaming is paused', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
         isPaused: true,
         lag: 100,
-        throughput: 0,
-        bufferSize: 3,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 3
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -93,19 +85,9 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show error state when there is an error', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
-        isStreaming: false,
-        isPaused: false,
-        lag: 0,
-        throughput: 0,
-        bufferSize: 0,
-        error: new Error('Connection failed'),
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
+        error: new Error('Connection failed')
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -117,19 +99,12 @@ describe('StreamingPredictionPanel', () => {
 
   describe('Control Buttons', () => {
     it('should show pause button when streaming and not paused', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -139,19 +114,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show resume button when streaming is paused', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
         isPaused: true,
         lag: 100,
-        throughput: 0,
-        bufferSize: 3,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 3
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -159,19 +127,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should call pause when pause button is clicked', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -182,19 +143,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should call resume when resume button is clicked', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
         isPaused: true,
         lag: 100,
-        throughput: 0,
-        bufferSize: 3,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 3
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -205,19 +159,7 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should disable controls when not streaming', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
-        isStreaming: false,
-        isPaused: false,
-        lag: 0,
-        throughput: 0,
-        bufferSize: 0,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn())
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -226,19 +168,9 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should call resume when retry button is clicked in error state', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
-        isStreaming: false,
-        isPaused: false,
-        lag: 0,
-        throughput: 0,
-        bufferSize: 0,
-        error: new Error('Connection failed'),
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
+        error: new Error('Connection failed')
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -251,19 +183,12 @@ describe('StreamingPredictionPanel', () => {
 
   describe('Lag Indicator Colors', () => {
     it('should show green color for optimal lag (< 100ms)', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -272,19 +197,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show yellow color for acceptable lag (100-500ms)', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 250,
         throughput: 8,
-        bufferSize: 10,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 10
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -293,19 +211,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show red color for high latency (> 500ms)', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 750,
         throughput: 5,
-        bufferSize: 20,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 20
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -316,19 +227,12 @@ describe('StreamingPredictionPanel', () => {
 
   describe('Metrics Display', () => {
     it('should display throughput in preds/s format', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 45.7,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -336,19 +240,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should display throughput in k preds/s format for high values', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 1500,
-        bufferSize: 50,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 50
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -356,19 +253,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should display buffer size', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 25,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 25
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -390,19 +280,13 @@ describe('StreamingPredictionPanel', () => {
         }
       ]
 
-      vi.mocked(useStreamingInference).mockReturnValue({
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         predictions: mockPredictions,
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -412,19 +296,12 @@ describe('StreamingPredictionPanel', () => {
     })
 
     it('should show waiting message when no predictions available', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -442,19 +319,13 @@ describe('StreamingPredictionPanel', () => {
         latencyMs: 20 + i * 5
       }))
 
-      vi.mocked(useStreamingInference).mockReturnValue({
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         predictions: mockPredictions,
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       render(<StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />)
 
@@ -467,19 +338,12 @@ describe('StreamingPredictionPanel', () => {
 
   describe('Hub Colors', () => {
     it('should apply different hub colors', () => {
-      vi.mocked(useStreamingInference).mockReturnValue({
-        predictions: [],
+      vi.mocked(useStreamingInference).mockReturnValue(createMockReturn({
         isStreaming: true,
-        isPaused: false,
         lag: 50,
         throughput: 10,
-        bufferSize: 5,
-        error: null,
-        pause: mockPause,
-        resume: mockResume,
-        start: mockStart,
-        stop: mockStop
-      })
+        bufferSize: 5
+      }))
 
       const { container: satorContainer, unmount: unmountSator } = render(
         <StreamingPredictionPanel wsUrl="ws://localhost:8080/stream" hub="SATOR" />

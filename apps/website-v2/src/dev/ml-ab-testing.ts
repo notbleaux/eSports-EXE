@@ -6,7 +6,10 @@
  * [Ver001.000]
  */
 
-import { useMLInference } from '../hooks/useMLInference'
+// Type-only import for model instance typing
+// Note: useMLInference is a React hook - in real usage it would be called within a component
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { useMLInference } from '../hooks/useMLInference'
 import { mlLogger } from '../utils/logger'
 
 export interface VariantConfig {

@@ -21,7 +21,6 @@ import type {
 import type { ModelInfo, WarmUpOptions } from '../types/ml'
 import { 
   MAX_RETRIES, 
-  RETRY_BASE_DELAY_MS,
   PREDICTION_TIMEOUT_MS,
   MAX_INPUT_SIZE,
   MIN_INPUT_VALUE,
@@ -33,13 +32,11 @@ import {
   loadTensorFlow, 
   loadModel, 
   unloadModel as unloadFromCache,
-  isTensorFlowLoaded,
-  isModelCached,
   type MLLoadProgress,
   type TFModule
 } from '../lib/ml-loader'
 import { isMLFeatureEnabled } from '../lib/ml-feature-flags'
-import type { MLModelType, FeatureDefinition } from '../lib/ml-features'
+import type { MLModelType } from '../lib/ml-features'
 import { getFeatureDefinition, validateFeatureValue, getFeatureNames } from '../lib/ml-features'
 
 export interface UseMLInferenceReturn {
@@ -315,6 +312,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
   const isCleaningUpRef = useRef(false)
   const loadAbortRef = useRef<AbortController | null>(null)
   const autoUnloadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const unloadModelRef = useRef<() => void>(() => {})
   
   // Worker refs
   const workerRef = useRef<Worker | null>(null)
@@ -348,7 +346,7 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
       autoUnloadTimerRef.current = setTimeout(() => {
         if (!isPredicting && isMountedRef.current) {
           mlLogger.debug('[ML Inference] Auto-unloading model due to inactivity')
-          unloadModel()
+          unloadModelRef.current()
         }
       }, autoUnloadTimeout)
     }
@@ -928,6 +926,9 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
 
     mlLogger.debug('[ML Inference] Model unloaded')
   }, [])
+
+  // Keep ref updated with latest unloadModel function
+  unloadModelRef.current = unloadModel
 
   /**
    * Dispose and cleanup

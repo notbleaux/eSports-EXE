@@ -7,7 +7,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
-import { useMLCacheStore, type CachedModel } from '../store/mlCacheStore'
+import { useMLCacheStore } from '../store/mlCacheStore'
 import { useMLInference, type ModelInfo } from './useMLInference'
 import { mlLogger } from '../utils/logger'
 
@@ -113,7 +113,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
       // Don't auto-switch, just restore the preference
       setActiveModelId(prefs.activeModelId)
     }
-  }, [])
+  }, [activeModelId])
   
   // Save preference when active model changes
   useEffect(() => {
@@ -132,7 +132,7 @@ export function useMLModelManager(): ModelManagerState & ModelManagerActions {
     url: string,
     options: LoadOptions = {}
   ): Promise<void> => {
-    const { name = id, quantization = 8, priority = 5, preload = true } = options
+    const { name = id, quantization = 8, priority = 5 } = options
     
     // Check if already loading
     if (loadPromisesRef.current.has(id)) {

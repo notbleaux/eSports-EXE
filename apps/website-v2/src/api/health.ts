@@ -5,6 +5,7 @@
  * [Ver001.001] - Updated health endpoint to use /v1/ prefix
  */
 
+import { useState, useEffect } from 'react'
 import { api } from './client'
 import { performanceMonitor } from '../monitoring/PerformanceMonitor'
 import { useMLCacheStore } from '../store/mlCacheStore'
@@ -84,7 +85,7 @@ export async function getHealthStatus(): Promise<HealthCheckResponse> {
   const webVitals: HealthCheckResponse['checks']['webVitals'] = {}
   
   for (const vital of metrics.webVitals) {
-    webVitals[vital.name] = vital.value
+    (webVitals as Record<string, number>)[vital.name] = vital.value
   }
 
   // Determine overall status
@@ -108,8 +109,8 @@ export async function getHealthStatus(): Promise<HealthCheckResponse> {
       webVitals
     },
     metadata: {
-      environment: (import.meta as unknown as { env: Record<string, string> }).env.VITE_APP_ENV || 'production',
-      buildId: (import.meta as unknown as { env: Record<string, string> }).env.VITE_BUILD_ID || 'unknown',
+      environment: import.meta.env.VITE_APP_ENV || 'production',
+      buildId: import.meta.env.VITE_BUILD_ID || 'unknown',
       nodeVersion: typeof process !== 'undefined' ? process.version : undefined
     }
   }
@@ -254,8 +255,5 @@ export function useHealthCheck(pollInterval = 30000) {
 
   return { health, isLoading, error, refetch: () => getHealthStatus() }
 }
-
-// Import useState for the hook
-import { useState, useEffect } from 'react'
 
 export default getHealthStatus

@@ -1,6 +1,7 @@
 /**
  * API Layer - Centralized API exports
  * 
+ * [Ver006.000] - Fixed duplicate exports by removing conflicting export * statements
  * [Ver005.000] - Fixed duplicate exports with explicit re-exports
  * [Ver004.000] - Added Cross-Reference API for AREPO hub
  * [Ver003.000] - Added ML Model Registry API
@@ -15,18 +16,20 @@ export * from './riot'
 export * from './crossReference'
 
 // ML Service API - re-export with namespace to avoid conflicts
+// NOTE: Do NOT add export * from './ml' - use named exports only
 export {
   getModels as getMLServiceModels,
   getModel as getMLServiceModel,
   downloadModel as downloadMLModel,
   predict,
   predictBatch,
-  checkHealth,
-  checkReady,
+  checkHealth as checkMLServiceHealth,
+  checkReady as checkMLServiceReady,
   mlService
 } from './ml'
 
 // ML Model Registry API - re-export with namespace to avoid conflicts
+// NOTE: Do NOT add export * from './mlRegistry' - use named exports only
 export {
   getModels as getMLRegistryModels,
   getModel as getMLRegistryModel,
@@ -48,6 +51,7 @@ export {
 } from './mlRegistry'
 
 // Pandascore API - re-export cache functions with unique names to avoid conflicts
+// NOTE: Do NOT add export * from './pandascore' - use named exports only
 export {
   isPandascoreAvailable,
   fetchPlayers,
