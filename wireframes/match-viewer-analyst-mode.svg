@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0D0D0F"/>
+  
+  <!-- Top Navigation (Dark Mode) -->
+  <g id="top-nav">
+    <rect x="16" y="12" width="1368" height="52" rx="12" fill="#1A1A1D" stroke="#2A2A2E"/>
+    <text x="40" y="48" font-size="16" fill="#FFFFFF" font-weight="700">eSports‑EXE</text>
+    <text x="200" y="48" font-size="13" fill="#6B6F76">/ Matches / PGL Major / Grand Final</text>
+    <rect x="1100" y="18" width="140" height="40" rx="8" fill="#2A2A2E"/>
+    <text x="1120" y="44" font-size="13" fill="#FFFFFF" font-weight="600">Fan Mode</text>
+    <rect x="1260" y="18" width="100" height="40" rx="8" fill="#00D1FF"/>
+    <text x="1280" y="44" font-size="13" fill="#111217" font-weight="600">Export</text>
+  </g>
+
+  <!-- Match Header (Dense HLTV Style) -->
+  <g id="match-header" transform="translate(16, 76)">
+    <rect x="0" y="0" width="1368" height="80" rx="12" fill="#1A1A1D" stroke="#2A2A2E"/>
+    
+    <!-- Team A -->
+    <text x="40" y="35" font-size="12" fill="#6B6F76">Natus Vincere</text>
+    <text x="40" y="65" font-size="32" fill="#FFFFFF" font-weight="700">2</text>
+    <text x="80" y="65" font-size="14" fill="#00C48C">(16-14, 13-16, 16-11)</text>
+    
+    <!-- Match Info Center -->
+    <text x="684" y="30" font-size="11" fill="#6B6F76" text-anchor="middle">PGL Major Copenhagen 2024 • Grand Final • BO5</text>
+    <text x="684" y="55" font-size="14" fill="#FFFFFF" font-weight="600" text-anchor="middle">Map 4: Ancient • Round 28/30</text>
+    <text x="684" y="75" font-size="12" fill="#9B7CFF" text-anchor="middle">● Live • 14-13 • 1:42 remaining</text>
+    
+    <!-- Team B -->
+    <text x="1160" y="35" font-size="12" fill="#6B6F76" text-anchor="end">FaZe Clan</text>
+    <text x="1328" y="65" font-size="32" fill="#FFFFFF" font-weight="700" text-anchor="end">1</text>
+  </g>
+
+  <!-- Left Panel: Round Timeline (HLTV Style) -->
+  <g id="round-timeline" transform="translate(16, 168)">
+    <rect x="0" y="0" width="280" height="580" rx="12" fill="#1A1A1D" stroke="#2A2A2E"/>
+    <text x="20" y="32" font-size="14" fill="#FFFFFF" font-weight="600">Round History</text>
+    
+    <!-- Round Grid -->
+    <g transform="translate(20, 52)">
+      <!-- Header -->
+      <text x="0" y="15" font-size="10" fill="#6B6F76">R</text>
+      <text x="40" y="15" font-size="10" fill="#6B6F76">Winner</text>
+      <text x="120" y="15" font-size="10" fill="#6B6F76">Score</text>
+      <text x="180" y="15" font-size="10" fill="#6B6F76">Type</text>
+      
+      <!-- Current Round (Highlighted) -->
+      <rect x="-10" y="24" width="260" height="32" rx="6" fill="#00D1FF" fill-opacity="0.15"/>
+      <text x="0" y="45" font-size="12" fill="#00D1FF" font-weight="600">28</text>
+      <text x="40" y="45" font-size="12" fill="#FFFFFF">-</text>
+      <text x="120" y="45" font-size="12" fill="#FFFFFF">14-13</text>
+      <text x="180" y="45" font-size="12" fill="#FFB86B">Live</text>
+      
+      <!-- Past Rounds -->
+      <rect x="-10" y="60" width="260" height="28" rx="4" fill="#2A2A2E"/>
+      <text x="0" y="78" font-size="11" fill="#6B6F76">27</text>
+      <text x="40" y="78" font-size="11" fill="#FF5C5C">FaZe</text>
+      <text x="120" y="78" font-size="11" fill="#FFFFFF">13-13</text>
+      <text x="180" y="78" font-size="11" fill="#6B6F76">B retake</text>
+      
+      <rect x="-10" y="92" width="260" height="28" rx="4" fill="#1A1A1D"/>
+      <text x="0" y="110" font-size="11" fill="#6B6F76">26</text>
+      <text x="40" y="110" font-size="11" fill="#00C48C">NAVI</text>
+      <text x="120" y="110" font-size="11" fill="#FFFFFF">13-12</text>
+      <text x="180" y="110" font-size="11" fill="#6B6F76">A execute</text>
+      
+      <rect x="-10" y="124" width="260" height="28" rx="4" fill="#2A2A2E"/>
+      <text x="0" y="142" font-size="11" fill="#6B6F76">25</text>
+      <text x="40" y="142" font-size="11" fill="#00C48C">NAVI</text>
+      <text x="120" y="142" font-size="11" fill="#FFFFFF">12-12</text>
+      <text x="180" y="142" font-size="11" fill="#6B6F76">Force buy</text>
+    </g>
+    
+    <!-- Economy Graph -->
+    <text x="20" y="300" font-size="12" fill="#FFFFFF" font-weight="600">Economy Trend</text>
+    <rect x="20" y="320" width="240" height="100" rx="8" fill="#0D0D0F"/>
+    <!-- Simple line chart -->
+    <polyline points="30,380 70,360 110,390 150,350 190,370 230,340" fill="none" stroke="#00C48C" stroke-width="2"/>
+    <polyline points="30,400 70,410 110,380 150,400 190,390 230,420" fill="none" stroke="#FF5C5C" stroke-width="2"/>
+  </g>
+
+  <!-- Center: Replay Canvas with Overlays -->
+  <g id="replay-canvas" transform="translate(312, 168)">
+    <rect x="0" y="0" width="776" height="580" rx="12" fill="#111217"/>
+    <text x="388" y="280" font-size="14" fill="#6B6F76" text-anchor="middle">Replay Canvas with Tactical Overlays</text>
+    
+    <!-- Grenade Arcs Overlay -->
+    <path d="M 200 400 Q 300 300 400 350" stroke="#00D1FF" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+    <circle cx="400" cy="350" r="6" fill="#00D1FF"/>
+    
+    <!-- Player Positions -->
+    <circle cx="250" cy="420" r="8" fill="#00C48C"/>
+    <text x="250" y="440" font-size="10" fill="#FFFFFF" text-anchor="middle">s1mple</text>
+    
+    <circle cx="500" cy="380" r="8" fill="#FF5C5C"/>
+    <text x="500" y="400" font-size="10" fill="#FFFFFF" text-anchor="middle">ropz</text>
+    
+    <!-- Heatmap Overlay (Subtle) -->
+    <circle cx="400" cy="400" r="60" fill="#FFB86B" fill-opacity="0.15"/>
+    
+    <!-- Timeline Controls -->
+    <rect x="20" y="520" width="736" height="40" rx="8" fill="#1A1A1D"/>
+    <rect x="20" y="520" width="420" height="40" rx="8" fill="#00D1FF" fill-opacity="0.3"/>
+    <circle cx="440" cy="540" r="10" fill="#00D1FF"/>
+    <text x="760" y="545" font-size="11" fill="#6B6F76" text-anchor="end">14:32 / 28:45</text>
+  </g>
+
+  <!-- Right Panel: Deep Stats (HLTV Style) -->
+  <g id="deep-stats" transform="translate(1104, 168)">
+    <rect x="0" y="0" width="280" height="580" rx="12" fill="#1A1A1D" stroke="#2A2A2E"/>
+    <text x="20" y="32" font-size="14" fill="#FFFFFF" font-weight="600">Player Statistics</text>
+    
+    <!-- Stat Tabs -->
+    <g transform="translate(20, 48)">
+      <text x="0" y="20" font-size="11" fill="#00D1FF" font-weight="600">Overview</text>
+      <text x="70" y="20" font-size="11" fill="#6B6F76">KAST</text>
+      <text x="120" y="20" font-size="11" fill="#6B6F76">ADR</text>
+      <text x="160" y="20" font-size="11" fill="#6B6F76">Utility</text>
+    </g>
+    
+    <!-- Dense Stats Table -->
+    <g transform="translate(20, 85)">
+      <!-- Headers -->
+      <text x="0" y="15" font-size="9" fill="#6B6F76">Player</text>
+      <text x="80" y="15" font-size="9" fill="#6B6F76" text-anchor="middle">K</text>
+      <text x="110" y="15" font-size="9" fill="#6B6F76" text-anchor="middle">D</text>
+      <text x="140" y="15" font-size="9" fill="#6B6F76" text-anchor="middle">A</text>
+      <text x="175" y="15" font-size="9" fill="#6B6F76" text-anchor="middle">KAST</text>
+      <text x="215" y="15" font-size="9" fill="#6B6F76" text-anchor="middle">ADR</text>
+      <text x="245" y="15" font-size="9" fill="#6B6F76" text-anchor="middle">Rating</text>
+      
+      <!-- s1mple -->
+      <rect x="-5" y="24" width="260" height="28" rx="4" fill="#2A2A2E"/>
+      <text x="0" y="42" font-size="10" fill="#FFFFFF">s1mple</text>
+      <text x="80" y="42" font-size="10" fill="#FFFFFF" text-anchor="middle">24</text>
+      <text x="110" y="42" font-size="10" fill="#FFFFFF" text-anchor="middle">12</text>
+      <text x="140" y="42" font-size="10" fill="#FFFFFF" text-anchor="middle">4</text>
+      <text x="175" y="42" font-size="10" fill="#00C48C" text-anchor="middle">82%</text>
+      <text x="215" y="42" font-size="10" fill="#FFFFFF" text-anchor="middle">89.2</text>
+      <text x="245" y="42" font-size="10" fill="#00C48C" font-weight="600" text-anchor="middle">1.45</text>
+      
+      <!-- b1t -->
+      <rect x="-5" y="56" width="260" height="28" rx="4" fill="#1A1A1D"/>
+      <text x="0" y="74" font-size="10" fill="#FFFFFF">b1t</text>
+      <text x="80" y="74" font-size="10" fill="#FFFFFF" text-anchor="middle">18</text>
+      <text x="110" y="74" font-size="10" fill="#FFFFFF" text-anchor="middle">15</text>
+      <text x="140" y="74" font-size="10" fill="#FFFFFF" text-anchor="middle">6</text>
+      <text x="175" y="74" font-size="10" fill="#6B6F76" text-anchor="middle">71%</text>
+      <text x="215" y="74" font-size="10" fill="#FFFFFF" text-anchor="middle">76.4</text>
+      <text x="245" y="74" font-size="10" fill="#6B6F76" text-anchor="middle">1.12</text>
+    </g>
+    
+    <!-- Utility Usage -->
+    <text x="20" y="200" font-size="12" fill="#FFFFFF" font-weight="600">Utility Damage</text>
+    <rect x="20" y="220" width="240" height="80" rx="8" fill="#0D0D0F"/>
+    <text x="30" y="245" font-size="10" fill="#6B6F76">Flash Assists: 12</text>
+    <text x="30" y="265" font-size="10" fill="#6B6F76">HE Damage: 234</text>
+    <text x="30" y="285" font-size="10" fill="#6B6F76">Molotov Damage: 89</text>
+    
+    <!-- Heatmap Toggle -->
+    <text x="20" y="340" font-size="12" fill="#FFFFFF" font-weight="600">Overlays</text>
+    <g transform="translate(20, 360)">
+      <rect x="0" y="0" width="110" height="32" rx="6" fill="#00D1FF" fill-opacity="0.2" stroke="#00D1FF"/>
+      <text x="55" y="21" font-size="11" fill="#00D1FF" text-anchor="middle">☑ Heatmap</text>
+      
+      <rect x="130" y="0" width="110" height="32" rx="6" fill="#2A2A2E"/>
+      <text x="185" y="21" font-size="11" fill="#FFFFFF" text-anchor="middle">☐ Grenades</text>
+    </g>
+  </g>
+
+  <!-- Bottom: Event Timeline -->
+  <g id="event-timeline" transform="translate(16, 764)">
+    <rect x="0" y="0" width="1368" height="180" rx="12" fill="#1A1A1D" stroke="#2A2A2E"/>
+    <text x="20" y="32" font-size="14" fill="#FFFFFF" font-weight="600">Round 28 Events</text>
+    
+    <!-- Event Markers -->
+    <g transform="translate(20, 50)">
+      <!-- Kill Events -->
+      <rect x="0" y="0" width="160" height="60" rx="8" fill="#2A2A2E"/>
+      <text x="80" y="25" font-size="11" fill="#FFFFFF" text-anchor="middle">s1mple kills rain</text>
+      <text x="80" y="45" font-size="10" fill="#6B6F76" text-anchor="middle">00:23 • AK-47</text>
+      
+      <rect x="180" y="0" width="160" height="60" rx="8" fill="#2A2A2E"/>
+      <text x="260" y="25" font-size="11" fill="#FFFFFF" text-anchor="middle">ropz kills iM</text>
+      <text x="260" y="45" font-size="10" fill="#6B6F76" text-anchor="middle">00:41 • M4A1-S</text>
+      
+      <rect x="360" y="0" width="160" height="60" rx="8" fill="#2A2A2E"/>
+      <text x="440" y="25" font-size="11" fill="#FFFFFF" text-anchor="middle">Smoke deployed</text>
+      <text x="440" y="45" font-size="10" fill="#6B6F76" text-anchor="middle">01:02 • A site</text>
+      
+      <rect x="540" y="0" width="160" height="60" rx="8" fill="#FFB86B" fill-opacity="0.2"/>
+      <text x="620" y="25" font-size="11" fill="#FFB86B" text-anchor="middle">⏸ Current</text>
+      <text x="620" y="45" font-size="10" fill="#6B6F76" text-anchor="middle">01:42 remaining</text>
+    </g>
+    
+    <!-- Scrubber -->
+    <rect x="20" y="130" width="1328" height="32" rx="8" fill="#0D0D0F"/>
+    <rect x="20" y="130" width="720" height="32" rx="8" fill="#00D1FF" fill-opacity="0.3"/>
+    <circle cx="740" cy="146" r="12" fill="#00D1FF"/>
+  </g>
+
+  <text x="16" y="968" font-size="11" fill="#6B6F76">Wireframe: Match Viewer — Analyst Mode (HLTV inspired). Dense data, round timeline, deep stats, tactical overlays. Dark theme optimized for focus.</text>
+</svg>

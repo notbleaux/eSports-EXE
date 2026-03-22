@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Timeline Component</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    /* Unified Timeline Engine - Drives all visualizations */
+    
+    .timeline-container {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-4);
+      border: 1px solid var(--border);
+    }
+    
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-4);
+    }
+    
+    .timeline-title {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .timeline-controls {
+      display: flex;
+      gap: var(--spacing-2);
+    }
+    
+    .timeline-btn {
+      padding: var(--spacing-2) var(--spacing-3);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: var(--text-xs);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--motion-fast);
+    }
+    
+    .timeline-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    
+    .timeline-btn--active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--surface);
+    }
+    
+    /* Main Timeline Track */
+    .timeline-track {
+      position: relative;
+      height: 48px;
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-4);
+      overflow: hidden;
+    }
+    
+    .timeline-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 70%, transparent 100%);
+      opacity: 0.3;
+      transition: width var(--motion-fast);
+    }
+    
+    .timeline-scrubber {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 40px;
+      background: var(--surface);
+      border: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      cursor: grab;
+      box-shadow: var(--shadow-md);
+      transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+      z-index: 10;
+    }
+    
+    .timeline-scrubber:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .timeline-scrubber:active {
+      cursor: grabbing;
+    }
+    
+    /* Event Markers */
+    .timeline-markers {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .timeline-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 32px;
+      border-radius: var(--radius-xs);
+      cursor: pointer;
+      transition: all var(--motion-fast);
+    }
+    
+    .timeline-marker:hover {
+      transform: translate(-50%, -50%) scaleY(1.2);
+    }
+    
+    .timeline-marker--kill {
+      background: var(--error);
+    }
+    
+    .timeline-marker--objective {
+      background: var(--accent);
+    }
+    
+    .timeline-marker--utility {
+      background: var(--warning);
+    }
+    
+    .timeline-marker--round {
+      background: var(--success);
+      width: 4px;
+      height: 48px;
+    }
+    
+    /* Event Cards Row */
+    .timeline-events {
+      display: flex;
+      gap: var(--spacing-2);
+      overflow-x: auto;
+      padding-bottom: var(--spacing-2);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    
+    .timeline-events::-webkit-scrollbar {
+      height: 6px;
+    }
+    
+    .timeline-events::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    
+    .event-card {
+      flex-shrink: 0;
+      width: 160px;
+      padding: var(--spacing-3);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--motion-fast);
+    }
+    
+    .event-card:hover {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    
+    .event-card--active {
+      border-color: var(--accent);
+      background: var(--accent);
+      background-opacity: 0.1;
+    }
+    
+    .event-time {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-1);
+    }
+    
+    .event-title {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .event-meta {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      margin-top: var(--spacing-1);
+    }
+    
+    /* Playback Controls */
+    .timeline-playback {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-4);
+      padding-top: var(--spacing-3);
+      border-top: 1px solid var(--border);
+    }
+    
+    .playback-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--accent);
+      color: var(--surface);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--motion-fast);
+    }
+    
+    .playback-btn:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .time-display {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .speed-control {
+      margin-left: auto;
+      display: flex;
+      gap: var(--spacing-1);
+    }
+    
+    .speed-btn {
+      padding: var(--spacing-1) var(--spacing-2);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: var(--text-xs);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    
+    .speed-btn--active {
+      background: var(--text);
+      color: var(--surface);
+      border-color: var(--text);
+    }
+    
+    /* Linked Visualizations Indicator */
+    .timeline-links {
+      display: flex;
+      gap: var(--spacing-2);
+      margin-top: var(--spacing-3);
+    }
+    
+    .link-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-1);
+      padding: var(--spacing-1) var(--spacing-2);
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+    }
+    
+    .link-indicator--active {
+      color: var(--accent);
+    }
+    
+    .link-indicator::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    
+    /* Accessibility */
+    .timeline-scrubber:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      .timeline-progress,
+      .timeline-scrubber,
+      .event-card,
+      .timeline-marker {
+        transition: none;
+      }
+      
+      .live-indicator {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body style="padding: 24px; background: var(--bg);">
+  <div class="timeline-container">
+    <div class="timeline-header">
+      <span class="timeline-title">Round 28 Timeline</span>
+      <div class="timeline-controls">
+        <button class="timeline-btn timeline-btn--active">All Events</button>
+        <button class="timeline-btn">Kills</button>
+        <button class="timeline-btn">Utility</button>
+        <button class="timeline-btn">Objectives</button>
+      </div>
+    </div>
+    
+    <!-- Main Track -->
+    <div class="timeline-track" role="slider" aria-label="Match timeline" aria-valuemin="0" aria-valuemax="175" aria-valuenow="115">
+      <div class="timeline-progress" style="width: 65%;"></div>
+      
+      <!-- Markers -->
+      <div class="timeline-markers">
+        <div class="timeline-marker timeline-marker--round" style="left: 0%;" title="Round Start"></div>
+        <div class="timeline-marker timeline-marker--kill" style="left: 15%;" title="s1mple kills rain"></div>
+        <div class="timeline-marker timeline-marker--kill" style="left: 28%;" title="ropz kills iM"></div>
+        <div class="timeline-marker timeline-marker--utility" style="left: 42%;" title="Smoke deployed"></div>
+        <div class="timeline-marker timeline-marker--objective" style="left: 58%;" title="Bomb planted"></div>
+        <div class="timeline-marker timeline-marker--kill" style="left: 72%;" title="b1t kills broky"></div>
+        <div class="timeline-marker timeline-marker--round" style="left: 100%;" title="Round End"></div>
+      </div>
+      
+      <!-- Scrubber -->
+      <div class="timeline-scrubber" style="left: 65%;" tabindex="0" role="slider"></div>
+    </div>
+    
+    <!-- Event Cards -->
+    <div class="timeline-events">
+      <div class="event-card event-card--active">
+        <div class="event-time">01:42</div>
+        <div class="event-title">Current Position</div>
+        <div class="event-meta">14-13 • 3v3</div>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-time">01:15</div>
+        <div class="event-title">b1t kills broky</div>
+        <div class="event-meta">AK-47 • Headshot</div>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-time">00:58</div>
+        <div class="event-title">Bomb Planted</div>
+        <div class="event-meta">A Site • By ropz</div>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-time">00:42</div>
+        <div class="event-title">Smoke Deployed</div>
+        <div class="event-meta">A Main • 18s duration</div>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-time">00:28</div>
+        <div class="event-title">ropz kills iM</div>
+        <div class="event-meta">M4A1-S • Wallbang</div>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-time">00:15</div>
+        <div class="event-title">s1mple kills rain</div>
+        <div class="event-meta">AK-47 • Entry frag</div>
+      </div>
+    </div>
+    
+    <!-- Playback Controls -->
+    <div class="timeline-playback">
+      <button class="playback-btn" aria-label="Play/Pause">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M4 2v12l10-6z"/>
+        </svg>
+      </button>
+      
+      <span class="time-display">01:42 / 02:55</span>
+      
+      <div class="speed-control">
+        <button class="speed-btn">0.5x</button>
+        <button class="speed-btn speed-btn--active">1x</button>
+        <button class="speed-btn">2x</button>
+        <button class="speed-btn">4x</button>
+      </div>
+    </div>
+    
+    <!-- Linked Visualizations -->
+    <div class="timeline-links">
+      <span class="link-indicator link-indicator--active">Heatmap</span>
+      <span class="link-indicator link-indicator--active">Grenade Arcs</span>
+      <span class="link-indicator link-indicator--active">Player Positions</span>
+      <span class="link-indicator">Ability Usage</span>
+    </div>
+  </div>
+  
+  <script>
+    // Timeline scrubbing
+    const track = document.querySelector('.timeline-track');
+    const scrubber = document.querySelector('.timeline-scrubber');
+    const progress = document.querySelector('.timeline-progress');
+    let isDragging = false;
+    
+    function updateScrubber(clientX) {
+      const rect = track.getBoundingClientRect();
+      const percent = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+      scrubber.style.left = percent + '%';
+      progress.style.width = percent + '%';
+      
+      // Update ARIA
+      scrubber.setAttribute('aria-valuenow', Math.round(percent));
+    }
+    
+    scrubber.addEventListener('mousedown', () => isDragging = true);
+    document.addEventListener('mouseup', () => isDragging = false);
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) updateScrubber(e.clientX);
+    });
+    
+    track.addEventListener('click', (e) => {
+      if (e.target !== scrubber) updateScrubber(e.clientX);
+    });
+    
+    // Keyboard navigation
+    scrubber.addEventListener('keydown', (e) => {
+      const currentLeft = parseFloat(scrubber.style.left) || 0;
+      if (e.key === 'ArrowLeft') {
+        scrubber.style.left = Math.max(0, currentLeft - 1) + '%';
+        progress.style.width = scrubber.style.left;
+      } else if (e.key === 'ArrowRight') {
+        scrubber.style.left = Math.min(100, currentLeft + 1) + '%';
+        progress.style.width = scrubber.style.left;
+      }
+    });
+  </script>
+</body>
+</html>

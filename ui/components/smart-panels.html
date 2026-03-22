@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Panels Component</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    /* Smart Panels - Flexible, interactive workspace panels */
+    
+    .panels-container {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: minmax(100px, auto);
+      gap: var(--spacing-4);
+      padding: var(--spacing-4);
+      background: var(--bg);
+      min-height: 100vh;
+    }
+    
+    /* Panel Base */
+    .panel {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all var(--motion-panel-duration) var(--motion-ease);
+      position: relative;
+    }
+    
+    .panel:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .panel--collapsed {
+      height: 48px !important;
+      min-height: 48px;
+    }
+    
+    .panel--floating {
+      position: fixed;
+      z-index: 100;
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .panel--pinned {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-alpha-20);
+    }
+    
+    /* Panel Header */
+    .panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-3) var(--spacing-4);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      cursor: grab;
+      user-select: none;
+    }
+    
+    .panel__header:active {
+      cursor: grabbing;
+    }
+    
+    .panel__title {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+    }
+    
+    .panel__icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.6;
+    }
+    
+    /* Panel Actions */
+    .panel__actions {
+      display: flex;
+      gap: var(--spacing-1);
+    }
+    
+    .panel__btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--motion-fast);
+    }
+    
+    .panel__btn:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+    
+    .panel__btn--active {
+      color: var(--accent);
+      background: var(--accent-alpha-10);
+    }
+    
+    /* Panel Body */
+    .panel__body {
+      flex: 1;
+      overflow: auto;
+      padding: var(--spacing-4);
+    }
+    
+    .panel--collapsed .panel__body {
+      display: none;
+    }
+    
+    /* Panel Resize Handle */
+    .panel__resize {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 16px;
+      height: 16px;
+      cursor: se-resize;
+      background: linear-gradient(135deg, transparent 50%, var(--border) 50%);
+      border-bottom-right-radius: var(--radius-lg);
+      opacity: 0;
+      transition: opacity var(--motion-fast);
+    }
+    
+    .panel:hover .panel__resize {
+      opacity: 1;
+    }
+    
+    /* Grid Positioning Classes */
+    .panel--col-3 { grid-column: span 3; }
+    .panel--col-4 { grid-column: span 4; }
+    .panel--col-6 { grid-column: span 6; }
+    .panel--col-8 { grid-column: span 8; }
+    .panel--col-12 { grid-column: span 12; }
+    
+    .panel--row-2 { grid-row: span 2; }
+    .panel--row-3 { grid-row: span 3; }
+    
+    /* Panel Content Types */
+    .panel__content--chart {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+    
+    .panel__content--list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-2);
+    }
+    
+    .panel__content--grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--spacing-3);
+    }
+    
+    /* Snap Grid Overlay */
+    .snap-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--motion-fast);
+      z-index: 99;
+    }
+    
+    .snap-grid--visible {
+      opacity: 1;
+    }
+    
+    .snap-grid__cell {
+      position: absolute;
+      border: 1px dashed var(--accent-alpha-30);
+      background: var(--accent-alpha-10);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .panels-container {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      
+      .panel--col-3,
+      .panel--col-4,
+      .panel--col-6 {
+        grid-column: span 6;
+      }
+      
+      .panel--col-8,
+      .panel--col-12 {
+        grid-column: span 6;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .panels-container {
+        grid-template-columns: 1fr;
+      }
+      
+      [class*="panel--col-"] {
+        grid-column: span 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="panels-container" id="panels-container">
+    <!-- Panel 1: Match Overview (Large) -->
+    <div class="panel panel--col-8 panel--row-2" data-panel-id="overview">
+      <div class="panel__header">
+        <span class="panel__title">
+          <svg class="panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+          Match Overview
+        </span>
+        <div class="panel__actions">
+          <button class="panel__btn" title="Pin">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="17" x2="12" y2="22"/>
+              <path d="M5 17h14v-5a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v5z"/>
+              <path d="M12 2v9"/>
+            </svg>
+          </button>
+          <button class="panel__btn" title="Float">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 7V4h3m11 3V4h-3M4 17v3h3m11-3v3h-3"/>
+            </svg>
+          </button>
+          <button class="panel__btn" title="Collapse">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="panel__body panel__content--chart">
+        <span style="color: var(--text-muted);">Match visualization canvas</span>
+      </div>
+      <div class="panel__resize"></div>
+    </div>
+    
+    <!-- Panel 2: Scoreboard -->
+    <div class="panel panel--col-4" data-panel-id="scoreboard">
+      <div class="panel__header">
+        <span class="panel__title">
+          <svg class="panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>
+          </svg>
+          Scoreboard
+        </span>
+        <div class="panel__actions">
+          <button class="panel__btn panel__btn--active" title="Pin">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="17" x2="12" y2="22"/>
+              <path d="M5 17h14v-5a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v5z"/>
+              <path d="M12 2v9"/>
+            </svg>
+          </button>
+          <button class="panel__btn" title="Collapse">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="panel__body panel__content--list">
+        <div style="padding: 8px; background: var(--bg); border-radius: 6px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px;">
+            <span>s1mple</span>
+            <span style="color: var(--success);">24/12</span>
+          </div>
+        </div>
+        <div style="padding: 8px; background: var(--bg); border-radius: 6px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px;">
+            <span>b1t</span>
+            <span>18/15</span>
+          </div>
+        </div>
+        <div style="padding: 8px; background: var(--bg); border-radius: 6px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px;">
+            <span>iM</span>
+            <span style="color: var(--error);">16/17</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel__resize"></div>
+    </div>
+    
+    <!-- Panel 3: Timeline -->
+    <div class="panel panel--col-6" data-panel-id="timeline">
+      <div class="panel__header">
+        <span class="panel__title">
+          <svg class="panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Round Timeline
+        </span>
+        <div class="panel__actions">
+          <button class="panel__btn" title="Pin">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="17" x2="12" y2="22"/>
+              <path d="M5 17h14v-5a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v5z"/>
+              <path d="M12 2v9"/>
+            </svg>
+          </button>
+          <button class="panel__btn" title="Collapse">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="panel__body panel__content--chart">
+        <span style="color: var(--text-muted);">Timeline visualization</span>
+      </div>
+      <div class="panel__resize"></div>
+    </div>
+    
+    <!-- Panel 4: Stats -->
+    <div class="panel panel--col-6" data-panel-id="stats">
+      <div class="panel__header">
+        <span class="panel__title">
+          <svg class="panel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          Statistics
+        </span>
+        <div class="panel__actions">
+          <button class="panel__btn" title="Pin">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="17" x2="12" y2="22"/>
+              <path d="M5 17h14v-5a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v5z"/>
+              <path d="M12 2v9"/>
+            </svg>
+          </button>
+          <button class="panel__btn" title="Collapse">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="panel__body panel__content--grid">
+        <div style="text-align: center; padding: 16px; background: var(--bg); border-radius: 8px;">
+          <div style="font-size: 24px; font-weight: 700;">1.45</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Rating</div>
+        </div>
+        <div style="text-align: center; padding: 16px; background: var(--bg); border-radius: 8px;">
+          <div style="font-size: 24px; font-weight: 700;">89.2</div>
+          <div style="font-size: 11px; color: var(--text-muted);">ADR</div>
+        </div>
+        <div style="text-align: center; padding: 16px; background: var(--bg); border-radius: 8px;">
+          <div style="font-size: 24px; font-weight: 700;">82%</div>
+          <div style="font-size: 11px; color: var(--text-muted);">KAST</div>
+        </div>
+      </div>
+      <div class="panel__resize"></div>
+    </div>
+  </div>
+  
+  <!-- Snap Grid Overlay -->
+  <div class="snap-grid" id="snap-grid"></div>
+  
+  <script>
+    // Panel management
+    document.querySelectorAll('.panel').forEach(panel => {
+      const header = panel.querySelector('.panel__header');
+      const collapseBtn = panel.querySelector('.panel__btn[title="Collapse"]');
+      const pinBtn = panel.querySelector('.panel__btn[title="Pin"]');
+      const floatBtn = panel.querySelector('.panel__btn[title="Float"]');
+      
+      // Collapse toggle
+      collapseBtn?.addEventListener('click', () => {
+        panel.classList.toggle('panel--collapsed');
+        const svg = collapseBtn.querySelector('svg polyline');
+        if (panel.classList.contains('panel--collapsed')) {
+          svg?.setAttribute('points', '6 9 12 15 18 9');
+        } else {
+          svg?.setAttribute('points', '18 15 12 9 6 15');
+        }
+      });
+      
+      // Pin toggle
+      pinBtn?.addEventListener('click', () => {
+        panel.classList.toggle('panel--pinned');
+        pinBtn.classList.toggle('panel__btn--active');
+      });
+      
+      // Float toggle (simplified)
+      floatBtn?.addEventListener('click', () => {
+        panel.classList.toggle('panel--floating');
+        if (panel.classList.contains('panel--floating')) {
+          panel.style.width = '400px';
+          panel.style.height = '300px';
+          panel.style.top = '100px';
+          panel.style.left = '100px';
+        } else {
+          panel.style.width = '';
+          panel.style.height = '';
+          panel.style.top = '';
+          panel.style.left = '';
+        }
+      });
+    });
+    
+    // Basic drag implementation
+    let draggedPanel = null;
+    let dragOffset = { x: 0, y: 0 };
+    
+    document.querySelectorAll('.panel__header').forEach(header => {
+      header.addEventListener('mousedown', (e) => {
+        const panel = header.closest('.panel');
+        if (panel.classList.contains('panel--floating')) {
+          draggedPanel = panel;
+          const rect = panel.getBoundingClientRect();
+          dragOffset.x = e.clientX - rect.left;
+          dragOffset.y = e.clientY - rect.top;
+        }
+      });
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (draggedPanel) {
+        draggedPanel.style.left = (e.clientX - dragOffset.x) + 'px';
+        draggedPanel.style.top = (e.clientY - dragOffset.y) + 'px';
+      }
+    });
+    
+    document.addEventListener('mouseup', () => {
+      draggedPanel = null;
+    });
+  </script>
+</body>
+</html>

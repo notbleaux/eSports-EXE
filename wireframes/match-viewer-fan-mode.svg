@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#F6F5F4"/>
+  
+  <!-- Top Navigation -->
+  <g id="top-nav">
+    <rect x="24" y="16" width="1352" height="56" rx="12" fill="#FFFFFF" stroke="#E6E6E6"/>
+    <text x="48" y="54" font-size="18" fill="#111217" font-weight="700">eSports‑EXE</text>
+    <rect x="540" y="24" width="320" height="40" rx="8" fill="#FFFFFF" stroke="#E6E6E6"/>
+    <text x="560" y="50" font-size="13" fill="#6B6F76">Match Viewer</text>
+    <rect x="1100" y="24" width="140" height="40" rx="8" fill="#111217"/>
+    <text x="1120" y="50" font-size="13" fill="#FFFFFF" font-weight="600">Analyst Mode</text>
+    <circle cx="1310" cy="44" r="16" fill="#00D1FF"/>
+  </g>
+
+  <!-- Match Header (VLR.gg Style - Clean) -->
+  <g id="match-header" transform="translate(24, 88)">
+    <rect x="0" y="0" width="1352" height="120" rx="16" fill="#FFFFFF" stroke="#E6E6E6"/>
+    
+    <!-- Team A -->
+    <text x="320" y="50" font-size="14" fill="#6B6F76" text-anchor="end">Natus Vincere</text>
+    <text x="320" y="90" font-size="36" fill="#111217" font-weight="700" text-anchor="end">2</text>
+    
+    <!-- VS -->
+    <rect x="660" y="30" width="80" height="60" rx="8" fill="#F6F5F4"/>
+    <text x="700" y="70" font-size="16" fill="#6B6F76" font-weight="600" text-anchor="middle">VS</text>
+    
+    <!-- Team B -->
+    <text x="1080" y="50" font-size="14" fill="#6B6F76">FaZe Clan</text>
+    <text x="1080" y="90" font-size="36" fill="#111217" font-weight="700">1</text>
+    
+    <!-- Match Info -->
+    <text x="700" y="110" font-size="12" fill="#9AA0A6" text-anchor="middle">PGL Major Copenhagen 2024 • Grand Final • BO5</text>
+    
+    <!-- Live Badge -->
+    <rect x="48" y="40" width="60" height="28" rx="6" fill="#FF5C5C"/>
+    <circle cx="64" cy="54" r="4" fill="#FFFFFF">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <text x="76" y="58" font-size="11" fill="#FFFFFF" font-weight="600">LIVE</text>
+  </g>
+
+  <!-- Map Cards (VLR Style - Clean Scorelines) -->
+  <g id="map-cards" transform="translate(24, 224)">
+    <text x="0" y="-12" font-size="14" fill="#6B6F76" font-weight="600">Maps</text>
+    
+    <!-- Map 1 -->
+    <g transform="translate(0, 0)">
+      <rect x="0" y="0" width="320" height="100" rx="12" fill="#00C48C" fill-opacity="0.1" stroke="#00C48C" stroke-width="2"/>
+      <text x="20" y="32" font-size="12" fill="#00C48C" font-weight="600">MAP 1</text>
+      <text x="20" y="64" font-size="24" fill="#111217" font-weight="700">Mirage</text>
+      <text x="20" y="86" font-size="14" fill="#6B6F76">16-14</text>
+      <text x="250" y="64" font-size="14" fill="#00C48C" font-weight="600" text-anchor="end">NAVI</text>
+    </g>
+    
+    <!-- Map 2 -->
+    <g transform="translate(344, 0)">
+      <rect x="0" y="0" width="320" height="100" rx="12" fill="#FF5C5C" fill-opacity="0.1" stroke="#FF5C5C" stroke-width="2"/>
+      <text x="20" y="32" font-size="12" fill="#FF5C5C" font-weight="600">MAP 2</text>
+      <text x="20" y="64" font-size="24" fill="#111217" font-weight="700">Nuke</text>
+      <text x="20" y="86" font-size="14" fill="#6B6F76">13-16</text>
+      <text x="250" y="64" font-size="14" fill="#FF5C5C" font-weight="600" text-anchor="end">FAZE</text>
+    </g>
+    
+    <!-- Map 3 -->
+    <g transform="translate(688, 0)">
+      <rect x="0" y="0" width="320" height="100" rx="12" fill="#00C48C" fill-opacity="0.1" stroke="#00C48C" stroke-width="2"/>
+      <text x="20" y="32" font-size="12" fill="#00C48C" font-weight="600">MAP 3</text>
+      <text x="20" y="64" font-size="24" fill="#111217" font-weight="700">Inferno</text>
+      <text x="20" y="86" font-size="14" fill="#6B6F76">16-11</text>
+      <text x="250" y="64" font-size="14" fill="#00C48C" font-weight="600" text-anchor="end">NAVI</text>
+    </g>
+    
+    <!-- VOD Button -->
+    <g transform="translate(1032, 0)">
+      <rect x="0" y="0" width="320" height="100" rx="12" fill="#FFFFFF" stroke="#E6E6E6" stroke-dasharray="4,4"/>
+      <text x="160" y="45" font-size="16" fill="#111217" font-weight="600" text-anchor="middle">Map 4: Ancient</text>
+      <text x="160" y="70" font-size="13" fill="#9B7CFF" text-anchor="middle">▶ Watch Live</text>
+    </g>
+  </g>
+
+  <!-- Main Content Area -->
+  <g id="main-content" transform="translate(24, 352)">
+    <!-- Video/Canvas Area -->
+    <rect x="0" y="0" width="900" height="480" rx="16" fill="#111217"/>
+    <text x="450" y="240" font-size="16" fill="#6B6F76" text-anchor="middle">Replay Canvas / Video Player</text>
+    <text x="450" y="270" font-size="12" fill="#9AA0A6" text-anchor="middle">Round 28/30 • Score: 14-13 • 1:42 remaining</text>
+    
+    <!-- Play Button Overlay -->
+    <circle cx="450" cy="200" r="40" fill="#FFFFFF" fill-opacity="0.9"/>
+    <path d="M 440 180 L 440 220 L 475 200 Z" fill="#111217"/>
+  </g>
+
+  <!-- Side Panel (Clean VLR Style) -->
+  <g id="side-panel" transform="translate(948, 352)">
+    <rect x="0" y="0" width="428" height="480" rx="16" fill="#FFFFFF" stroke="#E6E6E6"/>
+    
+    <!-- Tabs -->
+    <g transform="translate(20, 20)">
+      <text x="0" y="24" font-size="14" fill="#111217" font-weight="600">Scoreboard</text>
+      <text x="120" y="24" font-size="14" fill="#6B6F76">Highlights</text>
+      <text x="240" y="24" font-size="14" fill="#6B6F76">Stats</text>
+      <rect x="0" y="32" width="90" height="3" rx="1.5" fill="#00D1FF"/>
+    </g>
+    
+    <!-- Team Header -->
+    <g transform="translate(20, 72)">
+      <rect x="0" y="0" width="388" height="40" rx="8" fill="#F6F5F4"/>
+      <text x="12" y="26" font-size="13" fill="#111217" font-weight="600">NAVI</text>
+      <text x="320" y="26" font-size="13" fill="#6B6F76">K</text>
+      <text x="350" y="26" font-size="13" fill="#6B6F76">D</text>
+      <text x="380" y="26" font-size="13" fill="#6B6F76">+/-</text>
+    </g>
+    
+    <!-- Player Rows -->
+    <g transform="translate(20, 120)">
+      <rect x="0" y="0" width="388" height="48" rx="8" fill="#FFFFFF"/>
+      <text x="12" y="30" font-size="14" fill="#111217">s1mple</text>
+      <text x="320" y="30" font-size="14" fill="#111217">24</text>
+      <text x="350" y="30" font-size="14" fill="#111217">12</text>
+      <text x="380" y="30" font-size="14" fill="#00C48C">+12</text>
+      
+      <rect x="0" y="56" width="388" height="48" rx="8" fill="#FFFFFF"/>
+      <text x="12" y="86" font-size="14" fill="#111217">b1t</text>
+      <text x="320" y="86" font-size="14" fill="#111217">18</text>
+      <text x="350" y="86" font-size="14" fill="#111217">15</text>
+      <text x="380" y="86" font-size="14" fill="#00C48C">+3</text>
+      
+      <rect x="0" y="112" width="388" height="48" rx="8" fill="#FFFFFF"/>
+      <text x="12" y="142" font-size="14" fill="#111217">iM</text>
+      <text x="320" y="142" font-size="14" fill="#111217">16</text>
+      <text x="350" y="142" font-size="14" fill="#111217">17</text>
+      <text x="380" y="142" font-size="14" fill="#FF5C5C">-1</text>
+    </g>
+  </g>
+
+  <!-- Bottom Timeline (Minimal) -->
+  <g id="timeline" transform="translate(24, 856)">
+    <rect x="0" y="0" width="1352" height="28" rx="8" fill="#E6E6E6"/>
+    <rect x="0" y="0" width="680" height="28" rx="8" fill="#00D1FF"/>
+    <circle cx="680" cy="14" r="12" fill="#FFFFFF" stroke="#00D1FF" stroke-width="3"/>
+    <text x="1360" y="18" font-size="11" fill="#6B6F76" text-anchor="end">14:32 / 28:45</text>
+  </g>
+
+  <text x="24" y="890" font-size="11" fill="#9AA0A6">Wireframe: Match Viewer — Fan Mode (VLR.gg inspired). Clean, scannable, mobile-first. Toggle to Analyst Mode for HLTV-style depth.</text>
+</svg>

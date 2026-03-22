@@ -42,6 +42,13 @@ All wireframes are production-ready SVGs at 1400×900px with embedded annotation
 | **TeNET CS** | Steel Blue `#2B6FA6` | `wireframes/tenet-cs.svg` | Grenade visualizer canvas, arc overlays, round breakdown, drill library |
 | **TeNET Valorant** | Neon Magenta `#FF2D9C` | `wireframes/tenet-valorant.svg` | Ability timeline lanes, site control heatmap, agent filter, practice playlist |
 
+### Dual-Mode Match Viewer Wireframes
+
+| Mode | Style | File | Key Components |
+|------|-------|------|----------------|
+| **Fan Mode** | VLR.gg inspired | `wireframes/match-viewer-fan-mode.svg` | Clean header, map cards, simple scoreboard, minimal timeline |
+| **Analyst Mode** | HLTV inspired | `wireframes/match-viewer-analyst-mode.svg` | Dense stats, round timeline, tactical overlays, dark theme |
+
 ---
 
 ## 🧩 Component Library
@@ -54,6 +61,9 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 | **Panel** | `ui/components/panel.html` | Elevated container with header, actions, hover transform, cross-fade transition |
 | **Timeline** | `ui/components/timeline.html` | Scrubber with ARIA slider, event markers, play/zoom controls, tick-accurate |
 | **MatchViewer** | `ui/components/matchviewer.html` | 65/35 grid layout, video canvas, KPI row, event list, responsive breakpoint at 900px |
+| **MatchHeader** | `ui/components/match-header.html` | Dual-mode header (Fan/Analyst), live indicator, mode toggle |
+| **UnifiedTimeline** | `ui/components/unified-timeline.html` | Timeline engine with linked visualizations, event cards, playback controls |
+| **SmartPanels** | `ui/components/smart-panels.html` | Draggable, resizable, collapsible panels with snap-to-grid |
 
 ---
 
@@ -67,6 +77,13 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 **Performance**: 60fps target, ≤50 arcs visible, 128 tick precision
 **Features**: Tick-accurate scrubber, detonation effects, team color coding
 
+### TeNET CS Grenade Visualizer — Enhanced
+**Document**: `docs/TECH_DESIGN_TENET_CS_ENHANCED.md`
+
+**Innovations**: Dual-mode (Training/Analysis), unified timeline sync, lineup library, heatmap rendering, effectiveness scoring
+**Performance**: Layered canvas architecture, spatial indexing, Web Workers for heatmaps
+**Features**: Real-time collision detection, historical comparison, drill mode
+
 ### TeNET Valorant Ability Timeline
 **Document**: `docs/TECH_DESIGN_TENET_VALORANT.md`
 
@@ -74,6 +91,13 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 **Algorithm**: Virtualized lane rendering, density heatmap, SVG marker components
 **Performance**: 60fps target, ≤200 events visible, 10 agent lanes
 **Features**: Agent color mapping, site control widget, ability combo detection
+
+### TeNET Valorant Ability Timeline — Enhanced
+**Document**: `docs/TECH_DESIGN_TENET_VALORANT_ENHANCED.md`
+
+**Innovations**: Site control radar, coach annotation system, pattern recognition engine, composition DNA
+**Performance**: Real-time occupancy calculation, pattern detection <1s per round
+**Features**: Drawing overlay, tactical pattern detection, team composition analysis
 
 ---
 
