@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import fs from 'fs'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // Plugin to build and copy service worker and PWA assets
 const serviceWorkerPlugin = () => ({
@@ -42,8 +43,17 @@ const serviceWorkerPlugin = () => ({
 })
 
 export default defineConfig({
-  plugins: [react(), serviceWorkerPlugin()],
-  base: '/eSports-EXE/',
+  plugins: [
+    react(), 
+    serviceWorkerPlugin(),
+    visualizer({
+      filename: './dist/bundle-stats.html',
+      open: false,
+      gzipSize: true,
+      brotliSize: true,
+    })
+  ],
+  base: process.env.VITE_BASE_PATH || '/eSports-EXE/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -61,20 +71,207 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    // Optimize chunk size warnings
+    chunkSizeWarningLimit: 600,
+    // Enable minification optimizations
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+      },
+      mangle: {
+        safari10: true,
+      },
+    },
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'animation-vendor': ['framer-motion', 'gsap', '@gsap/react'],
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
-          // Note: @tensorflow/tfjs is loaded dynamically via import() - NOT in bundle
-          'analytics': ['./src/dev/ml-analytics.ts', './src/services/analyticsSync.ts']
-        }
+        // Advanced manual chunks for optimal code splitting
+        manualChunks: (id) => {
+          // React core ecosystem - always needed for initial render
+          if (id.includes('node_modules/react') || 
+              id.includes('node_modules/react-dom') || 
+              id.includes('node_modules/react-router-dom') ||
+              id.includes('node_modules/scheduler')) {
+            return 'react-core';
+          }
+          
+          // State management and data fetching
+          if (id.includes('node_modules/@tanstack/react-query') || 
+              id.includes('node_modules/zustand')) {
+            return 'data-layer';
+          }
+          
+          // UI Animation - medium priority
+          if (id.includes('node_modules/framer-motion')) {
+            return 'ui-animation';
+          }
+          
+          // Advanced animation (GSAP) - lazy loaded when needed
+          if (id.includes('node_modules/gsap') || id.includes('node_modules/@gsap')) {
+            return 'gsap-vendor';
+          }
+          
+          // Three.js 3D - heavy, only loaded when 3D components mount
+          if (id.includes('node_modules/three') || 
+              id.includes('node_modules/@react-three/fiber') || 
+              id.includes('node_modules/@react-three/drei')) {
+            return 'three-vendor';
+          }
+          
+          // ML/TensorFlow - very heavy, strictly on-demand
+          if (id.includes('node_modules/@tensorflow')) {
+            return 'ml-vendor';
+          }
+          
+          // ONNX runtime - separate from TF.js
+          if (id.includes('node_modules/onnxruntime-web')) {
+            return 'onnx-vendor';
+          }
+          
+          // Charting and visualization
+          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3')) {
+            return 'charts-vendor';
+          }
+          
+          // Utility libraries - group small utilities together
+          if (id.includes('node_modules/clsx') || 
+              id.includes('node_modules/tailwind-merge') ||
+              id.includes('node_modules/lucide-react')) {
+            return 'utils-vendor';
+          }
+          
+          // Grid layout - used in dashboard
+          if (id.includes('node_modules/react-grid-layout')) {
+            return 'grid-vendor';
+          }
+          
+          // Virtualization - for large lists
+          if (id.includes('node_modules/@tanstack/react-virtual')) {
+            return 'virtual-vendor';
+          }
+          
+          // Hub-specific chunks - each hub gets its own chunk
+          if (id.includes('/hub-1-sator/')) {
+            return 'hub-sator';
+          }
+          if (id.includes('/hub-2-rotas/')) {
+            return 'hub-rotas';
+          }
+          if (id.includes('/hub-3-arepo/')) {
+            return 'hub-arepo';
+          }
+          if (id.includes('/hub-4-opera/')) {
+            return 'hub-opera';
+          }
+          if (id.includes('/hub-5-tenet/')) {
+            return 'hub-tenet';
+          }
+          
+          // ML components chunk
+          if (id.includes('/MLPredictionPanel') || 
+              id.includes('/StreamingPredictionPanel') ||
+              id.includes('/ml-analytics') ||
+              id.includes('/useSimRating') ||
+              id.includes('/useMLInference')) {
+            return 'ml-components';
+          }
+          
+          // Analytics and monitoring
+          if (id.includes('/performance/') || id.includes('/monitoring/')) {
+            return 'analytics-internal';
+          }
+          
+          // Shared components chunk
+          if (id.includes('/shared/')) {
+            return 'shared';
+          }
+          
+          // Default: let Rollup handle with automatic chunking
+          return null;
+        },
+        // Optimize chunk file naming for better caching
+        entryFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: (chunkInfo) => {
+          const name = chunkInfo.name;
+          // Vendor chunks
+          if (name.includes('vendor') || name.includes('react') || name.includes('data') || 
+              name.includes('animation') || name.includes('utils')) {
+            return 'js/vendor/[name]-[hash].js';
+          }
+          // Hub chunks
+          if (name.includes('hub-')) {
+            return 'js/hubs/[name]-[hash].js';
+          }
+          // Component chunks
+          if (name.includes('components') || name.includes('ml-')) {
+            return 'js/components/[name]-[hash].js';
+          }
+          // Default chunks
+          return 'js/chunks/[name]-[hash].js';
+        },
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.')
+          const ext = info[info.length - 1]
+          if (/\.(css)$/i.test(assetInfo.name)) {
+            return 'css/[name]-[hash][extname]'
+          }
+          if (/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(assetInfo.name)) {
+            return 'img/[name]-[hash][extname]'
+          }
+          if (/\.(woff2?|ttf|otf|eot)$/i.test(assetInfo.name)) {
+            return 'fonts/[name]-[hash][extname]'
+          }
+          return 'assets/[name]-[hash][extname]'
+        },
       }
-    }
+    },
+    // Split CSS into separate files for better caching
+    cssCodeSplit: true,
+    // Enable CSS optimization
+    cssMinify: true,
+    // Target modern browsers for smaller bundles
+    target: 'es2020',
+    // Enable module preload polyfill
+    modulePreload: {
+      polyfill: true,
+    },
   },
   server: {
     port: 5173,
     open: true
-  }
+  },
+  // Optimize dependency pre-bundling
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@tanstack/react-query',
+      'zustand',
+      'framer-motion',
+      'lucide-react',
+      'clsx',
+      'tailwind-merge'
+    ],
+    exclude: [
+      // Exclude heavy deps from pre-bundling to keep dev startup fast
+      '@tensorflow/tfjs',
+      '@tensorflow/tfjs-backend-wasm',
+      '@tensorflow/tfjs-backend-webgpu',
+      'onnxruntime-web',
+      'three',
+      '@react-three/fiber',
+      '@react-three/drei',
+      'recharts',
+      'd3',
+      'gsap',
+      '@gsap/react'
+    ]
+  },
+  // CSS optimization
+  css: {
+    devSourcemap: true,
+  },
 })

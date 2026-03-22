@@ -1,8 +1,8 @@
 /**
  * Main Entry Point
- * NJZ Platform v2.0
+ * NJZ Platform v2.0 - PWA Enabled
  * 
- * [Ver003.000] - Enhanced with performance monitoring and lazy loading
+ * [Ver004.000] - Added Service Worker registration with update handling
  */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -20,6 +20,85 @@ performanceMonitor.initialize();
 
 // Mark main script execution start
 performanceMonitor.markUserTiming('main-js-start');
+
+// Service Worker Registration with Update Handling
+const registerServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js', {
+        scope: '/',
+        updateViaCache: 'imports',
+      })
+
+      console.log('[SW] Registered successfully:', registration.scope)
+
+      // Handle updates
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing
+        
+        if (newWorker) {
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                // New update available
+                console.log('[SW] New version available')
+                
+                // Dispatch custom event for the app
+                window.dispatchEvent(new CustomEvent('sw-update-available', {
+                  detail: { registration }
+                }))
+              } else {
+                // First install
+                console.log('[SW] Content cached for offline use')
+              }
+            }
+          })
+        }
+      })
+
+      // Check for updates periodically (every 30 minutes)
+      setInterval(() => {
+        registration.update()
+        console.log('[SW] Checking for updates...')
+      }, 30 * 60 * 1000)
+
+      // Listen for service worker messages
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data?.type === 'SW_ACTIVATED') {
+          console.log('[SW] Activated version:', event.data.version)
+        }
+      })
+
+      // Handle offline/online events
+      window.addEventListener('online', () => {
+        console.log('[App] Connection restored')
+        document.body.classList.remove('is-offline')
+      })
+
+      window.addEventListener('offline', () => {
+        console.log('[App] Connection lost')
+        document.body.classList.add('is-offline')
+      })
+
+      // Set initial online status
+      if (!navigator.onLine) {
+        document.body.classList.add('is-offline')
+      }
+
+      return registration
+    } catch (error) {
+      console.error('[SW] Registration failed:', error)
+    }
+  } else {
+    console.log('[SW] Service workers not supported')
+  }
+}
+
+// Register service worker
+const swRegistration = registerServiceWorker()
+
+// Make registration available globally for components
+window.swRegistration = swRegistration
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -57,4 +136,51 @@ if (typeof window !== 'undefined') {
       });
     }, { timeout: 2000 });
   });
+}
+
+// Expose PWA utilities
+window.pwaUtils = {
+  // Check if app is installed
+  isInstalled: () => {
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           window.navigator.standalone === true
+  },
+
+  // Get service worker registration
+  getRegistration: () => swRegistration,
+
+  // Check for updates
+  checkForUpdates: async () => {
+    const reg = await swRegistration
+    if (reg) {
+      await reg.update()
+      return reg.waiting !== null
+    }
+    return false
+  },
+
+  // Skip waiting and reload
+  applyUpdate: async () => {
+    const reg = await swRegistration
+    if (reg?.waiting) {
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+      window.location.reload()
+    }
+  },
+
+  // Clear all caches
+  clearCaches: async () => {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      const channel = new MessageChannel()
+      navigator.serviceWorker.controller.postMessage(
+        { type: 'CLEAR_ALL_CACHES' },
+        [channel.port2]
+      )
+      return new Promise((resolve) => {
+        channel.port1.onmessage = (event) => {
+          resolve(event.data?.success)
+        }
+      })
+    }
+  },
 }

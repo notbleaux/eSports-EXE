@@ -437,7 +437,7 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
     wsLogger.info('WebSocket manually disconnected')
   }, [clearReconnect, clearConnectionTimeout, stopHeartbeat])
 
-  const reconnect = useCallback(() => {
+  const performReconnect = useCallback(() => {
     disconnect()
     reconnectAttemptsRef.current = 0
     setTimeout(connectInternal, 100)
@@ -513,13 +513,13 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
       subscriptionsRef.current.clear()
       messageHandlersRef.current.clear()
     }
-  }, []) // Empty deps - only run on mount/unmount
+  }, [secureUrl, connectInternal, disconnect]) // Include all dependencies
 
   // Reconnect when URL or token changes
   useEffect(() => {
     if (wsRef.current && status !== 'disconnected') {
       wsLogger.info('URL or token changed, reconnecting...')
-      reconnect()
+      performReconnect()
     }
   }, [secureUrl, token])
 
@@ -541,7 +541,7 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
     subscriptions,
     connect,
     disconnect,
-    reconnect
+    reconnect: performReconnect
   }
 }
 

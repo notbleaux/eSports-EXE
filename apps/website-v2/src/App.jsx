@@ -1,8 +1,8 @@
 /**
  * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
- * Modernized with enhanced visuals, animations, and code splitting
+ * Optimized Bundle Loading with Intelligent Prefetching
  * 
- * [Ver005.000] - Added React.lazy() for route-based code splitting
+ * [Ver006.000] - Optimized code splitting with prefetch on hover
  */
 import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
@@ -15,6 +15,15 @@ import { AnimatedBackground } from './components/ui/AnimatedBackground';
 import { PanelSkeleton } from './components/grid/PanelSkeleton';
 import { PanelErrorBoundary } from './components/grid/PanelErrorBoundary';
 
+// PWA Components
+import { OfflineFallback, OfflineIndicator } from './components/OfflineFallback';
+import UpdateNotification from './components/UpdateNotification';
+import { 
+  BottomNavigation, 
+  InstallPrompt,
+  PullToRefresh 
+} from './components/mobile';
+
 // Error Boundaries (eager loaded for error handling)
 import { 
   AppErrorBoundary, 
@@ -23,16 +32,18 @@ import {
   HubErrorBoundary 
 } from './components/error';
 
-// Lazy load hub components for code splitting
+// Lazy load hub components for code splitting with prefetch support
 const SatorHub = lazy(() => import('./hub-1-sator/index.jsx'));
 const RotasHub = lazy(() => import('./hub-2-rotas/index.jsx'));
 const ArepoHub = lazy(() => import('./hub-3-arepo/index.jsx'));
 const OperaHub = lazy(() => import('./hub-4-opera/index.tsx'));
 const TenetHub = lazy(() => import('./hub-5-tenet/index.jsx'));
 
-// Lazy load heavy components
+// Lazy load heavy ML components with dedicated chunk
 const MLPredictionPanel = lazy(() => import('./components/MLPredictionPanel'));
 const StreamingPredictionPanel = lazy(() => import('./components/StreamingPredictionPanel'));
+
+// Lazy load performance dashboard (separate chunk)
 const PerformanceDashboard = lazy(() => import('./performance/PerformanceDashboard'));
 
 import { UnifiedGrid } from './components/UnifiedGrid';
@@ -40,10 +51,53 @@ import { useWorkerError } from './hooks/useWorkerError';
 import { useRowHeight } from './store/staticStore';
 import { performanceMonitor } from './monitoring/PerformanceMonitor';
 
-// Loading fallback component
+// Prefetch cache to track loaded modules
+const prefetchCache = new Set();
+
+// Prefetch function for route preloading on hover
+const prefetchHub = (hubName) => {
+  if (prefetchCache.has(hubName)) return;
+  
+  const prefetchers = {
+    sator: () => import('./hub-1-sator/index.jsx'),
+    rotas: () => import('./hub-2-rotas/index.jsx'),
+    arepo: () => import('./hub-3-arepo/index.jsx'),
+    opera: () => import('./hub-4-opera/index.tsx'),
+    tenet: () => import('./hub-5-tenet/index.jsx'),
+  };
+  
+  if (prefetchers[hubName]) {
+    prefetchCache.add(hubName);
+    // Use requestIdleCallback for non-critical prefetching
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        prefetchers[hubName]();
+        console.log(`[Prefetch] ${hubName} hub loaded`);
+      }, { timeout: 2000 });
+    } else {
+      // Fallback for Safari
+      setTimeout(() => {
+        prefetchers[hubName]();
+      }, 100);
+    }
+  }
+};
+
+// Export for use in Navigation component
+export { prefetchHub };
+
+// Loading fallback component with progressive enhancement
 const HubLoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
     <PanelSkeleton variant="hub-loading" title="Loading Hub..." />
+  </div>
+);
+
+// Inline skeleton for faster initial visual
+const InlineSkeleton = () => (
+  <div className="animate-pulse flex flex-col items-center justify-center min-h-[50vh]">
+    <div className="h-8 w-48 bg-white/10 rounded mb-4"></div>
+    <div className="h-4 w-32 bg-white/5 rounded"></div>
   </div>
 );
 
@@ -191,8 +245,10 @@ const RouteChangeHandler = () => {
 function AppContent() {
   const location = useLocation();
   const [showPerformanceDashboard, setShowPerformanceDashboard] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [showOfflineModal, setShowOfflineModal] = useState(false);
 
-  // Initialize performance monitoring
+  // Initialize performance monitoring and offline detection
   useEffect(() => {
     performanceMonitor.initialize();
     
@@ -205,7 +261,26 @@ function AppContent() {
     };
     
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    
+    // Handle online/offline events
+    const handleOnline = () => {
+      setIsOffline(false);
+      setShowOfflineModal(false);
+    };
+    
+    const handleOffline = () => {
+      setIsOffline(true);
+      setShowOfflineModal(true);
+    };
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   return (
@@ -221,6 +296,14 @@ function AppContent() {
       
       {/* Main Content */}
       <main className="relative">
+        <PullToRefresh 
+          onRefresh={async () => {
+            // Refresh data - revalidate queries, reload current hub data
+            console.log('[PullToRefresh] Refreshing...');
+            window.location.reload();
+          }}
+          pullThreshold={80}
+        >
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             {/* Landing Page */}
@@ -348,6 +431,7 @@ function AppContent() {
             />
           </Routes>
         </AnimatePresence>
+        </PullToRefresh>
       </main>
       
       {/* Performance Dashboard (lazy loaded) */}
@@ -356,6 +440,23 @@ function AppContent() {
           <PerformanceDashboard />
         </Suspense>
       )}
+      
+      {/* Offline Indicator */}
+      <OfflineIndicator />
+      
+      {/* Offline Fallback Modal */}
+      {showOfflineModal && isOffline && (
+        <OfflineFallback />
+      )}
+      
+      {/* Update Notification */}
+      <UpdateNotification checkInterval={30 * 60 * 1000} />
+      
+      {/* Mobile Bottom Navigation */}
+      <BottomNavigation />
+      
+      {/* PWA Install Prompt */}
+      <InstallPrompt delay={3000} />
     </div>
   );
 }

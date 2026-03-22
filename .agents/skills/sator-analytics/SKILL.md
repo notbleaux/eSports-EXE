@@ -4,7 +4,7 @@ description: "Esports analytics calculations for 4NJZ4 TENET Platform including 
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Analytics
@@ -555,7 +555,15 @@ python -m analytics.scripts.investment_report --output=report.csv
 python -m analytics.scripts.validate_guardrails
 ```
 
+## New in 2.1.0
+
+- Enhanced confidence weighting algorithms
+- Improved temporal wall enforcement
+- Overfitting guardrails with integrity checking
+- Range-based testing patterns (no hardcoded IDs)
+
 ## References
 
 - [AXIOM.md](../../../docs/AXIOM.md)
 - [DATA_DICTIONARY.md](../../../docs/DATA_DICTIONARY.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

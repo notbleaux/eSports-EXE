@@ -4,7 +4,7 @@ description: "Deterministic tactical FPS simulation for 4NJZ4 TENET Platform. US
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Simulation
@@ -392,7 +392,15 @@ godot --script scripts/Export/export_match.gd --match-id=123
 dotnet run --project SimConsoleRunner -- --seed 12345 --rounds 24
 ```
 
+## New in 2.1.0
+
+- Enhanced LiveSeasonModule export filtering
+- Improved EventLog serialization
+- Economy system with loss streak bonuses
+- Determinism verification tests
+
 ## References
 
 - [AGENTS.md](../../../AGENTS.md)
 - [docs/replay.md](../../../docs/replay.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

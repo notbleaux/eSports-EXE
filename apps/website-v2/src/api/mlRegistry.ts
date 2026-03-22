@@ -2,6 +2,7 @@
  * ML Model Registry API Client
  * Manages model registration, versioning, metrics, and A/B testing
  * 
+ * [Ver002.000] - Fixed return types to unwrap ApiResponse
  * [Ver001.000]
  */
 
@@ -46,35 +47,39 @@ export async function getModels(params?: {
   if (params?.offset) searchParams.set('offset', params.offset.toString())
 
   const query = searchParams.toString()
-  return api.get<MLModelListResponse>(`${ML_REGISTRY_BASE}/models${query ? `?${query}` : ''}`)
+  const response = await api.get<MLModelListResponse>(`${ML_REGISTRY_BASE}/models${query ? `?${query}` : ''}`)
+  return response.data
 }
 
 /**
  * Get a single model by ID
  */
 export async function getModel(modelId: string): Promise<MLModel> {
-  return api.get<MLModel>(`${ML_REGISTRY_BASE}/models/${modelId}`)
+  const response = await api.get<MLModel>(`${ML_REGISTRY_BASE}/models/${modelId}`)
+  return response.data
 }
 
 /**
  * Register a new model
  */
 export async function createModel(model: MLModelCreate): Promise<MLModel> {
-  return api.post<MLModel>(`${ML_REGISTRY_BASE}/models`, model)
+  const response = await api.post<MLModel>(`${ML_REGISTRY_BASE}/models`, model)
+  return response.data
 }
 
 /**
  * Update model metadata
  */
 export async function updateModel(modelId: string, update: MLModelUpdate): Promise<MLModel> {
-  return api.put<MLModel>(`${ML_REGISTRY_BASE}/models/${modelId}`, update)
+  const response = await api.put<MLModel>(`${ML_REGISTRY_BASE}/models/${modelId}`, update)
+  return response.data
 }
 
 /**
  * Delete a model
  */
 export async function deleteModel(modelId: string): Promise<void> {
-  return api.delete<void>(`${ML_REGISTRY_BASE}/models/${modelId}`)
+  await api.delete<void>(`${ML_REGISTRY_BASE}/models/${modelId}`)
 }
 
 /**
@@ -84,7 +89,8 @@ export async function deployModel(
   modelId: string,
   deployment: DeploymentCreate
 ): Promise<Deployment> {
-  return api.post<Deployment>(`${ML_REGISTRY_BASE}/models/${modelId}/deploy`, deployment)
+  const response = await api.post<Deployment>(`${ML_REGISTRY_BASE}/models/${modelId}/deploy`, deployment)
+  return response.data
 }
 
 /**
@@ -92,7 +98,7 @@ export async function deployModel(
  */
 export async function rollbackDeployment(deploymentId: number): Promise<void> {
   // This will be handled by updating the deployment status
-  return api.put<void>(`${ML_REGISTRY_BASE}/deployments/${deploymentId}/rollback`, {})
+  await api.put<void>(`${ML_REGISTRY_BASE}/deployments/${deploymentId}/rollback`, {})
 }
 
 /**
@@ -102,7 +108,8 @@ export async function recordMetric(
   modelId: string,
   metric: ModelMetricCreate
 ): Promise<ModelMetric> {
-  return api.post<ModelMetric>(`${ML_REGISTRY_BASE}/models/${modelId}/metrics`, metric)
+  const response = await api.post<ModelMetric>(`${ML_REGISTRY_BASE}/models/${modelId}/metrics`, metric)
+  return response.data
 }
 
 /**
@@ -124,16 +131,18 @@ export async function getModelMetrics(
   if (params?.offset) searchParams.set('offset', params.offset.toString())
 
   const query = searchParams.toString()
-  return api.get<ModelMetricsHistory>(
+  const response = await api.get<ModelMetricsHistory>(
     `${ML_REGISTRY_BASE}/models/${modelId}/metrics${query ? `?${query}` : ''}`
   )
+  return response.data
 }
 
 /**
  * Create a new A/B test
  */
 export async function createABTest(test: ABTestCreate): Promise<ABTest> {
-  return api.post<ABTest>(`${ML_REGISTRY_BASE}/ab-tests`, test)
+  const response = await api.post<ABTest>(`${ML_REGISTRY_BASE}/ab-tests`, test)
+  return response.data
 }
 
 /**
@@ -152,21 +161,24 @@ export async function getABTests(params?: {
   if (params?.offset) searchParams.set('offset', params.offset.toString())
 
   const query = searchParams.toString()
-  return api.get<ABTest[]>(`${ML_REGISTRY_BASE}/ab-tests${query ? `?${query}` : ''}`)
+  const response = await api.get<ABTest[]>(`${ML_REGISTRY_BASE}/ab-tests${query ? `?${query}` : ''}`)
+  return response.data
 }
 
 /**
  * Get A/B test by ID
  */
 export async function getABTest(testId: string): Promise<ABTest> {
-  return api.get<ABTest>(`${ML_REGISTRY_BASE}/ab-tests/${testId}`)
+  const response = await api.get<ABTest>(`${ML_REGISTRY_BASE}/ab-tests/${testId}`)
+  return response.data
 }
 
 /**
  * Start an A/B test
  */
 export async function startABTest(testId: string): Promise<ABTest> {
-  return api.post<ABTest>(`${ML_REGISTRY_BASE}/ab-tests/${testId}/start`, {})
+  const response = await api.post<ABTest>(`${ML_REGISTRY_BASE}/ab-tests/${testId}/start`, {})
+  return response.data
 }
 
 /**
@@ -177,17 +189,19 @@ export async function completeABTest(
   winnerModelId: string,
   reason?: string
 ): Promise<ABTest> {
-  return api.post<ABTest>(`${ML_REGISTRY_BASE}/ab-tests/${testId}/complete`, {
+  const response = await api.post<ABTest>(`${ML_REGISTRY_BASE}/ab-tests/${testId}/complete`, {
     winner_model_id: winnerModelId,
     reason
   })
+  return response.data
 }
 
 /**
  * Compare two models
  */
 export async function compareModels(modelAId: string, modelBId: string): Promise<ModelComparison> {
-  return api.get<ModelComparison>(`${ML_REGISTRY_BASE}/models/${modelAId}/compare/${modelBId}`)
+  const response = await api.get<ModelComparison>(`${ML_REGISTRY_BASE}/models/${modelAId}/compare/${modelBId}`)
+  return response.data
 }
 
 /**
@@ -198,9 +212,10 @@ export async function getActiveDeployments(environment?: string): Promise<Active
   if (environment) searchParams.set('environment', environment)
 
   const query = searchParams.toString()
-  return api.get<ActiveDeployment[]>(
+  const response = await api.get<ActiveDeployment[]>(
     `${ML_REGISTRY_BASE}/deployments/active${query ? `?${query}` : ''}`
   )
+  return response.data
 }
 
 /**

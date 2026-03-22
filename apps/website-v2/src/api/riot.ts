@@ -13,8 +13,8 @@ import { logger } from '@/utils/logger';
 const apiLogger = logger.child('RiotAPI');
 
 // Environment variable for Riot API key (should be server-side in production)
-const RIOT_API_KEY = import.meta.env.VITE_RIOT_API_KEY || '';
-const RIOT_API_URL = import.meta.env.VITE_RIOT_API_URL || 'http://localhost:8000/api/riot'; // Proxy through backend
+const RIOT_API_KEY = (import.meta as unknown as { env: Record<string, string> }).env.VITE_RIOT_API_KEY || '';
+const RIOT_API_URL = (import.meta as unknown as { env: Record<string, string> }).env.VITE_RIOT_API_URL || 'http://localhost:8000/api/riot'; // Proxy through backend
 
 // Cache configuration
 const CACHE_TTL = {

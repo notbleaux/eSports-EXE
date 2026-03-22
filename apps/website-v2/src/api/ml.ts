@@ -1,6 +1,7 @@
 /**
  * ML Service API - Model management and predictions
  * 
+ * [Ver002.000] - Fixed return types to unwrap ApiResponse
  * [Ver001.000]
  */
 
@@ -21,14 +22,16 @@ import type {
  * Get list of available models
  */
 export async function getModels(): Promise<ModelListResponse> {
-  return api.get<ModelListResponse>(ML_API.models)
+  const response = await api.get<ModelListResponse>(ML_API.models)
+  return response.data
 }
 
 /**
  * Get model information by ID
  */
 export async function getModel(modelId: string): Promise<ModelInfoResponse> {
-  return api.get<ModelInfoResponse>(ML_API.modelById(modelId))
+  const response = await api.get<ModelInfoResponse>(ML_API.modelById(modelId))
+  return response.data
 }
 
 /**
@@ -58,7 +61,8 @@ export async function predict(
     }
   }
   
-  return api.post<PredictResponse>(ML_API.predict, request)
+  const response = await api.post<PredictResponse>(ML_API.predict, request)
+  return response.data
 }
 
 /**
@@ -73,21 +77,24 @@ export async function predictBatch(
     modelId
   }
   
-  return api.post<BatchPredictResponse>(ML_API.predictBatch, request)
+  const response = await api.post<BatchPredictResponse>(ML_API.predictBatch, request)
+  return response.data
 }
 
 /**
  * Check service health
  */
 export async function checkHealth(): Promise<HealthResponse> {
-  return api.get<HealthResponse>(ML_API.health)
+  const response = await api.get<HealthResponse>(ML_API.health)
+  return response.data
 }
 
 /**
  * Check if service is ready
  */
 export async function checkReady(): Promise<ReadyResponse> {
-  return api.get<ReadyResponse>(ML_API.ready)
+  const response = await api.get<ReadyResponse>(ML_API.ready)
+  return response.data
 }
 
 /**

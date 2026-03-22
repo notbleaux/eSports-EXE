@@ -1,10 +1,13 @@
-# [Ver005.000] - Fixed GitHub Pages deployment
-name: Deploy to GitHub Pages
+# [Ver006.000] - GitHub Pages Deployment (Manual Only)
+# NOTE: Vercel is now the primary deployment target. This workflow is kept for fallback.
+name: Deploy to GitHub Pages (Manual)
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "deploy" to confirm GitHub Pages deployment'
+        required: true
 
 permissions:
   contents: read
@@ -18,6 +21,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'deploy'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

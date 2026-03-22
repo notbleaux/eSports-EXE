@@ -1,4 +1,4 @@
-# [Ver003.000]
+# [Ver003.002]
 # Render.com Deployment Configuration
 # SATOR API - Production Deployment
 # NOTE: Using FREE TIER ONLY - No paid services
@@ -9,10 +9,12 @@ services:
     name: sator-api
     env: python
     buildCommand: |
+      echo "Installing dependencies..."
       pip install -r packages/shared/api/requirements.txt
+      echo "Build complete"
     startCommand: |
       cd packages/shared/api && 
-      uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
+      PYTHONPATH=../../:$PYTHONPATH uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -47,6 +49,8 @@ services:
         value: "2"
       - key: DB_POOL_MAX_SIZE
         value: "5"
+      - key: PYTHONPATH
+        value: "/opt/render/project/src/packages/shared"
     healthCheckPath: /health
     autoDeploy: true
     plan: free  # FREE TIER - No costs incurred

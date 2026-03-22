@@ -4,7 +4,7 @@ description: "Full-stack 4NJZ4 TENET Platform development across all components.
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR End-to-End
@@ -387,7 +387,15 @@ cd packages/shared
 mypy axiom-esports-data/
 ```
 
+## New in 2.1.0
+
+- Enhanced API contract patterns
+- Improved feature flag system
+- E2E testing with pytest-asyncio
+- Better troubleshooting workflows
+
 ## References
 
 - [FIREWALL_POLICY.md](../../../docs/FIREWALL_POLICY.md)
 - [API_V1_DOCUMENTATION.md](../../../docs/API_V1_DOCUMENTATION.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

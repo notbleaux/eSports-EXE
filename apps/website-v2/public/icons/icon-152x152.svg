@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="152" height="152" viewBox="0 0 152 152">
+  <defs>
+    <linearGradient id="bg152" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent152" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f0ff"/>
+      <stop offset="100%" style="stop-color:#9d4edd"/>
+    </linearGradient>
+  </defs>
+  <rect width="152" height="152" rx="24" fill="url(#bg152)"/>
+  <rect x="14" y="14" width="124" height="124" rx="20" fill="none" stroke="url(#accent152)" stroke-width="4"/>
+  <text x="76" y="92" font-family="system-ui, sans-serif" font-size="56" font-weight="bold" text-anchor="middle" fill="url(#accent152)">4</text>
+  <text x="76" y="120" font-family="system-ui, sans-serif" font-size="16" font-weight="500" text-anchor="middle" fill="#00f0ff">NJZ</text>
+</svg>

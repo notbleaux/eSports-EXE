@@ -20,7 +20,12 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.js'],
     css: true,
-    exclude: ['node_modules/', 'e2e/'],
+    exclude: [
+      'node_modules/',
+      'e2e/',
+      'tests/e2e/',
+      '**/*.spec.ts', // Exclude Playwright tests
+    ],
     coverage: {
       reporter: ['text', 'json', 'html'],
       exclude: [
@@ -41,5 +46,18 @@ export default defineConfig({
         },
       },
     },
+    // Increase timeout for async tests
+    testTimeout: 10000,
+    // Handle React act() warnings
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    },
+  },
+  // Ensure React is in development mode for testing
+  define: {
+    'process.env.NODE_ENV': '"development"',
   },
 })

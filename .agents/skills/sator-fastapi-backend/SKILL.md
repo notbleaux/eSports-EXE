@@ -4,7 +4,7 @@ description: "FastAPI async backend development for 4NJZ4 TENET Platform. USE FO
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR FastAPI Backend
@@ -460,8 +460,17 @@ When running, access docs at:
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
+## New in 2.1.0
+
+- Enhanced main.py with structured JSON logging
+- Request ID middleware for tracing
+- Prometheus-compatible `/metrics` endpoint
+- WebSocket support for real-time features
+- OPERA Live Events endpoints
+
 ## References
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [asyncpg Documentation](https://magicstack.github.io/asyncpg/)
 - [Pydantic Documentation](https://docs.pydantic.dev/)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

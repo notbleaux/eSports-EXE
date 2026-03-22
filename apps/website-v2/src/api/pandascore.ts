@@ -14,7 +14,7 @@ const RATE_LIMIT_DELAY = 1000; // 1 second between calls (1000 calls/day limit)
 const apiLogger = logger.child('Pandascore');
 
 // Environment variable for Pandascore token
-const PANDASCORE_TOKEN = import.meta.env.VITE_PANDASCORE_TOKEN || '';
+const PANDASCORE_TOKEN = (import.meta as unknown as { env: Record<string, string> }).env.VITE_PANDASCORE_TOKEN || '';
 
 // ============================================================================
 // Type Definitions

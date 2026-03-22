@@ -2,9 +2,9 @@
  * SATOR Hub - Hub 1: The Observatory
  * Raw data ingestion with orbital ring navigation
  * 
- * [Ver002.000] - Consolidated: Merged legacy orbital ring visualization
+ * [Ver004.000] - Added SimRating Web Worker Analytics
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Database, 
@@ -14,13 +14,19 @@ import {
   Trophy, 
   Search, 
   Activity,
-  FileCheck 
+  FileCheck,
+  Table,
+  Zap,
+  Calculator,
+  BarChart3
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { colors } from '@/theme/colors';
 import { StatsGrid } from './components/StatsGrid';
 import { PlayerWidget } from './components/PlayerWidget';
-import { useSatorData } from './hooks/useSatorData';
+import { VirtualDataGrid } from './components/VirtualDataGrid';
+import { VirtualPlayerGrid } from './components/VirtualPlayerGrid';
+import { PlayerRatingCard } from './components/PlayerRatingCard';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
 import { 
   MLInferenceErrorBoundary, 
@@ -28,6 +34,8 @@ import {
   HubErrorFallback 
 } from '@/components/error';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
+import { useSimRating } from './hooks/useSimRating';
 
 const HUB_CONFIG = {
   name: 'SATOR',
@@ -76,15 +84,126 @@ const itemVariants = {
   },
 };
 
+// Generate mock player data for the grid
+const generateMockPlayerData = (count = 1000) => {
+  const agents = ['Jett', 'Reyna', 'Sage', 'Omen', 'Phoenix', 'Raze', 'Viper', 'Cypher'];
+  const teams = ['Sentinels', 'Cloud9', 'NRG', 'Evil Geniuses', 'LOUD', 'Fnatic', 'NAVI', 'Furia'];
+  
+  return Array.from({ length: count }, (_, i) => ({
+    id: `player-${i + 1}`,
+    rank: i + 1,
+    name: `Player ${i + 1}`,
+    team: teams[Math.floor(Math.random() * teams.length)],
+    agent: agents[Math.floor(Math.random() * agents.length)],
+    rating: +(Math.random() * 1.5 + 0.5).toFixed(2),
+    acs: Math.floor(Math.random() * 300 + 150),
+    kda: (Math.random() * 3 + 0.5).toFixed(2),
+    winRate: Math.floor(Math.random() * 40 + 40),
+    matches: Math.floor(Math.random() * 100 + 50),
+    trend: Math.floor(Math.random() * 40) - 20
+  }));
+};
+
+// Grid columns configuration
+const playerGridColumns = [
+  { key: 'rank', header: 'Rank', width: 60, type: 'number', align: 'center' },
+  { key: 'name', header: 'Player', width: 150, type: 'text', align: 'left' },
+  { key: 'team', header: 'Team', width: 140, type: 'text', align: 'left' },
+  { key: 'agent', header: 'Agent', width: 100, type: 'text', align: 'center' },
+  { key: 'rating', header: 'Rating', width: 80, type: 'rating', align: 'center' },
+  { key: 'acs', header: 'ACS', width: 80, type: 'number', align: 'center' },
+  { key: 'kda', header: 'KDA', width: 80, type: 'rating', align: 'center' },
+  { key: 'winRate', header: 'Win %', width: 80, type: 'trend', align: 'center' },
+  { key: 'matches', header: 'Matches', width: 90, type: 'number', align: 'center' },
+];
+
 function SatorHubContent() {
-  const { stats, players, isLoading, error } = useSatorData();
+  const [stats, setStats] = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const addNotification = useNJZStore(state => state.addNotification);
   const { state, setState } = useHubState('sator');
+  const gridRef = useRef(null);
   
   // Orbital ring state (from legacy)
   const [activeRing, setActiveRing] = useState(null);
   const [rotation, setRotation] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showGridView, setShowGridView] = useState(false);
+  const [gridData, setGridData] = useState([]);
+  const [workerCapabilities, setWorkerCapabilities] = useState({ 
+    supported: false, 
+    offscreen: false 
+  });
+
+  // Check worker capabilities on mount
+  useEffect(() => {
+    setWorkerCapabilities({
+      supported: isWorkerSupported(),
+      offscreen: isOffscreenCanvasSupported()
+    });
+  }, []);
+
+  // Initialize worker pool for multiple grids
+  useEffect(() => {
+    if (isWorkerSupported()) {
+      // Pre-initialize worker pool
+      const pool = getWorkerPool('grid', () => {
+        return new Worker(new URL('../workers/grid.worker.ts', import.meta.url), {
+          type: 'module'
+        });
+      }, {
+        maxWorkers: 2,
+        idleTimeoutMs: 60000
+      });
+
+      return () => {
+        // Cleanup pool on unmount
+        pool.dispose();
+      };
+    }
+  }, []);
+
+  // Generate mock data
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const mockStats = [
+          { value: 2847, label: 'Teams', trend: 'up' },
+          { value: 156, label: 'Matches', trend: 'neutral' },
+          { value: 12847, label: 'Players', trend: 'up' },
+          { value: 48, label: 'Tournaments', trend: 'up' },
+          { value: 2400000, label: 'Records', trend: 'up' },
+          { value: 99.9, label: 'Uptime %', trend: 'neutral' },
+        ];
+
+        const mockPlayers = Array.from({ length: 5 }, (_, i) => ({
+          id: `player-${i}`,
+          name: ['TenZ', 'aspas', 'yay', 'Derke', 'something'][i],
+          team: ['Sentinels', 'LOUD', 'Cloud9', 'Fnatic', 'Paper Rex'][i],
+          rating: [1.45, 1.42, 1.38, 1.35, 1.33][i],
+          trend: 'up'
+        }));
+
+        const mockGridData = generateMockPlayerData(1000);
+
+        setStats(mockStats);
+        setPlayers(mockPlayers);
+        setGridData(mockGridData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   // Rotation animation (from legacy)
   useEffect(() => {
@@ -104,6 +223,22 @@ function SatorHubContent() {
     if (searchQuery.trim()) {
       addNotification(`Searching RAWS for "${searchQuery}"...`, 'info');
     }
+  };
+
+  const handleRowClick = (row, index) => {
+    addNotification(`Selected player: ${row.name} (Rank #${row.rank})`, 'info');
+  };
+
+  const handleCellClick = (row, column, value) => {
+    console.log('Cell clicked:', { row, column, value });
+  };
+
+  const scrollToTop = () => {
+    gridRef.current?.scrollToTop();
+  };
+
+  const scrollToBottom = () => {
+    gridRef.current?.scrollToBottom();
   };
 
   return (
@@ -188,6 +323,106 @@ function SatorHubContent() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Player Widgets */}
         <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
+          {/* Virtual Data Grid - NEW */}
+          <GlassCard 
+            className="p-6" 
+            hoverGlow={HUB_CONFIG.glow}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Table className="w-5 h-5" style={{ color: HUB_CONFIG.color }} />
+                <h2 
+                  className="text-lg font-semibold"
+                  style={{ color: HUB_CONFIG.color }}
+                >
+                  Player Rankings
+                </h2>
+                {workerCapabilities.supported && (
+                  <span 
+                    className="text-xs px-2 py-0.5 rounded-full font-mono"
+                    style={{ 
+                      backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                      color: colors.status.success
+                    }}
+                  >
+                    <Zap className="w-3 h-3 inline mr-1" />
+                    {workerCapabilities.offscreen ? 'Web Worker + OffscreenCanvas' : 'Web Worker'}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={scrollToTop}
+                  className="text-xs px-3 py-1.5 rounded-md transition-colors"
+                  style={{ 
+                    color: HUB_CONFIG.color,
+                    border: `1px solid ${HUB_CONFIG.muted}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  Top
+                </button>
+                <button
+                  onClick={scrollToBottom}
+                  className="text-xs px-3 py-1.5 rounded-md transition-colors"
+                  style={{ 
+                    color: HUB_CONFIG.color,
+                    border: `1px solid ${HUB_CONFIG.muted}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  Bottom
+                </button>
+              </div>
+            </div>
+            
+            {error ? (
+              <div 
+                className="p-4 rounded-lg text-center"
+                style={{ 
+                  backgroundColor: 'rgba(255, 70, 85, 0.1)',
+                  color: colors.status.error,
+                }}
+              >
+                {error}
+              </div>
+            ) : (
+              <VirtualDataGrid
+                ref={gridRef}
+                data={gridData}
+                columns={playerGridColumns}
+                height={500}
+                rowHeight={40}
+                headerHeight={48}
+                onRowClick={handleRowClick}
+                onCellClick={handleCellClick}
+                useWorkerPool={true}
+                theme={{
+                  headerTextColor: HUB_CONFIG.color,
+                  accentColor: HUB_CONFIG.color,
+                }}
+              />
+            )}
+            
+            <p 
+              className="text-xs mt-3 text-center"
+              style={{ color: colors.text.muted }}
+            >
+              Showing {gridData.length.toLocaleString()} players • 
+              Scroll performance optimized with {workerCapabilities.offscreen ? 'OffscreenCanvas' : 'Virtual Scrolling'}
+            </p>
+          </GlassCard>
+
           {/* Orbital Ring System - Merged from legacy */}
           <GlassCard 
             className="p-6" 
@@ -363,6 +598,13 @@ function SatorHubContent() {
               </div>
             )}
           </GlassCard>
+
+          {/* SimRating Analytics Section - Web Worker Integration */}
+          <SimRatingAnalyticsSection 
+            hubColor={HUB_CONFIG.color} 
+            hubGlow={HUB_CONFIG.glow} 
+            hubMuted={HUB_CONFIG.muted} 
+          />
 
           {/* Search Section */}
           <GlassCard 
@@ -571,6 +813,286 @@ function SatorHubContent() {
           </GlassCard>
         </motion.div>
       </div>
+    </motion.div>
+  );
+}
+
+/**
+ * SimRating Analytics Section Component
+ * Demonstrates Web Worker-based SimRating calculations
+ */
+function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }) {
+  const addNotification = useNJZStore(state => state.addNotification);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [calculationTimes, setCalculationTimes] = useState([]);
+  
+  const { 
+    calculateBatch, 
+    isCalculating, 
+    isReady, 
+    cacheSize,
+    clearCache 
+  } = useSimRating();
+
+  // Sample players with realistic stats for demo
+  const samplePlayers = [
+    {
+      id: 'player-tenz',
+      name: 'TenZ',
+      team: 'Sentinels',
+      role: 'duelist',
+      region: 'NA',
+      stats: {
+        kills: 245,
+        deaths: 180,
+        assists: 45,
+        kd_ratio: 1.36,
+        adr: 168,
+        firstKills: 52,
+        first_kills_per_round: 0.18,
+        roundsPlayed: 289,
+        matchesPlayed: 12,
+        buy_efficiency: 0.78,
+        save_rate: 0.22,
+        clutchesWon: 8,
+        clutch_success_rate: 0.35,
+        clutchOpportunities: 23,
+        utility_usage: 0.65,
+        assists_per_round: 0.16,
+        entry_success_rate: 0.72,
+        entryWins: 42,
+        entryAttempts: 58
+      }
+    },
+    {
+      id: 'player-aspas',
+      name: 'aspas',
+      team: 'Leviatán',
+      role: 'duelist',
+      region: 'BR',
+      stats: {
+        kills: 312,
+        deaths: 195,
+        assists: 38,
+        kd_ratio: 1.60,
+        adr: 182,
+        firstKills: 68,
+        first_kills_per_round: 0.22,
+        roundsPlayed: 310,
+        matchesPlayed: 14,
+        buy_efficiency: 0.82,
+        save_rate: 0.18,
+        clutchesWon: 12,
+        clutch_success_rate: 0.42,
+        clutchOpportunities: 29,
+        utility_usage: 0.58,
+        assists_per_round: 0.12,
+        entry_success_rate: 0.78,
+        entryWins: 55,
+        entryAttempts: 71
+      }
+    },
+    {
+      id: 'player-boaster',
+      name: 'Boaster',
+      team: 'FNATIC',
+      role: 'controller',
+      region: 'EU',
+      stats: {
+        kills: 198,
+        deaths: 165,
+        assists: 89,
+        kd_ratio: 1.20,
+        adr: 142,
+        firstKills: 28,
+        first_kills_per_round: 0.09,
+        roundsPlayed: 312,
+        matchesPlayed: 13,
+        buy_efficiency: 0.88,
+        save_rate: 0.28,
+        clutchesWon: 6,
+        clutch_success_rate: 0.28,
+        clutchOpportunities: 22,
+        utility_usage: 0.85,
+        assists_per_round: 0.28,
+        entry_success_rate: 0.45,
+        entryWins: 18,
+        entryAttempts: 40
+      }
+    },
+    {
+      id: 'player-nats',
+      name: 'nAts',
+      team: 'Team Liquid',
+      role: 'sentinel',
+      region: 'RU',
+      stats: {
+        kills: 225,
+        deaths: 148,
+        assists: 72,
+        kd_ratio: 1.52,
+        adr: 155,
+        firstKills: 32,
+        first_kills_per_round: 0.11,
+        roundsPlayed: 298,
+        matchesPlayed: 12,
+        buy_efficiency: 0.85,
+        save_rate: 0.25,
+        clutchesWon: 15,
+        clutch_success_rate: 0.52,
+        clutchOpportunities: 29,
+        utility_usage: 0.78,
+        assists_per_round: 0.24,
+        entry_success_rate: 0.48,
+        entryWins: 22,
+        entryAttempts: 46
+      }
+    }
+  ];
+
+  // Calculate ratings for all sample players
+  const handleCalculateAll = async () => {
+    if (!isReady) {
+      addNotification('Analytics Worker not ready', 'error');
+      return;
+    }
+
+    const startTime = performance.now();
+    
+    const players = samplePlayers.map(p => ({
+      id: p.id,
+      payload: {
+        playerId: p.id,
+        playerStats: p.stats,
+        role: p.role,
+        confidence: Math.min(p.stats.matchesPlayed / 20, 1)
+      }
+    }));
+
+    try {
+      await calculateBatch(players);
+      const duration = performance.now() - startTime;
+      setCalculationTimes(prev => [...prev.slice(-9), duration]);
+      addNotification(`Calculated ${players.length} SimRatings in ${duration.toFixed(1)}ms`, 'success');
+    } catch (err) {
+      addNotification('Batch calculation failed', 'error');
+    }
+  };
+
+  // Calculate average time
+  const avgCalculationTime = calculationTimes.length > 0
+    ? calculationTimes.reduce((a, b) => a + b, 0) / calculationTimes.length
+    : 0;
+
+  return (
+    <motion.div variants={itemVariants}>
+      <GlassCard 
+        className="p-6" 
+        hoverGlow={hubGlow}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <Calculator className="w-5 h-5" style={{ color: hubColor }} />
+            <h2 
+              className="text-lg font-semibold"
+              style={{ color: hubColor }}
+            >
+              SimRating Analytics
+            </h2>
+            <span 
+              className="text-xs px-2 py-1 rounded-full"
+              style={{ 
+                backgroundColor: isReady ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                color: isReady ? '#10B981' : '#F59E0B'
+              }}
+            >
+              {isReady ? 'Worker Ready' : 'Initializing...'}
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {calculationTimes.length > 0 && (
+              <span 
+                className="text-xs font-mono"
+                style={{ color: hubMuted }}
+              >
+                Avg: {avgCalculationTime.toFixed(1)}ms
+              </span>
+            )}
+            <button
+              onClick={handleCalculateAll}
+              disabled={!isReady || isCalculating}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ 
+                backgroundColor: isCalculating ? `${hubColor}40` : hubColor,
+                color: isCalculating ? hubMuted : '#000',
+              }}
+            >
+              {isCalculating ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  Calculating...
+                </>
+              ) : (
+                <>
+                  <BarChart3 className="w-4 h-4" />
+                  Calculate All
+                </>
+              )}
+            </button>
+            {cacheSize > 0 && (
+              <button
+                onClick={clearCache}
+                className="px-3 py-2 rounded-lg text-xs font-medium transition-all"
+                style={{ 
+                  border: `1px solid ${hubMuted}`,
+                  color: hubMuted,
+                }}
+              >
+                Clear Cache ({cacheSize})
+              </button>
+            )}
+          </div>
+        </div>
+
+        <p className="text-sm mb-6" style={{ color: colors.text.secondary }}>
+          SimRating calculations run in a Web Worker to keep the UI responsive. 
+          The 5-component rating (Combat, Economy, Clutch, Support, Entry) is computed asynchronously with result caching.
+        </p>
+
+        {/* Player Rating Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {samplePlayers.map((player) => (
+            <PlayerRatingCard
+              key={player.id}
+              player={player}
+              compact={false}
+              showComponents={true}
+              onRatingCalculated={(result) => {
+                console.log(`[SATOR] SimRating calculated for ${player.name}:`, result);
+              }}
+              onError={(error) => {
+                console.error(`[SATOR] SimRating error for ${player.name}:`, error);
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Worker Status Footer */}
+        <div 
+          className="mt-6 pt-4 border-t flex items-center justify-between text-xs"
+          style={{ borderColor: colors.border.subtle }}
+        >
+          <div className="flex items-center gap-4" style={{ color: colors.text.muted }}>
+            <span>Worker Status: {isReady ? '✅ Connected' : '⏳ Loading'}</span>
+            <span>Cache: {cacheSize} entries</span>
+            <span>Calculations: {calculationTimes.length} batches</span>
+          </div>
+          <div style={{ color: colors.text.muted }}>
+            Web Worker Thread • Non-blocking UI
+          </div>
+        </div>
+      </GlassCard>
     </motion.div>
   );
 }

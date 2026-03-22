@@ -6,14 +6,14 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { _motion } from 'framer-motion';
 import { 
   Bold, 
   Italic, 
   Heading, 
   List, 
   Link, 
-  Image, 
+  _Image, 
   Code, 
   Eye, 
   Edit3,

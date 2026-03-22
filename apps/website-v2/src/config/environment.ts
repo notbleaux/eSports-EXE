@@ -41,10 +41,10 @@ export function getEnvironment(): Environment {
   
   return {
     NODE_ENV: nodeEnv,
-    VITE_API_URL: import.meta.env?.VITE_API_URL,
-    VITE_WS_URL: import.meta.env?.VITE_WS_URL,
-    VITE_MODEL_REGISTRY_URL: import.meta.env?.VITE_MODEL_REGISTRY_URL,
-    DEBUG: import.meta.env?.DEBUG === 'true' || nodeEnv === 'development'
+    VITE_API_URL: (import.meta as unknown as { env: Record<string, string> }).env?.VITE_API_URL,
+    VITE_WS_URL: (import.meta as unknown as { env: Record<string, string> }).env?.VITE_WS_URL,
+    VITE_MODEL_REGISTRY_URL: (import.meta as unknown as { env: Record<string, string> }).env?.VITE_MODEL_REGISTRY_URL,
+    DEBUG: (import.meta as unknown as { env: Record<string, string> }).env?.DEBUG === 'true' || nodeEnv === 'development'
   }
 }
 

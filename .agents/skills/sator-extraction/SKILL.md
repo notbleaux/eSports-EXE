@@ -4,7 +4,7 @@ description: "Web scraping and data extraction for 4NJZ4 TENET Platform from VLR
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Extraction
@@ -355,7 +355,15 @@ pytest extraction/tests/ -v
 python -m extraction.scripts.validate_extraction
 ```
 
+## New in 2.1.0
+
+- Pandascore API client for official data access
+- Enhanced VLR client with rate limiting
+- KnownRecordRegistry for deduplication
+- Content drift detection patterns
+
 ## References
 
 - [AXIOM.md](../../../docs/AXIOM.md)
 - [DATA_DICTIONARY.md](../../../docs/DATA_DICTIONARY.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

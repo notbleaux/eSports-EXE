@@ -4,7 +4,7 @@ description: "Enforce SATOR data partition firewall between game simulation and 
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Data Firewall
@@ -216,6 +216,14 @@ npm run validate:schema
 python -m packages.shared.axiom-esports-data.extraction.tests.test_firewall
 ```
 
+## New in 2.1.0
+
+- Enhanced GAME_ONLY_FIELDS coverage
+- Improved middleware filtering
+- Better error messages for violations
+- CI/CD integration for automated testing
+
 ## References
 
 - [FIREWALL_POLICY.md](../../../docs/FIREWALL_POLICY.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

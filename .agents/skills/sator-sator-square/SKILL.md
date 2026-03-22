@@ -4,7 +4,7 @@ description: "5-layer SATOR Square visualization with D3.js and WebGL for 4NJZ4 
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Square Visualization
@@ -319,7 +319,15 @@ npm run test:webgl
 npm run analyze:performance
 ```
 
+## New in 2.1.0
+
+- Enhanced 5-layer composition system
+- Improved D3.js integration patterns
+- WebGL shader optimization
+- Protanopia-safe color schemes
+
 ## References
 
 - [D3.js Documentation](https://d3js.org/)
 - [WebGL2 Fundamentals](https://webgl2fundamentals.org/)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

@@ -4,7 +4,7 @@ description: "Libre-X-eSport 4NJZ4 TENET Platform project orchestration. USE FOR
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Libre-X-eSport 4NJZ4 TENET Platform
@@ -67,6 +67,7 @@ Activate this skill when user wants to:
 | Combat resolution, duels | `sator-simulation` |
 | Render, Vercel, CI/CD | `sator-deployment` |
 | Cross-component features | `sator-end-to-end` |
+| Agent coordination, JLB | `sator-coordination` |
 
 ## Project Architecture
 
@@ -300,3 +301,4 @@ All documents MUST include version header:
 - **AGENTS.md**: Project conventions and guidelines
 - **README.md**: User overview
 - **docs/**: Architecture and API documentation
+- **memory/CURRENT_FOCUS.md**: Current priorities and progress

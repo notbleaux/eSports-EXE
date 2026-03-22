@@ -14,7 +14,7 @@ import {
   Eye, 
   Tag, 
   CheckCircle,
-  XCircle,
+  _XCircle,
   MessageSquare
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -24,7 +24,7 @@ import { WikiArticle, ArticleFeedback } from './types';
 interface WikiArticleViewerProps {
   article: WikiArticle;
   onFeedback?: (feedback: ArticleFeedback) => void;
-  showNavigation?: boolean;
+  _showNavigation?: boolean;
 }
 
 export const WikiArticleViewer: React.FC<WikiArticleViewerProps> = ({

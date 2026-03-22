@@ -4,7 +4,7 @@ description: "Free-tier deployment for 4NJZ4 TENET Platform on Render, Vercel, G
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Deployment
@@ -425,8 +425,16 @@ render.com → Dashboard → Service → Logs
 vercel.com → Dashboard → Project → Deployments
 ```
 
+## New in 2.1.0
+
+- Cold start mitigation with keepalive workflow
+- Enhanced health check patterns
+- GitHub Actions deployment automation
+- Zero-cost stack optimization
+
 ## References
 
 - [Render Documentation](https://render.com/docs)
 - [Vercel Documentation](https://vercel.com/docs)
 - [Supabase Documentation](https://supabase.com/docs)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

@@ -1,17 +1,65 @@
 {
-  "name": "LibreauxNJZ Platform",
-  "short_name": "LibreauxNJZ",
-  "description": "Advanced esports analytics and simulation platform",
+  "name": "4NJZ4 TENET",
+  "short_name": "4NJZ4",
+  "description": "Advanced esports analytics and simulation platform - SATOR Analytics, ROTAS Simulation, and tactical FPS insights",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#00f0ff",
-  "orientation": "landscape-primary",
+  "orientation": "any",
   "scope": "/",
   "lang": "en",
   "dir": "ltr",
-  "categories": ["games", "entertainment", "utilities"],
+  "categories": ["games", "entertainment", "utilities", "sports"],
   "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "/icons/icon-192x192.svg",
       "sizes": "192x192",
@@ -30,25 +78,71 @@
       "src": "/screenshots/wide.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": "wide",
+      "label": "SATOR Analytics Dashboard"
+    },
+    {
+      "src": "/screenshots/narrow.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile Analytics View"
     }
   ],
   "shortcuts": [
     {
       "name": "SATOR Analytics",
       "short_name": "Analytics",
-      "description": "View esports analytics",
+      "description": "View esports analytics and player stats",
       "url": "/sator",
-      "icons": [{ "src": "/icons/icon-192x192.svg", "sizes": "192x192" }]
+      "icons": [
+        { "src": "/icons/icon-192x192.png", "sizes": "192x192" },
+        { "src": "/icons/icon-96x96.png", "sizes": "96x96" }
+      ]
     },
     {
       "name": "ROTAS Simulation",
       "short_name": "Simulation",
       "description": "Run match simulations",
       "url": "/rotas",
-      "icons": [{ "src": "/icons/icon-192x192.svg", "sizes": "192x192" }]
+      "icons": [
+        { "src": "/icons/icon-192x192.png", "sizes": "192x192" },
+        { "src": "/icons/icon-96x96.png", "sizes": "96x96" }
+      ]
+    },
+    {
+      "name": "Player Search",
+      "short_name": "Players",
+      "description": "Search player statistics",
+      "url": "/sator/players",
+      "icons": [
+        { "src": "/icons/icon-192x192.png", "sizes": "192x192" },
+        { "src": "/icons/icon-96x96.png", "sizes": "96x96" }
+      ]
     }
   ],
   "related_applications": [],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "edge_side_panel": {},
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+4njz4",
+      "url": "/%s"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "name",
+      "text": "description",
+      "url": "link"
+    }
+  }
 }

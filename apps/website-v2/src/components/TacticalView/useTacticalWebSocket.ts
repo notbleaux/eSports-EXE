@@ -36,7 +36,7 @@ export interface UseTacticalWebSocketOptions {
   maxReconnectAttempts?: number;
 }
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/v1/ws';
+const WS_URL = (import.meta as unknown as { env: Record<string, string> }).env.VITE_WS_URL || 'ws://localhost:8000/v1/ws';
 const DEFAULT_RECONNECT_INTERVAL = 3000;
 const DEFAULT_MAX_RECONNECT_ATTEMPTS = 5;
 const PING_INTERVAL = 30000;
@@ -57,7 +57,7 @@ export const useTacticalWebSocket = (
   } = options;
 
   const wsRef = useRef<WebSocket | null>(null);
-  const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pongTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);

@@ -1,9 +1,9 @@
 /**
  * Navigation Component - Hub Switcher
  * Fixed glassmorphism header with all 5 hubs
- * [Ver001.000]
+ * [Ver002.000] - Added prefetch on hover for code splitting optimization
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Eye, Activity, Book, Map, Grid3X3, Zap } from 'lucide-react';
@@ -16,6 +16,109 @@ export const HUBS = [
   { id: 'opera', name: 'OPERA', path: '/opera', color: '#9d4edd', icon: Map, subtitle: 'The Nexus' },
   { id: 'tenet', name: 'TENET', path: '/tenet', color: '#ffffff', icon: Grid3X3, subtitle: 'The Center' },
 ];
+
+// Prefetch cache to track loaded modules
+const prefetchCache = new Set();
+
+// Prefetch function for route preloading on hover
+const prefetchHub = (hubId) => {
+  if (prefetchCache.has(hubId)) return;
+  
+  const prefetchers = {
+    sator: () => import('../hub-1-sator/index.jsx'),
+    rotas: () => import('../hub-2-rotas/index.jsx'),
+    arepo: () => import('../hub-3-arepo/index.jsx'),
+    opera: () => import('../hub-4-opera/index.tsx'),
+    tenet: () => import('../hub-5-tenet/index.jsx'),
+  };
+  
+  if (prefetchers[hubId]) {
+    prefetchCache.add(hubId);
+    // Use requestIdleCallback for non-critical prefetching
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        prefetchers[hubId]();
+        console.log(`[Prefetch] ${hubId} hub loaded`);
+      }, { timeout: 2000 });
+    } else {
+      // Fallback for Safari
+      setTimeout(() => {
+        prefetchers[hubId]();
+      }, 100);
+    }
+  }
+};
+
+// HubLink component with prefetch on hover
+function HubLink({ hub, isActive }) {
+  const Icon = hub.icon;
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+    // Prefetch the hub module on hover
+    prefetchHub(hub.id);
+  }, [hub.id]);
+  
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+  
+  return (
+    <Link
+      to={hub.path}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`
+        relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
+        flex items-center gap-2 group
+        ${isActive 
+          ? 'text-white' 
+          : 'text-white/60 hover:text-white hover:bg-white/5'
+        }
+      `}
+    >
+      <Icon 
+        className="w-4 h-4 transition-colors" 
+        style={{ color: isActive ? hub.color : undefined }}
+      />
+      <span>{hub.name}</span>
+      
+      {/* Prefetch indicator (subtle) */}
+      {!isActive && isHovered && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#00ff88]/50"
+          title="Prefetching..."
+        />
+      )}
+      
+      {/* Active indicator */}
+      {isActive && (
+        <motion.div
+          layoutId="nav-indicator"
+          className="absolute inset-0 rounded-xl border-2"
+          style={{ borderColor: hub.color }}
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        />
+      )}
+      
+      {/* Glow effect for active hub */}
+      {isActive && (
+        <motion.div
+          className="absolute inset-0 rounded-xl -z-10"
+          style={{
+            background: `radial-gradient(circle at center, ${hub.color}20 0%, transparent 70%)`,
+          }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1.2 }}
+          transition={{ duration: 0.3 }}
+        />
+      )}
+    </Link>
+  );
+}
 
 function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,54 +179,13 @@ function Navigation() {
 
             {/* Desktop Navigation - Hub Buttons */}
             <div className="hidden md:flex items-center gap-1">
-              {HUBS.map((hub) => {
-                const Icon = hub.icon;
-                const active = isActive(hub.path);
-                
-                return (
-                  <Link
-                    key={hub.id}
-                    to={hub.path}
-                    className={`
-                      relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
-                      flex items-center gap-2 group
-                      ${active 
-                        ? 'text-white' 
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
-                      }
-                    `}
-                  >
-                    <Icon 
-                      className="w-4 h-4 transition-colors" 
-                      style={{ color: active ? hub.color : undefined }}
-                    />
-                    <span>{hub.name}</span>
-                    
-                    {/* Active indicator */}
-                    {active && (
-                      <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 rounded-xl border-2"
-                        style={{ borderColor: hub.color }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                      />
-                    )}
-                    
-                    {/* Glow effect for active hub */}
-                    {active && (
-                      <motion.div
-                        className="absolute inset-0 rounded-xl -z-10"
-                        style={{
-                          background: `radial-gradient(circle at center, ${hub.color}20 0%, transparent 70%)`,
-                        }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1.2 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    )}
-                  </Link>
-                );
-              })}
+              {HUBS.map((hub) => (
+                <HubLink
+                  key={hub.id}
+                  hub={hub}
+                  isActive={isActive(hub.path)}
+                />
+              ))}
             </div>
 
             {/* Live Status Indicator */}
@@ -186,7 +248,7 @@ function Navigation() {
                   </Link>
                 </motion.div>
 
-                {/* Hub Links */}
+                {/* Hub Links with prefetch */}
                 {HUBS.map((hub, index) => {
                   const Icon = hub.icon;
                   const active = isActive(hub.path);
@@ -201,6 +263,7 @@ function Navigation() {
                       <Link
                         to={hub.path}
                         onClick={() => setIsOpen(false)}
+                        onMouseEnter={() => prefetchHub(hub.id)}
                         className={`
                           flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all
                           ${active 

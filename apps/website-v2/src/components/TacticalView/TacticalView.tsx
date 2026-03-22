@@ -7,13 +7,13 @@
  */
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { 
+import type { 
   TacticalViewProps, 
   TacticalViewState, 
   MatchFrame, 
-  Position,
-  PLAYBACK_SPEEDS
+  Position
 } from './types';
+import { PLAYBACK_SPEEDS } from './types';
 import { TacticalControls } from './TacticalControls';
 import { TimelineScrubber } from './TimelineScrubber';
 // TODO: AgentSprite and AGENT_ROLE_COLORS to be used for enhanced sprite rendering in future update

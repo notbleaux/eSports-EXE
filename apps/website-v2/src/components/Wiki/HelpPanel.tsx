@@ -36,7 +36,7 @@ export const HelpPanel: React.FC<HelpPanelProps> = ({
   const [articles, setArticles] = useState<WikiArticleSummary[]>([]);
   const [navigation, setNavigation] = useState<WikiNavigationItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
+  const [_isSearching, setIsSearching] = useState(false);
 
   // Mock data - replace with API calls
   useEffect(() => {

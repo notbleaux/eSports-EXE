@@ -8,7 +8,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useMLInference } from './useMLInference'
 import type { DataStreamCommand, DataStreamResponse, StreamData } from '../workers/data-stream.worker'
-import type { PredictionResult, StreamingMetrics } from '../types/ml'
+// Types defined locally to avoid conflicts
 import { 
   BUFFER_SIZE,
   MAX_STREAMING_PREDICTIONS,
@@ -16,12 +16,13 @@ import {
   LAG_GREEN_THRESHOLD_MS,
   LAG_YELLOW_THRESHOLD_MS
 } from '../constants/ml'
-import { analyticsSync } from '../services/analyticsSync'
-import { streamingLogger } from '../utils/logger'
+// import { analyticsSync } from '../services/analyticsSync'
+import { streamingLogger as logger } from '../utils/logger'
 
 /**
  * Debounce hook for stable debounced callbacks
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function useDebounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   fn: T,
   delay: number

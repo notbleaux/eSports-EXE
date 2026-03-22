@@ -4,7 +4,7 @@ description: "Godot 4 game development for 4NJZ4 TENET Platform tactical FPS sim
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Godot Development
@@ -246,8 +246,16 @@ cd platform/simulation-game
 ./scripts/verify_determinism.sh
 ```
 
+## New in 2.1.0
+
+- C# simulation core integration
+- Enhanced GDScript patterns
+- Improved 20 TPS timestep handling
+- Determinism testing framework
+
 ## References
 
 - [AGENTS.md](../../../AGENTS.md)
 - [docs/map_format.md](../../../docs/map_format.md)
 - [docs/replay.md](../../../docs/replay.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

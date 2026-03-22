@@ -4,7 +4,7 @@ description: "React TypeScript frontend development for 4NJZ4 TENET Platform. US
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR React Frontend (4NJZ4 TENET Platform)
@@ -303,9 +303,17 @@ npm run test
 npx playwright test
 ```
 
+## New in 2.1.0
+
+- Enhanced error boundaries with MLInferenceErrorBoundary
+- Feature flag system via `config/features.ts`
+- Sentry integration for error tracking
+- WebSocket support for live data
+
 ## References
 
 - [React Documentation](https://react.dev/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/)
 - [TanStack Query Documentation](https://tanstack.com/query/)
 - [Vite Documentation](https://vitejs.dev/)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

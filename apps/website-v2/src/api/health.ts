@@ -108,8 +108,8 @@ export async function getHealthStatus(): Promise<HealthCheckResponse> {
       webVitals
     },
     metadata: {
-      environment: import.meta.env.VITE_APP_ENV || 'production',
-      buildId: import.meta.env.VITE_BUILD_ID || 'unknown',
+      environment: (import.meta as unknown as { env: Record<string, string> }).env.VITE_APP_ENV || 'production',
+      buildId: (import.meta as unknown as { env: Record<string, string> }).env.VITE_BUILD_ID || 'unknown',
       nodeVersion: typeof process !== 'undefined' ? process.version : undefined
     }
   }

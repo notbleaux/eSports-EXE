@@ -2,11 +2,15 @@
  * useGridWorker Hook - Main Thread Interface for Grid Worker
  * Manages worker lifecycle and provides typed message interface
  * 
- * [Ver001.000]
+ * [Ver002.000] - Updated to use types/worker.ts
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { WorkerCommand, WorkerResponse, PanelData } from './grid.worker'
+import type { 
+  GridRenderCommand as WorkerCommand,
+  GridRenderResult as WorkerResponse,
+  GridRow as PanelData
+} from '../types/worker'
 
 export type WorkerErrorType = 'init-failed' | 'render-failed' | 'timeout' | 'unsupported' | 'unknown'
 
@@ -53,6 +57,8 @@ function checkSupport(): boolean {
 
 /**
  * React hook for managing grid worker
+ * 
+ * @deprecated Use the new useGridWorker from '@/hooks/workers/useGridWorker' instead
  */
 export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorkerReturn {
   const { 
@@ -98,39 +104,27 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
     worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
       const response = event.data
 
-      switch (response.type) {
-        case 'PING':
-          if (isMounted) setIsReady(true)
-          break
-
-        case 'INIT_SUCCESS':
-          resolvePending('INIT')
-          break
-
-        case 'RENDER_COMPLETE':
-          resolvePending('RENDER')
-          onRenderComplete?.(response.panelCount, response.renderTime)
-          break
-
-        case 'RESIZE_SUCCESS':
-          resolvePending('RESIZE')
-          break
-
-        case 'CLEAR_COMPLETE':
-          resolvePending('CLEAR')
-          break
-
-        case 'ERROR': {
-          const workerError: WorkerError = {
-            type: classifyError(response.message),
-            message: response.message,
-            timestamp: Date.now(),
-          }
-          rejectPending(workerError)
-          onError?.(workerError)
-          if (isMounted) setError(workerError)
-          break
+      if (!response.success) {
+        const workerError: WorkerError = {
+          type: 'unknown',
+          message: 'Worker operation failed',
+          timestamp: Date.now(),
         }
+        rejectPending(workerError)
+        onError?.(workerError)
+        if (isMounted) setError(workerError)
+        return
+      }
+
+      // Success - resolve pending
+      resolvePending('operation')
+      
+      if (response.renderTime !== undefined && response.renderedCells !== undefined) {
+        onRenderComplete?.(response.renderedCells, response.renderTime)
+      }
+      
+      if (isMounted && !isReady) {
+        setIsReady(true)
       }
     }
 
@@ -154,7 +148,7 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
       // Clear pending map on cleanup
       pendingRef.current.clear()
     }
-  }, [isSupported, onError, onRenderComplete])
+  }, [isSupported, onError, onRenderComplete, isReady])
 
   // Helper to resolve pending promises
   const resolvePending = (operation: string) => {
@@ -169,15 +163,6 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
   const rejectPending = (error: WorkerError) => {
     pendingRef.current.forEach(({ reject }) => reject(error))
     pendingRef.current.clear()
-  }
-
-  // Classify error message to type
-  const classifyError = (message: string): WorkerErrorType => {
-    if (message.includes('INIT') || message.includes('initialize')) return 'init-failed'
-    if (message.includes('RENDER') || message.includes('render')) return 'render-failed'
-    if (message.includes('timeout') || message.includes('timed out')) return 'timeout'
-    if (message.includes('not supported')) return 'unsupported'
-    return 'unknown'
   }
 
   // Helper to send message and wait for response
@@ -244,10 +229,12 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
         canvasRef.current = offscreen
 
         const command: WorkerCommand = {
-          type: 'INIT',
-          canvas: offscreen,
-          width: w,
-          height: h,
+          type: 'init',
+          payload: {
+            canvas: offscreen,
+            width: w,
+            height: h,
+          }
         }
 
         // Send with transfer
@@ -258,7 +245,12 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
           setTimeout(() => {
             if (pendingRef.current.has(id)) {
               pendingRef.current.delete(id)
-              reject('INIT timed out')
+              const timeoutErr: WorkerError = {
+                type: 'timeout',
+                message: 'INIT timed out',
+                timestamp: Date.now()
+              }
+              reject(timeoutErr)
             }
           }, 5000)
 
@@ -266,7 +258,12 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
         })
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
-        setError(message)
+        const errObj: WorkerError = {
+          type: 'init-failed',
+          message,
+          timestamp: Date.now()
+        }
+        setError(errObj)
         throw err
       }
     },
@@ -279,7 +276,10 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
   const render = useCallback(
     async (panels: PanelData[]): Promise<void> => {
       lastPanelsRef.current = panels
-      const command: WorkerCommand = { type: 'RENDER', panels }
+      const command: WorkerCommand = { 
+        type: 'render',
+        payload: { panels }
+      }
       await sendMessage(command, 'RENDER')
     },
     [sendMessage]
@@ -311,7 +311,7 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
         const workerError: WorkerError = {
           type: 'render-failed',
           message: err instanceof Error ? err.message : 'Panel render failed',
-          panelId: panel.id,
+          panelId: String(panel.id),
           timestamp: Date.now(),
         }
         onError?.(workerError)
@@ -326,7 +326,10 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
    */
   const resize = useCallback(
     async (w: number, h: number): Promise<void> => {
-      const command: WorkerCommand = { type: 'RESIZE', width: w, height: h }
+      const command: WorkerCommand = { 
+        type: 'resize',
+        payload: { width: w, height: h }
+      }
       await sendMessage(command, 'RESIZE')
     },
     [sendMessage]
@@ -336,7 +339,10 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
    * Clear canvas
    */
   const clear = useCallback(async (): Promise<void> => {
-    const command: WorkerCommand = { type: 'CLEAR' }
+    const command: WorkerCommand = { 
+      type: 'terminate',
+      payload: {}
+    }
     await sendMessage(command, 'CLEAR')
   }, [sendMessage])
 
@@ -345,7 +351,10 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
    */
   const destroy = useCallback((): void => {
     if (workerRef.current) {
-      const command: WorkerCommand = { type: 'DESTROY' }
+      const command: WorkerCommand = { 
+        type: 'terminate',
+        payload: {}
+      }
       workerRef.current.postMessage(command)
       workerRef.current.terminate()
       workerRef.current = null

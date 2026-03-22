@@ -2,9 +2,9 @@
  * useSatorData Hook
  * Data fetching hook for SATOR Hub with Pandascore API integration
  * 
- * [Ver002.000] - Integrated Pandascore API with caching and fallback
+ * [Ver003.000] - Added virtual scrolling support with large dataset generation
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { logger } from '@/utils/logger';
 import {
   pandascoreApi,
@@ -13,7 +13,70 @@ import {
   isPandascoreAvailable,
 } from '@/api/pandascore';
 
-// Mock player data for fallback
+// Test dataset sizes for performance testing
+export const TEST_DATASET_SIZES = {
+  SMALL: 100,
+  MEDIUM: 500,
+  LARGE: 1000,
+  XLARGE: 5000,
+};
+
+// Player name pool for generating mock data
+const PLAYER_NAMES = [
+  'TenZ', 'aspas', 'yay', 'ScreaM', 'Derke', 'Alfajer', 'Boaster', 'Chronicle',
+  'Leo', 'Sayf', 'Redgar', 'nAts', 'cNed', 'zeek', 'Soulcas', 'Kiles',
+  'Mixwell', 'Shao', 'Zyppan', 'Suygetsu', 'Ardiis', 'Crashies', 'FNS', 'Victor',
+  'Marved', 'yay', 'Leaf', 'Vanity', 'Xeta', 'Autumn', 'Sike', 'Effys',
+  'Boostio', 'Bdog', 'Asuna', 'Cryocells', 'Ethan', 'Demon1', 'Jawgemo', 'Boostio',
+  'F0rsakeN', 'Jinggg', 'Mindfreak', 'Something', 'Benkai', 'Deryeon', 'Lenne', 'Retla',
+  'Medusa', 'BORKUM', 'Dispenser', 'JessieVash', 'Khaled', 'Paradox', 'Pengg', 'Wild0reoo',
+  'NagZ', 'Klaus', 'DaveeyS', 'Melser', 'Tacolilla', 'Adverso', 'Shyy', 'Nozwerr',
+  'Heat', 'TxoziN', 'Mazin', 'Qck', 'Less', 'Saadhak', 'Sato', 'Pancada',
+  'Tuyz', 'Cauanzin', 'Nozwerr', 'Khalil', 'Takk', 'Frz', 'Kon4n', 'Nyang',
+  'Artzin', 'Dgzin', 'Mwzera', 'Rglmeister', 'Ptc', 'Splendiferous', 'Primmie', 'JcVash'
+];
+
+const TEAMS = [
+  'Sentinels', 'Leviatán', 'Disguised', 'Karmine Corp', 'FNATIC', 'NAVI', 'Team Liquid',
+  'Paper Rex', 'DRX', 'Gen.G', 'T1', 'ZETA DIVISION', 'Rex Regum Qeon', 'BLEED',
+  'Evil Geniuses', 'Cloud9', 'LOUD', 'NRG', 'G2 Esports', '100 Thieves', 'FaZe Clan',
+  'Version1', 'Shopify Rebellion', 'Moist Moguls', 'Talon Esports', 'Global Esports',
+  'Team Secret', 'MIBR', 'Furia', 'Vivo Keyd', 'Liberty', 'Fluxo', 'Oxygen Esports'
+];
+
+const NATIONALITIES = ['US', 'CA', 'BR', 'MX', 'AR', 'CL', 'CO', 'PE', 'EU', 'UK', 'FR', 'DE', 'ES', 'PT', 'IT', 'PL', 'RU', 'UA', 'TR', 'KR', 'JP', 'CN', 'TW', 'TH', 'SG', 'ID', 'PH', 'VN', 'AU', 'NZ'];
+
+/**
+ * Generate mock players for performance testing
+ * @param {number} count - Number of players to generate
+ * @returns {Array} Array of mock player objects
+ */
+export function generateMockPlayers(count = 100) {
+  return Array.from({ length: count }, (_, index) => {
+    const name = PLAYER_NAMES[index % PLAYER_NAMES.length] + (index >= PLAYER_NAMES.length ? ` ${Math.floor(index / PLAYER_NAMES.length) + 1}` : '');
+    const team = TEAMS[index % TEAMS.length];
+    const nationality = NATIONALITIES[index % NATIONALITIES.length];
+    
+    // Generate realistic stats with some randomness
+    const baseRating = 0.8 + Math.random() * 0.6; // 0.8 - 1.4
+    const baseACS = 180 + Math.random() * 120; // 180 - 300
+    const baseWinRate = 40 + Math.random() * 40; // 40% - 80%
+    
+    return {
+      id: `player-${index + 1}`,
+      name,
+      team,
+      nationality,
+      rating: parseFloat(baseRating.toFixed(2)),
+      acs: Math.round(baseACS),
+      kda: (0.8 + Math.random() * 0.8).toFixed(2),
+      winRate: parseFloat(baseWinRate.toFixed(1)),
+      avatar: null,
+    };
+  });
+}
+
+// Default mock player data for fallback (small set)
 const MOCK_PLAYERS = [
   {
     id: '1',
@@ -99,6 +162,8 @@ const satorLogger = logger.child('useSatorData');
  * useSatorData - Custom hook for fetching SATOR hub data
  * Attempts to fetch from Pandascore API, falls back to mock data on failure
  * 
+ * @param {Object} options - Hook options
+ * @param {number} options.testDatasetSize - Size of mock dataset for testing (default: 6)
  * @returns {Object} - Data and state for SATOR hub
  * @returns {Array} return.stats - Platform statistics
  * @returns {Array} return.players - Top player data
@@ -106,13 +171,25 @@ const satorLogger = logger.child('useSatorData');
  * @returns {string|null} return.error - Error message if any
  * @returns {Function} return.refresh - Function to refresh data
  * @returns {boolean} return.isUsingMockData - Whether currently using mock data
+ * @returns {Function} return.generateTestData - Generate test dataset of specified size
  */
-export function useSatorData() {
+export function useSatorData(options = {}) {
+  const { testDatasetSize = null } = options;
+  
   const [stats, setStats] = useState([]);
   const [players, setPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isUsingMockData, setIsUsingMockData] = useState(false);
+
+  // Generate test data function
+  const generateTestData = useCallback((size) => {
+    const mockPlayers = generateMockPlayers(size);
+    setPlayers(mockPlayers);
+    setIsUsingMockData(true);
+    setError(null);
+    satorLogger.info(`Generated test dataset with ${size} players`);
+  }, []);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -120,6 +197,16 @@ export function useSatorData() {
     setIsUsingMockData(false);
 
     try {
+      // Check if test dataset size is specified (for performance testing)
+      if (testDatasetSize && testDatasetSize > 0) {
+        satorLogger.info(`Generating test dataset with ${testDatasetSize} players`);
+        setIsUsingMockData(true);
+        setStats(MOCK_STATS);
+        setPlayers(generateMockPlayers(testDatasetSize));
+        setIsLoading(false);
+        return;
+      }
+
       // Check if Pandascore API is available
       if (!isPandascoreAvailable()) {
         satorLogger.warn('Pandascore API token not configured, using mock data');
@@ -197,6 +284,7 @@ export function useSatorData() {
     error,
     refresh,
     isUsingMockData,
+    generateTestData,
   };
 }
 

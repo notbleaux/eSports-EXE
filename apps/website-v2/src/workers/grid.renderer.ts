@@ -3,7 +3,18 @@
  * High-performance panel rendering with grid layout algorithm
  */
 
-import type { PanelData } from './grid.worker'
+// Local PanelData type for grid rendering
+interface PanelData {
+  id: string
+  x: number
+  y: number
+  width: number
+  height: number
+  title?: string
+  content?: string
+  backgroundColor?: string
+  borderColor?: string
+}
 
 export interface RenderStats {
   panelCount: number

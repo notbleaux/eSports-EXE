@@ -14,14 +14,14 @@ import { WikiArticleSummary } from './types';
 interface WikiSearchProps {
   onSearch?: (query: string, results: WikiArticleSummary[]) => void;
   placeholder?: string;
-  isHelpOnly?: boolean;
+  _isHelpOnly?: boolean;
   className?: string;
 }
 
 export const WikiSearch: React.FC<WikiSearchProps> = ({
   onSearch,
   placeholder = 'Search help articles...',
-  isHelpOnly = false,
+  _isHelpOnly = false,
   className = '',
 }) => {
   const [query, setQuery] = useState('');

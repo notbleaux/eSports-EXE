@@ -1,472 +1,445 @@
-/**
- * Grid Worker - OffscreenCanvas Rendering Thread
- * Handles canvas-based grid rendering in a dedicated worker thread
+/** [Ver002.000]
+ * Grid Worker for 4NJZ4 TENET Platform
+ * High-performance grid rendering with OffscreenCanvas support
  * 
- * [Ver001.001] - Added DEV conditional for console logs
+ * Features:
+ * - Virtual scrolling for 1000+ rows
+ * - 60fps rendering optimization
+ * - Cell-level styling
+ * - Column-based formatting
  */
 
-// Debug flag - disabled in production
-const DEV = false
+/// <reference lib="webworker" />
 
-// ============================================================================
-// MESSAGE PROTOCOL TYPES
-// ============================================================================
+import type {
+  GridRenderCommand,
+  GridRenderResult,
+  GridInitPayload,
+  GridRenderPayload,
+  GridScrollPayload,
+  GridResizePayload,
+  GridColumn,
+  GridRow,
+  GridVisibleRange
+} from '../types/worker'
 
-export type WorkerCommand =
-  | { type: 'INIT'; canvas: OffscreenCanvas; width: number; height: number }
-  | { type: 'RENDER'; panels: PanelData[] }
-  | { type: 'RESIZE'; width: number; height: number }
-  | { type: 'CLEAR' }
-  | { type: 'DESTROY' }
+const ctx: Worker = self as unknown as Worker
 
-export type WorkerResponse =
-  | { type: 'INIT_SUCCESS'; timestamp: number }
-  | { type: 'RENDER_COMPLETE'; panelCount: number; renderTime: number }
-  | { type: 'RESIZE_SUCCESS'; width: number; height: number }
-  | { type: 'CLEAR_COMPLETE' }
-  | { type: 'ERROR'; message: string; stack?: string }
-  | { type: 'PING'; timestamp: number }
-
-export interface PanelData {
-  id: string
-  x: number
-  y: number
-  width: number
-  height: number
-  title?: string
-  content?: string
-  backgroundColor?: string
-  borderColor?: string
+// Grid rendering state
+let canvas: OffscreenCanvas | null = null
+let ctx2d: OffscreenCanvasRenderingContext2D | null = null
+let columns: GridColumn[] = []
+let rowHeight = 40
+let headerHeight = 48
+let totalRows = 0
+let scrollTop = 0
+let scrollLeft = 0
+let renderData: GridRow[] = []
+let theme = {
+  backgroundColor: '#050508',
+  headerBackgroundColor: '#1a1a25',
+  rowBackgroundColor: '#0a0a0f',
+  alternateRowBackgroundColor: '#12121a',
+  borderColor: 'rgba(255, 255, 255, 0.08)',
+  textColor: '#ffffff',
+  headerTextColor: '#ffd700',
+  accentColor: '#ffd700'
 }
 
-export interface LayoutCell {
-  x: number
-  y: number
-  width: number
-  height: number
-  color: string
-}
+// Send ready signal
+ctx.postMessage({ type: 'ready', workerType: 'grid' })
 
-// ============================================================================
-// PORCELAIN³ COLOR PALETTE
-// ============================================================================
+ctx.onmessage = (event: MessageEvent<GridRenderCommand>) => {
+  const { type, payload } = event.data
 
-const PORCELAIN_COLORS = {
-  background: '#0a0a0f',
-  gridLine: 'rgba(157, 78, 221, 0.15)',
-  panelBg: [
-    'rgba(245, 245, 250, 0.95)',  // Porcelain white
-    'rgba(240, 240, 245, 0.95)',
-    'rgba(235, 235, 242, 0.95)',
-    'rgba(250, 248, 245, 0.95)',  // Warm porcelain
-  ],
-  panelBorder: 'rgba(157, 78, 221, 0.6)',
-  titleBar: 'rgba(30, 30, 45, 0.95)',
-  textPrimary: '#1a1a2e',
-  textSecondary: 'rgba(26, 26, 46, 0.8)',
-  accent: '#9d4edd',
-  gap: 4,
-}
+  try {
+    switch (type) {
+      case 'init':
+        handleInit(payload as GridInitPayload)
+        break
 
-// ============================================================================
-// WORKER STATE
-// ============================================================================
+      case 'render':
+        handleRender(payload as GridRenderPayload)
+        break
 
-interface WorkerState {
-  canvas: OffscreenCanvas | null
-  ctx: OffscreenCanvasRenderingContext2D | null
-  width: number
-  height: number
-  isInitialized: boolean
-  panels: Map<string, PanelData>
-}
+      case 'scroll':
+        handleScroll(payload as GridScrollPayload)
+        break
 
-const state: WorkerState = {
-  canvas: null,
-  ctx: null,
-  width: 0,
-  height: 0,
-  isInitialized: false,
-  panels: new Map(),
-}
+      case 'resize':
+        handleResize(payload as GridResizePayload)
+        break
 
-// ============================================================================
-// GRID LAYOUT ALGORITHM
-// ============================================================================
+      case 'calculateRange':
+        handleCalculateRange(payload as {
+          scrollTop: number
+          scrollLeft: number
+          viewportWidth: number
+          viewportHeight: number
+        })
+        break
 
-export function calculateLayout(
-  panels: PanelData[],
-  canvasWidth: number,
-  canvasHeight: number
-): LayoutCell[] {
-  const count = panels.length
-  if (count === 0) return []
-
-  // Calculate grid dimensions based on aspect ratio
-  const aspectRatio = canvasWidth / canvasHeight
-  const cols = Math.ceil(Math.sqrt(count * aspectRatio))
-  const rows = Math.ceil(count / cols)
-
-  // Calculate cell dimensions with gaps
-  const gap = PORCELAIN_COLORS.gap
-  const availableWidth = canvasWidth - gap * (cols + 1)
-  const availableHeight = canvasHeight - gap * (rows + 1)
-  const cellWidth = Math.floor(availableWidth / cols)
-  const cellHeight = Math.floor(availableHeight / rows)
-
-  // Generate layout cells
-  return panels.map((panel, index) => {
-    const col = index % cols
-    const row = Math.floor(index / cols)
-    const colorIndex = index % PORCELAIN_COLORS.panelBg.length
-
-    return {
-      x: gap + col * (cellWidth + gap),
-      y: gap + row * (cellHeight + gap),
-      width: cellWidth,
-      height: cellHeight,
-      color: panel.backgroundColor || PORCELAIN_COLORS.panelBg[colorIndex],
+      case 'terminate':
+        handleTerminate()
+        break
     }
-  })
-}
-
-// ============================================================================
-// PANEL RENDERING
-// ============================================================================
-
-export function renderPanels(panels: PanelData[]): void {
-  if (!state.ctx || !state.canvas) {
-    throw new Error('Worker not initialized')
-  }
-
-  const ctx = state.ctx
-  const { width, height } = state
-
-  // Clear canvas
-  ctx.fillStyle = PORCELAIN_COLORS.background
-  ctx.fillRect(0, 0, width, height)
-
-  // Calculate layout
-  const layout = calculateLayout(panels, width, height)
-
-  // Render grid lines
-  drawGridLines(ctx, layout, width, height)
-
-  // Render each panel
-  layout.forEach((cell, index) => {
-    const panel = panels[index]
-    renderCell(ctx, cell, panel)
-  })
-}
-
-function drawGridLines(
-  ctx: OffscreenCanvasRenderingContext2D,
-  layout: LayoutCell[],
-  canvasWidth: number,
-  canvasHeight: number
-): void {
-  if (layout.length === 0) return
-
-  ctx.strokeStyle = PORCELAIN_COLORS.gridLine
-  ctx.lineWidth = 1
-
-  // Find grid dimensions from layout
-  const gap = PORCELAIN_COLORS.gap
-  const cellWidth = layout[0].width
-  const cellHeight = layout[0].height
-  const cols = Math.floor((canvasWidth - gap) / (cellWidth + gap))
-  const rows = Math.ceil(layout.length / cols)
-
-  // Vertical lines
-  for (let col = 0; col <= cols; col++) {
-    const x = gap / 2 + col * (cellWidth + gap)
-    ctx.beginPath()
-    ctx.moveTo(x, 0)
-    ctx.lineTo(x, canvasHeight)
-    ctx.stroke()
-  }
-
-  // Horizontal lines
-  for (let row = 0; row <= rows; row++) {
-    const y = gap / 2 + row * (cellHeight + gap)
-    ctx.beginPath()
-    ctx.moveTo(0, y)
-    ctx.lineTo(canvasWidth, y)
-    ctx.stroke()
+  } catch (error) {
+    const result: GridRenderResult = {
+      success: false,
+      renderTime: performance.now(),
+      renderedCells: 0
+    }
+    ctx.postMessage(result)
   }
 }
 
-function renderCell(
-  ctx: OffscreenCanvasRenderingContext2D,
-  cell: LayoutCell,
-  panel: PanelData
-): void {
-  const { x, y, width, height, color } = cell
-  const titleBarHeight = 24
+function handleInit(payload: GridInitPayload): void {
+  if (payload.canvas instanceof OffscreenCanvas) {
+    canvas = payload.canvas
+    ctx2d = canvas.getContext('2d', {
+      alpha: false,
+      desynchronized: true // Low-latency rendering
+    })
 
-  // Panel shadow
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
-  ctx.shadowBlur = 8
-  ctx.shadowOffsetX = 2
-  ctx.shadowOffsetY = 2
-
-  // Panel background
-  ctx.fillStyle = color
-  ctx.fillRect(x, y, width, height)
-
-  // Reset shadow
-  ctx.shadowColor = 'transparent'
-  ctx.shadowBlur = 0
-  ctx.shadowOffsetX = 0
-  ctx.shadowOffsetY = 0
-
-  // Panel border
-  ctx.strokeStyle = PORCELAIN_COLORS.panelBorder
-  ctx.lineWidth = 1
-  ctx.strokeRect(x, y, width, height)
-
-  // Title bar
-  ctx.fillStyle = PORCELAIN_COLORS.titleBar
-  ctx.fillRect(x + 1, y + 1, width - 2, titleBarHeight)
-
-  // Title bar accent line
-  ctx.strokeStyle = PORCELAIN_COLORS.accent
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(x + 1, y + titleBarHeight)
-  ctx.lineTo(x + width - 1, y + titleBarHeight)
-  ctx.stroke()
-
-  // Title text
-  if (panel.title) {
-    ctx.fillStyle = '#ffffff'
-    ctx.font = 'bold 11px system-ui, sans-serif'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(panel.title, x + 8, y + titleBarHeight / 2 + 1)
-  }
-
-  // Content text
-  if (panel.content) {
-    ctx.fillStyle = PORCELAIN_COLORS.textSecondary
-    ctx.font = '10px system-ui, sans-serif'
-    ctx.textAlign = 'left'
-    ctx.textBaseline = 'top'
-
-    const maxWidth = width - 16
-    const _lineHeight = 14  // Reserved for future multi-line support
-    const startY = y + titleBarHeight + 6
-
-    // Simple truncation for content
-    let text = panel.content
-    let metrics = ctx.measureText(text)
-
-    while (metrics.width > maxWidth && text.length > 0) {
-      text = text.slice(0, -1)
-      metrics = ctx.measureText(text + '...')
+    if (payload.columns) {
+      columns = payload.columns
     }
 
-    if (text !== panel.content) {
-      text += '...'
+    // Send success response
+    const result: GridRenderResult = {
+      success: true,
+      renderTime: performance.now(),
+      renderedCells: 0
     }
-
-    ctx.fillText(text, x + 8, startY)
+    ctx.postMessage(result)
   }
 }
 
-// ============================================================================
-// PERFORMANCE BENCHMARK
-// ============================================================================
-
-export function measureRenderTime(panelCounts: number[] = [10, 20, 50]): void {
-  if (!state.ctx || !state.canvas) {
-    if (DEV) console.error('[Worker] Cannot measure: not initialized')
+function handleRender(payload: GridRenderPayload): void {
+  if (!ctx2d || !canvas) {
+    const result: GridRenderResult = {
+      success: false,
+      renderTime: performance.now(),
+      renderedCells: 0
+    }
+    ctx.postMessage(result)
     return
   }
 
-  if (DEV) console.log('[Worker] Starting render benchmark...')
+  // Update state from payload
+  if (payload.data) renderData = payload.data
+  if (payload.columns) columns = payload.columns
+  if (payload.rowHeight) rowHeight = payload.rowHeight
+  if (payload.headerHeight) headerHeight = payload.headerHeight
+  if (payload.theme) theme = { ...theme, ...payload.theme }
+  if (payload.scrollTop !== undefined) scrollTop = payload.scrollTop
+  if (payload.scrollLeft !== undefined) scrollLeft = payload.scrollLeft
 
-  panelCounts.forEach((count) => {
-    // Generate test panels
-    const panels: PanelData[] = Array.from({ length: count }, (_, i) => ({
-      id: `bench-${i}`,
-      x: 0,
-      y: 0,
-      width: 100,
-      height: 100,
-      title: `Panel ${i + 1}`,
-      content: `Benchmark panel ${i + 1}`,
-    }))
+  totalRows = renderData.length
 
-    // Measure render time
-    const startTime = performance.now()
-    renderPanels(panels)
-    const renderTime = performance.now() - startTime
+  const renderStartTime = performance.now()
 
-    const status = renderTime < 16 ? '✓ PASS' : '✗ FAIL'
-    if (DEV) console.log(
-      `[Worker] Render ${count} panels: ${renderTime.toFixed(2)}ms ${status}` +
-        ` (target: <16ms)`
-    )
+  // Perform the actual rendering
+  const { renderedCells, visibleRows } = renderGrid(ctx2d, canvas, payload)
+
+  const result: GridRenderResult = {
+    success: true,
+    renderTime: performance.now() - renderStartTime,
+    renderedCells,
+    visibleRows
+  }
+
+  ctx.postMessage(result)
+}
+
+function handleScroll(payload: GridScrollPayload): void {
+  scrollTop = payload.scrollTop
+  scrollLeft = payload.scrollLeft
+
+  // Re-render with new scroll position
+  if (ctx2d && canvas && renderData.length > 0) {
+    const { renderedCells, visibleRows } = renderGrid(ctx2d, canvas, {
+      data: renderData,
+      columns,
+      viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
+      scrollTop,
+      scrollLeft,
+      rowHeight,
+      headerHeight,
+      theme
+    })
+
+    const result: GridRenderResult = {
+      success: true,
+      renderTime: 0,
+      renderedCells,
+      visibleRows
+    }
+
+    ctx.postMessage(result)
+  }
+}
+
+function handleResize(payload: GridResizePayload): void {
+  if (canvas) {
+    canvas.width = payload.width
+    canvas.height = payload.height
+
+    // Re-render if we have data
+    if (ctx2d && renderData.length > 0) {
+      const { renderedCells, visibleRows } = renderGrid(ctx2d, canvas, {
+        data: renderData,
+        columns,
+        viewport: { x: 0, y: 0, width: payload.width, height: payload.height },
+        scrollTop,
+        scrollLeft,
+        rowHeight,
+        headerHeight,
+        theme
+      })
+
+      const result: GridRenderResult = {
+        success: true,
+        renderTime: 0,
+        renderedCells,
+        visibleRows
+      }
+
+      ctx.postMessage(result)
+    }
+  }
+}
+
+function handleCalculateRange(payload: {
+  scrollTop: number
+  scrollLeft: number
+  viewportWidth: number
+  viewportHeight: number
+}): void {
+  const visibleRange = calculateVisibleRange(
+    payload.scrollTop,
+    payload.scrollLeft,
+    payload.viewportWidth,
+    payload.viewportHeight
+  )
+
+  ctx.postMessage({
+    type: 'calculateRange',
+    data: visibleRange
   })
-
-  if (DEV) console.log('[Worker] Benchmark complete')
 }
 
-// ============================================================================
-// COMMAND HANDLERS
-// ============================================================================
-
-function handleInit(
-  canvas: OffscreenCanvas,
-  width: number,
-  height: number
-): WorkerResponse {
-  try {
-    const ctx = canvas.getContext('2d')
-    if (!ctx) {
-      return { type: 'ERROR', message: 'Failed to get 2D context from OffscreenCanvas' }
-    }
-
-    state.canvas = canvas
-    state.ctx = ctx
-    state.width = width
-    state.height = height
-    state.isInitialized = true
-
-    canvas.width = width
-    canvas.height = height
-
-    // Clear with background
-    ctx.fillStyle = PORCELAIN_COLORS.background
-    ctx.fillRect(0, 0, width, height)
-
-    return { type: 'INIT_SUCCESS', timestamp: Date.now() }
-  } catch (error) {
-    return {
-      type: 'ERROR',
-      message: error instanceof Error ? error.message : 'Unknown error during init',
-      stack: error instanceof Error ? error.stack : undefined,
-    }
-  }
+function handleTerminate(): void {
+  canvas = null
+  ctx2d = null
+  columns = []
+  renderData = []
+  scrollTop = 0
+  scrollLeft = 0
 }
 
-function handleRender(panels: PanelData[]): WorkerResponse {
-  if (!state.isInitialized || !state.ctx || !state.canvas) {
-    return { type: 'ERROR', message: 'Worker not initialized' }
-  }
+function calculateVisibleRange(
+  st: number,
+  sl: number,
+  viewportWidth: number,
+  viewportHeight: number
+): GridVisibleRange {
+  const startRow = Math.max(0, Math.floor(st / rowHeight))
+  const endRow = Math.min(totalRows, Math.ceil((st + viewportHeight - headerHeight) / rowHeight))
 
-  const startTime = performance.now()
+  let accumulatedWidth = 0
+  let startCol = 0
+  let endCol = columns.length
 
-  try {
-    renderPanels(panels)
-
-    const renderTime = performance.now() - startTime
-
-    // Update panels map
-    state.panels.clear()
-    for (const panel of panels) {
-      state.panels.set(panel.id, panel)
+  // Calculate visible columns based on scroll position
+  for (let i = 0; i < columns.length; i++) {
+    if (accumulatedWidth < sl) {
+      startCol = i
     }
-
-    return {
-      type: 'RENDER_COMPLETE',
-      panelCount: panels.length,
-      renderTime,
-    }
-  } catch (error) {
-    return {
-      type: 'ERROR',
-      message: error instanceof Error ? error.message : 'Unknown error during render',
-      stack: error instanceof Error ? error.stack : undefined,
-    }
-  }
-}
-
-function handleResize(width: number, height: number): WorkerResponse {
-  if (!state.isInitialized || !state.canvas) {
-    return { type: 'ERROR', message: 'Worker not initialized' }
-  }
-
-  try {
-    state.width = width
-    state.height = height
-    state.canvas.width = width
-    state.canvas.height = height
-
-    return { type: 'RESIZE_SUCCESS', width, height }
-  } catch (error) {
-    return {
-      type: 'ERROR',
-      message: error instanceof Error ? error.message : 'Unknown error during resize',
-      stack: error instanceof Error ? error.stack : undefined,
-    }
-  }
-}
-
-function handleClear(): WorkerResponse {
-  if (!state.isInitialized || !state.ctx || !state.canvas) {
-    return { type: 'ERROR', message: 'Worker not initialized' }
-  }
-
-  try {
-    state.ctx.fillStyle = PORCELAIN_COLORS.background
-    state.ctx.fillRect(0, 0, state.width, state.height)
-    state.panels.clear()
-    return { type: 'CLEAR_COMPLETE' }
-  } catch (error) {
-    return {
-      type: 'ERROR',
-      message: error instanceof Error ? error.message : 'Unknown error during clear',
-      stack: error instanceof Error ? error.stack : undefined,
-    }
-  }
-}
-
-function handleDestroy(): WorkerResponse {
-  state.canvas = null
-  state.ctx = null
-  state.width = 0
-  state.height = 0
-  state.isInitialized = false
-  state.panels.clear()
-
-  return { type: 'CLEAR_COMPLETE' }
-}
-
-// ============================================================================
-// MESSAGE HANDLER
-// ============================================================================
-
-self.onmessage = (event: MessageEvent<WorkerCommand>) => {
-  const command = event.data
-  let response: WorkerResponse
-
-  switch (command.type) {
-    case 'INIT':
-      response = handleInit(command.canvas, command.width, command.height)
+    accumulatedWidth += columns[i].width
+    if (accumulatedWidth > sl + viewportWidth && endCol === columns.length) {
+      endCol = i + 1
       break
-    case 'RENDER':
-      response = handleRender(command.panels)
-      break
-    case 'RESIZE':
-      response = handleResize(command.width, command.height)
-      break
-    case 'CLEAR':
-      response = handleClear()
-      break
-    case 'DESTROY':
-      response = handleDestroy()
-      break
+    }
+  }
+
+  return {
+    startRow,
+    endRow,
+    startCol,
+    endCol
+  }
+}
+
+function renderGrid(
+  context: OffscreenCanvasRenderingContext2D,
+  canvasEl: OffscreenCanvas,
+  params: GridRenderPayload
+): { renderedCells: number; visibleRows: number } {
+  const { data, viewport, scrollTop: st, scrollLeft: sl } = params
+  const { width, height } = viewport
+
+  // Clear canvas with background color
+  context.fillStyle = theme.backgroundColor
+  context.fillRect(0, 0, width, height)
+
+  // Calculate visible range
+  const visibleRange = calculateVisibleRange(st, sl, width, height)
+  const { startRow, endRow, startCol, endCol } = visibleRange
+
+  let renderedCells = 0
+  const visibleRows = Math.min(endRow, data.length) - startRow
+
+  // Pre-calculate column positions for performance
+  const colPositions: { x: number; width: number }[] = []
+  let currentX = -sl
+  for (let colIdx = 0; colIdx < columns.length; colIdx++) {
+    const col = columns[colIdx]
+    colPositions.push({ x: currentX, width: col.width })
+    currentX += col.width
+  }
+
+  // Render header row
+  context.fillStyle = theme.headerBackgroundColor
+  context.fillRect(0, 0, width, headerHeight)
+
+  // Header border
+  context.strokeStyle = theme.borderColor
+  context.lineWidth = 1
+  context.beginPath()
+  context.moveTo(0, headerHeight - 0.5)
+  context.lineTo(width, headerHeight - 0.5)
+  context.stroke()
+
+  // Render headers
+  context.font = '600 13px system-ui, -apple-system, sans-serif'
+  context.textBaseline = 'middle'
+
+  for (let colIdx = startCol; colIdx < Math.min(endCol, columns.length); colIdx++) {
+    const col = columns[colIdx]
+    const { x, width: colWidth } = colPositions[colIdx]
+
+    // Skip if outside viewport
+    if (x + colWidth < 0 || x > canvasEl.width) continue
+
+    // Header text
+    context.fillStyle = theme.headerTextColor
+    context.textAlign = (col.align || 'left') as CanvasTextAlign
+
+    const textX = col.align === 'right' ? x + colWidth - 12 :
+                  col.align === 'center' ? x + colWidth / 2 :
+                  x + 12
+    context.fillText(col.header, textX, headerHeight / 2)
+
+    // Column border
+    context.strokeStyle = theme.borderColor
+    context.beginPath()
+    context.moveTo(x + colWidth - 0.5, 0)
+    context.lineTo(x + colWidth - 0.5, headerHeight)
+    context.stroke()
+
+    renderedCells++
+  }
+
+  // Render data rows (only visible ones)
+  const firstVisibleY = startRow * rowHeight + headerHeight - st
+
+  for (let rowIdx = startRow; rowIdx < Math.min(endRow, data.length); rowIdx++) {
+    const row = data[rowIdx]
+    const y = (rowIdx - startRow) * rowHeight + firstVisibleY
+
+    // Skip if outside viewport
+    if (y > canvasEl.height) break
+    if (y + rowHeight < headerHeight) continue
+
+    // Row background (alternating)
+    const isAlternate = rowIdx % 2 === 1
+    context.fillStyle = isAlternate ? theme.alternateRowBackgroundColor : theme.rowBackgroundColor
+    context.fillRect(0, y, width, rowHeight)
+
+    // Render cells
+    for (let colIdx = startCol; colIdx < Math.min(endCol, columns.length); colIdx++) {
+      const col = columns[colIdx]
+      const { x, width: colWidth } = colPositions[colIdx]
+
+      // Skip if outside viewport
+      if (x + colWidth < 0 || x > canvasEl.width) continue
+
+      const value = row[col.key]
+      const formattedValue = formatCellValue(value, col.type)
+
+      // Cell text
+      context.fillStyle = theme.textColor
+      context.font = '400 13px system-ui, -apple-system, sans-serif'
+      context.textAlign = (col.align || 'left') as CanvasTextAlign
+
+      const textX = col.align === 'right' ? x + colWidth - 12 :
+                    col.align === 'center' ? x + colWidth / 2 :
+                    x + 12
+
+      // Truncate text if too long
+      const maxWidth = colWidth - 24
+      const metrics = context.measureText(formattedValue)
+      let displayText = formattedValue
+      if (metrics.width > maxWidth) {
+        let truncated = formattedValue
+        while (context.measureText(truncated + '...').width > maxWidth && truncated.length > 0) {
+          truncated = truncated.slice(0, -1)
+        }
+        displayText = truncated + '...'
+      }
+
+      context.fillText(displayText, textX, y + rowHeight / 2)
+
+      // Cell border
+      context.strokeStyle = theme.borderColor
+      context.lineWidth = 0.5
+      context.beginPath()
+      context.moveTo(x + colWidth - 0.5, y)
+      context.lineTo(x + colWidth - 0.5, y + rowHeight)
+      context.stroke()
+
+      renderedCells++
+    }
+
+    // Row border
+    context.strokeStyle = theme.borderColor
+    context.lineWidth = 0.5
+    context.beginPath()
+    context.moveTo(0, y + rowHeight - 0.5)
+    context.lineTo(width, y + rowHeight - 0.5)
+    context.stroke()
+  }
+
+  return { renderedCells, visibleRows }
+}
+
+function formatCellValue(value: unknown, type?: string): string {
+  if (value === null || value === undefined) return ''
+
+  switch (type) {
+    case 'number':
+      if (typeof value === 'number') {
+        return value.toLocaleString('en-US', { maximumFractionDigits: 2 })
+      }
+      return String(value)
+
+    case 'rating':
+      if (typeof value === 'number') {
+        return value.toFixed(2)
+      }
+      return String(value)
+
+    case 'trend':
+      if (typeof value === 'number') {
+        const arrow = value > 0 ? '↑' : value < 0 ? '↓' : '→'
+        return `${arrow} ${Math.abs(value).toFixed(1)}%`
+      }
+      return String(value)
+
     default:
-      response = { type: 'ERROR', message: `Unknown command type` }
+      return String(value)
   }
-
-  self.postMessage(response)
 }
 
-// ============================================================================
-// WORKER READY SIGNAL
-// ============================================================================
-
-self.postMessage({ type: 'PING', timestamp: Date.now() })
+export {}

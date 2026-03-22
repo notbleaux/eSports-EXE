@@ -4,7 +4,7 @@ description: "Async Python data pipeline development for 4NJZ4 TENET Platform. U
 license: MIT
 metadata:
   author: SATOR Team
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # SATOR Python Pipeline
@@ -281,7 +281,15 @@ pytest axiom-esports-data/extraction/tests/ -v
 python -m axiom-esports-data.extraction.src.scrapers.epoch_harvester --epoch=1 --mode=delta
 ```
 
+## New in 2.1.0
+
+- Enhanced connection pooling with asyncpg
+- Improved epoch harvester with delta/full modes
+- KnownRecordRegistry for deduplication
+- Content drift detection patterns
+
 ## References
 
 - [AXIOM.md](../../../docs/AXIOM.md)
 - [DATA_DICTIONARY.md](../../../docs/DATA_DICTIONARY.md)
+- [memory/CURRENT_FOCUS.md](../../../memory/CURRENT_FOCUS.md)

@@ -1,4 +1,4 @@
-/** [Ver001.001] */
+/** [Ver002.000] */
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
@@ -7,6 +7,8 @@ interface ImportMetaEnv {
   readonly VITE_ANALYTICS_ID: string;
   readonly VITE_APP_ENV: string;
   readonly VITE_LOG_LEVEL: string;
+  readonly VITE_PANDASCORE_TOKEN?: string;
+  readonly VITE_RIOT_API_KEY?: string;
   // Add more env variables as needed
 }
 

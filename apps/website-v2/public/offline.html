@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - 4NJZ4 TENET</title>
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="manifest" href="/manifest.json">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 480px;
+      width: 100%;
+    }
+    
+    .icon-container {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(157, 78, 221, 0.1));
+      border: 2px solid rgba(0, 240, 255, 0.3);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+    
+    .icon {
+      font-size: 48px;
+    }
+    
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #00f0ff, #9d4edd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    p {
+      color: #a0a0a0;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, #00f0ff, #9d4edd);
+      color: #0a0a0f;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 240, 255, 0.3);
+    }
+    
+    .cached-info {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
+    }
+    
+    .cached-info h2 {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #00f0ff;
+      margin-bottom: 0.75rem;
+    }
+    
+    .cached-info p {
+      font-size: 0.875rem;
+      margin-bottom: 0;
+    }
+    
+    .features {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    
+    .feature {
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: #808080;
+    }
+    
+    .status-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0.75rem;
+      background: rgba(255, 59, 48, 0.1);
+      border-bottom: 1px solid rgba(255, 59, 48, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: #ff3b30;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #ff3b30;
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @media (max-width: 480px) {
+      .icon-container {
+        width: 96px;
+        height: 96px;
+      }
+      
+      .icon {
+        font-size: 40px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .features {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span class="status-dot"></span>
+    <span>No Internet Connection</span>
+  </div>
+  
+  <div class="container">
+    <div class="icon-container">
+      <span class="icon">📡</span>
+    </div>
+    
+    <h1>You're Offline</h1>
+    <p>Your connection to the 4NJZ4 network has been interrupted. Don't worry — your cached data is still available.</p>
+    
+    <a href="/" class="btn">
+      <span>🏠</span>
+      Return to Dashboard
+    </a>
+    
+    <div class="cached-info">
+      <h2>📊 Available Offline</h2>
+      <p>Player statistics, match history, and saved analytics continue to work without an internet connection.</p>
+      
+      <div class="features">
+        <span class="feature">Player Stats</span>
+        <span class="feature">Match History</span>
+        <span class="feature">Analytics</span>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Auto-reload when connection is restored
+    window.addEventListener('online', () => {
+      window.location.href = '/';
+    });
+    
+    // Check connection status periodically
+    setInterval(() => {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

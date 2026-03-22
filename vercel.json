@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "name": "libre-x-4njz4-tenet-platform",
+  "alias": ["sator-platform.vercel.app"],
+  "github": {
+    "enabled": true,
+    "autoAlias": true
+  },
   "buildCommand": "cd apps/website-v2 && npm run build",
   "outputDirectory": "apps/website-v2/dist",
   "installCommand": "npm install",
@@ -25,6 +30,11 @@
     },
     {
       "source": "/tenet/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "Accept", "value": "text/html" }],
       "destination": "/index.html"
     }
   ],
@@ -73,6 +83,7 @@
   },
   "build": {
     "env": {
+      "VITE_BASE_PATH": "/",
       "VITE_API_URL": "@api_url",
       "VITE_WS_URL": "@ws_url",
       "VITE_SENTRY_DSN": "@sentry_dsn"
