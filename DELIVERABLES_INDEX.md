@@ -110,6 +110,9 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 | Component library with 4 components | ✅ Complete | `ui/components/*.html` |
 | TeNET CS technical spec | ✅ Complete | `docs/TECH_DESIGN_TENET_CS.md` |
 | TeNET Valorant technical spec | ✅ Complete | `docs/TECH_DESIGN_TENET_VALORANT.md` |
+| Data architecture documentation | ✅ Complete | `docs/DATA_ARCHITECTURE.md` |
+| Complete schema reference | ✅ Complete | `docs/SCHEMA_REFERENCE.md` |
+| Sprint backlog with data tickets | ✅ Complete | `docs/SPRINT_BACKLOG.md` (Ver002.000) |
 | Demo data files | ✅ Complete | `data/*.json` |
 | Design tokens file | ✅ Complete | `ui/tokens.css` |
 
@@ -119,12 +122,18 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 
 | Sprint | Duration | Focus | Key Deliverables |
 |--------|----------|-------|------------------|
+| **Sprint -1** | 3 weeks | **Data Infrastructure** | CS 2012-2025, Valorant 2020-2025 historical data |
 | **Sprint 0** | 3 days | Foundation | Clean repo, tokens, skeleton pages, tooling |
 | **Sprint 1** | 2 weeks | UI Foundation | 4 components, demo API, MatchViewer layout |
 | **Sprint 2** | 2 weeks | Analytics Hub | KPI cards, match list, integrated viewer |
 | **Sprint 3** | 2 weeks | Events & Ops | Calendar, event flow, status tiles, queue |
 | **Sprint 4** | 2 weeks | TeNET Tools | Grenade visualizer, ability timeline |
 | **Sprint 5** | 2 weeks | Polish & Launch | a11y audit, performance, deploy |
+
+**Data Scope**:
+- **CS**: ~50,000 Tier 1-2 matches, 8,000 players, 150 tournaments (2012-2025)
+- **Valorant**: ~35,000 Tier 1-2 matches, 6,000 players, 200 tournaments (2020-2025)
+- **Storage**: ~525 MB raw, ~125 MB compressed, served via GitHub Pages + CDN
 
 **Detailed tickets**: See `docs/SPRINT_BACKLOG.md`
 

@@ -1,11 +1,128 @@
-[Ver001.000]
+[Ver002.000]
 
 # eSports-EXE — Sprint Backlog
 
 **Date**: 2026-03-22  
 **Status**: Active  
 **Sprint Duration**: 2 weeks per sprint  
-**Total Duration**: 8-12 weeks (5-6 sprints)
+**Total Duration**: 10-14 weeks (7 sprints)
+
+---
+
+## Sprint -1: Data Infrastructure (PRE-REQUISITE)
+**Duration**: 3 weeks  
+**Goal**: Establish historical data foundation for CS (2012-2025) and Valorant (2020-2025)
+
+### Ticket SX-001: Data Architecture Implementation
+**Priority**: P0 | **Assignee**: TBD | **Est**: 8h
+- [ ] Set up `data/` repository structure
+- [ ] Create raw data directories (gitignored)
+- [ ] Create processed data pipeline directories
+- [ ] Set up export directories for API
+
+**Acceptance Criteria**:
+- Directory structure matches DATA_ARCHITECTURE.md
+- All sensitive raw data gitignored
+- Export directories ready for JSON generation
+
+---
+
+### Ticket SX-002: Liquipedia Data Collector (CS)
+**Priority**: P0 | **Assignee**: TBD | **Est**: 16h
+- [ ] Implement MediaWiki API client
+- [ ] Build tournament list collector (2012-2025)
+- [ ] Build match result collector
+- [ ] Build team roster collector
+- [ ] Build player stats collector
+- [ ] Implement rate limiting (200 req/min)
+- [ ] Add retry logic for failed requests
+
+**Acceptance Criteria**:
+- Successfully collects all CS Major tournaments 2012-2025
+- Data stored in `data/raw/liquipedia/cs/`
+- Rate limiting prevents API blocks
+- Failed requests retry 3x with backoff
+
+---
+
+### Ticket SX-003: Liquipedia Data Collector (Valorant)
+**Priority**: P0 | **Assignee**: TBD | **Est**: 12h
+- [ ] Implement VCT tournament collector (2020-2025)
+- [ ] Build Valorant match result collector
+- [ ] Build team/agent stats collector
+- [ ] Implement rate limiting
+
+**Acceptance Criteria**:
+- Successfully collects all VCT events 2020-2025
+- Data stored in `data/raw/liquipedia/valorant/`
+- All Tier 1-2 tournaments included
+
+---
+
+### Ticket SX-004: Data Cleaning & Normalization
+**Priority**: P0 | **Assignee**: TBD | **Est**: 16h
+- [ ] Normalize tournament data to schema
+- [ ] Normalize team data to schema
+- [ ] Normalize player data to schema
+- [ ] Normalize match data to schema
+- [ ] Deduplicate records
+- [ ] Handle missing/null fields
+- [ ] Validate data integrity
+
+**Acceptance Criteria**:
+- All raw data cleaned and stored in `data/processed/`
+- Schema validation passes for all records
+- Duplicate matches removed
+- Missing fields marked with data_quality flag
+
+---
+
+### Ticket SX-005: JSON Export Generation
+**Priority**: P0 | **Assignee**: TBD | **Est**: 12h
+- [ ] Build tournament index generator
+- [ ] Build team index generator
+- [ ] Build player index generator
+- [ ] Build match chunk generator (by year/month)
+- [ ] Build manifest.json generator
+- [ ] Implement gzip compression for large files
+
+**Acceptance Criteria**:
+- All exports in `data/exports/v1/`
+- Manifest.json indexes all available datasets
+- Files chunked for optimal loading (<100KB each)
+- Compressed files <50% of original size
+
+---
+
+### Ticket SX-006: Supabase Setup (Optional)
+**Priority**: P1 | **Assignee**: TBD | **Est**: 8h
+- [ ] Create Supabase project
+- [ ] Run database migrations
+- [ ] Seed with historical data (2012-2022)
+- [ ] Set up Row Level Security policies
+- [ ] Create API views for common queries
+
+**Acceptance Criteria**:
+- Database accessible via REST API
+- All tables populated with historical data
+- RLS prevents unauthorized access
+- API responds within 500ms
+
+---
+
+### Ticket SX-007: Data Pipeline Automation
+**Priority**: P1 | **Assignee**: TBD | **Est**: 8h
+- [ ] Create master sync script
+- [ ] Implement incremental updates
+- [ ] Add data quality checks
+- [ ] Create update notification system
+- [ ] Document update procedures
+
+**Acceptance Criteria**:
+- `scripts/data-pipeline/sync.py` runs end-to-end
+- Incremental updates only fetch new data
+- Quality checks validate before export
+- Documentation in `docs/DATA_COLLECTION_GUIDE.md`
 
 ---
 
@@ -19,11 +136,13 @@
 - [ ] Remove `__pycache__` and temp files
 - [ ] Verify no sensitive docs in public paths
 - [ ] Update `.gitignore` for new structure
+- [ ] Add `data/raw/` to gitignore (sensitive/derived data)
 
 **Acceptance Criteria**:
 - `git status` shows clean working tree
 - No operational docs in public-facing directories
 - `archive/` contains legacy code with README explaining status
+- `data/raw/` excluded from git (only processed/exports committed)
 
 ---
 
@@ -568,13 +687,14 @@
 
 | Sprint | Planned | Completed | Velocity |
 |--------|---------|-----------|----------|
+| Sprint -1 | 80h | - | - |
 | Sprint 0 | 13h | - | - |
 | Sprint 1 | 44h | - | - |
 | Sprint 2 | 40h | - | - |
 | Sprint 3 | 46h | - | - |
 | Sprint 4 | 62h | - | - |
 | Sprint 5 | 50h | - | - |
-| **Total** | **255h** | - | - |
+| **Total** | **335h** | - | - |
 
 ---
 

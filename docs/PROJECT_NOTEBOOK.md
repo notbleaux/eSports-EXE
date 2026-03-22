@@ -32,12 +32,13 @@
 
 | Sprint | Dates | Status | Key Deliverables |
 |--------|-------|--------|------------------|
-| Sprint 0 | 03-22 → 03-25 | 🟡 In Progress | Foundation setup |
-| Sprint 1 | 03-26 → 04-08 | ⚪ Planned | UI Foundation |
-| Sprint 2 | 04-09 → 04-22 | ⚪ Planned | Analytics Hub |
-| Sprint 3 | 04-23 → 05-06 | ⚪ Planned | Events & Ops |
-| Sprint 4 | 05-07 → 05-13 | ⚪ Planned | TeNET Tools |
-| Sprint 5 | 05-14 → 05-20 | ⚪ Planned | Polish & Launch |
+| Sprint -1 | 03-22 → 04-12 | 🔴 Not Started | Data Infrastructure (CS 2012-2025, Valorant 2020-2025) |
+| Sprint 0 | 04-13 → 04-16 | ⚪ Planned | Foundation setup |
+| Sprint 1 | 04-17 → 04-30 | ⚪ Planned | UI Foundation |
+| Sprint 2 | 05-01 → 05-14 | ⚪ Planned | Analytics Hub |
+| Sprint 3 | 05-15 → 05-28 | ⚪ Planned | Events & Ops |
+| Sprint 4 | 05-29 → 06-11 | ⚪ Planned | TeNET Tools |
+| Sprint 5 | 06-12 → 06-25 | ⚪ Planned | Polish & Launch |
 
 ---
 
@@ -51,16 +52,22 @@
 - ✅ Component library ready (tokens.css + 4 HTML components)
 - ✅ Created SPRINT_BACKLOG.md with 30+ tickets
 - ✅ Updated PRODUCT_PLAN.md with sprint breakdown
+- ✅ Created DATA_ARCHITECTURE.md for historical data (CS 2012-2025, Valorant 2020-2025)
+- ✅ Created SCHEMA_REFERENCE.md with complete field documentation
 
 **Decisions**:
 - HLTV approach for analytics data model
 - VLR.gg approach for match page UX patterns
 - Hybrid analyst/fan modes for key hubs
+- **NEW**: Static-first data architecture (JSON exports) for zero-cost hosting
+- **NEW**: Liquipedia as primary data source (MediaWiki API)
+- **NEW**: Sprint -1 added for data infrastructure (3 weeks)
 
 **Next Steps**:
-- Begin Sprint 0: Repository cleanup
-- Archive sensitive operational docs
-- Set up dev tooling
+- Begin Sprint -1: Data infrastructure setup
+- Implement Liquipedia collectors
+- Generate historical JSON exports
+- Then proceed to Sprint 0: UI foundation
 
 ---
 
@@ -99,6 +106,12 @@
 | 03-22 | Per-hub accent colors | Brand identity per hub | 5 unique accents defined |
 | 03-22 | 65/35 asymmetric layout | Detail/Endex inspiration | Consistent across hubs |
 | 03-22 | CSS variables for tokens | Maintainability | Single source of truth |
+| 03-22 | **Static-first data architecture** | Zero-cost hosting requirement | JSON exports, no backend needed |
+| 03-22 | **Liquipedia as primary source** | Best free API for historical data | 2012-2025 CS, 2020-2025 Valorant |
+| 03-22 | **Sprint -1 for data infrastructure** | Historical data is prerequisite | 3-week data collection sprint |
+| 03-22 | **Hybrid storage strategy** | Balance cost vs capability | Hot data in JSON, warm in Supabase |
+| 03-22 | **GitHub Pages + CDN delivery** | Static hosting for global reach | Unlimited bandwidth, free |
+| 03-22 | **Data volume: ~525 MB total** | 50K CS matches + 35K Val matches | Chunked by year for lazy loading |
 
 ---
 
@@ -108,13 +121,20 @@
 - **HLTV.org**: https://www.hltv.org/stats/matches — Data density, historical stats
 - **VLR.gg**: https://www.vlr.gg/ — Modern UX, clean match pages
 
+### Data Sources
+- **Liquipedia**: https://liquipedia.net/ — Primary data source (MediaWiki API)
+- **Liquipedia API Docs**: https://liquipedia.net/commons/Help:API — API documentation
+- **Pandascore**: https://pandascore.co/ — Secondary enrichment (free tier)
+
 ### Internal Documents
 - `PRODUCT_PLAN.md` — Executive roadmap
 - `MVP.md` — One-page specification
-- `SPRINT_BACKLOG.md` — Ticket-level tasks
+- `SPRINT_BACKLOG.md` — Ticket-level tasks (now includes Sprint -1 data infrastructure)
 - `DELIVERABLES_INDEX.md` — Deliverables master list
 - `HUB_BLUEPRINTS.md` — Detailed hub specs
 - `STYLE_BRIEF.md` — Design tokens
+- `DATA_ARCHITECTURE.md` — Historical data strategy and schemas
+- `SCHEMA_REFERENCE.md` — Complete field documentation
 
 ### Technical Specs
 - `docs/TECH_DESIGN_TENET_CS.md` — Grenade visualizer
