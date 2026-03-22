@@ -35,7 +35,7 @@ export default defineConfig({
         '**/*.config.{js,ts}',
         'src/**/*.d.ts',
         'src/mocks/',
-        'src/dev/',
+        'src/dev/'
       ],
       thresholds: {
         global: {

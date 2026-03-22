@@ -7,7 +7,8 @@
 **Version:** 1.0.0  
 **Last Updated:** 2026-03-22
 
----
+## Purpose
+Coordination for Claude, Kimi, BLACKBOXAI network. Claim tasks exclusively to avoid conflicts.
 
 ## 🎯 How It Works
 

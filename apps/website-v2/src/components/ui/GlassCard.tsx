@@ -10,26 +10,27 @@ import { motion, type HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/utils/cn';
 import { useReducedMotion } from '@/hooks/animation/useReducedMotion';
 import { easings } from '@/lib/easing';
-import type { GlassCardProps, HubId } from '@/types/animation';
 
 // ============================================================================
 // Hub Theme Configuration
 // ============================================================================
 
+export type HubId = 'sator' | 'rotas' | 'arepo' | 'opera' | 'tenet';
+
 const HUB_COLORS: Record<HubId, string> = {
-  sator: '#3b82f6',
-  rotas: '#a855f7',
-  arepo: '#f59e0b',
-  opera: '#06b6d4',
-  tenet: '#ffffff',
+  sator: '#00d4ff',
+  rotas: '#ff4444',
+  arepo: '#ffaa00',
+  opera: '#ff00ff',
+  tenet: '#8b5cf6',
 };
 
 const HUB_GLOW_COLORS: Record<HubId, string> = {
-  sator: 'rgba(59, 130, 246, 0.5)',
-  rotas: 'rgba(168, 85, 247, 0.5)',
-  arepo: 'rgba(245, 158, 11, 0.5)',
-  opera: 'rgba(6, 182, 212, 0.5)',
-  tenet: 'rgba(255, 255, 255, 0.4)',
+  sator: 'rgba(0, 212, 255, 0.5)',
+  rotas: 'rgba(255, 68, 68, 0.5)',
+  arepo: 'rgba(255, 170, 0, 0.5)',
+  opera: 'rgba(255, 0, 255, 0.5)',
+  tenet: 'rgba(139, 92, 246, 0.4)',
 };
 
 type GlowIntensity = 'none' | 'subtle' | 'medium' | 'strong';
@@ -65,13 +66,31 @@ function getBorderGlowColor(hubTheme?: HubId): string {
 }
 
 // ============================================================================
-// Component
+// Component Props
 // ============================================================================
 
-export interface GlassCardComponentProps extends Omit<GlassCardProps, 'as'> {
+export interface GlassCardProps {
+  children: React.ReactNode;
+  className?: string;
+  hoverGlow?: string;
+  glowColor?: string;
+  hubTheme?: HubId;
+  glowIntensity?: GlowIntensity;
+  borderGlow?: boolean;
+  elevated?: boolean;
+  reducedMotion?: boolean;
+  onClick?: () => void;
+  as?: React.ElementType;
+}
+
+export interface GlassCardComponentProps extends GlassCardProps {
   motionProps?: HTMLMotionProps<'div'>;
   style?: React.CSSProperties;
 }
+
+// ============================================================================
+// Component
+// ============================================================================
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardComponentProps>(
   function GlassCard({

@@ -1,22 +1,24 @@
 /** [Ver002.000] */
 /**
- * Logger Utility
- * Simple logging utility for production and development.
+ * logger.ts - Structured logging utility
+ * Compatible with browser console and server-side logging
+ *
+ * [Ver001.000]
  */
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-const LOG_LEVELS: Record<LogLevel, number> = {
+const CURRENT_LEVEL: LogLevel = (import.meta.env?.VITE_LOG_LEVEL as LogLevel) || 'info';
+
+const LEVEL_ORDER: Record<LogLevel, number> = {
   debug: 0,
   info: 1,
   warn: 2,
   error: 3,
 };
 
-const CURRENT_LEVEL: LogLevel = ((import.meta as unknown as { env: Record<string, string> }).env.VITE_LOG_LEVEL as LogLevel) || 'info';
-
 function shouldLog(level: LogLevel): boolean {
-  return LOG_LEVELS[level] >= LOG_LEVELS[CURRENT_LEVEL];
+  return LEVEL_ORDER[level] >= LEVEL_ORDER[CURRENT_LEVEL];
 }
 
 function formatMessage(level: LogLevel, context: string, message: string, ...args: unknown[]): string {
