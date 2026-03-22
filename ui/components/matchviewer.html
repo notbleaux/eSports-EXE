@@ -1,0 +1,440 @@
+<!--
+  MatchViewer Component
+  Version: [Ver001.000]
+  
+  Usage:
+  1. Wrap in <div class="match-viewer" role="application" aria-label="Match viewer">
+  2. Include viewer-canvas for video/canvas
+  3. Include viewer-side for KPIs and event list
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MatchViewer Component Demo</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    /* Demo page styles */
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      padding: var(--space-xl);
+      line-height: var(--leading-normal);
+    }
+    
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-h2);
+      margin-bottom: var(--space-lg);
+    }
+    
+    /* ===== MATCHVIEWER COMPONENT STYLES ===== */
+    .match-viewer {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: var(--space-lg);
+      align-items: start;
+      max-width: 1400px;
+    }
+    
+    @media (max-width: 1024px) {
+      .match-viewer {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .viewer-main {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .viewer-canvas {
+      background: #0a0a0a;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .viewer-canvas video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .viewer-placeholder {
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: var(--space-xl);
+    }
+    
+    .viewer-placeholder-icon {
+      font-size: 48px;
+      margin-bottom: var(--space-md);
+      opacity: 0.5;
+    }
+    
+    /* Timeline within viewer */
+    .viewer-timeline {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+    }
+    
+    .timeline-track-compact {
+      height: 40px;
+      background: var(--color-surface-elevated);
+      position: relative;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .timeline-marker-compact {
+      position: absolute;
+      bottom: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+    
+    .timeline-marker-compact.kill { background: var(--color-error); }
+    .timeline-marker-compact.ability { background: var(--accent); }
+    .timeline-marker-compact.plant { background: var(--color-warning); }
+    
+    .timeline-controls-compact {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    
+    .timeline-time-compact {
+      font-family: var(--font-mono);
+      font-size: var(--text-small);
+      font-weight: 600;
+      min-width: 50px;
+    }
+    
+    .timeline-scrub-compact {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--color-border);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+    
+    .timeline-scrub-compact::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+    }
+    
+    /* Side panel */
+    .viewer-side {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    /* Score display */
+    .score-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-lg);
+      background: var(--color-surface);
+      padding: var(--space-lg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+    }
+    
+    .score-team {
+      text-align: center;
+    }
+    
+    .score-team-name {
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .score-team-value {
+      font-family: var(--font-display);
+      font-size: var(--text-h1);
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .score-divider {
+      font-family: var(--font-display);
+      font-size: var(--text-h2);
+      color: var(--color-text-muted);
+      font-weight: 300;
+    }
+    
+    /* Event list */
+    .event-list {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    
+    .event-list-header {
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--color-border-subtle);
+      font-weight: 600;
+    }
+    
+    .event-items {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .event-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--color-border-subtle);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--easing-out);
+    }
+    
+    .event-item:hover {
+      background: var(--color-surface-elevated);
+    }
+    
+    .event-item:last-child {
+      border-bottom: none;
+    }
+    
+    .event-time {
+      font-family: var(--font-mono);
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+      min-width: 50px;
+    }
+    
+    .event-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-small);
+    }
+    
+    .event-icon.kill {
+      background: rgba(255, 92, 92, 0.15);
+      color: var(--color-error);
+    }
+    
+    .event-icon.ability {
+      background: var(--accent-subtle);
+      color: var(--accent);
+    }
+    
+    .event-icon.plant {
+      background: rgba(255, 184, 107, 0.15);
+      color: var(--color-warning);
+    }
+    
+    .event-content {
+      flex: 1;
+    }
+    
+    .event-title {
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    
+    .event-meta {
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+    }
+    
+    /* Player stats mini */
+    .player-stats {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-lg);
+    }
+    
+    .player-stats h4 {
+      margin: 0 0 var(--space-md) 0;
+      font-size: var(--text-body);
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    
+    .stat-label {
+      color: var(--color-text-muted);
+      font-size: var(--text-small);
+    }
+    
+    .stat-value {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="hub-analytics">
+  <h1>MatchViewer Component</h1>
+  
+  <div class="match-viewer">
+    <!-- Main Viewer Area -->
+    <div class="viewer-main">
+      <div class="viewer-canvas">
+        <!-- Video or canvas element would go here -->
+        <div class="viewer-placeholder">
+          <div class="viewer-placeholder-icon">▶</div>
+          <p>Replay video would play here</p>
+          <p style="font-size: var(--text-small); opacity: 0.6;">EXE Cup — Finals • Map: Ascent</p>
+        </div>
+      </div>
+      
+      <!-- Compact Timeline -->
+      <div class="viewer-timeline">
+        <div class="timeline-track-compact">
+          <div class="timeline-marker-compact kill" style="left: 5%;" title="Kill"></div>
+          <div class="timeline-marker-compact ability" style="left: 12%;" title="Ability"></div>
+          <div class="timeline-marker-compact kill" style="left: 18%;" title="Kill"></div>
+          <div class="timeline-marker-compact plant" style="left: 25%;" title="Plant"></div>
+          <div class="timeline-marker-compact kill" style="left: 32%;" title="Kill"></div>
+          <div class="timeline-marker-compact ability" style="left: 45%;" title="Ability"></div>
+          <div class="timeline-marker-compact kill" style="left: 58%;" title="Kill"></div>
+          <div class="timeline-marker-compact kill" style="left: 72%;" title="Kill"></div>
+          <div class="timeline-marker-compact ability" style="left: 85%;" title="Ability"></div>
+          <div class="timeline-marker-compact kill" style="left: 92%;" title="Kill"></div>
+        </div>
+        <div class="timeline-controls-compact">
+          <span class="timeline-time-compact">01:24</span>
+          <input type="range" class="timeline-scrub-compact" min="0" max="2456" value="84" aria-label="Scrub timeline">
+          <span class="timeline-time-compact">40:56</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Side Panel -->
+    <div class="viewer-side">
+      <!-- Score Display -->
+      <div class="score-display">
+        <div class="score-team">
+          <div class="score-team-name">Alpha</div>
+          <div class="score-team-value" style="color: var(--color-success);">13</div>
+        </div>
+        <div class="score-divider">:</div>
+        <div class="score-team">
+          <div class="score-team-name">Beta</div>
+          <div class="score-team-value" style="color: var(--color-error);">11</div>
+        </div>
+      </div>
+      
+      <!-- Event List -->
+      <div class="event-list">
+        <div class="event-list-header">Timeline Events</div>
+        <div class="event-items">
+          <div class="event-item">
+            <span class="event-time">01:24</span>
+            <span class="event-icon kill">⚔</span>
+            <div class="event-content">
+              <div class="event-title">Kill by TenZ</div>
+              <div class="event-meta">Vandal • Headshot</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <span class="event-time">01:45</span>
+            <span class="event-icon ability">⚡</span>
+            <div class="event-content">
+              <div class="event-title">Recon Bolt</div>
+              <div class="event-meta">Sova • A Site</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <span class="event-time">02:08</span>
+            <span class="event-icon kill">⚔</span>
+            <div class="event-content">
+              <div class="event-title">Kill by aspas</div>
+              <div class="event-meta">Phantom</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <span class="event-time">02:45</span>
+            <span class="event-icon plant">💣</span>
+            <div class="event-content">
+              <div class="event-title">Spike Planted</div>
+              <div class="event-meta">A Site</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <span class="event-time">03:12</span>
+            <span class="event-icon ability">⚡</span>
+            <div class="event-content">
+              <div class="event-title">Paranoia</div>
+              <div class="event-meta">Omen • B Site</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <span class="event-time">03:28</span>
+            <span class="event-icon kill">⚔</span>
+            <div class="event-content">
+              <div class="event-title">Clutch Kill</div>
+              <div class="event-meta">1v2 situation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Player Stats -->
+      <div class="player-stats">
+        <h4>Match Stats</h4>
+        <div class="stat-row">
+          <span class="stat-label">Duration</span>
+          <span class="stat-value">40:56</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Total Kills</span>
+          <span class="stat-value">47</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Rounds Played</span>
+          <span class="stat-value">24</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Map</span>
+          <span class="stat-value">Ascent</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

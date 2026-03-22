@@ -1,0 +1,364 @@
+<!--
+  Panel Component
+  Version: [Ver001.000]
+  
+  Usage:
+  1. Wrap content in <section class="panel" aria-labelledby="panel-title">
+  2. Use panel-header for title and actions
+  3. Use panel-body for main content
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Component Demo</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    /* Demo page styles */
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      padding: var(--space-xl);
+      line-height: var(--leading-normal);
+    }
+    
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-h2);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-lg);
+      max-width: var(--container-max);
+    }
+    
+    @media (max-width: 768px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* ===== PANEL COMPONENT STYLES ===== */
+    .panel {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      overflow: hidden;
+      transition: transform var(--duration-fast) var(--easing-out),
+                  box-shadow var(--duration-fast) var(--easing-out);
+    }
+    
+    .panel-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    
+    .panel-header h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-h3);
+      margin: 0;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    
+    .panel-header h4 {
+      font-family: var(--font-display);
+      font-size: var(--text-h4);
+      margin: 0;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    
+    .panel-actions {
+      display: flex;
+      gap: var(--space-sm);
+    }
+    
+    .panel-body {
+      color: var(--color-text-secondary);
+    }
+    
+    .panel-body > *:first-child {
+      margin-top: 0;
+    }
+    
+    .panel-body > *:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* KPI Row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .kpi-card {
+      background: var(--color-surface-elevated);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      text-align: center;
+      transition: background var(--duration-fast) var(--easing-out);
+    }
+    
+    .kpi-card:hover {
+      background: var(--color-bg);
+    }
+    
+    .kpi-value {
+      font-family: var(--font-display);
+      font-size: var(--text-h2);
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1;
+    }
+    
+    .kpi-label {
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+      margin-top: var(--space-xs);
+    }
+    
+    .kpi-trend {
+      font-size: var(--text-micro);
+      margin-top: var(--space-xs);
+    }
+    
+    .kpi-trend.up {
+      color: var(--color-success);
+    }
+    
+    .kpi-trend.down {
+      color: var(--color-error);
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-small);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--easing-out);
+      border: 1px solid transparent;
+    }
+    
+    .btn:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border-color: var(--color-border);
+      color: var(--color-text-secondary);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--color-surface-elevated);
+      color: var(--color-text);
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    
+    /* Match List */
+    .match-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    .match-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--color-surface-elevated);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--easing-out);
+    }
+    
+    .match-item:hover {
+      background: var(--color-bg);
+    }
+    
+    .match-thumb {
+      width: 60px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-subtle), transparent);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-micro);
+      color: var(--accent);
+    }
+    
+    .match-info {
+      flex: 1;
+    }
+    
+    .match-title {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    
+    .match-meta {
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+    }
+    
+    .match-score {
+      font-family: var(--font-display);
+      font-size: var(--text-h4);
+      font-weight: 700;
+    }
+    
+    /* Sparkline placeholder */
+    .sparkline {
+      height: 40px;
+      background: linear-gradient(90deg, var(--accent-subtle) 0%, var(--accent) 50%, var(--accent-subtle) 100%);
+      border-radius: var(--radius-sm);
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body class="hub-analytics">
+  <h1>Panel Component Demo</h1>
+  
+  <div class="demo-grid">
+    <!-- Main Content Column -->
+    <div class="main-column">
+      <!-- KPI Panel -->
+      <section class="panel" aria-labelledby="kpi-title">
+        <header class="panel-header">
+          <h3 id="kpi-title">Match Analytics</h3>
+          <div class="panel-actions">
+            <button class="btn btn-secondary">Filter</button>
+            <button class="btn btn-primary">Export</button>
+          </div>
+        </header>
+        <div class="panel-body">
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-value">24</div>
+              <div class="kpi-label">Matches</div>
+              <div class="kpi-trend up">+12% vs last week</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">1.4</div>
+              <div class="kpi-label">Avg K/D</div>
+              <div class="kpi-trend up">+5% vs last week</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">98s</div>
+              <div class="kpi-label">Avg Round Time</div>
+              <div class="kpi-trend down">-3% vs last week</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">68%</div>
+              <div class="kpi-label">Win Rate</div>
+              <div class="kpi-trend up">+8% vs last week</div>
+            </div>
+          </div>
+          <div class="sparkline"></div>
+        </div>
+      </section>
+      
+      <!-- Match List Panel -->
+      <section class="panel panel-hover" aria-labelledby="matches-title">
+        <header class="panel-header">
+          <h4 id="matches-title">Recent Matches</h4>
+          <div class="panel-actions">
+            <button class="btn btn-secondary">View All</button>
+          </div>
+        </header>
+        <div class="panel-body">
+          <div class="match-list">
+            <div class="match-item">
+              <div class="match-thumb">MAP</div>
+              <div class="match-info">
+                <div class="match-title">EXE Cup — Finals</div>
+                <div class="match-meta">Ascent • 2 hours ago</div>
+              </div>
+              <div class="match-score">13-11</div>
+            </div>
+            <div class="match-item">
+              <div class="match-thumb">MAP</div>
+              <div class="match-info">
+                <div class="match-title">VCT Masters — Group Stage</div>
+                <div class="match-meta">Bind • Yesterday</div>
+              </div>
+              <div class="match-score">8-13</div>
+            </div>
+            <div class="match-item">
+              <div class="match-thumb">MAP</div>
+              <div class="match-info">
+                <div class="match-title">Practice Scrims</div>
+                <div class="match-meta">Haven • 2 days ago</div>
+              </div>
+              <div class="match-score">13-10</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <!-- Context Column -->
+    <div class="context-column">
+      <!-- Saved Views Panel -->
+      <section class="panel" aria-labelledby="views-title">
+        <header class="panel-header">
+          <h4 id="views-title">Saved Views</h4>
+        </header>
+        <div class="panel-body">
+          <p>Quick access to your favorite analytics configurations.</p>
+          <button class="btn btn-secondary" style="width: 100%; margin-top: var(--space-md);">+ New View</button>
+        </div>
+      </section>
+      
+      <!-- Export Panel -->
+      <section class="panel panel-hover" aria-labelledby="export-title">
+        <header class="panel-header">
+          <h4 id="export-title">Export Data</h4>
+        </header>
+        <div class="panel-body">
+          <p>Download match data in CSV or JSON format.</p>
+          <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-md);">
+            <button class="btn btn-secondary" style="flex: 1;">CSV</button>
+            <button class="btn btn-primary" style="flex: 1;">JSON</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

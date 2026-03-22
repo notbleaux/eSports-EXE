@@ -1,0 +1,113 @@
+/**
+ * eSports-EXE Design Tokens
+ * Version: [Ver001.000]
+ * 
+ * Usage: Import this file at the top of your CSS:
+ * @import './tokens.css';
+ * 
+ * Per-hub theming: Apply hub class to root element:
+ * <body class="hub-analytics"> or <body class="hub-events">
+ */
+
+:root {
+  /* Background Colors */
+  --color-bg: #F6F5F4;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FAFAFA;
+  
+  /* Text Colors */
+  --color-text: #111217;
+  --color-text-secondary: #6B6F76;
+  --color-text-muted: #9A9EA5;
+  
+  /* Borders */
+  --color-border: #E5E5E7;
+  --color-border-subtle: #F0F0F1;
+  
+  /* Hub Accents (Default to Analytics) */
+  --accent-analytics: #00D1FF;
+  --accent-events: #FFB86B;
+  --accent-ops: #9B7CFF;
+  --accent-tenet-cs: #2B6FA6;
+  --accent-tenet-valorant: #FF2D9C;
+  
+  /* Current Accent (overridden by hub class) */
+  --accent: var(--accent-analytics);
+  --accent-hover: color-mix(in srgb, var(--accent) 85%, white);
+  --accent-subtle: color-mix(in srgb, var(--accent) 15%, transparent);
+  
+  /* Semantic Colors */
+  --color-success: #00C48C;
+  --color-warning: #FFB86B;
+  --color-error: #FF5C5C;
+  
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  /* Spacing (8px base unit) */
+  --space-unit: 8px;
+  --space-xs: calc(var(--space-unit) * 0.5);
+  --space-sm: var(--space-unit);
+  --space-md: calc(var(--space-unit) * 2);
+  --space-lg: calc(var(--space-unit) * 3);
+  --space-xl: calc(var(--space-unit) * 4);
+  --space-2xl: calc(var(--space-unit) * 6);
+  --space-3xl: calc(var(--space-unit) * 8);
+  
+  /* Container */
+  --container-max: 1200px;
+  --container-narrow: 720px;
+  
+  /* Typography */
+  --font-display: "GT Standard", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  
+  /* Type Scale */
+  --text-h1: 64px;
+  --text-h2: 40px;
+  --text-h3: 28px;
+  --text-h4: 20px;
+  --text-body: 16px;
+  --text-small: 14px;
+  --text-micro: 12px;
+  
+  /* Line Heights */
+  --leading-tight: 0.95;
+  --leading-snug: 1.15;
+  --leading-normal: 1.45;
+  --leading-relaxed: 1.6;
+  
+  /* Shadows */
+  --shadow-card: 0 6px 18px rgba(17, 18, 23, 0.08);
+  --shadow-elevated: 0 12px 32px rgba(17, 18, 23, 0.12);
+  --shadow-hover: 0 8px 24px rgba(17, 18, 23, 0.1);
+  
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 240ms;
+  --duration-slow: 350ms;
+  --easing-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Per-Hub Accent Overrides */
+.hub-analytics { --accent: var(--accent-analytics); }
+.hub-events { --accent: var(--accent-events); }
+.hub-ops { --accent: var(--accent-ops); }
+.hub-tenet-cs { --accent: var(--accent-tenet-cs); }
+.hub-tenet-valorant { --accent: var(--accent-tenet-valorant); }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
