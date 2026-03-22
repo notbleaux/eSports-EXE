@@ -1,123 +1,73 @@
-[Ver001.000]
+[Ver003.000]
 
-# eSports-EXE — MVP Specification
-## Public Demo Site + Minimal Platform Surface
+# eSports-EXE — One-Page MVP Spec
 
-**Project**: eSports-EXE — 4NJZ4 TENET Platform  
-**Goal**: Launch a free, public, read-only demonstration of core platform value: match viewer + hubbed dashboards + marketing site.  
-**Hosting**: Static (GitHub Pages / Cloudflare Pages) with serverless JSON endpoints for demo data.  
-**Status**: Draft  
-**Last Updated**: 2026-03-22  
+**Project**: eSports-EXE public demo & marketing site  
+**Goal**: Ship a free-hosted, production-quality public presence that demonstrates core platform value (match replay + hub panels) and a reusable visual system.  
+**Date**: 2026-03-22  
+**Status**: Approved for Implementation  
 
 ---
 
-## Scope (Priority Order)
+## Objective
 
-| Priority | Feature | Description |
-|----------|---------|-------------|
-| P0 | **Marketing Site** | Home, About, Roadmap, Contact pages |
-| P0 | **Match Viewer Demo** | Replay canvas, timeline scrub, event markers, contextual side panel |
-| P0 | **Hubs Shell** | Tabbed hub container with three sample hubs (Analytics, Events, Replays) |
-| P1 | **API Stubs** | Read-only JSON files under `/data/` |
-| P1 | **Design System** | `ui/tokens.css`, `ui/components/*` |
+Deliver a zero-budget, deployable site that showcases:
+
+1. **Match Viewer demo** — read-only replay with timeline and event panel
+2. **Hubbed UI** — tabbed, panelled lenses with per-hub flair
+3. **Design system** — tokens + small component library to guide future work
 
 ---
 
-## Demo Data Endpoints (Static JSON)
+## Scope (MVP)
 
-### GET `/data/matches.json`
-List of matches with metadata.
+| Module | Features |
+|--------|----------|
+| **Marketing pages** | Home, About, Roadmap, Contact, Docs index |
+| **Demo app** | Match Viewer (scrub timeline, event markers, contextual side panel) |
+| **API stubs** | Static JSON endpoints to feed the demo UI |
+| **Design system** | CSS variables for tokens; components for Tabs, Panels, Data Cards, Buttons |
+| **Deployment** | GitHub Pages or Cloudflare Pages (static + optional serverless stubs) |
+
+---
+
+## Endpoints (Demo Stubs)
+
+### GET /api/demo/matches
+Response: `[{ id, title, date, hub, duration, thumbnail }]`
+
+### GET /api/demo/matches/{id}
+Response: `{ id, teams[], score{}, timeline[{t,type,actor,meta}], replayUrl }`
+
+### GET /api/demo/players/{id}
+Response: `{ id, name, avatar, role, stats{} }`
+
+### GET /api/demo/hubs
+Response: `[{ id, name, accentColor, description }]`
+
+---
+
+## Demo Data (Example)
 
 ```json
 {
   "matches": [
     {
-      "id": "match-2026-03-22-01",
-      "teams": ["Red Ravens", "Blue Bastion"],
-      "score": { "red": 2, "blue": 1 },
-      "date": "2026-03-22T08:30:00Z",
-      "replayId": "replay-001",
-      "status": "completed",
-      "map": "Ascent",
-      "tournament": "VCT Masters"
-    }
-  ]
-}
-```
-
-### GET `/data/replays/{replayId}.json`
-Replay metadata with timeline events.
-
-```json
-{
-  "id": "replay-001",
-  "matchId": "match-2026-03-22-01",
-  "duration": 2456,
-  "keyframes": [
-    { "timestamp": 0, "type": "round_start", "data": { "round": 1 } }
-  ],
-  "events": [
-    {
-      "timestamp": 124,
-      "type": "kill",
-      "player": "TenZ",
-      "target": "Opponent",
-      "weapon": "Vandal",
-      "position": { "x": 0.65, "y": 0.32 }
+      "id": "m-001",
+      "title": "EXE Cup — Finals",
+      "date": "2026-03-01",
+      "hub": "analytics",
+      "duration": 3600,
+      "thumbnail": "/img/m-001.jpg"
     }
   ],
-  "teams": {
-    "red": { "players": [...], "score": 2 },
-    "blue": { "players": [...], "score": 1 }
+  "matchDetails": {
+    "id": "m-001",
+    "teams": ["Alpha", "Beta"],
+    "score": { "Alpha": 3, "Beta": 2 },
+    "timeline": [{ "t": 12, "type": "kill", "actor": "player-7", "meta": {} }],
+    "replayUrl": "/replays/m-001.webm"
   }
-}
-```
-
-### GET `/data/events.json`
-Event catalog for timeline markers.
-
-```json
-{
-  "eventTypes": [
-    { "id": "kill", "label": "Kill", "color": "#FF5C5C", "icon": "crosshair" },
-    { "id": "ability", "label": "Ability Used", "color": "#00C8FF", "icon": "zap" },
-    { "id": "plant", "label": "Spike Planted", "color": "#FFB86B", "icon": "target" },
-    { "id": "defuse", "label": "Spike Defused", "color": "#00C48C", "icon": "shield" }
-  ]
-}
-```
-
-### GET `/data/hubs.json`
-Hub definitions and configuration.
-
-```json
-{
-  "hubs": [
-    {
-      "id": "analytics",
-      "name": "Analytics Hub",
-      "accent": "#00C8FF",
-      "description": "Match statistics and performance metrics",
-      "defaultTab": "overview",
-      "tabs": ["overview", "players", "rounds", "economy"]
-    },
-    {
-      "id": "events",
-      "name": "Events Hub",
-      "accent": "#FFB86B",
-      "description": "Live and upcoming tournament events",
-      "defaultTab": "live",
-      "tabs": ["live", "upcoming", "results", "schedule"]
-    },
-    {
-      "id": "replays",
-      "name": "Replays Hub",
-      "accent": "#8A6CFF",
-      "description": "Match replays and VOD review",
-      "defaultTab": "library",
-      "tabs": ["library", "bookmarks", "shared"]
-    }
-  ]
 }
 ```
 
@@ -125,162 +75,42 @@ Hub definitions and configuration.
 
 ## Acceptance Criteria
 
-### Deployable
-- [ ] Site builds successfully (`npm run build` or equivalent)
-- [ ] Deploys to GitHub Pages or Cloudflare Pages from `main` branch
-- [ ] Custom domain or `username.github.io/esports-exe` works
-
-### Match Viewer
-- [ ] Loads `/data/replays/replay-001.json` successfully
-- [ ] Renders replay canvas (placeholder or actual)
-- [ ] Displays timeline with scrub control
-- [ ] Shows event markers at correct timestamps
-- [ ] Side panel updates on scrub or marker click
-
-### Hubs
-- [ ] Tabbed hub container renders correctly
-- [ ] Tab switching triggers animated panel transition (200-300ms)
-- [ ] Each hub uses its distinct accent color
-- [ ] Default tab loads correctly per hub
-
-### Design System
-- [ ] `ui/tokens.css` contains all CSS variables (colors, type, spacing, motion)
-- [ ] Components consume tokens (not hardcoded values)
-- [ ] Components: Tabs, Panels, DataCard, Button, Timeline
-
-### Performance
-- [ ] Lighthouse performance score ≥ 70 on mobile
-- [ ] First Meaningful Paint < 2.5s on demo data
-- [ ] Bundle size < 200KB initial
-
-### Accessibility
-- [ ] Keyboard navigable tabs (arrow keys, Enter, Space)
-- [ ] Focus states visible (3px solid accent or equivalent)
-- [ ] Color contrast ≥ 4.5:1 for body text
-- [ ] Semantic HTML (nav, main, article, button vs div)
+- [ ] **Public deploy**: Marketing pages + demo app reachable at a public URL
+- [ ] **Match Viewer**: Loads `/api/demo/matches/{id}`, supports timeline scrub, shows event markers, updates side panel on event selection
+- [ ] **Design system**: CSS variables for tokens; components for Tabs, Panels, Data Cards, Buttons exist in `ui/`
+- [ ] **Performance**: FCP < 1.5s on 3G emulation for marketing pages
+- [ ] **Accessibility**: Keyboard operable hub tabs; body text contrast >= 4.5:1
+- [ ] **Security**: No secrets or sensitive runbooks in public repo; SECURITY.md present
 
 ---
 
-## File Structure
+## Deliverables & Timeline (Zero Budget)
 
-```
-├── MVP.md                    # This file
-├── README.md                 # Updated with deploy instructions
-├── site/                     # Static app (React/Vite or HTML+JS)
-│   ├── index.html
-│   ├── about.html
-│   ├── roadmap.html
-│   ├── contact.html
-│   ├── hub.html              # Hub shell with routing
-│   ├── match.html            # Match viewer
-│   ├── css/
-│   │   └── tokens.css        # Design tokens
-│   ├── components/
-│   │   ├── Tabs.js
-│   │   ├── Panel.js
-│   │   ├── DataCard.js
-│   │   ├── Button.js
-│   │   └── Timeline.js
-│   └── js/
-│       └── app.js
-├── data/                     # Static JSON endpoints
-│   ├── matches.json
-│   ├── events.json
-│   ├── hubs.json
-│   └── replays/
-│       └── replay-001.json
-└── .github/
-    └── workflows/
-        └── deploy.yml        # GitHub Pages deployment
-```
+| Week | Focus | Deliverable |
+|------|-------|-------------|
+| **Week 0 (Prep)** | Repo prune; README index; create `ui/tokens.css` | Clean repo, token file |
+| **Week 1** | Static marketing pages; token file committed | Home, About, Roadmap, Contact |
+| **Week 2** | Match Viewer UI + demo JSON endpoints (static files) | Working match viewer |
+| **Week 3** | Component polish, accessibility pass, deploy to GitHub Pages | Public MVP |
 
 ---
 
-## Tech Stack Options
+## Deployment (Free Options)
 
-### Option A: React + Vite (Recommended)
-- **Pros**: Component model, HMR, large ecosystem
-- **Cons**: Larger bundle, needs JS enabled
-- **Build**: `vite build` → `dist/` → GitHub Pages
-
-### Option B: Astro (Static Site)
-- **Pros**: Zero JS by default, partial hydration, fast
-- **Cons**: Newer framework, learning curve
-- **Build**: `astro build` → `dist/` → GitHub Pages
-
-### Option C: Plain HTML + CSS + JS
-- **Pros**: Maximum simplicity, no build step
-- **Cons**: Manual component repetition
-- **Build**: Direct deploy of static files
-
-**Recommendation**: Start with **React + Vite** for component reusability, migrate to Astro later if performance demands it.
+**Primary**: GitHub Pages (static site)  
+**Optional**: Cloudflare Pages / Netlify / Vercel for static + serverless functions (free tiers)
 
 ---
 
-## Deliverables Checklist
+## Quick Implementation Notes
 
-### Design
-- [ ] `STYLE_BRIEF.md` approved and in repo
-- [ ] Figma mockups (Landing, Hub shell, Match viewer)
-- [ ] Component library documented
-
-### Data
-- [ ] `data/matches.json` (5+ sample matches)
-- [ ] `data/replays/replay-001.json` (complete replay)
-- [ ] `data/events.json` (event type catalog)
-- [ ] `data/hubs.json` (3 hub definitions)
-
-### Code
-- [ ] `site/` directory with working app
-- [ ] `ui/tokens.css` with all design tokens
-- [ ] `ui/components/` with base components
-- [ ] GitHub Actions workflow for deployment
-
-### Documentation
-- [ ] `README.md` with deploy instructions
-- [ ] `MVP.md` (this file)
-- [ ] Changelog or release notes
+- Keep demo data in `/public/api/demo/*.json` for simple fetches
+- Build UI with a lightweight framework (React + Vite or plain HTML/CSS/vanilla JS) to keep build simple
+- Store tokens as CSS variables in `ui/tokens.css` and import into components
+- Add `MVP.md` and `STYLE_BRIEF.md` to repo root for designers/devs
 
 ---
 
-## Timeline Estimate
-
-| Phase | Duration | Deliverables |
-|-------|----------|--------------|
-| Setup | 2 days | Repo structure, build pipeline, deploy |
-| Data | 1 day | JSON files, sample data |
-| Design System | 2 days | Tokens, base components |
-| Marketing Site | 2 days | Home, About, Roadmap, Contact |
-| Hubs Shell | 3 days | Tabbed container, routing |
-| Match Viewer | 4 days | Canvas, timeline, side panel |
-| Polish | 2 days | A11y, perf, bug fixes |
-| **Total** | **16 days (~3 weeks)** | **Complete MVP** |
-
----
-
-## Risks & Mitigations
-
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Scope creep | High | Strict P0/P1 boundary; defer non-essential features |
-| Data complexity | Medium | Use simplified demo data; real API integration post-MVP |
-| Performance issues | Medium | Optimize images, lazy load, code split |
-| Browser compatibility | Low | Test on Chrome, Firefox, Safari; use polyfills if needed |
-
----
-
-## Post-MVP Features (Not in Scope)
-
-- User authentication and accounts
-- Real-time WebSocket data
-- Actual video replay streaming
-- Backend API integration
-- Mobile native app
-- Advanced analytics visualizations
-- Community features (comments, forums)
-
----
-
-*Document Version: [Ver001.000]*  
-*Next Review: After design phase approval*  
+*Document Version: [Ver003.000]*  
+*Last Updated: 2026-03-22*  
 *Owner: Product Manager / Foreman Agent*
