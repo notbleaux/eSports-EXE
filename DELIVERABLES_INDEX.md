@@ -96,6 +96,8 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 | `MVP.md` | One-page MVP specification, endpoints, acceptance criteria | Ver003.000 |
 | `STYLE_BRIEF.md` | Design tokens, typography, layout principles | Ver003.000 |
 | `HUB_BLUEPRINTS.md` | Detailed hub specifications and user flows | — |
+| `SPRINT_BACKLOG.md` | 30+ tickets with acceptance criteria across 6 sprints | Ver001.000 |
+| `PROJECT_NOTEBOOK.md` | Daily tracking, decisions log, metrics | Ver001.000 |
 | `DELIVERABLES_INDEX.md` | This file — master index of all deliverables | Ver001.000 |
 
 ---
@@ -113,12 +115,18 @@ Ready-to-use HTML/CSS components in `ui/components/`.
 
 ---
 
-## 🚀 Next Steps (Implementation)
+## 🚀 Implementation Roadmap
 
-1. **Sprint 0** (3 days): Repo audit, tokens file integration, skeleton pages
-2. **Sprint 1** (2 weeks): Implement components, match viewer with static replay, analytics hub shell
-3. **Sprint 2** (2 weeks): Events and Ops hubs, TeNET tools (one per sub-hub)
-4. **Sprint 3** (1 week): Accessibility pass, performance tuning, deploy to GitHub Pages
+| Sprint | Duration | Focus | Key Deliverables |
+|--------|----------|-------|------------------|
+| **Sprint 0** | 3 days | Foundation | Clean repo, tokens, skeleton pages, tooling |
+| **Sprint 1** | 2 weeks | UI Foundation | 4 components, demo API, MatchViewer layout |
+| **Sprint 2** | 2 weeks | Analytics Hub | KPI cards, match list, integrated viewer |
+| **Sprint 3** | 2 weeks | Events & Ops | Calendar, event flow, status tiles, queue |
+| **Sprint 4** | 2 weeks | TeNET Tools | Grenade visualizer, ability timeline |
+| **Sprint 5** | 2 weeks | Polish & Launch | a11y audit, performance, deploy |
+
+**Detailed tickets**: See `docs/SPRINT_BACKLOG.md`
 
 ---
 
