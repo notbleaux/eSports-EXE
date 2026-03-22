@@ -1,219 +1,375 @@
 {
-  "_comment": "Datapoint Naming Convention — canonical naming schema shared by all pipeline services. Every entity type has one canonical form; all source-specific aliases map to it. This file is the authoritative translation key used by CanonicalIDResolver and FieldTranslator.",
-
-  "schema_version": "1.0.0",
-
-  "naming_rules": {
-    "_comment": "Rules every field name and entity identifier MUST satisfy before entering the KCRITR schema.",
-    "case":             "snake_case for all field names (e.g. kast_pct, NOT KASTpct, NOT KAST%)",
-    "separators":       "underscore only — no hyphens, dots, or spaces in field names",
-    "percent_suffix":   "Fields representing percentages end in _pct (e.g. kast_pct, headshot_pct)",
-    "count_suffix":     "Integer count fields use the bare noun or _count (e.g. kills, first_blood, clutch_wins)",
-    "id_suffix":        "UUID identity fields end in _id (e.g. player_id)",
-    "source_prefix":    "Source-specific raw fields MUST be prefixed before translation (e.g. vlr_gg.acs, liquipedia.kill_count)",
-    "canonical_prefix": "Resolved canonical URIs use the cid: scheme (e.g. cid:player:tenz, cid:match:vlr/123456)",
-    "no_special_chars": "Canonical entity names must be ASCII alphanumeric + underscore + hyphen only",
-    "max_alias_depth":  1,
-    "_max_alias_depth_note": "An alias points to a canonical form — aliases cannot chain to other aliases"
+  "_comment": "Field naming mappings for SATOR data pipeline - supports VLR (Valorant) and HLTV (CS2)",
+  "version": "1.0.0",
+  "last_updated": "2024-03-22",
+  
+  "sources": {
+    "vlr": {
+      "name": "VLR.gg",
+      "game": "valorant",
+      "base_url": "https://www.vlr.gg"
+    },
+    "hltv": {
+      "name": "HLTV.org",
+      "game": "cs2",
+      "base_url": "https://www.hltv.org"
+    },
+    "pandascore": {
+      "name": "Pandascore",
+      "game": "both",
+      "base_url": "https://api.pandascore.co"
+    }
   },
-
-  "entity_types": {
-    "player": {
-      "_comment": "A human player. Canonical form is the most widely-used competitive handle in lowercase.",
-      "canonical_key_format": "cid:player:{handle_lowercase}",
-      "example":  "cid:player:tenz",
-      "fields_that_form_id": ["name", "team"],
-      "fallback_id_method": "sha256(name.lower() + ':' + team.lower())"
+  
+  "match_fields": {
+    "match_id": {
+      "vlr": "match_id",
+      "hltv": "match_id",
+      "pandascore": "id",
+      "type": "string",
+      "description": "Unique match identifier"
     },
-    "match": {
-      "_comment": "A single competitive match. Canonical ID uses the primary source URL slug.",
-      "canonical_key_format": "cid:match:{source_slug}/{source_match_id}",
-      "example":  "cid:match:vlr_gg/123456",
-      "fields_that_form_id": ["data_source", "match_id"]
+    "team_a": {
+      "vlr": "team_a",
+      "hltv": "team1",
+      "pandascore": "opponents[0].opponent.name",
+      "type": "string",
+      "description": "First team name"
     },
-    "map": {
-      "_comment": "A playable map. Canonical names are Riot's official lowercase map names.",
-      "canonical_key_format": "cid:map:{official_name_lowercase}",
-      "example":  "cid:map:bind",
-      "aliases_example": {
-        "Bind":    "cid:map:bind",
-        "BIND":    "cid:map:bind",
-        "bind":    "cid:map:bind",
-        "Ascent":  "cid:map:ascent",
-        "Haven":   "cid:map:haven",
-        "Split":   "cid:map:split",
-        "Fracture":"cid:map:fracture",
-        "Pearl":   "cid:map:pearl",
-        "Lotus":   "cid:map:lotus",
-        "Sunset":  "cid:map:sunset",
-        "Abyss":   "cid:map:abyss",
-        "Icebox":  "cid:map:icebox",
-        "Breeze":  "cid:map:breeze",
-        "Drift":   "cid:map:drift"
-      }
+    "team_b": {
+      "vlr": "team_b",
+      "hltv": "team2",
+      "pandascore": "opponents[1].opponent.name",
+      "type": "string",
+      "description": "Second team name"
+    },
+    "score_a": {
+      "vlr": "score_a",
+      "hltv": "team1Score",
+      "pandascore": "results[0].score",
+      "type": "integer",
+      "description": "First team score"
+    },
+    "score_b": {
+      "vlr": "score_b",
+      "hltv": "team2Score",
+      "pandascore": "results[1].score",
+      "type": "integer",
+      "description": "Second team score"
+    },
+    "event_name": {
+      "vlr": "event_name",
+      "hltv": "event",
+      "pandascore": "serie.full_name",
+      "type": "string",
+      "description": "Tournament/event name"
+    },
+    "event_id": {
+      "vlr": "event_id",
+      "hltv": "eventId",
+      "pandascore": "serie.id",
+      "type": "string",
+      "description": "Event identifier"
+    },
+    "match_date": {
+      "vlr": "timestamp",
+      "hltv": "date",
+      "pandascore": "scheduled_at",
+      "type": "datetime",
+      "description": "Match start time"
+    },
+    "format": {
+      "vlr": "format",
+      "hltv": "format",
+      "pandascore": "number_of_games",
+      "type": "string",
+      "description": "Match format (bo1, bo3, bo5)"
+    },
+    "status": {
+      "vlr": "status",
+      "hltv": "status",
+      "pandascore": "status",
+      "type": "string",
+      "description": "Match status"
+    }
+  },
+  
+  "player_fields": {
+    "player_id": {
+      "vlr": "player_id",
+      "hltv": "playerId",
+      "pandascore": "player.id",
+      "type": "string"
+    },
+    "player_name": {
+      "vlr": "player_name",
+      "hltv": "nickname",
+      "pandascore": "player.name",
+      "type": "string"
     },
     "team": {
-      "_comment": "A competitive team. Canonical form is the team's official tag in uppercase.",
-      "canonical_key_format": "cid:team:{official_tag_uppercase}",
-      "example":  "cid:team:sentinels",
-      "aliases_example": {
-        "Sentinels":  "cid:team:sentinels",
-        "SEN":        "cid:team:sentinels",
-        "sen":        "cid:team:sentinels",
-        "NRG":        "cid:team:nrg",
-        "nrg esports":"cid:team:nrg",
-        "Cloud9":     "cid:team:c9",
-        "C9":         "cid:team:c9",
-        "c9":         "cid:team:c9"
+      "vlr": "team",
+      "hltv": "team",
+      "pandascore": "team.name",
+      "type": "string"
+    },
+    
+    "kills": {
+      "vlr": "kills",
+      "hltv": "kills",
+      "pandascore": "kills",
+      "type": "integer",
+      "description": "Total kills"
+    },
+    "deaths": {
+      "vlr": "deaths",
+      "hltv": "deaths",
+      "pandascore": "deaths",
+      "type": "integer",
+      "description": "Total deaths"
+    },
+    "assists": {
+      "vlr": "assists",
+      "hltv": "assists",
+      "pandascore": "assists",
+      "type": "integer",
+      "description": "Total assists"
+    },
+    
+    "adr": {
+      "vlr": "damage_made / rounds_played",
+      "hltv": "adr",
+      "pandascore": "adr",
+      "type": "float",
+      "description": "Average Damage per Round"
+    },
+    "kast": {
+      "vlr": "kast_pct",
+      "hltv": "kast",
+      "pandascore": "kast",
+      "type": "float",
+      "description": "Kill, Assist, Survive, Trade percentage"
+    },
+    "rating": {
+      "vlr": "rating",
+      "hltv": "rating",
+      "pandascore": "rating",
+      "type": "float",
+      "description": "Performance rating"
+    },
+    
+    "headshot_percent": {
+      "vlr": "headshot_pct",
+      "hltv": "hsPercent",
+      "pandascore": "hs_percent",
+      "type": "float",
+      "description": "Headshot percentage"
+    },
+    "first_kills": {
+      "vlr": "first_bloods",
+      "hltv": "fk",
+      "pandascore": "first_kills",
+      "type": "integer"
+    },
+    "first_deaths": {
+      "vlr": "first_deaths",
+      "hltv": "fd",
+      "pandascore": "first_deaths",
+      "type": "integer"
+    }
+  },
+  
+  "game_specific": {
+    "valorant": {
+      "agent": {
+        "vlr": "agent",
+        "pandascore": "character.name",
+        "type": "string",
+        "description": "Agent/character played"
+      },
+      "acs": {
+        "vlr": "acs",
+        "pandascore": "acs",
+        "type": "float",
+        "description": "Average Combat Score"
+      },
+      "econ_rating": {
+        "vlr": "econ_rating",
+        "pandascore": "econ_rating",
+        "type": "float",
+        "description": "Economic rating"
+      },
+      "fb": {
+        "vlr": "fb",
+        "pandascore": "first_bloods",
+        "type": "integer",
+        "description": "First bloods"
+      },
+      "plants": {
+        "vlr": "plants",
+        "pandascore": "plants",
+        "type": "integer"
+      },
+      "defuses": {
+        "vlr": "defuses",
+        "pandascore": "defuses",
+        "type": "integer"
       }
     },
-    "tournament": {
-      "_comment": "A competition event. Canonical form is the official Riot designation.",
-      "canonical_key_format": "cid:tournament:{organiser}_{year}_{stage}",
-      "example":  "cid:tournament:vct_2024_masters_madrid",
-      "aliases_example": {
-        "VCT Masters Madrid 2024":   "cid:tournament:vct_2024_masters_madrid",
-        "Masters Madrid":            "cid:tournament:vct_2024_masters_madrid",
-        "VCT 2024 - Masters Madrid": "cid:tournament:vct_2024_masters_madrid"
-      }
-    },
-    "agent": {
-      "_comment": "A Valorant playable character. Canonical form is Riot's official name (Title Case).",
-      "canonical_key_format": "cid:agent:{official_name_titlecase}",
-      "example":  "cid:agent:jett",
-      "aliases_example": {
-        "Jett":      "cid:agent:jett",
-        "jett":      "cid:agent:jett",
-        "JETT":      "cid:agent:jett",
-        "KAY/O":     "cid:agent:kayo",
-        "kayo":      "cid:agent:kayo",
-        "kay/o":     "cid:agent:kayo",
-        "Sage":      "cid:agent:sage",
-        "sage":      "cid:agent:sage"
+    
+    "cs2": {
+      "fk_diff": {
+        "hltv": "fkDiff",
+        "pandascore": "fk_diff",
+        "type": "integer",
+        "description": "First kill difference (FK - FD)"
+      },
+      "opening_kill_ratio": {
+        "hltv": "openingKills / openingDeaths",
+        "type": "float",
+        "description": "Opening kill to death ratio"
+      },
+      "clutches_won": {
+        "hltv": "clutchesWon",
+        "pandascore": "clutches",
+        "type": "integer"
+      },
+      "rounds_played": {
+        "hltv": "roundsPlayed",
+        "type": "integer"
+      },
+      "kpr": {
+        "hltv": "kills / roundsPlayed",
+        "type": "float",
+        "description": "Kills per round"
+      },
+      "dpr": {
+        "hltv": "deaths / roundsPlayed",
+        "type": "float",
+        "description": "Deaths per round"
+      },
+      "apr": {
+        "hltv": "assists / roundsPlayed",
+        "type": "float",
+        "description": "Assists per round"
+      },
+      "impact": {
+        "hltv": "impact",
+        "type": "float",
+        "description": "HLTV impact rating"
       }
     }
   },
-
-  "field_translation_table": {
-    "_comment": "Maps every source-specific field name to the KCRITR canonical field name. Used by FieldTranslator. Add new source columns here — never edit the KCRITR canonical names.",
-
-    "canonical_fields": {
-      "name":               {"type": "str",   "group": "identity",     "description": "Player handle/alias (display name)"},
-      "team":               {"type": "str",   "group": "identity",     "description": "Team tag or full name"},
-      "region":             {"type": "str",   "group": "identity",     "description": "Geographic region code (NA, EMEA, APAC, BR, LATAM)"},
-      "role":               {"type": "str",   "group": "identity",     "description": "Combat role (Entry, IGL, Controller, Initiator, Sentinel)"},
-      "kills":              {"type": "int",   "group": "performance",  "description": "Total kills in the map"},
-      "deaths":             {"type": "int",   "group": "performance",  "description": "Total deaths in the map"},
-      "acs":                {"type": "float", "group": "performance",  "description": "Average Combat Score per round"},
-      "adr":                {"type": "float", "group": "performance",  "description": "Average Damage per Round"},
-      "kast_pct":           {"type": "float", "group": "performance",  "description": "% rounds with Kill, Assist, Survive, or Trade"},
-      "headshot_pct":       {"type": "float", "group": "extended",     "description": "Headshot kill percentage"},
-      "first_blood":        {"type": "int",   "group": "extended",     "description": "First-blood kills"},
-      "clutch_wins":        {"type": "int",   "group": "extended",     "description": "Clutch rounds won"},
-      "agent":              {"type": "str",   "group": "extended",     "description": "Valorant agent played (Riot official name)"},
-      "match_id":           {"type": "str",   "group": "context",      "description": "Source-specific match identifier"},
-      "map_name":           {"type": "str",   "group": "context",      "description": "Canonical map name (cid:map:*)"},
-      "tournament":         {"type": "str",   "group": "context",      "description": "Tournament name (canonical preferred)"},
-      "patch_version":      {"type": "str",   "group": "context",      "description": "Game patch version at time of match"},
-      "realworld_time":     {"type": "str",   "group": "context",      "description": "ISO-8601 UTC timestamp of match"},
-      "data_source":        {"type": "str",   "group": "provenance",   "description": "One of: vlr_gg, liquipedia, hltv, grid"},
-      "confidence_tier":    {"type": "float", "group": "provenance",   "description": "Data confidence 0-100 (epoch floor applied)"},
-      "separation_flag":    {"type": "int",   "group": "provenance",   "description": "0=raw, 1=reconstructed"},
-      "checksum_sha256":    {"type": "str",   "group": "provenance",   "description": "SHA-256 hex digest of source HTML"},
-      "extraction_timestamp":{"type":"str",   "group": "provenance",   "description": "ISO-8601 UTC timestamp of extraction"}
+  
+  "map_fields": {
+    "map_name": {
+      "vlr": "map",
+      "hltv": "name",
+      "pandascore": "map.name",
+      "type": "string"
     },
-
-    "source_mappings": {
-      "vlr_gg": {
-        "_comment": "VLR.gg HTML scrape field names → canonical KCRITR names",
-        "player":      "name",
-        "rating":      "role_adjusted_value",
-        "acs":         "acs",
-        "kills":       "kills",
-        "deaths":      "deaths",
-        "assists":     null,
-        "kast":        "kast_pct",
-        "adr":         "adr",
-        "hs_pct":      "headshot_pct",
-        "first_blood": "first_blood",
-        "clutch_win":  "clutch_wins",
-        "agent":       "agent",
-        "map":         "map_name",
-        "tournament":  "tournament",
-        "patch":       "patch_version",
-        "match_date":  "realworld_time",
-        "team":        "team"
-      },
-      "liquipedia": {
-        "_comment": "Liquipedia API response field names → canonical KCRITR names",
-        "player_name":     "name",
-        "team_name":       "team",
-        "kill_count":      "kills",
-        "death_count":     "deaths",
-        "average_combat_score": "acs",
-        "average_damage_round": "adr",
-        "kast_percentage": "kast_pct",
-        "headshot_percentage": "headshot_pct",
-        "first_blood_count": "first_blood",
-        "clutch_count":    "clutch_wins",
-        "agent_name":      "agent",
-        "map_played":      "map_name",
-        "event_name":      "tournament",
-        "match_timestamp": "realworld_time"
-      },
-      "hltv": {
-        "_comment": "HLTV API/scrape field names → canonical KCRITR names (CS2 pipeline)",
-        "nickname":        "name",
-        "org":             "team",
-        "total_kills":     "kills",
-        "total_deaths":    "deaths",
-        "rating_2":        "role_adjusted_value",
-        "kast":            "kast_pct",
-        "dmg_per_round":   "adr",
-        "hs_percent":      "headshot_pct",
-        "opening_kills":   "first_blood",
-        "map_name":        "map_name",
-        "event_name":      "tournament",
-        "match_date":      "realworld_time"
-      },
-      "grid": {
-        "_comment": "GRID partnership API field names → canonical KCRITR names",
-        "playerHandle":    "name",
-        "teamName":        "team",
-        "seriesKills":     "kills",
-        "seriesDeaths":    "deaths",
-        "combatScore":     "acs",
-        "damagePerRound":  "adr",
-        "kastPercent":     "kast_pct",
-        "headshotPercent": "headshot_pct",
-        "firstBloods":     "first_blood",
-        "clutchesWon":     "clutch_wins",
-        "agentName":       "agent",
-        "mapName":         "map_name",
-        "tournamentName":  "tournament",
-        "matchStartTime":  "realworld_time"
-      }
+    "map_score_a": {
+      "vlr": "team_a_score",
+      "hltv": "team1Score",
+      "pandascore": "score[0]",
+      "type": "integer"
     },
-
-    "conflict_resolution": {
-      "_comment": "When two sources provide different values for the same canonical field on the same entity, apply these rules.",
-      "numeric_fields": "prefer_higher_confidence_source",
-      "string_fields":  "prefer_canonical_form_if_known_else_primary_source",
-      "identity_fields":["name", "team", "agent", "map_name"],
-      "primary_source_priority": ["vlr_gg", "grid", "liquipedia", "hltv"],
-      "_priority_note": "vlr_gg is primary for Valorant; hltv is primary for CS2",
-      "log_conflict":   true,
-      "store_both_on_conflict": false,
-      "_store_both_note": "On conflict, store the higher-priority value and log the discrepancy"
+    "map_score_b": {
+      "vlr": "team_b_score",
+      "hltv": "team2Score",
+      "pandascore": "score[1]",
+      "type": "integer"
+    },
+    "duration": {
+      "vlr": "duration",
+      "hltv": "duration",
+      "pandascore": "finished_at - started_at",
+      "type": "integer",
+      "description": "Match duration in seconds"
+    },
+    "overtime": {
+      "vlr": "overtime",
+      "hltv": "overtime",
+      "type": "boolean"
     }
   },
-
-  "deduplication_key": {
-    "_comment": "The canonical dedup key is the stable UUID derived from the canonical IDs of player + match + map. This key is SOURCE-AGNOSTIC — the same player record from VLR and Liquipedia resolves to the same key.",
-    "components": ["canonical_player_id", "canonical_match_id", "canonical_map_id"],
-    "derivation": "uuid5(NAMESPACE_URL, 'cid:player:{handle}|cid:match:{source}/{id}|cid:map:{name}')",
-    "example": "uuid5(NAMESPACE_URL, 'cid:player:tenz|cid:match:vlr_gg/123456|cid:map:bind')",
-    "collision_policy": "reject_and_log",
-    "_collision_policy_note": "Two records with the same dedup key from different sources are treated as duplicates; the higher-priority source wins"
+  
+  "calculated_fields": {
+    "kdr": {
+      "formula": "kills / max(deaths, 1)",
+      "type": "float",
+      "description": "Kill/Death ratio"
+    },
+    "kda": {
+      "formula": "(kills + assists) / max(deaths, 1)",
+      "type": "float",
+      "description": "Kill/Death/Assist ratio"
+    },
+    "fk_diff": {
+      "formula": "first_kills - first_deaths",
+      "type": "integer",
+      "description": "First kill difference"
+    },
+    "impact_estimate": {
+      "formula": "(2.13 * kpr) + (0.42 * fk_diff / rounds) - 0.41",
+      "type": "float",
+      "description": "Estimated impact (HLTV formula)"
+    }
+  },
+  
+  "normalization_rules": {
+    "map_names": {
+      "description": "Normalize map names across sources",
+      "rules": {
+        "dust2": ["dust2", "de_dust2", "d2", "Dust II"],
+        "mirage": ["mirage", "de_mirage", "mrg"],
+        "inferno": ["inferno", "de_inferno", "inf"],
+        "nuke": ["nuke", "de_nuke", "nk"],
+        "overpass": ["overpass", "de_overpass", "op"],
+        "vertigo": ["vertigo", "de_vertigo", "vtg"],
+        "ancient": ["ancient", "de_ancient", "anc"],
+        "anubis": ["anubis", "de_anubis", "anb"],
+        "ascent": ["ascent", "Ascent"],
+        "bind": ["bind", "Bind"],
+        "breeze": ["breeze", "Breeze"],
+        "fracture": ["fracture", "Fracture"],
+        "haven": ["haven", "Haven"],
+        "icebox": ["icebox", "Icebox"],
+        "lotus": ["lotus", "Lotus"],
+        "pearl": ["pearl", "Pearl"],
+        "split": ["split", "Split"],
+        "sunset": ["sunset", "Sunset"]
+      }
+    },
+    "team_names": {
+      "description": "Normalize team names",
+      "rules": {
+        "case": "title",
+        "strip_suffixes": ["esports", "gaming", "team", "club"],
+        "aliases": {
+          "faze": ["faze", "faze clan", "fazeclan"],
+          "navi": ["navi", "natus vincere", "natus_vincere"],
+          "g2": ["g2", "g2 esports", "g2esports"],
+          "vitality": ["vitality", "team vitality", "teamvitality"],
+          "astralis": ["astralis"],
+          "liquid": ["liquid", "team liquid", "teamliquid"],
+          "furia": ["furia", "furia esports", "furiaesports"],
+          "sentinels": ["sentinels", "sen"],
+          "loud": ["loud", "loud esports"],
+          "eg": ["eg", "evil geniuses", "evilgeniuses"]
+        }
+      }
+    }
+  },
+  
+  "data_quality": {
+    "required_fields": ["match_id", "team_a", "team_b", "score_a", "score_b"],
+    "player_required": ["player_id", "player_name", "kills", "deaths"],
+    "validation_rules": {
+      "score_range": {"min": 0, "max": 32},
+      "rating_range": {"min": 0.0, "max": 3.0},
+      "kast_range": {"min": 0.0, "max": 100.0},
+      "adr_range": {"min": 0.0, "max": 300.0}
+    }
   }
 }

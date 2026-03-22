@@ -1,5 +1,5 @@
 #!/bin/bash
-# [Ver001.000]
+# [Ver001.001]
 # SATOR Database Migration Runner Script
 # Runs all SQL migrations in order for Render deployment
 # Usage: ./scripts/run-migrations.sh [environment]
@@ -39,7 +39,6 @@ log_info "Database URL is configured"
 
 # Migration directories
 API_MIGRATIONS_DIR="packages/shared/api/migrations"
-AXIOM_MIGRATIONS_DIR="packages/shared/axiom-esports-data/infrastructure/migrations"
 
 # Check if migration directories exist
 if [ ! -d "$API_MIGRATIONS_DIR" ]; then
@@ -47,13 +46,7 @@ if [ ! -d "$API_MIGRATIONS_DIR" ]; then
     exit 1
 fi
 
-if [ ! -d "$AXIOM_MIGRATIONS_DIR" ]; then
-    log_warn "Axiom migrations directory not found: $AXIOM_MIGRATIONS_DIR"
-    log_warn "Will only run API migrations"
-    RUN_AXIOM=false
-else
-    RUN_AXIOM=true
-fi
+log_info "Found API migrations directory"
 
 # Check if Python is available
 if ! command -v python3 &> /dev/null; then
@@ -77,6 +70,7 @@ fi
 # Run migrations using the Python script
 if [ -f "scripts/migrate.py" ]; then
     log_info "Running migrations using scripts/migrate.py"
+    export PYTHONPATH="packages/shared:$PYTHONPATH"
     $PYTHON_CMD scripts/migrate.py
 else
     log_warn "scripts/migrate.py not found, running SQL directly"
@@ -84,9 +78,6 @@ else
     # Alternative: Run migrations directly with psql if available
     if command -v psql &> /dev/null; then
         log_info "Using psql to run migrations"
-        
-        # Extract connection info from DATABASE_URL (basic parsing)
-        # This assumes DATABASE_URL format: postgresql://user:pass@host:port/db
         
         # Run API migrations (013-019)
         log_info "Running API migrations..."
@@ -97,18 +88,6 @@ else
                 exit 1
             }
         done
-        
-        # Run Axiom migrations if available (001-012, 019)
-        if [ "$RUN_AXIOM" = true ]; then
-            log_info "Running Axiom migrations..."
-            for migration in $(ls -1 $AXIOM_MIGRATIONS_DIR/*.sql | sort); do
-                log_info "Applying: $(basename $migration)"
-                psql "$DATABASE_URL" -f "$migration" || {
-                    log_error "Failed to apply migration: $migration"
-                    exit 1
-                }
-            done
-        fi
     else
         log_error "Neither migrate.py nor psql is available"
         log_error "Cannot run migrations automatically"

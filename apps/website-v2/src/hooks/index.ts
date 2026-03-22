@@ -39,3 +39,15 @@ export { usePWA } from './usePWA';
 
 // Workers
 export { useWorkerError } from './useWorkerError';
+
+// Analytics hooks
+export { usePredictionAccuracy } from './usePredictionAccuracy';
+export type {
+  AccuracyMetrics,
+  ModelAccuracy,
+  TimeSeriesPoint,
+  ConfusionMatrix,
+  AccuracyData,
+  UsePredictionAccuracyOptions,
+  UsePredictionAccuracyReturn,
+} from './usePredictionAccuracy';

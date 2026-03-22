@@ -1,22 +1,23 @@
-"""
-Parsers module — HTML parsing for VLR.gg pages.
-"""
-from extraction.src.parsers.match_parser import MatchParser, RawMatchData
-from extraction.src.parsers.player_parser import PlayerParser, RawPlayerData
-from extraction.src.parsers.team_parser import TeamParser, RawTeamData
-from extraction.src.parsers.content_drift_detector import ContentDriftDetector, DriftReport
-from extraction.src.parsers.economy_inference import EconomyInference
-from extraction.src.parsers.role_classifier import RoleClassifier
+"""Parsers for converting scraped data to standard formats"""
+
+from .cs_match_parser import (
+    CS2MatchParser,
+    CS2RoleClassifier,
+    CS2Role,
+    RawMatchData,
+    RawMapData,
+    RawPlayerStats,
+    normalize_map_name,
+    calculate_team_rating
+)
 
 __all__ = [
-    "MatchParser",
+    "CS2MatchParser",
+    "CS2RoleClassifier", 
+    "CS2Role",
     "RawMatchData",
-    "PlayerParser",
-    "RawPlayerData",
-    "TeamParser",
-    "RawTeamData",
-    "ContentDriftDetector",
-    "DriftReport",
-    "EconomyInference",
-    "RoleClassifier",
+    "RawMapData",
+    "RawPlayerStats",
+    "normalize_map_name",
+    "calculate_team_rating"
 ]

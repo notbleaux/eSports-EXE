@@ -49,12 +49,32 @@ export const GLOW_COLORS = {
   tenetGlow: '0 0 20px #8b5cf6'
 } as const
 
+// Text Colors (for dark theme)
+export const TEXT_COLORS = {
+  primary: '#ffffff',
+  secondary: 'rgba(255, 255, 255, 0.7)',
+  muted: 'rgba(255, 255, 255, 0.5)',
+  disabled: 'rgba(255, 255, 255, 0.3)'
+} as const
+
+// Chart Colors
+export const CHART_COLORS = {
+  primary: '#00d4ff',
+  secondary: '#0099ff',
+  success: '#00ff88',
+  warning: '#ffaa00',
+  error: '#ff4655',
+  grid: 'rgba(255, 255, 255, 0.05)'
+} as const
+
 // Export all
 export const colors = {
   hub: HUB_COLORS,
   status: STATUS_COLORS,
   gray: GRAYSCALE,
-  glow: GLOW_COLORS
+  glow: GLOW_COLORS,
+  text: TEXT_COLORS,
+  chart: CHART_COLORS
 } as const
 
 export default colors

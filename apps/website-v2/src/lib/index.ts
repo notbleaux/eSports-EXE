@@ -4,6 +4,9 @@
  * Central export point for utility libraries.
  */
 
+// Utility functions
+export { cn, formatNumber, truncate, debounce, throttle } from './utils';
+
 // API Client
 export { api, handleApiError } from './api-client';
 export type { ApiError, RequestConfig } from './api-client';

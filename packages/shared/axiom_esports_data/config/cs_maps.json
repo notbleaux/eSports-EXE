@@ -1,0 +1,280 @@
+{
+  "_comment": "CS2 Map Configuration for SATOR Data Pipeline",
+  "version": "1.0.0",
+  "last_updated": "2024-03-22",
+  "game": "cs2",
+  
+  "maps": {
+    "Dust2": {
+      "id": "de_dust2",
+      "name": "Dust2",
+      "aliases": ["dust2", "de_dust2", "d2"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Classic desert map, most played in CS history",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "open_spaces": true,
+        "long_sightlines": true,
+        "awp_friendly": true
+      }
+    },
+    "Mirage": {
+      "id": "de_mirage",
+      "name": "Mirage",
+      "aliases": ["mirage", "de_mirage", "mrg"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Middle Eastern themed map with balanced bombsite design",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "mid_control": true,
+        "verticality": false,
+        "balanced": true
+      }
+    },
+    "Inferno": {
+      "id": "de_inferno",
+      "name": "Inferno",
+      "aliases": ["inferno", "de_inferno", "inf"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Italian village map with narrow streets and close-quarters combat",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "close_quarters": true,
+        "choke_points": true,
+        "smoke_heavy": true
+      }
+    },
+    "Nuke": {
+      "id": "de_nuke",
+      "name": "Nuke",
+      "aliases": ["nuke", "de_nuke", "nk"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Nuclear facility with two-level design",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "verticality": true,
+        "two_levels": true,
+        "outside_area": true
+      }
+    },
+    "Overpass": {
+      "id": "de_overpass",
+      "name": "Overpass",
+      "aliases": ["overpass", "de_overpass", "op"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Berlin overpass with complex bombsite connections",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "connector_heavy": true,
+        "water_feature": true,
+        "t_b favored": true
+      }
+    },
+    "Vertigo": {
+      "id": "de_vertigo",
+      "name": "Vertigo",
+      "aliases": ["vertigo", "de_vertigo", "vtg"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Skyscraper construction site with extreme verticality",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "extreme_verticality": true,
+        "ramp_focus": true,
+        "newest_map": true
+      }
+    },
+    "Ancient": {
+      "id": "de_ancient",
+      "name": "Ancient",
+      "aliases": ["ancient", "de_ancient", "anc"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "South American archaeological site",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "tight_corners": true,
+        "water_feature": true,
+        "plant_focus": true
+      }
+    },
+    "Anubis": {
+      "id": "de_anubis",
+      "name": "Anubis",
+      "aliases": ["anubis", "de_anubis", "anb"],
+      "type": "bomb_defusal",
+      "active_duty": true,
+      "description": "Egyptian-themed map with water canals",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "water_feature": true,
+        "canals": true,
+        "compact": true
+      }
+    }
+  },
+  
+  "reserve_maps": {
+    "Train": {
+      "id": "de_train",
+      "name": "Train",
+      "aliases": ["train", "de_train", "trn"],
+      "type": "bomb_defusal",
+      "active_duty": false,
+      "description": "Russian train yard - removed from active duty",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "trains": true,
+        "tight_angles": true,
+        "retake_difficult": true
+      }
+    },
+    "Cache": {
+      "id": "de_cache",
+      "name": "Cache",
+      "aliases": ["cache", "de_cache", "cch"],
+      "type": "bomb_defusal",
+      "active_duty": false,
+      "description": "Chernobyl-inspired map - community favorite",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "simple_layout": true,
+        "aim_focus": true,
+        "community_map": true
+      }
+    },
+    "Cobblestone": {
+      "id": "de_cobblestone",
+      "name": "Cobblestone",
+      "aliases": ["cobblestone", "de_cobblestone", "cobble", "cbl"],
+      "type": "bomb_defusal",
+      "active_duty": false,
+      "description": "French castle map - Major history",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "awp_heaven": true,
+        "large_sites": true,
+        "historical": true
+      }
+    },
+    "Tuscan": {
+      "id": "de_tuscan",
+      "name": "Tuscan",
+      "aliases": ["tuscan", "de_tuscan", "tsc"],
+      "type": "bomb_defusal",
+      "active_duty": false,
+      "description": "Italian countryside - spiritual successor to de_mirage",
+      "team_size": 5,
+      "max_rounds": 24,
+      "sides": ["T", "CT"],
+      "characteristics": {
+        "classic_design": true,
+        "mid_focus": true,
+        "community_map": true
+      }
+    }
+  },
+  
+  "competitive_pool": {
+    "active_duty": [
+      "Dust2", "Mirage", "Inferno", "Nuke", 
+      "Overpass", "Vertigo", "Ancient", "Anubis"
+    ],
+    "major_pool": [
+      "Dust2", "Mirage", "Inferno", "Nuke",
+      "Overpass", "Vertigo", "Ancient", "Anubis"
+    ],
+    "premier_pool": [
+      "Dust2", "Mirage", "Inferno", "Nuke",
+      "Overpass", "Vertigo", "Ancient", "Anubis"
+    ]
+  },
+  
+  "map_aliases_lookup": {
+    "dust2": "Dust2",
+    "de_dust2": "Dust2",
+    "d2": "Dust2",
+    "mirage": "Mirage",
+    "de_mirage": "Mirage",
+    "mrg": "Mirage",
+    "inferno": "Inferno",
+    "de_inferno": "Inferno",
+    "inf": "Inferno",
+    "nuke": "Nuke",
+    "de_nuke": "Nuke",
+    "nk": "Nuke",
+    "overpass": "Overpass",
+    "de_overpass": "Overpass",
+    "op": "Overpass",
+    "vertigo": "Vertigo",
+    "de_vertigo": "Vertigo",
+    "vtg": "Vertigo",
+    "ancient": "Ancient",
+    "de_ancient": "Ancient",
+    "anc": "Ancient",
+    "anubis": "Anubis",
+    "de_anubis": "Anubis",
+    "anb": "Anubis",
+    "train": "Train",
+    "de_train": "Train",
+    "trn": "Train",
+    "cache": "Cache",
+    "de_cache": "Cache",
+    "cch": "Cache",
+    "cobblestone": "Cobblestone",
+    "de_cobblestone": "Cobblestone",
+    "cobble": "Cobblestone",
+    "cbl": "Cobblestone",
+    "tuscan": "Tuscan",
+    "de_tuscan": "Tuscan",
+    "tsc": "Tuscan"
+  },
+  
+  "match_format_defaults": {
+    "bo1": {
+      "map_count": 1,
+      "win_condition": "first_to_16",
+      "overtime": "mr3",
+      "sides": ["knife_round", "loser_picks"]
+    },
+    "bo3": {
+      "map_count": 3,
+      "win_condition": "first_to_2_maps",
+      "overtime": "mr3",
+      "sides": ["vetoes_alternate", "winner_picks_last_map"]
+    },
+    "bo5": {
+      "map_count": 5,
+      "win_condition": "first_to_3_maps",
+      "overtime": "mr3",
+      "sides": ["vetoes_alternate", "decider_last_map"]
+    }
+  }
+}

@@ -2,10 +2,16 @@
  * useMLInference - Enhanced TensorFlow.js Hook with Lazy Loading
  * Loads TF.js on-demand with IndexedDB caching and ML Worker offloading
  * 
- * [Ver004.000] - Integrated with ml-loader for bundle optimization
+ * [Ver005.000] - Integrated with Feature Store
+ * 
+ * Features:
+ * - Preprocess inputs using feature definitions
+ * - Validate feature values
+ * - Log feature usage
+ * - Feature Store integration
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import type { 
   MLWorkerCommand, 
   MLWorkerResponse, 
@@ -33,6 +39,8 @@ import {
   type TFModule
 } from '../lib/ml-loader'
 import { isMLFeatureEnabled } from '../lib/ml-feature-flags'
+import type { MLModelType, FeatureDefinition } from '../lib/ml-features'
+import { getFeatureDefinition, validateFeatureValue, getFeatureNames } from '../lib/ml-features'
 
 export interface UseMLInferenceReturn {
   isModelLoading: boolean
@@ -64,6 +72,18 @@ export interface UseMLInferenceReturn {
   dispose: () => void
   /** Unload model to free memory */
   unloadModel: () => void
+  
+  // Feature Store Integration
+  /** Preprocess features using feature store definitions */
+  preprocessFeatures: (input: number[]) => number[]
+  /** Validate feature values against definitions */
+  validateFeatures: (input: number[]) => { valid: boolean; errors: string[] }
+  /** Get feature names for current model type */
+  featureNames: string[]
+  /** Expected input size based on feature definitions */
+  expectedInputSize: number
+  /** Associated model type */
+  modelType: MLModelType | null
 }
 
 export interface CircuitBreakerConfig {
@@ -89,6 +109,16 @@ export interface UseMLInferenceOptions {
   onWorkerError?: (error: Error) => void
   /** Auto-unload model after inactivity (ms) */
   autoUnloadTimeout?: number
+  
+  // Feature Store Integration
+  /** Associated model type for feature validation */
+  modelType?: MLModelType
+  /** Enable feature preprocessing */
+  enableFeaturePreprocessing?: boolean
+  /** Enable feature validation */
+  enableFeatureValidation?: boolean
+  /** Log feature usage analytics */
+  logFeatureUsage?: boolean
 }
 
 export class MLValidationError extends Error {
@@ -258,7 +288,11 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     circuitBreaker: cbConfig = DEFAULT_CB_CONFIG,
     onProgress,
     onWorkerError,
-    autoUnloadTimeout = DEFAULT_AUTO_UNLOAD
+    autoUnloadTimeout = DEFAULT_AUTO_UNLOAD,
+    modelType: modelTypeOption,
+    enableFeaturePreprocessing = true,
+    enableFeatureValidation = true,
+    logFeatureUsage = false
   } = options
   
   const [isModelLoading, setIsModelLoading] = useState(false)
@@ -940,13 +974,123 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     }
   }, [dispose])
 
+  // ============================================================================
+  // Feature Store Integration
+  // ============================================================================
+
+  /**
+   * Get feature names for current model type
+   */
+  const featureNames = useMemo(() => {
+    if (!modelTypeOption) return []
+    return getFeatureNames(modelTypeOption)
+  }, [modelTypeOption])
+
+  /**
+   * Expected input size based on feature definitions
+   */
+  const expectedInputSize = useMemo(() => {
+    return featureNames.length
+  }, [featureNames])
+
+  /**
+   * Preprocess features using feature store definitions
+   * Applies normalization and handles missing values
+   */
+  const preprocessFeatures = useCallback((input: number[]): number[] => {
+    if (!enableFeaturePreprocessing || !modelTypeOption) {
+      return input
+    }
+
+    const processed: number[] = []
+    const names = getFeatureNames(modelTypeOption)
+
+    names.forEach((name, index) => {
+      const definition = getFeatureDefinition(modelTypeOption!, name)
+      let value = input[index]
+
+      if (value === undefined || isNaN(value)) {
+        // Use default for missing values
+        value = definition?.defaultValue ?? 0
+      }
+
+      // Clamp to valid range
+      if (definition?.min !== undefined && value < definition.min) {
+        value = definition.min
+      }
+      if (definition?.max !== undefined && value > definition.max) {
+        value = definition.max
+      }
+
+      processed.push(value)
+    })
+
+    // Log feature usage if enabled
+    if (logFeatureUsage) {
+      mlLogger.debug('[ML Inference] Preprocessed features:', {
+        modelType: modelTypeOption,
+        featureCount: processed.length
+      })
+    }
+
+    return processed
+  }, [modelTypeOption, enableFeaturePreprocessing, logFeatureUsage])
+
+  /**
+   * Validate feature values against definitions
+   */
+  const validateFeatures = useCallback((input: number[]): { valid: boolean; errors: string[] } => {
+    if (!enableFeatureValidation || !modelTypeOption) {
+      return { valid: true, errors: [] }
+    }
+
+    const errors: string[] = []
+    const names = getFeatureNames(modelTypeOption)
+
+    names.forEach((name, index) => {
+      const definition = getFeatureDefinition(modelTypeOption!, name)
+      const value = input[index]
+
+      const validation = validateFeatureValue(definition!, value)
+      if (!validation.valid) {
+        errors.push(`${name}: ${validation.error}`)
+      }
+    })
+
+    return {
+      valid: errors.length === 0,
+      errors
+    }
+  }, [modelTypeOption, enableFeatureValidation])
+
+  // Wrap predict to include feature preprocessing
+  const predictWithFeatures = useCallback(async (input: number[]): Promise<number[]> => {
+    // Preprocess if enabled
+    const processedInput = preprocessFeatures(input)
+
+    // Validate if enabled
+    if (enableFeatureValidation) {
+      const validation = validateFeatures(processedInput)
+      if (!validation.valid) {
+        mlLogger.warn('[ML Inference] Feature validation failed:', validation.errors)
+        // Continue anyway - preprocessing has applied defaults
+      }
+    }
+
+    return predict(processedInput)
+  }, [predict, preprocessFeatures, validateFeatures, enableFeatureValidation])
+
+  // ============================================================================
+  // Return
+  // ============================================================================
+
   return {
     isModelLoading,
     isModelReady,
     isWarmedUp,
     isPredicting,
     loadModel: loadModelFn,
-    predict,
+    predict: predictWithFeatures,
     predictBatch,
     warmUp,
     getModelInfo,
@@ -961,7 +1105,14 @@ export function useMLInference(options: UseMLInferenceOptions = {}): UseMLInfere
     setUseWorker,
     retry,
     dispose,
-    unloadModel
+    unloadModel,
+    
+    // Feature Store Integration
+    preprocessFeatures,
+    validateFeatures,
+    featureNames,
+    expectedInputSize,
+    modelType: modelTypeOption ?? null
   }
 }
 

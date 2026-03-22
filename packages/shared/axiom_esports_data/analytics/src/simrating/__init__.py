@@ -1,0 +1,1 @@
+# SimRating module stub
