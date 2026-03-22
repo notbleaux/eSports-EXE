@@ -4,8 +4,8 @@
 
 **Project**: eSports-EXE MVP  
 **Start Date**: 2026-03-22  
-**Target Launch**: 2026-05-17 (8 weeks)  
-**Status**: Sprint 0 — Foundation
+**Target Launch**: 2026-06-25 (14 weeks with Sprint -1)  
+**Status**: Sprint -1 — Data Infrastructure
 
 ---
 
@@ -137,8 +137,10 @@
 - `SCHEMA_REFERENCE.md` — Complete field documentation
 
 ### Technical Specs
-- `docs/TECH_DESIGN_TENET_CS.md` — Grenade visualizer
-- `docs/TECH_DESIGN_TENET_VALORANT.md` — Ability timeline
+- `docs/TECH_DESIGN_TENET_CS.md` — Grenade visualizer (base)
+- `docs/TECH_DESIGN_TENET_CS_ENHANCED.md` — Grenade visualizer (enhanced with lineup library)
+- `docs/TECH_DESIGN_TENET_VALORANT.md` — Ability timeline (base)
+- `docs/TECH_DESIGN_TENET_VALORANT_ENHANCED.md` — Ability timeline (enhanced with coach annotations)
 
 ---
 
@@ -148,14 +150,16 @@
 **Attendees**: Product Lead, Design Lead  
 **Agenda**: MVP scope confirmation, design direction, sprint planning  
 **Decisions**:
-- Confirmed 8-week timeline
+- Confirmed 14-week timeline (including Sprint -1 data infrastructure)
 - Approved HLTV+VLR hybrid approach
 - Locked design tokens
+- Added Sprint -1 for CS 2012-2025 and Valorant 2020-2025 historical data collection
 
 **Action Items**:
-- [ ] Start Sprint 0 (assigned: Dev Team)
+- [ ] Start Sprint -1: Data infrastructure (assigned: Data Team)
 - [ ] Set up project board (assigned: Product Lead)
 - [ ] Schedule weekly check-ins (assigned: Product Lead)
+- [ ] Set up Liquipedia API access (assigned: Data Team)
 
 ---
 

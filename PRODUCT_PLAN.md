@@ -434,7 +434,7 @@ pages/
 |----------|---------|
 | **MVP.md** | One-page MVP specification |
 | **STYLE_BRIEF.md** | Visual style brief with tokens |
-| **HUB_BLUEPRINTS.md** | Annotated wireframes for all hubs |
+| **HUB_BLUEPRINTS.md** | Annotated wireframes for all hubs | — |
 | **SPRINT_BACKLOG.md** | Detailed sprint tickets with acceptance criteria |
 | **DELIVERABLES_INDEX.md** | Complete deliverables index |
 
