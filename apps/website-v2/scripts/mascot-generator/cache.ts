@@ -9,7 +9,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
-import { MascotConfig, GenerationOptions } from './config';
+import { MascotConfig, GenerationOptions } from './config.js';
 
 interface CacheEntry {
   hash: string;

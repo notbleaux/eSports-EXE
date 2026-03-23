@@ -7,7 +7,7 @@
  * Zero dependencies, works anywhere CSS works.
  */
 
-import { MascotConfig, GenerationOptions, ColorPalette } from './config';
+import { MascotConfig, GenerationOptions, ColorPalette } from './config.js';
 
 interface CSSPixel {
   x: number;

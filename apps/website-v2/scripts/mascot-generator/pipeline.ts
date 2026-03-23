@@ -17,10 +17,10 @@ import {
   ALL_MASCOTS, 
   DEFAULT_OPTIONS,
   FINE_TUNING 
-} from './config';
-import { SVGGenerator, generateReactComponent } from './svg-generator';
-import { PNGGenerator, optimizePNG, generateAllPNGs } from './png-generator';
-import { CSSGenerator, generateAllCSS } from './css-generator';
+} from './config.js';
+import { SVGGenerator, generateReactComponent } from './svg-generator.js';
+import { PNGGenerator, optimizePNG, generateAllPNGs } from './png-generator.js';
+import { CSSGenerator, generateAllCSS } from './css-generator.js';
 
 // ============================================
 // PIPELINE CONFIGURATION

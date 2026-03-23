@@ -1,0 +1,505 @@
+/**
+ * Wolf Mascot CSS Styles
+ * [Ver001.000]
+ * 
+ * Zero-dependency CSS-based Wolf mascot for Libre-X-eSport 4NJZ4 TENET Platform
+ * Features: Pointed ears, long snout, gray coloration (slate scheme)
+ */
+
+/* ============================================
+   BASE WOLF MASCOT (64x64 base size)
+   ============================================ */
+
+.wolf-mascot {
+  --wolf-primary: #475569;
+  --wolf-secondary: #64748b;
+  --wolf-light: #94a3b8;
+  --wolf-dark: #334155;
+  --wolf-shadow: #1e293b;
+  --wolf-eye: #f8fafc;
+  --wolf-pupil: #0f172a;
+  
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  image-rendering: pixelated;
+}
+
+/* Wolf Head Base */
+.wolf-mascot::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 36px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--wolf-secondary) 0%, var(--wolf-primary) 50%, var(--wolf-dark) 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Left Ear - Pointed */
+.wolf-mascot .ear-left {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 20px solid var(--wolf-primary);
+  transform: rotate(-15deg);
+  z-index: 1;
+}
+
+.wolf-mascot .ear-left::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: -5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 14px solid var(--wolf-light);
+}
+
+/* Right Ear - Pointed */
+.wolf-mascot .ear-right {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 20px solid var(--wolf-primary);
+  transform: rotate(15deg);
+  z-index: 1;
+}
+
+.wolf-mascot .ear-right::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: -5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 14px solid var(--wolf-light);
+}
+
+/* Snout - Long */
+.wolf-mascot .snout {
+  position: absolute;
+  top: 34px;
+  left: 20px;
+  width: 24px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--wolf-light) 0%, var(--wolf-secondary) 100%);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* Nose */
+.wolf-mascot .nose {
+  position: absolute;
+  top: 42px;
+  left: 26px;
+  width: 12px;
+  height: 8px;
+  background: var(--wolf-shadow);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.wolf-mascot .nose::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  width: 6px;
+  height: 3px;
+  background: var(--wolf-dark);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* Eyes Container */
+.wolf-mascot .eyes {
+  position: absolute;
+  top: 22px;
+  left: 18px;
+  width: 28px;
+  height: 16px;
+  z-index: 3;
+}
+
+/* Left Eye */
+.wolf-mascot .eye-left {
+  position: absolute;
+  left: 0;
+  width: 12px;
+  height: 14px;
+  background: var(--wolf-eye);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.wolf-mascot .eye-left::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  width: 7px;
+  height: 10px;
+  background: var(--wolf-pupil);
+  border-radius: 50%;
+}
+
+.wolf-mascot .eye-left::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Right Eye */
+.wolf-mascot .eye-right {
+  position: absolute;
+  right: 0;
+  width: 12px;
+  height: 14px;
+  background: var(--wolf-eye);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.wolf-mascot .eye-right::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 7px;
+  height: 10px;
+  background: var(--wolf-pupil);
+  border-radius: 50%;
+}
+
+.wolf-mascot .eye-right::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Eyebrows */
+.wolf-mascot .eyebrow-left,
+.wolf-mascot .eyebrow-right {
+  position: absolute;
+  top: 18px;
+  width: 16px;
+  height: 4px;
+  background: var(--wolf-dark);
+  border-radius: 2px;
+  z-index: 4;
+}
+
+.wolf-mascot .eyebrow-left {
+  left: 14px;
+  transform: rotate(-5deg);
+}
+
+.wolf-mascot .eyebrow-right {
+  right: 14px;
+  transform: rotate(5deg);
+}
+
+/* Mouth */
+.wolf-mascot .mouth {
+  position: absolute;
+  top: 48px;
+  left: 26px;
+  width: 12px;
+  height: 6px;
+  border: 2px solid var(--wolf-secondary);
+  border-top: none;
+  border-radius: 0 0 50% 50%;
+  z-index: 2;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+/* 32x32 size */
+.wolf-mascot.size-32 {
+  width: 32px;
+  height: 32px;
+  transform: scale(0.5);
+  transform-origin: top left;
+}
+
+/* 128x128 size */
+.wolf-mascot.size-128 {
+  width: 128px;
+  height: 128px;
+  transform: scale(2);
+  transform-origin: top left;
+}
+
+/* 256x256 size */
+.wolf-mascot.size-256 {
+  width: 256px;
+  height: 256px;
+  transform: scale(4);
+  transform-origin: top left;
+}
+
+/* 512x512 size */
+.wolf-mascot.size-512 {
+  width: 512px;
+  height: 512px;
+  transform: scale(8);
+  transform-origin: top left;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Idle Animation - Gentle breathing */
+@keyframes wolf-idle {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+.wolf-mascot.animate-idle {
+  animation: wolf-idle 2s ease-in-out infinite;
+}
+
+/* Wave Animation - Head tilt */
+@keyframes wolf-wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+.wolf-mascot.animate-wave {
+  animation: wolf-wave 0.6s ease-in-out 3;
+}
+
+/* Celebrate Animation - Happy bounce */
+@keyframes wolf-celebrate {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) scale(1.1);
+  }
+  50% {
+    transform: translateY(0) scale(1);
+  }
+  75% {
+    transform: translateY(-8px) scale(1.1);
+  }
+}
+
+.wolf-mascot.animate-celebrate {
+  animation: wolf-celebrate 0.8s ease-in-out;
+}
+
+/* Blink Animation */
+@keyframes wolf-blink {
+  0%, 90%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+.wolf-mascot.animate-idle .eye-left,
+.wolf-mascot.animate-idle .eye-right {
+  animation: wolf-blink 4s ease-in-out infinite;
+}
+
+/* Ear Twitch Animation */
+@keyframes wolf-ear-twitch-left {
+  0%, 100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+}
+
+@keyframes wolf-ear-twitch-right {
+  0%, 100% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+.wolf-mascot.animate-idle .ear-left {
+  animation: wolf-ear-twitch-left 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.wolf-mascot.animate-idle .ear-right {
+  animation: wolf-ear-twitch-right 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* ============================================
+   STATE VARIATIONS
+   ============================================ */
+
+/* Hover state */
+.wolf-mascot:hover {
+  filter: brightness(1.1);
+}
+
+/* Focus state */
+.wolf-mascot:focus {
+  outline: 3px solid var(--wolf-secondary);
+  outline-offset: 4px;
+}
+
+/* Active/Pressed state */
+.wolf-mascot:active {
+  transform: scale(0.95);
+}
+
+/* Disabled state */
+.wolf-mascot.disabled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  pointer-events: none;
+}
+
+/* ============================================
+   THEME VARIATIONS
+   ============================================ */
+
+/* Dark theme */
+.wolf-mascot.theme-dark {
+  --wolf-primary: #334155;
+  --wolf-secondary: #475569;
+  --wolf-light: #64748b;
+  --wolf-dark: #1e293b;
+}
+
+/* Light theme */
+.wolf-mascot.theme-light {
+  --wolf-primary: #64748b;
+  --wolf-secondary: #94a3b8;
+  --wolf-light: #cbd5e1;
+  --wolf-dark: #475569;
+}
+
+/* Accent color variations */
+.wolf-mascot.accent-cyan {
+  --wolf-eye: #06b6d4;
+}
+
+.wolf-mascot.accent-amber {
+  --wolf-eye: #f59e0b;
+}
+
+.wolf-mascot.accent-red {
+  --wolf-eye: #ef4444;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.wolf-mascot.rounded {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.wolf-mascot.circular {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.wolf-mascot.shadow-sm {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.wolf-mascot.shadow-md {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.wolf-mascot.shadow-lg {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+}
+
+.wolf-mascot.glow {
+  filter: drop-shadow(0 0 20px rgba(71, 85, 105, 0.5));
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .wolf-mascot,
+  .wolf-mascot.animate-idle,
+  .wolf-mascot.animate-wave,
+  .wolf-mascot.animate-celebrate,
+  .wolf-mascot .ear-left,
+  .wolf-mascot .ear-right,
+  .wolf-mascot .eye-left,
+  .wolf-mascot .eye-right {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .wolf-mascot {
+    --wolf-primary: #000000;
+    --wolf-secondary: #333333;
+    --wolf-light: #666666;
+    --wolf-dark: #000000;
+    --wolf-eye: #ffffff;
+    --wolf-pupil: #000000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .wolf-mascot {
+    --wolf-primary: #333333;
+    --wolf-secondary: #666666;
+    --wolf-light: #999999;
+    --wolf-dark: #000000;
+    filter: none !important;
+  }
+}

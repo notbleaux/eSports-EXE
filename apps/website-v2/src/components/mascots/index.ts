@@ -37,6 +37,12 @@ export { MascotGallery } from './MascotGallery';
 export { CharacterBible } from './CharacterBible';
 export { MascotStatsRadar } from './MascotStatsRadar';
 
+// Wolf Mascot Components (GEN-003)
+export { WolfMascot } from './WolfMascot';
+export { WolfMascotAnimated } from './WolfMascotAnimated';
+export type { WolfSize, WolfAnimation, WolfVariant } from './WolfMascot';
+// Note: WolfMascotAnimated props are inline in the component
+
 // Hooks
 export { useMascotFilter } from './hooks/useMascotFilter';
 export { useMascotAnimation } from './hooks/useMascotAnimation';

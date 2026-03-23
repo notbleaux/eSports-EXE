@@ -39,12 +39,13 @@ export type {
 } from './config';
 
 // Default export for programmatic usage
-import { MascotPipeline, PRESETS } from './pipeline';
+import { MascotPipeline, PRESETS } from './pipeline.js';
 export default MascotPipeline;
 export { PRESETS };
 
 // Auto-run if executed directly
-if (require.main === module) {
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
   const pipeline = PRESETS.web();
   pipeline.run().catch(console.error);
 }

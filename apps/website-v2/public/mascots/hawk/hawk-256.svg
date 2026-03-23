@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <!-- Enhanced Gradients -->
+    <linearGradient id="hawkRed256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCA5A5"/>
+      <stop offset="20%" stop-color="#F87171"/>
+      <stop offset="45%" stop-color="#EF4444"/>
+      <stop offset="70%" stop-color="#DC2626"/>
+      <stop offset="90%" stop-color="#B91C1C"/>
+      <stop offset="100%" stop-color="#991B1B"/>
+    </linearGradient>
+    <linearGradient id="hawkGold256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="25%" stop-color="#FCD34D"/>
+      <stop offset="50%" stop-color="#FBBF24"/>
+      <stop offset="75%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="beakHighlight256" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="20%" stop-color="#FFFBEB"/>
+      <stop offset="50%" stop-color="#FEF3C7"/>
+      <stop offset="100%" stop-color="#FDE68A"/>
+    </linearGradient>
+    <radialGradient id="eyeGlow256" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#F59E0B" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="headShine256" cx="30%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#FCA5A5" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#EF4444" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#DC2626" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="featherGold256" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="shadow256" x="-8" y="-8" width="272" height="272">
+      <feDropShadow dx="4" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    <filter id="innerGlow256">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+  </defs>
+  
+  <!-- Ground Shadow -->
+  <ellipse cx="128" cy="238" rx="80" ry="12" fill="#000000" opacity="0.1"/>
+  
+  <!-- Main Head Shape -->
+  <path d="M128 10C100 10 82 26 66 50C50 74 46 106 58 142C70 178 92 206 128 226C164 206 186 178 198 142C210 106 206 74 190 50C174 26 156 10 128 10Z" fill="url(#hawkRed256)" filter="url(#shadow256)"/>
+  
+  <!-- Head Shine Overlay -->
+  <ellipse cx="100" cy="60" rx="50" ry="40" fill="url(#headShine256)"/>
+  
+  <!-- Detailed Feather Texture -->
+  <g opacity="0.5" fill="none" stroke="#7F1D1D" stroke-width="2.5">
+    <!-- Left Side Feather Groups -->
+    <g>
+      <path d="M76 44L82 74L68 94"/>
+      <path d="M60 66L70 90L60 110"/>
+      <path d="M54 94L64 114L56 134"/>
+      <path d="M60 122L70 138L66 154"/>
+    </g>
+    <!-- Right Side Feather Groups -->
+    <g>
+      <path d="M180 44L174 74L188 94"/>
+      <path d="M196 66L186 90L196 110"/>
+      <path d="M202 94L192 114L200 134"/>
+      <path d="M196 122L186 138L190 154"/>
+    </g>
+    <!-- Top/Center Feather Groups -->
+    <g>
+      <path d="M100 26L110 54L96 70"/>
+      <path d="M128 18L128 48L118 64"/>
+      <path d="M128 18L128 48L138 64"/>
+      <path d="M156 26L146 54L160 70"/>
+      <path d="M88 34L96 58L86 74"/>
+      <path d="M168 34L160 58L170 74"/>
+    </g>
+  </g>
+  
+  <!-- Secondary Feather Layer (Gold Tinted) -->
+  <g opacity="0.15" fill="none" stroke="#F59E0B" stroke-width="2">
+    <path d="M84 52L90 76L78 92"/>
+    <path d="M172 52L166 76L178 92"/>
+    <path d="M106 32L112 56L102 72"/>
+    <path d="M150 32L144 56L154 72"/>
+  </g>
+  
+  <!-- Beak Group -->
+  <g>
+    <!-- Main Beak Shape -->
+    <path d="M128 96L96 138H160L128 96Z" fill="url(#hawkGold256)"/>
+    <!-- Beak Top Highlight -->
+    <path d="M128 96L112 128H144L128 96Z" fill="url(#beakHighlight256)"/>
+    <!-- Beak Ridge -->
+    <path d="M128 96V164" stroke="#92400E" stroke-width="4" stroke-linecap="round"/>
+    <!-- Beak Side Shading -->
+    <path d="M96 138L106 130L112 128" stroke="#B45309" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M160 138L150 130L144 128" stroke="#B45309" stroke-width="2" fill="none" opacity="0.5"/>
+    <!-- Nostrils -->
+    <ellipse cx="120" cy="118" rx="3.5" ry="2.5" fill="#78350F" opacity="0.7"/>
+    <ellipse cx="136" cy="118" rx="3.5" ry="2.5" fill="#78350F" opacity="0.7"/>
+  </g>
+  
+  <!-- Eyes Container -->
+  <g>
+    <!-- Eye Glow Effects -->
+    <circle cx="88" cy="98" r="24" fill="url(#eyeGlow256)"/>
+    <circle cx="168" cy="98" r="24" fill="url(#eyeGlow256)"/>
+    
+    <!-- Left Eye Group -->
+    <g>
+      <!-- Outer Socket -->
+      <ellipse cx="88" cy="98" rx="20" ry="15" fill="#1F2937"/>
+      <!-- Inner Eye -->
+      <ellipse cx="88" cy="98" rx="17" ry="12.5" fill="#111827"/>
+      <!-- Eye Gradient Overlay -->
+      <ellipse cx="88" cy="98" rx="17" ry="12.5" fill="url(#eyeGlow256)" opacity="0.3"/>
+      <!-- Main Highlight -->
+      <circle cx="94" cy="92" r="7" fill="#FFFFFF"/>
+      <!-- Secondary Highlight -->
+      <circle cx="94" cy="92" r="4.5" fill="#FEF3C7"/>
+      <!-- Small Reflection -->
+      <circle cx="96" cy="90" r="2" fill="#FFFFFF"/>
+    </g>
+    
+    <!-- Right Eye Group -->
+    <g>
+      <!-- Outer Socket -->
+      <ellipse cx="168" cy="98" rx="20" ry="15" fill="#1F2937"/>
+      <!-- Inner Eye -->
+      <ellipse cx="168" cy="98" rx="17" ry="12.5" fill="#111827"/>
+      <!-- Eye Gradient Overlay -->
+      <ellipse cx="168" cy="98" rx="17" ry="12.5" fill="url(#eyeGlow256)" opacity="0.3"/>
+      <!-- Main Highlight -->
+      <circle cx="174" cy="92" r="7" fill="#FFFFFF"/>
+      <!-- Secondary Highlight -->
+      <circle cx="174" cy="92" r="4.5" fill="#FEF3C7"/>
+      <!-- Small Reflection -->
+      <circle cx="176" cy="90" r="2" fill="#FFFFFF"/>
+    </g>
+  </g>
+  
+  <!-- Eyebrow/Brow Ridge (Intense Expression) -->
+  <g fill="none" stroke-linecap="round">
+    <!-- Left Brow -->
+    <path d="M64 88L80 94H108L116 88" stroke="#7F1D1D" stroke-width="5"/>
+    <path d="M68 84L84 90H104L112 84" stroke="#991B1B" stroke-width="3"/>
+    <!-- Right Brow -->
+    <path d="M192 88L176 94H148L140 88" stroke="#7F1D1D" stroke-width="5"/>
+    <path d="M188 84L172 90H152L144 84" stroke="#991B1B" stroke-width="3"/>
+  </g>
+  
+  <!-- Aggressive Eye Slant Marks -->
+  <g stroke="#FBBF24" stroke-width="3" stroke-linecap="round" opacity="0.9">
+    <path d="M56 76L68 84"/>
+    <path d="M200 76L188 84"/>
+    <path d="M52 82L62 88"/>
+    <path d="M204 82L194 88"/>
+  </g>
+  
+  <!-- Gold Feather Accents -->
+  <g>
+    <!-- Left Side Accents -->
+    <path d="M40 146L28 162L48 166L40 146Z" fill="url(#featherGold256)"/>
+    <path d="M64 182L56 198L76 198L68 182" fill="url(#featherGold256)"/>
+    <path d="M92 202L86 218L104 216L98 202"/>
+    <!-- Right Side Accents -->
+    <path d="M216 146L228 162L208 166L216 146Z" fill="url(#featherGold256)"/>
+    <path d="M192 182L200 198L180 198L188 182" fill="url(#featherGold256)"/>
+    <path d="M164 202L170 218L152 216L158 202"/>
+    <!-- Bottom Accents -->
+    <path d="M116 212L128 228L140 212" fill="url(#featherGold256)"/>
+  </g>
+  
+  <!-- Chest Feather Pattern -->
+  <g stroke="#FCD34D" stroke-width="3" fill="none" opacity="0.7">
+    <path d="M76 178L88 194L104 178"/>
+    <path d="M152 178L168 194L180 178"/>
+    <path d="M96 194L112 210L128 200L144 210L160 194"/>
+  </g>
+  
+  <!-- Chest Gold Detail -->
+  <g fill="url(#hawkGold256)" opacity="0.25">
+    <path d="M104 166C104 166 112 182 128 182C144 182 152 166 152 166V174C152 174 144 190 128 190C112 190 104 174 104 174V166Z"/>
+  </g>
+  
+  <!-- Feather Tips Detail -->
+  <g fill="#F59E0B" opacity="0.4">
+    <circle cx="40" cy="146" r="4"/>
+    <circle cx="216" cy="146" r="4"/>
+    <circle cx="64" cy="182" r="3"/>
+    <circle cx="192" cy="182" r="3"/>
+    <circle cx="92" cy="202" r="2.5"/>
+    <circle cx="164" cy="202" r="2.5"/>
+  </g>
+</svg>

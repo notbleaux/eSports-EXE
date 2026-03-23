@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "entries": {
+    "fox": {
+      "hash": "fffb878f4948e232",
+      "timestamp": 1774269212640,
+      "files": [
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-32x32.svg",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-64x64.svg",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-128x128.svg",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-256x256.svg",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-512x512.svg",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\fox.css",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\FoxMascotSVG.tsx",
+        "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\FoxCSS.tsx"
+      ],
+      "config": {
+        "name": "fox",
+        "displayName": "Fox",
+        "personality": "Agile, clever, quick-witted",
+        "colors": {
+          "primary": "#F97316",
+          "secondary": "#EA580C",
+          "light": "#FB923C",
+          "dark": "#9A3412",
+          "outline": "#000000",
+          "white": "#FFFFFF",
+          "black": "#000000"
+        },
+        "features": {
+          "earShape": "pointed",
+          "eyeSize": "medium",
+          "snoutLength": "medium",
+          "hasTail": true
+        },
+        "animations": {
+          "idle": [
+            "blink",
+            "ear-twitch",
+            "tail-wag"
+          ],
+          "wave": [
+            "raise-paw",
+            "wave",
+            "lower-paw"
+          ],
+          "celebrate": [
+            "jump",
+            "spin",
+            "star-eyes"
+          ]
+        }
+      },
+      "options": {
+        "sizes": [
+          32,
+          64,
+          128,
+          256
+        ],
+        "pixelScale": 2,
+        "showGrid": false,
+        "antiAlias": false,
+        "formats": [
+          "svg",
+          "png"
+        ],
+        "optimization": "basic",
+        "metadata": true
+      }
+    }
+  }
+}

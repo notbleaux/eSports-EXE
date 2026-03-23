@@ -7,7 +7,7 @@
  * Primary output format - works immediately in browsers.
  */
 
-import { MascotConfig, GenerationOptions, ColorPalette } from './config';
+import { MascotConfig, GenerationOptions, ColorPalette } from './config.js';
 
 interface Pixel {
   x: number;
@@ -291,8 +291,11 @@ export function generateReactComponent(config: MascotConfig): string {
   const svg128 = generator.generate(128);
   const svg256 = generator.generate(256);
 
+  const svg64Escaped = svg64.replace(/`/g, '\\`').replace(/\\"/g, '\\\\"');
+  const svg128Escaped = svg128.replace(/`/g, '\\`').replace(/\\"/g, '\\\\"');
+  const svg256Escaped = svg256.replace(/`/g, '\\`').replace(/\\"/g, '\\\\"');
+
   return `import React from 'react';
-import { MascotType } from '../types';
 
 interface ${config.displayName}MascotSVGProps {
   size?: 32 | 64 | 128 | 256;
@@ -311,9 +314,9 @@ export const ${config.displayName}MascotSVG: React.FC<${config.displayName}Masco
   className = '',
   animate = false 
 }) => {
-  const svgContent = size <= 64 ? \`${svg64.replace(/"/g, '\"')}\` :
-                     size <= 128 ? \`${svg128.replace(/"/g, '\"')}\` :
-                     \`${svg256.replace(/"/g, '\"')}\`;
+  const svgContent = size <= 64 ? \`${svg64Escaped}\` :
+                     size <= 128 ? \`${svg128Escaped}\` :
+                     \`${svg256Escaped}\`;
 
   return (
     <div 
@@ -348,7 +351,7 @@ export function generateAllMascots(
     options.sizes.forEach(size => {
       if (options.formats.includes('svg')) {
         const svg = generator.generate(size);
-        files.push(\`\${config.name}-\${size}x\${size}.svg\`);
+        files.push(config.name + '-' + size + 'x' + size + '.svg');
         // Would write to file here
       }
     });

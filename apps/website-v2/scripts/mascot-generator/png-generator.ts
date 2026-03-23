@@ -7,8 +7,8 @@
  * Requires Node.js canvas library (free, npm install canvas)
  */
 
-import { MascotConfig, GenerationOptions } from './config';
-import { SVGGenerator } from './svg-generator';
+import { MascotConfig, GenerationOptions } from './config.js';
+import { SVGGenerator } from './svg-generator.js';
 
 // Type definitions for canvas (will be dynamically imported)
 interface CanvasContext {

@@ -1,0 +1,527 @@
+/**
+ * Hawk Mascot Styles
+ * Red/Gold Color Scheme
+ * Primary: #DC2626 (red)
+ * Gold Accents: #F59E0B
+ */
+
+/* ============================================
+   HAWK MASCOT CSS VARIABLES
+   ============================================ */
+
+:root {
+  /* Primary Colors */
+  --hawk-red-50: #FEF2F2;
+  --hawk-red-100: #FECACA;
+  --hawk-red-200: #FCA5A5;
+  --hawk-red-300: #F87171;
+  --hawk-red-400: #EF4444;
+  --hawk-red-500: #DC2626;
+  --hawk-red-600: #B91C1C;
+  --hawk-red-700: #991B1B;
+  --hawk-red-800: #7F1D1D;
+  --hawk-red-900: #450A0A;
+
+  /* Gold Colors */
+  --hawk-gold-50: #FFFBEB;
+  --hawk-gold-100: #FEF3C7;
+  --hawk-gold-200: #FDE68A;
+  --hawk-gold-300: #FCD34D;
+  --hawk-gold-400: #FBBF24;
+  --hawk-gold-500: #F59E0B;
+  --hawk-gold-600: #D97706;
+  --hawk-gold-700: #B45309;
+  --hawk-gold-800: #92400E;
+  --hawk-gold-900: #78350F;
+
+  /* Default Sizes */
+  --hawk-size-xs: 32px;
+  --hawk-size-sm: 64px;
+  --hawk-size-md: 128px;
+  --hawk-size-lg: 256px;
+  --hawk-size-xl: 512px;
+}
+
+/* ============================================
+   BASE HAWK MASCOT CLASSES
+   ============================================ */
+
+.hawk-mascot {
+  display: inline-block;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  flex-shrink: 0;
+}
+
+.hawk-mascot--xs {
+  width: var(--hawk-size-xs);
+  height: var(--hawk-size-xs);
+  background-image: url('/mascots/hawk/hawk-32.svg');
+}
+
+.hawk-mascot--sm {
+  width: var(--hawk-size-sm);
+  height: var(--hawk-size-sm);
+  background-image: url('/mascots/hawk/hawk-64.svg');
+}
+
+.hawk-mascot--md {
+  width: var(--hawk-size-md);
+  height: var(--hawk-size-md);
+  background-image: url('/mascots/hawk/hawk-128.svg');
+}
+
+.hawk-mascot--lg {
+  width: var(--hawk-size-lg);
+  height: var(--hawk-size-lg);
+  background-image: url('/mascots/hawk/hawk-256.svg');
+}
+
+.hawk-mascot--xl {
+  width: var(--hawk-size-xl);
+  height: var(--hawk-size-xl);
+  background-image: url('/mascots/hawk/hawk-512.svg');
+}
+
+/* ============================================
+   HAWK ANIMATIONS
+   ============================================ */
+
+@keyframes hawk-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes hawk-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes hawk-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px var(--hawk-gold-400));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px var(--hawk-gold-300));
+  }
+}
+
+@keyframes hawk-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes hawk-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes hawk-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.02);
+  }
+}
+
+/* Animation Classes */
+.hawk-mascot--float {
+  animation: hawk-float 3s ease-in-out infinite;
+}
+
+.hawk-mascot--pulse {
+  animation: hawk-pulse 2s ease-in-out infinite;
+}
+
+.hawk-mascot--glow {
+  animation: hawk-glow 2s ease-in-out infinite;
+}
+
+.hawk-mascot--shake {
+  animation: hawk-shake 0.5s ease-in-out;
+}
+
+.hawk-mascot--rotate {
+  animation: hawk-rotate 10s linear infinite;
+}
+
+.hawk-mascot--bounce {
+  animation: hawk-bounce 1s ease-in-out infinite;
+}
+
+/* Hover Effects */
+.hawk-mascot--hoverable {
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.hawk-mascot--hoverable:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px var(--hawk-gold-400));
+}
+
+.hawk-mascot--hoverable:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   HAWK VARIANTS
+   ============================================ */
+
+/* Gold Accent Variant */
+.hawk-mascot--gold {
+  filter: drop-shadow(0 0 6px var(--hawk-gold-500));
+}
+
+/* Red Intense Variant */
+.hawk-mascot--intense {
+  filter: drop-shadow(0 0 8px var(--hawk-red-500));
+}
+
+/* Team Spirit Variant */
+.hawk-mascot--team {
+  position: relative;
+}
+
+.hawk-mascot--team::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 3px solid var(--hawk-gold-400);
+  animation: hawk-pulse 2s ease-in-out infinite;
+}
+
+/* Victory Variant */
+.hawk-mascot--victory {
+  animation: hawk-bounce 0.6s ease-in-out infinite;
+}
+
+.hawk-mascot--victory::before {
+  content: '🏆';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.5em;
+  animation: hawk-float 2s ease-in-out infinite;
+}
+
+/* ============================================
+   HAWK CONTAINER STYLES
+   ============================================ */
+
+.hawk-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hawk-container--centered {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.hawk-container--with-text {
+  gap: 12px;
+}
+
+.hawk-container--vertical {
+  flex-direction: column;
+}
+
+/* ============================================
+   HAWK TEXT STYLES
+   ============================================ */
+
+.hawk-text {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  color: var(--hawk-red-500);
+}
+
+.hawk-text--xs {
+  font-size: 12px;
+}
+
+.hawk-text--sm {
+  font-size: 14px;
+}
+
+.hawk-text--md {
+  font-size: 16px;
+}
+
+.hawk-text--lg {
+  font-size: 20px;
+}
+
+.hawk-text--xl {
+  font-size: 24px;
+}
+
+.hawk-text--gold {
+  color: var(--hawk-gold-500);
+}
+
+.hawk-text--gradient {
+  background: linear-gradient(135deg, var(--hawk-red-500), var(--hawk-gold-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   HAWK BADGE STYLES
+   ============================================ */
+
+.hawk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--hawk-red-500), var(--hawk-red-600));
+  border-radius: 24px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.hawk-badge--gold {
+  background: linear-gradient(135deg, var(--hawk-gold-500), var(--hawk-gold-600));
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.hawk-badge--outline {
+  background: transparent;
+  border: 2px solid var(--hawk-red-500);
+  color: var(--hawk-red-500);
+}
+
+.hawk-badge--outline-gold {
+  background: transparent;
+  border: 2px solid var(--hawk-gold-500);
+  color: var(--hawk-gold-600);
+}
+
+/* ============================================
+   HAWK BACKGROUND PATTERNS
+   ============================================ */
+
+.hawk-bg-pattern {
+  background-color: var(--hawk-red-50);
+  background-image: 
+    radial-gradient(circle at 25% 25%, var(--hawk-red-100) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, var(--hawk-gold-200) 2px, transparent 2px);
+  background-size: 40px 40px;
+}
+
+.hawk-bg-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--hawk-red-50) 0%,
+    var(--hawk-gold-50) 50%,
+    var(--hawk-red-100) 100%
+  );
+}
+
+.hawk-bg-radial {
+  background: radial-gradient(
+    ellipse at center,
+    var(--hawk-gold-100) 0%,
+    var(--hawk-red-100) 70%
+  );
+}
+
+/* ============================================
+   HAWK LOADER STYLES
+   ============================================ */
+
+.hawk-loader {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.hawk-loader__icon {
+  width: 100%;
+  height: 100%;
+  background-image: url('/mascots/hawk/hawk-64.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  animation: hawk-pulse 1.5s ease-in-out infinite;
+}
+
+.hawk-loader__ring {
+  position: absolute;
+  inset: -8px;
+  border: 3px solid transparent;
+  border-top-color: var(--hawk-gold-500);
+  border-radius: 50%;
+  animation: hawk-rotate 1s linear infinite;
+}
+
+.hawk-loader__ring--secondary {
+  inset: -16px;
+  border-top-color: var(--hawk-red-500);
+  animation-duration: 1.5s;
+  animation-direction: reverse;
+}
+
+/* ============================================
+   HAWK RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+  .hawk-mascot--lg {
+    width: 192px;
+    height: 192px;
+  }
+  
+  .hawk-mascot--xl {
+    width: 320px;
+    height: 320px;
+  }
+  
+  .hawk-text--xl {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hawk-mascot--md {
+    width: 96px;
+    height: 96px;
+  }
+  
+  .hawk-mascot--lg {
+    width: 128px;
+    height: 128px;
+  }
+  
+  .hawk-mascot--xl {
+    width: 256px;
+    height: 256px;
+  }
+  
+  .hawk-badge {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   HAWK ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hawk-mascot--float,
+  .hawk-mascot--pulse,
+  .hawk-mascot--glow,
+  .hawk-mascot--shake,
+  .hawk-mascot--rotate,
+  .hawk-mascot--bounce {
+    animation: none;
+  }
+  
+  .hawk-mascot--hoverable {
+    transition: none;
+  }
+  
+  .hawk-loader__ring,
+  .hawk-loader__icon {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .hawk-mascot {
+    filter: contrast(1.2);
+  }
+  
+  .hawk-badge {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hawk-red-500: #EF4444;
+    --hawk-gold-500: #FBBF24;
+  }
+  
+  .hawk-text {
+    color: var(--hawk-red-400);
+  }
+  
+  .hawk-bg-pattern {
+    background-color: #1F2937;
+  }
+}
+
+/* ============================================
+   HAWK UTILITY CLASSES
+   ============================================ */
+
+.hawk-shadow-sm {
+  filter: drop-shadow(0 1px 2px rgba(220, 38, 38, 0.2));
+}
+
+.hawk-shadow-md {
+  filter: drop-shadow(0 4px 6px rgba(220, 38, 38, 0.25));
+}
+
+.hawk-shadow-lg {
+  filter: drop-shadow(0 8px 12px rgba(220, 38, 38, 0.3));
+}
+
+.hawk-shadow-gold-sm {
+  filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.2));
+}
+
+.hawk-shadow-gold-md {
+  filter: drop-shadow(0 4px 6px rgba(245, 158, 11, 0.25));
+}
+
+.hawk-shadow-gold-lg {
+  filter: drop-shadow(0 8px 12px rgba(245, 158, 11, 0.3));
+}
+
+.hawk-opacity-75 {
+  opacity: 0.75;
+}
+
+.hawk-opacity-50 {
+  opacity: 0.5;
+}
+
+.hawk-opacity-25 {
+  opacity: 0.25;
+}
+
+.hawk-rounded {
+  border-radius: 12px;
+}
+
+.hawk-rounded-full {
+  border-radius: 50%;
+}

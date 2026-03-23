@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="wolfGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#64748b"/>
+      <stop offset="25%" style="stop-color:#475569"/>
+      <stop offset="60%" style="stop-color:#334155"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="wolfLight512" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#94a3b8"/>
+      <stop offset="35%" style="stop-color:#64748b"/>
+      <stop offset="70%" style="stop-color:#475569"/>
+      <stop offset="100%" style="stop-color:#334155"/>
+    </linearGradient>
+    <linearGradient id="wolfEarInner512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f1f5f9"/>
+      <stop offset="40%" style="stop-color:#e2e8f0"/>
+      <stop offset="100%" style="stop-color:#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="wolfFurDark512" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#334155"/>
+      <stop offset="50%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#334155"/>
+    </linearGradient>
+    <filter id="shadow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-opacity="0.5"/>
+    </filter>
+    <filter id="glow512" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="furTexture512">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0f172a" rx="32"/>
+  
+  <!-- Background radial gradient -->
+  <radialGradient id="bgRadial512" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" style="stop-color:#1e293b"/>
+    <stop offset="100%" style="stop-color:#0f172a"/>
+  </radialGradient>
+  <circle cx="256" cy="256" r="220" fill="url(#bgRadial512)"/>
+  
+  <!-- Decorative ring -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#334155" stroke-width="2" opacity="0.3"/>
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#475569" stroke-width="1" opacity="0.2"/>
+  
+  <!-- Left Ear (pointed) -->
+  <path d="M112 72 L176 200 L80 168 Z" fill="url(#wolfGradient512)" filter="url(#shadow512)"/>
+  <!-- Left ear inner -->
+  <path d="M128 96 L160 176 L104 152 Z" fill="url(#wolfEarInner512)"/>
+  <!-- Left ear shadow detail -->
+  <path d="M120 80 L140 120 L108 100 Z" fill="#334155" opacity="0.4"/>
+  <path d="M132 88 L148 140 L120 124 Z" fill="#475569" opacity="0.3"/>
+  
+  <!-- Right Ear (pointed) -->
+  <path d="M400 72 L336 200 L432 168 Z" fill="url(#wolfGradient512)" filter="url(#shadow512)"/>
+  <!-- Right ear inner -->
+  <path d="M384 96 L352 176 L408 152 Z" fill="url(#wolfEarInner512)"/>
+  <!-- Right ear shadow detail -->
+  <path d="M392 80 L372 120 L404 100 Z" fill="#334155" opacity="0.4"/>
+  <path d="M380 88 L364 140 L392 124 Z" fill="#475569" opacity="0.3"/>
+  
+  <!-- Head base -->
+  <ellipse cx="256" cy="232" rx="144" ry="128" fill="url(#wolfGradient512)" filter="url(#shadow512)"/>
+  
+  <!-- Head fur texture lines -->
+  <g stroke="#334155" stroke-width="2" stroke-linecap="round" opacity="0.3">
+    <path d="M160 200 Q180 220 200 200"/>
+    <path d="M352 200 Q332 220 312 200"/>
+    <path d="M176 180 Q192 196 208 180"/>
+    <path d="M336 180 Q320 196 304 180"/>
+  </g>
+  
+  <!-- Side cheek fur (detailed) -->
+  <g stroke-linecap="round">
+    <path d="M112 240 Q88 264 104 296" fill="none" stroke="#475569" stroke-width="6"/>
+    <path d="M120 256 Q104 276 116 296" fill="none" stroke="#334155" stroke-width="4"/>
+    <path d="M128 268 Q116 284 124 296" fill="none" stroke="#1e293b" stroke-width="3"/>
+    
+    <path d="M400 240 Q424 264 408 296" fill="none" stroke="#475569" stroke-width="6"/>
+    <path d="M392 256 Q408 276 396 296" fill="none" stroke="#334155" stroke-width="4"/>
+    <path d="M384 268 Q396 284 388 296" fill="none" stroke="#1e293b" stroke-width="3"/>
+  </g>
+  
+  <!-- Forehead fur pattern (detailed) -->
+  <g stroke-linecap="round">
+    <path d="M224 152 L256 200 L288 152" fill="none" stroke="#334155" stroke-width="4" opacity="0.5"/>
+    <path d="M208 136 L224 160" fill="none" stroke="#334155" stroke-width="3" opacity="0.4"/>
+    <path d="M304 136 L288 160" fill="none" stroke="#334155" stroke-width="3" opacity="0.4"/>
+    <path d="M192 144 L208 168" fill="none" stroke="#334155" stroke-width="2" opacity="0.3"/>
+    <path d="M320 144 L304 168" fill="none" stroke="#334155" stroke-width="2" opacity="0.3"/>
+    <path d="M240 144 L256 168" fill="none" stroke="#475569" stroke-width="2" opacity="0.2"/>
+    <path d="M272 144 L256 168" fill="none" stroke="#475569" stroke-width="2" opacity="0.2"/>
+  </g>
+  
+  <!-- Center forehead tuft -->
+  <path d="M240 128 Q256 120 272 128 Q256 144 240 128" fill="#475569" opacity="0.5"/>
+  
+  <!-- Snout (long) -->
+  <ellipse cx="256" cy="312" rx="80" ry="64" fill="url(#wolfLight512)"/>
+  
+  <!-- Snout gradient overlay -->
+  <ellipse cx="256" cy="300" rx="48" ry="32" fill="#94a3b8" opacity="0.2"/>
+  
+  <!-- Snout side shading -->
+  <path d="M192 312 Q176 328 192 344" fill="none" stroke="#475569" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <path d="M320 312 Q336 328 320 344" fill="none" stroke="#475569" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  
+  <!-- Snout bridge lines -->
+  <path d="M224 280 Q256 272 288 280" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  <path d="M232 288 Q256 282 280 288" fill="none" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" opacity="0.25"/>
+  
+  <!-- Nose -->
+  <ellipse cx="256" cy="344" rx="32" ry="24" fill="#1e293b"/>
+  <ellipse cx="256" cy="336" rx="16" ry="8" fill="#334155" opacity="0.5"/>
+  
+  <!-- Nostrils -->
+  <ellipse cx="244" cy="348" rx="6" ry="4" fill="#0f172a"/>
+  <ellipse cx="268" cy="348" rx="6" ry="4" fill="#0f172a"/>
+  
+  <!-- Nose highlight -->
+  <ellipse cx="256" cy="328" rx="10" ry="4" fill="#475569" opacity="0.4"/>
+  <ellipse cx="256" cy="330" rx="6" ry="2" fill="#64748b" opacity="0.3"/>
+  
+  <!-- Eye whites -->
+  <ellipse cx="192" cy="216" rx="32" ry="40" fill="#f8fafc"/>
+  <ellipse cx="320" cy="216" rx="32" ry="40" fill="#f8fafc"/>
+  
+  <!-- Eye inner shadows -->
+  <ellipse cx="192" cy="216" rx="28" ry="36" fill="#e2e8f0" opacity="0.5"/>
+  <ellipse cx="320" cy="216" rx="28" ry="36" fill="#e2e8f0" opacity="0.5"/>
+  
+  <!-- Irises -->
+  <ellipse cx="192" cy="216" rx="20" ry="28" fill="#0f172a"/>
+  <ellipse cx="320" cy="216" rx="20" ry="28" fill="#0f172a"/>
+  
+  <!-- Iris detail -->
+  <ellipse cx="192" cy="216" rx="14" ry="20" fill="#1e293b"/>
+  <ellipse cx="320" cy="216" rx="14" ry="20" fill="#1e293b"/>
+  
+  <!-- Pupils -->
+  <ellipse cx="192" cy="216" rx="8" ry="12" fill="#0f172a"/>
+  <ellipse cx="320" cy="216" rx="8" ry="12" fill="#0f172a"/>
+  
+  <!-- Eye shine (main) -->
+  <circle cx="200" cy="204" r="10" fill="#ffffff" filter="url(#glow512)"/>
+  <circle cx="328" cy="204" r="10" fill="#ffffff" filter="url(#glow512)"/>
+  
+  <!-- Eye shine (secondary) -->
+  <circle cx="184" cy="224" r="6" fill="#ffffff" opacity="0.7"/>
+  <circle cx="312" cy="224" r="6" fill="#ffffff" opacity="0.7"/>
+  
+  <!-- Eye shine (tertiary) -->
+  <circle cx="204" cy="228" r="3" fill="#ffffff" opacity="0.5"/>
+  <circle cx="332" cy="228" r="3" fill="#ffffff" opacity="0.5"/>
+  
+  <!-- Eye outline -->
+  <ellipse cx="192" cy="216" rx="32" ry="40" fill="none" stroke="#334155" stroke-width="2" opacity="0.3"/>
+  <ellipse cx="320" cy="216" rx="32" ry="40" fill="none" stroke="#334155" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Eyebrows -->
+  <g stroke-linecap="round">
+    <path d="M160 176 Q192 160 224 176" fill="none" stroke="#334155" stroke-width="8"/>
+    <path d="M288 176 Q320 160 352 176" fill="none" stroke="#334155" stroke-width="8"/>
+    <!-- Eyebrow fur texture -->
+    <path d="M176 172 L184 176" fill="none" stroke="#475569" stroke-width="3"/>
+    <path d="M192 168 L196 172" fill="none" stroke="#475569" stroke-width="2"/>
+    <path d="M336 172 L328 176" fill="none" stroke="#475569" stroke-width="3"/>
+    <path d="M320 168 L316 172" fill="none" stroke="#475569" stroke-width="2"/>
+  </g>
+  
+  <!-- Mouth -->
+  <g stroke-linecap="round">
+    <path d="M224 376 Q256 392 288 376" fill="none" stroke="#475569" stroke-width="4"/>
+    <path d="M256 360 L256 384" fill="none" stroke="#475569" stroke-width="3"/>
+  </g>
+  
+  <!-- Mouth corners -->
+  <circle cx="220" cy="376" r="3" fill="#475569"/>
+  <circle cx="292" cy="376" r="3" fill="#475569"/>
+  
+  <!-- Lower lip -->
+  <path d="M232 384 Q256 396 280 384" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Chin fur (detailed) -->
+  <g stroke-linecap="round">
+    <path d="M232 400 Q256 416 280 400" fill="none" stroke="#64748b" stroke-width="4"/>
+    <path d="M240 408 Q256 420 272 408" fill="none" stroke="#94a3b8" stroke-width="3" opacity="0.6"/>
+    <path d="M248 412 Q256 418 264 412" fill="none" stroke="#cbd5e1" stroke-width="2" opacity="0.4"/>
+  </g>
+  
+  <!-- Neck/chest -->
+  <path d="M176 336 Q256 360 336 336" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  <path d="M192 352 Q256 372 320 352" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+  
+  <!-- Ear tip highlights -->
+  <circle cx="112" cy="72" r="3" fill="#64748b" opacity="0.6"/>
+  <circle cx="400" cy="72" r="3" fill="#64748b" opacity="0.6"/>
+</svg>

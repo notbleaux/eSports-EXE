@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="hawkRed64" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="50%" stop-color="#DC2626"/>
+      <stop offset="100%" stop-color="#B91C1C"/>
+    </linearGradient>
+    <linearGradient id="hawkGold64" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="beakHighlight64" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FEF3C7"/>
+      <stop offset="100%" stop-color="#FDE68A"/>
+    </linearGradient>
+    <filter id="shadow64" x="-2" y="-2" width="68" height="68">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Shadow/Glow Effect -->
+  <ellipse cx="32" cy="60" rx="20" ry="3" fill="#000000" opacity="0.15"/>
+  
+  <!-- Main Head Shape -->
+  <path d="M32 4C24 4 18 8 14 14C10 20 10 28 14 38C18 48 24 54 32 58C40 54 46 48 50 38C54 28 54 20 50 14C46 8 40 4 32 4Z" fill="url(#hawkRed64)" filter="url(#shadow64)"/>
+  
+  <!-- Feather Texture -->
+  <path d="M20 16L22 24L18 28" stroke="#B91C1C" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M44 16L42 24L46 28" stroke="#B91C1C" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M26 10L28 18L24 22" stroke="#B91C1C" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M38 10L36 18L40 22" stroke="#B91C1C" stroke-width="1.5" fill="none" opacity="0.6"/>
+  
+  <!-- Beak -->
+  <path d="M32 24L24 36H40L32 24Z" fill="url(#hawkGold64)"/>
+  <path d="M32 24L28 32H36L32 24Z" fill="url(#beakHighlight64)"/>
+  <path d="M32 36V42" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Eyes Container -->
+  <ellipse cx="22" cy="26" rx="7" ry="5" fill="#FFFFFF" opacity="0.1"/>
+  <ellipse cx="42" cy="26" rx="7" ry="5" fill="#FFFFFF" opacity="0.1"/>
+  
+  <!-- Left Eye -->
+  <ellipse cx="22" cy="26" rx="5" ry="4" fill="#1F2937"/>
+  <ellipse cx="22" cy="26" rx="4" ry="3.2" fill="#111827"/>
+  <circle cx="23.5" cy="24.5" r="1.8" fill="#FFFFFF"/>
+  <circle cx="23.5" cy="24.5" r="1" fill="#FBBF24" opacity="0.3"/>
+  
+  <!-- Right Eye -->
+  <ellipse cx="42" cy="26" rx="5" ry="4" fill="#1F2937"/>
+  <ellipse cx="42" cy="26" rx="4" ry="3.2" fill="#111827"/>
+  <circle cx="43.5" cy="24.5" r="1.8" fill="#FFFFFF"/>
+  <circle cx="43.5" cy="24.5" r="1" fill="#FBBF24" opacity="0.3"/>
+  
+  <!-- Sharp Eyebrow Ridge -->
+  <path d="M16 22L20 24H26L28 22" stroke="#7F1D1D" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M48 22L44 24H38L36 22" stroke="#7F1D1D" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Feather Accents -->
+  <path d="M12 38L8 42L14 44L12 38Z" fill="url(#hawkGold64)"/>
+  <path d="M24 46L22 50L28 50L26 46" fill="url(#hawkGold64)"/>
+  <path d="M40 46L38 50L44 50L42 46" fill="url(#hawkGold64)"/>
+  <path d="M52 38L56 42L50 44L52 38Z" fill="url(#hawkGold64)"/>
+  
+  <!-- Chest Feathers -->
+  <path d="M20 46L24 50L28 46" stroke="#FBBF24" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M36 46L40 50L44 46" stroke="#FBBF24" stroke-width="1.5" fill="none" opacity="0.5"/>
+</svg>
