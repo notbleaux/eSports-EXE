@@ -13,6 +13,74 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/:path*.js",
+      "destination": "/:path*.js"
+    },
+    {
+      "source": "/:path*.wasm",
+      "destination": "/:path*.wasm"
+    },
+    {
+      "source": "/:path*.css",
+      "destination": "/:path*.css"
+    },
+    {
+      "source": "/:path*.png",
+      "destination": "/:path*.png"
+    },
+    {
+      "source": "/:path*.jpg",
+      "destination": "/:path*.jpg"
+    },
+    {
+      "source": "/:path*.jpeg",
+      "destination": "/:path*.jpeg"
+    },
+    {
+      "source": "/:path*.svg",
+      "destination": "/:path*.svg"
+    },
+    {
+      "source": "/:path*.gif",
+      "destination": "/:path*.gif"
+    },
+    {
+      "source": "/:path*.webp",
+      "destination": "/:path*.webp"
+    },
+    {
+      "source": "/:path*.ico",
+      "destination": "/:path*.ico"
+    },
+    {
+      "source": "/:path*.json",
+      "destination": "/:path*.json"
+    },
+    {
+      "source": "/:path*.woff",
+      "destination": "/:path*.woff"
+    },
+    {
+      "source": "/:path*.woff2",
+      "destination": "/:path*.woff2"
+    },
+    {
+      "source": "/:path*.ttf",
+      "destination": "/:path*.ttf"
+    },
+    {
+      "source": "/:path*.otf",
+      "destination": "/:path*.otf"
+    },
+    {
+      "source": "/:path*.eot",
+      "destination": "/:path*.eot"
+    },
+    {
       "source": "/sator/:path*",
       "destination": "/index.html"
     },
@@ -33,8 +101,7 @@
       "destination": "/index.html"
     },
     {
-      "source": "/:path*",
-      "has": [{ "type": "header", "key": "Accept", "value": "text/html" }],
+      "source": "/((?!api|assets|.*\\.js$|.*\\.wasm$|.*\\.css$|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.gif$|.*\\.webp$|.*\\.ico$|.*\\.json$|.*\\.woff$|.*\\.woff2$|.*\\.ttf$|.*\\.otf$|.*\\.eot$).+)",
       "destination": "/index.html"
     }
   ],
@@ -69,6 +136,63 @@
     },
     {
       "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).wasm",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).css",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).(png|jpg|jpeg|gif|webp|svg|ico)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).(woff|woff2|ttf|otf|eot)",
       "headers": [
         {
           "key": "Cache-Control",

@@ -123,7 +123,7 @@
   ],
   "related_applications": [],
   "prefer_related_applications": false,
-  "display_override": ["standalone", "minimal-ui", "browser"],
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
   "edge_side_panel": {},
   "handle_links": "preferred",
   "launch_handler": {

@@ -53,7 +53,8 @@ export default defineConfig({
       brotliSize: true,
     })
   ],
-  base: process.env.VITE_BASE_PATH || '/eSports-EXE/',
+  // Base path: '/' for Vercel, '/eSports-EXE/' for GitHub Pages/local
+  base: process.env.VERCEL ? '/' : (process.env.VITE_BASE_PATH || '/eSports-EXE/'),
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -71,7 +72,9 @@ export default defineConfig({
     format: 'es'
   },
   build: {
+    target: 'esnext',
     outDir: 'dist',
+    assetsDir: 'assets',
     sourcemap: true,
     // Optimize chunk size warnings
     chunkSizeWarningLimit: 600,
@@ -233,8 +236,7 @@ export default defineConfig({
     cssCodeSplit: true,
     // Enable CSS optimization
     cssMinify: true,
-    // Target modern browsers for smaller bundles
-    target: 'es2020',
+    // Target already set at build level to 'esnext'
     // Enable module preload polyfill
     modulePreload: {
       polyfill: true,
@@ -242,8 +244,13 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    open: true
+    open: true,
+    headers: {
+      'Content-Type': 'application/javascript'
+    }
   },
+  // Proper asset handling for static files
+  assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp', '**/*.ico'],
   // Optimize dependency pre-bundling
   optimizeDeps: {
     include: [
