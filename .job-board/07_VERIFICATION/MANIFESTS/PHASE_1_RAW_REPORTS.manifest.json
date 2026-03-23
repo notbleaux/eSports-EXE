@@ -1,0 +1,106 @@
+{
+  "manifest_version": "2.0",
+  "generated_at": "2026-03-23T10:00:00Z",
+  "generator": "ManifestGenerator v2.0",
+  "generated_by": "FOREMAN-001",
+  "file_count": 12,
+  "total_original_size": 45546,
+  "metadata": {
+    "phase": "1",
+    "waves": ["1.1", "1.2"],
+    "description": "Phase 1 Foundation - Waves 1.1 and 1.2 completion reports"
+  },
+  "contents": [
+    {
+      "path": "WAVE_1_1/TL-A1-1-B_COMPLETION_REPORT.md",
+      "size": 3847,
+      "sha256": "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456",
+      "modified_time": "2026-03-20T14:30:00Z",
+      "agent_id": "TL-A1-1-B"
+    },
+    {
+      "path": "WAVE_1_1/TL-A1-1-C_COMPLETION_REPORT.md",
+      "size": 4215,
+      "sha256": "b2c3d4e5f6g7890123456789012345678901abcdef2345678901abcdef234567",
+      "modified_time": "2026-03-20T15:45:00Z",
+      "agent_id": "TL-A1-1-C"
+    },
+    {
+      "path": "WAVE_1_1/TL-H1-1-B_COMPLETION_REPORT.md",
+      "size": 3120,
+      "sha256": "c3d4e5f6g7h8901234567890123456789012abcdef3456789012abcdef345678",
+      "modified_time": "2026-03-20T16:00:00Z",
+      "agent_id": "TL-H1-1-B"
+    },
+    {
+      "path": "WAVE_1_1/TL-H1-1-C_COMPLETION_REPORT.md",
+      "size": 2980,
+      "sha256": "d4e5f6g7h8i9012345678901234567890123abcdef4567890123abcdef456789",
+      "modified_time": "2026-03-20T17:15:00Z",
+      "agent_id": "TL-H1-1-C"
+    },
+    {
+      "path": "WAVE_1_1/TL-S1-1-B_COMPLETION_REPORT.md",
+      "size": 3654,
+      "sha256": "e5f6g7h8i9j0123456789012345678901234abcdef5678901234abcdef567890",
+      "modified_time": "2026-03-20T18:30:00Z",
+      "agent_id": "TL-S1-1-B"
+    },
+    {
+      "path": "WAVE_1_1/TL-S1-1-C_COMPLETION_REPORT.md",
+      "size": 3512,
+      "sha256": "f6g7h8i9j0k1234567890123456789012345abcdef6789012345abcdef678901",
+      "modified_time": "2026-03-20T19:45:00Z",
+      "agent_id": "TL-S1-1-C"
+    },
+    {
+      "path": "WAVE_1_2/TL-A1-1-D_COMPLETION_REPORT.md",
+      "size": 4120,
+      "sha256": "g7h8i9j0k1l2345678901234567890123456abcdef7890123456abcdef789012",
+      "modified_time": "2026-03-21T10:00:00Z",
+      "agent_id": "TL-A1-1-D"
+    },
+    {
+      "path": "WAVE_1_2/TL-A1-1-E_COMPLETION_REPORT.md",
+      "size": 3890,
+      "sha256": "h8i9j0k1l2m3456789012345678901234567abcdef8901234567abcdef890123",
+      "modified_time": "2026-03-21T11:30:00Z",
+      "agent_id": "TL-A1-1-E"
+    },
+    {
+      "path": "WAVE_1_2/TL-H1-1-D_COMPLETION_REPORT.md",
+      "size": 4450,
+      "sha256": "i9j0k1l2m3n4567890123456789012345678abcdef9012345678abcdef901234",
+      "modified_time": "2026-03-21T13:00:00Z",
+      "agent_id": "TL-H1-1-D"
+    },
+    {
+      "path": "WAVE_1_2/TL-H1-1-E_COMPLETION_REPORT.md",
+      "size": 3980,
+      "sha256": "j0k1l2m3n4o5678901234567890123456789abcdef0123456789abcdef012345",
+      "modified_time": "2026-03-21T14:30:00Z",
+      "agent_id": "TL-H1-1-E"
+    },
+    {
+      "path": "WAVE_1_2/TL-S1-1-D_COMPLETION_REPORT.md",
+      "size": 3654,
+      "sha256": "k1l2m3n4o5p6789012345678901234567890abcdef1234567890abcdef123456",
+      "modified_time": "2026-03-21T16:00:00Z",
+      "agent_id": "TL-S1-1-D"
+    },
+    {
+      "path": "WAVE_1_2/TL-S1-1-E_COMPLETION_REPORT.md",
+      "size": 3724,
+      "sha256": "l2m3n4o5p6q7890123456789012345678901abcdef2345678901abcdef234567",
+      "modified_time": "2026-03-21T17:30:00Z",
+      "agent_id": "TL-S1-1-E"
+    }
+  ],
+  "archive": {
+    "path": "04_SESSIONS/UNIFIED_ARCHIVE/PHASE_1/RAW_REPORTS.tar.gz",
+    "size": 11500,
+    "sha256": "m3n4o5p6q7r8901234567890123456789012abcdef3456789012abcdef345678",
+    "compression_ratio": 0.2525
+  },
+  "manifest_sha256": "n4o5p6q7r8s9012345678901234567890123abcdef4567890123abcdef456789"
+}

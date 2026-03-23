@@ -37,3 +37,24 @@ export type {
   BreakpointConfig,
   AspectRatioReturn 
 } from './useFluidResize';
+
+// Mascot Animation Hook (TL-H3-3-A)
+export { 
+  useMascotAnimation,
+  useAnimationStateMatch,
+  useAnimationStateMatches,
+  useOnAnimationStateEnter,
+  useOnAnimationStateExit,
+  useAnimationTriggers,
+  VICTORY_SEQUENCE,
+  ATTACK_SEQUENCE,
+  DEFEAT_SEQUENCE,
+  COMBO_SEQUENCE,
+} from '../useMascotAnimation';
+export type { 
+  UseMascotAnimationOptions,
+  UseMascotAnimationReturn,
+  TransitionOptions,
+  StateChangeHandler,
+  AnimationEventHandler,
+} from '../useMascotAnimation';

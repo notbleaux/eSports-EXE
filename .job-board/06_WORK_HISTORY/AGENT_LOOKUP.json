@@ -1,0 +1,154 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-03-23T09:30:00Z",
+  "description": "Fast lookup index for agent work history",
+  
+  "agents": {
+    "TL-A1-1-B": {
+      "phase": "phase_1",
+      "wave": "1.1",
+      "team": "A1",
+      "deliverable": "Context Detection Engine",
+      "status": "complete",
+      "tests": 25,
+      "completed_at": "2026-03-20T14:30:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_1.agents[0]"
+    },
+    "TL-A1-1-C": {
+      "phase": "phase_1",
+      "wave": "1.1",
+      "team": "A1",
+      "deliverable": "Knowledge Graph & Search",
+      "status": "complete",
+      "tests": 72,
+      "completed_at": "2026-03-20T15:45:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_1.agents[1]"
+    },
+    "TL-H1-1-B": {
+      "phase": "phase_1",
+      "wave": "1.1",
+      "team": "H1",
+      "deliverable": "Sol/Lun Character Bibles",
+      "status": "complete",
+      "tests": 0,
+      "completed_at": "2026-03-20T16:00:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_1.agents[2]"
+    },
+    "TL-H1-1-C": {
+      "phase": "phase_1",
+      "wave": "1.1",
+      "team": "H1",
+      "deliverable": "Bin/Fat/Uni + 3 Villains",
+      "status": "complete",
+      "tests": 0,
+      "completed_at": "2026-03-20T17:15:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_1.agents[3]"
+    },
+    "TL-S1-1-B": {
+      "phase": "phase_1",
+      "wave": "1.1",
+      "team": "S1",
+      "deliverable": "8 Analytical Lenses",
+      "status": "complete",
+      "tests": 26,
+      "completed_at": "2026-03-20T18:30:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_1.agents[4]"
+    },
+    "TL-S1-1-C": {
+      "phase": "phase_1",
+      "wave": "1.1",
+      "team": "S1",
+      "deliverable": "8 Tactical Lenses",
+      "status": "complete",
+      "tests": 24,
+      "completed_at": "2026-03-20T19:45:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_1.agents[5]"
+    },
+    "TL-A2-1-B": {
+      "phase": "phase_2",
+      "wave": "2.0",
+      "team": "A2",
+      "deliverable": "Animation System",
+      "status": "complete",
+      "tests": 156,
+      "coverage": 95.56,
+      "completed_at": "2026-03-22T09:00:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_2.agents[0]"
+    },
+    "TL-A2-1-C": {
+      "phase": "phase_2",
+      "wave": "2.0",
+      "team": "A2",
+      "deliverable": "Cognitive Accessibility",
+      "status": "complete",
+      "tests": 89,
+      "coverage": 92.1,
+      "completed_at": "2026-03-22T10:30:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_2.agents[1]"
+    },
+    "OPT-A1": {
+      "phase": "phase_2_optimization",
+      "wave": "1",
+      "team": "OPT",
+      "deliverable": "State Machine Test Suite",
+      "status": "complete",
+      "tests": 89,
+      "coverage": 95.56,
+      "completed_at": "2026-03-22T18:00:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_2_optimization.agents[0]"
+    },
+    "OPT-A2": {
+      "phase": "phase_2_optimization",
+      "wave": "1",
+      "team": "OPT",
+      "deliverable": "ML Pipeline Tests",
+      "status": "complete",
+      "tests": 67,
+      "coverage": 88.0,
+      "completed_at": "2026-03-22T19:30:00Z",
+      "history_file": "MASTER_HISTORY.yaml",
+      "yaml_path": "phases.phase_2_optimization.agents[1]"
+    }
+  },
+  
+  "queries": {
+    "by_team": {
+      "A1": ["TL-A1-1-B", "TL-A1-1-C", "TL-A1-1-D", "TL-A1-1-E"],
+      "H1": ["TL-H1-1-B", "TL-H1-1-C", "TL-H1-1-D", "TL-H1-1-E"],
+      "S1": ["TL-S1-1-B", "TL-S1-1-C", "TL-S1-1-D", "TL-S1-1-E"],
+      "A2": ["TL-A2-1-B", "TL-A2-1-C"],
+      "OPT": ["OPT-A1", "OPT-A2"]
+    },
+    "by_phase": {
+      "phase_1": ["TL-A1-1-B", "TL-A1-1-C", "TL-H1-1-B", "TL-H1-1-C", "TL-S1-1-B", "TL-S1-1-C"],
+      "phase_2": ["TL-A2-1-B", "TL-A2-1-C"],
+      "phase_2_optimization": ["OPT-A1", "OPT-A2"]
+    },
+    "by_status": {
+      "complete": ["TL-A1-1-B", "TL-A1-1-C", "TL-H1-1-B", "TL-H1-1-C", "TL-S1-1-B", "TL-S1-1-C", "TL-A2-1-B", "TL-A2-1-C", "OPT-A1", "OPT-A2"],
+      "pending": [],
+      "in_progress": []
+    }
+  },
+  
+  "metrics_summary": {
+    "total_agents": 76,
+    "indexed_agents": 10,
+    "total_tests": 547,
+    "average_coverage": 91.89,
+    "phases": {
+      "complete": ["phase_2"],
+      "partial": ["phase_1"],
+      "in_progress": ["phase_2_optimization"]
+    }
+  }
+}

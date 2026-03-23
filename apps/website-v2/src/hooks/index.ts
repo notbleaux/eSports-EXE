@@ -1,4 +1,4 @@
-/** [Ver003.000]
+/** [Ver004.000]
  * Hooks Index
  * 
  * Central export point for all custom React hooks.
@@ -6,6 +6,19 @@
 
 // Animation hooks
 export * from './animation';
+
+// Cognitive Load hooks
+export {
+  useCognitiveLoad,
+  useCognitiveLoadLevel,
+  useIsHighCognitiveLoad,
+  useCognitiveMetric,
+  useCognitiveTaskTracker,
+} from './useCognitiveLoad';
+export type {
+  UseCognitiveLoadOptions,
+  UseCognitiveLoadResult,
+} from './useCognitiveLoad';
 
 // Help system hooks
 export { useKnowledgeGraph } from './useKnowledgeGraph';
@@ -63,6 +76,19 @@ export type {
 export type {
   UseHelpBroadcastOptions,
 } from './useBroadcast';
+
+// Live Match (Real-time)
+export {
+  useLiveMatch,
+  useLiveEvents,
+  useLiveScore,
+  useLiveConnectionStatus,
+  useLiveMatches,
+} from './useLiveMatch';
+export type {
+  UseLiveMatchOptions,
+  UseLiveMatchReturn,
+} from './useLiveMatch';
 
 // Service Worker & PWA
 export { useServiceWorker } from './useServiceWorker';
@@ -128,3 +154,17 @@ export {
   type FocusTrapConfig,
   type UseMobileScreenReaderReturn,
 } from './useMobileScreenReader';
+
+// Audio hooks
+export {
+  useAudio,
+  useVoiceAudio,
+  useSFXAudio,
+  useAmbientAudio,
+  usePersistentAudioSettings,
+  useAudioAnimationSync,
+} from './useAudio';
+export type {
+  UseAudioReturn,
+  UseAudioOptions,
+} from './useAudio';
