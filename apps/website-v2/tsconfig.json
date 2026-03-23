@@ -22,7 +22,11 @@
       "@hub-2/*": ["src/hub-2-rotas/*"],
       "@hub-3/*": ["src/hub-3-arepo/*"],
       "@hub-4/*": ["src/hub-4-opera/*"],
-      "@hub-5/*": ["src/hub-5-tenet/*"]
+      "@hub-5/*": ["src/hub-5-tenet/*"],
+      "@sator/types": ["../../packages/shared/types"],
+      "@sator/types/*": ["../../packages/shared/types/*"],
+      "@sator/services": ["../../packages/shared/services/help"],
+      "@sator/services/*": ["../../packages/shared/services/*"]
     },
     "types": ["node", "vitest/globals"]
   },

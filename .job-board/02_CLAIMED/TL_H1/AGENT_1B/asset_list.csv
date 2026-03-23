@@ -1,0 +1,108 @@
+Category,Asset Type,Asset Name,Format,Dimensions/Specs,Quantity,Priority,Assigned To,Est Hours,Notes
+Visual,Sol Sprite Sheet,idle_loop,PNG,128x128px per frame / 12 frames,1,High,Art Team,8,Breathing + cape flow animation
+Visual,Sol Sprite Sheet,hover_start,PNG,128x128px per frame / 4 frames,1,High,Art Team,4,Hover transition animation
+Visual,Sol Sprite Sheet,hover_loop,PNG,128x128px per frame / 8 frames,1,High,Art Team,6,Hover idle animation
+Visual,Sol Sprite Sheet,activate,PNG,192x192px per frame / 6 frames,1,High,Art Team,6,Battle stance activation
+Visual,Sol Sprite Sheet,attack_combo_1,PNG,192x192px per frame / 8 frames,1,Medium,Art Team,8,Solar slash attack
+Visual,Sol Sprite Sheet,attack_combo_2,PNG,192x192px per frame / 8 frames,1,Medium,Art Team,8,Rising dawn uppercut
+Visual,Sol Sprite Sheet,block,PNG,128x128px per frame / 4 frames,1,Medium,Art Team,4,Light shield deploy
+Visual,Sol Sprite Sheet,hurt,PNG,128x128px per frame / 4 frames,1,Medium,Art Team,4,Damage reaction
+Visual,Sol Sprite Sheet,defeat,PNG,128x128px per frame / 10 frames,1,Medium,Art Team,10,Dramatic death sequence
+Visual,Sol Sprite Sheet,celebrate,PNG,256x256px per frame / 16 frames,1,Medium,Art Team,12,Victory celebration
+Visual,Sol Sprite Sheet,ultimate_cast,PNG,512x512px per frame / 24 frames,1,High,Art Team,16,Full solar transformation
+Visual,Sol Sprite Sheet,lun_synergy,PNG,256x256px per frame / 12 frames,1,High,Art Team,10,Dual animation with Lun
+Visual,Lun Sprite Sheet,idle_loop,PNG,128x128px per frame / 16 frames,1,High,Art Team,10,Mystical breathing + stars
+Visual,Lun Sprite Sheet,hover_start,PNG,128x128px per frame / 5 frames,1,High,Art Team,5,Hover transition with mist
+Visual,Lun Sprite Sheet,hover_loop,PNG,128x128px per frame / 12 frames,1,High,Art Team,8,Hover with mirror orbit
+Visual,Lun Sprite Sheet,activate,PNG,192x192px per frame / 7 frames,1,High,Art Team,6,Barrier stance activation
+Visual,Lun Sprite Sheet,heal_cast,PNG,192x192px per frame / 10 frames,1,High,Art Team,8,Healing embrace
+Visual,Lun Sprite Sheet,heal_channel,PNG,128x128px per frame / 8 frames,1,Medium,Art Team,6,Sustained healing
+Visual,Lun Sprite Sheet,shield_deploy,PNG,256x256px per frame / 6 frames,1,High,Art Team,8,Team barrier ultimate
+Visual,Lun Sprite Sheet,hurt,PNG,128x128px per frame / 5 frames,1,Medium,Art Team,4,Damage reaction
+Visual,Lun Sprite Sheet,defeat,PNG,128x128px per frame / 12 frames,1,Medium,Art Team,12,Graceful collapse
+Visual,Lun Sprite Sheet,celebrate,PNG,256x256px per frame / 20 frames,1,Medium,Art Team,14,Joyful victory spin
+Visual,Lun Sprite Sheet,ultimate_cast,PNG,512x512px per frame / 30 frames,1,High,Art Team,18,Full lunar ascension
+Visual,Lun Sprite Sheet,sol_synergy,PNG,256x256px per frame / 12 frames,1,High,Art Team,10,Dual animation with Sol
+Visual,Lun Sprite Sheet,self_sacrifice,PNG,384x384px per frame / 15 frames,1,Medium,Art Team,14,Protection ultimate
+Visual,Portrait,Sol_Portrait_Default,PNG,512x512px,1,High,Art Team,4,Character select portrait
+Visual,Portrait,Sol_Portrait_Humbled,PNG,512x512px,1,Medium,Art Team,4,Post-quest variant
+Visual,Portrait,Lun_Portrait_Default,PNG,512x512px,1,High,Art Team,4,Character select portrait
+Visual,Portrait,Lun_Portrait_Renewed,PNG,512x512px,1,Medium,Art Team,4,Post-quest variant
+Visual,Icon,Sol_Ability_Sunburst,PNG,128x128px,1,High,UI Team,2,Ability icon
+Visual,Icon,Sol_Ability_Dawn_Slash,PNG,128x128px,1,High,UI Team,2,Ability icon
+Visual,Icon,Sol_Ability_Leaders_Call,PNG,128x128px,1,High,UI Team,2,Ability icon
+Visual,Icon,Sol_Ultimate_Eternal_Sun,PNG,256x256px,1,High,UI Team,3,Ultimate ability icon
+Visual,Icon,Lun_Ability_Moonbeam,PNG,128x128px,1,High,UI Team,2,Ability icon
+Visual,Icon,Lun_Ability_Star_Shield,PNG,128x128px,1,High,UI Team,2,Ability icon
+Visual,Icon,Lun_Ability_Renewal,PNG,128x128px,1,High,UI Team,2,Ability icon
+Visual,Icon,Lun_Ultimate_Guardian_Night,PNG,256x256px,1,High,UI Team,3,Ultimate ability icon
+Visual,Icon,Lun_Ultimate_Eternal_Eclipse,PNG,256x256px,1,High,UI Team,4,Combined ultimate icon
+Visual,Emote,Sol_Emote_Triumphant,GIF/APNG,256x256px,1,Medium,Art Team,3,Victory emote
+Visual,Emote,Sol_Emote_Facepalm,GIF/APNG,256x256px,1,Low,Art Team,3,Frustration emote
+Visual,Emote,Sol_Emote_Eclipse_Handshake,GIF/APNG,256x256px,1,High,Art Team,5,Dual emote with Lun
+Visual,Emote,Lun_Emote_Serenity,GIF/APNG,256x256px,1,Medium,Art Team,3,Calm emote
+Visual,Emote,Lun_Emote_Worry,GIF/APNG,256x256px,1,Low,Art Team,3,Concerned emote
+Visual,Emote,Lun_Emote_Lunar_Restoration,GIF/APNG,256x256px,1,High,Art Team,5,Healing meditative emote
+Audio,Voice Line,sol_select_01,WAV,44.1kHz/16bit,1,High,Voice Actor,0.5,"The dawn is upon us."
+Audio,Voice Line,sol_move_01,WAV,44.1kHz/16bit,3,Medium,Audio Team,2,Movement confirmations
+Audio,Voice Line,sol_attack_01,WAV,44.1kHz/16bit,3,Medium,Voice Actor,1.5,Attack exertions
+Audio,Voice Line,sol_hit_01,WAV,44.1kHz/16bit,3,Medium,Voice Actor,1.5,Damage reactions
+Audio,Voice Line,sol_ultimate_01,WAV,44.1kHz/16bit,1,High,Voice Actor,0.5,"Behold... the eternal sun!"
+Audio,Voice Line,sol_victory_01,WAV,44.1kHz/16bit,3,High,Voice Actor,1.5,Victory celebrations
+Audio,Voice Line,sol_defeat_01,WAV,44.1kHz/16bit,3,Medium,Voice Actor,1.5,Defeat lines
+Audio,Voice Line,sol_lun_bond_01,WAV,44.1kHz/16bit,5,High,Voice Actor,2.5,Bond-specific dialogue
+Audio,Voice Line,lun_select_01,WAV,44.1kHz/16bit,1,High,Voice Actor,0.5,"The night welcomes you."
+Audio,Voice Line,lun_move_01,WAV,44.1kHz/16bit,3,Medium,Audio Team,2,Movement confirmations
+Audio,Voice Line,lun_heal_01,WAV,44.1kHz/16bit,5,High,Voice Actor,2,Healing confirmations
+Audio,Voice Line,lun_shield_01,WAV,44.1kHz/16bit,3,Medium,Voice Actor,1.5,Shield deployments
+Audio,Voice Line,lun_hit_01,WAV,44.1kHz/16bit,3,Medium,Voice Actor,1.5,Damage reactions
+Audio,Voice Line,lun_ultimate_01,WAV,44.1kHz/16bit,1,High,Voice Actor,0.5,"Sleep now. I guard the night."
+Audio,Voice Line,lun_victory_01,WAV,44.1kHz/16bit,3,High,Voice Actor,1.5,Victory celebrations
+Audio,Voice Line,lun_defeat_01,WAV,44.1kHz/16bit,3,Medium,Voice Actor,1.5,Defeat lines
+Audio,Voice Line,lun_sol_bond_01,WAV,44.1kHz/16bit,5,High,Voice Actor,2.5,Bond-specific dialogue
+Audio,Voice Line,lun_sacrifice_01,WAV,44.1kHz/16bit,3,High,Voice Actor,1.5,Sacrifice moments
+Audio,SFX,sol_sunburst_cast,WAV,48kHz/24bit,1,High,Audio Team,4,Ability cast sound
+Audio,SFX,sol_dawn_slash_impact,WAV,48kHz/24bit,1,High,Audio Team,3,Attack impact
+Audio,SFX,sol_ultimate_charge,WAV,48kHz/24bit,1,High,Audio Team,6,Ultimate build-up
+Audio,SFX,sol_footstep_light,WAV,48kHz/24bit,4,Low,Audio Team,2,Movement footsteps
+Audio,SFX,lun_mist_gather,WAV,48kHz/24bit,1,High,Audio Team,4,Mist particle sound
+Audio,SFX,lun_heal_chime,WAV,48kHz/24bit,3,High,Audio Team,3,Healing restorative sound
+Audio,SFX,lun_shield_crystal,WAV,48kHz/24bit,1,High,Audio Team,4,Barrier deployment
+Audio,SFX,lun_mirror_shatter,WAV,48kHz/24bit,1,Medium,Audio Team,3,Defeat/impact sound
+Audio,SFX,lun_footstep_ethereal,WAV,48kHz/24bit,4,Low,Audio Team,2,Movement footsteps
+Audio,SFX,eclipse_synergy_hum,WAV,48kHz/24bit,1,High,Audio Team,5,Dual proximity buff sound
+Audio,SFX,eternal_eclipse_ultimate,WAV,48kHz/24bit,1,High,Audio Team,8,Combined ultimate sound
+Audio,Music,sol_theme_dawn,OGG,320kbps,1,Medium,Composer,16,Sol character theme
+Audio,Music,lun_theme_nocturne,OGG,320kbps,1,Medium,Composer,16,Lun character theme
+Audio,Music,eclipse_theme_duality,OGG,320kbps,1,High,Composer,24,Dual character theme
+Code,Component,SolAvatar.tsx,TypeScript,React Component,1,High,Frontend Dev,8,Web avatar component
+Code,Component,LunAvatar.tsx,TypeScript,React Component,1,High,Frontend Dev,8,Web avatar component
+Code,Component,EclipseSynergy.tsx,TypeScript,React Component,1,High,Frontend Dev,6,Dual proximity system
+Code,Script,sol_dialogue.gd,GDScript,Godot 4.x,1,High,Game Dev,4,Dialogue system integration
+Code,Script,lun_dialogue.gd,GDScript,Godot 4.x,1,High,Game Dev,4,Dialogue system integration
+Code,Script,sol_animation_controller.gd,GDScript,Godot 4.x,1,High,Game Dev,6,Animation state machine
+Code,Script,lun_animation_controller.gd,GDScript,Godot 4.x,1,High,Game Dev,6,Animation state machine
+Code,Script,duality_bond_system.gd,GDScript,Godot 4.x,1,High,Game Dev,8,Twin synergy mechanics
+Code,Quest,quest_sol_dawn_01,GDScript/JSON,Godot 4.x,1,High,Game Dev,16,Sol character quest
+Code,Quest,quest_lun_shadow_01,GDScript/JSON,Godot 4.x,1,High,Game Dev,16,Lun character quest
+VFX,Particle,sol_ember_motes,TSCN/GPU,Godot Particle System,1,Medium,VFX Artist,6,Floating spark particles
+VFX,Particle,sol_god_rays,TSCN/GPU,Godot Particle System,1,Medium,VFX Artist,8,Rotating sun rays
+VFX,Particle,sol_heat_shimmer,TSCN/Shader,Godot Shader,1,Low,VFX Artist,4,Distortion effect
+VFX,Particle,lun_star_motes,TSCN/GPU,Godot Particle System,1,Medium,VFX Artist,6,Orbiting star particles
+VFX,Particle,lun_mist_trail,TSCN/GPU,Godot Particle System,1,Medium,VFX Artist,8,Ethereal fog effect
+VFX,Particle,lun_moonbeams,TSCN/GPU,Godot Particle System,1,Medium,VFX Artist,6,Light ray particles
+VFX,Shader,eternal_eclipse_sky,GLSL,Godot Shader,1,High,VFX Artist,12,Eclipse ultimate environment
+UI,Skin,Sol_UI_Theme,Figma/CSS,Design System,1,High,UI/UX Designer,8,Gold/orange UI kit
+UI,Skin,Lun_UI_Theme,Figma/CSS,Design System,1,High,UI/UX Designer,8,Lavender/indigo UI kit
+UI,Health Bar,Sol_Health_Bar,PNG/CSS,UI Element,1,Medium,UI Team,4,Sun-themed HP bar
+UI,Health Bar,Lun_Health_Bar,PNG/CSS,UI Element,1,Medium,UI Team,4,Moon-themed HP bar
+UI,Ultimate Meter,Eclipse_Ultimate_Meter,PNG/CSS,UI Element,1,High,UI Team,6,Dual ultimate gauge
+Marketing,Render,Sol_Key_Art,PNG,4K Resolution,1,High,Marketing Art,24,Hero promotional image
+Marketing,Render,Lun_Key_Art,PNG,4K Resolution,1,High,Marketing Art,24,Hero promotional image
+Marketing,Render,Eclipse_Duo_Key_Art,PNG,4K Resolution,1,High,Marketing Art,32,Dual hero promotional
+Marketing,Video,Sol_Character_Trailer,MP4,1080p60,1,Medium,Video Team,40,Character spotlight
+Marketing,Video,Lun_Character_Trailer,MP4,1080p60,1,Medium,Video Team,40,Character spotlight
+Merch,Design,Sol_Pendant_Design,SVG,Vector,1,Low,Merch Team,8,Sunburst jewelry design
+Merch,Design,Lun_Necklace_Design,SVG,Vector,1,Low,Merch Team,8,Moon phase jewelry design
+Merch,Figure,Sol_Figma_Concept,PDF,Design Doc,1,Low,Merch Team,16,Action figure concept
+Merch,Figure,Lun_Figma_Concept,PDF,Design Doc,1,Low,Merch Team,16,Action figure concept

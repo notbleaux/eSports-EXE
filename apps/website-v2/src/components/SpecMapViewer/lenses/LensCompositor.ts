@@ -242,14 +242,27 @@ export class LensCompositor {
 
   /** Get default render order based on lens types */
   private getDefaultRenderOrder(): string[] {
-    // Order: base → overlays → effects → indicators
+    // Order: base → tactical status → predictive → overlays → effects → indicators
     const orderPriority: Record<string, number> = {
-      'secured': 1,    // Base control layer
-      'wind': 2,       // Movement patterns
-      'doors': 3,      // Rotation patterns
-      'tension': 4,    // Combat heatmap
-      'blood': 5,      // Combat aftermath
-      'ripple': 6      // Sound effects (top)
+      // Base layers
+      'secured': 1,           // Base control layer
+      'eco-pressure': 2,      // Economy status
+      'wind': 3,             // Movement patterns
+      'doors': 4,            // Rotation patterns
+      'rotation-predictor': 5, // Rotation predictions
+      // Tactical mid layers
+      'utility-coverage': 10,  // Active utility
+      'info-gaps': 11,         // Intel gaps
+      'clutch-zones': 12,      // Clutch positions
+      'trade-routes': 13,      // Support paths
+      // Analysis layers
+      'tension': 20,          // Combat heatmap
+      'blood': 21,            // Combat aftermath
+      // Predictive top layers
+      'push-probability': 30,  // Site predictions
+      'timing-windows': 31,    // Timing analysis
+      // Effects
+      'ripple': 40            // Sound effects (top)
     }
 
     return Array.from(this.lenses.keys())
@@ -264,12 +277,28 @@ export class LensCompositor {
   /** Preset composite configurations */
   getPresets(): Record<string, string[]> {
     return {
+      // Base presets
       'combat': ['tension', 'blood', 'ripple'],
       'strategic': ['secured', 'doors', 'wind'],
-      'full': ['secured', 'wind', 'doors', 'tension', 'blood', 'ripple'],
+      'full': [
+        'secured', 'eco-pressure', 'wind', 'doors',
+        'rotation-predictor', 'utility-coverage', 'info-gaps',
+        'clutch-zones', 'trade-routes',
+        'tension', 'blood',
+        'push-probability', 'timing-windows',
+        'ripple'
+      ],
       'minimal': ['tension', 'secured'],
       'stealth': ['ripple', 'wind'],
-      'postplant': ['secured', 'tension', 'doors']
+      'postplant': ['secured', 'tension', 'doors'],
+
+      // Tactical presets
+      'tactical': ['push-probability', 'utility-coverage', 'timing-windows', 'rotation-predictor'],
+      'predictive': ['rotation-predictor', 'push-probability', 'timing-windows', 'info-gaps'],
+      'attack': ['push-probability', 'timing-windows', 'trade-routes', 'eco-pressure'],
+      'defense': ['clutch-zones', 'utility-coverage', 'info-gaps', 'doors'],
+      'pre-round': ['push-probability', 'timing-windows', 'eco-pressure', 'trade-routes'],
+      'post-plant': ['clutch-zones', 'utility-coverage', 'rotation-predictor', 'info-gaps']
     }
   }
 

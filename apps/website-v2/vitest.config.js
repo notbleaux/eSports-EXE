@@ -12,7 +12,8 @@ export default defineConfig({
       '@hub-2': path.resolve(__dirname, './src/hub-2-rotas'),
       '@hub-3': path.resolve(__dirname, './src/hub-3-arepo'),
       '@hub-4': path.resolve(__dirname, './src/hub-4-opera'),
-      '@hub-5': path.resolve(__dirname, './src/hub-5-tenet')
+      '@hub-5': path.resolve(__dirname, './src/hub-5-tenet'),
+      '@sator/types': path.resolve(__dirname, '../../packages/shared/types')
     }
   },
   test: {

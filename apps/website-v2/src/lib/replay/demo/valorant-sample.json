@@ -1,0 +1,279 @@
+{
+  "_description": "Sample anonymized Valorant match replay for testing",
+  "_schema": "valorant-api-v1",
+  "_generated": "2026-03-23T09:00:00Z",
+  "_agent": "TL-S2-2-A",
+  "matchInfo": {
+    "matchId": "anon-match-001",
+    "mapId": "/Game/Maps/Ascent/Ascent",
+    "gameVersion": "release-09.00",
+    "gameLengthMillis": 2456000,
+    "completionState": "Completed",
+    "seasonId": "52ca6698-41c1-e7de-4008-899e9410581c"
+  },
+  "players": [
+    {
+      "puuid": "anon-player-001",
+      "gameName": "PlayerAlpha",
+      "tagLine": "0001",
+      "teamId": "Blue",
+      "partyId": "party-001",
+      "characterId": "dade69b4-4f5a-8528-247b-219e5a1facd6",
+      "stats": {
+        "score": 4520,
+        "roundsPlayed": 24,
+        "kills": 18,
+        "deaths": 12,
+        "assists": 6
+      },
+      "competitiveTier": 15,
+      "accountLevel": 125
+    },
+    {
+      "puuid": "anon-player-002",
+      "gameName": "PlayerBeta",
+      "tagLine": "0002",
+      "teamId": "Blue",
+      "partyId": "party-001",
+      "characterId": "5f8d3a7f-467b-97f3-062c-13acf203c006",
+      "stats": {
+        "score": 3890,
+        "roundsPlayed": 24,
+        "kills": 14,
+        "deaths": 14,
+        "assists": 8
+      },
+      "competitiveTier": 14,
+      "accountLevel": 98
+    },
+    {
+      "puuid": "anon-player-003",
+      "gameName": "PlayerGamma",
+      "tagLine": "0003",
+      "teamId": "Blue",
+      "partyId": "party-002",
+      "characterId": "f94c3b30-42be-e959-889c-5aa313dba261",
+      "stats": {
+        "score": 5210,
+        "roundsPlayed": 24,
+        "kills": 22,
+        "deaths": 10,
+        "assists": 4
+      },
+      "competitiveTier": 18,
+      "accountLevel": 203
+    },
+    {
+      "puuid": "anon-player-004",
+      "gameName": "PlayerDelta",
+      "tagLine": "0004",
+      "teamId": "Blue",
+      "partyId": "party-002",
+      "characterId": "22697a3d-45bf-8dd7-4fec-84a9e28cf69c",
+      "stats": {
+        "score": 3150,
+        "roundsPlayed": 24,
+        "kills": 11,
+        "deaths": 16,
+        "assists": 7
+      },
+      "competitiveTier": 13,
+      "accountLevel": 76
+    },
+    {
+      "puuid": "anon-player-005",
+      "gameName": "PlayerEcho",
+      "tagLine": "0005",
+      "teamId": "Blue",
+      "partyId": "party-003",
+      "characterId": "601dbbe7-43ce-be57-2a40-4abd24953621",
+      "stats": {
+        "score": 4280,
+        "roundsPlayed": 24,
+        "kills": 16,
+        "deaths": 13,
+        "assists": 9
+      },
+      "competitiveTier": 16,
+      "accountLevel": 156
+    },
+    {
+      "puuid": "anon-player-006",
+      "gameName": "PlayerZeta",
+      "tagLine": "0006",
+      "teamId": "Red",
+      "partyId": "party-004",
+      "characterId": "6f2a04ca-43e0-be17-7f36-b3908627744d",
+      "stats": {
+        "score": 3980,
+        "roundsPlayed": 24,
+        "kills": 15,
+        "deaths": 15,
+        "assists": 6
+      },
+      "competitiveTier": 14,
+      "accountLevel": 112
+    },
+    {
+      "puuid": "anon-player-007",
+      "gameName": "PlayerEta",
+      "tagLine": "0007",
+      "teamId": "Red",
+      "partyId": "party-004",
+      "characterId": "117ed9e3-49f3-6512-3ccf-0cada7e3823b",
+      "stats": {
+        "score": 3650,
+        "roundsPlayed": 24,
+        "kills": 13,
+        "deaths": 17,
+        "assists": 5
+      },
+      "competitiveTier": 13,
+      "accountLevel": 89
+    },
+    {
+      "puuid": "anon-player-008",
+      "gameName": "PlayerTheta",
+      "tagLine": "0008",
+      "teamId": "Red",
+      "partyId": "party-005",
+      "characterId": "320b2a48-4d9b-a075-30f1-1f93a9b638fa",
+      "stats": {
+        "score": 4890,
+        "roundsPlayed": 24,
+        "kills": 19,
+        "deaths": 12,
+        "assists": 7
+      },
+      "competitiveTier": 17,
+      "accountLevel": 178
+    },
+    {
+      "puuid": "anon-player-009",
+      "gameName": "PlayerIota",
+      "tagLine": "0009",
+      "teamId": "Red",
+      "partyId": "party-005",
+      "characterId": "1e58de9c-4950-5125-93e9-a0aee9f98746",
+      "stats": {
+        "score": 3420,
+        "roundsPlayed": 24,
+        "kills": 12,
+        "deaths": 18,
+        "assists": 4
+      },
+      "competitiveTier": 12,
+      "accountLevel": 67
+    },
+    {
+      "puuid": "anon-player-010",
+      "gameName": "PlayerKappa",
+      "tagLine": "0010",
+      "teamId": "Red",
+      "partyId": "party-006",
+      "characterId": "707eab51-4836-f488-046a-cda6bf494859",
+      "stats": {
+        "score": 4120,
+        "roundsPlayed": 24,
+        "kills": 17,
+        "deaths": 14,
+        "assists": 8
+      },
+      "competitiveTier": 15,
+      "accountLevel": 134
+    }
+  ],
+  "teams": [
+    {
+      "teamId": "Blue",
+      "won": true,
+      "roundsPlayed": 24,
+      "roundsWon": 13,
+      "numPoints": 13
+    },
+    {
+      "teamId": "Red",
+      "won": false,
+      "roundsPlayed": 24,
+      "roundsWon": 11,
+      "numPoints": 11
+    }
+  ],
+  "roundResults": [
+    {
+      "roundNum": 1,
+      "roundResult": "Elimination",
+      "roundCeremony": "CeremonyDefault",
+      "winningTeam": "Blue",
+      "bombPlanter": null,
+      "bombDefuser": null,
+      "plantRoundTime": 0,
+      "defuseRoundTime": 0,
+      "playerStats": [
+        {
+          "puuid": "anon-player-001",
+          "kills": [{ "gameTime": 45000, "roundTime": 32000, "killer": "anon-player-001", "victim": "anon-player-006", "weapon": "Vandal" }],
+          "damage": [{ "receiver": "anon-player-006", "damage": 156, "legshots": 0, "bodyshots": 3, "headshots": 1 }],
+          "score": 320,
+          "economy": { "loadoutValue": 3200, "weapon": "Vandal", "armor": "Light Shield", "remaining": 200, "spent": 3300 }
+        }
+      ]
+    },
+    {
+      "roundNum": 2,
+      "roundResult": "Bomb defused",
+      "roundCeremony": "CeremonyDefault",
+      "winningTeam": "Blue",
+      "bombPlanter": "anon-player-006",
+      "bombDefuser": "anon-player-001",
+      "plantRoundTime": 52000,
+      "defuseRoundTime": 78000,
+      "playerStats": []
+    },
+    {
+      "roundNum": 3,
+      "roundResult": "Bomb detonated",
+      "roundCeremony": "CeremonyDefault",
+      "winningTeam": "Red",
+      "bombPlanter": "anon-player-006",
+      "bombDefuser": null,
+      "plantRoundTime": 48000,
+      "defuseRoundTime": 0,
+      "playerStats": []
+    },
+    {
+      "roundNum": 4,
+      "roundResult": "Elimination",
+      "roundCeremony": "CeremonyDefault",
+      "winningTeam": "Red",
+      "bombPlanter": null,
+      "bombDefuser": null,
+      "plantRoundTime": 0,
+      "defuseRoundTime": 0,
+      "playerStats": []
+    },
+    {
+      "roundNum": 5,
+      "roundResult": "Elimination",
+      "roundCeremony": "CeremonyDefault",
+      "winningTeam": "Blue",
+      "bombPlanter": null,
+      "bombDefuser": null,
+      "plantRoundTime": 0,
+      "defuseRoundTime": 0,
+      "playerStats": []
+    }
+  ],
+  "kills": [
+    { "gameTime": 45000, "roundTime": 32000, "round": 1, "killer": "anon-player-001", "victim": "anon-player-006", "assistants": [], "location": { "x": 1250, "y": 850 }, "weapon": "Vandal", "secondaryFireMode": false },
+    { "gameTime": 48000, "roundTime": 35000, "round": 1, "killer": "anon-player-003", "victim": "anon-player-007", "assistants": [], "location": { "x": 1300, "y": 900 }, "weapon": "Phantom", "secondaryFireMode": false },
+    { "gameTime": 52000, "roundTime": 39000, "round": 1, "killer": "anon-player-005", "victim": "anon-player-008", "assistants": ["anon-player-001"], "location": { "x": 1200, "y": 800 }, "weapon": "Spectre", "secondaryFireMode": false },
+    { "gameTime": 55000, "roundTime": 42000, "round": 1, "killer": "anon-player-002", "victim": "anon-player-009", "assistants": [], "location": { "x": 1400, "y": 700 }, "weapon": "Guardian", "secondaryFireMode": false },
+    { "gameTime": 58000, "roundTime": 45000, "round": 1, "killer": "anon-player-004", "victim": "anon-player-010", "assistants": ["anon-player-003"], "location": { "x": 1100, "y": 950 }, "weapon": "Sheriff", "secondaryFireMode": false },
+    { "gameTime": 145000, "roundTime": 28000, "round": 2, "killer": "anon-player-008", "victim": "anon-player-002", "assistants": [], "location": { "x": 950, "y": 600 }, "weapon": "Vandal", "secondaryFireMode": false },
+    { "gameTime": 152000, "roundTime": 35000, "round": 2, "killer": "anon-player-006", "victim": "anon-player-003", "assistants": [], "location": { "x": 1000, "y": 650 }, "weapon": "Phantom", "secondaryFireMode": false },
+    { "gameTime": 245000, "roundTime": 22000, "round": 3, "killer": "anon-player-003", "victim": "anon-player-008", "assistants": [], "location": { "x": 1350, "y": 750 }, "weapon": "Operator", "secondaryFireMode": false },
+    { "gameTime": 252000, "roundTime": 29000, "round": 3, "killer": "anon-player-001", "victim": "anon-player-009", "assistants": [], "location": { "x": 1250, "y": 850 }, "weapon": "Vandal", "secondaryFireMode": true },
+    { "gameTime": 345000, "roundTime": 18000, "round": 4, "killer": "anon-player-008", "victim": "anon-player-001", "assistants": [], "location": { "x": 1150, "y": 700 }, "weapon": "Marshal", "secondaryFireMode": false }
+  ]
+}

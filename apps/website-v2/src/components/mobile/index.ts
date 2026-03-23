@@ -1,6 +1,6 @@
 /**
  * Mobile Components Index
- * [Ver001.000] - PWA Mobile UI Components
+ * [Ver002.000] - PWA Mobile UI Components
  * 
  * Export all mobile-specific components for the 4NJZ4 TENET Platform.
  * These components are optimized for touch interactions and PWA experiences.
@@ -14,6 +14,10 @@ export {
   TouchFeedbackButton, 
   TouchFeedbackCard 
 } from './TouchFeedback';
+export { 
+  GestureDemo,
+  CompactGestureDemo,
+} from './GestureDemo';
 
 // Default exports for convenience
 export { default } from './BottomNavigation';

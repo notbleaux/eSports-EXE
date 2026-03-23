@@ -1,0 +1,60 @@
+name: Agent Health Check
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check Agent Heartbeats
+        id: heartbeats
+        run: |
+          echo "## Agent Health Check Report" > health_report.md
+          echo "**Timestamp:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> health_report.md
+          echo "" >> health_report.md
+          
+          # Check for agent completion reports
+          COMPLETED=$(find .job-board/02_CLAIMED -name "COMPLETION_REPORT.md" 2>/dev/null | wc -l)
+          echo "- Completed Reports: $COMPLETED" >> health_report.md
+          
+          # Check for active agents (directories with WORK_IN_PROGRESS)
+          ACTIVE=$(find .job-board/02_CLAIMED -name "WORK_IN_PROGRESS.md" 2>/dev/null | wc -l)
+          echo "- Active Agents: $ACTIVE" >> health_report.md
+          
+          # Check for blocked agents
+          BLOCKED=$(find .job-board/04_BLOCKS -name "*.md" 2>/dev/null | wc -l)
+          echo "- Blocked Agents: $BLOCKED" >> health_report.md
+          
+          # Check spawn logs for errors
+          ERROR_COUNT=$(grep -r "\[ERROR\]" .job-board/SPAWN_LOGS/ 2>/dev/null | wc -l || echo "0")
+          echo "- Recent Errors: $ERROR_COUNT" >> health_report.md
+          
+          echo "health_status=healthy" >> $GITHUB_OUTPUT
+          if [ $BLOCKED -gt 3 ] || [ $ERROR_COUNT -gt 5 ]; then
+            echo "health_status=degraded" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Update Dashboard
+        run: |
+          # Update the spawn dashboard timestamp
+          sed -i "s/Last Updated:.*/Last Updated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")/" .job-board/SPAWN_DASHBOARD.md || true
+          
+      - name: Post to Discord (if issues)
+        if: steps.heartbeats.outputs.health_status == 'degraded'
+        run: |
+          echo "Health degraded - notifying Foreman"
+          # Discord webhook would go here
+          
+      - name: Commit Health Report
+        run: |
+          git config user.name "Agent Monitor"
+          git config user.email "monitor@libre-x.dev"
+          git add .job-board/SPAWN_DASHBOARD.md || true
+          git add health_report.md || true
+          git commit -m "[AUTO] Health check - $(date -u +"%H:%M")" || echo "No changes"
+          git push || echo "No changes to push"

@@ -1,0 +1,90 @@
+name: Twice-Daily Kimi Agent Check
+
+on:
+  schedule:
+    - cron: '0 9 * * *'   # 09:00 UTC
+    - cron: '0 21 * * *'  # 21:00 UTC
+  workflow_dispatch:
+    inputs:
+      check_type:
+        description: 'Morning or Evening check'
+        required: true
+        default: 'morning'
+
+jobs:
+  morning-check:
+    if: github.event.schedule == '0 9 * * *' || github.event.inputs.check_type == 'morning'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Morning Verification Routine
+        run: |
+          echo "## Morning Agent Check - $(date -u +"%Y-%m-%d")" > .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "### Overnight Activity" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          
+          # Find agents that completed overnight
+          COMPLETED_LAST_12H=$(find .job-board/02_CLAIMED -name "COMPLETION_REPORT.md" -mtime -0.5 2>/dev/null | wc -l)
+          echo "- Agents Completed (last 12h): $COMPLETED_LAST_12H" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          
+          # Check for overnight blocks
+          OVERNIGHT_BLOCKS=$(find .job-board/04_BLOCKS -name "*.md" -mtime -0.5 2>/dev/null | wc -l)
+          echo "- New Blocks: $OVERNIGHT_BLOCKS" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          
+          echo "" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "### Today's Queue" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          
+          # Count agents ready to spawn
+          QUEUED=$(find .job-board/01_LISTINGS/ACTIVE -name "*.md" 2>/dev/null | wc -l)
+          echo "- Directives Ready: $QUEUED" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          
+          echo "" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "### Action Items" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "- [ ] Review overnight completions" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "- [ ] Address any new blocks" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          echo "- [ ] Prepare daily spawn schedule" >> .job-board/CHECKS/morning_$(date -u +"%Y%m%d").md
+          
+      - name: Notify Foreman
+        run: |
+          echo "Morning check complete - Foreman should review"
+          # Notification would go here
+          
+  evening-check:
+    if: github.event.schedule == '0 21 * * *' || github.event.inputs.check_type == 'evening'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Evening Verification Routine
+        run: |
+          echo "## Evening Agent Check - $(date -u +"%Y-%m-%d")" > .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "### Daily Summary" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          
+          # Daily stats
+          COMPLETED_TODAY=$(find .job-board/02_CLAIMED -name "COMPLETION_REPORT.md" -mtime -1 2>/dev/null | wc -l)
+          echo "- Agents Completed Today: $COMPLETED_TODAY" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          
+          SPAWNED_TODAY=$(grep "SPAWN_START" .job-board/SPAWN_LOGS/*.log 2>/dev/null | grep "$(date -u +"%Y-%m-%d")" | wc -l || echo "0")
+          echo "- Agents Spawned Today: $SPAWNED_TODAY" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          
+          echo "" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "### Active Agents" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          
+          ACTIVE=$(find .job-board/02_CLAIMED -name "WORK_IN_PROGRESS.md" 2>/dev/null | wc -l)
+          echo "- Currently Active: $ACTIVE" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          
+          echo "" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "### Tomorrow's Plan" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "- [ ] Morning spawn queue ready" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "- [ ] TL pre-reviews submitted" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          echo "- [ ] Resource check passed" >> .job-board/CHECKS/evening_$(date -u +"%Y%m%d").md
+          
+      - name: Commit Check Reports
+        run: |
+          git config user.name "Agent Monitor"
+          git config user.email "monitor@libre-x.dev"
+          git add .job-board/CHECKS/ || true
+          git commit -m "[AUTO] $(date -u +"%H:%M") check - $(date -u +"%Y-%m-%d")" || echo "No changes"
+          git push || echo "No changes to push"

@@ -1,0 +1,21 @@
+{
+  "name": "@sator/types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for SATOR platform",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./help": "./help/index.ts"
+  },
+  "files": [
+    "**/*.ts"
+  ],
+  "keywords": [
+    "sator",
+    "types",
+    "typescript"
+  ],
+  "license": "MIT"
+}
