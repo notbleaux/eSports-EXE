@@ -2,26 +2,40 @@
  * Cat in Bunny Onesie - Dropout Style Animations
  * Playful, mischievous animations for the tuxedo cat in pink bunny onesie
  * 
- * Features:
- * - Mischievous ear wiggle
- * - Onesie bounce
- * - Eye sparkle animation
- * - Tail peek from onesie
+ * [Ver002.000] - Improved easing and spring physics
  */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.cat-dropout-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-playful: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --ease-mischief: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+}
 
 /* ===== IDLE ANIMATION ===== */
 @keyframes cat-dropout-idle {
   0%, 100% {
-    transform: translateY(0) rotate(0deg);
+    transform: scale(1) translateY(0) rotate(0deg);
   }
   25% {
-    transform: translateY(-3px) rotate(-0.5deg);
+    transform: scale(1.01) translateY(-3px) rotate(-0.5deg);
   }
   50% {
-    transform: translateY(0) rotate(0deg);
+    transform: scale(1.02) translateY(0) rotate(0deg);
   }
   75% {
-    transform: translateY(-2px) rotate(0.5deg);
+    transform: scale(1.01) translateY(-2px) rotate(0.5deg);
   }
 }
 
@@ -50,39 +64,19 @@
 }
 
 @keyframes cat-dropout-ear-wiggle-left {
-  0%, 100% {
-    transform: rotate(-10deg);
-  }
-  10% {
-    transform: rotate(-15deg);
-  }
-  20% {
-    transform: rotate(-8deg);
-  }
-  30% {
-    transform: rotate(-12deg);
-  }
-  40%, 90% {
-    transform: rotate(-10deg);
-  }
+  0%, 100% { transform: rotate(-10deg); }
+  10% { transform: rotate(-15deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(-12deg); }
+  40%, 90% { transform: rotate(-10deg); }
 }
 
 @keyframes cat-dropout-ear-wiggle-right {
-  0%, 100% {
-    transform: rotate(10deg);
-  }
-  15% {
-    transform: rotate(15deg);
-  }
-  25% {
-    transform: rotate(8deg);
-  }
-  35% {
-    transform: rotate(12deg);
-  }
-  45%, 90% {
-    transform: rotate(10deg);
-  }
+  0%, 100% { transform: rotate(10deg); }
+  15% { transform: rotate(15deg); }
+  25% { transform: rotate(8deg); }
+  35% { transform: rotate(12deg); }
+  45%, 90% { transform: rotate(10deg); }
 }
 
 @keyframes cat-dropout-eye-sparkle {
@@ -122,131 +116,68 @@
 }
 
 @keyframes cat-dropout-mischief-eyes {
-  0%, 100% {
-    transform: scaleY(1);
-  }
-  10%, 30%, 50% {
-    transform: scaleY(0.3);
-  }
-  20%, 40%, 60% {
-    transform: scaleY(1);
-  }
+  0%, 100% { transform: scaleY(1); }
+  10%, 30%, 50% { transform: scaleY(0.3); }
+  20%, 40%, 60% { transform: scaleY(1); }
 }
 
 @keyframes cat-dropout-mischief-brow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  25% {
-    transform: translateY(-3px);
-  }
-  50% {
-    transform: translateY(1px);
-  }
-  75% {
-    transform: translateY(-2px);
-  }
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-3px); }
+  50% { transform: translateY(1px); }
+  75% { transform: translateY(-2px); }
 }
 
 /* ===== PEEKABOO ANIMATION ===== */
 @keyframes cat-dropout-peekaboo {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  20% {
-    transform: translateY(15px);
-  }
-  40% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-  60% {
-    transform: translateY(0);
-  }
-  70% {
-    transform: translateY(8px);
-  }
-  80% {
-    transform: translateY(0);
-  }
+  0%, 100% { transform: translateY(0); }
+  20% { transform: translateY(15px); }
+  40% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+  60% { transform: translateY(0); }
+  70% { transform: translateY(8px); }
+  80% { transform: translateY(0); }
 }
 
 @keyframes cat-dropout-peekaboo-ears {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  20% {
-    transform: translateY(-20px);
-  }
-  40% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-  60% {
-    transform: translateY(0);
-  }
-  70% {
-    transform: translateY(-12px);
-  }
-  80% {
-    transform: translateY(0);
-  }
+  0%, 100% { transform: translateY(0); }
+  20% { transform: translateY(-20px); }
+  40% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  60% { transform: translateY(0); }
+  70% { transform: translateY(-12px); }
+  80% { transform: translateY(0); }
 }
 
-/* ===== CELEBRATE ANIMATION ===== */
+/* ===== CELEBRATION WITH SPRING PHYSICS ===== */
 @keyframes cat-dropout-celebrate {
   0%, 100% {
     transform: translateY(0) scale(1);
   }
-  10% {
+  15% {
     transform: translateY(-15px) scale(1.05);
   }
-  20% {
-    transform: translateY(0) scale(1);
-  }
   30% {
+    transform: translateY(0) scale(0.98);
+  }
+  45% {
     transform: translateY(-20px) scale(1.08);
   }
-  40% {
-    transform: translateY(0) scale(1);
+  60% {
+    transform: translateY(0) scale(0.95);
   }
-  50% {
+  75% {
     transform: translateY(-10px) scale(1.03);
-  }
-  60%, 80% {
-    transform: translateY(-5px) scale(1.02);
-  }
-  70% {
-    transform: translateY(-12px) scale(1.05);
-  }
-  90% {
-    transform: translateY(-3px) scale(1.01);
   }
 }
 
 @keyframes cat-dropout-celebrate-paws {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  10%, 30% {
-    transform: rotate(-20deg);
-  }
-  20%, 40% {
-    transform: rotate(-30deg);
-  }
-  50% {
-    transform: rotate(-15deg);
-  }
-  60%, 80% {
-    transform: rotate(-10deg);
-  }
-  70% {
-    transform: rotate(-25deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-20deg); }
+  20%, 40% { transform: rotate(-30deg); }
+  50% { transform: rotate(-15deg); }
+  60%, 80% { transform: rotate(-10deg); }
+  70% { transform: rotate(-25deg); }
 }
 
 @keyframes cat-dropout-celebrate-onesie {
@@ -266,94 +197,89 @@
 
 /* ===== UTILITY CLASSES ===== */
 
-/* Container */
-.cat-dropout-container {
-  display: inline-block;
-  transform-origin: center bottom;
-}
-
 /* Idle state */
 .cat-dropout-idle {
-  animation: cat-dropout-idle 2s ease-in-out infinite;
+  animation: cat-dropout-idle 2s var(--ease-in-out) infinite;
 }
 
 .cat-dropout-idle .onesie {
-  animation: cat-dropout-onesie-bounce 1s ease-in-out infinite;
+  animation: cat-dropout-onesie-bounce 1s var(--ease-in-out) infinite;
   transform-origin: center center;
 }
 
 .cat-dropout-idle .tail {
-  animation: cat-dropout-tail-peek 3s ease-in-out infinite;
+  animation: cat-dropout-tail-peek 3s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 .cat-dropout-idle .bunny-ears {
-  animation: cat-dropout-ear-wiggle-left 4s ease-in-out infinite;
+  animation: cat-dropout-ear-wiggle-left 4s var(--ease-in-out) infinite;
   transform-origin: center center;
 }
 
 .cat-dropout-idle .eye-left,
 .cat-dropout-idle .eye-right {
-  animation: cat-dropout-eye-sparkle 3s ease-in-out infinite;
+  animation: cat-dropout-eye-sparkle 3s var(--ease-in-out) infinite;
 }
 
 /* Mischief state */
 .cat-dropout-mischief {
-  animation: cat-dropout-mischief 2s ease-in-out;
+  animation: cat-dropout-mischief 2s var(--ease-mischief);
 }
 
 .cat-dropout-mischief .eye-left,
 .cat-dropout-mischief .eye-right {
-  animation: cat-dropout-mischief-eyes 2s ease-in-out;
+  animation: cat-dropout-mischief-eyes 2s var(--ease-in-out);
   transform-origin: center center;
 }
 
 .cat-dropout-mischief .head {
-  animation: cat-dropout-mischief-brow 1.5s ease-in-out infinite;
+  animation: cat-dropout-mischief-brow 1.5s var(--ease-in-out) infinite;
 }
 
 .cat-dropout-mischief .tail {
-  animation: cat-dropout-tail-peek 0.5s ease-in-out infinite;
+  animation: cat-dropout-tail-peek 0.5s var(--ease-in-out) infinite;
 }
 
 /* Peekaboo state */
 .cat-dropout-peekaboo {
-  animation: cat-dropout-peekaboo 2s ease-in-out;
+  animation: cat-dropout-peekaboo 2s var(--ease-playful);
 }
 
 .cat-dropout-peekaboo .head {
-  animation: cat-dropout-peekaboo 2s ease-in-out;
+  animation: cat-dropout-peekaboo 2s var(--ease-playful);
 }
 
 .cat-dropout-peekaboo .bunny-ears {
-  animation: cat-dropout-peekaboo-ears 2s ease-in-out;
+  animation: cat-dropout-peekaboo-ears 2s var(--ease-elastic);
 }
 
-/* Celebrate state */
+/* Celebrate state with spring */
 .cat-dropout-celebrate {
-  animation: cat-dropout-celebrate 1.5s ease-in-out;
+  animation: cat-dropout-celebrate 1.5s var(--ease-spring);
 }
 
 .cat-dropout-celebrate .arm-left,
 .cat-dropout-celebrate .arm-right {
-  animation: cat-dropout-celebrate-paws 1.5s ease-in-out;
+  animation: cat-dropout-celebrate-paws 1.5s var(--ease-spring);
   transform-origin: top center;
 }
 
 .cat-dropout-celebrate .onesie {
-  animation: cat-dropout-celebrate-onesie 1.5s ease-in-out;
+  animation: cat-dropout-celebrate-onesie 1.5s var(--ease-in-out);
   transform-origin: center center;
 }
 
 /* ===== HOVER EFFECTS ===== */
 .cat-dropout-container:hover {
   filter: brightness(1.05);
+  transition: filter 0.3s var(--ease-out);
 }
 
 .cat-dropout-container:hover .eye-left,
 .cat-dropout-container:hover .eye-right {
   filter: brightness(1.2) drop-shadow(0 0 4px #00B4D8);
-  transition: filter 0.3s ease;
+  transition: filter 0.3s var(--ease-out);
 }
 
 .cat-dropout-container:hover .onesie {
@@ -361,30 +287,36 @@
 }
 
 /* ===== SIZE VARIANTS ===== */
-.cat-dropout-size-32 {
-  width: 32px;
-  height: 32px;
+.cat-dropout-size-32 { width: 32px; height: 32px; }
+.cat-dropout-size-64 { width: 64px; height: 64px; }
+.cat-dropout-size-128 { width: 128px; height: 128px; }
+.cat-dropout-size-256 { width: 256px; height: 256px; }
+.cat-dropout-size-512 { width: 512px; height: 512px; }
+
+/* ===== ENTRANCE ANIMATION ===== */
+@keyframes cat-dropout-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-.cat-dropout-size-64 {
-  width: 64px;
-  height: 64px;
+.cat-dropout-enter {
+  animation: cat-dropout-enter 0.5s var(--ease-spring) forwards;
 }
 
-.cat-dropout-size-128 {
-  width: 128px;
-  height: 128px;
-}
-
-.cat-dropout-size-256 {
-  width: 256px;
-  height: 256px;
-}
-
-.cat-dropout-size-512 {
-  width: 512px;
-  height: 512px;
-}
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .cat-dropout-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .cat-dropout-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .cat-dropout-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .cat-dropout-container:nth-child(4) { animation-delay: 150ms; }
 
 /* ===== RESPONSIVE ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -405,7 +337,13 @@
   .cat-dropout-celebrate,
   .cat-dropout-celebrate .arm-left,
   .cat-dropout-celebrate .arm-right,
-  .cat-dropout-celebrate .onesie {
+  .cat-dropout-celebrate .onesie,
+  .cat-dropout-enter {
     animation: none;
+  }
+  
+  .cat-dropout-enter {
+    opacity: 1;
+    transform: none;
   }
 }

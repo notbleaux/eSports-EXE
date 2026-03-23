@@ -19,7 +19,9 @@
     "test:visual:fox": "playwright test --config=playwright-visual.config.ts -g 'Fox'",
     "test:visual:bear": "playwright test --config=playwright-visual.config.ts -g 'Dropout Bear'",
     "test:visual:bunny": "playwright test --config=playwright-visual.config.ts -g 'NJ Bunny'",
-    "test:visual:baseline:generate": "node tests/visual/scripts/generate-baselines.js"
+    "test:visual:baseline:generate": "node tests/visual/scripts/generate-baselines.js",
+    "analyze:bundle": "node scripts/analyze-bundle.js",
+    "build:analyze": "npm run build && npm run analyze:bundle"
   },
   "dependencies": {
     "@gsap/react": "^2.0.0",

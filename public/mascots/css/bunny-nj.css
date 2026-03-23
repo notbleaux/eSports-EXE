@@ -1,17 +1,50 @@
 /**
  * NJ Bunny CSS Animations
  * 5 variants: classic-blue, attention, hype-boy, cookie, ditto
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.bunny-nj-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-playful: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+.bunny-nj-container svg {
+  overflow: visible;
+}
 
 /* ===== BASE ANIMATIONS ===== */
 @keyframes bunny-nj-idle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
+  0%, 100% { 
+    transform: scale(1) translateY(0);
+  }
+  50% { 
+    transform: scale(1.02) translateY(-2px);
+  }
 }
 
 @keyframes bunny-nj-line-pulse {
-  0%, 100% { stroke-opacity: 1; stroke-width: 2px; }
-  50% { stroke-opacity: 0.8; stroke-width: 2.2px; }
+  0%, 100% { 
+    stroke-opacity: 1; 
+    stroke-width: 2px; 
+  }
+  50% { 
+    stroke-opacity: 0.8; 
+    stroke-width: 2.2px; 
+  }
 }
 
 @keyframes bunny-nj-ear-flop {
@@ -27,7 +60,7 @@
   96% { transform: rotate(-3deg); }
 }
 
-/* ===== WAVE ANIMATION ===== */
+/* ===== WAVE ANIMATION WITH SPRING ===== */
 @keyframes bunny-nj-wave {
   0%, 100% { transform: rotate(0deg); }
   15% { transform: rotate(-25deg); }
@@ -38,24 +71,39 @@
   90% { transform: rotate(0deg); }
 }
 
-/* ===== CELEBRATION ===== */
+/* ===== CELEBRATION WITH SPRING PHYSICS ===== */
 @keyframes bunny-nj-celebrate {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  12.5% { transform: translateY(-12px) rotate(-2deg); }
-  25% { transform: translateY(0) rotate(0deg); }
-  37.5% { transform: translateY(-16px) rotate(2deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  62.5% { transform: translateY(-10px) rotate(-1deg); }
-  75% { transform: translateY(0) rotate(0deg); }
-  87.5% { transform: translateY(-8px) rotate(1deg); }
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+  }
+  25% { 
+    transform: translateY(-20px) scale(1.1);
+  }
+  50% { 
+    transform: translateY(0) scale(0.95);
+  }
+  75% { 
+    transform: translateY(-10px) scale(1.05);
+  }
 }
 
 /* ===== VARIANT: ATTENTION ===== */
 @keyframes bunny-attention-bounce {
-  0%, 100% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-8px) scale(1.02); }
-  60% { transform: translateY(0) scale(0.98); }
-  80% { transform: translateY(-4px) scale(1.01); }
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+  }
+  20% { 
+    transform: translateY(2px) scale(0.98);
+  }
+  40% { 
+    transform: translateY(-8px) scale(1.02);
+  }
+  60% { 
+    transform: translateY(0) scale(0.98);
+  }
+  80% { 
+    transform: translateY(-4px) scale(1.01);
+  }
 }
 
 @keyframes bunny-attention-ears {
@@ -68,16 +116,30 @@
 
 /* ===== VARIANT: HYPE-BOY ===== */
 @keyframes bunny-hype-bounce {
-  0%, 100% { transform: translateY(0); }
-  25% { transform: translateY(-6px); }
-  50% { transform: translateY(0); }
-  75% { transform: translateY(-3px); }
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+  }
+  25% { 
+    transform: translateY(-6px) scale(1.02);
+  }
+  50% { 
+    transform: translateY(0) scale(0.98);
+  }
+  75% { 
+    transform: translateY(-3px) scale(1.01);
+  }
 }
 
 /* ===== VARIANT: COOKIE ===== */
 @keyframes bunny-cookie-shy {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  50% { transform: translateY(2px) rotate(1deg); opacity: 0.9; }
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(2px) rotate(1deg);
+    opacity: 0.9;
+  }
 }
 
 @keyframes bunny-cookie-ears-down {
@@ -87,50 +149,50 @@
 
 /* ===== VARIANT: DITTO ===== */
 @keyframes bunny-ditto-morph {
-  0%, 100% { transform: scaleY(1) scaleX(1); }
-  25% { transform: scaleY(0.95) scaleX(1.05); }
-  50% { transform: scaleY(1.02) scaleX(0.98); }
-  75% { transform: scaleY(0.98) scaleX(1.02); }
+  0%, 100% { 
+    transform: scaleY(1) scaleX(1);
+  }
+  25% { 
+    transform: scaleY(0.95) scaleX(1.05);
+  }
+  50% { 
+    transform: scaleY(1.02) scaleX(0.98);
+  }
+  75% { 
+    transform: scaleY(0.98) scaleX(1.02);
+  }
 }
 
 /* ===== UTILITY CLASSES ===== */
-.bunny-nj-container {
-  display: inline-block;
-  transform-origin: center bottom;
-}
 
-.bunny-nj-container svg {
-  overflow: visible;
-}
-
-/* Idle state */
+/* Idle state with smooth easing */
 .bunny-nj-idle {
-  animation: bunny-nj-idle 2s ease-in-out infinite;
+  animation: bunny-nj-idle 2s var(--ease-in-out) infinite;
 }
 
 .bunny-nj-idle svg {
-  animation: bunny-nj-line-pulse 2s ease-in-out infinite;
+  animation: bunny-nj-line-pulse 2s var(--ease-in-out) infinite;
 }
 
 .bunny-nj-idle .ear-left {
-  animation: bunny-nj-ear-flop 3s ease-in-out infinite;
+  animation: bunny-nj-ear-flop 3s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 .bunny-nj-idle .ear-right {
-  animation: bunny-nj-ear-twitch-left 5s ease-in-out infinite;
+  animation: bunny-nj-ear-twitch-left 5s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
-/* Wave state */
+/* Wave state with spring */
 .bunny-nj-wave .paw-right {
-  animation: bunny-nj-wave 0.8s ease-in-out;
+  animation: bunny-nj-wave 0.8s var(--ease-spring);
   transform-origin: center center;
 }
 
-/* Celebrate state */
+/* Celebrate state with spring */
 .bunny-nj-celebrate {
-  animation: bunny-nj-celebrate 1.2s ease-in-out;
+  animation: bunny-nj-celebrate 1.2s var(--ease-spring);
 }
 
 /* ===== VARIANT CLASSES ===== */
@@ -139,30 +201,30 @@
 }
 
 .bunny-nj-attention {
-  animation: bunny-attention-bounce 0.8s ease-in-out;
+  animation: bunny-attention-bounce 0.8s var(--ease-spring);
 }
 
 .bunny-nj-attention .ears {
-  animation: bunny-attention-ears 0.8s ease-in-out;
+  animation: bunny-attention-ears 0.8s var(--ease-elastic);
   transform-origin: center center;
 }
 
 .bunny-nj-hype-boy {
-  animation: bunny-hype-bounce 0.4s ease-in-out infinite;
+  animation: bunny-hype-bounce 0.4s var(--ease-playful) infinite;
 }
 
 .bunny-nj-cookie {
-  animation: bunny-cookie-shy 2s ease-in-out infinite;
+  animation: bunny-cookie-shy 2s var(--ease-in-out) infinite;
 }
 
 .bunny-nj-cookie .ear-left,
 .bunny-nj-cookie .ear-right {
-  animation: bunny-cookie-ears-down 2s ease-in-out infinite;
+  animation: bunny-cookie-ears-down 2s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 .bunny-nj-ditto {
-  animation: bunny-ditto-morph 3s ease-in-out infinite;
+  animation: bunny-ditto-morph 3s var(--ease-in-out) infinite;
 }
 
 /* ===== SIZE VARIANTS ===== */
@@ -182,8 +244,38 @@
 /* ===== HOVER EFFECTS ===== */
 .bunny-nj-container:hover svg {
   filter: drop-shadow(0 0 6px rgba(0, 0, 255, 0.4));
-  transition: filter 0.3s ease;
+  transition: filter 0.3s var(--ease-out);
 }
+
+.bunny-nj-container:hover .ear-left,
+.bunny-nj-container:hover .ear-right {
+  animation-duration: 1s;
+}
+
+/* ===== ENTRANCE ANIMATION ===== */
+@keyframes bunny-nj-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.bunny-nj-enter {
+  animation: bunny-nj-enter 0.5s var(--ease-spring) forwards;
+}
+
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .bunny-nj-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .bunny-nj-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .bunny-nj-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .bunny-nj-container:nth-child(4) { animation-delay: 150ms; }
 
 /* ===== RESPONSIVE ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -199,7 +291,13 @@
   .bunny-nj-cookie,
   .bunny-nj-cookie .ear-left,
   .bunny-nj-cookie .ear-right,
-  .bunny-nj-ditto {
+  .bunny-nj-ditto,
+  .bunny-nj-enter {
     animation: none;
+  }
+  
+  .bunny-nj-enter {
+    opacity: 1;
+    transform: none;
   }
 }

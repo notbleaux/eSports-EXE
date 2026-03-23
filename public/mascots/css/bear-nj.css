@@ -1,17 +1,49 @@
 /**
  * NJ Style Bear CSS Animations
  * Simple line art bear in NJ style
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.bear-nj-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+.bear-nj-container svg {
+  overflow: visible;
+}
 
 /* ===== BASE ANIMATIONS ===== */
 @keyframes bear-nj-idle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
+  0%, 100% { 
+    transform: scale(1) translateY(0);
+  }
+  50% { 
+    transform: scale(1.02) translateY(-2px);
+  }
 }
 
 @keyframes bear-nj-line-pulse {
-  0%, 100% { stroke-opacity: 1; }
-  50% { stroke-opacity: 0.85; }
+  0%, 100% { 
+    stroke-opacity: 1;
+    stroke-width: 2px;
+  }
+  50% { 
+    stroke-opacity: 0.85;
+    stroke-width: 2.2px;
+  }
 }
 
 @keyframes bear-nj-ear-twitch {
@@ -24,60 +56,52 @@
 /* ===== WAVE ANIMATION ===== */
 @keyframes bear-nj-wave {
   0%, 100% { transform: rotate(0deg); }
-  15% { transform: rotate(-20deg); }
-  30% { transform: rotate(0deg); }
-  45% { transform: rotate(-20deg); }
-  60% { transform: rotate(0deg); }
-  75% { transform: rotate(-10deg); }
-  90% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
 }
 
-/* ===== CELEBRATION ===== */
+/* ===== CELEBRATION WITH SPRING PHYSICS ===== */
 @keyframes bear-nj-celebrate {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  12.5% { transform: translateY(-10px) rotate(-2deg); }
-  25% { transform: translateY(0) rotate(0deg); }
-  37.5% { transform: translateY(-14px) rotate(2deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  62.5% { transform: translateY(-8px) rotate(-1deg); }
-  75% { transform: translateY(0) rotate(0deg); }
-  87.5% { transform: translateY(-6px) rotate(1deg); }
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+  }
+  25% { 
+    transform: translateY(-20px) scale(1.1);
+  }
+  50% { 
+    transform: translateY(0) scale(0.95);
+  }
+  75% { 
+    transform: translateY(-10px) scale(1.05);
+  }
 }
 
 /* ===== UTILITY CLASSES ===== */
-.bear-nj-container {
-  display: inline-block;
-  transform-origin: center bottom;
-}
 
-.bear-nj-container svg {
-  overflow: visible;
-}
-
-/* Idle state */
+/* Idle state with smooth breathing */
 .bear-nj-idle {
-  animation: bear-nj-idle 2.5s ease-in-out infinite;
+  animation: bear-nj-idle 2.5s var(--ease-in-out) infinite;
 }
 
 .bear-nj-idle svg {
-  animation: bear-nj-line-pulse 2s ease-in-out infinite;
+  animation: bear-nj-line-pulse 2s var(--ease-in-out) infinite;
 }
 
 .bear-nj-idle .ear-left,
 .bear-nj-idle .ear-right {
-  animation: bear-nj-ear-twitch 6s ease-in-out infinite;
+  animation: bear-nj-ear-twitch 6s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
-/* Wave state */
+/* Wave state with spring physics */
 .bear-nj-wave .paw-right {
-  animation: bear-nj-wave 0.8s ease-in-out;
+  animation: bear-nj-wave 0.8s var(--ease-spring);
   transform-origin: center center;
 }
 
-/* Celebrate state */
+/* Celebrate state with spring */
 .bear-nj-celebrate {
-  animation: bear-nj-celebrate 1.2s ease-in-out;
+  animation: bear-nj-celebrate 1.2s var(--ease-spring);
 }
 
 /* ===== SIZE VARIANTS ===== */
@@ -97,8 +121,38 @@
 /* ===== HOVER EFFECTS ===== */
 .bear-nj-container:hover svg {
   filter: drop-shadow(0 0 6px rgba(0, 0, 255, 0.4));
-  transition: filter 0.3s ease;
+  transition: filter 0.3s var(--ease-out);
 }
+
+.bear-nj-container:hover .ear-left,
+.bear-nj-container:hover .ear-right {
+  animation: bear-nj-ear-twitch 0.5s var(--ease-in-out) infinite;
+}
+
+/* ===== ENTRANCE ANIMATION ===== */
+@keyframes bear-nj-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.bear-nj-enter {
+  animation: bear-nj-enter 0.5s var(--ease-spring) forwards;
+}
+
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .bear-nj-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .bear-nj-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .bear-nj-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .bear-nj-container:nth-child(4) { animation-delay: 150ms; }
 
 /* ===== RESPONSIVE ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -107,7 +161,13 @@
   .bear-nj-idle .ear-left,
   .bear-nj-idle .ear-right,
   .bear-nj-wave .paw-right,
-  .bear-nj-celebrate {
+  .bear-nj-celebrate,
+  .bear-nj-enter {
     animation: none;
+  }
+  
+  .bear-nj-enter {
+    opacity: 1;
+    transform: none;
   }
 }

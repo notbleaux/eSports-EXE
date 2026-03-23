@@ -2,148 +2,165 @@
  * Hawk NJ Style CSS Animations
  * Features: Sharp head turn
  * Style: Sleek outline, precision lines
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
 
-/* Base hawk container */
-.hawk-nj {
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.hawk-nj-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  
   display: inline-block;
   position: relative;
-  transition: transform 0.3s ease;
+  will-change: transform;
 }
 
-/* Sharp head turn animation */
+/* Sharp head turn animation with snappy easing */
 @keyframes hawkNJHeadTurn {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  20% {
-    transform: rotate(-8deg);
-  }
-  40% {
-    transform: rotate(5deg);
-  }
-  60% {
-    transform: rotate(-3deg);
-  }
-  80% {
-    transform: rotate(2deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(5deg); }
+  60% { transform: rotate(-3deg); }
+  80% { transform: rotate(2deg); }
 }
 
-/* Quick alert snap */
+/* Quick alert snap with spring */
 @keyframes hawkNJAlertSnap {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  30% {
-    transform: rotate(-15deg);
-  }
-  60% {
-    transform: rotate(10deg);
-  }
-  80% {
-    transform: rotate(-5deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-15deg); }
+  60% { transform: rotate(10deg); }
+  80% { transform: rotate(-5deg); }
 }
 
 /* Body tension animation */
 @keyframes hawkNJBodyTension {
   0%, 100% {
-    transform: scale(1, 1);
+    transform: scale(1, 1) translateY(0);
   }
   50% {
-    transform: scale(1.01, 0.99);
+    transform: scale(1.01, 0.99) translateY(-1px);
   }
 }
 
 /* Line pulse animation */
 @keyframes hawkNJLinePulse {
+  0%, 100% { stroke-opacity: 1; }
+  50% { stroke-opacity: 0.7; }
+}
+
+/* Idle float with breathing */
+@keyframes hawkNJFloat {
   0%, 100% {
-    stroke-opacity: 1;
+    transform: scale(1) translateY(0);
   }
   50% {
-    stroke-opacity: 0.7;
+    transform: scale(1.01) translateY(-2px);
   }
 }
 
-/* Hover state */
-.hawk-nj:hover {
+/* Hover state - intensified animations */
+.hawk-nj-container:hover {
   transform: scale(1.03);
+  transition: transform 0.3s var(--ease-spring);
 }
 
-.hawk-nj:hover .hawk-head {
-  animation: hawkNJHeadTurn 2s ease-in-out infinite;
+.hawk-nj-container:hover .hawk-head {
+  animation: hawkNJHeadTurn 2s var(--ease-in-out) infinite;
   transform-origin: center 30%;
 }
 
-.hawk-nj:hover svg path,
-.hawk-nj:hover svg ellipse,
-.hawk-nj:hover svg circle {
-  animation: hawkNJLinePulse 2s ease-in-out infinite;
+.hawk-nj-container:hover svg path,
+.hawk-nj-container:hover svg ellipse,
+.hawk-nj-container:hover svg circle {
+  animation: hawkNJLinePulse 2s var(--ease-in-out) infinite;
 }
 
-/* Alert state - sharp movements */
-.hawk-nj.alert .hawk-head {
-  animation: hawkNJAlertSnap 0.6s ease-out;
+/* Alert state - sharp movements with spring */
+.hawk-nj-container.alert .hawk-head {
+  animation: hawkNJAlertSnap 0.6s var(--ease-spring);
   transform-origin: center 30%;
 }
 
-.hawk-nj.alert {
-  animation: hawkNJBodyTension 0.4s ease-in-out;
+.hawk-nj-container.alert {
+  animation: hawkNJBodyTension 0.4s var(--ease-in-out);
 }
 
 /* Scanning state - continuous head movement */
-.hawk-nj.scanning .hawk-head {
-  animation: hawkNJHeadTurn 3s ease-in-out infinite;
+.hawk-nj-container.scanning .hawk-head {
+  animation: hawkNJHeadTurn 3s var(--ease-in-out) infinite;
   transform-origin: center 30%;
 }
 
 /* Focused state - minimal movement */
-.hawk-nj.focused .hawk-head {
+.hawk-nj-container.focused .hawk-head {
   animation: none;
   transform: rotate(-3deg);
   transform-origin: center 30%;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s var(--ease-out);
 }
 
-.hawk-nj.focused svg path,
-.hawk-nj.focused svg ellipse {
+.hawk-nj-container.focused svg path,
+.hawk-nj-container.focused svg ellipse {
   stroke-width: 2.5;
-  transition: stroke-width 0.2s ease;
+  transition: stroke-width 0.2s var(--ease-out);
 }
 
 /* Predatory state - intense */
-.hawk-nj.predatory {
+.hawk-nj-container.predatory {
   transform: scale(1.05);
+  transition: transform 0.3s var(--ease-spring);
 }
 
-.hawk-nj.predatory .hawk-head {
+.hawk-nj-container.predatory .hawk-head {
   transform: rotate(-5deg);
   transform-origin: center 30%;
 }
 
-.hawk-nj.predatory svg {
+.hawk-nj-container.predatory svg {
   filter: drop-shadow(0 0 4px rgba(0, 0, 255, 0.3));
-  transition: filter 0.3s ease;
+  transition: filter 0.3s var(--ease-out);
 }
 
-/* Entrance animation - sharp snap in */
+/* Idle state with breathing */
+.hawk-nj-container.idle {
+  animation: hawkNJFloat 4s var(--ease-in-out) infinite;
+}
+
+/* Perch state - minimal movement */
+.hawk-nj-container.perch {
+  animation: hawkNJBodyTension 4s var(--ease-in-out) infinite;
+}
+
+.hawk-nj-container.perch .hawk-head {
+  animation: hawkNJHeadTurn 5s var(--ease-in-out) infinite;
+  transform-origin: center 30%;
+}
+
+/* Entrance animation - sharp snap in with spring */
 @keyframes hawkNJEnter {
   0% {
     opacity: 0;
-    transform: scale(0.8) rotate(-10deg);
+    transform: scale(0.8) rotate(-10deg) translateY(20px);
   }
   60% {
-    transform: scale(1.05) rotate(3deg);
+    transform: scale(1.05) rotate(3deg) translateY(-5px);
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(0deg) translateY(0);
   }
 }
 
-.hawk-nj.enter {
-  animation: hawkNJEnter 0.4s ease-out forwards;
+.hawk-nj-container.enter {
+  animation: hawkNJEnter 0.5s var(--ease-spring) forwards;
 }
 
 /* Exit animation */
@@ -158,47 +175,81 @@
   }
 }
 
-.hawk-nj.exit {
-  animation: hawkNJExit 0.3s ease-in forwards;
+.hawk-nj-container.exit {
+  animation: hawkNJExit 0.3s var(--ease-in) forwards;
 }
 
-/* Perch/idle state - minimal movement */
-.hawk-nj.perch {
-  animation: hawkNJBodyTension 4s ease-in-out infinite;
+/* Celebrate animation */
+@keyframes hawkNJCelebrate {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-15px) scale(1.05) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(0) scale(0.98);
+  }
+  75% {
+    transform: translateY(-8px) scale(1.02) rotate(3deg);
+  }
 }
 
-.hawk-nj.perch .hawk-head {
-  animation: hawkNJHeadTurn 5s ease-in-out infinite;
-  transform-origin: center 30%;
+.hawk-nj-container.celebrate {
+  animation: hawkNJCelebrate 1.2s var(--ease-spring);
+}
+
+/* Wave animation */
+@keyframes hawkNJWave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.hawk-nj-container.wave .hawk-wing-right {
+  animation: hawkNJWave 0.8s var(--ease-spring);
+  transform-origin: top center;
 }
 
 /* Size variants */
-.hawk-nj.size-32 { width: 32px; height: 32px; }
-.hawk-nj.size-64 { width: 64px; height: 64px; }
-.hawk-nj.size-128 { width: 128px; height: 128px; }
-.hawk-nj.size-256 { width: 256px; height: 256px; }
-.hawk-nj.size-512 { width: 512px; height: 512px; }
+.hawk-nj-size-32 { width: 32px; height: 32px; }
+.hawk-nj-size-64 { width: 64px; height: 64px; }
+.hawk-nj-size-128 { width: 128px; height: 128px; }
+.hawk-nj-size-256 { width: 256px; height: 256px; }
+.hawk-nj-size-512 { width: 512px; height: 512px; }
 
 /* Stroke width adjustments by size */
-.hawk-nj.size-32 svg { stroke-width: 2; }
-.hawk-nj.size-64 svg { stroke-width: 2; }
-.hawk-nj.size-128 svg { stroke-width: 2; }
-.hawk-nj.size-256 svg { stroke-width: 2; }
-.hawk-nj.size-512 svg { stroke-width: 2; }
+.hawk-nj-size-32 svg { stroke-width: 2; }
+.hawk-nj-size-64 svg { stroke-width: 2; }
+.hawk-nj-size-128 svg { stroke-width: 2; }
+.hawk-nj-size-256 svg { stroke-width: 2; }
+.hawk-nj-size-512 svg { stroke-width: 2; }
+
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .hawk-nj-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .hawk-nj-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .hawk-nj-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .hawk-nj-container:nth-child(4) { animation-delay: 150ms; }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .hawk-nj,
-  .hawk-nj *,
-  .hawk-nj *::before,
-  .hawk-nj *::after {
+  .hawk-nj-container,
+  .hawk-nj-container *,
+  .hawk-nj-container *::before,
+  .hawk-nj-container *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
   
-  .hawk-nj.focused .hawk-head,
-  .hawk-nj.predatory .hawk-head {
+  .hawk-nj-container.focused .hawk-head,
+  .hawk-nj-container.predatory .hawk-head {
+    transform: none;
+  }
+  
+  .hawk-nj-container.enter,
+  .hawk-nj-container.exit {
+    opacity: 1;
     transform: none;
   }
 }

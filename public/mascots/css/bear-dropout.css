@@ -1,14 +1,41 @@
 /**
  * Dropout Bear CSS Animations
  * 6 variants: default, homecoming, graduation, late-registration, yeezus, donda
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.bear-dropout-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-playful: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+}
 
 /* ===== BASE ANIMATIONS ===== */
 @keyframes bear-idle {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-2px) rotate(-0.5deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  75% { transform: translateY(-1px) rotate(0.5deg); }
+  0%, 100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.01) translateY(-2px) rotate(-0.5deg);
+  }
+  50% {
+    transform: scale(1.02) translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: scale(1.01) translateY(-1px) rotate(0.5deg);
+  }
 }
 
 @keyframes bear-breathe {
@@ -22,28 +49,37 @@
   75% { transform: rotate(-5deg); }
 }
 
-/* ===== WAVE ANIMATION ===== */
+/* ===== WAVE ANIMATION WITH SPRING ===== */
 @keyframes bear-wave {
   0%, 100% { transform: rotate(0deg); }
-  10% { transform: rotate(-15deg); }
-  20% { transform: rotate(0deg); }
-  30% { transform: rotate(-15deg); }
-  40% { transform: rotate(0deg); }
-  50% { transform: rotate(-10deg); }
-  100% { transform: rotate(0deg); }
+  15% { transform: rotate(-15deg); }
+  30% { transform: rotate(0deg); }
+  45% { transform: rotate(-15deg); }
+  60% { transform: rotate(0deg); }
+  75% { transform: rotate(-10deg); }
+  90% { transform: rotate(0deg); }
 }
 
-/* ===== CELEBRATION ANIMATION ===== */
+/* ===== CELEBRATION WITH SPRING PHYSICS ===== */
 @keyframes bear-celebrate {
-  0%, 100% { transform: translateY(0) scale(1); }
-  10% { transform: translateY(-10px) scale(1.02); }
-  20% { transform: translateY(0) scale(1); }
-  30% { transform: translateY(-15px) scale(1.04); }
-  40% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.02); }
-  60%, 80% { transform: translateY(-4px) scale(1.01); }
-  70% { transform: translateY(-10px) scale(1.03); }
-  90% { transform: translateY(-2px) scale(1.01); }
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  15% {
+    transform: translateY(-15px) scale(1.05);
+  }
+  30% {
+    transform: translateY(0) scale(0.98);
+  }
+  45% {
+    transform: translateY(-20px) scale(1.08);
+  }
+  60% {
+    transform: translateY(0) scale(0.95);
+  }
+  75% {
+    transform: translateY(-10px) scale(1.03);
+  }
 }
 
 /* ===== VARIANT: HOMECOMING ===== */
@@ -71,56 +107,53 @@
 }
 
 /* ===== UTILITY CLASSES ===== */
-.bear-dropout-container {
-  display: inline-block;
-  transform-origin: center bottom;
-}
 
+/* Idle state with smooth breathing */
 .bear-dropout-idle {
-  animation: bear-idle 3s ease-in-out infinite;
+  animation: bear-idle 3s var(--ease-in-out) infinite;
 }
 
 .bear-dropout-idle .jacket {
-  animation: bear-breathe 2s ease-in-out infinite;
+  animation: bear-breathe 2s var(--ease-in-out) infinite;
   transform-origin: center center;
 }
 
-/* Wave state */
+/* Wave state with spring */
 .bear-dropout-wave {
-  animation: bear-idle 0.5s ease-in-out;
+  animation: bear-idle 0.5s var(--ease-out);
 }
 
 .bear-dropout-wave .arm-right {
-  animation: bear-wave 0.6s ease-in-out;
+  animation: bear-wave 0.6s var(--ease-spring);
   transform-origin: top center;
 }
 
-/* Celebrate state */
+/* Celebrate state with spring */
 .bear-dropout-celebrate {
-  animation: bear-celebrate 1.5s ease-in-out;
+  animation: bear-celebrate 1.5s var(--ease-spring);
 }
 
 /* ===== VARIANT CLASSES ===== */
 .bear-dropout-homecoming .crown {
-  animation: homecoming-crown-sparkle 2s ease-in-out infinite;
+  animation: homecoming-crown-sparkle 2s var(--ease-in-out) infinite;
 }
 
 .bear-dropout-graduation .tassel {
-  animation: bear-graduation-tassel 3s ease-in-out infinite;
+  animation: bear-graduation-tassel 3s var(--ease-in-out) infinite;
   transform-origin: top center;
 }
 
 .bear-dropout-graduation .cap {
-  animation: graduation-cap-tip 4s ease-in-out infinite;
+  animation: graduation-cap-tip 4s var(--ease-in-out) infinite;
   transform-origin: center;
 }
 
 .bear-dropout-yeezus .mask {
-  animation: yeezus-mask-glow 3s ease-in-out infinite;
+  animation: yeezus-mask-glow 3s var(--ease-in-out) infinite;
 }
 
 .bear-dropout-donda .eyes {
-  animation: donda-red-pulse 2s ease-in-out infinite;
+  animation: donda-red-pulse 2s var(--ease-in-out) infinite;
 }
 
 /* ===== SIZE VARIANTS ===== */
@@ -133,8 +166,37 @@
 /* ===== HOVER EFFECTS ===== */
 .bear-dropout-container:hover {
   filter: brightness(1.05);
-  transition: filter 0.3s ease;
+  transition: filter 0.3s var(--ease-out);
 }
+
+.bear-dropout-container:hover .jacket {
+  animation: bear-breathe 0.5s var(--ease-in-out) infinite;
+}
+
+/* ===== ENTRANCE ANIMATION ===== */
+@keyframes bear-dropout-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.bear-dropout-enter {
+  animation: bear-dropout-enter 0.5s var(--ease-spring) forwards;
+}
+
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .bear-dropout-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .bear-dropout-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .bear-dropout-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .bear-dropout-container:nth-child(4) { animation-delay: 150ms; }
 
 /* ===== RESPONSIVE ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -147,7 +209,13 @@
   .bear-dropout-graduation .tassel,
   .bear-dropout-graduation .cap,
   .bear-dropout-yeezus .mask,
-  .bear-dropout-donda .eyes {
+  .bear-dropout-donda .eyes,
+  .bear-dropout-enter {
     animation: none;
+  }
+  
+  .bear-dropout-enter {
+    opacity: 1;
+    transform: none;
   }
 }

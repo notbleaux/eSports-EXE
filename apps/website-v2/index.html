@@ -33,6 +33,13 @@
   <!-- Preload critical icons -->
   <link rel="preload" href="/icons/icon-192x192.svg" as="image" type="image/svg+xml">
   
+  <!-- Preload critical mascot assets (commonly used) -->
+  <!-- Fox mascot - most commonly used, preload 128x128 size -->
+  <link rel="preload" href="/mascots/svg/fox-128x128.svg" as="image" type="image/svg+xml">
+  
+  <!-- Preconnect to mascot assets for faster loading -->
+  <link rel="dns-prefetch" href="/mascots">
+  
   <!-- Fonts with font-display: swap for fast initial render -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   

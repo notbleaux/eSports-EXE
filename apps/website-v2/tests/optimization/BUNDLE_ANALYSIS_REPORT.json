@@ -1,0 +1,1019 @@
+{
+  "timestamp": "2026-03-23T17:25:02.119Z",
+  "summary": {
+    "svgs": {
+      "count": 44,
+      "totalSize": 416044,
+      "totalSizeFormatted": "406.29 KB",
+      "gzipEstimate": 124767,
+      "gzipFormatted": "121.84 KB",
+      "averageSize": 9455.545454545454,
+      "averageFormatted": "9.23 KB",
+      "criticalCount": 0,
+      "warningCount": 0
+    },
+    "css": {
+      "count": 6,
+      "totalSize": 93285,
+      "totalSizeFormatted": "91.1 KB",
+      "gzipEstimate": 27983,
+      "gzipFormatted": "27.33 KB",
+      "averageSize": 15547.5,
+      "averageFormatted": "15.18 KB",
+      "criticalCount": 0,
+      "warningCount": 0
+    },
+    "components": {
+      "count": 47,
+      "totalSize": 559014,
+      "totalSizeFormatted": "545.91 KB",
+      "gzipEstimate": 167662,
+      "gzipFormatted": "163.73 KB",
+      "averageSize": 11893.91489361702,
+      "averageFormatted": "11.62 KB",
+      "criticalCount": 0,
+      "warningCount": 1
+    }
+  },
+  "details": {
+    "svgs": {
+      "largest": [
+        {
+          "file": "dropout-components.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\templates\\dropout-components.svg",
+          "size": 40985,
+          "gzipEstimate": 12291,
+          "sizeFormatted": "40.02 KB",
+          "gzipFormatted": "12 KB"
+        },
+        {
+          "file": "dropout-style-guide.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\templates\\dropout-style-guide.svg",
+          "size": 40672,
+          "gzipEstimate": 12190,
+          "sizeFormatted": "39.72 KB",
+          "gzipFormatted": "11.9 KB"
+        },
+        {
+          "file": "fox-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-512x512.svg",
+          "size": 28533,
+          "gzipEstimate": 8559,
+          "sizeFormatted": "27.86 KB",
+          "gzipFormatted": "8.36 KB"
+        },
+        {
+          "file": "fox-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-256x256.svg",
+          "size": 27471,
+          "gzipEstimate": 8241,
+          "sizeFormatted": "26.83 KB",
+          "gzipFormatted": "8.05 KB"
+        },
+        {
+          "file": "fox-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-128x128.svg",
+          "size": 26921,
+          "gzipEstimate": 8076,
+          "sizeFormatted": "26.29 KB",
+          "gzipFormatted": "7.89 KB"
+        }
+      ],
+      "critical": [],
+      "warnings": [],
+      "all": [
+        {
+          "file": "dropout-components.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\templates\\dropout-components.svg",
+          "size": 40985,
+          "gzipEstimate": 12291,
+          "sizeFormatted": "40.02 KB",
+          "gzipFormatted": "12 KB"
+        },
+        {
+          "file": "dropout-style-guide.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\templates\\dropout-style-guide.svg",
+          "size": 40672,
+          "gzipEstimate": 12190,
+          "sizeFormatted": "39.72 KB",
+          "gzipFormatted": "11.9 KB"
+        },
+        {
+          "file": "fox-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-512x512.svg",
+          "size": 28533,
+          "gzipEstimate": 8559,
+          "sizeFormatted": "27.86 KB",
+          "gzipFormatted": "8.36 KB"
+        },
+        {
+          "file": "fox-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-256x256.svg",
+          "size": 27471,
+          "gzipEstimate": 8241,
+          "sizeFormatted": "26.83 KB",
+          "gzipFormatted": "8.05 KB"
+        },
+        {
+          "file": "fox-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-128x128.svg",
+          "size": 26921,
+          "gzipEstimate": 8076,
+          "sizeFormatted": "26.29 KB",
+          "gzipFormatted": "7.89 KB"
+        },
+        {
+          "file": "fox-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-64x64.svg",
+          "size": 26871,
+          "gzipEstimate": 8061,
+          "sizeFormatted": "26.24 KB",
+          "gzipFormatted": "7.87 KB"
+        },
+        {
+          "file": "fox-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\fox-32x32.svg",
+          "size": 26759,
+          "gzipEstimate": 8027,
+          "sizeFormatted": "26.13 KB",
+          "gzipFormatted": "7.84 KB"
+        },
+        {
+          "file": "nj-components.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\templates\\nj-components.svg",
+          "size": 22479,
+          "gzipEstimate": 6737,
+          "sizeFormatted": "21.95 KB",
+          "gzipFormatted": "6.58 KB"
+        },
+        {
+          "file": "nj-style-guide.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\templates\\nj-style-guide.svg",
+          "size": 16954,
+          "gzipEstimate": 5079,
+          "sizeFormatted": "16.56 KB",
+          "gzipFormatted": "4.96 KB"
+        },
+        {
+          "file": "hawk-512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\hawk\\hawk-512.svg",
+          "size": 12121,
+          "gzipEstimate": 3636,
+          "sizeFormatted": "11.84 KB",
+          "gzipFormatted": "3.55 KB"
+        },
+        {
+          "file": "wolf-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\wolf-512x512.svg",
+          "size": 10081,
+          "gzipEstimate": 3024,
+          "sizeFormatted": "9.84 KB",
+          "gzipFormatted": "2.95 KB"
+        },
+        {
+          "file": "wolf-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\dropout\\wolf-512x512.svg",
+          "size": 9961,
+          "gzipEstimate": 2988,
+          "sizeFormatted": "9.73 KB",
+          "gzipFormatted": "2.92 KB"
+        },
+        {
+          "file": "dropout-bear-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\dropout-bear-512x512.svg",
+          "size": 8657,
+          "gzipEstimate": 2597,
+          "sizeFormatted": "8.45 KB",
+          "gzipFormatted": "2.54 KB"
+        },
+        {
+          "file": "hawk-256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\hawk\\hawk-256.svg",
+          "size": 8321,
+          "gzipEstimate": 2496,
+          "sizeFormatted": "8.13 KB",
+          "gzipFormatted": "2.44 KB"
+        },
+        {
+          "file": "wolf-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\nj\\wolf-512x512.svg",
+          "size": 7145,
+          "gzipEstimate": 2143,
+          "sizeFormatted": "6.98 KB",
+          "gzipFormatted": "2.09 KB"
+        },
+        {
+          "file": "wolf-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\wolf-256x256.svg",
+          "size": 7004,
+          "gzipEstimate": 2101,
+          "sizeFormatted": "6.84 KB",
+          "gzipFormatted": "2.05 KB"
+        },
+        {
+          "file": "wolf-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\dropout\\wolf-256x256.svg",
+          "size": 6914,
+          "gzipEstimate": 2074,
+          "sizeFormatted": "6.75 KB",
+          "gzipFormatted": "2.03 KB"
+        },
+        {
+          "file": "dropout-bear-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\dropout-bear-256x256.svg",
+          "size": 5652,
+          "gzipEstimate": 1695,
+          "sizeFormatted": "5.52 KB",
+          "gzipFormatted": "1.66 KB"
+        },
+        {
+          "file": "wolf-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\nj\\wolf-256x256.svg",
+          "size": 5599,
+          "gzipEstimate": 1679,
+          "sizeFormatted": "5.47 KB",
+          "gzipFormatted": "1.64 KB"
+        },
+        {
+          "file": "hawk-128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\hawk\\hawk-128.svg",
+          "size": 5320,
+          "gzipEstimate": 1596,
+          "sizeFormatted": "5.2 KB",
+          "gzipFormatted": "1.56 KB"
+        },
+        {
+          "file": "wolf-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\dropout\\wolf-128x128.svg",
+          "size": 5035,
+          "gzipEstimate": 1510,
+          "sizeFormatted": "4.92 KB",
+          "gzipFormatted": "1.47 KB"
+        },
+        {
+          "file": "owl-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\owl-512x512.svg",
+          "size": 5021,
+          "gzipEstimate": 1506,
+          "sizeFormatted": "4.9 KB",
+          "gzipFormatted": "1.47 KB"
+        },
+        {
+          "file": "owl-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\owl-256x256.svg",
+          "size": 4731,
+          "gzipEstimate": 1419,
+          "sizeFormatted": "4.62 KB",
+          "gzipFormatted": "1.39 KB"
+        },
+        {
+          "file": "owl-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\owl-128x128.svg",
+          "size": 4388,
+          "gzipEstimate": 1316,
+          "sizeFormatted": "4.29 KB",
+          "gzipFormatted": "1.29 KB"
+        },
+        {
+          "file": "owl-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\owl-64x64.svg",
+          "size": 3986,
+          "gzipEstimate": 1195,
+          "sizeFormatted": "3.89 KB",
+          "gzipFormatted": "1.17 KB"
+        },
+        {
+          "file": "wolf-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\wolf-128x128.svg",
+          "size": 3858,
+          "gzipEstimate": 1157,
+          "sizeFormatted": "3.77 KB",
+          "gzipFormatted": "1.13 KB"
+        },
+        {
+          "file": "wolf-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\nj\\wolf-128x128.svg",
+          "size": 3850,
+          "gzipEstimate": 1155,
+          "sizeFormatted": "3.76 KB",
+          "gzipFormatted": "1.13 KB"
+        },
+        {
+          "file": "wolf-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\dropout\\wolf-64x64.svg",
+          "size": 3815,
+          "gzipEstimate": 1144,
+          "sizeFormatted": "3.73 KB",
+          "gzipFormatted": "1.12 KB"
+        },
+        {
+          "file": "hawk-64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\hawk\\hawk-64.svg",
+          "size": 3425,
+          "gzipEstimate": 1027,
+          "sizeFormatted": "3.34 KB",
+          "gzipFormatted": "1 KB"
+        },
+        {
+          "file": "dropout-bear-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\dropout-bear-128x128.svg",
+          "size": 3323,
+          "gzipEstimate": 996,
+          "sizeFormatted": "3.25 KB",
+          "gzipFormatted": "996 B"
+        },
+        {
+          "file": "owl-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\owl-32x32.svg",
+          "size": 3094,
+          "gzipEstimate": 928,
+          "sizeFormatted": "3.02 KB",
+          "gzipFormatted": "928 B"
+        },
+        {
+          "file": "wolf-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\nj\\wolf-64x64.svg",
+          "size": 3000,
+          "gzipEstimate": 900,
+          "sizeFormatted": "2.93 KB",
+          "gzipFormatted": "900 B"
+        },
+        {
+          "file": "dropout-bear-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\dropout-bear-64x64.svg",
+          "size": 2820,
+          "gzipEstimate": 846,
+          "sizeFormatted": "2.75 KB",
+          "gzipFormatted": "846 B"
+        },
+        {
+          "file": "wolf-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\wolf-64x64.svg",
+          "size": 2568,
+          "gzipEstimate": 770,
+          "sizeFormatted": "2.51 KB",
+          "gzipFormatted": "770 B"
+        },
+        {
+          "file": "wolf-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\dropout\\wolf-32x32.svg",
+          "size": 2368,
+          "gzipEstimate": 710,
+          "sizeFormatted": "2.31 KB",
+          "gzipFormatted": "710 B"
+        },
+        {
+          "file": "wolf-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\nj\\wolf-32x32.svg",
+          "size": 1962,
+          "gzipEstimate": 588,
+          "sizeFormatted": "1.92 KB",
+          "gzipFormatted": "588 B"
+        },
+        {
+          "file": "dropout-bear-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\dropout-bear-32x32.svg",
+          "size": 1913,
+          "gzipEstimate": 573,
+          "sizeFormatted": "1.87 KB",
+          "gzipFormatted": "573 B"
+        },
+        {
+          "file": "nj-bunny-512x512.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\nj-bunny-512x512.svg",
+          "size": 1909,
+          "gzipEstimate": 572,
+          "sizeFormatted": "1.86 KB",
+          "gzipFormatted": "572 B"
+        },
+        {
+          "file": "nj-bunny-256x256.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\nj-bunny-256x256.svg",
+          "size": 1894,
+          "gzipEstimate": 568,
+          "sizeFormatted": "1.85 KB",
+          "gzipFormatted": "568 B"
+        },
+        {
+          "file": "nj-bunny-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\nj-bunny-32x32.svg",
+          "size": 1876,
+          "gzipEstimate": 562,
+          "sizeFormatted": "1.83 KB",
+          "gzipFormatted": "562 B"
+        },
+        {
+          "file": "nj-bunny-128x128.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\nj-bunny-128x128.svg",
+          "size": 1864,
+          "gzipEstimate": 559,
+          "sizeFormatted": "1.82 KB",
+          "gzipFormatted": "559 B"
+        },
+        {
+          "file": "nj-bunny-64x64.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\nj-bunny-64x64.svg",
+          "size": 1845,
+          "gzipEstimate": 553,
+          "sizeFormatted": "1.8 KB",
+          "gzipFormatted": "553 B"
+        },
+        {
+          "file": "hawk-32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\hawk\\hawk-32.svg",
+          "size": 1584,
+          "gzipEstimate": 475,
+          "sizeFormatted": "1.55 KB",
+          "gzipFormatted": "475 B"
+        },
+        {
+          "file": "wolf-32x32.svg",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\svg\\wolf-32x32.svg",
+          "size": 1495,
+          "gzipEstimate": 448,
+          "sizeFormatted": "1.46 KB",
+          "gzipFormatted": "448 B"
+        }
+      ]
+    },
+    "css": {
+      "largest": [
+        {
+          "file": "nj-bunny.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\nj-bunny.css",
+          "size": 23564,
+          "gzipEstimate": 7069,
+          "sizeFormatted": "23.01 KB",
+          "gzipFormatted": "6.9 KB"
+        },
+        {
+          "file": "wolf-nj.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\wolf-nj.css",
+          "size": 17739,
+          "gzipEstimate": 5321,
+          "sizeFormatted": "17.32 KB",
+          "gzipFormatted": "5.2 KB"
+        },
+        {
+          "file": "dropout-bear.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\dropout-bear.css",
+          "size": 15280,
+          "gzipEstimate": 4584,
+          "sizeFormatted": "14.92 KB",
+          "gzipFormatted": "4.48 KB"
+        },
+        {
+          "file": "wolf-dropout.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\wolf-dropout.css",
+          "size": 14336,
+          "gzipEstimate": 4300,
+          "sizeFormatted": "14 KB",
+          "gzipFormatted": "4.2 KB"
+        },
+        {
+          "file": "fox.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\fox.css",
+          "size": 12520,
+          "gzipEstimate": 3756,
+          "sizeFormatted": "12.23 KB",
+          "gzipFormatted": "3.67 KB"
+        }
+      ],
+      "critical": [],
+      "warnings": [],
+      "all": [
+        {
+          "file": "nj-bunny.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\nj-bunny.css",
+          "size": 23564,
+          "gzipEstimate": 7069,
+          "sizeFormatted": "23.01 KB",
+          "gzipFormatted": "6.9 KB"
+        },
+        {
+          "file": "wolf-nj.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\wolf-nj.css",
+          "size": 17739,
+          "gzipEstimate": 5321,
+          "sizeFormatted": "17.32 KB",
+          "gzipFormatted": "5.2 KB"
+        },
+        {
+          "file": "dropout-bear.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\dropout-bear.css",
+          "size": 15280,
+          "gzipEstimate": 4584,
+          "sizeFormatted": "14.92 KB",
+          "gzipFormatted": "4.48 KB"
+        },
+        {
+          "file": "wolf-dropout.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\wolf-dropout.css",
+          "size": 14336,
+          "gzipEstimate": 4300,
+          "sizeFormatted": "14 KB",
+          "gzipFormatted": "4.2 KB"
+        },
+        {
+          "file": "fox.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\fox.css",
+          "size": 12520,
+          "gzipEstimate": 3756,
+          "sizeFormatted": "12.23 KB",
+          "gzipFormatted": "3.67 KB"
+        },
+        {
+          "file": "owl.css",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\public\\mascots\\css\\owl.css",
+          "size": 9846,
+          "gzipEstimate": 2953,
+          "sizeFormatted": "9.62 KB",
+          "gzipFormatted": "2.88 KB"
+        }
+      ]
+    },
+    "components": {
+      "largest": [
+        {
+          "file": "FoxMascotSVG.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\FoxMascotSVG.tsx",
+          "size": 81272,
+          "gzipEstimate": 24381,
+          "sizeFormatted": "79.37 KB",
+          "gzipFormatted": "23.81 KB"
+        },
+        {
+          "file": "integration.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\integration.test.tsx",
+          "size": 38263,
+          "gzipEstimate": 11472,
+          "sizeFormatted": "37.37 KB",
+          "gzipFormatted": "11.2 KB"
+        },
+        {
+          "file": "BearDropout.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\dropout\\__tests__\\BearDropout.test.tsx",
+          "size": 34892,
+          "gzipEstimate": 10467,
+          "sizeFormatted": "34.07 KB",
+          "gzipFormatted": "10.22 KB"
+        },
+        {
+          "file": "BunnyNJ.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\nj\\__tests__\\BunnyNJ.test.tsx",
+          "size": 29954,
+          "gzipEstimate": 8986,
+          "sizeFormatted": "29.25 KB",
+          "gzipFormatted": "8.78 KB"
+        },
+        {
+          "file": "responsive.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\responsive.test.tsx",
+          "size": 25021,
+          "gzipEstimate": 7506,
+          "sizeFormatted": "24.43 KB",
+          "gzipFormatted": "7.33 KB"
+        }
+      ],
+      "critical": [],
+      "warnings": [
+        {
+          "file": "FoxMascotSVG.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\FoxMascotSVG.tsx",
+          "size": 81272,
+          "gzipEstimate": 24381,
+          "sizeFormatted": "79.37 KB",
+          "gzipFormatted": "23.81 KB"
+        }
+      ],
+      "all": [
+        {
+          "file": "FoxMascotSVG.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\FoxMascotSVG.tsx",
+          "size": 81272,
+          "gzipEstimate": 24381,
+          "sizeFormatted": "79.37 KB",
+          "gzipFormatted": "23.81 KB"
+        },
+        {
+          "file": "integration.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\integration.test.tsx",
+          "size": 38263,
+          "gzipEstimate": 11472,
+          "sizeFormatted": "37.37 KB",
+          "gzipFormatted": "11.2 KB"
+        },
+        {
+          "file": "BearDropout.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\dropout\\__tests__\\BearDropout.test.tsx",
+          "size": 34892,
+          "gzipEstimate": 10467,
+          "sizeFormatted": "34.07 KB",
+          "gzipFormatted": "10.22 KB"
+        },
+        {
+          "file": "BunnyNJ.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\nj\\__tests__\\BunnyNJ.test.tsx",
+          "size": 29954,
+          "gzipEstimate": 8986,
+          "sizeFormatted": "29.25 KB",
+          "gzipFormatted": "8.78 KB"
+        },
+        {
+          "file": "responsive.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\responsive.test.tsx",
+          "size": 25021,
+          "gzipEstimate": 7506,
+          "sizeFormatted": "24.43 KB",
+          "gzipFormatted": "7.33 KB"
+        },
+        {
+          "file": "MascotGallery.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotGallery.tsx",
+          "size": 24434,
+          "gzipEstimate": 7330,
+          "sizeFormatted": "23.86 KB",
+          "gzipFormatted": "7.16 KB"
+        },
+        {
+          "file": "visual-regression.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\visual-regression.test.tsx",
+          "size": 22780,
+          "gzipEstimate": 6830,
+          "sizeFormatted": "22.25 KB",
+          "gzipFormatted": "6.67 KB"
+        },
+        {
+          "file": "BunnyNJ.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\nj\\BunnyNJ.tsx",
+          "size": 22438,
+          "gzipEstimate": 6731,
+          "sizeFormatted": "21.91 KB",
+          "gzipFormatted": "6.57 KB"
+        },
+        {
+          "file": "NJBunnyMascot.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\NJBunnyMascot.tsx",
+          "size": 21933,
+          "gzipEstimate": 6579,
+          "sizeFormatted": "21.42 KB",
+          "gzipFormatted": "6.42 KB"
+        },
+        {
+          "file": "WolfNJ.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\nj\\WolfNJ.tsx",
+          "size": 17005,
+          "gzipEstimate": 5101,
+          "sizeFormatted": "16.61 KB",
+          "gzipFormatted": "4.98 KB"
+        },
+        {
+          "file": "CharacterBible.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\CharacterBible.tsx",
+          "size": 16099,
+          "gzipEstimate": 4829,
+          "sizeFormatted": "15.72 KB",
+          "gzipFormatted": "4.72 KB"
+        },
+        {
+          "file": "DropoutBearMascot.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\DropoutBearMascot.tsx",
+          "size": 15571,
+          "gzipEstimate": 4671,
+          "sizeFormatted": "15.21 KB",
+          "gzipFormatted": "4.56 KB"
+        },
+        {
+          "file": "WolfMascotAnimated.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\WolfMascotAnimated.tsx",
+          "size": 15436,
+          "gzipEstimate": 4630,
+          "sizeFormatted": "15.07 KB",
+          "gzipFormatted": "4.52 KB"
+        },
+        {
+          "file": "WolfDropout.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\dropout\\WolfDropout.tsx",
+          "size": 12902,
+          "gzipEstimate": 3870,
+          "sizeFormatted": "12.6 KB",
+          "gzipFormatted": "3.78 KB"
+        },
+        {
+          "file": "animation-performance.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\animation-performance.test.tsx",
+          "size": 12470,
+          "gzipEstimate": 3739,
+          "sizeFormatted": "12.18 KB",
+          "gzipFormatted": "3.65 KB"
+        },
+        {
+          "file": "accessibility.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\accessibility.test.tsx",
+          "size": 12426,
+          "gzipEstimate": 3727,
+          "sizeFormatted": "12.13 KB",
+          "gzipFormatted": "3.64 KB"
+        },
+        {
+          "file": "MascotAssetEnhanced.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotAssetEnhanced.tsx",
+          "size": 11455,
+          "gzipEstimate": 3436,
+          "sizeFormatted": "11.19 KB",
+          "gzipFormatted": "3.36 KB"
+        },
+        {
+          "file": "WolfMascot.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\WolfMascot.tsx",
+          "size": 11090,
+          "gzipEstimate": 3327,
+          "sizeFormatted": "10.83 KB",
+          "gzipFormatted": "3.25 KB"
+        },
+        {
+          "file": "MascotAssetLazyLoaded.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotAssetLazyLoaded.tsx",
+          "size": 10508,
+          "gzipEstimate": 3152,
+          "sizeFormatted": "10.26 KB",
+          "gzipFormatted": "3.08 KB"
+        },
+        {
+          "file": "MascotCard.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotCard.tsx",
+          "size": 9676,
+          "gzipEstimate": 2902,
+          "sizeFormatted": "9.45 KB",
+          "gzipFormatted": "2.83 KB"
+        },
+        {
+          "file": "MascotAsset.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotAsset.tsx",
+          "size": 9560,
+          "gzipEstimate": 2866,
+          "sizeFormatted": "9.34 KB",
+          "gzipFormatted": "2.8 KB"
+        },
+        {
+          "file": "MascotAssetEnhanced.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\MascotAssetEnhanced.test.tsx",
+          "size": 9147,
+          "gzipEstimate": 2738,
+          "sizeFormatted": "8.93 KB",
+          "gzipFormatted": "2.67 KB"
+        },
+        {
+          "file": "MascotCard.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\MascotCard.test.tsx",
+          "size": 8901,
+          "gzipEstimate": 2670,
+          "sizeFormatted": "8.69 KB",
+          "gzipFormatted": "2.61 KB"
+        },
+        {
+          "file": "MascotGallery.test.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__tests__\\MascotGallery.test.tsx",
+          "size": 8646,
+          "gzipEstimate": 2593,
+          "sizeFormatted": "8.44 KB",
+          "gzipFormatted": "2.53 KB"
+        },
+        {
+          "file": "OwlMascotSVG.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\OwlMascotSVG.tsx",
+          "size": 7703,
+          "gzipEstimate": 2310,
+          "sizeFormatted": "7.52 KB",
+          "gzipFormatted": "2.26 KB"
+        },
+        {
+          "file": "MascotCard.stories.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__stories__\\MascotCard.stories.tsx",
+          "size": 7413,
+          "gzipEstimate": 2223,
+          "sizeFormatted": "7.24 KB",
+          "gzipFormatted": "2.17 KB"
+        },
+        {
+          "file": "CharacterBible.stories.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__stories__\\CharacterBible.stories.tsx",
+          "size": 6703,
+          "gzipEstimate": 2010,
+          "sizeFormatted": "6.55 KB",
+          "gzipFormatted": "1.96 KB"
+        },
+        {
+          "file": "WolfMascotSVG.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\WolfMascotSVG.tsx",
+          "size": 6364,
+          "gzipEstimate": 1909,
+          "sizeFormatted": "6.21 KB",
+          "gzipFormatted": "1.86 KB"
+        },
+        {
+          "file": "MascotGallery.stories.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\__stories__\\MascotGallery.stories.tsx",
+          "size": 6008,
+          "gzipEstimate": 1802,
+          "sizeFormatted": "5.87 KB",
+          "gzipFormatted": "1.76 KB"
+        },
+        {
+          "file": "MascotStatsRadar.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotStatsRadar.tsx",
+          "size": 5056,
+          "gzipEstimate": 1516,
+          "sizeFormatted": "4.94 KB",
+          "gzipFormatted": "1.48 KB"
+        },
+        {
+          "file": "MascotSkeleton.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotSkeleton.tsx",
+          "size": 4684,
+          "gzipEstimate": 1405,
+          "sizeFormatted": "4.57 KB",
+          "gzipFormatted": "1.37 KB"
+        },
+        {
+          "file": "HawkMascotSVG.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\HawkMascotSVG.tsx",
+          "size": 4438,
+          "gzipEstimate": 1331,
+          "sizeFormatted": "4.33 KB",
+          "gzipFormatted": "1.3 KB"
+        },
+        {
+          "file": "MascotAssetLazy.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\MascotAssetLazy.tsx",
+          "size": 4039,
+          "gzipEstimate": 1211,
+          "sizeFormatted": "3.94 KB",
+          "gzipFormatted": "1.18 KB"
+        },
+        {
+          "file": "NJBunnySVG512.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\NJBunnySVG512.tsx",
+          "size": 3909,
+          "gzipEstimate": 1172,
+          "sizeFormatted": "3.82 KB",
+          "gzipFormatted": "1.14 KB"
+        },
+        {
+          "file": "NJBunnySVG256.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\NJBunnySVG256.tsx",
+          "size": 3896,
+          "gzipEstimate": 1168,
+          "sizeFormatted": "3.8 KB",
+          "gzipFormatted": "1.14 KB"
+        },
+        {
+          "file": "NJBunnySVG128.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\NJBunnySVG128.tsx",
+          "size": 3850,
+          "gzipEstimate": 1155,
+          "sizeFormatted": "3.76 KB",
+          "gzipFormatted": "1.13 KB"
+        },
+        {
+          "file": "NJBunnySVG64.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\NJBunnySVG64.tsx",
+          "size": 2997,
+          "gzipEstimate": 899,
+          "sizeFormatted": "2.93 KB",
+          "gzipFormatted": "899 B"
+        },
+        {
+          "file": "NJBunnySVG32.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\NJBunnySVG32.tsx",
+          "size": 2986,
+          "gzipEstimate": 895,
+          "sizeFormatted": "2.92 KB",
+          "gzipFormatted": "895 B"
+        },
+        {
+          "file": "OwlCSS.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\OwlCSS.tsx",
+          "size": 2446,
+          "gzipEstimate": 733,
+          "sizeFormatted": "2.39 KB",
+          "gzipFormatted": "733 B"
+        },
+        {
+          "file": "HawkCSS.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\HawkCSS.tsx",
+          "size": 660,
+          "gzipEstimate": 198,
+          "sizeFormatted": "660 B",
+          "gzipFormatted": "198 B"
+        },
+        {
+          "file": "WolfCSS.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\WolfCSS.tsx",
+          "size": 660,
+          "gzipEstimate": 198,
+          "sizeFormatted": "660 B",
+          "gzipFormatted": "198 B"
+        },
+        {
+          "file": "FoxCSS.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\FoxCSS.tsx",
+          "size": 641,
+          "gzipEstimate": 192,
+          "sizeFormatted": "641 B",
+          "gzipFormatted": "192 B"
+        },
+        {
+          "file": "DropoutBear512.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\svg\\DropoutBear512.tsx",
+          "size": 546,
+          "gzipEstimate": 163,
+          "sizeFormatted": "546 B",
+          "gzipFormatted": "163 B"
+        },
+        {
+          "file": "DropoutBear256.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\svg\\DropoutBear256.tsx",
+          "size": 545,
+          "gzipEstimate": 163,
+          "sizeFormatted": "545 B",
+          "gzipFormatted": "163 B"
+        },
+        {
+          "file": "DropoutBear128.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\svg\\DropoutBear128.tsx",
+          "size": 535,
+          "gzipEstimate": 160,
+          "sizeFormatted": "535 B",
+          "gzipFormatted": "160 B"
+        },
+        {
+          "file": "DropoutBear32.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\svg\\DropoutBear32.tsx",
+          "size": 528,
+          "gzipEstimate": 158,
+          "sizeFormatted": "528 B",
+          "gzipFormatted": "158 B"
+        },
+        {
+          "file": "DropoutBear64.tsx",
+          "path": "C:\\Users\\jacke\\Documents\\GitHub\\eSports-EXE\\apps\\website-v2\\src\\components\\mascots\\generated\\svg\\DropoutBear64.tsx",
+          "size": 528,
+          "gzipEstimate": 158,
+          "sizeFormatted": "528 B",
+          "gzipFormatted": "158 B"
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "issue": "Total bundle size exceeds 100KB target",
+      "solution": "Implement lazy loading for non-critical mascot components",
+      "impact": "HIGH"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "fox has 5 size variants loaded upfront",
+      "solution": "Load only required size, lazy load others",
+      "impact": "MEDIUM"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "hawk has 5 size variants loaded upfront",
+      "solution": "Load only required size, lazy load others",
+      "impact": "MEDIUM"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "wolf has 15 size variants loaded upfront",
+      "solution": "Load only required size, lazy load others",
+      "impact": "MEDIUM"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "dropout-bear has 5 size variants loaded upfront",
+      "solution": "Load only required size, lazy load others",
+      "impact": "MEDIUM"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "owl has 5 size variants loaded upfront",
+      "solution": "Load only required size, lazy load others",
+      "impact": "MEDIUM"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "nj-bunny has 5 size variants loaded upfront",
+      "solution": "Load only required size, lazy load others",
+      "impact": "MEDIUM"
+    },
+    {
+      "priority": "HIGH",
+      "issue": "4 components exceed 20KB",
+      "solution": "Split components into separate chunks with manualChunks",
+      "impact": "HIGH"
+    }
+  ]
+}

@@ -193,6 +193,37 @@ export default defineConfig({
             return 'shared';
           }
           
+          // MASCOT CHUNKS - REF-004 Optimization
+          // Base mascot utilities (always lightweight)
+          if (id.includes('/mascots/MascotAssetEnhanced') || 
+              id.includes('/mascots/MascotAssetLazy') ||
+              id.includes('/mascots/MascotSkeleton')) {
+            return 'mascot-base';
+          }
+          
+          // Dropout style mascots
+          if (id.includes('/mascots/generated/dropout/')) {
+            return 'mascot-dropout';
+          }
+          
+          // NJ style mascots
+          if (id.includes('/mascots/generated/nj/')) {
+            return 'mascot-nj';
+          }
+          
+          // Default/legacy mascot components
+          if (id.includes('/mascots/generated/') && 
+              !id.includes('/dropout/') && 
+              !id.includes('/nj/') &&
+              !id.includes('/svg/')) {
+            return 'mascot-default';
+          }
+          
+          // Mascot SVG components (size variants)
+          if (id.includes('/mascots/generated/svg/')) {
+            return 'mascot-svgs';
+          }
+          
           // Default: let Rollup handle with automatic chunking
           return null;
         },
@@ -212,6 +243,11 @@ export default defineConfig({
           // Component chunks
           if (name.includes('components') || name.includes('ml-')) {
             return 'js/components/[name]-[hash].js';
+          }
+          
+          // Mascot chunks
+          if (name.includes('mascot')) {
+            return 'js/mascots/[name]-[hash].js';
           }
           // Default chunks
           return 'js/chunks/[name]-[hash].js';

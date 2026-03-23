@@ -1,15 +1,38 @@
 /**
  * Fox NJ Style Animations
  * Smooth, minimalist line animations for the geometric fox
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.fox-nj-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-playful: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+.fox-nj-container svg {
+  overflow: visible;
+}
 
 /* ===== IDLE ANIMATION ===== */
 @keyframes nj-idle {
   0%, 100% {
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
   50% {
-    transform: translateY(-2px);
+    transform: scale(1.02) translateY(-2px);
   }
 }
 
@@ -25,137 +48,69 @@
 }
 
 @keyframes nj-tail-wag {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(5deg);
-  }
-  75% {
-    transform: rotate(-5deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
 }
 
 @keyframes nj-ear-twitch-left {
-  0%, 90%, 100% {
-    transform: rotate(0deg);
-  }
-  92% {
-    transform: rotate(-3deg);
-  }
-  94% {
-    transform: rotate(1deg);
-  }
-  96% {
-    transform: rotate(-2deg);
-  }
+  0%, 90%, 100% { transform: rotate(0deg); }
+  92% { transform: rotate(-3deg); }
+  94% { transform: rotate(1deg); }
+  96% { transform: rotate(-2deg); }
 }
 
 @keyframes nj-ear-twitch-right {
-  0%, 85%, 100% {
-    transform: rotate(0deg);
-  }
-  87% {
-    transform: rotate(3deg);
-  }
-  89% {
-    transform: rotate(-1deg);
-  }
-  91% {
-    transform: rotate(2deg);
-  }
+  0%, 85%, 100% { transform: rotate(0deg); }
+  87% { transform: rotate(3deg); }
+  89% { transform: rotate(-1deg); }
+  91% { transform: rotate(2deg); }
 }
 
-/* ===== WAVE ANIMATION ===== */
+/* ===== WAVE ANIMATION WITH SPRING ===== */
 @keyframes nj-wave {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  15% {
-    transform: rotate(-20deg);
-  }
-  30% {
-    transform: rotate(0deg);
-  }
-  45% {
-    transform: rotate(-20deg);
-  }
-  60% {
-    transform: rotate(0deg);
-  }
-  75% {
-    transform: rotate(-10deg);
-  }
-  90% {
-    transform: rotate(0deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-20deg); }
+  30% { transform: rotate(0deg); }
+  45% { transform: rotate(-20deg); }
+  60% { transform: rotate(0deg); }
+  75% { transform: rotate(-10deg); }
+  90% { transform: rotate(0deg); }
 }
 
 @keyframes nj-wave-paw {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
-/* ===== CELEBRATE ANIMATION ===== */
+/* ===== CELEBRATION WITH SPRING PHYSICS ===== */
 @keyframes nj-celebrate {
   0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  12.5% {
-    transform: translateY(-12px) rotate(-2deg);
+    transform: translateY(0) scale(1);
   }
   25% {
-    transform: translateY(0) rotate(0deg);
-  }
-  37.5% {
-    transform: translateY(-16px) rotate(2deg);
+    transform: translateY(-20px) scale(1.1);
   }
   50% {
-    transform: translateY(0) rotate(0deg);
-  }
-  62.5% {
-    transform: translateY(-10px) rotate(-1deg);
+    transform: translateY(0) scale(0.95);
   }
   75% {
-    transform: translateY(0) rotate(0deg);
-  }
-  87.5% {
-    transform: translateY(-8px) rotate(1deg);
+    transform: translateY(-10px) scale(1.05);
   }
 }
 
 @keyframes nj-celebrate-tail {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(15deg);
-  }
-  50% {
-    transform: rotate(-10deg);
-  }
-  75% {
-    transform: rotate(12deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  50% { transform: rotate(-10deg); }
+  75% { transform: rotate(12deg); }
 }
 
 @keyframes nj-celebrate-ears {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  25% {
-    transform: translateY(-3px);
-  }
-  50% {
-    transform: translateY(1px);
-  }
-  75% {
-    transform: translateY(-2px);
-  }
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-3px); }
+  50% { transform: translateY(1px); }
+  75% { transform: translateY(-2px); }
 }
 
 @keyframes nj-line-glow {
@@ -169,10 +124,13 @@
   }
 }
 
-/* ===== VARIANT: ATTENTION ===== */
+/* ===== VARIANT: ATTENTION WITH SPRING ===== */
 @keyframes nj-attention-bounce {
   0%, 100% {
     transform: translateY(0) scale(1);
+  }
+  20% {
+    transform: translateY(2px) scale(0.98);
   }
   40% {
     transform: translateY(-8px) scale(1.02);
@@ -186,49 +144,33 @@
 }
 
 @keyframes nj-attention-ears {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  20% {
-    transform: rotate(-5deg);
-  }
-  40% {
-    transform: rotate(5deg);
-  }
-  60% {
-    transform: rotate(-3deg);
-  }
-  80% {
-    transform: rotate(3deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-5deg); }
+  40% { transform: rotate(5deg); }
+  60% { transform: rotate(-3deg); }
+  80% { transform: rotate(3deg); }
 }
 
 /* ===== VARIANT: HYPE-BOY ===== */
 @keyframes nj-hype-bounce {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
   25% {
-    transform: translateY(-6px);
+    transform: translateY(-6px) scale(1.02);
   }
   50% {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
   }
   75% {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(1.01);
   }
 }
 
 @keyframes nj-hype-shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-2px);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(2px);
-  }
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
 }
 
 /* ===== VARIANT: COOKIE (shy) ===== */
@@ -244,12 +186,8 @@
 }
 
 @keyframes nj-cookie-ears-down {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(8deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
 }
 
 @keyframes nj-cookie-tail-curl {
@@ -278,81 +216,67 @@
 }
 
 @keyframes nj-ditto-line-wave {
-  0%, 100% {
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dashoffset: 10;
-  }
+  0%, 100% { stroke-dashoffset: 0; }
+  50% { stroke-dashoffset: 10; }
 }
 
 /* ===== UTILITY CLASSES ===== */
 
-/* Container */
-.fox-nj-container {
-  display: inline-block;
-  transform-origin: center bottom;
-}
-
-.fox-nj-container svg {
-  overflow: visible;
-}
-
 /* Idle state */
 .fox-nj-idle {
-  animation: nj-idle 2s ease-in-out infinite;
+  animation: nj-idle 2s var(--ease-in-out) infinite;
 }
 
 .fox-nj-idle svg {
-  animation: nj-line-pulse 2s ease-in-out infinite;
+  animation: nj-line-pulse 2s var(--ease-in-out) infinite;
 }
 
 .fox-nj-idle .tail {
-  animation: nj-tail-wag 3s ease-in-out infinite;
+  animation: nj-tail-wag 3s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 .fox-nj-idle .ear-left {
-  animation: nj-ear-twitch-left 5s ease-in-out infinite;
+  animation: nj-ear-twitch-left 5s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 .fox-nj-idle .ear-right {
-  animation: nj-ear-twitch-right 5.5s ease-in-out infinite;
+  animation: nj-ear-twitch-right 5.5s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
-/* Wave state */
+/* Wave state with spring */
 .fox-nj-wave {
-  animation: nj-idle 0.5s ease-in-out;
+  animation: nj-idle 0.5s var(--ease-out);
 }
 
 .fox-nj-wave .paw-right {
-  animation: nj-wave 0.8s ease-in-out;
+  animation: nj-wave 0.8s var(--ease-spring);
   transform-origin: center center;
 }
 
 .fox-nj-wave .paw-right circle {
-  animation: nj-wave-paw 0.8s ease-in-out;
+  animation: nj-wave-paw 0.8s var(--ease-spring);
   transform-origin: center center;
 }
 
-/* Celebrate state */
+/* Celebrate state with spring */
 .fox-nj-celebrate {
-  animation: nj-celebrate 1.2s ease-in-out;
+  animation: nj-celebrate 1.2s var(--ease-spring);
 }
 
 .fox-nj-celebrate svg {
-  animation: nj-line-glow 1.2s ease-in-out;
+  animation: nj-line-glow 1.2s var(--ease-in-out);
 }
 
 .fox-nj-celebrate .tail {
-  animation: nj-celebrate-tail 1.2s ease-in-out;
+  animation: nj-celebrate-tail 1.2s var(--ease-elastic);
   transform-origin: bottom center;
 }
 
 .fox-nj-celebrate .ears {
-  animation: nj-celebrate-ears 1.2s ease-in-out;
+  animation: nj-celebrate-ears 1.2s var(--ease-elastic);
 }
 
 /* Variant: Classic Blue (default) */
@@ -360,44 +284,44 @@
   stroke: #0000FF;
 }
 
-/* Variant: Attention */
+/* Variant: Attention with spring */
 .fox-nj-attention {
-  animation: nj-attention-bounce 0.8s ease-in-out;
+  animation: nj-attention-bounce 0.8s var(--ease-spring);
 }
 
 .fox-nj-attention .ears {
-  animation: nj-attention-ears 0.8s ease-in-out;
+  animation: nj-attention-ears 0.8s var(--ease-elastic);
   transform-origin: center center;
 }
 
 /* Variant: Hype-Boy */
 .fox-nj-hype-boy {
-  animation: nj-hype-bounce 0.4s ease-in-out infinite;
+  animation: nj-hype-bounce 0.4s var(--ease-playful) infinite;
 }
 
 .fox-nj-hype-boy svg {
-  animation: nj-hype-shake 0.5s ease-in-out infinite;
+  animation: nj-hype-shake 0.5s var(--ease-in-out) infinite;
 }
 
 /* Variant: Cookie (shy) */
 .fox-nj-cookie {
-  animation: nj-cookie-shy 2s ease-in-out infinite;
+  animation: nj-cookie-shy 2s var(--ease-in-out) infinite;
 }
 
 .fox-nj-cookie .ear-left,
 .fox-nj-cookie .ear-right {
-  animation: nj-cookie-ears-down 2s ease-in-out infinite;
+  animation: nj-cookie-ears-down 2s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 .fox-nj-cookie .tail {
-  animation: nj-cookie-tail-curl 2s ease-in-out infinite;
+  animation: nj-cookie-tail-curl 2s var(--ease-in-out) infinite;
   transform-origin: bottom center;
 }
 
 /* Variant: Ditto (morphing) */
 .fox-nj-ditto {
-  animation: nj-ditto-morph 3s ease-in-out infinite;
+  animation: nj-ditto-morph 3s var(--ease-in-out) infinite;
 }
 
 .fox-nj-ditto svg path,
@@ -405,65 +329,57 @@
 .fox-nj-ditto svg ellipse,
 .fox-nj-ditto svg line {
   stroke-dasharray: 100;
-  animation: nj-ditto-line-wave 3s ease-in-out infinite;
+  animation: nj-ditto-line-wave 3s var(--ease-in-out) infinite;
 }
+
+/* ===== SIZE VARIANTS ===== */
+.fox-nj-size-32 { width: 32px; height: 32px; }
+.fox-nj-size-64 { width: 64px; height: 64px; }
+.fox-nj-size-128 { width: 128px; height: 128px; }
+.fox-nj-size-256 { width: 256px; height: 256px; }
+.fox-nj-size-512 { width: 512px; height: 512px; }
+
+/* Stroke width adjustments */
+.fox-nj-size-32 svg { stroke-width: 2px; }
+.fox-nj-size-64 svg { stroke-width: 2px; }
+.fox-nj-size-128 svg { stroke-width: 2.5px; }
+.fox-nj-size-256 svg { stroke-width: 3px; }
+.fox-nj-size-512 svg { stroke-width: 4px; }
 
 /* ===== HOVER EFFECTS ===== */
 .fox-nj-container:hover svg {
   filter: drop-shadow(0 0 6px rgba(0, 0, 255, 0.4));
-  transition: filter 0.3s ease;
+  transition: filter 0.3s var(--ease-out);
 }
 
 .fox-nj-container:hover .tail {
-  animation: nj-tail-wag 0.5s ease-in-out infinite;
+  animation: nj-tail-wag 0.5s var(--ease-in-out) infinite;
 }
 
-/* ===== SIZE VARIANTS ===== */
-.fox-nj-size-32 {
-  width: 32px;
-  height: 32px;
+/* ===== ENTRANCE ANIMATION ===== */
+@keyframes nj-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-.fox-nj-size-64 {
-  width: 64px;
-  height: 64px;
+.fox-nj-enter {
+  animation: nj-enter 0.5s var(--ease-spring) forwards;
 }
 
-.fox-nj-size-128 {
-  width: 128px;
-  height: 128px;
-}
-
-.fox-nj-size-256 {
-  width: 256px;
-  height: 256px;
-}
-
-.fox-nj-size-512 {
-  width: 512px;
-  height: 512px;
-}
-
-/* Stroke width adjustments for different sizes */
-.fox-nj-size-32 svg {
-  stroke-width: 2px;
-}
-
-.fox-nj-size-64 svg {
-  stroke-width: 2px;
-}
-
-.fox-nj-size-128 svg {
-  stroke-width: 2.5px;
-}
-
-.fox-nj-size-256 svg {
-  stroke-width: 3px;
-}
-
-.fox-nj-size-512 svg {
-  stroke-width: 4px;
-}
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .fox-nj-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .fox-nj-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .fox-nj-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .fox-nj-container:nth-child(4) { animation-delay: 150ms; }
 
 /* ===== RESPONSIVE ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -491,7 +407,20 @@
   .fox-nj-ditto svg path,
   .fox-nj-ditto svg circle,
   .fox-nj-ditto svg ellipse,
-  .fox-nj-ditto svg line {
+  .fox-nj-ditto svg line,
+  .fox-nj-enter {
     animation: none;
+  }
+  
+  .fox-nj-enter {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .fox-nj-ditto svg path,
+  .fox-nj-ditto svg circle,
+  .fox-nj-ditto svg ellipse,
+  .fox-nj-ditto svg line {
+    stroke-dasharray: none;
   }
 }

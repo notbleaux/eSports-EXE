@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
-  <path d="M88 96 L96 16 Q104 0 120 16 L112 88" 
-        fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M136 88 L144 16 Q160 0 168 16 L160 96" 
-        fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <ellipse cx="128" cy="128" rx="56" ry="48" fill="none" stroke="#0000FF" stroke-width="4"/>
-  <ellipse cx="128" cy="144" rx="24" ry="20" fill="none" stroke="#0000FF" stroke-width="3"/>
-  <ellipse cx="128" cy="136" rx="12" ry="10" fill="#0000FF"/>
-  <path d="M88 112 L112 120" stroke="#0000FF" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M144 120 L168 112" stroke="#0000FF" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M104 160 Q128 192 152 160" fill="none" stroke="#0000FF" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M80 176 Q80 208 128 216 Q176 208 176 176" 
-        fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M72 184 L48 160" stroke="#0000FF" stroke-width="3" stroke-linecap="round"/>
-  <path d="M184 184 L208 160" stroke="#0000FF" stroke-width="3" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256"><path fill="none" stroke="#00f" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m88 96 8-80q8-16 24 0l-8 72M136 88l8-72q16-16 24 0l-8 80"/><ellipse cx="128" cy="128" fill="none" stroke="#00f" stroke-width="4" rx="56" ry="48"/><ellipse cx="128" cy="144" fill="none" stroke="#00f" stroke-width="3" rx="24" ry="20"/><ellipse cx="128" cy="136" fill="#00f" rx="12" ry="10"/><path stroke="#00f" stroke-linecap="round" stroke-width="3.5" d="m88 112 24 8M144 120l24-8"/><path fill="none" stroke="#00f" stroke-linecap="round" stroke-width="3.5" d="M104 160q24 32 48 0"/><path fill="none" stroke="#00f" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M80 176q0 32 48 40 48-8 48-40"/><path stroke="#00f" stroke-linecap="round" stroke-width="3" d="m72 184-24-24M184 184l24-24"/></svg>

@@ -369,46 +369,99 @@ export const MascotAnimationController = forwardRef<
   const blendWeight = stateMachineRef.current?.getBlendWeight() ?? 1;
   const animProgress = stateMachineRef.current?.getProgress() ?? 0;
 
-  // Framer Motion variants for container
+  // Shared easing curves for consistency
+  const easings = {
+    linear: [0, 0, 1, 1] as [number, number, number, number],
+    easeIn: [0.4, 0, 1, 1] as [number, number, number, number],
+    easeOut: [0, 0, 0.2, 1] as [number, number, number, number],
+    easeInOut: [0.4, 0, 0.2, 1] as [number, number, number, number],
+    bounce: [0.68, -0.55, 0.265, 1.55] as [number, number, number, number],
+    elastic: [0.175, 0.885, 0.32, 1.275] as [number, number, number, number],
+    spring: [0.34, 1.56, 0.64, 1] as [number, number, number, number],
+    smooth: [0.4, 0, 0.2, 1] as [number, number, number, number],
+    snappy: [0.2, 0, 0, 1] as [number, number, number, number],
+    playful: [0.68, -0.6, 0.32, 1.6] as [number, number, number, number],
+  };
+
+  // Spring physics configurations
+  const springConfigs = {
+    gentle: { stiffness: 100, damping: 15, mass: 1 },
+    default: { stiffness: 300, damping: 20, mass: 1 },
+    bouncy: { stiffness: 400, damping: 10, mass: 1 },
+    stiff: { stiffness: 500, damping: 30, mass: 1 },
+    slow: { stiffness: 100, damping: 20, mass: 2 },
+  };
+
+  // Framer Motion variants for container with improved physics
   const containerVariants = useMemo(() => ({
     idle: {
       scale: 1,
       rotate: 0,
-      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+      y: 0,
+      transition: { 
+        duration: 0.5, 
+        ease: easings.easeInOut,
+      },
     },
     walk: {
       scale: [1, 1.02, 1],
-      transition: { duration: 0.6, repeat: Infinity, ease: 'linear' },
+      y: [0, -2, 0],
+      transition: { 
+        duration: 0.6, 
+        repeat: Infinity, 
+        ease: easings.easeInOut,
+      },
     },
     run: {
       scale: [1, 1.05, 1],
-      transition: { duration: 0.3, repeat: Infinity, ease: 'linear' },
+      y: [0, -4, 0],
+      transition: { 
+        duration: 0.3, 
+        repeat: Infinity, 
+        ease: easings.easeInOut,
+      },
     },
     jump: {
-      y: [0, -20, 0],
-      scaleY: [1, 0.9, 1.1, 1],
-      transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
+      y: [0, -30, 0],
+      scaleY: [1, 0.95, 1.05, 1],
+      transition: { 
+        duration: 0.8, 
+        ease: easings.spring,
+      },
     },
     attack: {
       scale: [1, 1.2, 0.95, 1],
-      x: [0, 30, -10, 0],
-      transition: { duration: 0.5, ease: [0.7, 0, 0.84, 0] },
+      x: [0, 40, -15, 0],
+      transition: { 
+        duration: 0.4, 
+        ease: easings.snappy,
+      },
     },
     celebrate: {
-      scale: [1, 1.1, 1],
-      rotate: [0, 10, -10, 0],
-      y: [0, -10, 0],
-      transition: { duration: 0.5, repeat: 2, ease: [0.34, 1.56, 0.64, 1] },
+      scale: [1, 1.15, 0.95, 1.08, 1],
+      rotate: [0, -10, 8, -5, 0],
+      y: [0, -25, 0, -12, 0],
+      transition: { 
+        duration: 1.2, 
+        ease: easings.spring,
+      },
     },
     defeat: {
       scale: 0.95,
       rotateX: 15,
       opacity: 0.7,
-      transition: { duration: 0.5 },
+      y: 10,
+      transition: { 
+        duration: 0.6, 
+        ease: easings.easeOut,
+      },
     },
     custom: {
       scale: 1,
-      transition: { duration: 0.3 },
+      transition: { 
+        duration: 0.3,
+        ease: easings.easeInOut,
+      },
     },
   }), []);
 

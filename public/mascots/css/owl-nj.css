@@ -2,104 +2,117 @@
  * Owl NJ Style - CSS Animations
  * Features: Eye blink, subtle rotate
  * Style: Minimalist line art
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
 
-/* Container for the owl mascot */
+/* ===== CSS CUSTOM PROPERTIES ===== */
 .owl-nj-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
   display: inline-block;
   position: relative;
+  will-change: transform;
 }
 
 /* Eye blink animation */
 @keyframes nj-eye-blink {
-  0%, 48%, 52%, 100% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(0.05);
-  }
+  0%, 48%, 52%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.05); }
 }
 
 /* Subtle body rotation - wise observation */
 @keyframes nj-subtle-rotate {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-2deg);
-  }
-  75% {
-    transform: rotate(2deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
 }
 
-/* Gentle floating */
+/* Gentle floating with scale */
 @keyframes nj-float {
   0%, 100% {
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
   50% {
-    transform: translateY(-3px);
+    transform: scale(1.01) translateY(-3px);
   }
 }
 
 /* Line drawing animation */
 @keyframes nj-draw-line {
-  0% {
-    stroke-dashoffset: 1000;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
 }
 
 /* Wise nod animation */
 @keyframes nj-wise-nod {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(1deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1deg); }
 }
 
 /* Pulse effect for the line art */
 @keyframes nj-line-pulse {
+  0%, 100% { stroke-opacity: 1; }
+  50% { stroke-opacity: 0.7; }
+}
+
+/* Celebrate animation with spring */
+@keyframes nj-celebrate {
   0%, 100% {
-    stroke-opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) scale(1.05) rotate(-3deg);
   }
   50% {
-    stroke-opacity: 0.7;
+    transform: translateY(0) scale(0.98) rotate(0deg);
   }
+  75% {
+    transform: translateY(-8px) scale(1.02) rotate(2deg);
+  }
+}
+
+/* Wave animation */
+@keyframes nj-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(15deg); }
 }
 
 /* Base owl animation */
 .owl-nj {
-  animation: nj-float 5s ease-in-out infinite;
+  animation: nj-float 5s var(--ease-in-out) infinite;
   transform-origin: center bottom;
 }
 
 /* Body subtle rotation */
 .owl-nj__body {
-  animation: nj-subtle-rotate 8s ease-in-out infinite;
+  animation: nj-subtle-rotate 8s var(--ease-in-out) infinite;
   transform-origin: center 60%;
 }
 
 /* Eye blink */
 .owl-nj__eyes {
-  animation: nj-eye-blink 4s ease-in-out infinite;
+  animation: nj-eye-blink 4s var(--ease-in-out) infinite;
   transform-origin: center;
 }
 
 /* Head wise nod */
 .owl-nj__head {
-  animation: nj-wise-nod 6s ease-in-out infinite;
+  animation: nj-wise-nod 6s var(--ease-in-out) infinite;
   transform-origin: center 70%;
 }
 
 /* Line art pulse effect */
 .owl-nj__lines {
-  animation: nj-line-pulse 3s ease-in-out infinite;
+  animation: nj-line-pulse 3s var(--ease-in-out) infinite;
 }
 
 /* Draw animation for SVG paths */
@@ -108,7 +121,7 @@
 .owl-nj--draw .owl-nj__lines ellipse {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: nj-draw-line 2s ease-out forwards;
+  animation: nj-draw-line 2s var(--ease-out) forwards;
 }
 
 /* Staggered draw animation for different elements */
@@ -117,7 +130,7 @@
 .owl-nj--draw .owl-nj__lines path:nth-child(3) { animation-delay: 0.2s; }
 .owl-nj--draw .owl-nj__lines path:nth-child(4) { animation-delay: 0.3s; }
 
-/* Hover state */
+/* Hover state - intensified animations */
 .owl-nj-container:hover .owl-nj__eyes {
   animation-duration: 2s;
 }
@@ -126,31 +139,65 @@
   animation-duration: 4s;
 }
 
+.owl-nj-container:hover .owl-nj__head {
+  animation-duration: 3s;
+}
+
 /* Idle state - very subtle */
 .owl-nj--idle {
   animation: none;
 }
 
 .owl-nj--idle .owl-nj__eyes {
-  animation: nj-eye-blink 6s ease-in-out infinite;
+  animation: nj-eye-blink 6s var(--ease-in-out) infinite;
 }
 
 .owl-nj--idle .owl-nj__body {
-  animation: nj-subtle-rotate 12s ease-in-out infinite;
+  animation: nj-subtle-rotate 12s var(--ease-in-out) infinite;
 }
 
 /* Observing state - more rotation */
 .owl-nj--observing .owl-nj__body {
-  animation: nj-subtle-rotate 4s ease-in-out infinite;
+  animation: nj-subtle-rotate 4s var(--ease-in-out) infinite;
 }
 
 .owl-nj--observing .owl-nj__head {
-  animation: nj-wise-nod 3s ease-in-out infinite;
+  animation: nj-wise-nod 3s var(--ease-in-out) infinite;
 }
 
-/* SVG-specific styles */
+/* Celebrate state with spring */
+.owl-nj--celebrate {
+  animation: nj-celebrate 1.2s var(--ease-spring);
+}
+
+/* Wave state */
+.owl-nj--wave .owl-nj__wing-right {
+  animation: nj-wave 0.8s var(--ease-spring);
+  transform-origin: top center;
+}
+
+/* Entrance animation */
+@keyframes nj-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.owl-nj--enter {
+  animation: nj-enter 0.5s var(--ease-spring) forwards;
+}
+
+/* SVG-specific animations */
 .owl-nj-svg {
-  transition: all 0.3s ease;
+  transition: all 0.3s var(--ease-out);
 }
 
 .owl-nj-svg:hover {
@@ -163,7 +210,7 @@
 .owl-nj-svg circle,
 .owl-nj-svg ellipse,
 .owl-nj-svg line {
-  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+  transition: stroke 0.3s var(--ease-out), stroke-width 0.3s var(--ease-out);
 }
 
 .owl-nj-container:hover .owl-nj-svg path,
@@ -181,20 +228,16 @@
 }
 
 /* Size variants */
-.owl-nj--small {
-  width: 32px;
-  height: 32px;
-}
+.owl-nj--small { width: 32px; height: 32px; }
+.owl-nj--medium { width: 64px; height: 64px; }
+.owl-nj--large { width: 128px; height: 128px; }
+.owl-nj--xlarge { width: 256px; height: 256px; }
 
-.owl-nj--medium {
-  width: 64px;
-  height: 64px;
-}
-
-.owl-nj--large {
-  width: 128px;
-  height: 128px;
-}
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .owl-nj-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .owl-nj-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .owl-nj-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .owl-nj-container:nth-child(4) { animation-delay: 150ms; }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -217,13 +260,20 @@
   .owl-nj__body,
   .owl-nj__eyes,
   .owl-nj__head,
-  .owl-nj__lines {
+  .owl-nj__lines,
+  .owl-nj--celebrate,
+  .owl-nj--enter {
     animation: none;
   }
   
   .owl-nj-svg:hover {
     transform: none;
     filter: none;
+  }
+  
+  .owl-nj--enter {
+    opacity: 1;
+    transform: none;
   }
   
   .owl-nj--draw .owl-nj__lines path,

@@ -1,37 +1,41 @@
 /**
  * Owl Dropout Style - CSS Animations
  * Features: Head tilt, glasses glint
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
 
-/* Container for the owl mascot */
+/* ===== CSS CUSTOM PROPERTIES ===== */
 .owl-dropout-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
   display: inline-block;
   position: relative;
+  will-change: transform;
 }
 
 /* Head tilt animation - thoughtful pose */
 @keyframes owl-head-tilt {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(0deg);
-  }
-  75% {
-    transform: rotate(3deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(3deg); }
 }
 
-/* Subtle hover float */
+/* Subtle hover float with scale */
 @keyframes owl-float {
   0%, 100% {
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
   50% {
-    transform: translateY(-4px);
+    transform: scale(1.01) translateY(-4px);
   }
 }
 
@@ -47,35 +51,50 @@
   }
 }
 
-/* Sweater texture pulse */
+/* Sweater texture pulse with scale */
 @keyframes sweater-breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.01);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
 }
 
 /* Thoughtful blink */
 @keyframes thoughtful-blink {
-  0%, 45%, 55%, 100% {
-    transform: scaleY(1);
+  0%, 45%, 55%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.1); }
+}
+
+/* Celebrate animation with spring */
+@keyframes owl-celebrate {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) scale(1.05) rotate(-3deg);
   }
   50% {
-    transform: scaleY(0.1);
+    transform: translateY(0) scale(0.98) rotate(0deg);
   }
+  75% {
+    transform: translateY(-8px) scale(1.02) rotate(2deg);
+  }
+}
+
+/* Wave animation */
+@keyframes owl-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(15deg); }
 }
 
 /* Base owl animation */
 .owl-dropout {
-  animation: owl-float 4s ease-in-out infinite;
+  animation: owl-float 4s var(--ease-in-out) infinite;
   transform-origin: center bottom;
 }
 
 /* Head animation wrapper */
 .owl-dropout__head {
-  animation: owl-head-tilt 6s ease-in-out infinite;
+  animation: owl-head-tilt 6s var(--ease-in-out) infinite;
   transform-origin: center 60%;
 }
 
@@ -93,20 +112,20 @@
     rgba(255, 255, 255, 0.6) 50%,
     transparent 100%
   );
-  animation: glasses-glint 5s ease-in-out infinite;
+  animation: glasses-glint 5s var(--ease-in-out) infinite;
   pointer-events: none;
   border-radius: 50%;
 }
 
 /* Eye blink on owl */
 .owl-dropout__eyes {
-  animation: thoughtful-blink 4s ease-in-out infinite;
+  animation: thoughtful-blink 4s var(--ease-in-out) infinite;
   transform-origin: center;
 }
 
 /* Sweater breathing effect */
 .owl-dropout__sweater {
-  animation: sweater-breathe 3s ease-in-out infinite;
+  animation: sweater-breathe 3s var(--ease-in-out) infinite;
   transform-origin: center;
 }
 
@@ -125,16 +144,16 @@
 }
 
 .owl-dropout--idle .owl-dropout__head {
-  animation: owl-head-tilt 8s ease-in-out infinite;
+  animation: owl-head-tilt 8s var(--ease-in-out) infinite;
 }
 
 /* Focused/thinking state - more pronounced tilt */
 .owl-dropout--thinking .owl-dropout__head {
-  animation: owl-head-tilt 3s ease-in-out infinite;
+  animation: owl-head-tilt 3s var(--ease-in-out) infinite;
 }
 
 .owl-dropout--thinking .owl-dropout__eyes {
-  animation: thoughtful-blink 2s ease-in-out infinite;
+  animation: thoughtful-blink 2s var(--ease-in-out) infinite;
 }
 
 /* Reading state - glasses glint more frequent */
@@ -142,16 +161,59 @@
   animation-duration: 2s;
 }
 
-/* SVG-specific animations using CSS classes on SVG elements */
+/* Celebrate state with spring */
+.owl-dropout--celebrate {
+  animation: owl-celebrate 1.2s var(--ease-spring);
+}
+
+/* Wave state */
+.owl-dropout--wave .owl-dropout__wing-right {
+  animation: owl-wave 0.8s var(--ease-spring);
+  transform-origin: top center;
+}
+
+/* Entrance animation */
+@keyframes owl-dropout-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.owl-dropout--enter {
+  animation: owl-dropout-enter 0.5s var(--ease-spring) forwards;
+}
+
+/* SVG-specific animations */
 .owl-dropout-svg {
-  transition: transform 0.3s ease;
+  transition: all 0.3s var(--ease-out);
 }
 
 .owl-dropout-svg:hover {
   transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgba(0, 0, 255, 0.3));
 }
 
 /* Responsive sizing */
+.owl-dropout--small { width: 32px; height: 32px; }
+.owl-dropout--medium { width: 64px; height: 64px; }
+.owl-dropout--large { width: 128px; height: 128px; }
+.owl-dropout--xlarge { width: 256px; height: 256px; }
+
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .owl-dropout-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .owl-dropout-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .owl-dropout-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .owl-dropout-container:nth-child(4) { animation-delay: 150ms; }
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .owl-dropout {
     animation-duration: 3s;
@@ -168,11 +230,19 @@
   .owl-dropout__head,
   .owl-dropout__eyes,
   .owl-dropout__sweater,
-  .owl-dropout__glasses-glint::after {
+  .owl-dropout__glasses-glint::after,
+  .owl-dropout--celebrate,
+  .owl-dropout--enter {
     animation: none;
   }
   
   .owl-dropout-svg:hover {
+    transform: none;
+    filter: none;
+  }
+  
+  .owl-dropout--enter {
+    opacity: 1;
     transform: none;
   }
 }

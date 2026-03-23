@@ -2,107 +2,128 @@
  * Hawk Dropout Style CSS Animations
  * Features: Focused gaze shift, wing adjust
  * Style: Sharp hawk with aviator jacket
+ * 
+ * [Ver002.000] - Improved easing and spring physics
  */
 
-/* Base hawk container */
-.hawk-dropout {
+/* ===== CSS CUSTOM PROPERTIES ===== */
+.hawk-dropout-container {
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  
   display: inline-block;
   position: relative;
-  transition: transform 0.3s ease;
+  will-change: transform;
 }
 
 /* Focused gaze shift animation */
 @keyframes hawkDropoutGazeShift {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(2px);
-  }
-  50% {
-    transform: translateX(-1px);
-  }
-  75% {
-    transform: translateX(1px);
-  }
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(2px); }
+  50% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
 }
 
 /* Wing adjust animation */
 @keyframes hawkDropoutWingAdjust {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(-3deg);
-  }
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-3deg); }
 }
 
-/* Subtle breathing/stance animation */
+/* Subtle breathing/stance animation with scale */
 @keyframes hawkDropoutStance {
   0%, 100% {
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
   50% {
-    transform: translateY(-1px);
+    transform: scale(1.01) translateY(-1px);
   }
 }
 
 /* Jacket shine effect */
 @keyframes hawkDropoutJacketShine {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+/* Celebrate animation with spring */
+@keyframes hawkDropoutCelebrate {
   0%, 100% {
-    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-12px) scale(1.05) rotate(-3deg);
   }
   50% {
-    opacity: 0.85;
+    transform: translateY(0) scale(0.98) rotate(0deg);
   }
+  75% {
+    transform: translateY(-6px) scale(1.02) rotate(2deg);
+  }
+}
+
+/* Wave animation */
+@keyframes hawkDropoutWave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(10deg); }
 }
 
 /* Hover state - intensified animations */
-.hawk-dropout:hover {
+.hawk-dropout-container:hover {
   transform: scale(1.02);
+  transition: transform 0.3s var(--ease-spring);
 }
 
-.hawk-dropout:hover .hawk-eyes {
-  animation: hawkDropoutGazeShift 2s ease-in-out infinite;
+.hawk-dropout-container:hover .hawk-eyes {
+  animation: hawkDropoutGazeShift 2s var(--ease-in-out) infinite;
 }
 
-.hawk-dropout:hover .hawk-wings {
-  animation: hawkDropoutWingAdjust 1.5s ease-in-out infinite;
+.hawk-dropout-container:hover .hawk-wings {
+  animation: hawkDropoutWingAdjust 1.5s var(--ease-in-out) infinite;
 }
 
 /* Idle state - subtle animations */
-.hawk-dropout.idle {
-  animation: hawkDropoutStance 3s ease-in-out infinite;
+.hawk-dropout-container.idle {
+  animation: hawkDropoutStance 3s var(--ease-in-out) infinite;
 }
 
-.hawk-dropout.idle .hawk-jacket {
-  animation: hawkDropoutJacketShine 4s ease-in-out infinite;
+.hawk-dropout-container.idle .hawk-jacket {
+  animation: hawkDropoutJacketShine 4s var(--ease-in-out) infinite;
 }
 
 /* Focus state - alert and attentive */
-.hawk-dropout.focused .hawk-eyes {
-  animation: hawkDropoutGazeShift 0.8s ease-in-out infinite;
+.hawk-dropout-container.focused .hawk-eyes {
+  animation: hawkDropoutGazeShift 0.8s var(--ease-in-out) infinite;
 }
 
-.hawk-dropout.focused .hawk-brow {
+.hawk-dropout-container.focused .hawk-brow {
   transform: translateY(-1px);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s var(--ease-out);
 }
 
-/* Ready state - prepared for action */
-.hawk-dropout.ready {
+/* Ready state - prepared for action with spring */
+.hawk-dropout-container.ready {
   transform: scale(1.05);
+  transition: transform 0.3s var(--ease-spring);
 }
 
-.hawk-dropout.ready .hawk-wings {
-  animation: hawkDropoutWingAdjust 0.6s ease-in-out infinite;
+.hawk-dropout-container.ready .hawk-wings {
+  animation: hawkDropoutWingAdjust 0.6s var(--ease-in-out) infinite;
 }
 
-.hawk-dropout.ready .hawk-stance {
-  animation: hawkDropoutStance 0.8s ease-in-out infinite;
+.hawk-dropout-container.ready .hawk-stance {
+  animation: hawkDropoutStance 0.8s var(--ease-in-out) infinite;
 }
 
-/* Entrance animation */
+/* Entrance animation with spring */
 @keyframes hawkDropoutEnter {
   0% {
     opacity: 0;
@@ -117,8 +138,8 @@
   }
 }
 
-.hawk-dropout.enter {
-  animation: hawkDropoutEnter 0.5s ease-out forwards;
+.hawk-dropout-container.enter {
+  animation: hawkDropoutEnter 0.5s var(--ease-spring) forwards;
 }
 
 /* Exit animation */
@@ -133,25 +154,55 @@
   }
 }
 
-.hawk-dropout.exit {
-  animation: hawkDropoutExit 0.3s ease-in forwards;
+.hawk-dropout-container.exit {
+  animation: hawkDropoutExit 0.3s var(--ease-in) forwards;
+}
+
+/* Celebrate state */
+.hawk-dropout-container.celebrate {
+  animation: hawkDropoutCelebrate 1.2s var(--ease-spring);
+}
+
+/* Wave state */
+.hawk-dropout-container.wave .hawk-wing-right {
+  animation: hawkDropoutWave 0.8s var(--ease-spring);
+  transform-origin: top center;
 }
 
 /* Size variants */
-.hawk-dropout.size-32 { width: 32px; height: 32px; }
-.hawk-dropout.size-64 { width: 64px; height: 64px; }
-.hawk-dropout.size-128 { width: 128px; height: 128px; }
-.hawk-dropout.size-256 { width: 256px; height: 256px; }
-.hawk-dropout.size-512 { width: 512px; height: 512px; }
+.hawk-dropout-size-32 { width: 32px; height: 32px; }
+.hawk-dropout-size-64 { width: 64px; height: 64px; }
+.hawk-dropout-size-128 { width: 128px; height: 128px; }
+.hawk-dropout-size-256 { width: 256px; height: 256px; }
+.hawk-dropout-size-512 { width: 512px; height: 512px; }
+
+/* Stroke width adjustments by size */
+.hawk-dropout-size-32 svg { stroke-width: 2; }
+.hawk-dropout-size-64 svg { stroke-width: 2; }
+.hawk-dropout-size-128 svg { stroke-width: 2; }
+.hawk-dropout-size-256 svg { stroke-width: 2; }
+.hawk-dropout-size-512 svg { stroke-width: 2; }
+
+/* ===== STAGGER SUPPORT ===== */
+.mascot-group .hawk-dropout-container:nth-child(1) { animation-delay: 0ms; }
+.mascot-group .hawk-dropout-container:nth-child(2) { animation-delay: 50ms; }
+.mascot-group .hawk-dropout-container:nth-child(3) { animation-delay: 100ms; }
+.mascot-group .hawk-dropout-container:nth-child(4) { animation-delay: 150ms; }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .hawk-dropout,
-  .hawk-dropout *,
-  .hawk-dropout *::before,
-  .hawk-dropout *::after {
+  .hawk-dropout-container,
+  .hawk-dropout-container *,
+  .hawk-dropout-container *::before,
+  .hawk-dropout-container *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  
+  .hawk-dropout-container.enter,
+  .hawk-dropout-container.exit {
+    opacity: 1;
+    transform: none;
   }
 }
