@@ -1,7 +1,9 @@
-/** [Ver001.000]
+/** [Ver002.000]
  * Heroes Components Index
  * =======================
  * Barrel exports for hero-related components.
+ * 
+ * Includes: INT-001 - Mascot Integration with format support
  * 
  * @example
  * ```tsx
@@ -12,7 +14,10 @@
  * import { FoxHeroMascot, OwlHeroMascot } from '@/components/heroes';
  * 
  * // Import types
- * import type { HeroProps, HeroMascotProps } from '@/components/heroes';
+ * import type { HeroProps, HeroMascotProps, MascotFormat } from '@/components/heroes';
+ * 
+ * // Use with format prop
+ * <HeroMascot mascot="fox" size={128} format="auto" animate />
  * ```
  */
 
@@ -24,14 +29,19 @@ export type {
   HeroProps,
   HeroCta,
   HeroBackground,
-  HeroMascotProps,
   HeroSectionProps,
+  SectionBackground,
+} from './types';
+
+// Export extended types from HeroMascot component (INT-001)
+export type {
+  HeroMascotProps,
   MascotType,
   MascotAnimation,
   MascotPosition,
+  MascotFormat,
   MascotSize,
-  SectionBackground,
-} from './types';
+} from './HeroMascot';
 
 // ============================================================================
 // Components

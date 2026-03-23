@@ -1,220 +1,159 @@
-/** [Ver001.000]
+/** [Ver002.000]
  * HeroMascot Component
  * ====================
  * Mascot integration component for hero sections with animation states.
  * 
  * Features:
- * - Mascot SVG/component rendering
+ * - Generated mascot SVG/CSS component rendering
  * - Animation states (idle, wave, celebrate)
  * - Position control (left, right, center)
- * - Size variants (sm, md, lg)
+ * - Size variants (32, 64, 128, 256) with format switching (svg, css, auto)
+ * - Loading animations with pulse and fade-in
  * - Reduced motion support
+ * - Accessibility (ARIA labels, keyboard navigation)
+ * - Easter eggs (5-click celebration)
  * - Hub-specific theming
  * 
  * @example
  * ```tsx
- * // Basic mascot
+ * // Basic mascot with auto format
  * <HeroMascot mascot="fox" />
  * 
- * // Animated mascot with custom position and size
+ * // Animated mascot with custom position, size and format
  * <HeroMascot
  *   mascot="owl"
  *   animation="wave"
  *   position="right"
- *   size="lg"
+ *   size={128}
+ *   format="svg"
  * />
  * 
- * // Static mascot for reduced motion
+ * // CSS-only format for small sizes
  * <HeroMascot
  *   mascot="wolf"
- *   animation="idle"
- *   size="md"
+ *   size={64}
+ *   format="css"
+ *   animate
+ * />
+ * 
+ * // With easter eggs and personalization
+ * <HeroMascot
+ *   mascot="hawk"
+ *   size={256}
+ *   format="auto"
+ *   animate
+ *   easterEggs
+ *   preferenceKey="hero-hawk"
  * />
  * ```
  */
 
-import { motion, type Variants } from 'framer-motion';
+import { useState, useCallback, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/utils/cn';
 import { useReducedMotion } from '@/hooks/animation/useReducedMotion';
 import { easings } from '@/lib/easing';
-import type { HeroMascotProps, MascotType } from './types';
+
+// Import generated mascot components
+import { FoxMascotSVG } from '../mascots/generated/FoxMascotSVG';
+import { FoxCSS } from '../mascots/generated/FoxCSS';
+import { OwlMascotSVG } from '../mascots/generated/OwlMascotSVG';
+import { OwlCSS } from '../mascots/generated/OwlCSS';
+import { WolfMascotSVG } from '../mascots/generated/WolfMascotSVG';
+import { WolfCSS } from '../mascots/generated/WolfCSS';
+import { HawkMascotSVG } from '../mascots/generated/HawkMascotSVG';
+import { HawkCSS } from '../mascots/generated/HawkCSS';
+
+// Import enhanced mascot asset for advanced features
+import { MascotAsset } from '../mascots/MascotAssetEnhanced';
 
 // ============================================================================
-// Mascot SVG Components
+// Types
 // ============================================================================
 
-/**
- * Fox mascot SVG - Represents agility and cleverness.
- */
-function FoxMascot({ className }: { className?: string }): JSX.Element {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Ears */}
-      <path d="M40 60L60 20L80 60" fill="#f97316" stroke="#ea580c" strokeWidth="3"/>
-      <path d="M120 60L140 20L160 60" fill="#f97316" stroke="#ea580c" strokeWidth="3"/>
-      {/* Head */}
-      <ellipse cx="100" cy="100" rx="60" ry="50" fill="#fb923c"/>
-      {/* Face mask */}
-      <path d="M50 90Q100 130 150 90L150 120Q100 160 50 120Z" fill="#fff7ed"/>
-      {/* Eyes */}
-      <circle cx="75" cy="95" r="8" fill="#1f2937"/>
-      <circle cx="125" cy="95" r="8" fill="#1f2937"/>
-      <circle cx="77" cy="93" r="3" fill="white"/>
-      <circle cx="127" cy="93" r="3" fill="white"/>
-      {/* Nose */}
-      <ellipse cx="100" cy="115" rx="8" ry="6" fill="#1f2937"/>
-      {/* Mouth */}
-      <path d="M90 125Q100 135 110 125" stroke="#1f2937" strokeWidth="2" fill="none"/>
-      {/* Cheeks */}
-      <ellipse cx="55" cy="110" rx="10" ry="6" fill="#fca5a5" opacity="0.6"/>
-      <ellipse cx="145" cy="110" rx="10" ry="6" fill="#fca5a5" opacity="0.6"/>
-    </svg>
-  );
-}
+export type MascotType = 'fox' | 'owl' | 'wolf' | 'hawk';
+export type MascotAnimation = 'idle' | 'wave' | 'celebrate';
+export type MascotPosition = 'left' | 'right' | 'center';
+export type MascotFormat = 'svg' | 'css' | 'auto';
+export type MascotSize = 32 | 64 | 128 | 256;
 
 /**
- * Owl mascot SVG - Represents wisdom and insight.
+ * Props for the HeroMascot component.
  */
-function OwlMascot({ className }: { className?: string }): JSX.Element {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Body */}
-      <ellipse cx="100" cy="120" rx="55" ry="60" fill="#6366f1"/>
-      {/* Wings */}
-      <ellipse cx="45" cy="120" rx="20" ry="35" fill="#4f46e5"/>
-      <ellipse cx="155" cy="120" rx="20" ry="35" fill="#4f46e5"/>
-      {/* Head */}
-      <circle cx="100" cy="70" r="45" fill="#818cf8"/>
-      {/* Ear tufts */}
-      <path d="M60 40L70 15L85 35" fill="#4f46e5"/>
-      <path d="M115 35L130 15L140 40" fill="#4f46e5"/>
-      {/* Eyes (large) */}
-      <circle cx="75" cy="70" r="22" fill="#fbbf24"/>
-      <circle cx="125" cy="70" r="22" fill="#fbbf24"/>
-      <circle cx="75" cy="70" r="15" fill="#f59e0b"/>
-      <circle cx="125" cy="70" r="15" fill="#f59e0b"/>
-      <circle cx="75" cy="70" r="8" fill="#1f2937"/>
-      <circle cx="125" cy="70" r="8" fill="#1f2937"/>
-      <circle cx="78" cy="67" r="3" fill="white"/>
-      <circle cx="128" cy="67" r="3" fill="white"/>
-      {/* Beak */}
-      <path d="M90 85L100 100L110 85" fill="#f97316"/>
-      {/* Chest feathers */}
-      <path d="M70 130Q100 150 130 130" stroke="#a5b4fc" strokeWidth="2" fill="none"/>
-      <path d="M75 145Q100 160 125 145" stroke="#a5b4fc" strokeWidth="2" fill="none"/>
-    </svg>
-  );
-}
-
-/**
- * Wolf mascot SVG - Represents strength and leadership.
- */
-function WolfMascot({ className }: { className?: string }): JSX.Element {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Ears */}
-      <path d="M35 70L55 10L75 60" fill="#475569" stroke="#334155" strokeWidth="3"/>
-      <path d="M125 60L145 10L165 70" fill="#475569" stroke="#334155" strokeWidth="3"/>
-      {/* Head */}
-      <polygon points="100,30 160,90 140,150 60,150 40,90" fill="#64748b"/>
-      {/* Inner ears */}
-      <path d="M45 65L55 25L68 58" fill="#94a3b8"/>
-      <path d="M132 58L145 25L155 65" fill="#94a3b8"/>
-      {/* Eyes */}
-      <ellipse cx="70" cy="95" rx="12" ry="10" fill="#10b981"/>
-      <ellipse cx="130" cy="95" rx="12" ry="10" fill="#10b981"/>
-      <ellipse cx="70" cy="95" rx="6" ry="5" fill="#064e3b"/>
-      <ellipse cx="130" cy="95" rx="6" ry="5" fill="#064e3b"/>
-      <circle cx="73" cy="93" r="2" fill="white"/>
-      <circle cx="133" cy="93" r="2" fill="white"/>
-      {/* Snout */}
-      <ellipse cx="100" cy="120" rx="20" ry="15" fill="#94a3b8"/>
-      {/* Nose */}
-      <ellipse cx="100" cy="110" rx="8" ry="6" fill="#1f2937"/>
-      {/* Mouth */}
-      <path d="M90 125L100 135L110 125" stroke="#1f2937" strokeWidth="2" fill="none"/>
-      {/* Fangs */}
-      <path d="M88 128L90 138L92 128" fill="white"/>
-      <path d="M108 128L110 138L112 128" fill="white"/>
-    </svg>
-  );
-}
-
-/**
- * Hawk mascot SVG - Represents speed and precision.
- */
-function HawkMascot({ className }: { className?: string }): JSX.Element {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      className={className}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Head shape */}
-      <path d="M100 20L160 80L140 140L60 140L40 80Z" fill="#dc2626"/>
-      {/* Beak */}
-      <path d="M100 60L125 100H75L100 60Z" fill="#fbbf24"/>
-      <path d="M100 100L90 130H110L100 100Z" fill="#f59e0b"/>
-      {/* Eyes */}
-      <ellipse cx="65" cy="85" rx="18" ry="14" fill="#fbbf24"/>
-      <ellipse cx="135" cy="85" rx="18" ry="14" fill="#fbbf24"/>
-      <circle cx="65" cy="85" r="10" fill="#1f2937"/>
-      <circle cx="135" cy="85" r="10" fill="#1f2937"/>
-      <circle cx="68" cy="82" r="3" fill="white"/>
-      <circle cx="138" cy="82" r="3" fill="white"/>
-      {/* Eye stripes */}
-      <path d="M30 70L50 80" stroke="#7f1d1d" strokeWidth="4"/>
-      <path d="M30 85L47 88" stroke="#7f1d1d" strokeWidth="3"/>
-      <path d="M170 70L150 80" stroke="#7f1d1d" strokeWidth="4"/>
-      <path d="M170 85L153 88" stroke="#7f1d1d" strokeWidth="3"/>
-      {/* Neck feathers */}
-      <path d="M60 130L70 150M80 135L85 155M120 135L115 155M140 130L130 150" 
-        stroke="#b91c1c" strokeWidth="3"/>
-    </svg>
-  );
+export interface HeroMascotProps {
+  /** Mascot character type */
+  mascot: MascotType;
+  /** Animation state */
+  animation?: MascotAnimation;
+  /** Horizontal positioning */
+  position?: MascotPosition;
+  /** Size in pixels (32, 64, 128, 256) */
+  size?: MascotSize;
+  /** Format preference (svg, css, or auto-select) */
+  format?: MascotFormat;
+  /** Enable animations */
+  animate?: boolean;
+  /** Enable easter eggs (5-click celebration) */
+  easterEggs?: boolean;
+  /** Personalization key for storing user preference */
+  preferenceKey?: string;
+  /** Additional CSS classes */
+  className?: string;
+  /** Accessible label override */
+  ariaLabel?: string;
 }
 
 // ============================================================================
-// Mascot Registry
+// Mascot Registry for Generated Components
 // ============================================================================
 
-const MASCOT_COMPONENTS: Record<MascotType, React.FC<{ className?: string }>> = {
-  fox: FoxMascot,
-  owl: OwlMascot,
-  wolf: WolfMascot,
-  hawk: HawkMascot,
+// Use type assertion to handle different size type unions in generated components
+const MASCOT_COMPONENTS: Record<
+  MascotType, 
+  {
+    svg: React.FC<{ size?: number; className?: string; animate?: boolean }>;
+    css: React.FC<{ className?: string; animate?: boolean }>;
+    color: string;
+    description: string;
+  }
+> = {
+  fox: {
+    svg: FoxMascotSVG as React.FC<{ size?: number; className?: string; animate?: boolean }>,
+    css: FoxCSS,
+    color: '#F97316',
+    description: 'Agile, clever, quick-witted',
+  },
+  owl: {
+    svg: OwlMascotSVG as React.FC<{ size?: number; className?: string; animate?: boolean }>,
+    css: OwlCSS,
+    color: '#6366F1',
+    description: 'Wise, insightful, strategic',
+  },
+  wolf: {
+    svg: WolfMascotSVG as React.FC<{ size?: number; className?: string; animate?: boolean }>,
+    css: WolfCSS,
+    color: '#475569',
+    description: 'Strong, loyal, protective',
+  },
+  hawk: {
+    svg: HawkMascotSVG as React.FC<{ size?: number; className?: string; animate?: boolean }>,
+    css: HawkCSS,
+    color: '#DC2626',
+    description: 'Fast, precise, visionary',
+  },
 };
 
 // ============================================================================
 // Animation Variants
 // ============================================================================
 
-const ANIMATION_VARIANTS: Record<NonNullable<HeroMascotProps['animation']>, Variants> = {
+const ANIMATION_VARIANTS: Record<MascotAnimation, { initial: object; animate: object }> = {
   idle: {
-    initial: { scale: 1, rotate: 0 },
+    initial: { scale: 1, rotate: 0, opacity: 0 },
     animate: {
       scale: [1, 1.02, 1],
       rotate: [0, 1, -1, 0],
+      opacity: 1,
       transition: {
         duration: 4,
         ease: easings.smoke,
@@ -224,11 +163,12 @@ const ANIMATION_VARIANTS: Record<NonNullable<HeroMascotProps['animation']>, Vari
     },
   },
   wave: {
-    initial: { scale: 1, rotate: 0, x: 0 },
+    initial: { scale: 1, rotate: 0, x: 0, opacity: 0 },
     animate: {
       scale: [1, 1.05, 1],
       rotate: [0, -5, 5, -5, 0],
       x: [0, -5, 5, -5, 0],
+      opacity: 1,
       transition: {
         duration: 2,
         ease: easings.spring,
@@ -238,10 +178,11 @@ const ANIMATION_VARIANTS: Record<NonNullable<HeroMascotProps['animation']>, Vari
     },
   },
   celebrate: {
-    initial: { scale: 1, y: 0 },
+    initial: { scale: 0.8, y: 0, opacity: 0 },
     animate: {
-      scale: [1, 1.1, 1],
+      scale: [0.8, 1.2, 1],
       y: [0, -20, 0],
+      opacity: 1,
       transition: {
         duration: 0.8,
         ease: easings.spring,
@@ -253,27 +194,64 @@ const ANIMATION_VARIANTS: Record<NonNullable<HeroMascotProps['animation']>, Vari
 };
 
 // ============================================================================
-// Size Configuration
+// Position & Size Configuration
 // ============================================================================
 
-const SIZE_CLASSES: Record<NonNullable<HeroMascotProps['size']>, string> = {
-  sm: 'w-24 h-24 md:w-32 md:h-32',
-  md: 'w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56',
-  lg: 'w-40 h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 xl:w-80 xl:h-80',
-};
-
-// ============================================================================
-// Position Configuration
-// ============================================================================
-
-const POSITION_CLASSES: Record<NonNullable<HeroMascotProps['position']>, string> = {
+const POSITION_CLASSES: Record<MascotPosition, string> = {
   left: 'self-start',
   center: 'self-center',
   right: 'self-end',
 };
 
+const SIZE_PIXELS: Record<MascotSize, number> = {
+  32: 32,
+  64: 64,
+  128: 128,
+  256: 256,
+};
+
 // ============================================================================
-// Component
+// Loading Animation Component
+// ============================================================================
+
+interface LoadingPulseProps {
+  size: MascotSize;
+  color: string;
+}
+
+const LoadingPulse: React.FC<LoadingPulseProps> = ({ size, color }) => {
+  const pixelSize = SIZE_PIXELS[size];
+  
+  return (
+    <motion.div
+      className="absolute inset-0 flex items-center justify-center"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="rounded-full"
+        style={{
+          width: pixelSize * 0.5,
+          height: pixelSize * 0.5,
+          backgroundColor: color,
+        }}
+        animate={{
+          scale: [0.8, 1, 0.8],
+          opacity: [0.5, 0.8, 0.5],
+        }}
+        transition={{
+          duration: 1.5,
+          ease: 'easeInOut',
+          repeat: Infinity,
+        }}
+      />
+    </motion.div>
+  );
+};
+
+// ============================================================================
+// Main Component
 // ============================================================================
 
 /**
@@ -286,13 +264,111 @@ export function HeroMascot({
   mascot,
   animation = 'idle',
   position = 'center',
-  size = 'md',
+  size = 128,
+  format = 'auto',
+  animate = false,
+  easterEggs = false,
+  preferenceKey,
   className,
+  ariaLabel,
 }: HeroMascotProps): JSX.Element {
   const { prefersReducedMotion } = useReducedMotion();
+  const [isLoading, setIsLoading] = useState(true);
+  const [clickCount, setClickCount] = useState(0);
+  const [isCelebrate, setIsCelebrate] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   
-  const MascotComponent = MASCOT_COMPONENTS[mascot];
-  const variants = ANIMATION_VARIANTS[animation];
+  // Determine effective format based on size and preference
+  const effectiveFormat: 'svg' | 'css' = format === 'auto' 
+    ? (size <= 64 ? 'css' : 'svg')
+    : format;
+  
+  const mascotSet = MASCOT_COMPONENTS[mascot];
+  const variants = ANIMATION_VARIANTS[isCelebrate ? 'celebrate' : animation];
+  const pixelSize = SIZE_PIXELS[size];
+  
+  // Simulate loading completion
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [mascot, size, format]);
+  
+  // Easter egg: 5 clicks triggers celebration
+  const handleClick = useCallback(() => {
+    if (!easterEggs) return;
+    
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    
+    if (newCount >= 5) {
+      setIsCelebrate(true);
+      setTimeout(() => {
+        setIsCelebrate(false);
+        setClickCount(0);
+      }, 2000);
+    }
+  }, [clickCount, easterEggs]);
+  
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  }, [handleClick]);
+  
+  // Use MascotAssetEnhanced for advanced features when easterEggs or preferenceKey is provided
+  if (easterEggs || preferenceKey) {
+    return (
+      <div
+        className={cn(
+          'relative flex items-center justify-center',
+          POSITION_CLASSES[position],
+          className
+        )}
+      >
+        {/* Glow effect behind mascot */}
+        <motion.div 
+          className={cn(
+            'absolute rounded-full blur-3xl',
+            'bg-gradient-to-br from-blue-500 to-purple-500'
+          )}
+          style={{ 
+            width: pixelSize * 1.5, 
+            height: pixelSize * 1.5,
+            opacity: isHovered ? 0.4 : 0.2,
+          }}
+          animate={{ opacity: isHovered ? 0.4 : 0.2 }}
+          transition={{ duration: 0.3 }}
+          aria-hidden="true"
+        />
+        
+        <motion.div
+          className="relative z-10"
+          initial="initial"
+          animate={prefersReducedMotion ? { opacity: 1 } : variants.animate}
+          variants={prefersReducedMotion ? undefined : variants}
+          onHoverStart={() => setIsHovered(true)}
+          onHoverEnd={() => setIsHovered(false)}
+        >
+          <MascotAsset
+            mascot={mascot}
+            size={size}
+            format={format}
+            animate={animate && !prefersReducedMotion}
+            easterEggs={easterEggs}
+            preferenceKey={preferenceKey || `hero-${mascot}`}
+            className="cursor-pointer"
+          />
+        </motion.div>
+      </div>
+    );
+  }
+  
+  // Standard rendering with generated components
+  const MascotComponent = effectiveFormat === 'css' ? mascotSet.css : mascotSet.svg;
   
   return (
     <div
@@ -301,30 +377,90 @@ export function HeroMascot({
         POSITION_CLASSES[position],
         className
       )}
-      aria-label={`${mascot} mascot character`}
       role="img"
+      aria-label={ariaLabel || `${mascot} mascot - ${mascotSet.description}`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={easterEggs ? 0 : -1}
+      style={{ cursor: easterEggs ? 'pointer' : 'default' }}
     >
       {/* Glow effect behind mascot */}
-      <div 
+      <motion.div 
         className={cn(
-          'absolute inset-0 rounded-full blur-3xl opacity-30',
+          'absolute rounded-full blur-3xl',
           'bg-gradient-to-br from-blue-500 to-purple-500'
         )}
+        style={{ 
+          width: pixelSize * 1.5, 
+          height: pixelSize * 1.5,
+        }}
+        initial={{ opacity: 0.2 }}
+        animate={{ opacity: isHovered ? 0.4 : 0.2 }}
+        transition={{ duration: 0.3 }}
         aria-hidden="true"
       />
       
+      {/* Loading animation */}
+      <AnimatePresence>
+        {isLoading && (
+          <LoadingPulse size={size} color={mascotSet.color} />
+        )}
+      </AnimatePresence>
+      
       {/* Animated mascot container */}
       <motion.div
-        className={cn(
-          'relative z-10',
-          SIZE_CLASSES[size]
-        )}
-        variants={prefersReducedMotion ? {} : variants}
-        initial="initial"
-        animate="animate"
+        className="relative z-10"
+        style={{ width: pixelSize, height: pixelSize }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ 
+          opacity: isLoading ? 0 : 1, 
+          scale: isLoading ? 0.9 : 1,
+        }}
+        transition={{ 
+          duration: 0.4, 
+          ease: easings.smoke,
+        }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
       >
-        <MascotComponent className="w-full h-full drop-shadow-2xl" />
+        <motion.div
+          variants={prefersReducedMotion ? {} : {
+            animate: variants.animate,
+          }}
+          animate="animate"
+        >
+          {effectiveFormat === 'css' ? (
+            <MascotComponent 
+              className="w-full h-full drop-shadow-2xl"
+              animate={animate && !prefersReducedMotion}
+            />
+          ) : (
+            <MascotComponent 
+              size={size}
+              className="w-full h-full drop-shadow-2xl"
+              animate={animate && !prefersReducedMotion}
+            />
+          )}
+        </motion.div>
       </motion.div>
+      
+      {/* Screen reader description */}
+      <span className="sr-only">
+        {mascotSet.description}
+        {easterEggs && ' Click 5 times for a surprise!'}
+      </span>
+      
+      {/* Click indicator for easter egg */}
+      {easterEggs && clickCount > 0 && clickCount < 5 && (
+        <motion.div
+          className="absolute -top-6 right-0 text-xs opacity-60 bg-black/50 px-2 py-0.5 rounded"
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 0.6, y: 0 }}
+          exit={{ opacity: 0 }}
+        >
+          {clickCount}/5
+        </motion.div>
+      )}
     </div>
   );
 }
@@ -333,39 +469,33 @@ export function HeroMascot({
 // Named Exports for Specific Mascots
 // ============================================================================
 
+interface PresetProps extends Omit<HeroMascotProps, 'mascot'> {}
+
 /**
  * Fox mascot preset.
  */
-export function FoxHeroMascot(
-  props: Omit<HeroMascotProps, 'mascot'>
-): JSX.Element {
+export function FoxHeroMascot(props: PresetProps): JSX.Element {
   return <HeroMascot {...props} mascot="fox" />;
 }
 
 /**
  * Owl mascot preset.
  */
-export function OwlHeroMascot(
-  props: Omit<HeroMascotProps, 'mascot'>
-): JSX.Element {
+export function OwlHeroMascot(props: PresetProps): JSX.Element {
   return <HeroMascot {...props} mascot="owl" />;
 }
 
 /**
  * Wolf mascot preset.
  */
-export function WolfHeroMascot(
-  props: Omit<HeroMascotProps, 'mascot'>
-): JSX.Element {
+export function WolfHeroMascot(props: PresetProps): JSX.Element {
   return <HeroMascot {...props} mascot="wolf" />;
 }
 
 /**
  * Hawk mascot preset.
  */
-export function HawkHeroMascot(
-  props: Omit<HeroMascotProps, 'mascot'>
-): JSX.Element {
+export function HawkHeroMascot(props: PresetProps): JSX.Element {
   return <HeroMascot {...props} mascot="hawk" />;
 }
 

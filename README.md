@@ -1,4 +1,4 @@
-[Ver003.000]
+[Ver004.000]
 
 # 🏗️ Libre-X-eSport 4NJZ4 TENET Platform v2.1
 
@@ -23,6 +23,7 @@ The Libre-X-eSport 4NJZ4 TENET Platform is a comprehensive esports analytics and
 - **Feature Flags:** Gradual rollout and A/B testing support
 - **Error Tracking:** Sentry integration for production monitoring
 - **Component Docs:** Storybook for UI component documentation
+- **Mascot System:** Enhanced mascot assets with SVG/CSS/PNG formats and animations
 
 ---
 
@@ -255,6 +256,127 @@ wss://api.libre-x-esport.com/v1/ws  # Real-time updates
 ```
 
 See [API Documentation](docs/API_V1_DOCUMENTATION.md) for complete reference.
+
+---
+
+## 🎨 Mascot System
+
+The 4NJZ4 TENET Platform features an advanced mascot system with multiple asset formats, animations, and accessibility features.
+
+### Mascot Characters
+
+| Mascot | Name | Element | Rarity | Color |
+|--------|------|---------|--------|-------|
+| 🦊 | **Fox** | Solar | Legendary | Orange `#F97316` |
+| 🦉 | **Owl** | Lunar | Epic | Indigo `#6366F1` |
+| 🐺 | **Wolf** | Binary | Rare | Slate `#475569` |
+| 🦅 | **Hawk** | Fire | Epic | Red `#DC2626` |
+
+### Asset Formats
+
+Mascots support multiple formats for optimal performance:
+
+| Format | Extension | Best For | Features |
+|--------|-----------|----------|----------|
+| **SVG** | `.svg` | Scalability, animations | Vector-based, crisp at any size |
+| **PNG** | `.png` | Pixel-perfect raster | High quality, no compression artifacts |
+| **CSS** | Pure CSS | Zero dependencies, fast loading | No image files required |
+| **Auto** | — | Runtime optimization | Automatically selects best format |
+
+### Usage Examples
+
+#### Basic Usage
+
+```tsx
+import { MascotAssetEnhanced } from '@/components/mascots';
+
+// Default mascot with auto format
+<MascotAssetEnhanced mascot="fox" size={128} />
+
+// Specific format
+<MascotAssetEnhanced mascot="owl" size={64} format="svg" />
+
+// With animation
+<MascotAssetEnhanced mascot="wolf" size={128} animate animation="wave" />
+```
+
+#### Gallery Component
+
+```tsx
+import { MascotGallery, MOCK_MASCOTS } from '@/components/mascots';
+
+<MascotGallery
+  mascots={MOCK_MASCOTS}
+  config={{ viewMode: 'grid', cardSize: 'md' }}
+  onMascotSelect={(mascot) => console.log('Selected:', mascot.name)}
+/>
+```
+
+### 10 Design Recommendations
+
+The mascot system implements the following recommendations:
+
+| # | Recommendation | Status | Description |
+|---|----------------|--------|-------------|
+| 1 | **Consistent Color Palette** | ✅ | Each mascot has defined primary/glow colors |
+| 2 | **Scalable Base Design** | ✅ | SVG format supports any resolution |
+| 3 | **Preview Tool** | ✅ | `/dev/mascots` route for testing all variants |
+| 4 | **Progressive Enhancement** | ✅ | Falls back from PNG → SVG → CSS automatically |
+| 5 | **User Personalization** | ✅ | localStorage remembers user mascot preferences |
+| 6 | **Loading Animations** | ✅ | Pulse animation while assets load |
+| 7 | **Mascot Rotation** | ✅ | Random mascot selection on load option |
+| 8 | **Accessibility Patterns** | ✅ | ARIA labels, keyboard navigation, screen reader support |
+| 9 | **Contextual Usage** | ✅ | Different animations for different states |
+| 10 | **Format Optimization** | ✅ | Auto-selects best format based on size |
+
+### Animation Types
+
+| Animation | Description | Use Case |
+|-----------|-------------|----------|
+| `idle` | Subtle breathing/bouncing | Default state, continuous |
+| `wave` | Playful waving gesture | Hover interactions, greetings |
+| `celebrate` | Excited celebration | Achievements, milestones |
+
+### Dev Tools
+
+Access the mascot preview tool at:
+
+```
+http://localhost:5173/dev/mascots
+```
+
+Features:
+- Format switching (SVG/PNG/CSS/Auto)
+- Size comparison (32px to 256px)
+- Animation showcase
+- Dark/light mode toggle
+
+### Troubleshooting
+
+#### Mascot not displaying
+
+1. Check that the mascot files exist in `public/mascots/{format}/`
+2. Verify the format is supported for the selected size
+3. Check browser console for 404 errors
+
+#### Animations not working
+
+1. Ensure `animate` prop is set to `true`
+2. Check that `animation` prop is one of: `idle`, `wave`, `celebrate`
+3. Verify CSS animations are not disabled via `prefers-reduced-motion`
+
+#### Performance issues
+
+1. Use `format="auto"` for optimal format selection
+2. For small sizes (≤64px), use `format="css"`
+3. For large sizes (≥512px), use `format="png"`
+4. Limit animated mascots on screen simultaneously
+
+#### Format fallbacks not working
+
+1. Ensure `progressive` prop is `true` (default)
+2. Check that fallback formats exist in the expected paths
+3. Verify `onError` callback is not suppressing errors
 
 ---
 

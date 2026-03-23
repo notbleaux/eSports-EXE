@@ -222,7 +222,7 @@ export function Hero({
               mascot={mascot!}
               animation="idle"
               position="center"
-              size="lg"
+              size={256}
             />
           </motion.div>
         )}

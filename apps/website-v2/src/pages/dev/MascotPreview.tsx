@@ -7,7 +7,7 @@
  */
 
 import React, { useState } from 'react';
-import { MascotAsset, MascotType, AssetFormat } from '@/components/mascots/MascotAsset';
+import { MascotAssetEnhanced, MascotType, AssetFormat } from '@/components/mascots/MascotAssetEnhanced';
 
 const MASCOTS: MascotType[] = ['fox', 'owl', 'wolf', 'hawk'];
 const SIZES = [32, 64, 128, 256] as const;
@@ -116,7 +116,7 @@ export const MascotPreview: React.FC = () => {
               <div key={mascot} className="text-center">
                 <h3 className="text-lg font-medium mb-4 capitalize">{mascot}</h3>
                 <div className="inline-flex flex-col items-center p-4">
-                  <MascotAsset
+                  <MascotAssetEnhanced
                     mascot={mascot}
                     size={128}
                     format={selectedFormat}
@@ -141,7 +141,7 @@ export const MascotPreview: React.FC = () => {
                 {SIZES.map(size => (
                   <div key={size} className="text-center">
                     <div className="inline-flex items-center justify-center">
-                      <MascotAsset
+                      <MascotAssetEnhanced
                         mascot={mascot}
                         size={size}
                         format={selectedFormat}
@@ -165,7 +165,7 @@ export const MascotPreview: React.FC = () => {
             {FORMATS.map(format => (
               <div key={format} className="text-center">
                 <div className={`inline-flex items-center justify-center p-4 rounded border-2 ${selectedFormat === format ? 'border-blue-500' : 'border-transparent'}`}>
-                  <MascotAsset
+                  <MascotAssetEnhanced
                     mascot="fox"
                     size={64}
                     format={format}
@@ -195,7 +195,7 @@ export const MascotPreview: React.FC = () => {
                 <h3 className="text-lg font-medium mb-4 capitalize">{anim}</h3>
                 <div className="flex justify-center gap-4">
                   {MASCOTS.slice(0, 2).map(mascot => (
-                    <MascotAsset
+                    <MascotAssetEnhanced
                       key={mascot}
                       mascot={mascot}
                       size={96}
@@ -217,7 +217,7 @@ export const MascotPreview: React.FC = () => {
             <div>
               <h4 className="font-medium mb-2">Usage</h4>
               <code className="block bg-black/10 p-2 rounded">
-                {`<MascotAsset mascot="fox" size={128} format="${selectedFormat}" />`}
+                {`<MascotAssetEnhanced mascot="fox" size={128} format="${selectedFormat}" />`}
               </code>
             </div>
             <div>

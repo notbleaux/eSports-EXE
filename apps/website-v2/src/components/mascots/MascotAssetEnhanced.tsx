@@ -17,7 +17,7 @@ export type MascotType = 'fox' | 'owl' | 'wolf' | 'hawk';
 export type AssetFormat = 'svg' | 'png' | 'css' | 'auto';
 export type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 
-interface MascotAssetProps {
+export interface MascotAssetProps {
   mascot?: MascotType;
   size?: 32 | 64 | 128 | 256 | 512;
   format?: AssetFormat;
@@ -55,9 +55,6 @@ const getRandomMascot = (): MascotType => {
   const mascots: MascotType[] = ['fox', 'owl', 'wolf', 'hawk'];
   return mascots[Math.floor(Math.random() * mascots.length)];
 };
-
-// Easter egg tracking
-const clickCounts: Record<string, number> = {};
 
 /**
  * Enhanced Mascot Asset with all recommendations integrated
@@ -398,5 +395,8 @@ if (typeof document !== 'undefined') {
     document.head.appendChild(styleEl);
   }
 }
+
+// Named export alias for backward compatibility
+export const MascotAssetEnhanced = MascotAsset;
 
 export default MascotAsset;

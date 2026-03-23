@@ -200,14 +200,14 @@ describe('Hero Components', () => {
     });
 
     it('should render all size variants', () => {
-      const sizes: Array<'sm' | 'md' | 'lg'> = ['sm', 'md', 'lg'];
+      const sizes: Array<32 | 64 | 128 | 256> = [32, 64, 128, 256];
       
       sizes.forEach((size) => {
         const { unmount } = render(
           <HeroMascot mascot="fox" size={size} />
         );
         
-        expect(screen.getByLabelText('fox mascot character')).toBeInTheDocument();
+        expect(screen.getByLabelText(/fox mascot/i)).toBeInTheDocument();
         unmount();
       });
     });

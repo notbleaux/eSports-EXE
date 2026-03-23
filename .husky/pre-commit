@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Check if mascot config changed
+if git diff --cached --name-only | grep -q "mascot-generator"; then
+  echo "🎨 Mascot config changed, regenerating..."
+  npm run mascots:generate
+  git add apps/website-v2/public/mascots/
+fi

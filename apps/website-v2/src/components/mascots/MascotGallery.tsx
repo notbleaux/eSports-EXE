@@ -1,4 +1,4 @@
-/** [Ver001.000]
+/** [Ver002.000]
  * MascotGallery Component
  * =======================
  * Grid layout with responsive breakpoints for displaying mascot cards.
@@ -12,26 +12,36 @@
  * - View mode toggle (grid/list)
  * - Empty state handling
  * - Loading skeletons
+ * - Format toggle (SVG/CSS/PNG)
+ * - Size comparison view
+ * - Animation showcase
+ * 
+ * Uses MascotAssetEnhanced for all mascot rendering (INT-004)
  */
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   Search,
   Filter,
   Grid3X3,
-  List,
   ArrowUpDown,
   Star,
   X,
   Heart,
+  Image,
+  MonitorPlay,
+  Layers,
+  Maximize2,
+  Sparkles,
 } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/animation/useReducedMotion';
 import type { MascotGalleryProps, GalleryConfig, MascotElement, MascotRarity } from './types';
 import { MascotCard } from './MascotCard';
 import { useMascotFilter } from './hooks/useMascotFilter';
 import { ELEMENT_CONFIG, RARITY_CONFIG } from './mocks/mascots';
+import { MascotAsset as MascotAssetEnhanced, AssetFormat, MascotType } from './MascotAssetEnhanced';
 
 // ============================================================================
 // Default Configuration
@@ -51,6 +61,12 @@ const DEFAULT_CONFIG: GalleryConfig = {
 };
 
 // ============================================================================
+// View Mode Types
+// ============================================================================
+
+type GalleryView = 'gallery' | 'size-comparison' | 'animation-showcase';
+
+// ============================================================================
 // Component
 // ============================================================================
 
@@ -67,6 +83,16 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
 }) => {
   const config = useMemo(() => ({ ...DEFAULT_CONFIG, ...userConfig }), [userConfig]);
   const { prefersReducedMotion } = useReducedMotion();
+
+  // View mode state
+  const [view, setView] = useState<GalleryView>('gallery');
+  
+  // Format toggle state
+  const [selectedFormat, setSelectedFormat] = useState<AssetFormat>('auto');
+  
+  // Animation showcase state
+  const [showcaseAnimation, setShowcaseAnimation] = useState<'idle' | 'wave' | 'celebrate'>('idle');
+  const [showcaseSize, setShowcaseSize] = useState<32 | 64 | 128 | 256>(128);
 
   // Filter hook
   const {
@@ -131,6 +157,157 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
 
   const elements: MascotElement[] = ['solar', 'lunar', 'binary', 'fire', 'magic'];
   const rarities: MascotRarity[] = ['common', 'rare', 'epic', 'legendary'];
+  const formats: { value: AssetFormat; label: string; icon: React.ReactNode }[] = [
+    { value: 'auto', label: 'Auto', icon: <Sparkles className="w-4 h-4" /> },
+    { value: 'svg', label: 'SVG', icon: <Image className="w-4 h-4" /> },
+    { value: 'png', label: 'PNG', icon: <Layers className="w-4 h-4" /> },
+    { value: 'css', label: 'CSS', icon: <MonitorPlay className="w-4 h-4" /> },
+  ];
+  const sizes: { value: 32 | 64 | 128 | 256; label: string }[] = [
+    { value: 32, label: '32px' },
+    { value: 64, label: '64px' },
+    { value: 128, label: '128px' },
+    { value: 256, label: '256px' },
+  ];
+  const animations: { value: 'idle' | 'wave' | 'celebrate'; label: string }[] = [
+    { value: 'idle', label: 'Idle' },
+    { value: 'wave', label: 'Wave' },
+    { value: 'celebrate', label: 'Celebrate' },
+  ];
+
+  // Map mascot IDs to mascot types for MascotAssetEnhanced
+  const getMascotType = (id: string): MascotType => {
+    const typeMap: Record<string, MascotType> = {
+      sol: 'fox',
+      lun: 'owl',
+      bin: 'wolf',
+      fat: 'hawk',
+      uni: 'fox', // fallback to fox for uni
+    };
+    return typeMap[id] || 'fox';
+  };
+
+  // ============================================================================
+  // Size Comparison View
+  // ============================================================================
+
+  const SizeComparisonView = () => (
+    <div className="space-y-8">
+      <div className="bg-surface rounded-2xl p-6 shadow-sm border border-border">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Maximize2 className="w-5 h-5 text-cyan-500" />
+          Size Comparison
+        </h3>
+        <p className="text-sm text-gray-500 mb-6">
+          Compare all mascot sizes at different resolutions. Format: <strong>{selectedFormat.toUpperCase()}</strong>
+        </p>
+        
+        <div className="space-y-8">
+          {sizes.map(({ value: size, label }) => (
+            <div key={size} className="border-b border-border last:border-0 pb-6 last:pb-0">
+              <h4 className="text-sm font-medium text-gray-500 mb-4">{label}</h4>
+              <div className="flex flex-wrap items-end gap-8">
+                {filteredMascots.map((mascot) => (
+                  <div key={mascot.id} className="text-center">
+                    <div className="inline-flex items-center justify-center p-4 bg-gray-50 rounded-xl">
+                      <MascotAssetEnhanced
+                        mascot={getMascotType(mascot.id)}
+                        size={size}
+                        format={selectedFormat}
+                        animate={true}
+                        animation="idle"
+                        showLoading={true}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">{mascot.displayName}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ============================================================================
+  // Animation Showcase View
+  // ============================================================================
+
+  const AnimationShowcaseView = () => (
+    <div className="space-y-8">
+      <div className="bg-surface rounded-2xl p-6 shadow-sm border border-border">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <MonitorPlay className="w-5 h-5 text-cyan-500" />
+          Animation Showcase
+        </h3>
+        
+        {/* Showcase Controls */}
+        <div className="flex flex-wrap gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Animation</label>
+            <select
+              value={showcaseAnimation}
+              onChange={(e) => setShowcaseAnimation(e.target.value as typeof showcaseAnimation)}
+              className="px-3 py-2 bg-white border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+            >
+              {animations.map((anim) => (
+                <option key={anim.value} value={anim.value}>{anim.label}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Size</label>
+            <select
+              value={showcaseSize}
+              onChange={(e) => setShowcaseSize(Number(e.target.value) as typeof showcaseSize)}
+              className="px-3 py-2 bg-white border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+            >
+              {sizes.map((size) => (
+                <option key={size.value} value={size.value}>{size.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Animation Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {filteredMascots.map((mascot) => (
+            <motion.div
+              key={mascot.id}
+              className="text-center p-4 bg-gray-50 rounded-xl"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="inline-flex items-center justify-center mb-3">
+                <MascotAssetEnhanced
+                  mascot={getMascotType(mascot.id)}
+                  size={showcaseSize}
+                  format={selectedFormat}
+                  animate={true}
+                  animation={showcaseAnimation}
+                  showLoading={true}
+                />
+              </div>
+              <p className="font-medium text-sm">{mascot.displayName}</p>
+              <p className="text-xs text-gray-500 capitalize">{showcaseAnimation} animation</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Animation Description */}
+        <div className="mt-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-600">
+          <h4 className="font-medium mb-2">Animation Types:</h4>
+          <ul className="space-y-1 list-disc list-inside">
+            <li><strong>Idle:</strong> Subtle breathing/bouncing animation for default state</li>
+            <li><strong>Wave:</strong> Playful waving gesture for interactions</li>
+            <li><strong>Celebrate:</strong> Excited celebration animation for achievements</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 
   // ============================================================================
   // Render
@@ -188,22 +365,37 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
           {/* View Mode Toggle */}
           <div className="flex items-center gap-2">
             <button
+              onClick={() => setView('gallery')}
               className={`p-2.5 rounded-xl transition-colors ${
-                config.viewMode === 'grid' ? 'bg-cyan-100 text-cyan-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                view === 'gallery' ? 'bg-cyan-100 text-cyan-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
               }`}
-              aria-label="Grid view"
-              aria-pressed={config.viewMode === 'grid'}
+              aria-label="Gallery view"
+              aria-pressed={view === 'gallery'}
+              title="Gallery View"
             >
               <Grid3X3 className="w-4 h-4" />
             </button>
             <button
+              onClick={() => setView('size-comparison')}
               className={`p-2.5 rounded-xl transition-colors ${
-                config.viewMode === 'list' ? 'bg-cyan-100 text-cyan-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                view === 'size-comparison' ? 'bg-cyan-100 text-cyan-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
               }`}
-              aria-label="List view"
-              aria-pressed={config.viewMode === 'list'}
+              aria-label="Size comparison view"
+              aria-pressed={view === 'size-comparison'}
+              title="Size Comparison"
             >
-              <List className="w-4 h-4" />
+              <Maximize2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setView('animation-showcase')}
+              className={`p-2.5 rounded-xl transition-colors ${
+                view === 'animation-showcase' ? 'bg-cyan-100 text-cyan-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+              }`}
+              aria-label="Animation showcase view"
+              aria-pressed={view === 'animation-showcase'}
+              title="Animation Showcase"
+            >
+              <MonitorPlay className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -266,13 +458,39 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
             })}
           </div>
 
-          {/* Sort Dropdown */}
+          {/* Format Toggle (INT-004) */}
           <div className="flex items-center gap-2 ml-auto">
+            <Image className="w-4 h-4 text-gray-400" />
+            <span className="text-sm text-gray-500">Format:</span>
+            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+              {formats.map((fmt) => (
+                <button
+                  key={fmt.value}
+                  onClick={() => setSelectedFormat(fmt.value)}
+                  className={`
+                    px-2 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1
+                    ${selectedFormat === fmt.value
+                      ? 'bg-white text-cyan-600 shadow-sm'
+                      : 'text-gray-600 hover:bg-gray-200'
+                    }
+                  `}
+                  aria-pressed={selectedFormat === fmt.value}
+                  title={`${fmt.label} format`}
+                >
+                  {fmt.icon}
+                  {fmt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sort Dropdown */}
+          <div className="flex items-center gap-2">
             <ArrowUpDown className="w-4 h-4 text-gray-400" />
             <select
               value={`${filterState.sortBy}-${filterState.sortDirection}`}
               onChange={(e) => {
-                const [sortBy, direction] = e.target.value.split('-') as [typeof filterState.sortBy, typeof filterState.sortDirection];
+                const [sortBy] = e.target.value.split('-') as [typeof filterState.sortBy];
                 setSortBy(sortBy);
               }}
               className="px-3 py-1.5 bg-gray-50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
@@ -304,56 +522,63 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
         )}
       </div>
 
-      {/* Mascot Grid */}
-      {filteredMascots.length > 0 ? (
-        <div
-          ref={parentRef}
-          className={`grid ${gridClasses} gap-6`}
-          style={{ minHeight: '400px' }}
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredMascots.map((mascot, index) => (
-              <motion.div
-                key={mascot.id}
-                layout={!prefersReducedMotion}
-                initial={config.animateEntrance ? { opacity: 0, scale: 0.9 } : false}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{
-                  duration: prefersReducedMotion ? 0 : 0.2,
-                  delay: config.animateEntrance ? index * 0.05 : 0,
-                }}
-              >
-                <MascotCard
-                  mascot={mascot}
-                  size={config.cardSize}
-                  isFavorite={favorites.includes(mascot.id)}
-                  onClick={handleMascotClick}
-                  onFavoriteToggle={handleMascotFavorite}
-                  animated={config.animateEntrance}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      ) : (
-        /* Empty State */
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-            <Heart className="w-8 h-8 text-gray-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-charcoal mb-2">No Mascots Found</h3>
-          <p className="text-gray-500 max-w-sm">{emptyStateMessage}</p>
-          {hasActiveFilters && (
-            <button
-              onClick={resetFilters}
-              className="mt-4 px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors"
+      {/* Content Based on View Mode */}
+      {view === 'gallery' && (
+        <>
+          {filteredMascots.length > 0 ? (
+            <div
+              ref={parentRef}
+              className={`grid ${gridClasses} gap-6`}
+              style={{ minHeight: '400px' }}
             >
-              Clear Filters
-            </button>
+              <AnimatePresence mode="popLayout">
+                {filteredMascots.map((mascot, index) => (
+                  <motion.div
+                    key={mascot.id}
+                    layout={!prefersReducedMotion}
+                    initial={config.animateEntrance ? { opacity: 0, scale: 0.9 } : false}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{
+                      duration: prefersReducedMotion ? 0 : 0.2,
+                      delay: config.animateEntrance ? index * 0.05 : 0,
+                    }}
+                  >
+                    <MascotCard
+                      mascot={mascot}
+                      size={config.cardSize}
+                      isFavorite={favorites.includes(mascot.id)}
+                      onClick={handleMascotClick}
+                      onFavoriteToggle={handleMascotFavorite}
+                      animated={config.animateEntrance}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          ) : (
+            /* Empty State */
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <Heart className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-charcoal mb-2">No Mascots Found</h3>
+              <p className="text-gray-500 max-w-sm">{emptyStateMessage}</p>
+              {hasActiveFilters && (
+                <button
+                  onClick={resetFilters}
+                  className="mt-4 px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
+
+      {view === 'size-comparison' && <SizeComparisonView />}
+      {view === 'animation-showcase' && <AnimationShowcaseView />}
     </div>
   );
 };

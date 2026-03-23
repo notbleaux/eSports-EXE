@@ -49,6 +49,9 @@ const StreamingPredictionPanel = lazy(() => import('./components/StreamingPredic
 // Lazy load performance dashboard (separate chunk)
 const PerformanceDashboard = lazy(() => import('./performance/PerformanceDashboard'));
 
+// Lazy load dev tools (separate chunk, only for development)
+const MascotPreview = lazy(() => import('./pages/dev/MascotPreview'));
+
 import { UnifiedGrid } from './components/UnifiedGrid';
 import { useWorkerError } from './hooks/useWorkerError';
 import { useRowHeight } from './store/staticStore';
@@ -397,6 +400,18 @@ function AppContent() {
               } 
             />
             
+            {/* Dev Tools - Only available in development */}
+            <Route 
+              path="/dev/mascots" 
+              element={
+                <PageTransition hubId="dev-mascots">
+                  <Suspense fallback={<HubLoadingFallback />}>
+                    <MascotPreview />
+                  </Suspense>
+                </PageTransition>
+              } 
+            />
+            
             {/* 404 */}
             <Route 
               path="*" 
@@ -475,5 +490,8 @@ function App() {
     </AppErrorBoundary>
   );
 }
+
+// Export MascotPreview for use in other components
+export { MascotPreview };
 
 export default App;

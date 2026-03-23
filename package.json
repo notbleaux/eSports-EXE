@@ -17,7 +17,12 @@
     "validate:schema": "npm run validate:schema --workspace=packages/stats-schema",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test:e2e": "cd apps/website-v2 && npx playwright test",
-    "test:unit": "cd apps/website-v2 && npm run test:run"
+    "test:unit": "cd apps/website-v2 && npm run test:run",
+    "mascots:generate": "cd apps/website-v2 && npx ts-node scripts/mascot-generator/index.ts",
+    "mascots:watch": "cd apps/website-v2 && npx ts-node scripts/mascot-generator/watch.ts",
+    "mascots:fox": "cd apps/website-v2 && npx ts-node scripts/mascot-generator/index.ts --fox",
+    "mascots:build": "npm run mascots:generate",
+    "prebuild": "npm run mascots:build"
   },
   "workspaces": [
     "packages/*",
