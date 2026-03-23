@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Dropout Style Wolf - 32x32px -->
+  <!-- Strong wolf with varsity jacket, leadership pose -->
+  
+  <!-- Left Ear (pointed) -->
+  <path d="M7 4 L11 12 L5 10 Z" fill="#6C757D" stroke="#212529" stroke-width="1"/>
+  <path d="M8 5 L10 10 L6 9 Z" fill="#ADB5BD"/>
+  
+  <!-- Right Ear (pointed) -->
+  <path d="M25 4 L21 12 L27 10 Z" fill="#6C757D" stroke="#212529" stroke-width="1"/>
+  <path d="M24 5 L22 10 L26 9 Z" fill="#ADB5BD"/>
+  
+  <!-- Head -->
+  <ellipse cx="16" cy="14" rx="9" ry="8" fill="#6C757D" stroke="#212529" stroke-width="1"/>
+  
+  <!-- Forehead markings -->
+  <path d="M13 8 L16 12 L19 8" fill="none" stroke="#495057" stroke-width="1" opacity="0.6"/>
+  
+  <!-- Snout -->
+  <ellipse cx="16" cy="18" rx="5" ry="4" fill="#ADB5BD"/>
+  
+  <!-- Nose -->
+  <ellipse cx="16" cy="20" rx="2" ry="1.5" fill="#212529"/>
+  
+  <!-- Eyes (confident) -->
+  <ellipse cx="12" cy="13" rx="2" ry="2.5" fill="#F8F9FA" stroke="#212529" stroke-width="0.5"/>
+  <ellipse cx="20" cy="13" rx="2" ry="2.5" fill="#F8F9FA" stroke="#212529" stroke-width="0.5"/>
+  <circle cx="12" cy="13" r="1.2" fill="#212529"/>
+  <circle cx="20" cy="13" r="1.2" fill="#212529"/>
+  <circle cx="12.5" cy="12.5" r="0.5" fill="#FFFFFF"/>
+  <circle cx="20.5" cy="12.5" r="0.5" fill="#FFFFFF"/>
+  
+  <!-- Eyebrows (confident) -->
+  <path d="M10 10 Q12 9 14 10" fill="none" stroke="#495057" stroke-width="1"/>
+  <path d="M18 10 Q20 9 22 10" fill="none" stroke="#495057" stroke-width="1"/>
+  
+  <!-- Mouth -->
+  <path d="M14 22 Q16 23 18 22" fill="none" stroke="#495057" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- Varsity Jacket Body -->
+  <path d="M8 20 L6 28 L12 28 L12 24 L16 26 L20 24 L20 28 L26 28 L24 20 Q16 22 8 20" fill="#212529" stroke="#000000" stroke-width="1"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M10 20 L16 24 L22 20" fill="none" stroke="#C0C0C0" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Team Emblem -->
+  <circle cx="16" cy="24" r="2" fill="#C0C0C0"/>
+  <text x="16" y="25" font-size="2" fill="#212529" text-anchor="middle" font-weight="bold">W</text>
+  
+  <!-- Silver trim -->
+  <path d="M6 24 L8 24" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+  <path d="M24 24 L26 24" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+</svg>

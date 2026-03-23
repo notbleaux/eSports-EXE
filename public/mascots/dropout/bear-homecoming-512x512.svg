@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="hbBearBrown512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A0522D"/>
+      <stop offset="50%" style="stop-color:#8B4513"/>
+      <stop offset="100%" style="stop-color:#654321"/>
+    </linearGradient>
+    <linearGradient id="hbBearJacket512" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4169E1"/>
+      <stop offset="50%" style="stop-color:#27408B"/>
+      <stop offset="100%" style="stop-color:#191970"/>
+    </linearGradient>
+    <filter id="hbShadow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <ellipse cx="256" cy="480" rx="100" ry="20" fill="#000" opacity="0.1"/>
+  <g filter="url(#hbShadow512)">
+    <circle cx="160" cy="128" r="64" fill="url(#hbBearBrown512)"/>
+    <circle cx="352" cy="128" r="64" fill="url(#hbBearBrown512)"/>
+    <circle cx="160" cy="128" r="32" fill="#CD853F"/>
+    <circle cx="352" cy="128" r="32" fill="#CD853F"/>
+  </g>
+  <ellipse cx="256" cy="192" rx="128" ry="112" fill="url(#hbBearBrown512)"/>
+  <ellipse cx="224" cy="152" rx="40" ry="24" fill="#FFF" opacity="0.08"/>
+  <ellipse cx="256" cy="224" rx="64" ry="48" fill="#DEB887"/>
+  <ellipse cx="256" cy="208" rx="24" ry="20" fill="#333"/>
+  <ellipse cx="248" cy="200" rx="8" ry="6" fill="#FFF" opacity="0.5"/>
+  <path d="M224 248 Q256 272 288 248" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="208" cy="176" rx="24" ry="28" fill="#FFF"/>
+  <ellipse cx="212" cy="176" rx="12" ry="16" fill="#333"/>
+  <circle cx="216" cy="172" r="5" fill="#FFF"/>
+  <ellipse cx="304" cy="176" rx="24" ry="28" fill="#FFF"/>
+  <ellipse cx="300" cy="176" rx="12" ry="16" fill="#333"/>
+  <circle cx="296" cy="172" r="5" fill="#FFF"/>
+  <g filter="url(#hbShadow512)">
+    <path d="M128 96 L160 32 L192 64 L224 32 L256 64 L288 32 L320 64 L352 32 L384 96 Z" fill="#FFD700"/>
+    <circle cx="160" cy="32" r="10" fill="#FF1493"/>
+    <circle cx="224" cy="32" r="10" fill="#FF1493"/>
+    <circle cx="288" cy="32" r="10" fill="#FF1493"/>
+    <circle cx="352" cy="32" r="10" fill="#FF1493"/>
+  </g>
+  <path d="M160 288 Q160 240 256 224 Q352 240 352 288 Q352 416 256 448 Q160 416 160 288Z" fill="url(#hbBearJacket512)"/>
+  <line x1="256" y1="256" x2="256" y2="416" stroke="#191970" stroke-width="6"/>
+  <circle cx="256" cy="272" r="16" fill="#FFD700"/>
+  <path d="M192 240 L224 256 L288 256 L320 240" fill="none" stroke="#191970" stroke-width="8"/>
+  <path d="M208 248 L224 256 L288 256 L304 248" fill="#27408B"/>
+  <path d="M160 320 Q128 352 144 384 Q160 416 192 384" fill="url(#hbBearJacket512)"/>
+  <path d="M352 320 Q384 352 368 384 Q352 416 320 384" fill="url(#hbBearJacket512)"/>
+  <rect x="152" y="368" width="40" height="24" fill="#191970" rx="4"/>
+  <rect x="320" y="368" width="40" height="24" fill="#191970" rx="4"/>
+  <circle cx="160" cy="400" r="20" fill="#8B4513"/>
+  <circle cx="352" cy="400" r="20" fill="#8B4513"/>
+</svg>

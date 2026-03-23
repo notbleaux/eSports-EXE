@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Dropout Style Wolf - 512x512px -->
+  <!-- Strong wolf with varsity jacket, leadership pose -->
+  
+  <defs>
+    <linearGradient id="wolfGrad512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6C757D"/>
+      <stop offset="30%" style="stop-color:#5A6268"/>
+      <stop offset="70%" style="stop-color:#495057"/>
+      <stop offset="100%" style="stop-color:#343A40"/>
+    </linearGradient>
+    <linearGradient id="wolfLight512" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ADB5BD"/>
+      <stop offset="40%" style="stop-color:#868E96"/>
+      <stop offset="100%" style="stop-color:#6C757D"/>
+    </linearGradient>
+    <linearGradient id="silverGrad512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5F5"/>
+      <stop offset="30%" style="stop-color:#E0E0E0"/>
+      <stop offset="60%" style="stop-color:#C0C0C0"/>
+      <stop offset="100%" style="stop-color:#A0A0A0"/>
+    </linearGradient>
+    <filter id="shadow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.35"/>
+    </filter>
+    <filter id="emboss512">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="2" specularConstant="0.8" specularExponent="15" result="specOut">
+        <fePointLight x="256" y="-5000" z="10000"/>
+      </feSpecularLighting>
+      <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+      <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+  </defs>
+  
+  <!-- Left Ear (pointed) -->
+  <path d="M112 48 L176 192 L80 160 Z" fill="url(#wolfGrad512)" stroke="#212529" stroke-width="5" filter="url(#shadow512)"/>
+  <path d="M128 72 L160 168 L104 144 Z" fill="#CED4DA"/>
+  <path d="M120 64 L136 112 L104 96 Z" fill="#E9ECEF" opacity="0.6"/>
+  <path d="M116 80 L128 120 L96 104 Z" fill="#F8F9FA" opacity="0.3"/>
+  
+  <!-- Right Ear (pointed) -->
+  <path d="M400 48 L336 192 L432 160 Z" fill="url(#wolfGrad512)" stroke="#212529" stroke-width="5" filter="url(#shadow512)"/>
+  <path d="M384 72 L352 168 L408 144 Z" fill="#CED4DA"/>
+  <path d="M392 64 L376 112 L408 96 Z" fill="#E9ECEF" opacity="0.6"/>
+  <path d="M396 80 L384 120 L416 104 Z" fill="#F8F9FA" opacity="0.3"/>
+  
+  <!-- Head -->
+  <ellipse cx="256" cy="224" rx="144" ry="128" fill="url(#wolfGrad512)" stroke="#212529" stroke-width="5" filter="url(#shadow512)"/>
+  
+  <!-- Cheek fur -->
+  <path d="M120 240 Q96 272 112 304" fill="none" stroke="#495057" stroke-width="5" stroke-linecap="round"/>
+  <path d="M392 240 Q416 272 400 304" fill="none" stroke="#495057" stroke-width="5" stroke-linecap="round"/>
+  <path d="M128 256 Q112 280 124 296" fill="none" stroke="#6C757D" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M384 256 Q400 280 388 296" fill="none" stroke="#6C757D" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M136 264 Q124 280 132 292" fill="none" stroke="#868E96" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M376 264 Q388 280 380 292" fill="none" stroke="#868E96" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Forehead markings -->
+  <path d="M208 128 L256 192 L304 128" fill="none" stroke="#495057" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+  <path d="M176 112 L200 144" fill="none" stroke="#495057" stroke-width="6" opacity="0.4"/>
+  <path d="M336 112 L312 144" fill="none" stroke="#495057" stroke-width="6" opacity="0.4"/>
+  <path d="M224 104 L240 128" fill="none" stroke="#495057" stroke-width="4" opacity="0.3"/>
+  <path d="M288 104 L272 128" fill="none" stroke="#495057" stroke-width="4" opacity="0.3"/>
+  <path d="M192 120 L208 136" fill="none" stroke="#5A6268" stroke-width="3" opacity="0.25"/>
+  <path d="M320 120 L304 136" fill="none" stroke="#5A6268" stroke-width="3" opacity="0.25"/>
+  
+  <!-- Snout -->
+  <ellipse cx="256" cy="288" rx="80" ry="64" fill="url(#wolfLight512)"/>
+  <ellipse cx="256" cy="272" rx="48" ry="32" fill="#DEE2E6" opacity="0.5"/>
+  <ellipse cx="256" cy="280" rx="64" ry="48" fill="#CED4DA" opacity="0.3"/>
+  
+  <!-- Nose -->
+  <ellipse cx="256" cy="320" rx="32" ry="24" fill="#212529"/>
+  <ellipse cx="256" cy="312" rx="16" ry="8" fill="#495057" opacity="0.5"/>
+  <ellipse cx="256" cy="316" rx="8" ry="4" fill="#6C757D" opacity="0.3"/>
+  
+  <!-- Nostrils -->
+  <ellipse cx="244" cy="324" rx="6" ry="4" fill="#000000"/>
+  <ellipse cx="268" cy="324" rx="6" ry="4" fill="#000000"/>
+  
+  <!-- Eyes (confident) -->
+  <ellipse cx="192" cy="208" rx="32" ry="40" fill="#F8F9FA" stroke="#212529" stroke-width="3"/>
+  <ellipse cx="320" cy="208" rx="32" ry="40" fill="#F8F9FA" stroke="#212529" stroke-width="3"/>
+  <ellipse cx="192" cy="208" rx="20" ry="28" fill="#212529"/>
+  <ellipse cx="320" cy="208" rx="20" ry="28" fill="#212529"/>
+  
+  <!-- Eye shine -->
+  <circle cx="200" cy="200" r="10" fill="#FFFFFF"/>
+  <circle cx="328" cy="200" r="10" fill="#FFFFFF"/>
+  <circle cx="184" cy="216" r="6" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="312" cy="216" r="6" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="196" cy="212" r="4" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="324" cy="212" r="4" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="188" cy="204" r="3" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="316" cy="204" r="3" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Eyebrows (confident) -->
+  <path d="M152 160 Q192 144 232 160" fill="none" stroke="#495057" stroke-width="10" stroke-linecap="round"/>
+  <path d="M280 160 Q320 144 360 160" fill="none" stroke="#495057" stroke-width="10" stroke-linecap="round"/>
+  <path d="M160 152 Q192 140 224 152" fill="none" stroke="#6C757D" stroke-width="4" opacity="0.5"/>
+  <path d="M288 152 Q320 140 352 152" fill="none" stroke="#6C757D" stroke-width="4" opacity="0.5"/>
+  
+  <!-- Mouth -->
+  <path d="M224 368 Q256 384 288 368" fill="none" stroke="#495057" stroke-width="8" stroke-linecap="round"/>
+  <path d="M256 352 L256 376" fill="none" stroke="#495057" stroke-width="6" stroke-linecap="round"/>
+  <path d="M232 372 Q256 380 280 372" fill="none" stroke="#6C757D" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Chin fur -->
+  <path d="M232 400 Q256 416 280 400" fill="none" stroke="#6C757D" stroke-width="6" stroke-linecap="round"/>
+  <path d="M240 408 Q256 420 272 408" fill="none" stroke="#868E96" stroke-width="4" stroke-linecap="round"/>
+  <path d="M248 416 Q256 424 264 416" fill="none" stroke="#ADB5BD" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Varsity Jacket Body -->
+  <path d="M128 320 L96 448 L192 448 L192 384 L256 416 L320 384 L320 448 L416 448 L384 320 Q256 352 128 320" fill="#212529" stroke="#000000" stroke-width="5"/>
+  
+  <!-- Jacket texture/shading -->
+  <path d="M144 336 L136 400" fill="none" stroke="#343A40" stroke-width="4" opacity="0.5"/>
+  <path d="M160 344 L152 408" fill="none" stroke="#343A40" stroke-width="3" opacity="0.4"/>
+  <path d="M368 336 L376 400" fill="none" stroke="#343A40" stroke-width="4" opacity="0.5"/>
+  <path d="M352 344 L360 408" fill="none" stroke="#343A40" stroke-width="3" opacity="0.4"/>
+  <path d="M200 360 L200 440" fill="none" stroke="#2A2F35" stroke-width="2" opacity="0.3"/>
+  <path d="M312 360 L312 440" fill="none" stroke="#2A2F35" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M160 320 L256 384 L352 320" fill="none" stroke="url(#silverGrad512)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M176 304 L256 352 L336 304" fill="none" stroke="#212529" stroke-width="5"/>
+  <path d="M168 312 L256 368 L344 312" fill="none" stroke="#343A40" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Team Emblem -->
+  <circle cx="256" cy="384" r="32" fill="url(#silverGrad512)" stroke="#212529" stroke-width="3" filter="url(#emboss512)"/>
+  <text x="256" y="396" font-size="40" fill="#212529" text-anchor="middle" font-weight="bold" font-family="Arial, sans-serif">W</text>
+  <circle cx="256" cy="384" r="28" fill="none" stroke="#C0C0C0" stroke-width="1"/>
+  
+  <!-- Silver trim details -->
+  <path d="M96 384 L128 384" fill="none" stroke="url(#silverGrad512)" stroke-width="10"/>
+  <path d="M384 384 L416 384" fill="none" stroke="url(#silverGrad512)" stroke-width="10"/>
+  <path d="M192 416 L192 448" fill="none" stroke="url(#silverGrad512)" stroke-width="6"/>
+  <path d="M320 416 L320 448" fill="none" stroke="url(#silverGrad512)" stroke-width="6"/>
+  
+  <!-- Jacket cuffs -->
+  <rect x="104" y="424" width="64" height="24" fill="url(#silverGrad512)" rx="6" stroke="#A0A0A0" stroke-width="1"/>
+  <rect x="344" y="424" width="64" height="24" fill="url(#silverGrad512)" rx="6" stroke="#A0A0A0" stroke-width="1"/>
+  
+  <!-- Shoulder stripes -->
+  <path d="M112 336 L144 344" fill="none" stroke="url(#silverGrad512)" stroke-width="8"/>
+  <path d="M120 352 L152 360" fill="none" stroke="url(#silverGrad512)" stroke-width="6"/>
+  <path d="M128 368 L160 376" fill="none" stroke="url(#silverGrad512)" stroke-width="4"/>
+  <path d="M400 336 L368 344" fill="none" stroke="url(#silverGrad512)" stroke-width="8"/>
+  <path d="M392 352 L360 360" fill="none" stroke="url(#silverGrad512)" stroke-width="6"/>
+  <path d="M384 368 L352 376" fill="none" stroke="url(#silverGrad512)" stroke-width="4"/>
+  
+  <!-- Jacket buttons -->
+  <circle cx="256" cy="416" r="6" fill="url(#silverGrad512)"/>
+  <circle cx="256" cy="432" r="6" fill="url(#silverGrad512)"/>
+  
+  <!-- Jacket pockets -->
+  <path d="M152 376 L160 400 L176 400 L184 376" fill="none" stroke="#343A40" stroke-width="2"/>
+  <path d="M328 376 L336 400 L352 400 L360 376" fill="none" stroke="#343A40" stroke-width="2"/>
+</svg>

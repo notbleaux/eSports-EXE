@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- NJ Style Owl - 32x32 - Minimalist Line Art -->
+  
+  <!-- Body - Rounded -->
+  <ellipse cx="16" cy="19" rx="9" ry="10" stroke="#0000FF" stroke-width="2" fill="none"/>
+  
+  <!-- Head - Circular -->
+  <circle cx="16" cy="10" r="7" stroke="#0000FF" stroke-width="2" fill="none"/>
+  
+  <!-- Large Wise Eyes - Simple Circles -->
+  <circle cx="13" cy="9" r="2.5" stroke="#0000FF" stroke-width="1.5" fill="none"/>
+  <circle cx="19" cy="9" r="2.5" stroke="#0000FF" stroke-width="1.5" fill="none"/>
+  
+  <!-- Pupils -->
+  <circle cx="13" cy="9" r="1" fill="#0000FF"/>
+  <circle cx="19" cy="9" r="1" fill="#0000FF"/>
+  
+  <!-- Small Beak -->
+  <path d="M15 12 L16 13.5 L17 12" stroke="#0000FF" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Ear Tufts - Minimal -->
+  <path d="M10 5 L9 2 L12 4" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M22 5 L23 2 L20 4" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Simple Wing Lines -->
+  <path d="M9 18 Q7 20 9 24" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.6"/>
+  <path d="M23 18 Q25 20 23 24" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.6"/>
+  
+  <!-- Belly Line -->
+  <path d="M13 24 Q16 26 19 24" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.5"/>
+</svg>

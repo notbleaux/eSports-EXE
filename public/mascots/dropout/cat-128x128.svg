@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Cat in Bunny Onesie - Dropout Style 128x128 -->
+  <defs>
+    <linearGradient id="catBlack128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#333333"/>
+      <stop offset="50%" style="stop-color:#1F1F1F"/>
+      <stop offset="100%" style="stop-color:#0D0D0D"/>
+    </linearGradient>
+    <linearGradient id="catWhite128" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#F0F0F0"/>
+    </linearGradient>
+    <linearGradient id="onesiePink128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF69B4"/>
+      <stop offset="50%" style="stop-color:#FF1493"/>
+      <stop offset="100%" style="stop-color:#F72585"/>
+    </linearGradient>
+    <linearGradient id="eyeBlue128" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00E5FF"/>
+      <stop offset="100%" style="stop-color:#00B4D8"/>
+    </linearGradient>
+    <filter id="shadow128" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.2"/>
+    </filter>
+    <filter id="glow128">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Shadow -->
+  <ellipse cx="64" cy="120" rx="32" ry="6" fill="#000" opacity="0.1"/>
+  
+  <!-- Tail peeking from onesie -->
+  <g className="tail" filter="url(#shadow128)">
+    <path d="M24 88 Q16 72 24 56 Q32 40 48 56 Q40 72 32 88 Q28 96 24 88Z" fill="url(#catBlack128)"/>
+    <path d="M24 56 Q20 48 24 40 Q28 32 36 40" fill="none" stroke="#2D2D2D" stroke-width="3" stroke-linecap="round"/>
+    <path d="M28 84 Q36 76 40 68" fill="none" stroke="#333333" stroke-width="2" opacity="0.6"/>
+    <ellipse cx="26" cy="86" rx="3" ry="4" fill="#FFFFFF" opacity="0.3"/>
+  </g>
+  
+  <!-- Onesie Body -->
+  <g className="onesie" filter="url(#shadow128)">
+    <ellipse cx="64" cy="88" rx="36" ry="28" fill="url(#onesiePink128)"/>
+    <!-- Belly patch -->
+    <ellipse cx="64" cy="92" rx="20" ry="16" fill="#FFB6C1" opacity="0.6"/>
+    <!-- Zipper -->
+    <line x1="64" y1="64" x2="64" y2="104" stroke="#D41675" stroke-width="2.5" stroke-dasharray="5,3"/>
+    <circle cx="64" cy="62" r="5" fill="#FF1493"/>
+    <rect x="62" y="66" width="4" height="8" fill="#FF69B4"/>
+    <!-- Bottom hem -->
+    <path d="M40 110 Q64 118 88 110" stroke="#D41675" stroke-width="4" fill="none"/>
+    <!-- Paws -->
+    <ellipse cx="40" cy="108" rx="8" ry="6" fill="#FFB6C1"/>
+    <ellipse cx="88" cy="108" rx="8" ry="6" fill="#FFB6C1"/>
+  </g>
+  
+  <!-- Onesie Arms -->
+  <g className="arm-left" filter="url(#shadow128)">
+    <path d="M32 80 Q24 88 28 96 Q32 104 40 96" fill="url(#onesiePink128)"/>
+    <ellipse cx="30" cy="94" rx="5" ry="4" fill="#FFB6C1"/>
+    <!-- Grey paw pad -->
+    <ellipse cx="30" cy="95" rx="2" ry="1.5" fill="#6B7280" opacity="0.5"/>
+  </g>
+  <g className="arm-right" filter="url(#shadow128)">
+    <path d="M96 80 Q104 88 100 96 Q96 104 88 96" fill="url(#onesiePink128)"/>
+    <ellipse cx="98" cy="94" rx="5" ry="4" fill="#FFB6C1"/>
+    <!-- Grey paw pad -->
+    <ellipse cx="98" cy="95" rx="2" ry="1.5" fill="#6B7280" opacity="0.5"/>
+  </g>
+  
+  <!-- Bunny Ears (hood) -->
+  <g className="bunny-ears" filter="url(#shadow128)">
+    <ellipse cx="44" cy="32" rx="10" ry="24" fill="url(#onesiePink128)" transform="rotate(-10 44 32)"/>
+    <ellipse cx="44" cy="32" rx="5" ry="14" fill="#FFB6C1" transform="rotate(-10 44 32)"/>
+    <!-- Inner ear detail -->
+    <path d="M44 18 L42 28 L46 28Z" fill="#FF1493" opacity="0.3" transform="rotate(-10 44 32)"/>
+    
+    <ellipse cx="84" cy="32" rx="10" ry="24" fill="url(#onesiePink128)" transform="rotate(10 84 32)"/>
+    <ellipse cx="84" cy="32" rx="5" ry="14" fill="#FFB6C1" transform="rotate(10 84 32)"/>
+    <!-- Inner ear detail -->
+    <path d="M84 18 L82 28 L86 28Z" fill="#FF1493" opacity="0.3" transform="rotate(10 84 32)"/>
+  </g>
+  
+  <!-- Cat Head -->
+  <g className="head" filter="url(#shadow128)">
+    <!-- Face base -->
+    <ellipse cx="64" cy="52" rx="32" ry="28" fill="url(#catBlack128)"/>
+    <!-- White muzzle/chest patch -->
+    <ellipse cx="64" cy="64" rx="16" ry="12" fill="url(#catWhite128)"/>
+    <!-- Grey markings on face -->
+    <path d="M40 40 Q48 32 56 40" fill="none" stroke="#6B7280" stroke-width="2.5" opacity="0.6"/>
+    <path d="M72 40 Q80 32 88 40" fill="none" stroke="#6B7280" stroke-width="2.5" opacity="0.6"/>
+    <!-- Grey forehead stripes -->
+    <path d="M56 38 L60 44 L64 38 L68 44 L72 38" fill="none" stroke="#6B7280" stroke-width="1.5" opacity="0.5"/>
+    
+    <!-- Cat Ears (peeking from hood) -->
+    <path d="M40 36 L32 16 L48 32Z" fill="url(#catBlack128)"/>
+    <path d="M40 28 L36 20 L44 26Z" fill="#6B7280" opacity="0.5"/>
+    <path d="M88 36 L96 16 L80 32Z" fill="url(#catBlack128)"/>
+    <path d="M88 28 L92 20 L84 26Z" fill="#6B7280" opacity="0.5"/>
+    
+    <!-- Eyes (bright blue #00B4D8, cheeky/mischievous) -->
+    <g className="eye-left" filter="url(#glow128)">
+      <ellipse cx="52" cy="48" rx="8" ry="10" fill="url(#eyeBlue128)"/>
+      <ellipse cx="53" cy="46" rx="3" ry="4" fill="#FFF"/>
+      <circle cx="54" cy="50" rx="1.5" fill="#000" opacity="0.3"/>
+    </g>
+    <g className="eye-right" filter="url(#glow128)">
+      <ellipse cx="76" cy="48" rx="8" ry="10" fill="url(#eyeBlue128)"/>
+      <ellipse cx="75" cy="46" rx="3" ry="4" fill="#FFF"/>
+      <circle cx="74" cy="50" rx="1.5" fill="#000" opacity="0.3"/>
+    </g>
+    
+    <!-- Cheeky eyebrows -->
+    <path d="M44 38 Q52 36 58 40" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M70 40 Q76 36 84 38" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+    
+    <!-- Nose -->
+    <ellipse cx="64" cy="60" rx="4" ry="3" fill="#FF69B4"/>
+    <ellipse cx="62" cy="59" rx="1.2" ry="0.8" fill="#FFF" opacity="0.5"/>
+    
+    <!-- Cheeky smile -->
+    <path d="M56 66 Q64 72 72 64" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M70 63 L72 64 L71 67" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+    
+    <!-- Whiskers -->
+    <line x1="40" y1="60" x2="28" y2="58" stroke="#FFF" stroke-width="0.8" opacity="0.7"/>
+    <line x1="40" y1="64" x2="28" y2="64" stroke="#FFF" stroke-width="0.8" opacity="0.7"/>
+    <line x1="40" y1="68" x2="28" y2="70" stroke="#FFF" stroke-width="0.8" opacity="0.7"/>
+    <line x1="88" y1="60" x2="100" y2="58" stroke="#FFF" stroke-width="0.8" opacity="0.7"/>
+    <line x1="88" y1="64" x2="100" y2="64" stroke="#FFF" stroke-width="0.8" opacity="0.7"/>
+    <line x1="88" y1="68" x2="100" y2="70" stroke="#FFF" stroke-width="0.8" opacity="0.7"/>
+    
+    <!-- Grey cheek markings -->
+    <ellipse cx="48" cy="56" rx="3" ry="2" fill="#6B7280" opacity="0.3"/>
+    <ellipse cx="80" cy="56" rx="3" ry="2" fill="#6B7280" opacity="0.3"/>
+  </g>
+  
+  <!-- Paws detail -->
+  <g className="paws">
+    <ellipse cx="30" cy="96" rx="2" ry="1.5" fill="#6B7280" opacity="0.6"/>
+    <ellipse cx="98" cy="96" rx="2" ry="1.5" fill="#6B7280" opacity="0.6"/>
+  </g>
+</svg>

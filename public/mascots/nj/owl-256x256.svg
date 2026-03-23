@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- NJ Style Owl - 256x256 - Minimalist Line Art -->
+  
+  <!-- Body - Rounded -->
+  <ellipse cx="128" cy="152" rx="72" ry="80" stroke="#0000FF" stroke-width="2" fill="none"/>
+  
+  <!-- Body Detail Lines -->
+  <g opacity="0.4">
+    <path d="M96 184 Q128 204 160 184" stroke="#0000FF" stroke-width="1.5" fill="none"/>
+    <path d="M88 168 Q128 188 168 168" stroke="#0000FF" stroke-width="1.2" fill="none"/>
+    <path d="M104 200 Q128 212 152 200" stroke="#0000FF" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- Body Subtle Shading Lines -->
+  <g opacity="0.25">
+    <path d="M112 176 Q128 182 144 176" stroke="#0000FF" stroke-width="1" fill="none"/>
+    <path d="M108 192 Q128 198 148 192" stroke="#0000FF" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- Head - Circular -->
+  <circle cx="128" cy="80" rx="56" ry="52" stroke="#0000FF" stroke-width="2" fill="none"/>
+  
+  <!-- Face Disc Outline -->
+  <ellipse cx="128" cy="88" rx="40" ry="32" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.3"/>
+  <ellipse cx="128" cy="88" rx="32" ry="24" stroke="#0000FF" stroke-width="0.5" fill="none" opacity="0.2"/>
+  
+  <!-- Large Wise Eyes - Simple Circles -->
+  <circle cx="104" cy="72" r="20" stroke="#0000FF" stroke-width="2" fill="none"/>
+  <circle cx="152" cy="72" r="20" stroke="#0000FF" stroke-width="2" fill="none"/>
+  
+  <!-- Eye Detail Rings -->
+  <circle cx="104" cy="72" r="14" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  <circle cx="152" cy="72" r="14" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  <circle cx="104" cy="72" r="8" stroke="#0000FF" stroke-width="0.5" fill="none" opacity="0.3"/>
+  <circle cx="152" cy="72" r="8" stroke="#0000FF" stroke-width="0.5" fill="none" opacity="0.3"/>
+  
+  <!-- Pupils -->
+  <circle cx="104" cy="72" r="8" fill="#0000FF"/>
+  <circle cx="152" cy="72" r="8" fill="#0000FF"/>
+  
+  <!-- Pupil Highlights -->
+  <circle cx="100" cy="68" r="3" fill="#3333FF"/>
+  <circle cx="148" cy="68" r="3" fill="#3333FF"/>
+  
+  <!-- Eye Shine -->
+  <circle cx="110" cy="66" r="3" fill="#FFFFFF"/>
+  <circle cx="158" cy="66" r="3" fill="#FFFFFF"/>
+  <circle cx="100" cy="76" r="2" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="148" cy="76" r="2" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="108" cy="78" r="1.5" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="156" cy="78" r="1.5" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Small Beak -->
+  <path d="M120 96 L128 108 L136 96" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M124 100 L128 104 L132 100" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M126 98 L128 100 L130 98" stroke="#0000FF" stroke-width="0.5" fill="none" opacity="0.4"/>
+  
+  <!-- Ear Tufts - Minimal -->
+  <path d="M80 40 L72 16 L96 32" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M176 40 L184 16 L160 32" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Inner Ear Lines -->
+  <path d="M84 32 L80 20 L92 28" stroke="#0000FF" stroke-width="1.2" fill="none" opacity="0.5"/>
+  <path d="M172 32 L176 20 L164 28" stroke="#0000FF" stroke-width="1.2" fill="none" opacity="0.5"/>
+  <path d="M88 26 L86 18 L92 24" stroke="#0000FF" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M168 26 L170 18 L164 24" stroke="#0000FF" stroke-width="0.8" fill="none" opacity="0.4"/>
+  
+  <!-- Wing Lines -->
+  <path d="M72 144 Q56 160 72 192" stroke="#0000FF" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M184 144 Q200 160 184 192" stroke="#0000FF" stroke-width="1.5" fill="none" opacity="0.6"/>
+  
+  <!-- Wing Detail -->
+  <path d="M64 160 Q56 172 64 188" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M192 160 Q200 172 192 188" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M60 168 Q54 178 60 188" stroke="#0000FF" stroke-width="0.8" fill="none" opacity="0.3"/>
+  <path d="M196 168 Q202 178 196 188" stroke="#0000FF" stroke-width="0.8" fill="none" opacity="0.3"/>
+  
+  <!-- Feet -->
+  <g opacity="0.5">
+    <line x1="104" y1="228" x2="104" y2="236" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+    <line x1="128" y1="228" x2="128" y2="236" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+    <line x1="152" y1="228" x2="152" y2="236" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Feather Detail on Head -->
+  <path d="M112 36 Q104 40 108 48" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M128 32 Q128 40 128 48" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M144 36 Q152 40 148 48" stroke="#0000FF" stroke-width="1" fill="none" opacity="0.4"/>
+  
+  <!-- Head Highlight -->
+  <path d="M120 44 Q128 46 136 44" stroke="#0000FF" stroke-width="0.5" fill="none" opacity="0.3"/>
+</svg>

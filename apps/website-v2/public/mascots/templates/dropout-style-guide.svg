@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="1200" height="1600">
+  <defs>
+    <!-- ==================== COLOR PALETTE ==================== -->
+    <!-- Primary Dropout Colors -->
+    <color id="dropout-outline" value="#2D1810"/>
+    <color id="dropout-shadow" value="rgba(0,0,0,0.2)"/>
+    <color id="dropout-highlight" value="rgba(255,255,255,0.3)"/>
+    <color id="dropout-gold" value="#FFD700"/>
+    <color id="dropout-gold-dark" value="#B8860B"/>
+    <color id="dropout-cream" value="#FFF8DC"/>
+    
+    <!-- Bear Base Colors -->
+    <linearGradient id="bear-fur" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B4513"/>
+      <stop offset="50%" stop-color="#654321"/>
+      <stop offset="100%" stop-color="#4A3018"/>
+    </linearGradient>
+    
+    <linearGradient id="bear-fur-light" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#A0522D"/>
+      <stop offset="100%" stop-color="#8B4513"/>
+    </linearGradient>
+    
+    <linearGradient id="snout-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D2B48C"/>
+      <stop offset="100%" stop-color="#C19A6B"/>
+    </linearGradient>
+    
+    <!-- Eye Gradients -->
+    <radialGradient id="eye-sclera" cx="50%" cy="50%" r="50%">
+      <stop offset="80%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F0F0F0"/>
+    </radialGradient>
+    
+    <radialGradient id="eye-pupil" cx="40%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    
+    <radialGradient id="eye-highlight" cx="30%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    
+    <!-- Jacket Gradients -->
+    <linearGradient id="varsity-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DC143C"/>
+      <stop offset="50%" stop-color="#B22222"/>
+      <stop offset="100%" stop-color="#8B0000"/>
+    </linearGradient>
+    
+    <linearGradient id="varsity-sleeve" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E8E8E8"/>
+    </linearGradient>
+    
+    <linearGradient id="gold-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="50%" stop-color="#DAA520"/>
+      <stop offset="100%" stop-color="#B8860B"/>
+    </linearGradient>
+    
+    <!-- Shadow Filter -->
+    <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Outline Filter -->
+    <filter id="bold-outline" x="-20%" y="-20%" width="140%" height="140%">
+      <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="2"/>
+      <feFlood flood-color="#2D1810" result="COLOR"/>
+      <feComposite in="COLOR" in2="DILATED" operator="in" result="OUTLINE"/>
+      <feMerge>
+        <feMergeNode in="OUTLINE"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- ==================== BACKGROUND ==================== -->
+  <rect width="1200" height="1600" fill="#1A1A2E"/>
+  
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="32" font-weight="900">DROPOUT STYLE GUIDE</text>
+  <text x="600" y="80" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="14">Master Reference for Mascot Generation</text>
+  
+  <!-- ==================== SECTION 1: PROPORTIONS ==================== -->
+  <g transform="translate(50, 110)">
+    <rect width="500" height="320" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="250" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">1. PROPORTION SYSTEM</text>
+    
+    <!-- Proportion Diagram -->
+    <g transform="translate(250, 180)">
+      <!-- Grid Lines -->
+      <line x1="-150" y1="-100" x2="150" y2="-100" stroke="#FFD700" stroke-width="1" stroke-dasharray="5,5" opacity="0.5"/>
+      <line x1="-150" y1="0" x2="150" y2="0" stroke="#FFD700" stroke-width="1" stroke-dasharray="5,5" opacity="0.5"/>
+      <line x1="-150" y1="100" x2="150" y2="100" stroke="#FFD700" stroke-width="1" stroke-dasharray="5,5" opacity="0.5"/>
+      
+      <!-- Head Circle -->
+      <ellipse cx="0" cy="-80" rx="70" ry="65" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <text x="90" y="-80" fill="#FFF" font-family="Arial, sans-serif" font-size="12">HEAD: 60% of body</text>
+      
+      <!-- Body -->
+      <ellipse cx="0" cy="40" rx="55" ry="70" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <text x="90" y="40" fill="#FFF" font-family="Arial, sans-serif" font-size="12">BODY: Compact</text>
+      
+      <!-- Proportion Labels -->
+      <text x="-180" y="-100" fill="#FFD700" font-family="Arial, sans-serif" font-size="10">2-3 heads tall</text>
+      <line x1="-170" y1="-95" x2="-150" y2="-100" stroke="#FFD700" stroke-width="1"/>
+      
+      <!-- Measurement Lines -->
+      <line x1="-100" y1="-145" x2="-100" y2="110" stroke="#FFF" stroke-width="1"/>
+      <line x1="-105" y1="-145" x2="-95" y2="-145" stroke="#FFF" stroke-width="2"/>
+      <line x1="-105" y1="110" x2="-95" y2="110" stroke="#FFF" stroke-width="2"/>
+      <text x="-130" y="-10" fill="#FFF" font-family="Arial, sans-serif" font-size="10" transform="rotate(-90, -130, -10)">Body Height</text>
+    </g>
+    
+    <!-- Key Rules -->
+    <text x="20" y="280" fill="#FFF" font-family="Arial, sans-serif" font-size="11">• Head = 60% of total body height</text>
+    <text x="20" y="298" fill="#FFF" font-family="Arial, sans-serif" font-size="11">• Overall height = 2-3 head diameters</text>
+  </g>
+  
+  <!-- ==================== SECTION 2: HEAD DETAILS ==================== -->
+  <g transform="translate(580, 110)">
+    <rect width="570" height="320" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="285" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">2. HEAD CONSTRUCTION</text>
+    
+    <!-- Head Shape Study -->
+    <g transform="translate(120, 160)">
+      <!-- Base Head -->
+      <ellipse cx="0" cy="0" rx="85" ry="80" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      
+      <!-- Snout Area -->
+      <ellipse cx="0" cy="25" rx="35" ry="30" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="2"/>
+      
+      <!-- Nose -->
+      <ellipse cx="0" cy="18" rx="12" ry="8" fill="#2D1810"/>
+      <ellipse cx="-3" cy="16" rx="3" ry="2" fill="#FFF" opacity="0.6"/>
+      
+      <!-- Left Eye -->
+      <g transform="translate(-35, -15)">
+        <ellipse cx="0" cy="0" rx="22" ry="24" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="2" cy="2" rx="12" ry="14" fill="url(#eye-pupil)"/>
+        <circle cx="-5" cy="-6" r="5" fill="url(#eye-highlight)"/>
+        <circle cx="3" cy="6" r="2" fill="#FFF" opacity="0.8"/>
+      </g>
+      
+      <!-- Right Eye -->
+      <g transform="translate(35, -15)">
+        <ellipse cx="0" cy="0" rx="22" ry="24" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="-2" cy="2" rx="12" ry="14" fill="url(#eye-pupil)"/>
+        <circle cx="-7" cy="-6" r="5" fill="url(#eye-highlight)"/>
+        <circle cx="1" cy="6" r="2" fill="#FFF" opacity="0.8"/>
+      </g>
+      
+      <!-- Eyebrows -->
+      <path d="M-50 -45 Q-35 -55 -20 -45" stroke="#2D1810" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M20 -45 Q35 -55 50 -45" stroke="#2D1810" stroke-width="4" fill="none" stroke-linecap="round"/>
+      
+      <!-- Ears -->
+      <circle cx="-65" cy="-50" r="25" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <circle cx="-65" cy="-50" r="15" fill="#654321" stroke="#2D1810" stroke-width="2"/>
+      <circle cx="65" cy="-50" r="25" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <circle cx="65" cy="-50" r="15" fill="#654321" stroke="#2D1810" stroke-width="2"/>
+      
+      <!-- Labels -->
+      <line x1="0" y1="-90" x2="0" y2="-100" stroke="#FFD700" stroke-width="1"/>
+      <text x="0" y="-115" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10">Head Width: ~1.1x height</text>
+      
+      <line x1="-35" y1="-15" x2="-80" y2="-60" stroke="#FFD700" stroke-width="1"/>
+      <text x="-120" y="-70" fill="#FFD700" font-family="Arial, sans-serif" font-size="9">Eye: 25% head width</text>
+      
+      <line x1="35" y1="-15" x2="80" y2="-60" stroke="#FFD700" stroke-width="1"/>
+      <text x="90" y="-70" fill="#FFD700" font-family="Arial, sans-serif" font-size="9">Sclera + Pupil + Highlight</text>
+    </g>
+    
+    <!-- Eye Detail Callout -->
+    <g transform="translate(400, 140)">
+      <rect x="-80" y="-60" width="160" height="120" rx="8" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+      <text x="0" y="-45" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="11" font-weight="bold">EYE SPECIFICATIONS</text>
+      <text x="-70" y="-25" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Sclera: White (#FFF)</text>
+      <text x="-70" y="-10" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Pupil: Black (#000)</text>
+      <text x="-70" y="5" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Highlight: 2 dots</text>
+      <text x="-70" y="20" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Size: 25% head width</text>
+      <text x="-70" y="35" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Spacing: 60% apart</text>
+      <text x="-70" y="50" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Position: Upper 40%</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 3: BODY & CLOTHING ==================== -->
+  <g transform="translate(50, 450)">
+    <rect width="700" height="380" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="350" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">3. BODY & VARSITY JACKET</text>
+    
+    <!-- Full Body Example -->
+    <g transform="translate(200, 220)">
+      <!-- Legs -->
+      <ellipse cx="-25" cy="100" rx="20" ry="35" fill="#2D1810" stroke="#2D1810" stroke-width="3"/>
+      <ellipse cx="25" cy="100" rx="20" ry="35" fill="#2D1810" stroke="#2D1810" stroke-width="3"/>
+      
+      <!-- Shoes -->
+      <path d="M-45 120 Q-45 140 -25 140 L-15 140 Q-5 140 -5 120 Z" fill="#FFF" stroke="#2D1810" stroke-width="3"/>
+      <path d="M5 120 Q5 140 25 140 L35 140 Q45 140 45 120 Z" fill="#FFF" stroke="#2D1810" stroke-width="3"/>
+      
+      <!-- Body/Jacket -->
+      <path d="M-55 20 Q-65 80 -45 100 L45 100 Q65 80 55 20 Q30 -10 -30 -10 Z" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="3"/>
+      
+      <!-- Jacket Sleeves -->
+      <path d="M-55 20 Q-80 40 -75 70 L-55 75 Z" fill="url(#varsity-sleeve)" stroke="#2D1810" stroke-width="3"/>
+      <path d="M55 20 Q80 40 75 70 L55 75 Z" fill="url(#varsity-sleeve)" stroke="#2D1810" stroke-width="3"/>
+      
+      <!-- Jacket Details -->
+      <line x1="0" y1="-5" x2="0" y2="95" stroke="#2D1810" stroke-width="2"/>
+      <!-- Buttons -->
+      <circle cx="8" cy="20" r="4" fill="url(#gold-accent)" stroke="#2D1810" stroke-width="1"/>
+      <circle cx="8" cy="40" r="4" fill="url(#gold-accent)" stroke="#2D1810" stroke-width="1"/>
+      <circle cx="8" cy="60" r="4" fill="url(#gold-accent)" stroke="#2D1810" stroke-width="1"/>
+      <!-- Collar -->
+      <path d="M-30 -10 Q0 5 30 -10 L35 0 Q0 20 -35 0 Z" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+      <!-- Stripes on sleeves -->
+      <path d="M-75 55 L-60 58" stroke="#FFD700" stroke-width="3"/>
+      <path d="M-73 62 L-58 65" stroke="#FFD700" stroke-width="3"/>
+      <path d="M75 55 L60 58" stroke="#FFD700" stroke-width="3"/>
+      <path d="M73 62 L58 65" stroke="#FFD700" stroke-width="3"/>
+      
+      <!-- Arms/Hands -->
+      <ellipse cx="-70" cy="75" rx="15" ry="20" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <ellipse cx="70" cy="75" rx="15" ry="20" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      
+      <!-- Head -->
+      <ellipse cx="0" cy="-40" rx="70" ry="65" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <!-- Snout -->
+      <ellipse cx="0" cy="-25" rx="30" ry="25" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="2"/>
+      <!-- Nose -->
+      <ellipse cx="0" cy="-32" rx="10" ry="7" fill="#2D1810"/>
+      <!-- Eyes -->
+      <g transform="translate(-28, -55)">
+        <ellipse cx="0" cy="0" rx="18" ry="20" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="1" cy="2" rx="10" ry="12" fill="url(#eye-pupil)"/>
+        <circle cx="-4" cy="-4" r="4" fill="url(#eye-highlight)"/>
+      </g>
+      <g transform="translate(28, -55)">
+        <ellipse cx="0" cy="0" rx="18" ry="20" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="-1" cy="2" rx="10" ry="12" fill="url(#eye-pupil)"/>
+        <circle cx="-6" cy="-4" r="4" fill="url(#eye-highlight)"/>
+      </g>
+      <!-- Ears -->
+      <circle cx="-55" cy="-85" r="20" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <circle cx="55" cy="-85" r="20" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="3"/>
+      <!-- Hat (Backwards cap) -->
+      <path d="M-60 -85 Q0 -120 60 -85 L65 -75 Q0 -100 -65 -75 Z" fill="#DC143C" stroke="#2D1810" stroke-width="3"/>
+      <rect x="50" y="-90" width="25" height="8" rx="2" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+      <!-- Gold emblem on hat -->
+      <circle cx="0" cy="-100" r="12" fill="url(#gold-accent)" stroke="#2D1810" stroke-width="2"/>
+      <text x="0" y="-96" text-anchor="middle" fill="#8B0000" font-family="Arial Black" font-size="10">S</text>
+    </g>
+    
+    <!-- Clothing Specs -->
+    <g transform="translate(480, 180)">
+      <rect x="-100" y="0" width="200" height="160" rx="8" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+      <text x="0" y="20" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="11" font-weight="bold">CLOTHING SPECS</text>
+      <text x="-90" y="40" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Varsity jacket: Red body</text>
+      <text x="-90" y="55" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• White sleeves with gold stripes</text>
+      <text x="-90" y="70" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Gold buttons (3-4)</text>
+      <text x="-90" y="85" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Contrasting collar</text>
+      <text x="-90" y="100" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Backwards cap optional</text>
+      <text x="-90" y="115" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Baggy pants/jeans</text>
+      <text x="-90" y="130" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• High-top sneakers</text>
+      <text x="-90" y="145" fill="#FFD700" font-family="Arial, sans-serif" font-size="8">* Adapt per animal type</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 4: COLOR PALETTE ==================== -->
+  <g transform="translate(770, 450)">
+    <rect width="380" height="380" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="190" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">4. COLOR SYSTEM</text>
+    
+    <!-- Outline Color -->
+    <g transform="translate(50, 60)">
+      <rect width="60" height="40" rx="4" fill="#2D1810" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Outline</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="9">#2D1810</text>
+    </g>
+    
+    <!-- Gold Accent -->
+    <g transform="translate(210, 60)">
+      <rect width="60" height="40" rx="4" fill="#FFD700" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Gold</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="9">#FFD700</text>
+    </g>
+    
+    <!-- Shadow -->
+    <g transform="translate(50, 120)">
+      <rect width="60" height="40" rx="4" fill="rgba(0,0,0,0.3)" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Shadow</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="8">rgba(0,0,0,0.2)</text>
+    </g>
+    
+    <!-- Highlight -->
+    <g transform="translate(210, 120)">
+      <rect width="60" height="40" rx="4" fill="rgba(255,255,255,0.3)" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Highlight</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="7">rgba(255,255,255,0.3)</text>
+    </g>
+    
+    <!-- Bear Brown -->
+    <g transform="translate(50, 180)">
+      <rect width="60" height="40" rx="4" fill="#8B4513" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Bear Fur</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="9">#8B4513</text>
+    </g>
+    
+    <!-- Varsity Red -->
+    <g transform="translate(210, 180)">
+      <rect width="60" height="40" rx="4" fill="#DC143C" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Varsity Red</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="9">#DC143C</text>
+    </g>
+    
+    <!-- Snout -->
+    <g transform="translate(50, 240)">
+      <rect width="60" height="40" rx="4" fill="#D2B48C" stroke="#FFF" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Snout</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="9">#D2B48C</text>
+    </g>
+    
+    <!-- Sleeve White -->
+    <g transform="translate(210, 240)">
+      <rect width="60" height="40" rx="4" fill="#FFF" stroke="#666" stroke-width="1"/>
+      <text x="70" y="15" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Sleeve</text>
+      <text x="70" y="30" fill="#AAA" font-family="monospace" font-size="9">#FFFFFF</text>
+    </g>
+    
+    <!-- CSS Variables Reference -->
+    <g transform="translate(20, 310)">
+      <rect x="0" y="0" width="340" height="55" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+      <text x="10" y="18" fill="#FFD700" font-family="monospace" font-size="9">CSS Variables:</text>
+      <text x="10" y="35" fill="#FFF" font-family="monospace" font-size="8">--dropout-outline: #2D1810;</text>
+      <text x="10" y="48" fill="#FFF" font-family="monospace" font-size="8">--dropout-gold: #FFD700;</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 5: EXPRESSIONS ==================== -->
+  <g transform="translate(50, 850)">
+    <rect width="550" height="350" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="275" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">5. EXPRESSION LIBRARY</text>
+    
+    <!-- Expression: Confident (Default) -->
+    <g transform="translate(80, 120)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Confident eyes - half-lidded -->
+      <path d="M-22 -5 Q-15 -8 -8 -5" stroke="#2D1810" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M8 -5 Q15 -8 22 -5" stroke="#2D1810" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <circle cx="-15" cy="-2" r="5" fill="#FFF"/>
+      <circle cx="15" cy="-2" r="5" fill="#FFF"/>
+      <!-- Smirk -->
+      <path d="M-8 25 Q0 28 8 25" stroke="#2D1810" stroke-width="2" fill="none"/>
+      <text x="0" y="65" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Confident</text>
+    </g>
+    
+    <!-- Expression: Happy -->
+    <g transform="translate(200, 120)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Happy eyes - curved up -->
+      <ellipse cx="-15" cy="-5" rx="12" ry="14" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="-15" cy="-3" rx="7" ry="8" fill="#2D1810"/>
+      <circle cx="-18" cy="-8" r="3" fill="#FFF"/>
+      <ellipse cx="15" cy="-5" rx="12" ry="14" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="15" cy="-3" rx="7" ry="8" fill="#2D1810"/>
+      <circle cx="12" cy="-8" r="3" fill="#FFF"/>
+      <!-- Big smile -->
+      <path d="M-12 22 Q0 32 12 22" stroke="#2D1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <text x="0" y="65" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Happy</text>
+    </g>
+    
+    <!-- Expression: Excited -->
+    <g transform="translate(320, 120)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Excited eyes - wide open, sparkles -->
+      <ellipse cx="-15" cy="-5" rx="14" ry="16" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="-15" cy="-3" rx="8" ry="9" fill="#2D1810"/>
+      <circle cx="-19" cy="-9" r="4" fill="#FFF"/>
+      <circle cx="-11" cy="0" r="2" fill="#FFF"/>
+      <ellipse cx="15" cy="-5" rx="14" ry="16" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="15" cy="-3" rx="8" ry="9" fill="#2D1810"/>
+      <circle cx="11" cy="-9" r="4" fill="#FFF"/>
+      <circle cx="19" cy="0" r="2" fill="#FFF"/>
+      <!-- Open mouth -->
+      <ellipse cx="0" cy="28" rx="10" ry="8" fill="#2D1810"/>
+      <ellipse cx="0" cy="25" rx="8" ry="5" fill="#FF6B6B"/>
+      <text x="0" y="65" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Excited</text>
+    </g>
+    
+    <!-- Expression: Mischievous -->
+    <g transform="translate(440, 120)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Mischievous - one eye winking -->
+      <path d="M-22 -5 Q-15 2 -8 -5" stroke="#2D1810" stroke-width="3" fill="none"/>
+      <ellipse cx="15" cy="-5" rx="12" ry="14" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="13" cy="-3" rx="7" ry="8" fill="#2D1810"/>
+      <circle cx="10" cy="-8" r="3" fill="#FFF"/>
+      <!-- Side smirk -->
+      <path d="M-5 25 Q5 28 10 22" stroke="#2D1810" stroke-width="2" fill="none"/>
+      <text x="0" y="65" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Mischievous</text>
+    </g>
+    
+    <!-- Expression: Surprised -->
+    <g transform="translate(140, 240)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Surprised eyes -->
+      <circle cx="-15" cy="-8" r="10" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-15" cy="-8" r="5" fill="#2D1810"/>
+      <circle cx="-18" cy="-11" r="3" fill="#FFF"/>
+      <circle cx="15" cy="-8" r="10" fill="url(#eye-sclera)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="15" cy="-8" r="5" fill="#2D1810"/>
+      <circle cx="12" cy="-11" r="3" fill="#FFF"/>
+      <!-- Raised eyebrows -->
+      <path d="M-28 -22 Q-15 -30 -5 -22" stroke="#2D1810" stroke-width="3" fill="none"/>
+      <path d="M5 -22 Q15 -30 28 -22" stroke="#2D1810" stroke-width="3" fill="none"/>
+      <!-- O mouth -->
+      <ellipse cx="0" cy="28" rx="8" ry="10" fill="#2D1810"/>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Surprised</text>
+    </g>
+    
+    <!-- Expression: Chill/Relaxed -->
+    <g transform="translate(260, 240)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Chill eyes - closed happy -->
+      <path d="M-22 -5 Q-15 0 -8 -5" stroke="#2D1810" stroke-width="3" fill="none"/>
+      <path d="M8 -5 Q15 0 22 -5" stroke="#2D1810" stroke-width="3" fill="none"/>
+      <!-- Neutral mouth -->
+      <line x1="-8" y1="28" x2="8" y2="28" stroke="#2D1810" stroke-width="2" stroke-linecap="round"/>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Chill</text>
+    </g>
+    
+    <!-- Expression: Determined -->
+    <g transform="translate(380, 240)">
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="15" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="10" rx="7" ry="5" fill="#2D1810"/>
+      <!-- Determined eyes - angled -->
+      <path d="M-25 -8 L-8 -3" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="-16" cy="-5" r="4" fill="#FFF"/>
+      <path d="M8 -3 L25 -8" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="16" cy="-5" r="4" fill="#FFF"/>
+      <!-- Frown -->
+      <path d="M-10 28 Q0 24 10 28" stroke="#2D1810" stroke-width="2" fill="none"/>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Determined</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 6: ANIMAL VARIATIONS ==================== -->
+  <g transform="translate(620, 850)">
+    <rect width="530" height="350" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="265" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">6. ANIMAL ADAPTATION GUIDE</text>
+    
+    <!-- Bear (Reference) -->
+    <g transform="translate(80, 120)">
+      <ellipse cx="0" cy="0" rx="35" ry="32" fill="#8B4513" stroke="#2D1810" stroke-width="2"/>
+      <circle cx="-25" cy="-25" r="12" fill="#8B4513" stroke="#2D1810" stroke-width="2"/>
+      <circle cx="25" cy="-25" r="12" fill="#8B4513" stroke="#2D1810" stroke-width="2"/>
+      <circle cx="0" cy="8" rx="14" ry="12" fill="#D2B48C" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="4" rx="5" ry="3" fill="#2D1810"/>
+      <text x="0" y="50" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10">Bear (Base)</text>
+    </g>
+    
+    <!-- Wolf -->
+    <g transform="translate(200, 120)">
+      <ellipse cx="0" cy="5" rx="32" ry="35" fill="#696969" stroke="#2D1810" stroke-width="2"/>
+      <!-- Pointed ears -->
+      <path d="M-25 -20 L-35 -45 L-15 -30 Z" fill="#696969" stroke="#2D1810" stroke-width="2"/>
+      <path d="M25 -20 L35 -45 L15 -30 Z" fill="#696969" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="12" rx="12" ry="10" fill="#A9A9A9" stroke="#2D1810" stroke-width="1.5"/>
+      <ellipse cx="0" cy="8" rx="4" ry="3" fill="#2D1810"/>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Wolf</text>
+      <text x="0" y="68" text-anchor="middle" fill="#AAA" font-family="Arial, sans-serif" font-size="8">Pointed ears</text>
+    </g>
+    
+    <!-- Rabbit -->
+    <g transform="translate(320, 120)">
+      <ellipse cx="0" cy="10" rx="30" ry="28" fill="#FFB6C1" stroke="#2D1810" stroke-width="2"/>
+      <!-- Long ears -->
+      <ellipse cx="-12" cy="-35" rx="8" ry="25" fill="#FFB6C1" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="-12" cy="-35" rx="4" ry="18" fill="#FFC0CB"/>
+      <ellipse cx="12" cy="-35" rx="8" ry="25" fill="#FFB6C1" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="12" cy="-35" rx="4" ry="18" fill="#FFC0CB"/>
+      <ellipse cx="0" cy="15" rx="10" ry="8" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Rabbit</text>
+      <text x="0" y="68" text-anchor="middle" fill="#AAA" font-family="Arial, sans-serif" font-size="8">Long ears</text>
+    </g>
+    
+    <!-- Tiger -->
+    <g transform="translate(440, 120)">
+      <ellipse cx="0" cy="0" rx="35" ry="32" fill="#FF8C00" stroke="#2D1810" stroke-width="2"/>
+      <!-- Stripes -->
+      <path d="M-20 -25 L-10 -20 L-20 -15" fill="#2D1810"/>
+      <path d="M20 -25 L10 -20 L20 -15" fill="#2D1810"/>
+      <path d="M-25 0 L-15 5 L-25 10" fill="#2D1810"/>
+      <path d="M25 0 L15 5 L25 10" fill="#2D1810"/>
+      <!-- Round ears -->
+      <circle cx="-25" cy="-25" r="10" fill="#FF8C00" stroke="#2D1810" stroke-width="2"/>
+      <circle cx="-25" cy="-25" r="5" fill="#FFF"/>
+      <circle cx="25" cy="-25" r="10" fill="#FF8C00" stroke="#2D1810" stroke-width="2"/>
+      <circle cx="25" cy="-25" r="5" fill="#FFF"/>
+      <ellipse cx="0" cy="8" rx="14" ry="12" fill="#FFE4B5" stroke="#2D1810" stroke-width="1.5"/>
+      <text x="0" y="50" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Tiger</text>
+      <text x="0" y="63" text-anchor="middle" fill="#AAA" font-family="Arial, sans-serif" font-size="8">Stripes, round ears</text>
+    </g>
+    
+    <!-- Adaptation Notes -->
+    <g transform="translate(265, 260)">
+      <rect x="-240" y="0" width="480" height="75" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+      <text x="0" y="18" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10" font-weight="bold">ADAPTATION RULES</text>
+      <text x="-230" y="35" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Maintain 60% head ratio across all animals</text>
+      <text x="-230" y="50" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Keep large expressive eyes (25% head width)</text>
+      <text x="-230" y="65" fill="#FFF" font-family="Arial, sans-serif" font-size="9">• Adapt ears/features to species while keeping proportions</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 7: POSE REFERENCE ==================== -->
+  <g transform="translate(50, 1220)">
+    <rect width="1100" height="350" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="550" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="18">7. POSE LIBRARY</text>
+    
+    <!-- Pose: Standing -->
+    <g transform="translate(100, 200)">
+      <!-- Simple standing pose -->
+      <ellipse cx="0" cy="60" rx="35" ry="50" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-20" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-10" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-15" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="15" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <line x1="-35" y1="20" x2="-50" y2="50" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="35" y1="20" x2="50" y2="50" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <text x="0" y="130" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Standing</text>
+    </g>
+    
+    <!-- Pose: Walking -->
+    <g transform="translate(250, 200)">
+      <ellipse cx="0" cy="60" rx="35" ry="50" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="5" cy="-20" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="5" cy="-10" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-10" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="20" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <!-- Walking legs -->
+      <line x1="-20" y1="100" x2="-30" y2="130" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="20" y1="100" x2="40" y2="125" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <!-- Arms swinging -->
+      <line x1="-35" y1="20" x2="-55" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="35" y1="20" x2="55" y2="0" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <text x="0" y="150" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Walking</text>
+    </g>
+    
+    <!-- Pose: Jumping -->
+    <g transform="translate(400, 200)">
+      <ellipse cx="0" cy="40" rx="35" ry="45" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-35" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-25" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-15" cy="-45" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="15" cy="-45" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <!-- Jumping limbs -->
+      <line x1="-30" y1="70" x2="-50" y2="50" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="30" y1="70" x2="50" y2="50" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="-35" y1="10" x2="-60" y2="-10" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="35" y1="10" x2="60" y2="-10" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <text x="0" y="110" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Jumping</text>
+    </g>
+    
+    <!-- Pose: Arms Crossed -->
+    <g transform="translate(550, 200)">
+      <ellipse cx="0" cy="60" rx="40" ry="50" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-20" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <!-- Crossed arms -->
+      <path d="M-35 20 Q0 40 35 20" stroke="#2D1810" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <ellipse cx="0" cy="-10" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-15" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="15" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <text x="0" y="130" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Confident</text>
+    </g>
+    
+    <!-- Pose: Dancing -->
+    <g transform="translate(700, 200)">
+      <ellipse cx="0" cy="55" rx="35" ry="48" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="-5" cy="-20" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="-5" cy="-10" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-20" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="10" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <!-- Dynamic limbs -->
+      <line x1="-30" y1="90" x2="-50" y2="110" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="30" y1="90" x2="55" y2="70" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="-35" y1="15" x2="-60" y2="-20" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="35" y1="15" x2="60" y2="-20" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <!-- Motion lines -->
+      <path d="M-70 -30 Q-80 -35 -75 -25" stroke="#FFD700" stroke-width="2" fill="none"/>
+      <path d="M70 -30 Q80 -35 75 -25" stroke="#FFD700" stroke-width="2" fill="none"/>
+      <text x="0" y="135" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Dancing</text>
+    </g>
+    
+    <!-- Pose: Sitting -->
+    <g transform="translate(850, 200)">
+      <ellipse cx="0" cy="80" rx="50" ry="35" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="0" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="10" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-15" cy="-10" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="15" cy="-10" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <!-- Sitting pose arms -->
+      <line x1="-40" y1="40" x2="-55" y2="70" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="40" y1="40" x2="55" y2="70" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <text x="0" y="135" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Sitting</text>
+    </g>
+    
+    <!-- Pose: Victory -->
+    <g transform="translate(1000, 200)">
+      <ellipse cx="0" cy="60" rx="35" ry="50" fill="url(#varsity-red)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-20" rx="45" ry="42" fill="url(#bear-fur)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-10" rx="18" ry="15" fill="url(#snout-gradient)" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="-15" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <circle cx="15" cy="-30" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+      <!-- Victory arm up -->
+      <line x1="-35" y1="20" x2="-50" y2="50" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <line x1="35" y1="20" x2="55" y2="-30" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+      <!-- Victory hand -->
+      <circle cx="55" cy="-35" r="8" fill="#8B4513" stroke="#2D1810" stroke-width="2"/>
+      <text x="0" y="130" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="10">Victory</text>
+    </g>
+    
+    <!-- Animation Easing -->
+    <g transform="translate(550, 320)">
+      <text x="0" y="0" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10">Animation Easing: cubic-bezier(0.34, 1.56, 0.64, 1)</text>
+      <text x="0" y="15" text-anchor="middle" fill="#AAA" font-family="Arial, sans-serif" font-size="9">Bouncy, energetic movement with slight overshoot</text>
+    </g>
+  </g>
+  
+  <!-- ==================== FOOTER ==================== -->
+  <g transform="translate(0, 1590)">
+    <text x="600" y="-10" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Dropout Style Guide v1.0 | Libre-X-eSport 4NJZ4 TENET Platform</text>
+  </g>
+</svg>

@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Dropout Style Wolf - 256x256px -->
+  <!-- Strong wolf with varsity jacket, leadership pose -->
+  
+  <defs>
+    <linearGradient id="wolfGrad256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6C757D"/>
+      <stop offset="40%" style="stop-color:#5A6268"/>
+      <stop offset="100%" style="stop-color:#495057"/>
+    </linearGradient>
+    <linearGradient id="wolfLight256" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ADB5BD"/>
+      <stop offset="50%" style="stop-color:#868E96"/>
+      <stop offset="100%" style="stop-color:#6C757D"/>
+    </linearGradient>
+    <linearGradient id="silverGrad256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8E8E8"/>
+      <stop offset="50%" style="stop-color:#C0C0C0"/>
+      <stop offset="100%" style="stop-color:#A8A8A8"/>
+    </linearGradient>
+    <filter id="shadow256" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Left Ear (pointed) -->
+  <path d="M56 24 L88 96 L40 80 Z" fill="url(#wolfGrad256)" stroke="#212529" stroke-width="3" filter="url(#shadow256)"/>
+  <path d="M64 36 L80 84 L52 72 Z" fill="#CED4DA"/>
+  <path d="M60 32 L68 56 L52 48 Z" fill="#E9ECEF" opacity="0.5"/>
+  
+  <!-- Right Ear (pointed) -->
+  <path d="M200 24 L168 96 L216 80 Z" fill="url(#wolfGrad256)" stroke="#212529" stroke-width="3" filter="url(#shadow256)"/>
+  <path d="M192 36 L176 84 L204 72 Z" fill="#CED4DA"/>
+  <path d="M196 32 L188 56 L204 48 Z" fill="#E9ECEF" opacity="0.5"/>
+  
+  <!-- Head -->
+  <ellipse cx="128" cy="112" rx="72" ry="64" fill="url(#wolfGrad256)" stroke="#212529" stroke-width="3" filter="url(#shadow256)"/>
+  
+  <!-- Cheek fur -->
+  <path d="M60 120 Q48 136 56 152" fill="none" stroke="#495057" stroke-width="3" stroke-linecap="round"/>
+  <path d="M196 120 Q208 136 200 152" fill="none" stroke="#495057" stroke-width="3" stroke-linecap="round"/>
+  <path d="M64 128 Q56 140 62 148" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  <path d="M192 128 Q200 140 194 148" fill="none" stroke="#6C757D" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  
+  <!-- Forehead markings -->
+  <path d="M104 64 L128 96 L152 64" fill="none" stroke="#495057" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M88 56 L100 72" fill="none" stroke="#495057" stroke-width="3" opacity="0.4"/>
+  <path d="M168 56 L156 72" fill="none" stroke="#495057" stroke-width="3" opacity="0.4"/>
+  <path d="M112 52 L120 64" fill="none" stroke="#495057" stroke-width="2" opacity="0.3"/>
+  <path d="M144 52 L136 64" fill="none" stroke="#495057" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Snout -->
+  <ellipse cx="128" cy="144" rx="40" ry="32" fill="url(#wolfLight256)"/>
+  <ellipse cx="128" cy="136" rx="24" ry="16" fill="#DEE2E6" opacity="0.5"/>
+  
+  <!-- Nose -->
+  <ellipse cx="128" cy="160" rx="16" ry="12" fill="#212529"/>
+  <ellipse cx="128" cy="156" rx="8" ry="4" fill="#495057" opacity="0.5"/>
+  
+  <!-- Nostrils -->
+  <ellipse cx="122" cy="162" rx="3" ry="2" fill="#000000"/>
+  <ellipse cx="134" cy="162" rx="3" ry="2" fill="#000000"/>
+  
+  <!-- Eyes (confident) -->
+  <ellipse cx="96" cy="104" rx="16" ry="20" fill="#F8F9FA" stroke="#212529" stroke-width="2"/>
+  <ellipse cx="160" cy="104" rx="16" ry="20" fill="#F8F9FA" stroke="#212529" stroke-width="2"/>
+  <ellipse cx="96" cy="104" rx="10" ry="14" fill="#212529"/>
+  <ellipse cx="160" cy="104" rx="10" ry="14" fill="#212529"/>
+  
+  <!-- Eye shine -->
+  <circle cx="100" cy="100" r="5" fill="#FFFFFF"/>
+  <circle cx="164" cy="100" r="5" fill="#FFFFFF"/>
+  <circle cx="92" cy="108" r="3" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="156" cy="108" r="3" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="98" cy="106" r="2" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="162" cy="106" r="2" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Eyebrows (confident) -->
+  <path d="M76 80 Q96 72 116 80" fill="none" stroke="#495057" stroke-width="5" stroke-linecap="round"/>
+  <path d="M140 80 Q160 72 180 80" fill="none" stroke="#495057" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Mouth -->
+  <path d="M112 184 Q128 192 144 184" fill="none" stroke="#495057" stroke-width="4" stroke-linecap="round"/>
+  <path d="M128 176 L128 188" fill="none" stroke="#495057" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Chin fur -->
+  <path d="M116 200 Q128 208 140 200" fill="none" stroke="#6C757D" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120 204 Q128 210 136 204" fill="none" stroke="#868E96" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Varsity Jacket Body -->
+  <path d="M64 160 L48 224 L96 224 L96 192 L128 208 L160 192 L160 224 L208 224 L192 160 Q128 176 64 160" fill="#212529" stroke="#000000" stroke-width="3"/>
+  
+  <!-- Jacket texture/shading -->
+  <path d="M72 168 L68 200" fill="none" stroke="#343A40" stroke-width="2" opacity="0.5"/>
+  <path d="M184 168 L188 200" fill="none" stroke="#343A40" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M80 160 L128 192 L176 160" fill="none" stroke="url(#silverGrad256)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 152 L128 176 L168 152" fill="none" stroke="#212529" stroke-width="3"/>
+  
+  <!-- Team Emblem -->
+  <circle cx="128" cy="192" r="16" fill="url(#silverGrad256)" stroke="#212529" stroke-width="2"/>
+  <text x="128" y="198" font-size="20" fill="#212529" text-anchor="middle" font-weight="bold" font-family="Arial, sans-serif">W</text>
+  
+  <!-- Silver trim details -->
+  <path d="M48 192 L64 192" fill="none" stroke="url(#silverGrad256)" stroke-width="5"/>
+  <path d="M192 192 L208 192" fill="none" stroke="url(#silverGrad256)" stroke-width="5"/>
+  <path d="M96 208 L96 224" fill="none" stroke="url(#silverGrad256)" stroke-width="3"/>
+  <path d="M160 208 L160 224" fill="none" stroke="url(#silverGrad256)" stroke-width="3"/>
+  
+  <!-- Jacket cuffs -->
+  <rect x="52" y="212" width="32" height="12" fill="url(#silverGrad256)" rx="3"/>
+  <rect x="172" y="212" width="32" height="12" fill="url(#silverGrad256)" rx="3"/>
+  
+  <!-- Shoulder stripes -->
+  <path d="M56 168 L72 172" fill="none" stroke="url(#silverGrad256)" stroke-width="4"/>
+  <path d="M60 176 L76 180" fill="none" stroke="url(#silverGrad256)" stroke-width="3"/>
+  <path d="M200 168 L184 172" fill="none" stroke="url(#silverGrad256)" stroke-width="4"/>
+  <path d="M196 176 L180 180" fill="none" stroke="url(#silverGrad256)" stroke-width="3"/>
+  
+  <!-- Jacket buttons -->
+  <circle cx="128" cy="208" r="3" fill="#C0C0C0"/>
+  <circle cx="128" cy="216" r="3" fill="#C0C0C0"/>
+</svg>

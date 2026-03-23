@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <path d="M96 96 Q80 64 88 40 Q104 24 120 64 Q128 88 120 104" 
+        fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,3"/>
+  <path d="M136 104 Q128 88 136 64 Q152 24 168 40 Q176 64 160 96" 
+        fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,3"/>
+  <ellipse cx="128" cy="128" rx="56" ry="48" fill="none" stroke="#0000FF" stroke-width="3" stroke-dasharray="6,4"/>
+  <ellipse cx="128" cy="144" rx="24" ry="20" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <ellipse cx="128" cy="136" rx="10" ry="8" fill="#0000FF"/>
+  <circle cx="100" cy="116" r="8" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <circle cx="156" cy="116" r="8" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M112 160 Q120 164 128 160 Q136 164 144 160" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M80 176 Q72 200 128 216 Q184 200 176 176" 
+        fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6,4"/>
+  <ellipse cx="80" cy="200" rx="14" ry="18" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <line x1="72" y1="192" x2="72" y2="208" stroke="#0000FF" stroke-width="1.8"/>
+  <line x1="80" y1="188" x2="80" y2="212" stroke="#0000FF" stroke-width="1.8"/>
+  <line x1="88" y1="192" x2="88" y2="208" stroke="#0000FF" stroke-width="1.8"/>
+  <ellipse cx="176" cy="200" rx="14" ry="18" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <line x1="168" y1="192" x2="168" y2="208" stroke="#0000FF" stroke-width="1.8"/>
+  <line x1="176" y1="188" x2="176" y2="212" stroke="#0000FF" stroke-width="1.8"/>
+  <line x1="184" y1="192" x2="184" y2="208" stroke="#0000FF" stroke-width="1.8"/>
+</svg>

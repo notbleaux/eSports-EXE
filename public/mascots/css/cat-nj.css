@@ -1,0 +1,429 @@
+/**
+ * Cat in Bunny Onesie - NJ Style Animations
+ * Minimalist line art animations for the playful cat mascot
+ * 
+ * Features:
+ * - Line bounce
+ * - Eye blink
+ * - Onesie sway
+ * - Playful hop
+ */
+
+/* ===== IDLE ANIMATION ===== */
+@keyframes cat-nj-idle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes cat-nj-line-pulse {
+  0%, 100% {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+  }
+  50% {
+    stroke-opacity: 0.85;
+    stroke-width: 2.2px;
+  }
+}
+
+@keyframes cat-nj-tail-sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}
+
+@keyframes cat-nj-ear-wiggle {
+  0%, 90%, 100% {
+    transform: rotate(0deg);
+  }
+  92% {
+    transform: rotate(-3deg);
+  }
+  94% {
+    transform: rotate(2deg);
+  }
+  96% {
+    transform: rotate(-1deg);
+  }
+}
+
+@keyframes cat-nj-onesie-sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1deg);
+  }
+  75% {
+    transform: rotate(-1deg);
+  }
+}
+
+/* ===== WAVE ANIMATION ===== */
+@keyframes cat-nj-wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-20deg);
+  }
+  30% {
+    transform: rotate(0deg);
+  }
+  45% {
+    transform: rotate(-20deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  90% {
+    transform: rotate(0deg);
+  }
+}
+
+/* ===== HOP ANIMATION ===== */
+@keyframes cat-nj-hop {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  12.5% {
+    transform: translateY(-12px) rotate(-2deg);
+  }
+  25% {
+    transform: translateY(0) rotate(0deg);
+  }
+  37.5% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  62.5% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(0) rotate(0deg);
+  }
+  87.5% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes cat-nj-hop-ears {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(1px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes cat-nj-hop-tail {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
+}
+
+/* ===== WIGGLE ANIMATION ===== */
+@keyframes cat-nj-wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: rotate(-3deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: rotate(3deg);
+  }
+}
+
+/* ===== BLINK ANIMATION ===== */
+@keyframes cat-nj-blink {
+  0%, 96%, 100% {
+    transform: scaleY(1);
+  }
+  98% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* ===== VARIANT: CLASSIC PINK ===== */
+@keyframes cat-nj-classic-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 0 #F72585);
+  }
+  50% {
+    filter: drop-shadow(0 0 4px #F72585);
+  }
+}
+
+/* ===== VARIANT: ATTENTION ===== */
+@keyframes cat-nj-attention-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-8px) scale(1.02);
+  }
+  60% {
+    transform: translateY(0) scale(0.98);
+  }
+  80% {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+@keyframes cat-nj-attention-ears {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-5deg);
+  }
+  40% {
+    transform: rotate(5deg);
+  }
+  60% {
+    transform: rotate(-3deg);
+  }
+  80% {
+    transform: rotate(3deg);
+  }
+}
+
+/* ===== VARIANT: ONESIE-PINK ===== */
+@keyframes cat-nj-onesie-pink-glow {
+  0%, 100% {
+    stroke: #F72585;
+    filter: drop-shadow(0 0 0 #F72585);
+  }
+  50% {
+    stroke: #FF69B4;
+    filter: drop-shadow(0 0 8px #FF69B4);
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Container */
+.cat-nj-container {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+.cat-nj-container svg {
+  overflow: visible;
+}
+
+/* Idle state */
+.cat-nj-idle {
+  animation: cat-nj-idle 2s ease-in-out infinite;
+}
+
+.cat-nj-idle svg {
+  animation: cat-nj-line-pulse 2s ease-in-out infinite;
+}
+
+.cat-nj-idle .tail {
+  animation: cat-nj-tail-sway 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.cat-nj-idle .bunny-ears {
+  animation: cat-nj-ear-wiggle 5s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.cat-nj-idle .onesie {
+  animation: cat-nj-onesie-sway 4s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Wave state */
+.cat-nj-wave {
+  animation: cat-nj-idle 0.5s ease-in-out;
+}
+
+.cat-nj-wave .arm-right {
+  animation: cat-nj-wave 0.8s ease-in-out;
+  transform-origin: center center;
+}
+
+/* Hop state */
+.cat-nj-hop {
+  animation: cat-nj-hop 1.2s ease-in-out;
+}
+
+.cat-nj-hop .bunny-ears {
+  animation: cat-nj-hop-ears 1.2s ease-in-out;
+}
+
+.cat-nj-hop .tail {
+  animation: cat-nj-hop-tail 1.2s ease-in-out;
+  transform-origin: bottom center;
+}
+
+/* Wiggle state */
+.cat-nj-wiggle {
+  animation: cat-nj-wiggle 0.5s ease-in-out;
+}
+
+.cat-nj-wiggle .head {
+  animation: cat-nj-wiggle 0.5s ease-in-out;
+}
+
+/* Peek state */
+.cat-nj-peek {
+  animation: cat-nj-idle 0.3s ease-in-out infinite;
+}
+
+.cat-nj-peek .head {
+  animation: cat-nj-attention-bounce 0.6s ease-in-out;
+}
+
+.cat-nj-peek .eye-left,
+.cat-nj-peek .eye-right {
+  animation: cat-nj-blink 3s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Variant: Classic Pink (default) */
+.cat-nj-classic-pink svg {
+  stroke: #F72585;
+}
+
+.cat-nj-classic-pink svg {
+  animation: cat-nj-classic-pulse 3s ease-in-out infinite;
+}
+
+/* Variant: Attention */
+.cat-nj-attention {
+  animation: cat-nj-attention-bounce 0.8s ease-in-out;
+}
+
+.cat-nj-attention .bunny-ears {
+  animation: cat-nj-attention-ears 0.8s ease-in-out;
+  transform-origin: center center;
+}
+
+/* Variant: Onesie-Pink */
+.cat-nj-onesie-pink svg {
+  animation: cat-nj-onesie-pink-glow 2s ease-in-out infinite;
+}
+
+/* ===== HOVER EFFECTS ===== */
+.cat-nj-container:hover svg {
+  filter: drop-shadow(0 0 6px rgba(247, 37, 133, 0.4));
+  transition: filter 0.3s ease;
+}
+
+.cat-nj-container:hover .tail {
+  animation: cat-nj-tail-sway 0.5s ease-in-out infinite;
+}
+
+.cat-nj-container:hover .eye-left,
+.cat-nj-container:hover .eye-right {
+  animation: cat-nj-blink 2s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* ===== SIZE VARIANTS ===== */
+.cat-nj-size-32 {
+  width: 32px;
+  height: 32px;
+}
+
+.cat-nj-size-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.cat-nj-size-128 {
+  width: 128px;
+  height: 128px;
+}
+
+.cat-nj-size-256 {
+  width: 256px;
+  height: 256px;
+}
+
+.cat-nj-size-512 {
+  width: 512px;
+  height: 512px;
+}
+
+/* Stroke width adjustments for different sizes */
+.cat-nj-size-32 svg {
+  stroke-width: 2px;
+}
+
+.cat-nj-size-64 svg {
+  stroke-width: 2px;
+}
+
+.cat-nj-size-128 svg {
+  stroke-width: 2.5px;
+}
+
+.cat-nj-size-256 svg {
+  stroke-width: 3px;
+}
+
+.cat-nj-size-512 svg {
+  stroke-width: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .cat-nj-idle,
+  .cat-nj-idle svg,
+  .cat-nj-idle .tail,
+  .cat-nj-idle .bunny-ears,
+  .cat-nj-idle .onesie,
+  .cat-nj-wave,
+  .cat-nj-wave .arm-right,
+  .cat-nj-hop,
+  .cat-nj-hop .bunny-ears,
+  .cat-nj-hop .tail,
+  .cat-nj-wiggle,
+  .cat-nj-wiggle .head,
+  .cat-nj-peek,
+  .cat-nj-peek .head,
+  .cat-nj-peek .eye-left,
+  .cat-nj-peek .eye-right,
+  .cat-nj-classic-pink svg,
+  .cat-nj-attention,
+  .cat-nj-attention .bunny-ears,
+  .cat-nj-onesie-pink svg {
+    animation: none;
+  }
+}

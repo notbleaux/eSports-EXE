@@ -1,0 +1,113 @@
+/**
+ * NJ Style Bear CSS Animations
+ * Simple line art bear in NJ style
+ */
+
+/* ===== BASE ANIMATIONS ===== */
+@keyframes bear-nj-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes bear-nj-line-pulse {
+  0%, 100% { stroke-opacity: 1; }
+  50% { stroke-opacity: 0.85; }
+}
+
+@keyframes bear-nj-ear-twitch {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  92% { transform: rotate(-3deg); }
+  94% { transform: rotate(1deg); }
+  96% { transform: rotate(-2deg); }
+}
+
+/* ===== WAVE ANIMATION ===== */
+@keyframes bear-nj-wave {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-20deg); }
+  30% { transform: rotate(0deg); }
+  45% { transform: rotate(-20deg); }
+  60% { transform: rotate(0deg); }
+  75% { transform: rotate(-10deg); }
+  90% { transform: rotate(0deg); }
+}
+
+/* ===== CELEBRATION ===== */
+@keyframes bear-nj-celebrate {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  12.5% { transform: translateY(-10px) rotate(-2deg); }
+  25% { transform: translateY(0) rotate(0deg); }
+  37.5% { transform: translateY(-14px) rotate(2deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  62.5% { transform: translateY(-8px) rotate(-1deg); }
+  75% { transform: translateY(0) rotate(0deg); }
+  87.5% { transform: translateY(-6px) rotate(1deg); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.bear-nj-container {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+.bear-nj-container svg {
+  overflow: visible;
+}
+
+/* Idle state */
+.bear-nj-idle {
+  animation: bear-nj-idle 2.5s ease-in-out infinite;
+}
+
+.bear-nj-idle svg {
+  animation: bear-nj-line-pulse 2s ease-in-out infinite;
+}
+
+.bear-nj-idle .ear-left,
+.bear-nj-idle .ear-right {
+  animation: bear-nj-ear-twitch 6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Wave state */
+.bear-nj-wave .paw-right {
+  animation: bear-nj-wave 0.8s ease-in-out;
+  transform-origin: center center;
+}
+
+/* Celebrate state */
+.bear-nj-celebrate {
+  animation: bear-nj-celebrate 1.2s ease-in-out;
+}
+
+/* ===== SIZE VARIANTS ===== */
+.bear-nj-size-32 { width: 32px; height: 32px; }
+.bear-nj-size-64 { width: 64px; height: 64px; }
+.bear-nj-size-128 { width: 128px; height: 128px; }
+.bear-nj-size-256 { width: 256px; height: 256px; }
+.bear-nj-size-512 { width: 512px; height: 512px; }
+
+/* Stroke width adjustments */
+.bear-nj-size-32 svg { stroke-width: 2px; }
+.bear-nj-size-64 svg { stroke-width: 2px; }
+.bear-nj-size-128 svg { stroke-width: 2.5px; }
+.bear-nj-size-256 svg { stroke-width: 3px; }
+.bear-nj-size-512 svg { stroke-width: 4px; }
+
+/* ===== HOVER EFFECTS ===== */
+.bear-nj-container:hover svg {
+  filter: drop-shadow(0 0 6px rgba(0, 0, 255, 0.4));
+  transition: filter 0.3s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .bear-nj-idle,
+  .bear-nj-idle svg,
+  .bear-nj-idle .ear-left,
+  .bear-nj-idle .ear-right,
+  .bear-nj-wave .paw-right,
+  .bear-nj-celebrate {
+    animation: none;
+  }
+}

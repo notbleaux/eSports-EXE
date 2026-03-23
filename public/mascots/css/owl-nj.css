@@ -1,0 +1,252 @@
+/**
+ * Owl NJ Style - CSS Animations
+ * Features: Eye blink, subtle rotate
+ * Style: Minimalist line art
+ */
+
+/* Container for the owl mascot */
+.owl-nj-container {
+  display: inline-block;
+  position: relative;
+}
+
+/* Eye blink animation */
+@keyframes nj-eye-blink {
+  0%, 48%, 52%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.05);
+  }
+}
+
+/* Subtle body rotation - wise observation */
+@keyframes nj-subtle-rotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+}
+
+/* Gentle floating */
+@keyframes nj-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Line drawing animation */
+@keyframes nj-draw-line {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Wise nod animation */
+@keyframes nj-wise-nod {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}
+
+/* Pulse effect for the line art */
+@keyframes nj-line-pulse {
+  0%, 100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.7;
+  }
+}
+
+/* Base owl animation */
+.owl-nj {
+  animation: nj-float 5s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* Body subtle rotation */
+.owl-nj__body {
+  animation: nj-subtle-rotate 8s ease-in-out infinite;
+  transform-origin: center 60%;
+}
+
+/* Eye blink */
+.owl-nj__eyes {
+  animation: nj-eye-blink 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Head wise nod */
+.owl-nj__head {
+  animation: nj-wise-nod 6s ease-in-out infinite;
+  transform-origin: center 70%;
+}
+
+/* Line art pulse effect */
+.owl-nj__lines {
+  animation: nj-line-pulse 3s ease-in-out infinite;
+}
+
+/* Draw animation for SVG paths */
+.owl-nj--draw .owl-nj__lines path,
+.owl-nj--draw .owl-nj__lines circle,
+.owl-nj--draw .owl-nj__lines ellipse {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: nj-draw-line 2s ease-out forwards;
+}
+
+/* Staggered draw animation for different elements */
+.owl-nj--draw .owl-nj__lines circle:nth-child(1) { animation-delay: 0s; }
+.owl-nj--draw .owl-nj__lines circle:nth-child(2) { animation-delay: 0.1s; }
+.owl-nj--draw .owl-nj__lines path:nth-child(3) { animation-delay: 0.2s; }
+.owl-nj--draw .owl-nj__lines path:nth-child(4) { animation-delay: 0.3s; }
+
+/* Hover state */
+.owl-nj-container:hover .owl-nj__eyes {
+  animation-duration: 2s;
+}
+
+.owl-nj-container:hover .owl-nj__body {
+  animation-duration: 4s;
+}
+
+/* Idle state - very subtle */
+.owl-nj--idle {
+  animation: none;
+}
+
+.owl-nj--idle .owl-nj__eyes {
+  animation: nj-eye-blink 6s ease-in-out infinite;
+}
+
+.owl-nj--idle .owl-nj__body {
+  animation: nj-subtle-rotate 12s ease-in-out infinite;
+}
+
+/* Observing state - more rotation */
+.owl-nj--observing .owl-nj__body {
+  animation: nj-subtle-rotate 4s ease-in-out infinite;
+}
+
+.owl-nj--observing .owl-nj__head {
+  animation: nj-wise-nod 3s ease-in-out infinite;
+}
+
+/* SVG-specific styles */
+.owl-nj-svg {
+  transition: all 0.3s ease;
+}
+
+.owl-nj-svg:hover {
+  filter: drop-shadow(0 0 8px rgba(0, 0, 255, 0.3));
+  transform: scale(1.03);
+}
+
+/* Line color transition on hover */
+.owl-nj-svg path,
+.owl-nj-svg circle,
+.owl-nj-svg ellipse,
+.owl-nj-svg line {
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.owl-nj-container:hover .owl-nj-svg path,
+.owl-nj-container:hover .owl-nj-svg circle,
+.owl-nj-container:hover .owl-nj-svg ellipse,
+.owl-nj-container:hover .owl-nj-svg line {
+  stroke: #3333FF;
+}
+
+/* Focus state for accessibility */
+.owl-nj-container:focus-within .owl-nj-svg {
+  outline: 2px solid #0000FF;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* Size variants */
+.owl-nj--small {
+  width: 32px;
+  height: 32px;
+}
+
+.owl-nj--medium {
+  width: 64px;
+  height: 64px;
+}
+
+.owl-nj--large {
+  width: 128px;
+  height: 128px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .owl-nj {
+    animation-duration: 4s;
+  }
+  
+  .owl-nj__body {
+    animation-duration: 6s;
+  }
+  
+  .owl-nj__eyes {
+    animation-duration: 3s;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .owl-nj,
+  .owl-nj__body,
+  .owl-nj__eyes,
+  .owl-nj__head,
+  .owl-nj__lines {
+    animation: none;
+  }
+  
+  .owl-nj-svg:hover {
+    transform: none;
+    filter: none;
+  }
+  
+  .owl-nj--draw .owl-nj__lines path,
+  .owl-nj--draw .owl-nj__lines circle,
+  .owl-nj--draw .owl-nj__lines ellipse {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Dark mode support - lines become brighter */
+@media (prefers-color-scheme: dark) {
+  .owl-nj-svg path,
+  .owl-nj-svg circle,
+  .owl-nj-svg ellipse,
+  .owl-nj-svg line {
+    stroke: #6666FF;
+  }
+  
+  .owl-nj-container:hover .owl-nj-svg path,
+  .owl-nj-container:hover .owl-nj-svg circle,
+  .owl-nj-container:hover .owl-nj-svg ellipse,
+  .owl-nj-container:hover .owl-nj-svg line {
+    stroke: #8888FF;
+  }
+}

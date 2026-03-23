@@ -1,0 +1,204 @@
+/**
+ * Hawk NJ Style CSS Animations
+ * Features: Sharp head turn
+ * Style: Sleek outline, precision lines
+ */
+
+/* Base hawk container */
+.hawk-nj {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* Sharp head turn animation */
+@keyframes hawkNJHeadTurn {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(5deg);
+  }
+  60% {
+    transform: rotate(-3deg);
+  }
+  80% {
+    transform: rotate(2deg);
+  }
+}
+
+/* Quick alert snap */
+@keyframes hawkNJAlertSnap {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-15deg);
+  }
+  60% {
+    transform: rotate(10deg);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+}
+
+/* Body tension animation */
+@keyframes hawkNJBodyTension {
+  0%, 100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.01, 0.99);
+  }
+}
+
+/* Line pulse animation */
+@keyframes hawkNJLinePulse {
+  0%, 100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.7;
+  }
+}
+
+/* Hover state */
+.hawk-nj:hover {
+  transform: scale(1.03);
+}
+
+.hawk-nj:hover .hawk-head {
+  animation: hawkNJHeadTurn 2s ease-in-out infinite;
+  transform-origin: center 30%;
+}
+
+.hawk-nj:hover svg path,
+.hawk-nj:hover svg ellipse,
+.hawk-nj:hover svg circle {
+  animation: hawkNJLinePulse 2s ease-in-out infinite;
+}
+
+/* Alert state - sharp movements */
+.hawk-nj.alert .hawk-head {
+  animation: hawkNJAlertSnap 0.6s ease-out;
+  transform-origin: center 30%;
+}
+
+.hawk-nj.alert {
+  animation: hawkNJBodyTension 0.4s ease-in-out;
+}
+
+/* Scanning state - continuous head movement */
+.hawk-nj.scanning .hawk-head {
+  animation: hawkNJHeadTurn 3s ease-in-out infinite;
+  transform-origin: center 30%;
+}
+
+/* Focused state - minimal movement */
+.hawk-nj.focused .hawk-head {
+  animation: none;
+  transform: rotate(-3deg);
+  transform-origin: center 30%;
+  transition: transform 0.2s ease;
+}
+
+.hawk-nj.focused svg path,
+.hawk-nj.focused svg ellipse {
+  stroke-width: 2.5;
+  transition: stroke-width 0.2s ease;
+}
+
+/* Predatory state - intense */
+.hawk-nj.predatory {
+  transform: scale(1.05);
+}
+
+.hawk-nj.predatory .hawk-head {
+  transform: rotate(-5deg);
+  transform-origin: center 30%;
+}
+
+.hawk-nj.predatory svg {
+  filter: drop-shadow(0 0 4px rgba(0, 0, 255, 0.3));
+  transition: filter 0.3s ease;
+}
+
+/* Entrance animation - sharp snap in */
+@keyframes hawkNJEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+  60% {
+    transform: scale(1.05) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.hawk-nj.enter {
+  animation: hawkNJEnter 0.4s ease-out forwards;
+}
+
+/* Exit animation */
+@keyframes hawkNJExit {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(10deg);
+  }
+}
+
+.hawk-nj.exit {
+  animation: hawkNJExit 0.3s ease-in forwards;
+}
+
+/* Perch/idle state - minimal movement */
+.hawk-nj.perch {
+  animation: hawkNJBodyTension 4s ease-in-out infinite;
+}
+
+.hawk-nj.perch .hawk-head {
+  animation: hawkNJHeadTurn 5s ease-in-out infinite;
+  transform-origin: center 30%;
+}
+
+/* Size variants */
+.hawk-nj.size-32 { width: 32px; height: 32px; }
+.hawk-nj.size-64 { width: 64px; height: 64px; }
+.hawk-nj.size-128 { width: 128px; height: 128px; }
+.hawk-nj.size-256 { width: 256px; height: 256px; }
+.hawk-nj.size-512 { width: 512px; height: 512px; }
+
+/* Stroke width adjustments by size */
+.hawk-nj.size-32 svg { stroke-width: 2; }
+.hawk-nj.size-64 svg { stroke-width: 2; }
+.hawk-nj.size-128 svg { stroke-width: 2; }
+.hawk-nj.size-256 svg { stroke-width: 2; }
+.hawk-nj.size-512 svg { stroke-width: 2; }
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .hawk-nj,
+  .hawk-nj *,
+  .hawk-nj *::before,
+  .hawk-nj *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .hawk-nj.focused .hawk-head,
+  .hawk-nj.predatory .hawk-head {
+    transform: none;
+  }
+}

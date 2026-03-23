@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Left Ear (floppy) -->
+  <path d="M192 160 Q128 64 160 32 Q224 0 256 96 Q272 160 256 224" 
+        fill="none" stroke="#0000FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M176 96 Q192 64 224 96" fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <path d="M184 128 Q200 112 216 128" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+  <path d="M192 160 Q208 144 224 160" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  <path d="M200 192 Q216 176 232 192" fill="none" stroke="#0000FF" stroke-width="1.5" stroke-linecap="round" opacity="0.2"/>
+  
+  <!-- Right Ear (upright) -->
+  <path d="M320 192 L352 32 Q384 0 416 32 L384 224" 
+        fill="none" stroke="#0000FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M352 64 Q384 48 400 64" fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <path d="M360 96 Q384 84 396 96" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+  <path d="M368 128 Q384 118 394 128" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  
+  <!-- Head -->
+  <ellipse cx="256" cy="256" rx="112" ry="96" fill="none" stroke="#0000FF" stroke-width="5"/>
+  
+  <!-- Head contour -->
+  <path d="M176 224 Q256 208 336 224" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+  <path d="M192 288 Q256 304 320 288" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  
+  <!-- Face -->
+  <ellipse cx="256" cy="288" rx="48" ry="40" fill="none" stroke="#0000FF" stroke-width="4"/>
+  <ellipse cx="256" cy="272" rx="24" ry="20" fill="#0000FF"/>
+  
+  <!-- Face detail -->
+  <path d="M240 292 Q256 300 272 292" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="200" cy="232" rx="20" ry="24" fill="#0000FF"/>
+  <ellipse cx="204" cy="228" rx="8" ry="10" fill="#FFF"/>
+  <circle cx="208" cy="224" r="4" fill="#FFF"/>
+  <ellipse cx="312" cy="232" rx="20" ry="24" fill="#0000FF"/>
+  <ellipse cx="308" cy="228" rx="8" ry="10" fill="#FFF"/>
+  <circle cx="304" cy="224" r="4" fill="#FFF"/>
+  
+  <!-- Eyelashes -->
+  <path d="M176 208 L160 192" stroke="#0000FF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M336 208 L352 192" stroke="#0000FF" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Cheeks -->
+  <path d="M160 272 Q176 280 192 272" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <path d="M320 272 Q336 280 352 272" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  
+  <!-- Mouth -->
+  <path d="M224 320 Q256 352 288 320" fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Body -->
+  <path d="M160 352 Q160 448 256 464 Q352 448 352 352" 
+        fill="none" stroke="#0000FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Body contour -->
+  <path d="M208 384 Q256 400 304 384" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+  <path d="M192 416 Q256 432 320 416" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  
+  <!-- Paws -->
+  <ellipse cx="160" cy="416" rx="32" ry="40" fill="none" stroke="#0000FF" stroke-width="4"/>
+  <line x1="144" y1="400" x2="144" y2="432" stroke="#0000FF" stroke-width="2.5"/>
+  <line x1="160" y1="392" x2="160" y2="440" stroke="#0000FF" stroke-width="2.5"/>
+  <line x1="176" y1="400" x2="176" y2="432" stroke="#0000FF" stroke-width="2.5"/>
+  <ellipse cx="160" cy="436" rx="10" ry="8" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.4"/>
+  
+  <ellipse cx="352" cy="416" rx="32" ry="40" fill="none" stroke="#0000FF" stroke-width="4"/>
+  <line x1="336" y1="400" x2="336" y2="432" stroke="#0000FF" stroke-width="2.5"/>
+  <line x1="352" y1="392" x2="352" y2="440" stroke="#0000FF" stroke-width="2.5"/>
+  <line x1="368" y1="400" x2="368" y2="432" stroke="#0000FF" stroke-width="2.5"/>
+  <ellipse cx="352" cy="436" rx="10" ry="8" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.4"/>
+</svg>

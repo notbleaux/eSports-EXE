@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="yeeBearBrown32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513"/>
+      <stop offset="100%" style="stop-color:#654321"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Ears -->
+  <circle cx="10" cy="8" r="4" fill="url(#yeeBearBrown32)"/>
+  <circle cx="22" cy="8" r="4" fill="url(#yeeBearBrown32)"/>
+  
+  <!-- Head -->
+  <ellipse cx="16" cy="12" rx="8" ry="7" fill="url(#yeeBearBrown32)"/>
+  
+  <!-- Mask -->
+  <path d="M8 10 Q16 6 24 10 Q25 14 24 16 Q16 18 8 16 Q7 14 8 10Z" fill="#FFF"/>
+  <path d="M8 10 Q16 14 24 10" fill="none" stroke="#DDD" stroke-width="0.5"/>
+  
+  <!-- Snout -->
+  <ellipse cx="16" cy="14" rx="4" ry="3" fill="#DEB887"/>
+  <ellipse cx="16" cy="13" rx="2" ry="1.5" fill="#333"/>
+  
+  <!-- Intense Eyes -->
+  <path d="M11 11.5 L14 11" stroke="#333" stroke-width="1"/>
+  <path d="M18 11 L21 11.5" stroke="#333" stroke-width="1"/>
+  
+  <!-- Body/Distressed Tee -->
+  <path d="M10 18 Q10 15 16 14 Q22 15 22 18 Q22 26 16 28 Q10 26 10 18Z" fill="#FFF"/>
+  <path d="M12 20 Q16 22 20 20" fill="none" stroke="#CCC" stroke-width="0.5"/>
+  <path d="M11 24 Q16 25 21 24" fill="none" stroke="#CCC" stroke-width="0.5"/>
+  
+  <!-- Arms -->
+  <ellipse cx="9" cy="21" rx="2" ry="3" fill="#FFF"/>
+  <ellipse cx="23" cy="21" rx="2" ry="3" fill="#FFF"/>
+</svg>

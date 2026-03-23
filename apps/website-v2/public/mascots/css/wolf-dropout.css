@@ -1,0 +1,631 @@
+/**
+ * Dropout Style Wolf Mascot - CSS Animation
+ * =========================================
+ * Strong wolf with varsity jacket, leadership pose
+ * 
+ * Colors:
+ * - Slate: #6C757D
+ * - Black jacket: #212529
+ * - Silver accents: #C0C0C0
+ * - Light gray: #ADB5BD
+ * 
+ * [Ver001.000] - CSS-only animated wolf mascot
+ */
+
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+  --wolf-slate: #6C757D;
+  --wolf-slate-dark: #495057;
+  --wolf-slate-light: #ADB5BD;
+  --wolf-jacket: #212529;
+  --wolf-jacket-dark: #000000;
+  --wolf-silver: #C0C0C0;
+  --wolf-silver-light: #E8E8E8;
+  --wolf-outline: #212529;
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+.wolf-dropout-container {
+  position: relative;
+  display: inline-block;
+  width: 128px;
+  height: 128px;
+}
+
+/* Size Variants */
+.wolf-dropout-container.small {
+  width: 64px;
+  height: 64px;
+}
+
+.wolf-dropout-container.medium {
+  width: 128px;
+  height: 128px;
+}
+
+.wolf-dropout-container.large {
+  width: 256px;
+  height: 256px;
+}
+
+/* ============================================
+   WOLF BODY - Strong Stance, Chest Puff
+   ============================================ */
+.wolf-dropout {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+/* ============================================
+   WOLF HEAD
+   ============================================ */
+.wolf-dropout-head {
+  position: absolute;
+  width: 56%;
+  height: 50%;
+  left: 22%;
+  top: 8%;
+  background: var(--wolf-slate);
+  border-radius: 50%;
+  border: 3px solid var(--wolf-outline);
+  z-index: 10;
+  transform-origin: center bottom;
+}
+
+.wolf-dropout-container.small .wolf-dropout-head {
+  border-width: 2px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-head {
+  border-width: 4px;
+}
+
+/* ============================================
+   EARS - Pointed
+   ============================================ */
+.wolf-dropout-ear-left,
+.wolf-dropout-ear-right {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 5;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+}
+
+.wolf-dropout-ear-left {
+  left: 15%;
+  top: 2%;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 40px solid var(--wolf-slate);
+  transform: rotate(-15deg);
+}
+
+.wolf-dropout-ear-right {
+  right: 15%;
+  top: 2%;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 40px solid var(--wolf-slate);
+  transform: rotate(15deg);
+}
+
+.wolf-dropout-ear-left::after,
+.wolf-dropout-ear-right::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 12px;
+  left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 22px solid var(--wolf-slate-light);
+}
+
+.wolf-dropout-container.small .wolf-dropout-ear-left,
+.wolf-dropout-container.small .wolf-dropout-ear-right {
+  border-bottom-width: 24px;
+  border-left-width: 10px;
+  border-right-width: 10px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-ear-left,
+.wolf-dropout-container.large .wolf-dropout-ear-right {
+  border-bottom-width: 64px;
+  border-left-width: 28px;
+  border-right-width: 28px;
+}
+
+/* ============================================
+   EYES - Confident Expression
+   ============================================ */
+.wolf-dropout-eye-left,
+.wolf-dropout-eye-right {
+  position: absolute;
+  width: 16%;
+  height: 20%;
+  background: #ffffff;
+  border-radius: 50%;
+  top: 32%;
+  border: 2px solid var(--wolf-outline);
+  overflow: hidden;
+}
+
+.wolf-dropout-eye-left {
+  left: 22%;
+}
+
+.wolf-dropout-eye-right {
+  right: 22%;
+}
+
+.wolf-dropout-eye-left::after,
+.wolf-dropout-eye-right::after {
+  content: '';
+  position: absolute;
+  width: 55%;
+  height: 60%;
+  background: var(--wolf-outline);
+  border-radius: 50%;
+  top: 28%;
+  left: 22%;
+}
+
+.wolf-dropout-eye-left::before,
+.wolf-dropout-eye-right::before {
+  content: '';
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  background: #ffffff;
+  border-radius: 50%;
+  top: 35%;
+  left: 35%;
+  z-index: 2;
+}
+
+.wolf-dropout-container.small .wolf-dropout-eye-left,
+.wolf-dropout-container.small .wolf-dropout-eye-right {
+  border-width: 1px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-eye-left,
+.wolf-dropout-container.large .wolf-dropout-eye-right {
+  border-width: 3px;
+}
+
+/* ============================================
+   SNOUT
+   ============================================ */
+.wolf-dropout-snout {
+  position: absolute;
+  width: 44%;
+  height: 32%;
+  background: var(--wolf-slate-light);
+  border-radius: 50%;
+  bottom: 12%;
+  left: 28%;
+  border: 2px solid var(--wolf-outline);
+}
+
+.wolf-dropout-snout::before {
+  content: '';
+  position: absolute;
+  width: 36%;
+  height: 30%;
+  background: var(--wolf-outline);
+  border-radius: 50%;
+  top: 15%;
+  left: 32%;
+}
+
+.wolf-dropout-container.small .wolf-dropout-snout {
+  border-width: 1px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-snout {
+  border-width: 3px;
+}
+
+/* ============================================
+   EYEBROWS - Confident
+   ============================================ */
+.wolf-dropout-eyebrow-left,
+.wolf-dropout-eyebrow-right {
+  position: absolute;
+  width: 24%;
+  height: 4%;
+  background: var(--wolf-slate-dark);
+  border-radius: 2px;
+  top: 24%;
+}
+
+.wolf-dropout-eyebrow-left {
+  left: 18%;
+  transform: rotate(-5deg);
+}
+
+.wolf-dropout-eyebrow-right {
+  right: 18%;
+  transform: rotate(5deg);
+}
+
+/* ============================================
+   JACKET BODY - Varsity Style
+   ============================================ */
+.wolf-dropout-jacket {
+  position: absolute;
+  width: 60%;
+  height: 55%;
+  left: 20%;
+  bottom: 0;
+  background: var(--wolf-jacket);
+  border-radius: 40% 40% 10% 10%;
+  border: 3px solid var(--wolf-jacket-dark);
+  z-index: 8;
+}
+
+.wolf-dropout-jacket::before {
+  content: '';
+  position: absolute;
+  width: 18%;
+  height: 75%;
+  background: var(--wolf-silver);
+  left: 41%;
+  top: 12%;
+  border-radius: 10%;
+}
+
+/* Jacket collar */
+.wolf-dropout-jacket::after {
+  content: '';
+  position: absolute;
+  width: 55%;
+  height: 22%;
+  background: var(--wolf-jacket);
+  border: 3px solid var(--wolf-silver);
+  border-radius: 50% 50% 0 0;
+  top: -6%;
+  left: 22%;
+}
+
+.wolf-dropout-container.small .wolf-dropout-jacket {
+  border-width: 2px;
+}
+
+.wolf-dropout-container.small .wolf-dropout-jacket::after {
+  border-width: 2px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-jacket {
+  border-width: 4px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-jacket::after {
+  border-width: 4px;
+}
+
+/* ============================================
+   TEAM EMBLEM
+   ============================================ */
+.wolf-dropout-emblem {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  background: var(--wolf-silver);
+  border-radius: 50%;
+  border: 2px solid var(--wolf-outline);
+  top: 35%;
+  left: 40%;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--wolf-outline);
+  font-size: 0.8rem;
+}
+
+.wolf-dropout-emblem::after {
+  content: 'W';
+}
+
+/* ============================================
+   PAWS
+   ============================================ */
+.wolf-dropout-paw-left,
+.wolf-dropout-paw-right {
+  position: absolute;
+  width: 20%;
+  height: 24%;
+  background: var(--wolf-slate-light);
+  border-radius: 40%;
+  border: 2px solid var(--wolf-outline);
+  bottom: 5%;
+  z-index: 9;
+  transform-origin: top center;
+}
+
+.wolf-dropout-paw-left {
+  left: 18%;
+}
+
+.wolf-dropout-paw-right {
+  right: 18%;
+}
+
+/* Paw pads */
+.wolf-dropout-paw-left::after,
+.wolf-dropout-paw-right::after {
+  content: '';
+  position: absolute;
+  width: 55%;
+  height: 40%;
+  background: var(--wolf-slate);
+  border-radius: 50%;
+  bottom: 15%;
+  left: 22%;
+}
+
+.wolf-dropout-container.small .wolf-dropout-paw-left,
+.wolf-dropout-container.small .wolf-dropout-paw-right {
+  border-width: 1px;
+}
+
+.wolf-dropout-container.large .wolf-dropout-paw-left,
+.wolf-dropout-container.large .wolf-dropout-paw-right {
+  border-width: 3px;
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+/* Strong stance breathing animation */
+@keyframes wolf-strength-idle {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  25% {
+    transform: scale(1.03, 0.98) translateY(1px);
+  }
+  50% {
+    transform: scale(1) translateY(0);
+  }
+  75% {
+    transform: scale(0.98, 1.02) translateY(-2px);
+  }
+}
+
+/* Chest puff animation */
+@keyframes wolf-chest-puff {
+  0%, 100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.08);
+  }
+}
+
+/* Blink animation */
+@keyframes wolf-blink {
+  0%, 90%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Head confidence nod animation */
+@keyframes wolf-confidence-nod {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-2deg) translateY(1px);
+  }
+  50% {
+    transform: rotate(0deg) translateY(0);
+  }
+  75% {
+    transform: rotate(2deg) translateY(1px);
+  }
+}
+
+/* Howl animation */
+@keyframes wolf-howl {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  20% {
+    transform: rotate(-20deg) translateY(-5px);
+  }
+  40% {
+    transform: rotate(-25deg) translateY(-8px);
+  }
+  60% {
+    transform: rotate(-20deg) translateY(-5px);
+  }
+  80% {
+    transform: rotate(-10deg) translateY(-2px);
+  }
+}
+
+/* Leadership stance animation */
+@keyframes wolf-leadership {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  10% {
+    transform: translateY(-5px) scale(1.02);
+  }
+  20% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-3px) scale(1.01);
+  }
+  40% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Jacket shimmer during leadership */
+@keyframes wolf-jacket-shimmer {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.1);
+  }
+}
+
+/* ============================================
+   ANIMATION TRIGGER CLASSES
+   ============================================ */
+
+/* Idle animation - strong stance with chest puff */
+.animate-idle .wolf-dropout {
+  animation: wolf-strength-idle 4s ease-in-out infinite;
+}
+
+.animate-idle .wolf-dropout-jacket {
+  animation: wolf-chest-puff 4s ease-in-out infinite;
+}
+
+.animate-idle .wolf-dropout-eye-left,
+.animate-idle .wolf-dropout-eye-right {
+  animation: wolf-blink 5s ease-in-out infinite;
+}
+
+.animate-idle .wolf-dropout-head {
+  animation: wolf-confidence-nod 6s ease-in-out infinite;
+}
+
+/* Howl animation */
+.animate-howl .wolf-dropout-head {
+  animation: wolf-howl 2s ease-in-out;
+}
+
+.animate-howl .wolf-dropout-ear-left,
+.animate-howl .wolf-dropout-ear-right {
+  animation: wolf-confidence-nod 2s ease-in-out;
+}
+
+/* Leadership animation */
+.animate-leadership .wolf-dropout {
+  animation: wolf-leadership 3s ease-in-out;
+}
+
+.animate-leadership .wolf-dropout-jacket {
+  animation: wolf-jacket-shimmer 3s ease-in-out;
+}
+
+.animate-leadership .wolf-dropout-head {
+  animation: wolf-confidence-nod 1.5s ease-in-out 2;
+}
+
+/* Combined idle and leadership */
+.animate-idle-leadership .wolf-dropout {
+  animation: wolf-strength-idle 4s ease-in-out infinite;
+}
+
+.animate-idle-leadership .wolf-dropout-jacket {
+  animation: wolf-chest-puff 4s ease-in-out infinite;
+}
+
+.animate-idle-leadership .wolf-dropout-head {
+  animation: wolf-confidence-nod 6s ease-in-out infinite;
+}
+
+.animate-idle-leadership .wolf-dropout-eye-left,
+.animate-idle-leadership .wolf-dropout-eye-right {
+  animation: wolf-blink 5s ease-in-out infinite;
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+.wolf-dropout-container:hover .wolf-dropout-head {
+  transform: rotate(-3deg);
+  transition: transform 0.3s ease;
+}
+
+.wolf-dropout-container:hover .wolf-dropout-jacket {
+  filter: brightness(1.15);
+  transition: filter 0.3s ease;
+}
+
+.wolf-dropout-container:hover .wolf-dropout-eye-left::after,
+.wolf-dropout-container:hover .wolf-dropout-eye-right::after {
+  transform: translateX(3px);
+  transition: transform 0.3s ease;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .wolf-dropout,
+  .wolf-dropout-head,
+  .wolf-dropout-eye-left,
+  .wolf-dropout-eye-right,
+  .wolf-dropout-ear-left,
+  .wolf-dropout-ear-right,
+  .wolf-dropout-jacket,
+  .wolf-dropout-paw-left,
+  .wolf-dropout-paw-right {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   HTML USAGE EXAMPLE
+   ============================================
+<!-- Basic Wolf -->
+<div class="wolf-dropout-container medium">
+  <div class="wolf-dropout">
+    <div class="wolf-dropout-ear-left"></div>
+    <div class="wolf-dropout-ear-right"></div>
+    <div class="wolf-dropout-head">
+      <div class="wolf-dropout-eyebrow-left"></div>
+      <div class="wolf-dropout-eyebrow-right"></div>
+      <div class="wolf-dropout-eye-left"></div>
+      <div class="wolf-dropout-eye-right"></div>
+      <div class="wolf-dropout-snout"></div>
+    </div>
+    <div class="wolf-dropout-jacket">
+      <div class="wolf-dropout-emblem"></div>
+    </div>
+    <div class="wolf-dropout-paw-left"></div>
+    <div class="wolf-dropout-paw-right"></div>
+  </div>
+</div>
+
+<!-- Animated Idle Wolf -->
+<div class="wolf-dropout-container medium animate-idle">
+  ...
+</div>
+
+<!-- Howling Wolf -->
+<div class="wolf-dropout-container medium animate-howl">
+  ...
+</div>
+
+<!-- Leadership Pose Wolf -->
+<div class="wolf-dropout-container large animate-leadership">
+  ...
+</div>
+*/

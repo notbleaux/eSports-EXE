@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bearBrown128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513"/>
+      <stop offset="100%" style="stop-color:#654321"/>
+    </linearGradient>
+    <linearGradient id="bearJacket128" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#DC143C"/>
+      <stop offset="100%" style="stop-color:#8B0000"/>
+    </linearGradient>
+    <linearGradient id="goldAccent128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#FFA500"/>
+    </linearGradient>
+    <filter id="shadow128" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Ears -->
+  <g filter="url(#shadow128)">
+    <circle cx="40" cy="32" r="16" fill="url(#bearBrown128)"/>
+    <circle cx="88" cy="32" r="16" fill="url(#bearBrown128)"/>
+    <circle cx="40" cy="32" r="8" fill="#D2691E"/>
+    <circle cx="88" cy="32" r="8" fill="#D2691E"/>
+  </g>
+  
+  <!-- Head -->
+  <g filter="url(#shadow128)">
+    <ellipse cx="64" cy="48" rx="32" ry="28" fill="url(#bearBrown128)"/>
+  </g>
+  
+  <!-- Snout -->
+  <g filter="url(#shadow128)">
+    <ellipse cx="64" cy="56" rx="16" ry="12" fill="#DEB887"/>
+    <ellipse cx="64" cy="52" rx="6" ry="5" fill="#333"/>
+  </g>
+  
+  <!-- Mouth -->
+  <path d="M56 64 Q64 72 72 64" fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="52" cy="44" rx="6" ry="7" fill="#FFF"/>
+  <ellipse cx="53" cy="44" rx="3" ry="4" fill="#333"/>
+  <circle cx="54" cy="43" r="1.2" fill="#FFF"/>
+  <ellipse cx="76" cy="44" rx="6" ry="7" fill="#FFF"/>
+  <ellipse cx="75" cy="44" rx="3" ry="4" fill="#333"/>
+  <circle cx="74" cy="43" r="1.2" fill="#FFF"/>
+  
+  <!-- Eyebrows -->
+  <path d="M46 36 Q52 34 58 36" stroke="#333" stroke-width="2" fill="none"/>
+  <path d="M70 36 Q76 34 82 36" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- Graduation Cap -->
+  <g filter="url(#shadow128)">
+    <rect x="40" y="16" width="48" height="12" fill="#1a1a2e" rx="2"/>
+    <rect x="40" y="16" width="48" height="4" fill="#16213e"/>
+    <path d="M48 16 L64 8 L80 16" fill="#1a1a2e"/>
+    <circle cx="80" cy="20" r="4" fill="url(#goldAccent128)"/>
+    <line x1="80" y1="20" x2="88" y2="32" stroke="#FFD700" stroke-width="2"/>
+    <circle cx="88" cy="32" r="3" fill="#FFD700"/>
+  </g>
+  
+  <!-- Body/Jacket -->
+  <g filter="url(#shadow128)">
+    <path d="M40 72 Q40 60 64 56 Q88 60 88 72 Q88 104 64 112 Q40 104 40 72Z" fill="url(#bearJacket128)"/>
+    
+    <line x1="64" y1="64" x2="64" y2="104" stroke="#8B0000" stroke-width="2"/>
+    <circle cx="64" cy="68" r="4" fill="url(#goldAccent128)"/>
+    
+    <!-- Collar -->
+    <path d="M48 64 L56 72 L72 72 L80 64" fill="none" stroke="#8B0000" stroke-width="3"/>
+  </g>
+  
+  <!-- Arms -->
+  <g filter="url(#shadow128)">
+    <ellipse cx="36" cy="84" r="8" ry="12" fill="url(#bearJacket128)"/>
+    <ellipse cx="92" cy="84" r="8" ry="12" fill="url(#bearJacket128)"/>
+    <circle cx="36" cy="100" r="8" fill="#8B4513"/>
+    <circle cx="92" cy="100" r="8" fill="#8B4513"/>
+  </g>
+  
+  <!-- Emblem -->
+  <circle cx="80" cy="76" r="8" fill="url(#goldAccent128)"/>
+  <text x="80" y="79" font-size="8" text-anchor="middle" fill="#8B0000" font-weight="bold">D</text>
+</svg>

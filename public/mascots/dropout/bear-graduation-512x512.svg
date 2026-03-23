@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="gradBearBrown512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A0522D"/>
+      <stop offset="50%" style="stop-color:#8B4513"/>
+      <stop offset="100%" style="stop-color:#654321"/>
+    </linearGradient>
+    <linearGradient id="gradBearJacket512" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2F4F4F"/>
+      <stop offset="50%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#000000"/>
+    </linearGradient>
+    <linearGradient id="gradGold512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="50%" style="stop-color:#FFC125"/>
+      <stop offset="100%" style="stop-color:#FFA500"/>
+    </linearGradient>
+    <filter id="gradShadow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <ellipse cx="256" cy="480" rx="100" ry="20" fill="#000" opacity="0.1"/>
+  <g filter="url(#gradShadow512)">
+    <circle cx="160" cy="128" r="64" fill="url(#gradBearBrown512)"/>
+    <circle cx="352" cy="128" r="64" fill="url(#gradBearBrown512)"/>
+  </g>
+  <ellipse cx="256" cy="192" rx="128" ry="112" fill="url(#gradBearBrown512)"/>
+  <ellipse cx="256" cy="224" rx="64" ry="48" fill="#DEB887"/>
+  <ellipse cx="256" cy="208" rx="24" ry="20" fill="#333"/>
+  <ellipse cx="208" cy="176" rx="24" ry="28" fill="#FFF"/>
+  <ellipse cx="212" cy="176" rx="12" ry="16" fill="#333"/>
+  <circle cx="216" cy="172" r="5" fill="#FFF"/>
+  <ellipse cx="304" cy="176" rx="24" ry="28" fill="#FFF"/>
+  <ellipse cx="300" cy="176" rx="12" ry="16" fill="#333"/>
+  <circle cx="296" cy="172" r="5" fill="#FFF"/>
+  <g filter="url(#gradShadow512)">
+    <rect x="128" y="64" width="256" height="64" fill="#111" rx="4"/>
+    <rect x="160" y="32" width="192" height="32" fill="#111"/>
+    <circle cx="320" cy="80" r="12" fill="url(#gradGold512)"/>
+    <line x1="320" y1="80" x2="384" y2="160" stroke="#FFD700" stroke-width="4"/>
+    <circle cx="384" cy="160" r="10" fill="#FFD700"/>
+    <line x1="384" y1="160" x2="376" y2="192" stroke="#FFD700" stroke-width="2"/>
+    <line x1="384" y1="160" x2="392" y2="192" stroke="#FFD700" stroke-width="2"/>
+  </g>
+  <rect x="352" y="320" width="96" height="40" fill="#FFF8DC" rx="4"/>
+  <line x1="360" y1="336" x2="440" y2="336" stroke="#D2691E" stroke-width="3"/>
+  <line x1="360" y1="348" x2="440" y2="348" stroke="#D2691E" stroke-width="3"/>
+  <path d="M160 288 Q160 240 256 224 Q352 240 352 288 Q352 416 256 448 Q160 416 160 288Z" fill="url(#gradBearJacket512)"/>
+  <line x1="256" y1="256" x2="256" y2="416" stroke="#333" stroke-width="6"/>
+  <circle cx="256" cy="272" r="16" fill="url(#gradGold512)"/>
+  <path d="M160 320 Q128 352 144 384 Q160 416 192 384" fill="url(#gradBearJacket512)"/>
+  <path d="M352 320 Q384 352 368 384 Q352 416 320 384" fill="url(#gradBearJacket512)"/>
+  <rect x="152" y="368" width="40" height="24" fill="#333" rx="4"/>
+  <rect x="320" y="368" width="40" height="24" fill="#333" rx="4"/>
+  <circle cx="160" cy="400" r="20" fill="#8B4513"/>
+  <circle cx="352" cy="400" r="20" fill="#8B4513"/>
+</svg>

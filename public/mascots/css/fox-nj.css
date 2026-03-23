@@ -1,0 +1,497 @@
+/**
+ * Fox NJ Style Animations
+ * Smooth, minimalist line animations for the geometric fox
+ */
+
+/* ===== IDLE ANIMATION ===== */
+@keyframes nj-idle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes nj-line-pulse {
+  0%, 100% {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+  }
+  50% {
+    stroke-opacity: 0.8;
+    stroke-width: 2.2px;
+  }
+}
+
+@keyframes nj-tail-wag {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}
+
+@keyframes nj-ear-twitch-left {
+  0%, 90%, 100% {
+    transform: rotate(0deg);
+  }
+  92% {
+    transform: rotate(-3deg);
+  }
+  94% {
+    transform: rotate(1deg);
+  }
+  96% {
+    transform: rotate(-2deg);
+  }
+}
+
+@keyframes nj-ear-twitch-right {
+  0%, 85%, 100% {
+    transform: rotate(0deg);
+  }
+  87% {
+    transform: rotate(3deg);
+  }
+  89% {
+    transform: rotate(-1deg);
+  }
+  91% {
+    transform: rotate(2deg);
+  }
+}
+
+/* ===== WAVE ANIMATION ===== */
+@keyframes nj-wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-20deg);
+  }
+  30% {
+    transform: rotate(0deg);
+  }
+  45% {
+    transform: rotate(-20deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  90% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes nj-wave-paw {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ===== CELEBRATE ANIMATION ===== */
+@keyframes nj-celebrate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  12.5% {
+    transform: translateY(-12px) rotate(-2deg);
+  }
+  25% {
+    transform: translateY(0) rotate(0deg);
+  }
+  37.5% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  62.5% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(0) rotate(0deg);
+  }
+  87.5% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes nj-celebrate-tail {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
+}
+
+@keyframes nj-celebrate-ears {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(1px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes nj-line-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 0 #0000FF);
+    stroke: #0000FF;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px #0000FF);
+    stroke: #3333FF;
+  }
+}
+
+/* ===== VARIANT: ATTENTION ===== */
+@keyframes nj-attention-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-8px) scale(1.02);
+  }
+  60% {
+    transform: translateY(0) scale(0.98);
+  }
+  80% {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+@keyframes nj-attention-ears {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-5deg);
+  }
+  40% {
+    transform: rotate(5deg);
+  }
+  60% {
+    transform: rotate(-3deg);
+  }
+  80% {
+    transform: rotate(3deg);
+  }
+}
+
+/* ===== VARIANT: HYPE-BOY ===== */
+@keyframes nj-hype-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-6px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes nj-hype-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+/* ===== VARIANT: COOKIE (shy) ===== */
+@keyframes nj-cookie-shy {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(2px) rotate(1deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes nj-cookie-ears-down {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes nj-cookie-tail-curl {
+  0%, 100% {
+    transform: rotate(0deg) scaleX(1);
+  }
+  50% {
+    transform: rotate(-5deg) scaleX(0.95);
+  }
+}
+
+/* ===== VARIANT: DITTO (morphing) ===== */
+@keyframes nj-ditto-morph {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  25% {
+    transform: scaleY(0.95) scaleX(1.05);
+  }
+  50% {
+    transform: scaleY(1.02) scaleX(0.98);
+  }
+  75% {
+    transform: scaleY(0.98) scaleX(1.02);
+  }
+}
+
+@keyframes nj-ditto-line-wave {
+  0%, 100% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: 10;
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Container */
+.fox-nj-container {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+.fox-nj-container svg {
+  overflow: visible;
+}
+
+/* Idle state */
+.fox-nj-idle {
+  animation: nj-idle 2s ease-in-out infinite;
+}
+
+.fox-nj-idle svg {
+  animation: nj-line-pulse 2s ease-in-out infinite;
+}
+
+.fox-nj-idle .tail {
+  animation: nj-tail-wag 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.fox-nj-idle .ear-left {
+  animation: nj-ear-twitch-left 5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.fox-nj-idle .ear-right {
+  animation: nj-ear-twitch-right 5.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Wave state */
+.fox-nj-wave {
+  animation: nj-idle 0.5s ease-in-out;
+}
+
+.fox-nj-wave .paw-right {
+  animation: nj-wave 0.8s ease-in-out;
+  transform-origin: center center;
+}
+
+.fox-nj-wave .paw-right circle {
+  animation: nj-wave-paw 0.8s ease-in-out;
+  transform-origin: center center;
+}
+
+/* Celebrate state */
+.fox-nj-celebrate {
+  animation: nj-celebrate 1.2s ease-in-out;
+}
+
+.fox-nj-celebrate svg {
+  animation: nj-line-glow 1.2s ease-in-out;
+}
+
+.fox-nj-celebrate .tail {
+  animation: nj-celebrate-tail 1.2s ease-in-out;
+  transform-origin: bottom center;
+}
+
+.fox-nj-celebrate .ears {
+  animation: nj-celebrate-ears 1.2s ease-in-out;
+}
+
+/* Variant: Classic Blue (default) */
+.fox-nj-classic-blue svg {
+  stroke: #0000FF;
+}
+
+/* Variant: Attention */
+.fox-nj-attention {
+  animation: nj-attention-bounce 0.8s ease-in-out;
+}
+
+.fox-nj-attention .ears {
+  animation: nj-attention-ears 0.8s ease-in-out;
+  transform-origin: center center;
+}
+
+/* Variant: Hype-Boy */
+.fox-nj-hype-boy {
+  animation: nj-hype-bounce 0.4s ease-in-out infinite;
+}
+
+.fox-nj-hype-boy svg {
+  animation: nj-hype-shake 0.5s ease-in-out infinite;
+}
+
+/* Variant: Cookie (shy) */
+.fox-nj-cookie {
+  animation: nj-cookie-shy 2s ease-in-out infinite;
+}
+
+.fox-nj-cookie .ear-left,
+.fox-nj-cookie .ear-right {
+  animation: nj-cookie-ears-down 2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.fox-nj-cookie .tail {
+  animation: nj-cookie-tail-curl 2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Variant: Ditto (morphing) */
+.fox-nj-ditto {
+  animation: nj-ditto-morph 3s ease-in-out infinite;
+}
+
+.fox-nj-ditto svg path,
+.fox-nj-ditto svg circle,
+.fox-nj-ditto svg ellipse,
+.fox-nj-ditto svg line {
+  stroke-dasharray: 100;
+  animation: nj-ditto-line-wave 3s ease-in-out infinite;
+}
+
+/* ===== HOVER EFFECTS ===== */
+.fox-nj-container:hover svg {
+  filter: drop-shadow(0 0 6px rgba(0, 0, 255, 0.4));
+  transition: filter 0.3s ease;
+}
+
+.fox-nj-container:hover .tail {
+  animation: nj-tail-wag 0.5s ease-in-out infinite;
+}
+
+/* ===== SIZE VARIANTS ===== */
+.fox-nj-size-32 {
+  width: 32px;
+  height: 32px;
+}
+
+.fox-nj-size-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.fox-nj-size-128 {
+  width: 128px;
+  height: 128px;
+}
+
+.fox-nj-size-256 {
+  width: 256px;
+  height: 256px;
+}
+
+.fox-nj-size-512 {
+  width: 512px;
+  height: 512px;
+}
+
+/* Stroke width adjustments for different sizes */
+.fox-nj-size-32 svg {
+  stroke-width: 2px;
+}
+
+.fox-nj-size-64 svg {
+  stroke-width: 2px;
+}
+
+.fox-nj-size-128 svg {
+  stroke-width: 2.5px;
+}
+
+.fox-nj-size-256 svg {
+  stroke-width: 3px;
+}
+
+.fox-nj-size-512 svg {
+  stroke-width: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .fox-nj-idle,
+  .fox-nj-idle svg,
+  .fox-nj-idle .tail,
+  .fox-nj-idle .ear-left,
+  .fox-nj-idle .ear-right,
+  .fox-nj-wave,
+  .fox-nj-wave .paw-right,
+  .fox-nj-wave .paw-right circle,
+  .fox-nj-celebrate,
+  .fox-nj-celebrate svg,
+  .fox-nj-celebrate .tail,
+  .fox-nj-celebrate .ears,
+  .fox-nj-attention,
+  .fox-nj-attention .ears,
+  .fox-nj-hype-boy,
+  .fox-nj-hype-boy svg,
+  .fox-nj-cookie,
+  .fox-nj-cookie .ear-left,
+  .fox-nj-cookie .ear-right,
+  .fox-nj-cookie .tail,
+  .fox-nj-ditto,
+  .fox-nj-ditto svg path,
+  .fox-nj-ditto svg circle,
+  .fox-nj-ditto svg ellipse,
+  .fox-nj-ditto svg line {
+    animation: none;
+  }
+}

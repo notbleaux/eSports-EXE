@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200" width="1000" height="1200">
+  <defs>
+    <style>
+      :root {
+        --nj-classic: #0000FF;
+        --nj-attention: #FF006E;
+        --nj-hype: #00F5D4;
+        --nj-cookie: #8B4513;
+        --nj-ditto: #E0E0E0;
+        --nj-outline: #1a1a1a;
+      }
+      
+      .nj-stroke {
+        fill: none;
+        stroke: var(--nj-outline);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      
+      .nj-stroke-classic { stroke: var(--nj-classic); }
+      .nj-stroke-attention { stroke: var(--nj-attention); }
+      .nj-stroke-hype { stroke: var(--nj-hype); }
+      
+      .component-label {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 11px;
+        fill: #666;
+      }
+      
+      .component-title {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        fill: #1a1a1a;
+      }
+      
+      .spec-note {
+        font-family: 'Inter', sans-serif;
+        font-size: 9px;
+        fill: #999;
+      }
+      
+      .grid-bg {
+        fill: none;
+        stroke: #e5e5e5;
+        stroke-width: 0.5;
+      }
+      
+      /* Component bounding box for reference */
+      .component-box {
+        fill: #f9f9f9;
+        stroke: #ddd;
+        stroke-width: 1;
+        stroke-dasharray: 4,2;
+      }
+      
+      /* Highlight for selected component */
+      .highlight {
+        stroke: #FF006E;
+        stroke-width: 1;
+        fill: none;
+        opacity: 0.5;
+      }
+    </style>
+    
+    <!-- Grid pattern -->
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" class="grid-bg"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1000" height="1200" fill="url(#grid)"/>
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" class="component-title" style="font-size: 20px;">NJ Component Library</text>
+  <text x="500" y="50" text-anchor="middle" class="component-label">Reusable SVG components for mascot generation</text>
+  
+  <!-- ==================== SECTION 1: EYE COMPONENTS ==================== -->
+  <g transform="translate(30, 80)">
+    <text x="0" y="0" class="component-title">1. Eye Components</text>
+    
+    <!-- Eye 1: Simple Dot -->
+    <g transform="translate(0, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-dot">
+        <circle cx="20" cy="20" r="5" fill="#1a1a1a"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-dot</text>
+      <text x="55" y="28" class="spec-note">r="5" fill="#1a1a1a"</text>
+    </g>
+    
+    <!-- Eye 2: Outlined Circle -->
+    <g transform="translate(200, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-circle">
+        <circle cx="20" cy="20" r="6" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-circle</text>
+      <text x="55" y="28" class="spec-note">r="6" stroke-width="2"</text>
+    </g>
+    
+    <!-- Eye 3: Large Dot -->
+    <g transform="translate(400, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-large">
+        <circle cx="20" cy="20" r="8" fill="#1a1a1a"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-large</text>
+      <text x="55" y="28" class="spec-note">r="8" fill="#1a1a1a"</text>
+    </g>
+    
+    <!-- Eye 4: Happy Arc -->
+    <g transform="translate(600, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-happy">
+        <path d="M 8 22 Q 20 14 32 22" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-happy</text>
+      <text x="55" y="28" class="spec-note">Q curve, 24px width</text>
+    </g>
+    
+    <!-- Eye 5: Sparkle -->
+    <g transform="translate(800, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-sparkle">
+        <path d="M 20 8 L 20 32 M 8 20 L 32 20" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-sparkle</text>
+      <text x="55" y="28" class="spec-note">Cross shape, 24px</text>
+    </g>
+    
+    <!-- Eye 6: Winking -->
+    <g transform="translate(0, 90)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-wink">
+        <path d="M 8 18 Q 20 26 32 18" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-wink</text>
+      <text x="55" y="28" class="spec-note">Q curve inverted</text>
+    </g>
+    
+    <!-- Eye 7: Closed Line -->
+    <g transform="translate(200, 90)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-closed">
+        <line x1="8" y1="20" x2="32" y2="20" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-closed</text>
+      <text x="55" y="28" class="spec-note">24px line</text>
+    </g>
+    
+    <!-- Eye 8: Dazzled -->
+    <g transform="translate(400, 90)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="eye-dazzled">
+        <circle cx="20" cy="20" r="6" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+        <circle cx="20" cy="20" r="2" fill="#1a1a1a"/>
+      </g>
+      <text x="55" y="15" class="component-label">eye-dazzled</text>
+      <text x="55" y="28" class="spec-note">Circle + center dot</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 2: EAR COMPONENTS ==================== -->
+  <g transform="translate(30, 260)">
+    <text x="0" y="0" class="component-title">2. Ear Components</text>
+    
+    <!-- Ear 1: Rabbit Long -->
+    <g transform="translate(0, 25)">
+      <rect x="-10" y="-10" width="50" height="100" class="component-box" rx="4"/>
+      <g id="ear-rabbit-long">
+        <ellipse cx="15" cy="40" rx="12" ry="40" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+        <ellipse cx="15" cy="40" rx="6" ry="28" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="50" y="90" class="component-label">ear-rabbit-long</text>
+      <text x="50" y="103" class="spec-note">rx="12" ry="40"</text>
+    </g>
+    
+    <!-- Ear 2: Rabbit Short -->
+    <g transform="translate(150, 25)">
+      <rect x="-10" y="-10" width="50" height="80" class="component-box" rx="4"/>
+      <g id="ear-rabbit-short">
+        <ellipse cx="15" cy="30" rx="10" ry="25" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+        <ellipse cx="15" cy="30" rx="5" ry="18" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="50" y="70" class="component-label">ear-rabbit-short</text>
+      <text x="50" y="83" class="spec-note">rx="10" ry="25"</text>
+    </g>
+    
+    <!-- Ear 3: Round Bear -->
+    <g transform="translate(300, 25)">
+      <rect x="-10" y="-10" width="60" height="60" class="component-box" rx="4"/>
+      <g id="ear-bear-round">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+        <circle cx="20" cy="20" r="10" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="55" y="50" class="component-label">ear-bear-round</text>
+      <text x="55" y="63" class="spec-note">r="18" outer</text>
+    </g>
+    
+    <!-- Ear 4: Pointed Cat -->
+    <g transform="translate(450, 25)">
+      <rect x="-10" y="-10" width="60" height="70" class="component-box" rx="4"/>
+      <g id="ear-cat-pointed">
+        <path d="M 5 50 L 20 5 L 35 50 Q 20 58 5 50 Z" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M 12 45 L 20 15 L 28 45" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+      </g>
+      <text x="55" y="60" class="component-label">ear-cat-pointed</text>
+      <text x="55" y="73" class="spec-note">Triangle shape</text>
+    </g>
+    
+    <!-- Ear 5: Floppy Dog -->
+    <g transform="translate(600, 25)">
+      <rect x="-10" y="-10" width="60" height="80" class="component-box" rx="4"/>
+      <g id="ear-dog-floppy">
+        <path d="M 10 10 Q 40 15 40 50 Q 35 65 15 60 Q 5 50 10 10" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="55" y="70" class="component-label">ear-dog-floppy</text>
+      <text x="55" y="83" class="spec-note">Curved Q path</text>
+    </g>
+    
+    <!-- Ear 6: Wide Hamster -->
+    <g transform="translate(750, 25)">
+      <rect x="-10" y="-10" width="70" height="50" class="component-box" rx="4"/>
+      <g id="ear-hamster-wide">
+        <ellipse cx="25" cy="20" rx="22" ry="12" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+        <ellipse cx="25" cy="20" rx="12" ry="6" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="55" y="45" class="component-label">ear-hamster-wide</text>
+      <text x="55" y="58" class="spec-note">rx="22" ry="12"</text>
+    </g>
+    
+    <!-- Ear 7: Tuft Bird -->
+    <g transform="translate(0, 130)">
+      <rect x="-10" y="-10" width="50" height="60" class="component-box" rx="4"/>
+      <g id="ear-bird-tuft">
+        <path d="M 15 5 Q 5 25 15 40" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 15 5 Q 15 25 15 45" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 15 5 Q 25 25 15 40" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="45" y="50" class="component-label">ear-bird-tuft</text>
+      <text x="45" y="63" class="spec-note">3 curved lines</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 3: BODY SHAPES ==================== -->
+  <g transform="translate(30, 480)">
+    <text x="0" y="0" class="component-title">3. Body Shape Components</text>
+    
+    <!-- Body 1: Pear/Rounded -->
+    <g transform="translate(0, 25)">
+      <rect x="-5" y="-5" width="70" height="90" class="component-box" rx="4"/>
+      <g id="body-pear">
+        <path d="M 20 10 Q 5 40 10 70 Q 30 85 50 70 Q 55 40 40 10 Q 30 5 20 10" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="75" y="45" class="component-label">body-pear</text>
+      <text x="75" y="58" class="spec-note">Rabbit style</text>
+    </g>
+    
+    <!-- Body 2: Bean -->
+    <g transform="translate(160, 25)">
+      <rect x="-5" y="-5" width="70" height="70" class="component-box" rx="4"/>
+      <g id="body-bean">
+        <path d="M 15 20 Q 5 45 30 55 Q 55 45 45 20 Q 40 10 30 10 Q 20 10 15 20" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="75" y="35" class="component-label">body-bean</text>
+      <text x="75" y="48" class="spec-note">Hamster/bear</text>
+    </g>
+    
+    <!-- Body 3: Oval -->
+    <g transform="translate(320, 25)">
+      <rect x="-5" y="-5" width="60" height="90" class="component-box" rx="4"/>
+      <g id="body-oval">
+        <ellipse cx="25" cy="40" rx="20" ry="35" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="65" y="45" class="component-label">body-oval</text>
+      <text x="65" y="58" class="spec-note">rx="20" ry="35"</text>
+    </g>
+    
+    <!-- Body 4: Chubby -->
+    <g transform="translate(460, 25)">
+      <rect x="-5" y="-5" width="80" height="70" class="component-box" rx="4"/>
+      <g id="body-chubby">
+        <path d="M 10 25 Q 5 55 35 60 Q 65 55 60 25 Q 55 15 35 15 Q 15 15 10 25" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="85" y="40" class="component-label">body-chubby</text>
+      <text x="85" y="53" class="spec-note">Wide round</text>
+    </g>
+    
+    <!-- Body 5: Teardrop -->
+    <g transform="translate(620, 25)">
+      <rect x="-5" y="-5" width="60" height="90" class="component-box" rx="4"/>
+      <g id="body-teardrop">
+        <path d="M 25 5 Q 5 35 15 70 Q 25 80 35 70 Q 45 35 25 5" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="65" y="45" class="component-label">body-teardrop</text>
+      <text x="65" y="58" class="spec-note">Pointed top</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 4: LIMB COMPONENTS ==================== -->
+  <g transform="translate(30, 640)">
+    <text x="0" y="0" class="component-title">4. Limb Components</text>
+    
+    <!-- Arm 1: Simple Line -->
+    <g transform="translate(0, 25)">
+      <rect x="-5" y="-5" width="50" height="60" class="component-box" rx="4"/>
+      <g id="arm-simple">
+        <path d="M 10 10 Q 5 30 10 45" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="50" y="30" class="component-label">arm-simple</text>
+      <text x="50" y="43" class="spec-note">Single curve</text>
+    </g>
+    
+    <!-- Arm 2: Stubby -->
+    <g transform="translate(140, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="arm-stubby">
+        <path d="M 10 15 Q 5 25 15 30" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <text x="50" y="25" class="component-label">arm-stubby</text>
+      <text x="50" y="38" class="spec-note">Thick, short</text>
+    </g>
+    
+    <!-- Arm 3: With Paw -->
+    <g transform="translate(280, 25)">
+      <rect x="-5" y="-5" width="50" height="60" class="component-box" rx="4"/>
+      <g id="arm-paw">
+        <path d="M 10 10 Q 15 30 10 40" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="10" cy="45" r="6" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="50" y="30" class="component-label">arm-paw</text>
+      <text x="50" y="43" class="spec-note">Line + circle</text>
+    </g>
+    
+    <!-- Leg 1: Simple -->
+    <g transform="translate(420, 25)">
+      <rect x="-5" y="-5" width="40" height="60" class="component-box" rx="4"/>
+      <g id="leg-simple">
+        <path d="M 15 10 Q 10 35 15 45" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="40" y="30" class="component-label">leg-simple</text>
+    </g>
+    
+    <!-- Foot 1: Oval -->
+    <g transform="translate(540, 25)">
+      <rect x="-5" y="-5" width="50" height="40" class="component-box" rx="4"/>
+      <g id="foot-oval">
+        <ellipse cx="20" cy="20" rx="12" ry="8" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="50" y="25" class="component-label">foot-oval</text>
+      <text x="50" y="38" class="spec-note">rx="12" ry="8"</text>
+    </g>
+    
+    <!-- Foot 2: Round -->
+    <g transform="translate(680, 25)">
+      <rect x="-5" y="-5" width="50" height="50" class="component-box" rx="4"/>
+      <g id="foot-round">
+        <circle cx="20" cy="20" r="12" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="50" y="25" class="component-label">foot-round</text>
+      <text x="50" y="38" class="spec-note">r="12"</text>
+    </g>
+    
+    <!-- Tail 1: Curved -->
+    <g transform="translate(820, 25)">
+      <rect x="-5" y="-5" width="50" height="60" class="component-box" rx="4"/>
+      <g id="tail-curved">
+        <path d="M 10 40 Q 30 30 25 10" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="50" y="30" class="component-label">tail-curved</text>
+      <text x="50" y="43" class="spec-note">Upward curl</text>
+    </g>
+    
+    <!-- Tail 2: Bushy -->
+    <g transform="translate(0, 100)">
+      <rect x="-5" y="-5" width="60" height="70" class="component-box" rx="4"/>
+      <g id="tail-bushy">
+        <path d="M 10 50 Q 30 40 35 15" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 15 52 Q 35 42 38 20" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 5 48 Q 25 38 32 12" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="60" y="35" class="component-label">tail-bushy</text>
+      <text x="60" y="48" class="spec-note">3 line bundle</text>
+    </g>
+    
+    <!-- Tail 3: Round -->
+    <g transform="translate(140, 100)">
+      <rect x="-5" y="-5" width="50" height="60" class="component-box" rx="4"/>
+      <g id="tail-round">
+        <circle cx="25" cy="25" r="15" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+        <line x1="10" y1="40" x2="20" y2="35" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <text x="50" y="35" class="component-label">tail-round</text>
+      <text x="50" y="48" class="spec-note">Circle tail</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 5: HEAD SHAPES ==================== -->
+  <g transform="translate(30, 820)">
+    <text x="0" y="0" class="component-title">5. Head Shape Components</text>
+    
+    <!-- Head 1: Perfect Circle -->
+    <g transform="translate(0, 25)">
+      <rect x="-5" y="-5" width="60" height="60" class="component-box" rx="4"/>
+      <g id="head-circle">
+        <circle cx="25" cy="25" r="22" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="65" y="30" class="component-label">head-circle</text>
+      <text x="65" y="43" class="spec-note">r="22" bunny</text>
+    </g>
+    
+    <!-- Head 2: Wide Oval -->
+    <g transform="translate(160, 25)">
+      <rect x="-5" y="-5" width="70" height="60" class="component-box" rx="4"/>
+      <g id="head-oval-wide">
+        <ellipse cx="30" cy="25" rx="28" ry="22" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="75" y="30" class="component-label">head-oval-wide</text>
+      <text x="75" y="43" class="spec-note">rx="28" ry="22"</text>
+    </g>
+    
+    <!-- Head 3: Tall Oval -->
+    <g transform="translate(330, 25)">
+      <rect x="-5" y="-5" width="60" height="80" class="component-box" rx="4"/>
+      <g id="head-oval-tall">
+        <ellipse cx="25" cy="35" rx="20" ry="30" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="65" y="40" class="component-label">head-oval-tall</text>
+      <text x="65" y="53" class="spec-note">rx="20" ry="30"</text>
+    </g>
+    
+    <!-- Head 4: Rounded Square -->
+    <g transform="translate(480, 25)">
+      <rect x="-5" y="-5" width="60" height="60" class="component-box" rx="4"/>
+      <g id="head-round-square">
+        <rect x="5" y="5" width="40" height="40" rx="15" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </g>
+      <text x="65" y="30" class="component-label">head-round-square</text>
+      <text x="65" y="43" class="spec-note">rx="15" bear</text>
+    </g>
+    
+    <!-- Head 5: Hexagon -->
+    <g transform="translate(640, 25)">
+      <rect x="-5" y="-5" width="60" height="60" class="component-box" rx="4"/>
+      <g id="head-hexagon">
+        <path d="M 25 3 L 46 15 L 46 35 L 25 47 L 4 35 L 4 15 Z" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+      </g>
+      <text x="65" y="30" class="component-label">head-hexagon</text>
+      <text x="65" y="43" class="spec-note">Geometric</text>
+    </g>
+    
+    <!-- Head 6: Heart -->
+    <g transform="translate(800, 25)">
+      <rect x="-5" y="-5" width="60" height="60" class="component-box" rx="4"/>
+      <g id="head-heart">
+        <path d="M 25 45 Q 5 30 5 15 Q 5 5 15 5 Q 22 5 25 12 Q 28 5 35 5 Q 45 5 45 15 Q 45 30 25 45" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+      </g>
+      <text x="65" y="30" class="component-label">head-heart</text>
+      <text x="65" y="43" class="spec-note">Romantic style</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 6: COMPLETE MASCOT ASSEMBLY ==================== -->
+  <g transform="translate(30, 970)">
+    <text x="0" y="0" class="component-title">6. Assembly Example — NJ Bunny</text>
+    
+    <g transform="translate(50, 30)">
+      <!-- Component boxes showing assembly -->
+      <rect x="-60" y="-80" width="120" height="160" class="component-box" rx="8" opacity="0.3"/>
+      
+      <!-- Ears -->
+      <use href="#ear-rabbit-long" x="-25" y="-55" transform="translate(-10, -10)"/>
+      <use href="#ear-rabbit-long" x="25" y="-55" transform="translate(10, -10)"/>
+      
+      <!-- Head -->
+      <use href="#head-circle" x="0" y="0"/>
+      
+      <!-- Face -->
+      <use href="#eye-dot" x="-18" y="-5"/>
+      <use href="#eye-dot" x="18" y="-5"/>
+      
+      <!-- Nose and mouth -->
+      <line x1="0" y1="5" x2="0" y2="10" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M -8 15 Q 0 20 8 15" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      
+      <!-- Body -->
+      <use href="#body-pear" x="0" y="42"/>
+      
+      <!-- Arms -->
+      <use href="#arm-simple" x="-35" y="55"/>
+      <use href="#arm-simple" x="35" y="55" transform="scale(-1, 1) translate(-70, 0)"/>
+      
+      <!-- Feet -->
+      <use href="#foot-oval" x="-15" y="95"/>
+      <use href="#foot-oval" x="15" y="95"/>
+      
+      <!-- Legend -->
+      <text x="150" y="0" class="component-label">Assembly from components:</text>
+      <text x="150" y="20" class="spec-note">• ear-rabbit-long × 2</text>
+      <text x="150" y="35" class="spec-note">• head-circle</text>
+      <text x="150" y="50" class="spec-note">• eye-dot × 2</text>
+      <text x="150" y="65" class="spec-note">• body-pear</text>
+      <text x="150" y="80" class="spec-note">• arm-simple × 2</text>
+      <text x="150" y="95" class="spec-note">• foot-oval × 2</text>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <text x="500" y="1180" text-anchor="middle" class="spec-note">NJ Component Library v1.0 — Copy IDs to use components: &lt;use href="#component-id"/&gt;</text>
+</svg>

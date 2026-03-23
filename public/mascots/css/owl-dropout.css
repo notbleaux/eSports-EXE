@@ -1,0 +1,178 @@
+/**
+ * Owl Dropout Style - CSS Animations
+ * Features: Head tilt, glasses glint
+ */
+
+/* Container for the owl mascot */
+.owl-dropout-container {
+  display: inline-block;
+  position: relative;
+}
+
+/* Head tilt animation - thoughtful pose */
+@keyframes owl-head-tilt {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+/* Subtle hover float */
+@keyframes owl-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Glasses glint/shine animation */
+@keyframes glasses-glint {
+  0%, 90%, 100% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  95% {
+    opacity: 1;
+    transform: translateX(10px);
+  }
+}
+
+/* Sweater texture pulse */
+@keyframes sweater-breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
+/* Thoughtful blink */
+@keyframes thoughtful-blink {
+  0%, 45%, 55%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Base owl animation */
+.owl-dropout {
+  animation: owl-float 4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* Head animation wrapper */
+.owl-dropout__head {
+  animation: owl-head-tilt 6s ease-in-out infinite;
+  transform-origin: center 60%;
+}
+
+/* Glasses glint effect overlay */
+.owl-dropout__glasses-glint::after {
+  content: '';
+  position: absolute;
+  top: 35%;
+  left: 20%;
+  width: 60%;
+  height: 20%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  animation: glasses-glint 5s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Eye blink on owl */
+.owl-dropout__eyes {
+  animation: thoughtful-blink 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Sweater breathing effect */
+.owl-dropout__sweater {
+  animation: sweater-breathe 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Hover state - intensified animations */
+.owl-dropout-container:hover .owl-dropout__head {
+  animation-duration: 3s;
+}
+
+.owl-dropout-container:hover .owl-dropout__glasses-glint::after {
+  animation-duration: 2s;
+}
+
+/* Idle state - subtle movement only */
+.owl-dropout--idle {
+  animation: none;
+}
+
+.owl-dropout--idle .owl-dropout__head {
+  animation: owl-head-tilt 8s ease-in-out infinite;
+}
+
+/* Focused/thinking state - more pronounced tilt */
+.owl-dropout--thinking .owl-dropout__head {
+  animation: owl-head-tilt 3s ease-in-out infinite;
+}
+
+.owl-dropout--thinking .owl-dropout__eyes {
+  animation: thoughtful-blink 2s ease-in-out infinite;
+}
+
+/* Reading state - glasses glint more frequent */
+.owl-dropout--reading .owl-dropout__glasses-glint::after {
+  animation-duration: 2s;
+}
+
+/* SVG-specific animations using CSS classes on SVG elements */
+.owl-dropout-svg {
+  transition: transform 0.3s ease;
+}
+
+.owl-dropout-svg:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive sizing */
+@media (max-width: 768px) {
+  .owl-dropout {
+    animation-duration: 3s;
+  }
+  
+  .owl-dropout__head {
+    animation-duration: 4s;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .owl-dropout,
+  .owl-dropout__head,
+  .owl-dropout__eyes,
+  .owl-dropout__sweater,
+  .owl-dropout__glasses-glint::after {
+    animation: none;
+  }
+  
+  .owl-dropout-svg:hover {
+    transform: none;
+  }
+}

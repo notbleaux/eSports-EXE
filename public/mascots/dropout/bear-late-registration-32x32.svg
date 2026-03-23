@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="lrBearBrown32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513"/>
+      <stop offset="100%" style="stop-color:#654321"/>
+    </linearGradient>
+    <linearGradient id="lrBearJacket32" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B7355"/>
+      <stop offset="100%" style="stop-color:#5C4033"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Ears -->
+  <circle cx="10" cy="8" r="4" fill="url(#lrBearBrown32)"/>
+  <circle cx="22" cy="8" r="4" fill="url(#lrBearBrown32)"/>
+  
+  <!-- Head -->
+  <ellipse cx="16" cy="12" rx="8" ry="7" fill="url(#lrBearBrown32)"/>
+  
+  <!-- Snout -->
+  <ellipse cx="16" cy="14" rx="4" ry="3" fill="#DEB887"/>
+  <ellipse cx="16" cy="13" rx="2" ry="1.5" fill="#333"/>
+  
+  <!-- Eyes (tired) -->
+  <path d="M11.5 11 Q13 10 14.5 11" stroke="#333" stroke-width="0.8" fill="none"/>
+  <path d="M17.5 11 Q19 10 20.5 11" stroke="#333" stroke-width="0.8" fill="none"/>
+  
+  <!-- Blazer -->
+  <path d="M10 18 Q10 15 16 14 Q22 15 22 18 Q22 26 16 28 Q10 26 10 18Z" fill="url(#lrBearJacket32)"/>
+  <line x1="16" y1="16" x2="16" y2="26" stroke="#5C4033" stroke-width="0.5"/>
+  
+  <!-- Polo collar -->
+  <path d="M12 16 L16 19 L20 16" fill="#CD853F"/>
+  
+  <!-- Arms -->
+  <ellipse cx="9" cy="21" rx="2" ry="3" fill="url(#lrBearJacket32)"/>
+  <ellipse cx="23" cy="21" rx="2" ry="3" fill="url(#lrBearJacket32)"/>
+</svg>

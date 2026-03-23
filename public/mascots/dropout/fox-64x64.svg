@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="foxOrange64" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F48C06"/>
+      <stop offset="100%" style="stop-color:#E85D04"/>
+    </linearGradient>
+    <linearGradient id="jacketBurgundy64" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="goldAccent64" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD60A"/>
+      <stop offset="100%" style="stop-color:#FFC300"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Tail -->
+  <path d="M12 40 Q8 32 12 24 Q16 16 24 20 Q20 28 16 36 Q14 40 12 40Z" fill="url(#foxOrange64)"/>
+  <path d="M12 24 Q10 20 12 16 Q14 12 18 16" fill="none" stroke="#F48C06" stroke-width="1"/>
+  <path d="M14 38 Q18 36 20 32" fill="none" stroke="#FAA307" stroke-width="0.8"/>
+  
+  <!-- Body/Jacket -->
+  <path d="M20 36 Q20 28 28 26 Q36 24 44 28 Q48 32 48 40 Q48 52 40 56 Q32 60 24 56 Q20 52 20 44 Q20 40 20 36Z" fill="url(#jacketBurgundy64)"/>
+  
+  <!-- Jacket Details -->
+  <path d="M28 32 L28 48" stroke="#9D0208" stroke-width="1"/>
+  <path d="M36 32 L36 48" stroke="#9D0208" stroke-width="1"/>
+  <rect x="30" y="36" width="4" height="4" fill="url(#goldAccent64)" rx="0.5"/>
+  
+  <!-- Zipper -->
+  <line x1="32" y1="32" x2="32" y2="50" stroke="#FFD60A" stroke-width="0.5" stroke-dasharray="2,1"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M24 28 L28 32 L36 32 L40 28" fill="none" stroke="#9D0208" stroke-width="1.5"/>
+  <path d="M26 30 Q32 34 38 30" fill="#6A040F"/>
+  
+  <!-- Head -->
+  <ellipse cx="32" cy="20" rx="12" ry="10" fill="url(#foxOrange64)"/>
+  
+  <!-- Cheeks -->
+  <ellipse cx="22" cy="22" rx="3" ry="2" fill="#FFBA08" opacity="0.6"/>
+  <ellipse cx="42" cy="22" rx="3" ry="2" fill="#FFBA08" opacity="0.6"/>
+  
+  <!-- Ears -->
+  <path d="M22 14 L20 6 L26 12Z" fill="url(#foxOrange64)"/>
+  <path d="M22 10 L22 8 L24 10Z" fill="#370617"/>
+  <path d="M42 14 L44 6 L38 12Z" fill="url(#foxOrange64)"/>
+  <path d="M42 10 L42 8 L40 10Z" fill="#370617"/>
+  
+  <!-- Snout -->
+  <ellipse cx="32" cy="24" rx="5" ry="3" fill="#FFBA08"/>
+  <ellipse cx="32" cy="23" rx="2" ry="1.5" fill="#370617"/>
+  <line x1="32" y1="24" x2="32" y2="26" stroke="#370617" stroke-width="0.5"/>
+  
+  <!-- Mouth (confident smirk) -->
+  <path d="M28 26 Q32 28 36 25" fill="none" stroke="#370617" stroke-width="0.8" stroke-linecap="round"/>
+  
+  <!-- Eyes (clever expression) -->
+  <ellipse cx="27" cy="19" rx="2.5" ry="3" fill="#FFF"/>
+  <ellipse cx="27.5" cy="19" rx="1.2" ry="1.8" fill="#370617"/>
+  <circle cx="27.8" cy="18.5" r="0.4" fill="#FFF"/>
+  <ellipse cx="37" cy="19" rx="2.5" ry="3" fill="#FFF"/>
+  <ellipse cx="36.5" cy="19" rx="1.2" ry="1.8" fill="#370617"/>
+  <circle cx="36.2" cy="18.5" r="0.4" fill="#FFF"/>
+  
+  <!-- Eyebrows (confident) -->
+  <path d="M24 15 Q27 14 30 15" stroke="#370617" stroke-width="0.8" fill="none"/>
+  <path d="M34 15 Q37 14 40 15" stroke="#370617" stroke-width="0.8" fill="none"/>
+  
+  <!-- Arms -->
+  <path d="M20 40 Q16 44 18 48 Q20 52 24 48" fill="url(#jacketBurgundy64)"/>
+  <path d="M48 40 Q52 44 50 48 Q48 52 44 48" fill="url(#jacketBurgundy64)"/>
+  
+  <!-- Jacket Cuffs -->
+  <rect x="19" y="46" width="5" height="3" fill="#6A040F" rx="1"/>
+  <rect x="40" y="46" width="5" height="3" fill="#6A040F" rx="1"/>
+  
+  <!-- Jacket Emblem -->
+  <circle cx="40" cy="38" r="3" fill="url(#goldAccent64)"/>
+  <text x="40" y="39.5" font-size="3" text-anchor="middle" fill="#370617" font-weight="bold">F</text>
+  
+  <!-- Jacket Pockets -->
+  <path d="M24 42 L26 42 L26 46 L24 46Z" fill="#6A040F"/>
+  <path d="M38 42 L40 42 L40 46 L38 46Z" fill="#6A040F"/>
+</svg>

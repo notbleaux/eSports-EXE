@@ -1,0 +1,313 @@
+/**
+ * Fox Dropout Style Animations
+ * Bouncy, street-smart animations for the bomber jacket fox
+ */
+
+/* ===== IDLE ANIMATION ===== */
+@keyframes dropout-idle {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-2px) rotate(1deg);
+  }
+}
+
+@keyframes dropout-jacket-bounce {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(2px) scaleY(0.98);
+  }
+}
+
+@keyframes dropout-tail-sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes dropout-collar-flap {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(1px);
+  }
+}
+
+/* ===== WAVE ANIMATION ===== */
+@keyframes dropout-wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-15deg);
+  }
+  20% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes dropout-wave-body {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(-1px);
+  }
+}
+
+/* ===== CELEBRATE ANIMATION ===== */
+@keyframes dropout-celebrate {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  10% {
+    transform: translateY(-15px) scale(1.05);
+  }
+  20% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-20px) scale(1.08);
+  }
+  40% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.03);
+  }
+  60%, 80% {
+    transform: translateY(-5px) scale(1.02);
+  }
+  70% {
+    transform: translateY(-12px) scale(1.05);
+  }
+  90% {
+    transform: translateY(-3px) scale(1.01);
+  }
+}
+
+@keyframes dropout-celebrate-arms {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30% {
+    transform: rotate(-25deg);
+  }
+  20%, 40% {
+    transform: rotate(-35deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  60%, 80% {
+    transform: rotate(-15deg);
+  }
+  70% {
+    transform: rotate(-30deg);
+  }
+  90% {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes dropout-celebrate-jacket {
+  0%, 100% {
+    transform: scaleY(1) skewX(0deg);
+  }
+  25% {
+    transform: scaleY(1.02) skewX(-1deg);
+  }
+  50% {
+    transform: scaleY(0.98) skewX(1deg);
+  }
+  75% {
+    transform: scaleY(1.01) skewX(-0.5deg);
+  }
+}
+
+@keyframes dropout-celebrate-emblem {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.2);
+    filter: brightness(1.3);
+  }
+}
+
+/* ===== CONFIDENT STANCE ANIMATION ===== */
+@keyframes dropout-confident {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2deg) translateY(-1px);
+  }
+}
+
+@keyframes dropout-emblem-shine {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 0 #FFD60A);
+  }
+  50% {
+    filter: brightness(1.2) drop-shadow(0 0 5px #FFD60A);
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Container */
+.fox-dropout-container {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+/* Idle state */
+.fox-dropout-idle {
+  animation: dropout-idle 2s ease-in-out infinite;
+}
+
+.fox-dropout-idle .jacket {
+  animation: dropout-jacket-bounce 1s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.fox-dropout-idle .tail {
+  animation: dropout-tail-sway 2.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.fox-dropout-idle .collar {
+  animation: dropout-collar-flap 1.5s ease-in-out infinite;
+}
+
+/* Wave state */
+.fox-dropout-wave {
+  animation: dropout-wave-body 0.6s ease-in-out;
+}
+
+.fox-dropout-wave .arm-right {
+  animation: dropout-wave 0.6s ease-in-out;
+  transform-origin: top center;
+}
+
+.fox-dropout-wave .jacket {
+  animation: dropout-jacket-bounce 0.6s ease-in-out;
+}
+
+/* Celebrate state */
+.fox-dropout-celebrate {
+  animation: dropout-celebrate 1.5s ease-in-out;
+}
+
+.fox-dropout-celebrate .arm-left,
+.fox-dropout-celebrate .arm-right {
+  animation: dropout-celebrate-arms 1.5s ease-in-out;
+  transform-origin: top center;
+}
+
+.fox-dropout-celebrate .jacket {
+  animation: dropout-celebrate-jacket 1.5s ease-in-out;
+  transform-origin: center center;
+}
+
+.fox-dropout-celebrate .emblem {
+  animation: dropout-celebrate-emblem 0.75s ease-in-out infinite;
+}
+
+/* Confident stance (alternative idle) */
+.fox-dropout-confident {
+  animation: dropout-confident 3s ease-in-out infinite;
+}
+
+.fox-dropout-confident .emblem {
+  animation: dropout-emblem-shine 2s ease-in-out infinite;
+}
+
+/* ===== HOVER EFFECTS ===== */
+.fox-dropout-container:hover {
+  filter: brightness(1.05);
+}
+
+.fox-dropout-container:hover .emblem {
+  filter: brightness(1.2) drop-shadow(0 0 8px #FFD60A);
+  transition: filter 0.3s ease;
+}
+
+/* ===== SIZE VARIANTS ===== */
+.fox-dropout-size-32 {
+  width: 32px;
+  height: 32px;
+}
+
+.fox-dropout-size-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.fox-dropout-size-128 {
+  width: 128px;
+  height: 128px;
+}
+
+.fox-dropout-size-256 {
+  width: 256px;
+  height: 256px;
+}
+
+.fox-dropout-size-512 {
+  width: 512px;
+  height: 512px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .fox-dropout-idle,
+  .fox-dropout-idle .jacket,
+  .fox-dropout-idle .tail,
+  .fox-dropout-idle .collar,
+  .fox-dropout-wave,
+  .fox-dropout-wave .arm-right,
+  .fox-dropout-wave .jacket,
+  .fox-dropout-celebrate,
+  .fox-dropout-celebrate .arm-left,
+  .fox-dropout-celebrate .arm-right,
+  .fox-dropout-celebrate .jacket,
+  .fox-dropout-celebrate .emblem,
+  .fox-dropout-confident,
+  .fox-dropout-confident .emblem {
+    animation: none;
+  }
+}

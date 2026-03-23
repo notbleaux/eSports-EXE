@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" width="1200" height="1400">
+  <defs>
+    <!-- ==================== GRADIENTS ==================== -->
+    <!-- Bear Fur Gradients -->
+    <linearGradient id="grad-fur-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B4513"/>
+      <stop offset="50%" stop-color="#654321"/>
+      <stop offset="100%" stop-color="#4A3018"/>
+    </linearGradient>
+    
+    <linearGradient id="grad-fur-light" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#A0522D"/>
+      <stop offset="100%" stop-color="#8B4513"/>
+    </linearGradient>
+    
+    <linearGradient id="grad-fur-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CD853F"/>
+      <stop offset="100%" stop-color="#A0522D"/>
+    </linearGradient>
+    
+    <!-- Snout Gradient -->
+    <linearGradient id="grad-snout" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8D4B8"/>
+      <stop offset="50%" stop-color="#D2B48C"/>
+      <stop offset="100%" stop-color="#C19A6B"/>
+    </linearGradient>
+    
+    <!-- Eye Gradients -->
+    <radialGradient id="grad-eye-sclera" cx="50%" cy="50%" r="50%">
+      <stop offset="70%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F5F5F5"/>
+    </radialGradient>
+    
+    <radialGradient id="grad-eye-pupil" cx="40%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#333333"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    
+    <radialGradient id="grad-eye-highlight" cx="30%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    
+    <!-- Clothing Gradients -->
+    <linearGradient id="grad-varsity-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DC143C"/>
+      <stop offset="50%" stop-color="#B22222"/>
+      <stop offset="100%" stop-color="#8B0000"/>
+    </linearGradient>
+    
+    <linearGradient id="grad-varsity-sleeve" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E0E0E0"/>
+    </linearGradient>
+    
+    <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="50%" stop-color="#DAA520"/>
+      <stop offset="100%" stop-color="#B8860B"/>
+    </linearGradient>
+    
+    <linearGradient id="grad-denim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="50%" stop-color="#27408B"/>
+      <stop offset="100%" stop-color="#191970"/>
+    </linearGradient>
+    
+    <linearGradient id="grad-sneaker" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E0E0E0"/>
+    </linearGradient>
+    
+    <!-- Shadow Filter -->
+    <filter id="filter-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="1" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Glow Filter -->
+    <filter id="filter-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- ==================== BACKGROUND ==================== -->
+  <rect width="1200" height="1400" fill="#1A1A2E"/>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="28" font-weight="900">DROPOUT COMPONENT LIBRARY</text>
+  <text x="600" y="65" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="12">Reusable SVG Components for Mascot Generation</text>
+  
+  <!-- ==================== SECTION 1: HEAD TEMPLATES ==================== -->
+  <g transform="translate(30, 90)">
+    <rect width="360" height="280" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="180" y="25" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="14">1. HEAD TEMPLATES</text>
+    
+    <!-- Head Base - Front View -->
+    <g transform="translate(70, 100)">
+      <ellipse cx="0" cy="0" rx="50" ry="48" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="3"/>
+      <text x="0" y="75" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">Front View</text>
+      <!-- Center line -->
+      <line x1="0" y1="-48" x2="0" y2="48" stroke="#FFD700" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>
+      <line x1="-50" y1="0" x2="50" y2="0" stroke="#FFD700" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>
+    </g>
+    
+    <!-- Head Base - 3/4 View -->
+    <g transform="translate(180, 100)">
+      <ellipse cx="0" cy="0" rx="45" ry="48" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="3"/>
+      <!-- Perspective shading -->
+      <ellipse cx="-15" cy="0" rx="25" ry="40" fill="rgba(0,0,0,0.1)"/>
+      <text x="0" y="75" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">3/4 View</text>
+    </g>
+    
+    <!-- Head Base - Side View -->
+    <g transform="translate(290, 100)">
+      <path d="M-30 -45 Q0 -55 35 -40 Q45 0 35 45 Q0 55 -30 45 Q-40 0 -30 -45" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="3"/>
+      <text x="0" y="75" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">Side View</text>
+    </g>
+    
+    <!-- Specifications -->
+    <g transform="translate(180, 210)">
+      <rect x="-160" y="0" width="320" height="55" rx="4" fill="#0F3460"/>
+      <text x="0" y="15" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="9" font-weight="bold">HEAD SPECIFICATIONS</text>
+      <text x="-150" y="30" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Width: 1.05x height | Ratio: ~1.04:1</text>
+      <text x="-150" y="45" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Stroke: 3px #2D1810 | Fill: grad-fur-primary</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 2: EYE TEMPLATES ==================== -->
+  <g transform="translate(410, 90)">
+    <rect width="380" height="280" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="190" y="25" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="14">2. EYE TEMPLATES</text>
+    
+    <!-- Left Eye Template -->
+    <g transform="translate(70, 90)">
+      <rect x="-40" y="-40" width="80" height="80" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="eye-left">
+        <!-- Sclera -->
+        <ellipse cx="0" cy="0" rx="22" ry="24" fill="url(#grad-eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <!-- Pupil (looking left) -->
+        <ellipse cx="-3" cy="1" rx="12" ry="14" fill="url(#grad-eye-pupil)"/>
+        <!-- Primary highlight -->
+        <circle cx="-8" cy="-7" r="5" fill="url(#grad-eye-highlight)"/>
+        <!-- Secondary highlight -->
+        <circle cx="4" cy="7" r="2" fill="#FFF" opacity="0.8"/>
+      </g>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Left Eye</text>
+    </g>
+    
+    <!-- Right Eye Template -->
+    <g transform="translate(160, 90)">
+      <rect x="-40" y="-40" width="80" height="80" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="eye-right">
+        <ellipse cx="0" cy="0" rx="22" ry="24" fill="url(#grad-eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="3" cy="1" rx="12" ry="14" fill="url(#grad-eye-pupil)"/>
+        <circle cx="-2" cy="-7" r="5" fill="url(#grad-eye-highlight)"/>
+        <circle cx="10" cy="7" r="2" fill="#FFF" opacity="0.8"/>
+      </g>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Right Eye</text>
+    </g>
+    
+    <!-- Eye - Forward Look -->
+    <g transform="translate(250, 90)">
+      <rect x="-40" y="-40" width="80" height="80" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="eye-forward">
+        <ellipse cx="0" cy="0" rx="22" ry="24" fill="url(#grad-eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="1" rx="12" ry="14" fill="url(#grad-eye-pupil)"/>
+        <circle cx="-5" cy="-6" r="5" fill="url(#grad-eye-highlight)"/>
+        <circle cx="7" cy="7" r="2" fill="#FFF" opacity="0.8"/>
+      </g>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Forward</text>
+    </g>
+    
+    <!-- Eye - Excited/Wide -->
+    <g transform="translate(340, 90)">
+      <rect x="-40" y="-40" width="80" height="80" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="eye-excited">
+        <ellipse cx="0" cy="0" rx="24" ry="26" fill="url(#grad-eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="2" rx="14" ry="16" fill="url(#grad-eye-pupil)"/>
+        <circle cx="-6" cy="-8" r="6" fill="url(#grad-eye-highlight)"/>
+        <circle cx="8" cy="8" r="3" fill="#FFF" opacity="0.9"/>
+        <circle cx="-8" cy="10" r="1.5" fill="#FFF" opacity="0.7"/>
+      </g>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Excited</text>
+    </g>
+    
+    <!-- Eye Construction Guide -->
+    <g transform="translate(190, 195)">
+      <rect x="-175" y="0" width="350" height="70" rx="4" fill="#0F3460"/>
+      <text x="0" y="15" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="9" font-weight="bold">EYE CONSTRUCTION LAYERS (Bottom to Top)</text>
+      <text x="-165" y="30" fill="#FFF" font-family="Arial, sans-serif" font-size="8">1. Sclera (white ellipse, 22x24px)</text>
+      <text x="-165" y="43" fill="#FFF" font-family="Arial, sans-serif" font-size="8">2. Pupil (black ellipse, 12x14px, offset for direction)</text>
+      <text x="-165" y="56" fill="#FFF" font-family="Arial, sans-serif" font-size="8">3. Primary highlight (5px circle, upper-left)</text>
+      <text x="-165" y="69" fill="#FFF" font-family="Arial, sans-serif" font-size="8">4. Secondary highlight (2px circle, lower-right)</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 3: SNOUT & NOSE ==================== -->
+  <g transform="translate(30, 390)">
+    <rect width="360" height="260" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="180" y="25" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="14">3. SNOUT &amp; NOSE TEMPLATES</text>
+    
+    <!-- Snout Base -->
+    <g transform="translate(80, 100)">
+      <rect x="-50" y="-50" width="100" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <ellipse cx="0" cy="0" rx="35" ry="30" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="2"/>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Snout Base</text>
+    </g>
+    
+    <!-- Nose Template -->
+    <g transform="translate(180, 100)">
+      <rect x="-40" y="-50" width="80" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <ellipse cx="0" cy="-5" rx="12" ry="8" fill="#2D1810"/>
+      <ellipse cx="-4" cy="-8" rx="3" ry="2" fill="#FFF" opacity="0.6"/>
+      <text x="0" y="35" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Nose</text>
+    </g>
+    
+    <!-- Snout + Nose + Mouth -->
+    <g transform="translate(280, 100)">
+      <rect x="-50" y="-50" width="100" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <ellipse cx="0" cy="0" rx="35" ry="30" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="2"/>
+      <ellipse cx="0" cy="-8" rx="12" ry="8" fill="#2D1810"/>
+      <ellipse cx="-4" cy="-11" rx="3" ry="2" fill="#FFF" opacity="0.6"/>
+      <!-- Mouth -->
+      <path d="M-12 15 Q0 20 12 15" stroke="#2D1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="0" y="55" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Complete</text>
+    </g>
+    
+    <!-- Specifications -->
+    <g transform="translate(180, 195)">
+      <rect x="-160" y="0" width="320" height="45" rx="4" fill="#0F3460"/>
+      <text x="0" y="15" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="9" font-weight="bold">SNOUT SPECIFICATIONS</text>
+      <text x="-150" y="30" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Size: 35x30px ellipse | Fill: grad-snout</text>
+      <text x="-150" y="42" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Nose: 12x8px black ellipse with highlight</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 4: EAR TEMPLATES ==================== -->
+  <g transform="translate(410, 390)">
+    <rect width="380" height="260" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="190" y="25" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="14">4. EAR TEMPLATES</text>
+    
+    <!-- Round Ear (Bear) -->
+    <g transform="translate(70, 100)">
+      <rect x="-35" y="-50" width="70" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="ear-round">
+        <circle cx="0" cy="0" r="25" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+        <circle cx="0" cy="0" r="15" fill="#654321" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="0" cy="0" r="8" fill="#8B4513" opacity="0.5"/>
+      </g>
+      <text x="0" y="45" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Round (Bear)</text>
+    </g>
+    
+    <!-- Pointed Ear (Wolf/Fox) -->
+    <g transform="translate(160, 100)">
+      <rect x="-35" y="-50" width="70" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="ear-pointed">
+        <path d="M0 -35 L-20 10 Q0 20 20 10 Z" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+        <path d="M0 -25 L-12 5 Q0 12 12 5 Z" fill="#D2B48C" stroke="#2D1810" stroke-width="1"/>
+      </g>
+      <text x="0" y="45" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Pointed (Wolf)</text>
+    </g>
+    
+    <!-- Long Ear (Rabbit) -->
+    <g transform="translate(250, 100)">
+      <rect x="-35" y="-50" width="70" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="ear-long">
+        <ellipse cx="0" cy="0" rx="10" ry="35" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="0" rx="5" ry="25" fill="#FFB6C1" stroke="#2D1810" stroke-width="1"/>
+      </g>
+      <text x="0" y="45" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Long (Rabbit)</text>
+    </g>
+    
+    <!-- Floppy Ear (Dog) -->
+    <g transform="translate(340, 100)">
+      <rect x="-35" y="-50" width="70" height="100" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="ear-floppy">
+        <path d="M-15 -20 Q-25 0 -15 25 Q0 30 15 25 Q25 0 15 -20 Q0 -25 -15 -20" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+        <path d="M-10 -10 Q-15 5 -10 20 Q0 22 10 20 Q15 5 10 -10 Q0 -12 -10 -10" fill="#654321" opacity="0.6"/>
+      </g>
+      <text x="0" y="45" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Floppy (Dog)</text>
+    </g>
+    
+    <!-- Ear Placement Guide -->
+    <g transform="translate(190, 195)">
+      <rect x="-175" y="0" width="350" height="45" rx="4" fill="#0F3460"/>
+      <text x="0" y="15" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="9" font-weight="bold">EAR PLACEMENT GUIDE</text>
+      <text x="-165" y="30" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Position: Top of head, ~60% of head width apart</text>
+      <text x="-165" y="42" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Angle: Slightly outward (10-15°) for cuteness</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 5: VARSITY JACKET ==================== -->
+  <g transform="translate(30, 670)">
+    <rect width="570" height="340" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="285" y="25" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="14">5. VARSITY JACKET COMPONENTS</text>
+    
+    <!-- Jacket Body -->
+    <g transform="translate(100, 120)">
+      <rect x="-60" y="-70" width="120" height="140" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="jacket-body">
+        <!-- Main body -->
+        <path d="M-45 -50 Q-50 0 -45 60 L45 60 Q50 0 45 -50 Q0 -60 -45 -50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2.5"/>
+        <!-- Center placket -->
+        <line x1="0" y1="-55" x2="0" y2="60" stroke="#2D1810" stroke-width="2"/>
+        <!-- Buttons -->
+        <circle cx="8" cy="-30" r="4" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+        <circle cx="8" cy="-5" r="4" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+        <circle cx="8" cy="20" r="4" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+        <circle cx="8" cy="45" r="4" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+        <!-- Collar -->
+        <path d="M-25 -50 Q0 -40 25 -50 L30 -40 Q0 -25 -30 -40 Z" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+        <!-- Pockets -->
+        <path d="M-35 25 L-35 45 L-10 45 L-10 30 Q-22 35 -35 25" fill="#B22222" stroke="#2D1810" stroke-width="1"/>
+        <path d="M35 25 L35 45 L10 45 L10 30 Q22 35 35 25" fill="#B22222" stroke="#2D1810" stroke-width="1"/>
+      </g>
+      <text x="0" y="85" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Jacket Body</text>
+    </g>
+    
+    <!-- Jacket Sleeve -->
+    <g transform="translate(220, 120)">
+      <rect x="-40" y="-70" width="80" height="140" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="jacket-sleeve">
+        <path d="M-25 -60 L-20 50 L20 50 L25 -60 Q0 -70 -25 -60" fill="url(#grad-varsity-sleeve)" stroke="#2D1810" stroke-width="2.5"/>
+        <!-- Stripes -->
+        <path d="M-24 -10 L24 -8" stroke="#FFD700" stroke-width="4"/>
+        <path d="M-23 0 L23 2" stroke="#DC143C" stroke-width="3"/>
+        <path d="M-22 10 L22 12" stroke="#FFD700" stroke-width="4"/>
+        <!-- Cuff -->
+        <rect x="-20" y="45" width="40" height="12" rx="2" fill="#8B0000" stroke="#2D1810" stroke-width="1.5"/>
+      </g>
+      <text x="0" y="85" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Sleeve</text>
+    </g>
+    <!-- Jacket Back -->
+    <g transform="translate(320, 120)">
+      <rect x="-50" y="-70" width="100" height="140" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="jacket-back">
+        <path d="M-40 -50 Q-45 0 -40 60 L40 60 Q45 0 40 -50 Q0 -60 -40 -50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2.5"/>
+        <!-- Large back emblem area -->
+        <circle cx="0" cy="-10" r="25" fill="#FFFFFF" stroke="#FFD700" stroke-width="2"/>
+        <text x="0" y="-5" text-anchor="middle" fill="#8B0000" font-family="Arial Black" font-size="16">S</text>
+        <!-- Bottom stripes -->
+        <path d="M-38 50 L38 50" stroke="#FFD700" stroke-width="4"/>
+        <path d="M-37 56 L37 56" stroke="#FFFFFF" stroke-width="3"/>
+      </g>
+      <text x="0" y="85" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Back View</text>
+    </g>
+    
+    <!-- Jacket Logo/Emblem -->
+    <g transform="translate(430, 120)">
+      <rect x="-45" y="-70" width="90" height="140" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="jacket-emblem">
+        <!-- Chest emblem -->
+        <circle cx="0" cy="-20" r="18" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="2"/>
+        <circle cx="0" cy="-20" r="14" fill="#DC143C" stroke="#2D1810" stroke-width="1"/>
+        <text x="0" y="-15" text-anchor="middle" fill="#FFD700" font-family="Arial Black" font-size="14">S</text>
+        <!-- Small patch -->
+        <rect x="-15" y="10" width="30" height="20" rx="2" fill="#FFFFFF" stroke="#2D1810" stroke-width="1.5"/>
+        <text x="0" y="24" text-anchor="middle" fill="#DC143C" font-family="Arial" font-size="8">TEAM</text>
+      </g>
+      <text x="0" y="85" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Emblems</text>
+    </g>
+    
+    <!-- Jacket Specs -->
+    <g transform="translate(285, 240)">
+      <rect x="-270" y="0" width="540" height="85" rx="4" fill="#0F3460"/>
+      <text x="0" y="18" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10" font-weight="bold">JACKET SPECIFICATIONS</text>
+      <text x="-260" y="35" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Body: grad-varsity-red | Sleeves: grad-varsity-sleeve (white)</text>
+      <text x="-260" y="50" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Stripes: #FFD700 gold, 3-4px thick | Buttons: 4 gold circles</text>
+      <text x="-260" y="65" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Collar: Contrasting red | Cuffs: Dark red (#8B0000) band</text>
+      <text x="-260" y="80" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Outline: #2D1810, 2.5px stroke on all elements</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 6: LIMBS & ACCESSORIES ==================== -->
+  <g transform="translate(620, 670)">
+    <rect width="550" height="340" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="275" y="25" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="14">6. LIMBS &amp; ACCESSORIES</text>
+    
+    <!-- Hand/Paw Template -->
+    <g transform="translate(70, 110)">
+      <rect x="-45" y="-55" width="90" height="110" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="hand-paw">
+        <!-- Palm -->
+        <ellipse cx="0" cy="10" rx="22" ry="25" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+        <!-- Fingers/Pads -->
+        <ellipse cx="-12" cy="-10" rx="7" ry="10" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-15" rx="7" ry="12" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="12" cy="-10" rx="7" ry="10" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <!-- Paw pads -->
+        <circle cx="-8" cy="20" r="5" fill="#654321" stroke="#2D1810" stroke-width="1"/>
+        <circle cx="8" cy="20" r="5" fill="#654321" stroke="#2D1810" stroke-width="1"/>
+        <ellipse cx="0" cy="8" rx="8" ry="10" fill="#654321" stroke="#2D1810" stroke-width="1"/>
+      </g>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Paw Hand</text>
+    </g>
+    
+    <!-- Foot Template -->
+    <g transform="translate(170, 110)">
+      <rect x="-45" y="-55" width="90" height="110" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="foot-template">
+        <!-- Shoe base -->
+        <path d="M-30 20 Q-35 35 -15 40 L20 40 Q35 35 30 20 Q25 10 0 10 Q-25 10 -30 20" fill="url(#grad-sneaker)" stroke="#2D1810" stroke-width="2.5"/>
+        <!-- High top -->
+        <path d="M-20 15 L-20 -5 L20 -5 L20 15" fill="url(#grad-sneaker)" stroke="#2D1810" stroke-width="2"/>
+        <!-- Toe cap -->
+        <path d="M-15 25 Q0 22 15 25 Q18 30 15 35 Q0 38 -15 35 Q-18 30 -15 25" fill="#E0E0E0" stroke="#2D1810" stroke-width="1.5"/>
+        <!-- Laces area -->
+        <rect x="-12" y="-2" width="24" height="15" rx="2" fill="#FFF" stroke="#2D1810" stroke-width="1"/>
+        <line x1="-10" y1="2" x2="10" y2="2" stroke="#2D1810" stroke-width="1"/>
+        <line x1="-10" y1="7" x2="10" y2="7" stroke="#2D1810" stroke-width="1"/>
+        <!-- Logo -->
+        <circle cx="20" cy="5" r="6" fill="#FFD700" stroke="#2D1810" stroke-width="1"/>
+      </g>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Sneaker Foot</text>
+    </g>
+    
+    <!-- Cap Template -->
+    <g transform="translate(270, 110)">
+      <rect x="-45" y="-55" width="90" height="110" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="cap-template">
+        <!-- Cap crown -->
+        <path d="M-35 -10 Q0 -35 35 -10 L35 5 Q0 -10 -35 5 Z" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+        <!-- Brim (backwards) -->
+        <rect x="25" y="-15" width="20" height="8" rx="2" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+        <!-- Front emblem -->
+        <circle cx="0" cy="-15" r="10" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1.5"/>
+        <text x="0" y="-11" text-anchor="middle" fill="#8B0000" font-family="Arial Black" font-size="10">S</text>
+      </g>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Backwards Cap</text>
+    </g>
+    
+    <!-- Chain/Necklace -->
+    <g transform="translate(370, 110)">
+      <rect x="-45" y="-55" width="90" height="110" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="chain-template">
+        <!-- Chain links -->
+        <ellipse cx="-15" cy="-10" rx="10" ry="12" fill="none" stroke="url(#grad-gold)" stroke-width="4"/>
+        <ellipse cx="0" cy="5" rx="10" ry="12" fill="none" stroke="url(#grad-gold)" stroke-width="4"/>
+        <ellipse cx="15" cy="-10" rx="10" ry="12" fill="none" stroke="url(#grad-gold)" stroke-width="4"/>
+        <!-- Pendant -->
+        <circle cx="0" cy="20" r="12" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="2"/>
+        <text x="0" y="24" text-anchor="middle" fill="#8B0000" font-family="Arial Black" font-size="10">S</text>
+      </g>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Gold Chain</text>
+    </g>
+    
+    <!-- Sunglasses -->
+    <g transform="translate(470, 110)">
+      <rect x="-45" y="-55" width="90" height="110" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="0.5"/>
+      <g id="sunglasses-template">
+        <!-- Frame -->
+        <path d="M-30 -5 L-25 -5 Q-15 -15 -5 -5 L5 -5 Q15 -15 25 -5 L30 -5" stroke="#2D1810" stroke-width="3" fill="none"/>
+        <!-- Left lens -->
+        <ellipse cx="-15" cy="5" rx="12" ry="10" fill="#1A1A1A" stroke="#FFD700" stroke-width="2"/>
+        <ellipse cx="-18" cy="2" rx="4" ry="3" fill="#FFF" opacity="0.3"/>
+        <!-- Right lens -->
+        <ellipse cx="15" cy="5" rx="12" ry="10" fill="#1A1A1A" stroke="#FFD700" stroke-width="2"/>
+        <ellipse cx="12" cy="2" rx="4" ry="3" fill="#FFF" opacity="0.3"/>
+        <!-- Bridge -->
+        <line x1="-3" y1="0" x2="3" y2="0" stroke="#FFD700" stroke-width="2"/>
+      </g>
+      <text x="0" y="70" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Sunglasses</text>
+    </g>
+    
+    <!-- Accessory Specs -->
+    <g transform="translate(275, 240)">
+      <rect x="-265" y="0" width="530" height="85" rx="4" fill="#0F3460"/>
+      <text x="0" y="18" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10" font-weight="bold">ACCESSORY SPECIFICATIONS</text>
+      <text x="-255" y="35" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Hands: 3-finger paw style with pads | Feet: High-top sneaker with laces</text>
+      <text x="-255" y="50" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Cap: Backwards style, red with gold emblem | Chain: Gold links, circular pendant</text>
+      <text x="-255" y="65" fill="#FFF" font-family="Arial, sans-serif" font-size="8">Glasses: Dark lenses with gold accents | All accessories: 2.5px #2D1810 outline</text>
+      <text x="-255" y="80" fill="#FFD700" font-family="Arial, sans-serif" font-size="8">* Mix and match accessories per character personality</text>
+    </g>
+  </g>
+  
+  <!-- ==================== SECTION 7: COMPLETE CHARACTER ASSEMBLY ==================== -->
+  <g transform="translate(30, 1030)">
+    <rect width="1140" height="350" rx="10" fill="#16213E" stroke="#FFD700" stroke-width="2"/>
+    <text x="570" y="30" text-anchor="middle" fill="#FFD700" font-family="Arial Black, sans-serif" font-size="16">7. COMPLETE CHARACTER ASSEMBLY</text>
+    
+    <!-- Assembly Steps -->
+    <g transform="translate(80, 200)">
+      <!-- Step 1: Base -->
+      <g transform="translate(0, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">1. Body Base</text>
+      </g>
+      
+      <!-- Step 2: Add Head -->
+      <g transform="translate(130, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-45" rx="40" ry="38" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">2. Add Head</text>
+      </g>
+      
+      <!-- Step 3: Facial Features -->
+      <g transform="translate(260, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-45" rx="40" ry="38" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <!-- Snout -->
+        <ellipse cx="0" cy="-38" rx="18" ry="15" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="1"/>
+        <ellipse cx="0" cy="-42" rx="6" ry="4" fill="#2D1810"/>
+        <!-- Eyes -->
+        <circle cx="-18" cy="-55" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="-18" cy="-55" r="5" fill="#000"/>
+        <circle cx="-20" cy="-58" r="2" fill="#FFF"/>
+        <circle cx="18" cy="-55" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="18" cy="-55" r="5" fill="#000"/>
+        <circle cx="16" cy="-58" r="2" fill="#FFF"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">3. Face Features</text>
+      </g>
+      
+      <!-- Step 4: Ears -->
+      <g transform="translate(390, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-45" rx="40" ry="38" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-38" rx="18" ry="15" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="1"/>
+        <ellipse cx="0" cy="-42" rx="6" ry="4" fill="#2D1810"/>
+        <circle cx="-18" cy="-55" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="-18" cy="-55" r="5" fill="#000"/>
+        <circle cx="-20" cy="-58" r="2" fill="#FFF"/>
+        <circle cx="18" cy="-55" r="10" fill="#FFF" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="18" cy="-55" r="5" fill="#000"/>
+        <circle cx="16" cy="-58" r="2" fill="#FFF"/>
+        <!-- Ears -->
+        <circle cx="-32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <circle cx="32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">4. Add Ears</text>
+      </g>
+      
+      <!-- Step 5: Limbs -->
+      <g transform="translate(520, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-45" rx="40" ry="38" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-38" rx="18" ry="15" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="1"/>
+        <ellipse cx="0" cy="-42" rx="6" ry="4" fill="#2D1810"/>
+        <circle cx="-32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <circle cx="32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <!-- Arms -->
+        <line x1="-28" y1="10" x2="-45" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+        <line x1="28" y1="10" x2="45" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">5. Limbs</text>
+      </g>
+      
+      <!-- Step 6: Jacket Details -->
+      <g transform="translate(650, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <line x1="0" y1="-15" x2="0" y2="75" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="6" cy="0" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="0.5"/>
+        <circle cx="6" cy="25" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="0.5"/>
+        <circle cx="6" cy="50" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="0.5"/>
+        <ellipse cx="0" cy="-45" rx="40" ry="38" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-38" rx="18" ry="15" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="1"/>
+        <circle cx="-32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <circle cx="32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <line x1="-28" y1="10" x2="-45" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+        <line x1="28" y1="10" x2="45" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">6. Jacket Details</text>
+      </g>
+      
+      <!-- Step 7: Accessories -->
+      <g transform="translate(780, 0)">
+        <rect x="-50" y="-80" width="100" height="160" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="1"/>
+        <!-- Cap -->
+        <path d="M-30 -70 Q0 -95 30 -70 L32 -65 Q0 -80 -32 -65 Z" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+        <rect x="25" y="-72" width="12" height="5" rx="1" fill="#DC143C" stroke="#2D1810" stroke-width="1"/>
+        <!-- Full character -->
+        <ellipse cx="0" cy="30" rx="30" ry="50" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2"/>
+        <line x1="0" y1="-15" x2="0" y2="75" stroke="#2D1810" stroke-width="1.5"/>
+        <circle cx="6" cy="0" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="0.5"/>
+        <ellipse cx="0" cy="-45" rx="40" ry="38" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <ellipse cx="0" cy="-38" rx="18" ry="15" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="1"/>
+        <circle cx="-32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <circle cx="32" cy="-75" r="15" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2"/>
+        <line x1="-28" y1="10" x2="-45" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+        <line x1="28" y1="10" x2="45" y2="40" stroke="#2D1810" stroke-width="8" stroke-linecap="round"/>
+        <text x="0" y="95" text-anchor="middle" fill="#FFF" font-family="Arial, sans-serif" font-size="9">7. Accessories</text>
+      </g>
+      
+      <!-- Final: Full Render -->
+      <g transform="translate(930, 0)">
+        <rect x="-60" y="-90" width="120" height="180" rx="4" fill="#0F3460" stroke="#FFD700" stroke-width="2"/>
+        <!-- Complete character -->
+        <g transform="scale(0.9)">
+          <!-- Legs -->
+          <ellipse cx="-18" cy="75" rx="15" ry="25" fill="#2D1810" stroke="#2D1810" stroke-width="2"/>
+          <ellipse cx="18" cy="75" rx="15" ry="25" fill="#2D1810" stroke="#2D1810" stroke-width="2"/>
+          <!-- Shoes -->
+          <path d="M-30 90 Q-30 105 -15 105 L-10 105 Q-2 105 -2 90 Z" fill="#FFF" stroke="#2D1810" stroke-width="2"/>
+          <path d="M2 90 Q2 105 15 105 L22 105 Q30 105 30 90 Z" fill="#FFF" stroke="#2D1810" stroke-width="2"/>
+          <!-- Body -->
+          <ellipse cx="0" cy="35" rx="40" ry="55" fill="url(#grad-varsity-red)" stroke="#2D1810" stroke-width="2.5"/>
+          <line x1="0" y1="-15" x2="0" y2="85" stroke="#2D1810" stroke-width="2"/>
+          <circle cx="6" cy="5" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+          <circle cx="6" cy="30" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+          <circle cx="6" cy="55" r="3" fill="url(#grad-gold)" stroke="#2D1810" stroke-width="1"/>
+          <!-- Arms -->
+          <ellipse cx="-45" cy="40" rx="12" ry="18" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+          <ellipse cx="45" cy="40" rx="12" ry="18" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+          <!-- Head -->
+          <ellipse cx="0" cy="-45" rx="50" ry="48" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="3"/>
+          <!-- Snout -->
+          <ellipse cx="0" cy="-38" rx="22" ry="18" fill="url(#grad-snout)" stroke="#2D1810" stroke-width="2"/>
+          <ellipse cx="0" cy="-45" rx="8" ry="5" fill="#2D1810"/>
+          <!-- Eyes -->
+          <ellipse cx="-20" cy="-60" rx="14" ry="16" fill="url(#grad-eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+          <ellipse cx="-20" cy="-58" rx="8" ry="9" fill="url(#grad-eye-pupil)"/>
+          <circle cx="-24" cy="-65" r="3" fill="url(#grad-eye-highlight)"/>
+          <ellipse cx="20" cy="-60" rx="14" ry="16" fill="url(#grad-eye-sclera)" stroke="#2D1810" stroke-width="2"/>
+          <ellipse cx="20" cy="-58" rx="8" ry="9" fill="url(#grad-eye-pupil)"/>
+          <circle cx="16" cy="-65" r="3" fill="url(#grad-eye-highlight)"/>
+          <!-- Ears -->
+          <circle cx="-40" cy="-80" r="18" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+          <circle cx="40" cy="-80" r="18" fill="url(#grad-fur-primary)" stroke="#2D1810" stroke-width="2.5"/>
+          <!-- Cap -->
+          <path d="M-45 -80 Q0 -115 45 -80 L50 -70 Q0 -95 -50 -70 Z" fill="#DC143C" stroke="#2D1810" stroke-width="2.5"/>
+          <rect x="38" y="-85" width="18" height="7" rx="2" fill="#DC143C" stroke="#2D1810" stroke-width="2"/>
+        </g>
+        <text x="0" y="105" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="9" font-weight="bold">FINAL RENDER</text>
+      </g>
+    </g>
+    
+    <!-- Assembly Notes -->
+    <g transform="translate(570, 330)">
+      <text x="0" y="0" text-anchor="middle" fill="#FFD700" font-family="Arial, sans-serif" font-size="10">Assembly Order: Body → Head → Face → Ears → Limbs → Clothing Details → Accessories</text>
+    </g>
+  </g>
+  
+  <!-- ==================== FOOTER ==================== -->
+  <g transform="translate(0, 1390)">
+    <text x="600" y="-10" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Dropout Component Library v1.0 | Libre-X-eSport 4NJZ4 TENET Platform</text>
+  </g>
+</svg>

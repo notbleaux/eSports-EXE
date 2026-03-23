@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- NJ Style Hawk - 512x512 -->
+  <!-- Sleek outline style, precision lines, #0000FF stroke -->
+  
+  <!-- Main body outline - streamlined hawk silhouette -->
+  <path d="M160 416 Q128 320 192 256 Q160 224 192 160 Q224 96 320 96 Q416 96 448 160 L384 224 Q448 288 384 384 Q320 448 160 416" 
+        stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Wing structure - detailed precision lines -->
+  <path d="M192 256 Q256 224 352 256" stroke="#0000FF" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M176 288 L224 272" stroke="#0000FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M168 320 L216 304" stroke="#0000FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M184 224 L232 240" stroke="#0000FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Secondary wing layers -->
+  <path d="M208 272 L240 264" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M200 304 L248 288" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M224 248 L272 256" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M216 280 L264 272" stroke="#0000FF" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M212 240 L244 248" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M240 296 L288 280" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Wing feather texture -->
+  <path d="M232 232 L256 240" stroke="#0000FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M240 312 L280 296" stroke="#0000FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M256 264 L288 260" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <path d="M248 288 L288 276" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Head with alert posture -->
+  <path d="M192 160 Q224 96 320 96 Q384 96 416 144" stroke="#0000FF" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Crown feather details -->
+  <path d="M224 112 Q288 80 352 112" stroke="#0000FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M240 104 Q288 88 336 104" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M256 120 Q288 112 320 120" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M208 136 Q256 112 304 144" stroke="#0000FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Head contour lines -->
+  <path d="M208 136 Q256 112 304 144" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M216 124 Q264 108 296 132" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Sharp hooked beak -->
+  <path d="M416 144 L464 160 L416 192 Q432 176 424 160 Q432 144 416 144" stroke="#0000FF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Beak ridge detail -->
+  <path d="M432 152 L456 160 L432 168" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M424 160 L440 160" stroke="#0000FF" stroke-width="1.5" fill="none"/>
+  <path d="M428 156 L448 160 L428 164" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <path d="M420 152 L436 160 L420 168" stroke="#0000FF" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  
+  <!-- Nostril -->
+  <ellipse cx="428" cy="158" rx="3" ry="2" fill="#0000FF"/>
+  
+  <!-- Alert eye - intense focus -->
+  <ellipse cx="320" cy="144" rx="32" ry="24" stroke="#0000FF" stroke-width="3" fill="none"/>
+  <ellipse cx="328" cy="144" rx="12" ry="10" fill="#0000FF"/>
+  
+  <!-- Eye highlights -->
+  <circle cx="332" cy="140" r="4" fill="#FFFFFF"/>
+  <circle cx="324" cy="148" r="2" fill="#FFFFFF" opacity="0.7"/>
+  
+  <!-- Sharp angled brow - intense expression -->
+  <path d="M272 112 L336 136" stroke="#0000FF" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M288 120 L332 132" stroke="#0000FF" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M280 116 L324 128" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M296 124 L320 130" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Neck contour -->
+  <path d="M208 168 Q240 192 224 224" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M200 184 Q224 200 216 216" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M192 200 Q212 208 208 220" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Tail feathers - angular precision -->
+  <path d="M128 352 L96 416 M160 384 L136 432" stroke="#0000FF" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M144 368 L120 424" stroke="#0000FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M112 376 L92 416" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M136 360 L116 408" stroke="#0000FF" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  
+  <!-- Body contour lines -->
+  <path d="M224 288 Q256 352 224 416" stroke="#0000FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M256 272 Q288 320 272 400" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M288 264 Q312 304 304 384" stroke="#0000FF" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M320 256 Q336 288 332 368" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M352 248 Q360 272 360 352" stroke="#0000FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Chest feather detail lines -->
+  <path d="M208 336 Q240 360 224 400" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M232 320 Q256 344 248 392" stroke="#0000FF" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M216 352 Q240 368 232 408" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M240 336 Q260 356 256 388" stroke="#0000FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Back contour -->
+  <path d="M352 272 Q368 320 344 376" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M336 280 Q348 312 332 360" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Leg/talon outline -->
+  <path d="M208 400 L192 448 M272 416 L288 464" stroke="#0000FF" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M184 424 L200 448 M280 440 L296 456" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M200 432 L208 444 M264 432 L272 452" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M216 436 L220 444 M256 436 L260 448" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+</svg>

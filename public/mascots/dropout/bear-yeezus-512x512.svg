@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="yeeBearBrown512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A0522D"/>
+      <stop offset="50%" style="stop-color:#8B4513"/>
+      <stop offset="100%" style="stop-color:#654321"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="256" cy="480" rx="100" ry="20" fill="#000" opacity="0.1"/>
+  <circle cx="160" cy="128" r="64" fill="url(#yeeBearBrown512)"/>
+  <circle cx="352" cy="128" r="64" fill="url(#yeeBearBrown512)"/>
+  <ellipse cx="256" cy="192" rx="128" ry="112" fill="url(#yeeBearBrown512)"/>
+  <path d="M128 160 Q256 96 384 160 Q400 224 384 256 Q256 288 128 256 Q112 224 128 160Z" fill="#FFF"/>
+  <path d="M128 160 Q256 224 384 160" fill="none" stroke="#DDD" stroke-width="4"/>
+  <ellipse cx="256" cy="224" rx="64" ry="48" fill="#DEB887"/>
+  <ellipse cx="256" cy="208" rx="24" ry="20" fill="#333"/>
+  <path d="M176 184 L224 176" stroke="#333" stroke-width="6"/>
+  <path d="M288 176 L336 184" stroke="#333" stroke-width="6"/>
+  <path d="M160 288 Q160 240 256 224 Q352 240 352 288 Q352 416 256 448 Q160 416 160 288Z" fill="#FFF"/>
+  <path d="M192 320 Q256 352 320 320" fill="none" stroke="#CCC" stroke-width="4"/>
+  <path d="M176 384 Q256 400 336 384" fill="none" stroke="#CCC" stroke-width="4"/>
+  <path d="M160 320 Q128 352 144 384 Q160 416 192 384" fill="#FFF"/>
+  <path d="M352 320 Q384 352 368 384 Q352 416 320 384" fill="#FFF"/>
+  <circle cx="160" cy="400" r="20" fill="#8B4513"/>
+  <circle cx="352" cy="400" r="20" fill="#8B4513"/>
+</svg>

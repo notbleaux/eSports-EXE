@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- NJ Style Hawk - 64x64 -->
+  <!-- Sleek outline style, precision lines, #0000FF stroke -->
+  
+  <!-- Main body outline - streamlined hawk form -->
+  <path d="M20 52 Q16 40 24 32 Q20 28 24 20 Q28 12 40 12 Q52 12 56 20 L48 28 Q56 36 48 48 Q40 56 20 52" 
+        stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Wing structure - sharp angles -->
+  <path d="M24 32 Q32 28 44 32" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M22 36 L28 34" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M20 40 L26 38" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Head with alert posture -->
+  <path d="M24 20 Q28 12 40 12 Q48 12 52 18" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Crown feather lines -->
+  <path d="M28 14 Q36 10 44 14" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Sharp hooked beak -->
+  <path d="M52 18 L58 20 L52 24 Q54 22 53 20 Q54 18 52 18" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Beak ridge line -->
+  <path d="M54 19 L56 20 L54 21" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Alert eye with focus -->
+  <ellipse cx="40" cy="18" rx="4" ry="3" stroke="#0000FF" stroke-width="2" fill="none"/>
+  <circle cx="41" cy="18" r="1.5" fill="#0000FF"/>
+  
+  <!-- Sharp angled brow -->
+  <path d="M34 14 L42 17" stroke="#0000FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M36 15 L40 16.5" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Tail feathers - precision lines -->
+  <path d="M16 44 L12 52 M20 48 L17 54" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Body contour lines -->
+  <path d="M28 36 Q32 44 28 52" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M32 34 Q36 40 34 50" stroke="#0000FF" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Leg/talon outline -->
+  <path d="M26 50 L24 56 M34 52 L36 58" stroke="#0000FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

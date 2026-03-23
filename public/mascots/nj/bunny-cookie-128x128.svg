@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Droopy ears -->
+  <path d="M48 48 Q32 32 40 24 Q52 20 60 40" 
+        fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M68 40 Q76 20 88 24 Q96 32 80 48" 
+        fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="64" cy="64" rx="28" ry="24" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <ellipse cx="64" cy="72" rx="12" ry="10" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <ellipse cx="64" cy="68" rx="6" ry="5" fill="#0000FF"/>
+  <!-- Shy looking down eyes -->
+  <path d="M46 58 Q52 56 58 58" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+  <path d="M70 58 Q76 56 82 58" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+  <!-- Blush marks -->
+  <ellipse cx="40" cy="68" rx="6" ry="4" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.5"/>
+  <ellipse cx="88" cy="68" rx="6" ry="4" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.5"/>
+  <!-- Tiny smile -->
+  <path d="M58 80 Q64 84 70 80" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 88 Q40 108 64 112 Q88 108 88 88" 
+        fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="40" cy="100" rx="8" ry="10" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <ellipse cx="88" cy="100" rx="8" ry="10" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+</svg>

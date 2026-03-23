@@ -1,0 +1,157 @@
+/**
+ * Hawk Dropout Style CSS Animations
+ * Features: Focused gaze shift, wing adjust
+ * Style: Sharp hawk with aviator jacket
+ */
+
+/* Base hawk container */
+.hawk-dropout {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* Focused gaze shift animation */
+@keyframes hawkDropoutGazeShift {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  50% {
+    transform: translateX(-1px);
+  }
+  75% {
+    transform: translateX(1px);
+  }
+}
+
+/* Wing adjust animation */
+@keyframes hawkDropoutWingAdjust {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+
+/* Subtle breathing/stance animation */
+@keyframes hawkDropoutStance {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+/* Jacket shine effect */
+@keyframes hawkDropoutJacketShine {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+/* Hover state - intensified animations */
+.hawk-dropout:hover {
+  transform: scale(1.02);
+}
+
+.hawk-dropout:hover .hawk-eyes {
+  animation: hawkDropoutGazeShift 2s ease-in-out infinite;
+}
+
+.hawk-dropout:hover .hawk-wings {
+  animation: hawkDropoutWingAdjust 1.5s ease-in-out infinite;
+}
+
+/* Idle state - subtle animations */
+.hawk-dropout.idle {
+  animation: hawkDropoutStance 3s ease-in-out infinite;
+}
+
+.hawk-dropout.idle .hawk-jacket {
+  animation: hawkDropoutJacketShine 4s ease-in-out infinite;
+}
+
+/* Focus state - alert and attentive */
+.hawk-dropout.focused .hawk-eyes {
+  animation: hawkDropoutGazeShift 0.8s ease-in-out infinite;
+}
+
+.hawk-dropout.focused .hawk-brow {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+/* Ready state - prepared for action */
+.hawk-dropout.ready {
+  transform: scale(1.05);
+}
+
+.hawk-dropout.ready .hawk-wings {
+  animation: hawkDropoutWingAdjust 0.6s ease-in-out infinite;
+}
+
+.hawk-dropout.ready .hawk-stance {
+  animation: hawkDropoutStance 0.8s ease-in-out infinite;
+}
+
+/* Entrance animation */
+@keyframes hawkDropoutEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+  50% {
+    transform: translateY(2px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hawk-dropout.enter {
+  animation: hawkDropoutEnter 0.5s ease-out forwards;
+}
+
+/* Exit animation */
+@keyframes hawkDropoutExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+}
+
+.hawk-dropout.exit {
+  animation: hawkDropoutExit 0.3s ease-in forwards;
+}
+
+/* Size variants */
+.hawk-dropout.size-32 { width: 32px; height: 32px; }
+.hawk-dropout.size-64 { width: 64px; height: 64px; }
+.hawk-dropout.size-128 { width: 128px; height: 128px; }
+.hawk-dropout.size-256 { width: 256px; height: 256px; }
+.hawk-dropout.size-512 { width: 512px; height: 512px; }
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .hawk-dropout,
+  .hawk-dropout *,
+  .hawk-dropout *::before,
+  .hawk-dropout *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

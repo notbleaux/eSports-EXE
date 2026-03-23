@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="foxOrange512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F48C06"/>
+      <stop offset="30%" style="stop-color:#FAA307"/>
+      <stop offset="70%" style="stop-color:#E85D04"/>
+      <stop offset="100%" style="stop-color:#D00000"/>
+    </linearGradient>
+    <linearGradient id="jacketBurgundy512" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#9D0208"/>
+      <stop offset="40%" style="stop-color:#6A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="goldAccent512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD60A"/>
+      <stop offset="50%" style="stop-color:#FFC300"/>
+      <stop offset="100%" style="stop-color:#FF9500"/>
+    </linearGradient>
+    <filter id="shadow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="4" flood-opacity="0.2"/>
+    </filter>
+    <filter id="glow512">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="fabric512">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.05 0" in="noise" result="coloredNoise"/>
+      <feComposite operator="in" in="coloredNoise" in2="SourceGraphic" result="composite"/>
+      <feBlend mode="multiply" in="composite" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  
+  <!-- Shadow -->
+  <ellipse cx="256" cy="478" rx="120" ry="24" fill="#000" opacity="0.1"/>
+  
+  <!-- Tail -->
+  <g filter="url(#shadow512)">
+    <path d="M96 320 Q64 256 96 192 Q128 128 192 160 Q160 224 128 288 Q112 320 96 320Z" fill="url(#foxOrange512)"/>
+    <path d="M96 192 Q80 160 96 128 Q112 96 144 128" fill="none" stroke="#F48C06" stroke-width="5"/>
+    <path d="M112 304 Q144 288 160 256" fill="none" stroke="#FAA307" stroke-width="4"/>
+    <path d="M128 272 Q152 256 168 232" fill="none" stroke="#FAA307" stroke-width="3.5"/>
+    <path d="M144 240 Q164 228 176 208" fill="none" stroke="#FAA307" stroke-width="3"/>
+    <path d="M160 208 Q176 198 184 184" fill="none" stroke="#FAA307" stroke-width="2.5"/>
+    <!-- Tail tip -->
+    <ellipse cx="104" cy="312" rx="12" ry="16" fill="#FFF" opacity="0.35"/>
+    <ellipse cx="100" cy="308" rx="6" ry="8" fill="#FFF" opacity="0.5"/>
+  </g>
+  
+  <!-- Body/Jacket -->
+  <g filter="url(#shadow512)">
+    <path d="M160 288 Q160 224 224 208 Q288 192 352 224 Q384 256 384 320 Q384 416 320 448 Q256 480 192 448 Q160 416 160 352 Q160 320 160 288Z" fill="url(#jacketBurgundy512)"/>
+    
+    <!-- Jacket texture overlay -->
+    <path d="M160 288 Q160 224 224 208 Q288 192 352 224 Q384 256 384 320 Q384 416 320 448 Q256 480 192 448 Q160 416 160 352 Q160 320 160 288Z" fill="url(#jacketBurgundy512)" filter="url(#fabric512)" opacity="0.3"/>
+    
+    <!-- Jacket Details -->
+    <path d="M224 256 L224 384" stroke="#9D0208" stroke-width="5"/>
+    <path d="M288 256 L288 384" stroke="#9D0208" stroke-width="5"/>
+    <rect x="240" y="288" width="32" height="32" fill="url(#goldAccent512)" rx="3"/>
+    
+    <!-- Zipper -->
+    <line x1="256" y1="256" x2="256" y2="400" stroke="#FFD60A" stroke-width="2.5" stroke-dasharray="6,4"/>
+    <circle cx="256" cy="248" r="12" fill="#FFC300"/>
+    <circle cx="256" cy="248" r="8" fill="#FF9500" opacity="0.5"/>
+    <rect x="252" y="260" width="8" height="16" fill="#FFD60A"/>
+    <rect x="254" y="276" width="4" height="8" fill="#FFC300"/>
+    
+    <!-- Jacket Collar -->
+    <path d="M192 224 L224 256 L288 256 L320 224" fill="none" stroke="#9D0208" stroke-width="7"/>
+    <path d="M208 240 L224 256 L288 256 L304 240" fill="#6A040F"/>
+    <path d="M208 240 Q256 272 304 240" fill="#6A040F"/>
+    <!-- Collar highlight -->
+    <path d="M216 244 Q256 268 296 244" stroke="#9D0208" stroke-width="1" fill="none" opacity="0.5"/>
+    
+    <!-- Jacket Ribbing (bottom) -->
+    <path d="M176 416 Q256 448 336 416" stroke="#6A040F" stroke-width="16" fill="none"/>
+    <line x1="192" y1="416" x2="192" y2="432" stroke="#9D0208" stroke-width="2"/>
+    <line x1="224" y1="424" x2="224" y2="440" stroke="#9D0208" stroke-width="2"/>
+    <line x1="256" y1="428" x2="256" y2="444" stroke="#9D0208" stroke-width="2"/>
+    <line x1="288" y1="424" x2="288" y2="440" stroke="#9D0208" stroke-width="2"/>
+    <line x1="320" y1="416" x2="320" y2="432" stroke="#9D0208" stroke-width="2"/>
+    
+    <!-- Sleeve details -->
+    <path d="M176 304 Q160 320 168 336" stroke="#9D0208" stroke-width="2" fill="none"/>
+    <path d="M368 304 Q384 320 376 336" stroke="#9D0208" stroke-width="2" fill="none"/>
+    
+    <!-- Shoulder patches -->
+    <ellipse cx="184" cy="264" rx="16" ry="12" fill="#6A040F"/>
+    <ellipse cx="328" cy="264" rx="16" ry="12" fill="#6A040F"/>
+  </g>
+  
+  <!-- Head -->
+  <g filter="url(#shadow512)">
+    <ellipse cx="256" cy="160" rx="96" ry="80" fill="url(#foxOrange512)"/>
+    
+    <!-- Forehead marking -->
+    <path d="M224 96 Q256 112 288 96" stroke="#FAA307" stroke-width="3" fill="none" opacity="0.6"/>
+    <path d="M232 104 Q256 116 280 104" stroke="#FAA307" stroke-width="2" fill="none" opacity="0.4"/>
+    
+    <!-- Cheeks -->
+    <ellipse cx="176" cy="176" rx="24" ry="16" fill="#FFBA08" opacity="0.6"/>
+    <ellipse cx="336" cy="176" rx="24" ry="16" fill="#FFBA08" opacity="0.6"/>
+    
+    <!-- Ears -->
+    <path d="M176 112 L160 48 L208 96Z" fill="url(#foxOrange512)"/>
+    <path d="M176 80 L176 64 L192 80Z" fill="#370617"/>
+    <path d="M160 48 L168 72 L184 64Z" fill="#FAA307" opacity="0.6"/>
+    <!-- Inner ear -->
+    <path d="M172 88 L168 64 L188 84Z" fill="#6A040F" opacity="0.3"/>
+    
+    <path d="M336 112 L352 48 L304 96Z" fill="url(#foxOrange512)"/>
+    <path d="M336 80 L336 64 L320 80Z" fill="#370617"/>
+    <path d="M352 48 L344 72 L328 64Z" fill="#FAA307" opacity="0.6"/>
+    <!-- Inner ear -->
+    <path d="M340 88 L344 64 L324 84Z" fill="#6A040F" opacity="0.3"/>
+    
+    <!-- Snout -->
+    <ellipse cx="256" cy="192" rx="40" ry="24" fill="#FFBA08"/>
+    <ellipse cx="256" cy="184" rx="16" ry="12" fill="#370617"/>
+    <line x1="256" y1="196" x2="256" y2="208" stroke="#370617" stroke-width="2.5"/>
+    
+    <!-- Mouth (confident smirk) -->
+    <path d="M224 208 Q256 224 288 200" fill="none" stroke="#370617" stroke-width="4" stroke-linecap="round"/>
+    <path d="M280 196 L288 200 L284 208" fill="none" stroke="#370617" stroke-width="2.5"/>
+    
+    <!-- Eyes (clever expression) -->
+    <g filter="url(#glow512)">
+      <ellipse cx="216" cy="152" rx="20" ry="24" fill="#FFF"/>
+      <ellipse cx="220" cy="152" rx="10" ry="14" fill="#370617"/>
+      <circle cx="224" cy="148" r="4" fill="#FFF"/>
+      <circle cx="226" cy="146" r="2" fill="#FFF"/>
+    </g>
+    <g filter="url(#glow512)">
+      <ellipse cx="296" cy="152" rx="20" ry="24" fill="#FFF"/>
+      <ellipse cx="292" cy="152" rx="10" ry="14" fill="#370617"/>
+      <circle cx="288" cy="148" r="4" fill="#FFF"/>
+      <circle cx="286" cy="146" r="2" fill="#FFF"/>
+    </g>
+    
+    <!-- Eyebrows (confident) -->
+    <path d="M192 120 Q216 112 240 120" stroke="#370617" stroke-width="4" fill="none"/>
+    <path d="M272 120 Q296 112 320 120" stroke="#370617" stroke-width="4" fill="none"/>
+    
+    <!-- Nose shine -->
+    <ellipse cx="248" cy="180" rx="4" ry="3" fill="#FFF" opacity="0.7"/>
+    <ellipse cx="252" cy="178" rx="2" ry="1.5" fill="#FFF" opacity="0.9"/>
+    
+    <!-- Whiskers -->
+    <line x1="184" y1="192" x2="164" y2="188" stroke="#370617" stroke-width="1" opacity="0.6"/>
+    <line x1="184" y1="200" x2="160" y2="200" stroke="#370617" stroke-width="1" opacity="0.6"/>
+    <line x1="184" y1="208" x2="164" y2="212" stroke="#370617" stroke-width="1" opacity="0.6"/>
+    <line x1="328" y1="192" x2="348" y2="188" stroke="#370617" stroke-width="1" opacity="0.6"/>
+    <line x1="328" y1="200" x2="352" y2="200" stroke="#370617" stroke-width="1" opacity="0.6"/>
+    <line x1="328" y1="208" x2="348" y2="212" stroke="#370617" stroke-width="1" opacity="0.6"/>
+  </g>
+  
+  <!-- Arms -->
+  <g filter="url(#shadow512)">
+    <path d="M160 320 Q128 352 144 384 Q160 416 192 384" fill="url(#jacketBurgundy512)"/>
+    <path d="M384 320 Q416 352 400 384 Q384 416 352 384" fill="url(#jacketBurgundy512)"/>
+    
+    <!-- Jacket Cuffs -->
+    <rect x="152" y="368" width="40" height="24" fill="#6A040F" rx="5"/>
+    <rect x="320" y="368" width="40" height="24" fill="#6A040F" rx="5"/>
+    
+    <!-- Cuff details -->
+    <line x1="160" y1="376" x2="160" y2="384" stroke="#9D0208" stroke-width="1.5"/>
+    <line x1="172" y1="376" x2="172" y2="384" stroke="#9D0208" stroke-width="1.5"/>
+    <line x1="184" y1="376" x2="184" y2="384" stroke="#9D0208" stroke-width="1.5"/>
+    <line x1="328" y1="376" x2="328" y2="384" stroke="#9D0208" stroke-width="1.5"/>
+    <line x1="340" y1="376" x2="340" y2="384" stroke="#9D0208" stroke-width="1.5"/>
+    <line x1="352" y1="376" x2="352" y2="384" stroke="#9D0208" stroke-width="1.5"/>
+    
+    <!-- Jacket Emblem -->
+    <circle cx="320" cy="304" r="24" fill="url(#goldAccent512)"/>
+    <circle cx="320" cy="304" r="20" fill="none" stroke="#9D0208" stroke-width="2"/>
+    <circle cx="320" cy="304" r="16" fill="none" stroke="#FF9500" stroke-width="1"/>
+    <text x="320" y="316" font-size="24" text-anchor="middle" fill="#370617" font-weight="bold">F</text>
+    
+    <!-- Jacket Pockets -->
+    <path d="M192 336 L208 336 L208 368 L192 368Z" fill="#6A040F"/>
+    <path d="M304 336 L320 336 L320 368 L304 368Z" fill="#6A040F"/>
+    
+    <!-- Pocket flaps -->
+    <path d="M188 336 L212 336 L200 344Z" fill="#9D0208"/>
+    <path d="M300 336 L324 336 L312 344Z" fill="#9D0208"/>
+    
+    <!-- Pocket buttons -->
+    <circle cx="200" cy="348" r="3" fill="url(#goldAccent512)"/>
+    <circle cx="312" cy="348" r="3" fill="url(#goldAccent512)"/>
+  </g>
+  
+  <!-- Highlights and shine -->
+  <ellipse cx="232" cy="128" rx="30" ry="20" fill="#FFF" opacity="0.08"/>
+  <ellipse cx="280" cy="120" rx="20" ry="12" fill="#FFF" opacity="0.05"/>
+</svg>

@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Dropout Style Owl - 256x256 -->
+  <defs>
+    <linearGradient id="bodyGrad256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9D4EDD"/>
+      <stop offset="40%" style="stop-color:#7B2CBF"/>
+      <stop offset="100%" style="stop-color:#5A189A"/>
+    </linearGradient>
+    <linearGradient id="sweaterGrad256" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB347"/>
+      <stop offset="50%" style="stop-color:#FF9E00"/>
+      <stop offset="100%" style="stop-color:#CC7000"/>
+    </linearGradient>
+    <linearGradient id="glassesGrad256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8DC"/>
+      <stop offset="30%" style="stop-color:#FFD700"/>
+      <stop offset="50%" style="stop-color:#FFA500"/>
+      <stop offset="70%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#FFF8DC"/>
+    </linearGradient>
+    <filter id="shadow256" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+    <filter id="glint256" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Body -->
+  <ellipse cx="128" cy="160" rx="80" ry="72" fill="url(#bodyGrad256)" filter="url(#shadow256)"/>
+  
+  <!-- Body Texture/Shading -->
+  <ellipse cx="128" cy="160" rx="70" ry="60" fill="none" stroke="#5A189A" stroke-width="1" opacity="0.2"/>
+  <ellipse cx="128" cy="160" rx="55" ry="48" fill="none" stroke="#9D4EDD" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- Sweater -->
+  <path d="M48 160 Q48 224 128 224 Q208 224 208 160 L208 144 Q208 192 128 192 Q48 192 48 144 Z" fill="url(#sweaterGrad256)"/>
+  
+  <!-- Sweater Ribbing Detail -->
+  <g opacity="0.35">
+    <path d="M56 176 Q128 196 200 176" stroke="#8B4513" stroke-width="2" fill="none"/>
+    <path d="M56 192 Q128 212 200 192" stroke="#8B4513" stroke-width="2" fill="none"/>
+    <path d="M56 208 Q128 228 200 208" stroke="#8B4513" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Sweater Stitching Detail -->
+  <g opacity="0.25">
+    <path d="M64 168 L64 172 M72 170 L72 174 M80 171 L80 175" stroke="#8B4513" stroke-width="1.5"/>
+    <path d="M176 171 L176 175 M184 170 L184 174 M192 168 L192 172" stroke="#8B4513" stroke-width="1.5"/>
+  </g>
+  
+  <!-- Sweater Collar -->
+  <ellipse cx="128" cy="144" rx="64" ry="20" fill="#FF9E00" stroke="#CC7000" stroke-width="2"/>
+  <ellipse cx="128" cy="144" rx="56" ry="16" fill="none" stroke="#E08500" stroke-width="1"/>
+  <ellipse cx="128" cy="144" rx="48" ry="12" fill="none" stroke="#CC7000" stroke-width="0.5" opacity="0.5"/>
+  
+  <!-- Head -->
+  <ellipse cx="128" cy="80" rx="72" ry="64" fill="url(#bodyGrad256)" filter="url(#shadow256)"/>
+  
+  <!-- Head Highlight -->
+  <ellipse cx="112" cy="56" rx="30" ry="20" fill="#9D4EDD" opacity="0.3"/>
+  
+  <!-- Ears/Tufts -->
+  <path d="M64 40 L48 16 L80 32 Z" fill="#7B2CBF"/>
+  <path d="M192 40 L208 16 L176 32 Z" fill="#7B2CBF"/>
+  <path d="M72 32 L64 12 L84 28 Z" fill="#9D4EDD"/>
+  <path d="M184 32 L192 12 L172 28 Z" fill="#9D4EDD"/>
+  <path d="M68 28 L60 8 L76 24 Z" fill="#5A189A"/>
+  <path d="M188 28 L196 8 L180 24 Z" fill="#5A189A"/>
+  
+  <!-- Face Disc -->
+  <ellipse cx="128" cy="84" rx="60" ry="48" fill="#7B2CBF" opacity="0.3"/>
+  
+  <!-- Eyes Background -->
+  <circle cx="96" cy="80" r="28" fill="#FFFFFF"/>
+  <circle cx="160" cy="80" r="28" fill="#FFFFFF"/>
+  
+  <!-- Eye Shadows -->
+  <ellipse cx="96" cy="108" rx="20" ry="8" fill="#5A189A" opacity="0.1"/>
+  <ellipse cx="160" cy="108" rx="20" ry="8" fill="#5A189A" opacity="0.1"/>
+  
+  <!-- Pupils -->
+  <circle cx="96" cy="80" r="16" fill="#1A1A2E"/>
+  <circle cx="160" cy="80" r="16" fill="#1A1A2E"/>
+  
+  <!-- Pupil Highlights -->
+  <circle cx="92" cy="76" r="5" fill="#33334D"/>
+  <circle cx="156" cy="76" r="5" fill="#33334D"/>
+  
+  <!-- Eye Highlights -->
+  <circle cx="104" cy="72" r="6" fill="#FFFFFF"/>
+  <circle cx="168" cy="72" r="6" fill="#FFFFFF"/>
+  <circle cx="92" cy="84" r="3" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="156" cy="84" r="3" fill="#FFFFFF" opacity="0.7"/>
+  
+  <!-- Glasses Frame -->
+  <circle cx="96" cy="80" r="32" stroke="url(#glassesGrad256)" stroke-width="4" fill="none"/>
+  <circle cx="160" cy="80" r="32" stroke="url(#glassesGrad256)" stroke-width="4" fill="none"/>
+  
+  <!-- Glasses Bridge -->
+  <path d="M128 80 Q128 64 128 64" stroke="url(#glassesGrad256)" stroke-width="3" fill="none"/>
+  <line x1="128" y1="76" x2="128" y2="84" stroke="url(#glassesGrad256)" stroke-width="3"/>
+  
+  <!-- Glasses Temples -->
+  <line x1="64" y1="80" x2="56" y2="72" stroke="url(#glassesGrad256)" stroke-width="3"/>
+  <line x1="192" y1="80" x2="200" y2="72" stroke="url(#glassesGrad256)" stroke-width="3"/>
+  
+  <!-- Glasses Glint -->
+  <g filter="url(#glint256)">
+    <path d="M76 64 Q88 56 104 64" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8"/>
+    <path d="M140 64 Q152 56 168 64" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8"/>
+  </g>
+  
+  <!-- Frame Detail -->
+  <circle cx="96" cy="80" r="28" stroke="#B8860B" stroke-width="1" fill="none" opacity="0.5"/>
+  <circle cx="160" cy="80" r="28" stroke="#B8860B" stroke-width="1" fill="none" opacity="0.5"/>
+  
+  <!-- Beak -->
+  <path d="M120 104 L128 120 L136 104 Z" fill="#FFB347"/>
+  <path d="M120 104 L128 112 L136 104 Z" fill="#FFA500"/>
+  <path d="M124 108 L128 114 L132 108 Z" fill="#FF8C00"/>
+  
+  <!-- Beak Highlight -->
+  <path d="M126 106 L128 110 L130 106" stroke="#FFE4B5" stroke-width="1" fill="none"/>
+  
+  <!-- Thoughtful Eyebrows -->
+  <path d="M72 56 Q96 48 112 56" stroke="#5A189A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M144 56 Q160 48 184 56" stroke="#5A189A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Eyebrow Detail -->
+  <path d="M76 54 Q96 47 108 54" stroke="#7B2CBF" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M148 54 Q160 47 180 54" stroke="#7B2CBF" stroke-width="1.5" fill="none" opacity="0.5"/>
+  
+  <!-- Chest Feather Detail -->
+  <g opacity="0.4">
+    <path d="M112 176 Q128 184 144 176" stroke="#9D4EDD" stroke-width="3" fill="none"/>
+    <path d="M112 192 Q128 200 144 192" stroke="#9D4EDD" stroke-width="3" fill="none"/>
+    <path d="M112 208 Q128 216 144 208" stroke="#9D4EDD" stroke-width="3" fill="none"/>
+  </g>
+  
+  <!-- Wing Hints -->
+  <path d="M56 144 Q48 168 56 192" stroke="#5A189A" stroke-width="3" fill="none" opacity="0.3"/>
+  <path d="M200 144 Q208 168 200 192" stroke="#5A189A" stroke-width="3" fill="none" opacity="0.3"/>
+  
+  <!-- Wing Detail -->
+  <path d="M60 152 Q54 168 60 184" stroke="#7B2CBF" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M196 152 Q202 168 196 184" stroke="#7B2CBF" stroke-width="2" fill="none" opacity="0.4"/>
+</svg>

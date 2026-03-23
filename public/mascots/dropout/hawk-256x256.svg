@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Dropout Style Hawk - 256x256 -->
+  <defs>
+    <linearGradient id="dropoutBody256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D00000"/>
+      <stop offset="25%" style="stop-color:#9D0208"/>
+      <stop offset="60%" style="stop-color:#6A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="jacket256" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6A040F"/>
+      <stop offset="40%" style="stop-color:#4A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="goldAccent256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFBA08"/>
+      <stop offset="40%" style="stop-color:#FAA307"/>
+      <stop offset="100%" style="stop-color:#E85D04"/>
+    </linearGradient>
+    <linearGradient id="beakShine256" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD60A"/>
+      <stop offset="100%" style="stop-color:#FFBA08"/>
+    </linearGradient>
+    <filter id="shadow256" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="2" flood-color="#370617" flood-opacity="0.4"/>
+    </filter>
+    <filter id="eyeGlow256" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Body base -->
+  <ellipse cx="128" cy="160" rx="56" ry="64" fill="url(#dropoutBody256)"/>
+  
+  <!-- Body feather texture layers -->
+  <g opacity="0.4">
+    <path d="M88 140 Q128 150 168 140" stroke="#9D0208" stroke-width="2" fill="none"/>
+    <path d="M84 156 Q128 166 172 156" stroke="#9D0208" stroke-width="2" fill="none"/>
+    <path d="M80 172 Q128 182 176 172" stroke="#9D0208" stroke-width="2" fill="none"/>
+    <path d="M88 188 Q128 198 168 188" stroke="#9D0208" stroke-width="2" fill="none"/>
+    <path d="M96 140 Q100 150 96 160" stroke="#9D0208" stroke-width="1" fill="none"/>
+    <path d="M160 140 Q156 150 160 160" stroke="#9D0208" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- Aviator Jacket -->
+  <path d="M80 144 Q128 128 176 144 L176 208 Q128 224 80 208 Z" fill="url(#jacket256)" filter="url(#shadow256)"/>
+  
+  <!-- Jacket piping -->
+  <path d="M80 144 L80 208" stroke="url(#goldAccent256)" stroke-width="6" fill="none"/>
+  <path d="M176 144 L176 208" stroke="url(#goldAccent256)" stroke-width="6" fill="none"/>
+  
+  <!-- Jacket collar (turned up) -->
+  <path d="M80 144 Q104 160 128 152 Q152 160 176 144" stroke="url(#goldAccent256)" stroke-width="4" fill="none"/>
+  <path d="M82 146 Q104 158 128 150 Q152 158 174 146" stroke="#4A040F" stroke-width="2" fill="none"/>
+  
+  <!-- Zipper with detailed pull -->
+  <line x1="128" y1="152" x2="128" y2="216" stroke="#FAA307" stroke-width="3" stroke-dasharray="4,3"/>
+  <rect x="124" y="156" width="8" height="12" rx="2" fill="url(#goldAccent256)"/>
+  <rect x="126" y="168" width="4" height="6" rx="1" fill="#E85D04"/>
+  
+  <!-- Jacket shoulder details -->
+  <ellipse cx="92" cy="152" rx="8" ry="4" fill="#4A040F"/>
+  <ellipse cx="164" cy="152" rx="8" ry="4" fill="#4A040F"/>
+  
+  <!-- Head -->
+  <ellipse cx="128" cy="80" rx="40" ry="32" fill="url(#dropoutBody256)"/>
+  
+  <!-- Crown feathers -->
+  <path d="M108 52 Q128 44 148 52" stroke="#9D0208" stroke-width="2" fill="none"/>
+  <path d="M112 48 Q128 40 144 48" stroke="#9D0208" stroke-width="1.5" fill="none"/>
+  <path d="M116 56 Q128 52 140 56" stroke="#9D0208" stroke-width="1" fill="none"/>
+  
+  <!-- Head feather details -->
+  <path d="M96 64 Q112 56 120 72" stroke="#9D0208" stroke-width="2" fill="none"/>
+  <path d="M160 64 Q144 56 136 72" stroke="#9D0208" stroke-width="2" fill="none"/>
+  <path d="M100 56 Q128 48 156 56" stroke="#9D0208" stroke-width="1.5" fill="none"/>
+  
+  <!-- Sharp Hooked Beak -->
+  <path d="M160 68 L200 80 L160 96 Q168 88 164 80 Q168 72 160 68" fill="url(#goldAccent256)"/>
+  <path d="M160 68 L200 80 L160 96 Q168 88 164 80 Q168 72 160 68" stroke="#E85D04" stroke-width="2" fill="none"/>
+  
+  <!-- Beak ridge detail -->
+  <path d="M165 74 L190 80 L165 86" stroke="#E85D04" stroke-width="1" fill="none" opacity="0.6"/>
+  
+  <!-- Beak highlights -->
+  <path d="M168 72 L188 80 L168 86" fill="url(#beakShine256)"/>
+  <ellipse cx="184" cy="78" rx="6" ry="3" fill="#FFBA08" opacity="0.7"/>
+  <ellipse cx="176" cy="82" rx="4" ry="2" fill="#FFD60A" opacity="0.5"/>
+  
+  <!-- Nostril -->
+  <ellipse cx="166" cy="78" rx="2" ry="1.5" fill="#9D0208" opacity="0.5"/>
+  
+  <!-- Intense Eyes with depth and shading -->
+  <g filter="url(#eyeGlow256)">
+    <ellipse cx="112" cy="72" rx="16" ry="12" fill="#FFFFFF"/>
+    <ellipse cx="144" cy="72" rx="16" ry="12" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Eye shadows/depth -->
+  <ellipse cx="112" cy="72" rx="16" ry="12" fill="url(#dropoutBody256)" opacity="0.1"/>
+  <ellipse cx="144" cy="72" rx="16" ry="12" fill="url(#dropoutBody256)" opacity="0.1"/>
+  
+  <!-- Pupils (intense focus) -->
+  <ellipse cx="116" cy="72" rx="10" ry="8" fill="#000000"/>
+  <ellipse cx="148" cy="72" rx="10" ry="8" fill="#000000"/>
+  
+  <!-- Eye shine (intense gaze) -->
+  <circle cx="120" cy="68" r="4" fill="#FFFFFF"/>
+  <circle cx="152" cy="68" r="4" fill="#FFFFFF"/>
+  <circle cx="114" cy="76" r="2" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="146" cy="76" r="2" fill="#FFFFFF" opacity="0.6"/>
+  
+  <!-- Sharp Angled Brow (focused and intense) -->
+  <path d="M88 56 L108 68" stroke="#370617" stroke-width="6" stroke-linecap="round"/>
+  <path d="M168 56 L148 68" stroke="#370617" stroke-width="6" stroke-linecap="round"/>
+  <path d="M92 60 L106 66" stroke="#6A040F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M164 60 L150 66" stroke="#6A040F" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Wing details (sleek, folded) -->
+  <path d="M72 148 L48 192 L72 176" fill="#9D0208"/>
+  <path d="M184 148 L208 192 L184 176" fill="#9D0208"/>
+  
+  <!-- Wing feather layers -->
+  <path d="M60 164 L56 180" stroke="#FAA307" stroke-width="3"/>
+  <path d="M68 156 L64 172" stroke="#FAA307" stroke-width="2.5"/>
+  <path d="M196 164 L200 180" stroke="#FAA307" stroke-width="3"/>
+  <path d="M188 156 L192 172" stroke="#FAA307" stroke-width="2.5"/>
+  
+  <!-- Secondary wing feathers -->
+  <path d="M52 172 L50 184" stroke="#D00000" stroke-width="2"/>
+  <path d="M204 172 L206 184" stroke="#D00000" stroke-width="2"/>
+  
+  <!-- Jacket pockets with detailed buttons -->
+  <rect x="92" y="168" width="16" height="20" rx="3" fill="none" stroke="#FAA307" stroke-width="2.5"/>
+  <circle cx="100" cy="178" r="3" fill="url(#goldAccent256)"/>
+  <rect x="148" y="168" width="16" height="20" rx="3" fill="none" stroke="#FAA307" stroke-width="2.5"/>
+  <circle cx="156" cy="178" r="3" fill="url(#goldAccent256)"/>
+  
+  <!-- Confident stance - feet with talons -->
+  <g fill="#370617">
+    <ellipse cx="104" cy="216" rx="12" ry="6"/>
+    <ellipse cx="152" cy="216" rx="12" ry="6"/>
+  </g>
+  <!-- Talons -->
+  <path d="M98 214 L96 220 M104 214 L104 220 M110 214 L112 220" stroke="#FAA307" stroke-width="2" stroke-linecap="round"/>
+  <path d="M146 214 L144 220 M152 214 L152 220 M158 214 L160 220" stroke="#FAA307" stroke-width="2" stroke-linecap="round"/>
+</svg>

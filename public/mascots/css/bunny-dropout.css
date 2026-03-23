@@ -1,0 +1,119 @@
+/**
+ * Dropout Style Bunny CSS Animations
+ * Hot pink/orange color scheme, fashionable bunny
+ */
+
+/* ===== BASE ANIMATIONS ===== */
+@keyframes bunny-dropout-idle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-3px) rotate(-1deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-2px) rotate(1deg); }
+}
+
+@keyframes bunny-dropout-bounce {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  50% { transform: scaleY(0.98) translateY(2px); }
+}
+
+@keyframes bunny-dropout-ear-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+}
+
+/* ===== WAVE ANIMATION ===== */
+@keyframes bunny-dropout-wave {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(-15deg); }
+  20% { transform: rotate(0deg); }
+  30% { transform: rotate(-15deg); }
+  40% { transform: rotate(0deg); }
+  50% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ===== CELEBRATION ===== */
+@keyframes bunny-dropout-celebrate {
+  0%, 100% { transform: translateY(0) scale(1); }
+  10% { transform: translateY(-15px) scale(1.05); }
+  20% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-20px) scale(1.08); }
+  40% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.03); }
+  60%, 80% { transform: translateY(-5px) scale(1.02); }
+  70% { transform: translateY(-12px) scale(1.05); }
+  90% { transform: translateY(-3px) scale(1.01); }
+}
+
+@keyframes bunny-dropout-sparkle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2) drop-shadow(0 0 8px #FF1493); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.bunny-dropout-container {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+.bunny-dropout-idle {
+  animation: bunny-dropout-idle 2s ease-in-out infinite;
+}
+
+.bunny-dropout-idle .hoodie {
+  animation: bunny-dropout-bounce 1s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.bunny-dropout-idle .ear-left,
+.bunny-dropout-idle .ear-right {
+  animation: bunny-dropout-ear-wiggle 2.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Wave state */
+.bunny-dropout-wave {
+  animation: bunny-dropout-idle 0.5s ease-in-out;
+}
+
+.bunny-dropout-wave .arm-right {
+  animation: bunny-dropout-wave 0.6s ease-in-out;
+  transform-origin: top center;
+}
+
+/* Celebrate state */
+.bunny-dropout-celebrate {
+  animation: bunny-dropout-celebrate 1.5s ease-in-out;
+}
+
+.bunny-dropout-celebrate .ears {
+  animation: bunny-dropout-sparkle 0.75s ease-in-out infinite;
+}
+
+/* ===== SIZE VARIANTS ===== */
+.bunny-dropout-size-32 { width: 32px; height: 32px; }
+.bunny-dropout-size-64 { width: 64px; height: 64px; }
+.bunny-dropout-size-128 { width: 128px; height: 128px; }
+.bunny-dropout-size-256 { width: 256px; height: 256px; }
+.bunny-dropout-size-512 { width: 512px; height: 512px; }
+
+/* ===== HOVER EFFECTS ===== */
+.bunny-dropout-container:hover {
+  filter: brightness(1.08) drop-shadow(0 0 10px rgba(255, 20, 147, 0.4));
+  transition: filter 0.3s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .bunny-dropout-idle,
+  .bunny-dropout-idle .hoodie,
+  .bunny-dropout-idle .ear-left,
+  .bunny-dropout-idle .ear-right,
+  .bunny-dropout-wave,
+  .bunny-dropout-wave .arm-right,
+  .bunny-dropout-celebrate,
+  .bunny-dropout-celebrate .ears {
+    animation: none;
+  }
+}

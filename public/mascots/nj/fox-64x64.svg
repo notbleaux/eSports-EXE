@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Minimalist line art fox - NJ Style -->
+  
+  <!-- Tail (fluffy, flowing) -->
+  <path d="M8 40 Q4 32 8 24 Q12 16 20 20 Q16 28 12 36 Q10 40 8 40Z" 
+        fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8 24 Q6 20 8 16" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+  <!-- Tail fluff lines -->
+  <path d="M10 36 Q14 32 16 28" fill="none" stroke="#0000FF" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Body (simple rounded shape) -->
+  <path d="M20 44 Q20 32 32 30 Q44 28 52 36 Q56 44 52 52 Q48 60 36 58 Q24 56 20 44Z" 
+        fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Chest marking -->
+  <path d="M28 38 Q32 42 36 38" fill="none" stroke="#0000FF" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Head (circular with pointed ears) -->
+  <circle cx="36" cy="20" r="12" fill="none" stroke="#0000FF" stroke-width="2"/>
+  
+  <!-- Ears (triangular, pointed) -->
+  <path d="M26 12 L22 4 L30 10" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M46 12 L50 4 L42 10" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Inner ear -->
+  <path d="M26 10 L24 6 L28 9" fill="none" stroke="#0000FF" stroke-width="1" stroke-linecap="round"/>
+  <path d="M46 10 L48 6 L44 9" fill="none" stroke="#0000FF" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- Snout (small rounded) -->
+  <ellipse cx="36" cy="26" rx="5" ry="3" fill="none" stroke="#0000FF" stroke-width="2"/>
+  <ellipse cx="36" cy="25" rx="2" ry="1.5" fill="#0000FF"/>
+  
+  <!-- Mouth (small smile) -->
+  <path d="M32 28 Q36 30 40 27" fill="none" stroke="#0000FF" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Eyes (clever, cute expression) -->
+  <circle cx="30" cy="18" r="2.5" fill="#0000FF"/>
+  <circle cx="30.5" cy="17.5" r="0.8" fill="#FFF"/>
+  <circle cx="42" cy="18" r="2.5" fill="#0000FF"/>
+  <circle cx="41.5" cy="17.5" r="0.8" fill="#FFF"/>
+  
+  <!-- Eyebrows (playful arch) -->
+  <path d="M26 14 Q30 12 34 14" fill="none" stroke="#0000FF" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M38 14 Q42 12 46 14" fill="none" stroke="#0000FF" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Paws (simple circles) -->
+  <circle cx="24" cy="52" r="4" fill="none" stroke="#0000FF" stroke-width="2"/>
+  <circle cx="48" cy="52" r="4" fill="none" stroke="#0000FF" stroke-width="2"/>
+  
+  <!-- Paw details -->
+  <line x1="22" y1="50" x2="22" y2="54" stroke="#0000FF" stroke-width="1"/>
+  <line x1="24" y1="49" x2="24" y2="55" stroke="#0000FF" stroke-width="1"/>
+  <line x1="26" y1="50" x2="26" y2="54" stroke="#0000FF" stroke-width="1"/>
+  <line x1="46" y1="50" x2="46" y2="54" stroke="#0000FF" stroke-width="1"/>
+  <line x1="48" y1="49" x2="48" y2="55" stroke="#0000FF" stroke-width="1"/>
+  <line x1="50" y1="50" x2="50" y2="54" stroke="#0000FF" stroke-width="1"/>
+</svg>

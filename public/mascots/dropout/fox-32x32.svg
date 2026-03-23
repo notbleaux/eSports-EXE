@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="foxOrange32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F48C06"/>
+      <stop offset="100%" style="stop-color:#E85D04"/>
+    </linearGradient>
+    <linearGradient id="jacketBurgundy32" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="goldAccent32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD60A"/>
+      <stop offset="100%" style="stop-color:#FFC300"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Tail -->
+  <path d="M6 20 Q4 16 6 12 Q8 8 12 10 Q10 14 8 18 Q7 20 6 20Z" fill="url(#foxOrange32)"/>
+  <path d="M6 12 Q5 10 6 8 Q7 6 9 8" fill="none" stroke="#F48C06" stroke-width="0.5"/>
+  
+  <!-- Body/Jacket -->
+  <path d="M10 18 Q10 14 14 13 Q18 12 22 14 Q24 16 24 20 Q24 26 20 28 Q16 30 12 28 Q10 26 10 22 Q10 20 10 18Z" fill="url(#jacketBurgundy32)"/>
+  
+  <!-- Jacket Details -->
+  <path d="M14 16 L14 24" stroke="#9D0208" stroke-width="0.5"/>
+  <path d="M18 16 L18 24" stroke="#9D0208" stroke-width="0.5"/>
+  <rect x="15" y="18" width="2" height="2" fill="url(#goldAccent32)" rx="0.3"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M12 14 L14 16 L18 16 L20 14" fill="none" stroke="#9D0208" stroke-width="0.8"/>
+  
+  <!-- Head -->
+  <ellipse cx="16" cy="10" rx="6" ry="5" fill="url(#foxOrange32)"/>
+  
+  <!-- Ears -->
+  <path d="M11 7 L10 3 L13 6Z" fill="url(#foxOrange32)"/>
+  <path d="M11 5 L11 4 L12 5Z" fill="#370617"/>
+  <path d="M21 7 L22 3 L19 6Z" fill="url(#foxOrange32)"/>
+  <path d="M21 5 L21 4 L20 5Z" fill="#370617"/>
+  
+  <!-- Snout -->
+  <ellipse cx="16" cy="12" rx="2.5" ry="1.5" fill="#FFBA08"/>
+  <circle cx="16" cy="11.5" r="0.8" fill="#370617"/>
+  
+  <!-- Eyes (clever expression) -->
+  <ellipse cx="13.5" cy="9.5" rx="1.2" ry="1.5" fill="#FFF"/>
+  <ellipse cx="13.7" cy="9.5" rx="0.6" ry="0.9" fill="#370617"/>
+  <ellipse cx="18.5" cy="9.5" rx="1.2" ry="1.5" fill="#FFF"/>
+  <ellipse cx="18.3" cy="9.5" rx="0.6" ry="0.9" fill="#370617"/>
+  
+  <!-- Eyebrows (confident) -->
+  <path d="M12 7.5 Q13.5 7 15 7.5" stroke="#370617" stroke-width="0.4" fill="none"/>
+  <path d="M17 7.5 Q18.5 7 20 7.5" stroke="#370617" stroke-width="0.4" fill="none"/>
+  
+  <!-- Arms -->
+  <path d="M10 20 Q8 22 9 24 Q10 26 12 24" fill="url(#jacketBurgundy32)"/>
+  <path d="M24 20 Q26 22 25 24 Q24 26 22 24" fill="url(#jacketBurgundy32)"/>
+  
+  <!-- Jacket Emblem -->
+  <circle cx="20" cy="19" r="1.5" fill="url(#goldAccent32)"/>
+  <text x="20" y="19.5" font-size="1.5" text-anchor="middle" fill="#370617" font-weight="bold">F</text>
+</svg>

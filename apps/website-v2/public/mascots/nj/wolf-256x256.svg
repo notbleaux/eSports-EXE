@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- NJ Style Wolf - 256x256px -->
+  <!-- Bold wolf outline, determined expression -->
+  
+  <!-- Left Ear (alert, sharp angles) -->
+  <path d="M48 24 L80 112 L32 96 Z" fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M56 40 L72 96 L40 84 Z" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M52 32 L64 64 L44 56 Z" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.5"/>
+  <path d="M48 48 L56 80 L36 72 Z" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.3"/>
+  
+  <!-- Right Ear (alert, sharp angles) -->
+  <path d="M208 24 L176 112 L224 96 Z" fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M200 40 L184 96 L216 84 Z" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M204 32 L192 64 L212 56 Z" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.5"/>
+  <path d="M208 48 L200 80 L220 72 Z" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.3"/>
+  
+  <!-- Head (sleek outline) -->
+  <path d="M64 112 Q64 64 128 64 Q192 64 192 112 Q192 160 128 176 Q64 160 64 112" fill="none" stroke="#0000FF" stroke-width="3"/>
+  
+  <!-- Forehead markings (sharp angles) -->
+  <path d="M96 80 L128 112 L160 80" fill="none" stroke="#0000FF" stroke-width="3" opacity="0.6"/>
+  <path d="M80 72 L96 88" fill="none" stroke="#0000FF" stroke-width="2.5" opacity="0.4"/>
+  <path d="M176 72 L160 88" fill="none" stroke="#0000FF" stroke-width="2.5" opacity="0.4"/>
+  <path d="M104 68 L112 80" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.3"/>
+  <path d="M152 68 L144 80" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.3"/>
+  <path d="M88 76 L100 84" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.25"/>
+  <path d="M168 76 L156 84" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.25"/>
+  
+  <!-- Snout (sleek line) -->
+  <path d="M96 144 Q128 128 160 144 Q160 176 128 192 Q96 176 96 144" fill="none" stroke="#0000FF" stroke-width="3"/>
+  
+  <!-- Snout detail lines -->
+  <path d="M104 152 Q128 140 152 152" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.5"/>
+  <path d="M112 160 Q128 152 144 160" fill="none" stroke="#0000FF" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Nose -->
+  <ellipse cx="128" cy="168" rx="12" ry="8" fill="#0000FF"/>
+  
+  <!-- Nostrils -->
+  <ellipse cx="122" cy="170" rx="3" ry="2" fill="#0000FF" opacity="0.7"/>
+  <ellipse cx="134" cy="170" rx="3" ry="2" fill="#0000FF" opacity="0.7"/>
+  
+  <!-- Eyes (determined) -->
+  <path d="M80 104 L112 112 L112 128 L80 120 Z" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <path d="M176 104 L144 112 L144 128 L176 120 Z" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <ellipse cx="96" cy="116" rx="6" ry="8" fill="#0000FF"/>
+  <ellipse cx="160" cy="116" rx="6" ry="8" fill="#0000FF"/>
+  
+  <!-- Eye highlight -->
+  <circle cx="98" cy="114" r="2" fill="#3333FF" opacity="0.5"/>
+  <circle cx="162" cy="114" r="2" fill="#3333FF" opacity="0.5"/>
+  <circle cx="94" cy="118" r="1" fill="#3333FF" opacity="0.3"/>
+  <circle cx="158" cy="118" r="1" fill="#3333FF" opacity="0.3"/>
+  
+  <!-- Eyebrow line (focused) -->
+  <path d="M72 88 L120 96" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <path d="M184 88 L136 96" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <path d="M76 84 L116 90" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.4"/>
+  <path d="M180 84 L140 90" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.4"/>
+  
+  <!-- Mouth -->
+  <path d="M112 200 Q128 208 144 200" fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M128 184 L128 200" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M120 196 Q128 200 136 196" fill="none" stroke="#0000FF" stroke-width="1.5" opacity="0.5"/>
+  
+  <!-- Chin -->
+  <path d="M116 208 Q128 216 140 208" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M120 212 Q128 218 136 212" fill="none" stroke="#0000FF" stroke-width="1.5"/>
+  
+  <!-- Body (sleek line) -->
+  <path d="M80 176 Q48 208 48 240 Q128 256 208 240 Q208 208 176 176" fill="none" stroke="#0000FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Sharp angles on back -->
+  <path d="M64 200 L80 224" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M192 200 L176 224" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M72 192 L84 212" fill="none" stroke="#0000FF" stroke-width="2"/>
+  <path d="M184 192 L172 212" fill="none" stroke="#0000FF" stroke-width="2"/>
+  <path d="M56 216 L68 236" fill="none" stroke="#0000FF" stroke-width="1.5"/>
+  <path d="M200 216 L188 236" fill="none" stroke="#0000FF" stroke-width="1.5"/>
+  
+  <!-- Chest detail -->
+  <path d="M96 208 Q128 224 160 208" fill="none" stroke="#0000FF" stroke-width="2.5"/>
+  <path d="M104 216 Q128 228 152 216" fill="none" stroke="#0000FF" stroke-width="2"/>
+  <path d="M112 224 Q128 232 144 224" fill="none" stroke="#0000FF" stroke-width="1.5"/>
+  
+  <!-- Tail hint -->
+  <path d="M208 224 Q224 216 232 200" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M216 220 Q228 214 234 204" fill="none" stroke="#0000FF" stroke-width="1.5"/>
+  
+  <!-- Front legs hint -->
+  <path d="M88 232 L88 248" fill="none" stroke="#0000FF" stroke-width="2"/>
+  <path d="M168 232 L168 248" fill="none" stroke="#0000FF" stroke-width="2"/>
+</svg>

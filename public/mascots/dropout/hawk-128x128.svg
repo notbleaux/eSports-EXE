@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Dropout Style Hawk - 128x128 -->
+  <defs>
+    <linearGradient id="dropoutBody128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D00000"/>
+      <stop offset="30%" style="stop-color:#9D0208"/>
+      <stop offset="70%" style="stop-color:#6A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="jacket128" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6A040F"/>
+      <stop offset="50%" style="stop-color:#4A040F"/>
+      <stop offset="100%" style="stop-color:#370617"/>
+    </linearGradient>
+    <linearGradient id="goldAccent128" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFBA08"/>
+      <stop offset="50%" style="stop-color:#FAA307"/>
+      <stop offset="100%" style="stop-color:#E85D04"/>
+    </linearGradient>
+    <filter id="shadow128" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="#370617" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Body -->
+  <ellipse cx="64" cy="80" rx="28" ry="32" fill="url(#dropoutBody128)"/>
+  
+  <!-- Body feather texture -->
+  <path d="M50 70 Q64 75 78 70" stroke="#9D0208" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M48 80 Q64 85 80 80" stroke="#9D0208" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M50 90 Q64 95 78 90" stroke="#9D0208" stroke-width="1" fill="none" opacity="0.5"/>
+  
+  <!-- Aviator Jacket -->
+  <path d="M40 72 Q64 64 88 72 L88 104 Q64 112 40 104 Z" fill="url(#jacket128)" filter="url(#shadow128)"/>
+  <path d="M40 72 L40 104 M88 72 L88 104" stroke="url(#goldAccent128)" stroke-width="3" fill="none"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M40 72 Q52 80 64 76 Q76 80 88 72" stroke="url(#goldAccent128)" stroke-width="2" fill="none"/>
+  
+  <!-- Zipper line with pull tab -->
+  <line x1="64" y1="76" x2="64" y2="108" stroke="#FAA307" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <rect x="62" y="78" width="4" height="6" rx="1" fill="#FAA307"/>
+  
+  <!-- Head -->
+  <ellipse cx="64" cy="40" rx="20" ry="16" fill="url(#dropoutBody128)"/>
+  
+  <!-- Head feather details -->
+  <path d="M48 32 Q56 28 60 36" stroke="#9D0208" stroke-width="1.5" fill="none"/>
+  <path d="M80 32 Q72 28 68 36" stroke="#9D0208" stroke-width="1.5" fill="none"/>
+  <path d="M52 28 Q64 24 76 28" stroke="#9D0208" stroke-width="1" fill="none"/>
+  
+  <!-- Sharp Hooked Beak -->
+  <path d="M80 34 L100 40 L80 48 Q84 44 82 40 Q84 36 80 34" fill="url(#goldAccent128)"/>
+  <path d="M80 34 L100 40 L80 48 Q84 44 82 40 Q84 36 80 34" stroke="#E85D04" stroke-width="1" fill="none"/>
+  
+  <!-- Beak highlight -->
+  <path d="M84 37 L92 40 L84 43" fill="#FFD60A"/>
+  <ellipse cx="88" cy="40" rx="3" ry="1.5" fill="#FFBA08" opacity="0.6"/>
+  
+  <!-- Intense Eyes with depth -->
+  <ellipse cx="56" cy="36" rx="8" ry="6" fill="#FFFFFF"/>
+  <ellipse cx="72" cy="36" rx="8" ry="6" fill="#FFFFFF"/>
+  
+  <!-- Eye shadows -->
+  <ellipse cx="56" cy="36" rx="8" ry="6" fill="none" stroke="#9D0208" stroke-width="0.5" opacity="0.3"/>
+  <ellipse cx="72" cy="36" rx="8" ry="6" fill="none" stroke="#9D0208" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- Pupils -->
+  <ellipse cx="58" cy="36" rx="5" ry="4" fill="#000000"/>
+  <ellipse cx="74" cy="36" rx="5" ry="4" fill="#000000"/>
+  
+  <!-- Eye highlights (intense gaze) -->
+  <circle cx="60" cy="34" r="2" fill="#FFFFFF"/>
+  <circle cx="76" cy="34" r="2" fill="#FFFFFF"/>
+  <circle cx="57" cy="38" r="1" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="73" cy="38" r="1" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Sharp Angled Brow (focused) -->
+  <path d="M44 28 L54 34" stroke="#370617" stroke-width="3" stroke-linecap="round"/>
+  <path d="M84 28 L74 34" stroke="#370617" stroke-width="3" stroke-linecap="round"/>
+  <path d="M46 30 L52 33" stroke="#6A040F" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M82 30 L76 33" stroke="#6A040F" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Wing details (folded back) -->
+  <path d="M36 74 L24 96 L36 88" fill="#9D0208"/>
+  <path d="M92 74 L104 96 L92 88" fill="#9D0208"/>
+  
+  <!-- Wing feather details -->
+  <path d="M30 82 L28 90" stroke="#FAA307" stroke-width="2"/>
+  <path d="M34 78 L32 86" stroke="#FAA307" stroke-width="1.5"/>
+  <path d="M98 82 L100 90" stroke="#FAA307" stroke-width="2"/>
+  <path d="M94 78 L96 86" stroke="#FAA307" stroke-width="1.5"/>
+  
+  <!-- Jacket pockets with buttons -->
+  <rect x="46" y="84" width="8" height="10" rx="2" fill="none" stroke="#FAA307" stroke-width="1.5"/>
+  <circle cx="50" cy="89" r="1.5" fill="#FAA307"/>
+  <rect x="74" y="84" width="8" height="10" rx="2" fill="none" stroke="#FAA307" stroke-width="1.5"/>
+  <circle cx="78" cy="89" r="1.5" fill="#FAA307"/>
+  
+  <!-- Confident stance - feet -->
+  <ellipse cx="52" cy="108" rx="6" ry="3" fill="#370617"/>
+  <ellipse cx="76" cy="108" rx="6" ry="3" fill="#370617"/>
+</svg>

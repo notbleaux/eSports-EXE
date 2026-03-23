@@ -1,0 +1,830 @@
+/**
+ * NJ Style Wolf Mascot - CSS Animation
+ * ====================================
+ * Bold wolf outline, determined expression
+ * 
+ * Style: Minimalist line art, electric blue stroke
+ * Stroke: #0000FF, 2px weight
+ * Features: Sharp angles, alert ears, sleek body line
+ * 
+ * [Ver001.000] - CSS-only animated wolf mascot
+ */
+
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+  --nj-wolf-primary: #0000FF;
+  --nj-wolf-primary-light: #3333FF;
+  --nj-wolf-primary-dark: #0000CC;
+  --nj-wolf-stroke: 2px;
+  --nj-wolf-stroke-lg: 3px;
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+.nj-wolf-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+}
+
+/* ============================================
+   BASE WOLF STRUCTURE (Line Art)
+   ============================================ */
+.nj-wolf {
+  position: relative;
+  display: block;
+  background: transparent;
+}
+
+/* --------------------------------------------
+   HEAD - Sleek outline
+   -------------------------------------------- */
+.nj-wolf-head {
+  position: absolute;
+  border-radius: 45%;
+  border: var(--nj-wolf-stroke) solid var(--nj-wolf-primary);
+  background: transparent;
+  z-index: 2;
+}
+
+/* --------------------------------------------
+   EARS - Alert, sharp angles
+   -------------------------------------------- */
+.nj-wolf-ear-left,
+.nj-wolf-ear-right {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 1;
+  transform-origin: bottom center;
+}
+
+.nj-wolf-ear-left {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 32px solid transparent;
+}
+
+.nj-wolf-ear-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 28px solid var(--nj-wolf-primary);
+}
+
+.nj-wolf-ear-right {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 32px solid transparent;
+}
+
+.nj-wolf-ear-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 28px solid var(--nj-wolf-primary);
+}
+
+/* Inner ear detail (line art style) */
+.nj-wolf-ear-left::after,
+.nj-wolf-ear-right::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 16px solid transparent;
+}
+
+.nj-wolf-ear-left::after {
+  border-bottom-color: var(--nj-wolf-primary);
+  opacity: 0.5;
+}
+
+.nj-wolf-ear-right::after {
+  border-bottom-color: var(--nj-wolf-primary);
+  opacity: 0.5;
+}
+
+/* --------------------------------------------
+   EYES - Determined (angular)
+   -------------------------------------------- */
+.nj-wolf-eye-left,
+.nj-wolf-eye-right {
+  position: absolute;
+  border: var(--nj-wolf-stroke) solid var(--nj-wolf-primary);
+  background: transparent;
+  z-index: 3;
+  transform: skewX(-10deg);
+}
+
+.nj-wolf-eye-left::after,
+.nj-wolf-eye-right::after {
+  content: '';
+  position: absolute;
+  background: var(--nj-wolf-primary);
+  border-radius: 50%;
+  top: 30%;
+  left: 25%;
+}
+
+/* Eye highlight */
+.nj-wolf-eye-left::before,
+.nj-wolf-eye-right::before {
+  content: '';
+  position: absolute;
+  background: var(--nj-wolf-primary-light);
+  border-radius: 50%;
+  top: 25%;
+  left: 35%;
+  z-index: 4;
+  opacity: 0.5;
+}
+
+/* --------------------------------------------
+   EYEBROWS - Focused
+   -------------------------------------------- */
+.nj-wolf-eyebrow-left,
+.nj-wolf-eyebrow-right {
+  position: absolute;
+  height: 2px;
+  background: var(--nj-wolf-primary);
+  z-index: 3;
+}
+
+.nj-wolf-eyebrow-left {
+  transform: rotate(-3deg);
+}
+
+.nj-wolf-eyebrow-right {
+  transform: rotate(3deg);
+}
+
+/* --------------------------------------------
+   SNOUT - Sleek
+   -------------------------------------------- */
+.nj-wolf-snout {
+  position: absolute;
+  border-radius: 50%;
+  border: var(--nj-wolf-stroke) solid var(--nj-wolf-primary);
+  border-top: none;
+  background: transparent;
+  z-index: 2;
+}
+
+/* --------------------------------------------
+   NOSE
+   -------------------------------------------- */
+.nj-wolf-nose {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--nj-wolf-primary);
+  z-index: 3;
+}
+
+/* --------------------------------------------
+   BODY - Sleek line drawing
+   -------------------------------------------- */
+.nj-wolf-body {
+  position: absolute;
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  border: var(--nj-wolf-stroke) solid var(--nj-wolf-primary);
+  border-top: none;
+  background: transparent;
+  z-index: 1;
+}
+
+/* Sharp angle details on body */
+.nj-wolf-body::before,
+.nj-wolf-body::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  background: var(--nj-wolf-primary);
+  opacity: 0.7;
+}
+
+/* --------------------------------------------
+   MOUTH
+   -------------------------------------------- */
+.nj-wolf-mouth {
+  position: absolute;
+  width: 20%;
+  height: 2px;
+  background: var(--nj-wolf-primary);
+  z-index: 3;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+/* Small: 64x64px */
+.nj-wolf.size-small {
+  width: 64px;
+  height: 64px;
+}
+
+.nj-wolf.size-small .nj-wolf-head {
+  width: 36px;
+  height: 32px;
+  top: 20px;
+  left: 14px;
+}
+
+.nj-wolf.size-small .nj-wolf-ear-left,
+.nj-wolf.size-small .nj-wolf-ear-right {
+  top: 2px;
+}
+
+.nj-wolf.size-small .nj-wolf-ear-left {
+  left: 12px;
+  transform: rotate(-12deg);
+}
+
+.nj-wolf.size-small .nj-wolf-ear-right {
+  right: 12px;
+  transform: rotate(12deg);
+}
+
+.nj-wolf.size-small .nj-wolf-eye-left,
+.nj-wolf.size-small .nj-wolf-eye-right {
+  width: 10px;
+  height: 12px;
+  top: 28px;
+}
+
+.nj-wolf.size-small .nj-wolf-eye-left {
+  left: 18px;
+}
+
+.nj-wolf.size-small .nj-wolf-eye-right {
+  right: 18px;
+}
+
+.nj-wolf.size-small .nj-wolf-eye-left::after,
+.nj-wolf.size-small .nj-wolf-eye-right::after {
+  width: 4px;
+  height: 5px;
+}
+
+.nj-wolf.size-small .nj-wolf-eye-left::before,
+.nj-wolf.size-small .nj-wolf-eye-right::before {
+  width: 1.5px;
+  height: 1.5px;
+}
+
+.nj-wolf.size-small .nj-wolf-eyebrow-left,
+.nj-wolf.size-small .nj-wolf-eyebrow-right {
+  width: 16px;
+  top: 24px;
+}
+
+.nj-wolf.size-small .nj-wolf-eyebrow-left {
+  left: 14px;
+}
+
+.nj-wolf.size-small .nj-wolf-eyebrow-right {
+  right: 14px;
+}
+
+.nj-wolf.size-small .nj-wolf-snout {
+  width: 20px;
+  height: 16px;
+  top: 44px;
+  left: 22px;
+}
+
+.nj-wolf.size-small .nj-wolf-nose {
+  width: 6px;
+  height: 4px;
+  top: 46px;
+  left: 29px;
+}
+
+.nj-wolf.size-small .nj-wolf-body {
+  width: 32px;
+  height: 24px;
+  top: 52px;
+  left: 16px;
+}
+
+.nj-wolf.size-small .nj-wolf-mouth {
+  top: 54px;
+  left: 26px;
+}
+
+/* Medium: 128x128px */
+.nj-wolf.size-medium {
+  width: 128px;
+  height: 128px;
+}
+
+.nj-wolf.size-medium .nj-wolf-head {
+  width: 72px;
+  height: 64px;
+  top: 40px;
+  left: 28px;
+}
+
+.nj-wolf.size-medium .nj-wolf-ear-left,
+.nj-wolf.size-medium .nj-wolf-ear-right {
+  top: 4px;
+}
+
+.nj-wolf.size-medium .nj-wolf-ear-left {
+  left: 24px;
+  transform: rotate(-12deg);
+}
+
+.nj-wolf.size-medium .nj-wolf-ear-right {
+  right: 24px;
+  transform: rotate(12deg);
+}
+
+.nj-wolf.size-medium .nj-wolf-eye-left,
+.nj-wolf.size-medium .nj-wolf-eye-right {
+  width: 20px;
+  height: 24px;
+  top: 56px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eye-left {
+  left: 36px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eye-right {
+  right: 36px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eye-left::after,
+.nj-wolf.size-medium .nj-wolf-eye-right::after {
+  width: 8px;
+  height: 10px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eye-left::before,
+.nj-wolf.size-medium .nj-wolf-eye-right::before {
+  width: 3px;
+  height: 3px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eyebrow-left,
+.nj-wolf.size-medium .nj-wolf-eyebrow-right {
+  width: 32px;
+  top: 48px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eyebrow-left {
+  left: 28px;
+}
+
+.nj-wolf.size-medium .nj-wolf-eyebrow-right {
+  right: 28px;
+}
+
+.nj-wolf.size-medium .nj-wolf-snout {
+  width: 40px;
+  height: 32px;
+  top: 88px;
+  left: 44px;
+}
+
+.nj-wolf.size-medium .nj-wolf-nose {
+  width: 12px;
+  height: 8px;
+  top: 92px;
+  left: 58px;
+}
+
+.nj-wolf.size-medium .nj-wolf-body {
+  width: 64px;
+  height: 48px;
+  top: 104px;
+  left: 32px;
+}
+
+.nj-wolf.size-medium .nj-wolf-mouth {
+  top: 108px;
+  left: 52px;
+}
+
+/* Large: 256x256px */
+.nj-wolf.size-large {
+  width: 256px;
+  height: 256px;
+}
+
+.nj-wolf.size-large .nj-wolf-head {
+  width: 144px;
+  height: 128px;
+  top: 80px;
+  left: 56px;
+  border-width: var(--nj-wolf-stroke-lg);
+}
+
+.nj-wolf.size-large .nj-wolf-ear-left,
+.nj-wolf.size-large .nj-wolf-ear-right {
+  top: 8px;
+}
+
+.nj-wolf.size-large .nj-wolf-ear-left {
+  left: 48px;
+  transform: rotate(-12deg);
+}
+
+.nj-wolf.size-large .nj-wolf-ear-right {
+  right: 48px;
+  transform: rotate(12deg);
+}
+
+.nj-wolf.size-large .nj-wolf-ear-left::before,
+.nj-wolf.size-large .nj-wolf-ear-right::before {
+  border-left-width: 18px;
+  border-right-width: 18px;
+  border-bottom-width: 52px;
+  left: -18px;
+}
+
+.nj-wolf.size-large .nj-wolf-eye-left,
+.nj-wolf.size-large .nj-wolf-eye-right {
+  width: 40px;
+  height: 48px;
+  top: 112px;
+  border-width: var(--nj-wolf-stroke-lg);
+}
+
+.nj-wolf.size-large .nj-wolf-eye-left {
+  left: 72px;
+}
+
+.nj-wolf.size-large .nj-wolf-eye-right {
+  right: 72px;
+}
+
+.nj-wolf.size-large .nj-wolf-eye-left::after,
+.nj-wolf.size-large .nj-wolf-eye-right::after {
+  width: 16px;
+  height: 20px;
+}
+
+.nj-wolf.size-large .nj-wolf-eye-left::before,
+.nj-wolf.size-large .nj-wolf-eye-right::before {
+  width: 6px;
+  height: 6px;
+}
+
+.nj-wolf.size-large .nj-wolf-eyebrow-left,
+.nj-wolf.size-large .nj-wolf-eyebrow-right {
+  width: 64px;
+  height: 3px;
+  top: 96px;
+}
+
+.nj-wolf.size-large .nj-wolf-eyebrow-left {
+  left: 56px;
+}
+
+.nj-wolf.size-large .nj-wolf-eyebrow-right {
+  right: 56px;
+}
+
+.nj-wolf.size-large .nj-wolf-snout {
+  width: 80px;
+  height: 64px;
+  top: 176px;
+  left: 88px;
+  border-width: var(--nj-wolf-stroke-lg);
+}
+
+.nj-wolf.size-large .nj-wolf-nose {
+  width: 24px;
+  height: 16px;
+  top: 184px;
+  left: 116px;
+}
+
+.nj-wolf.size-large .nj-wolf-body {
+  width: 128px;
+  height: 96px;
+  top: 208px;
+  left: 64px;
+  border-width: var(--nj-wolf-stroke-lg);
+}
+
+.nj-wolf.size-large .nj-wolf-mouth {
+  width: 40px;
+  height: 3px;
+  top: 216px;
+  left: 108px;
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+/* Alert ear twitch animation */
+@keyframes wolf-ear-twitch-left {
+  0%, 100% {
+    transform: rotate(-12deg);
+  }
+  10% {
+    transform: rotate(-18deg);
+  }
+  20% {
+    transform: rotate(-10deg);
+  }
+  30% {
+    transform: rotate(-15deg);
+  }
+  40%, 100% {
+    transform: rotate(-12deg);
+  }
+}
+
+@keyframes wolf-ear-twitch-right {
+  0%, 100% {
+    transform: rotate(12deg);
+  }
+  10% {
+    transform: rotate(18deg);
+  }
+  20% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(15deg);
+  }
+  40%, 100% {
+    transform: rotate(12deg);
+  }
+}
+
+/* Alert stance idle */
+@keyframes wolf-alert-idle {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-1deg) translateY(-1px);
+  }
+  50% {
+    transform: rotate(0deg) translateY(0);
+  }
+  75% {
+    transform: rotate(1deg) translateY(-1px);
+  }
+}
+
+/* Eye blink */
+@keyframes wolf-blink {
+  0%, 90%, 100% {
+    transform: skewX(-10deg) scaleY(1);
+  }
+  95% {
+    transform: skewX(-10deg) scaleY(0.1);
+  }
+}
+
+/* Howl animation */
+@keyframes wolf-howl-line {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(-20deg);
+  }
+  60% {
+    transform: rotate(-15deg);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+}
+
+/* Focus animation */
+@keyframes wolf-focus {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ============================================
+   ANIMATION TRIGGER CLASSES
+   ============================================ */
+
+/* Alert ear twitch animation */
+.nj-wolf.animate-alert .nj-wolf-ear-left {
+  animation: wolf-ear-twitch-left 4s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert .nj-wolf-ear-right {
+  animation: wolf-ear-twitch-right 4s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert .nj-wolf-head {
+  animation: wolf-alert-idle 3s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert .nj-wolf-eye-left,
+.nj-wolf.animate-alert .nj-wolf-eye-right {
+  animation: wolf-blink 5s ease-in-out infinite;
+}
+
+/* Howl animation */
+.nj-wolf.animate-howl .nj-wolf-head {
+  animation: wolf-howl-line 2s ease-in-out;
+}
+
+.nj-wolf.animate-howl .nj-wolf-ear-left {
+  animation: wolf-ear-twitch-left 2s ease-in-out;
+}
+
+.nj-wolf.animate-howl .nj-wolf-ear-right {
+  animation: wolf-ear-twitch-right 2s ease-in-out;
+}
+
+/* Focus animation */
+.nj-wolf.animate-focus .nj-wolf-eyebrow-left,
+.nj-wolf.animate-focus .nj-wolf-eyebrow-right {
+  animation: wolf-focus 2s ease-in-out infinite;
+}
+
+.nj-wolf.animate-focus .nj-wolf-eye-left::after,
+.nj-wolf.animate-focus .nj-wolf-eye-right::after {
+  animation: wolf-focus 1.5s ease-in-out infinite;
+}
+
+/* Combined alert and focus */
+.nj-wolf.animate-alert-focus .nj-wolf-ear-left {
+  animation: wolf-ear-twitch-left 4s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert-focus .nj-wolf-ear-right {
+  animation: wolf-ear-twitch-right 4s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert-focus .nj-wolf-head {
+  animation: wolf-alert-idle 3s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert-focus .nj-wolf-eye-left,
+.nj-wolf.animate-alert-focus .nj-wolf-eye-right {
+  animation: wolf-blink 5s ease-in-out infinite;
+}
+
+.nj-wolf.animate-alert-focus .nj-wolf-eyebrow-left,
+.nj-wolf.animate-alert-focus .nj-wolf-eyebrow-right {
+  animation: wolf-focus 2s ease-in-out infinite;
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.nj-wolf.hoverable {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.nj-wolf.hoverable:hover {
+  transform: scale(1.05);
+}
+
+.nj-wolf.hoverable:hover .nj-wolf-ear-left {
+  animation: wolf-ear-twitch-left 0.5s ease-in-out;
+}
+
+.nj-wolf.hoverable:hover .nj-wolf-ear-right {
+  animation: wolf-ear-twitch-right 0.5s ease-in-out;
+}
+
+/* ============================================
+   GLOW EFFECT
+   ============================================ */
+
+.nj-wolf--glow {
+  filter: drop-shadow(0 0 8px var(--nj-wolf-primary));
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .nj-wolf,
+  .nj-wolf .nj-wolf-ear-left,
+  .nj-wolf .nj-wolf-ear-right,
+  .nj-wolf .nj-wolf-eye-left,
+  .nj-wolf .nj-wolf-eye-right,
+  .nj-wolf .nj-wolf-head,
+  .nj-wolf .nj-wolf-eyebrow-left,
+  .nj-wolf .nj-wolf-eyebrow-right {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .nj-wolf .nj-wolf-head,
+  .nj-wolf .nj-wolf-ear-left::before,
+  .nj-wolf .nj-wolf-ear-right::before,
+  .nj-wolf .nj-wolf-snout,
+  .nj-wolf .nj-wolf-body {
+    border-width: 3px;
+  }
+  
+  .nj-wolf .nj-wolf-eye-left,
+  .nj-wolf .nj-wolf-eye-right {
+    border-width: 3px;
+  }
+  
+  .nj-wolf .nj-wolf-nose {
+    background: #000;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nj-wolf-primary: #3333FF;
+    --nj-wolf-primary-light: #5555FF;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Float effect */
+.nj-wolf--float {
+  animation: wolf-alert-idle 3s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+.nj-wolf--pulse {
+  animation: wolf-focus 2s ease-in-out infinite;
+}
+
+/* ============================================
+   HTML USAGE EXAMPLE
+   ============================================
+<!-- Basic NJ Wolf -->
+<div class="nj-wolf-container">
+  <div class="nj-wolf size-medium">
+    <div class="nj-wolf-ear-left"></div>
+    <div class="nj-wolf-ear-right"></div>
+    <div class="nj-wolf-head">
+      <div class="nj-wolf-eyebrow-left"></div>
+      <div class="nj-wolf-eyebrow-right"></div>
+      <div class="nj-wolf-eye-left"></div>
+      <div class="nj-wolf-eye-right"></div>
+    </div>
+    <div class="nj-wolf-snout">
+      <div class="nj-wolf-nose"></div>
+    </div>
+    <div class="nj-wolf-body"></div>
+    <div class="nj-wolf-mouth"></div>
+  </div>
+</div>
+
+<!-- Alert Wolf with ear twitch -->
+<div class="nj-wolf-container">
+  <div class="nj-wolf size-medium animate-alert">
+    ...
+  </div>
+</div>
+
+<!-- Howling Wolf -->
+<div class="nj-wolf-container">
+  <div class="nj-wolf size-large animate-howl">
+    ...
+  </div>
+</div>
+
+<!-- Hoverable Wolf with glow -->
+<div class="nj-wolf-container">
+  <div class="nj-wolf size-medium hoverable nj-wolf--glow">
+    ...
+  </div>
+</div>
+*/

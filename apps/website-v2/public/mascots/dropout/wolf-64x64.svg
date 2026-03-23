@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Dropout Style Wolf - 64x64px -->
+  <!-- Strong wolf with varsity jacket, leadership pose -->
+  
+  <!-- Left Ear (pointed) -->
+  <path d="M14 6 L22 24 L10 20 Z" fill="#6C757D" stroke="#212529" stroke-width="1.5"/>
+  <path d="M16 9 L20 20 L12 17 Z" fill="#ADB5BD"/>
+  
+  <!-- Right Ear (pointed) -->
+  <path d="M50 6 L42 24 L54 20 Z" fill="#6C757D" stroke="#212529" stroke-width="1.5"/>
+  <path d="M48 9 L44 20 L52 17 Z" fill="#ADB5BD"/>
+  
+  <!-- Head -->
+  <ellipse cx="32" cy="28" rx="18" ry="16" fill="#6C757D" stroke="#212529" stroke-width="1.5"/>
+  
+  <!-- Forehead markings -->
+  <path d="M26 16 L32 24 L38 16" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M22 14 L26 18" fill="none" stroke="#495057" stroke-width="1" opacity="0.4"/>
+  <path d="M42 14 L38 18" fill="none" stroke="#495057" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Snout -->
+  <ellipse cx="32" cy="36" rx="10" ry="8" fill="#ADB5BD"/>
+  <ellipse cx="32" cy="34" rx="6" ry="4" fill="#CED4DA" opacity="0.5"/>
+  
+  <!-- Nose -->
+  <ellipse cx="32" cy="40" rx="4" ry="3" fill="#212529"/>
+  <ellipse cx="32" cy="39" rx="2" ry="1" fill="#495057" opacity="0.5"/>
+  
+  <!-- Nostrils -->
+  <ellipse cx="30.5" cy="40.5" rx="0.8" ry="0.5" fill="#000000"/>
+  <ellipse cx="33.5" cy="40.5" rx="0.8" ry="0.5" fill="#000000"/>
+  
+  <!-- Eyes (confident) -->
+  <ellipse cx="24" cy="26" rx="4" ry="5" fill="#F8F9FA" stroke="#212529" stroke-width="1"/>
+  <ellipse cx="40" cy="26" rx="4" ry="5" fill="#F8F9FA" stroke="#212529" stroke-width="1"/>
+  <ellipse cx="24" cy="26" rx="2.5" ry="3.5" fill="#212529"/>
+  <ellipse cx="40" cy="26" rx="2.5" ry="3.5" fill="#212529"/>
+  
+  <!-- Eye shine -->
+  <circle cx="25" cy="25" r="1.2" fill="#FFFFFF"/>
+  <circle cx="41" cy="25" r="1.2" fill="#FFFFFF"/>
+  <circle cx="23" cy="27" r="0.7" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="39" cy="27" r="0.7" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Eyebrows (confident) -->
+  <path d="M19 20 Q24 18 29 20" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round"/>
+  <path d="M35 20 Q40 18 45 20" fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Mouth -->
+  <path d="M28 46 Q32 48 36 46" fill="none" stroke="#495057" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M32 44 L32 47" fill="none" stroke="#495057" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- Chin fur -->
+  <path d="M29 50 Q32 52 35 50" fill="none" stroke="#6C757D" stroke-width="1"/>
+  
+  <!-- Varsity Jacket Body -->
+  <path d="M16 40 L12 56 L24 56 L24 48 L32 52 L40 48 L40 56 L52 56 L48 40 Q32 44 16 40" fill="#212529" stroke="#000000" stroke-width="1.5"/>
+  
+  <!-- Jacket Collar -->
+  <path d="M20 40 L32 48 L44 40" fill="none" stroke="#C0C0C0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 38 L32 44 L42 38" fill="none" stroke="#212529" stroke-width="1"/>
+  
+  <!-- Team Emblem -->
+  <circle cx="32" cy="48" r="4" fill="#C0C0C0" stroke="#212529" stroke-width="0.5"/>
+  <text x="32" y="50" font-size="5" fill="#212529" text-anchor="middle" font-weight="bold" font-family="Arial, sans-serif">W</text>
+  
+  <!-- Silver trim details -->
+  <path d="M12 48 L16 48" fill="none" stroke="#C0C0C0" stroke-width="2"/>
+  <path d="M48 48 L52 48" fill="none" stroke="#C0C0C0" stroke-width="2"/>
+  <path d="M24 52 L24 56" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+  <path d="M40 52 L40 56" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+  
+  <!-- Jacket cuffs -->
+  <rect x="13" y="53" width="8" height="3" fill="#C0C0C0" rx="1"/>
+  <rect x="43" y="53" width="8" height="3" fill="#C0C0C0" rx="1"/>
+</svg>

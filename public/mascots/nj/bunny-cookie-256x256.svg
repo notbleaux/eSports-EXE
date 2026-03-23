@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <path d="M96 96 Q64 64 80 48 Q104 40 120 80" 
+        fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M136 80 Q152 40 176 48 Q192 64 160 96" 
+        fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="128" cy="128" rx="56" ry="48" fill="none" stroke="#0000FF" stroke-width="4"/>
+  <ellipse cx="128" cy="144" rx="24" ry="20" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <ellipse cx="128" cy="136" rx="12" ry="10" fill="#0000FF"/>
+  <path d="M92 116 Q104 112 116 116" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M140 116 Q152 112 164 116" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="80" cy="136" rx="12" ry="8" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.5"/>
+  <ellipse cx="176" cy="136" rx="12" ry="8" fill="none" stroke="#0000FF" stroke-width="2" opacity="0.5"/>
+  <path d="M116 160 Q128 168 140 160" fill="none" stroke="#0000FF" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M80 176 Q80 216 128 224 Q176 216 176 176" 
+        fill="none" stroke="#0000FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="80" cy="200" rx="16" ry="20" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <line x1="72" y1="192" x2="72" y2="208" stroke="#0000FF" stroke-width="2"/>
+  <line x1="80" y1="188" x2="80" y2="212" stroke="#0000FF" stroke-width="2"/>
+  <line x1="88" y1="192" x2="88" y2="208" stroke="#0000FF" stroke-width="2"/>
+  <ellipse cx="176" cy="200" rx="16" ry="20" fill="none" stroke="#0000FF" stroke-width="3"/>
+  <line x1="168" y1="192" x2="168" y2="208" stroke="#0000FF" stroke-width="2"/>
+  <line x1="176" y1="188" x2="176" y2="212" stroke="#0000FF" stroke-width="2"/>
+  <line x1="184" y1="192" x2="184" y2="208" stroke="#0000FF" stroke-width="2"/>
+</svg>
