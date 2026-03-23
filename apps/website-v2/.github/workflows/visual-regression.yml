@@ -1,0 +1,185 @@
+# Visual Regression Testing Workflow
+# 
+# [Ver001.000]
+#
+# Runs visual regression tests for all mascots on PRs and main branch.
+# Updates baselines automatically when tests run on main.
+
+name: Visual Regression Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/components/mascots/**'
+      - 'tests/visual/**'
+      - 'playwright-visual.config.ts'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'src/components/mascots/**'
+      - 'tests/visual/**'
+      - 'playwright-visual.config.ts'
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: 'Update baseline images'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+env:
+  PLAYWRIGHT_BASE_URL: http://localhost:5173
+  UPDATE_VISUAL_BASELINES: ${{ github.event.inputs.update_baselines || 'false' }}
+
+jobs:
+  visual-regression:
+    name: Visual Regression (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      
+      - name: Restore baseline images cache
+        uses: actions/cache@v4
+        with:
+          path: tests/visual/baselines
+          key: visual-baselines-${{ hashFiles('src/components/mascots/**') }}
+          restore-keys: |
+            visual-baselines-
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Run visual regression tests
+        run: |
+          npx playwright test \
+            --config=playwright-visual.config.ts \
+            --project=${{ matrix.browser }} \
+            --reporter=list,html,json
+      
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+            tests/visual/results/
+          retention-days: 7
+      
+      - name: Upload baseline images
+        if: github.ref == 'refs/heads/main' && matrix.browser == 'chromium'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: tests/visual/baselines/
+          retention-days: 30
+
+  update-baselines:
+    name: Update Baseline Images
+    runs-on: ubuntu-latest
+    needs: visual-regression
+    if: github.ref == 'refs/heads/main' && github.event.inputs.update_baselines == 'true'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Update baselines
+        run: |
+          UPDATE_VISUAL_BASELINES=1 \
+          npx playwright test \
+            --config=playwright-visual.config.ts \
+            --project=chromium \
+            -g 'Update all baselines'
+      
+      - name: Commit updated baselines
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add tests/visual/baselines/
+          git diff --quiet --staged || (
+            git commit -m "chore(visual): Update baseline images [skip ci]"
+            git push
+          )
+
+  summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: visual-regression
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Generate summary
+        run: |
+          echo "## Visual Regression Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Browser | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          for browser in chromium firefox webkit; do
+            status="✅ Pass"
+            if [ "${{ needs.visual-regression.result }}" == "failure" ]; then
+              status="❌ Fail"
+            fi
+            echo "| $browser | $status |" >> $GITHUB_STEP_SUMMARY
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- 6 mascots" >> $GITHUB_STEP_SUMMARY
+          echo "- 14 total variants" >> $GITHUB_STEP_SUMMARY
+          echo "- 3 animation states (idle, wave, celebrate)" >> $GITHUB_STEP_SUMMARY
+          echo "- 42 total baseline images" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.visual-regression.result }}" == "failure" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### ⚠️ Test Artifacts" >> $GITHUB_STEP_SUMMARY
+            echo "Download test results and diff images from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
+          fi

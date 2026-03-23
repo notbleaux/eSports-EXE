@@ -12,7 +12,14 @@
     "typecheck:watch": "tsc --noEmit --watch",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:visual": "playwright test --config=playwright-visual.config.ts",
+    "test:visual:update": "cross-env UPDATE_VISUAL_BASELINES=1 playwright test --config=playwright-visual.config.ts -g 'Update all baselines'",
+    "test:visual:report": "playwright show-report playwright-report/visual",
+    "test:visual:fox": "playwright test --config=playwright-visual.config.ts -g 'Fox'",
+    "test:visual:bear": "playwright test --config=playwright-visual.config.ts -g 'Dropout Bear'",
+    "test:visual:bunny": "playwright test --config=playwright-visual.config.ts -g 'NJ Bunny'",
+    "test:visual:baseline:generate": "node tests/visual/scripts/generate-baselines.js"
   },
   "dependencies": {
     "@gsap/react": "^2.0.0",
@@ -69,6 +76,7 @@
     "typescript": "^5.9.3",
     "vite": "^8.0.2",
     "vitest": "^4.1.0",
-    "ws": "^8.14.0"
+    "ws": "^8.14.0",
+    "cross-env": "^7.0.3"
   }
 }

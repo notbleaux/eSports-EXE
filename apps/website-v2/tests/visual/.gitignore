@@ -1,0 +1,35 @@
+# Visual Regression Test Results
+# 
+# Baseline images should be committed to version control.
+# Only test outputs and temporary files are ignored.
+
+# Test output directories
+results/
+actual/
+expected/
+diff/
+temp/
+
+# Playwright reports
+playwright-report/
+test-results/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+*.pid
+*.seed
+*.pid.lock
