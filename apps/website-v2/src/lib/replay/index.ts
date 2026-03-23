@@ -10,6 +10,12 @@
 // Re-export types
 export * from './types';
 
+// Export annotations
+export * from './annotations';
+
+// Export storage
+export * from './storage';
+
 // Export parsers
 export { ValorantReplayParser, createValorantParser } from './parsers/valorant';
 export { CS2ReplayParser, createCS2Parser } from './parsers/cs2';

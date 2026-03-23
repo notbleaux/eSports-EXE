@@ -1,4 +1,4 @@
-/** [Ver002.000]
+/** [Ver003.000]
  * Hooks Index
  * 
  * Central export point for all custom React hooks.
@@ -116,3 +116,15 @@ export {
   type GestureHandlers,
   type UseTouchGestureReturn,
 } from './useTouchGesture';
+
+// Mobile screen reader hooks
+export {
+  useMobileScreenReader,
+  type ScreenReaderType,
+  type MobileScreenReaderState,
+  type MobileAnnouncementOptions,
+  type ScreenReaderNavigationOptions,
+  type PageChangeOptions,
+  type FocusTrapConfig,
+  type UseMobileScreenReaderReturn,
+} from './useMobileScreenReader';

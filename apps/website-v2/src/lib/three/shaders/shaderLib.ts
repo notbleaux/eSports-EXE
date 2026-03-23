@@ -806,4 +806,4 @@ export class ShaderErrorHandler {
 // Export cache for external access
 // ============================================
 
-export { BaseShader.cache as globalShaderCache };
+export const globalShaderCache = BaseShader.cache;

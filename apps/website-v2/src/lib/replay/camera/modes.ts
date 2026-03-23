@@ -534,7 +534,16 @@ export class OrbitCamera extends BaseCamera {
     bounds?: CameraBounds
   ) {
     super(undefined, bounds);
-    this.config = { ...DEFAULT_ORBIT_CONFIG, ...config };
+    this.config = { 
+      ...DEFAULT_ORBIT_CONFIG, 
+      ...config,
+      // Clamp distance to valid range
+      distance: clamp(
+        config.distance ?? DEFAULT_ORBIT_CONFIG.distance,
+        CAMERA_SETTINGS.MIN_ORBIT_DISTANCE,
+        CAMERA_SETTINGS.MAX_ORBIT_DISTANCE
+      ),
+    };
     this.state.fov = this.config.fov;
     this.updatePositionFromOrbit();
   }

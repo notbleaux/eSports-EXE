@@ -1,12 +1,13 @@
 /**
  * Three.js Optimization Library
  * 
- * [Ver001.000] - WebGL/Three.js optimization modules for mascot 3D scenes
+ * [Ver002.000] - WebGL/Three.js optimization modules for mascot 3D scenes
  * 
  * Provides:
  * - LOD (Level of Detail) system with smooth transitions
  * - Frustum culling with occlusion detection
  * - Texture atlasing for draw call reduction
+ * - Shader pipeline for mascot VFX
  * - Performance monitoring utilities
  * 
  * @example
@@ -14,7 +15,9 @@
  * import { 
  *   LODManager, 
  *   FrustumCullingManager, 
- *   TextureAtlas 
+ *   TextureAtlas,
+ *   SolarGlowShader,
+ *   MagicSparkleShader,
  * } from '@/lib/three';
  * 
  * // Setup LOD
@@ -29,13 +32,24 @@
  * 
  * // Setup frustum culling
  * const cullingManager = new FrustumCullingManager();
- * cullingManager.setCamera(camera);
+ * const cullingManager.setCamera(camera);
  * cullingManager.registerObject('mascot', mascotLOD.getGroup());
+ * 
+ * // Add shader effect to mascot
+ * const solarShader = new SolarGlowShader({
+ *   glowIntensity: 2.0,
+ *   pulseSpeed: 1.5,
+ * });
+ * const result = solarShader.compile();
+ * if (result.material) {
+ *   mascotMesh.material = result.material;
+ * }
  * 
  * // Animation loop
  * function animate(deltaTime: number) {
  *   lodManager.update(deltaTime);
  *   cullingManager.update();
+ *   solarShader.update(deltaTime);
  *   renderer.render(scene, camera);
  * }
  * ```
@@ -90,3 +104,54 @@ export type {
   AtlasStats,
   UVRemapInfo,
 } from './textureAtlas';
+
+// Shader Pipeline
+export {
+  // Core
+  BaseShader,
+  ShaderCache,
+  UniformManager,
+  ShaderErrorHandler,
+  GLSL_UTILS,
+  globalShaderCache,
+  // Shaders
+  SolarGlowShader,
+  LunarGlowShader,
+  BinaryCodeShader,
+  FireVFXShader,
+  MagicSparkleShader,
+  // Factories
+  createSolarGlow,
+  createLunarGlow,
+  createBinaryCode,
+  createFireVFX,
+  createMagicSparkle,
+  createSolarGlowMaterial,
+  createLunarGlowMaterial,
+  createBinaryCodeMaterial,
+  createFireVFXMaterial,
+  createMagicSparkleMaterial,
+  // Utilities
+  getDefaultShaderForMascot,
+  getPresetsForMascot,
+  getShaderStats,
+  SHADER_PERFORMANCE_TARGETS,
+} from './shaders';
+
+export type {
+  // Core types
+  ShaderCompilationResult,
+  ShaderError,
+  UniformDefinition,
+  UniformType,
+  ShaderMetrics,
+  BaseShaderConfig,
+  // Shader configs
+  SolarGlowConfig,
+  LunarGlowConfig,
+  BinaryCodeConfig,
+  FireVFXConfig,
+  MagicSparkleConfig,
+  // Mascot types
+  MascotId,
+} from './shaders';

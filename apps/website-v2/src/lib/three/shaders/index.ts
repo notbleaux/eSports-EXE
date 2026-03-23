@@ -12,7 +12,10 @@
  * - Magic Sparkle for Uni mascot
  */
 
-// Core library
+// ============================================
+// Core Library
+// ============================================
+
 export {
   BaseShader,
   ShaderCache,
@@ -31,7 +34,10 @@ export type {
   BaseShaderConfig,
 } from './shaderLib';
 
+// ============================================
 // Solar Glow Shader
+// ============================================
+
 export {
   SolarGlowShader,
   createSolarGlow,
@@ -39,7 +45,10 @@ export {
 } from './solarGlow';
 export type { SolarGlowConfig } from './solarGlow';
 
+// ============================================
 // Lunar Glow Shader
+// ============================================
+
 export {
   LunarGlowShader,
   createLunarGlow,
@@ -47,7 +56,10 @@ export {
 } from './lunarGlow';
 export type { LunarGlowConfig } from './lunarGlow';
 
+// ============================================
 // Binary Code Shader
+// ============================================
+
 export {
   BinaryCodeShader,
   createBinaryCode,
@@ -55,7 +67,10 @@ export {
 } from './binaryCode';
 export type { BinaryCodeConfig } from './binaryCode';
 
+// ============================================
 // Fire VFX Shader
+// ============================================
+
 export {
   FireVFXShader,
   createFireVFX,
@@ -63,13 +78,27 @@ export {
 } from './fireVFX';
 export type { FireVFXConfig } from './fireVFX';
 
+// ============================================
 // Magic Sparkle Shader
+// ============================================
+
 export {
   MagicSparkleShader,
   createMagicSparkle,
   createMagicSparkleMaterial,
 } from './magicSparkle';
 export type { MagicSparkleConfig } from './magicSparkle';
+
+// ============================================
+// Re-import for utility functions
+// ============================================
+
+import { SolarGlowShader } from './solarGlow';
+import { LunarGlowShader } from './lunarGlow';
+import { BinaryCodeShader } from './binaryCode';
+import { FireVFXShader } from './fireVFX';
+import { MagicSparkleShader } from './magicSparkle';
+import { globalShaderCache } from './shaderLib';
 
 // ============================================
 // Mascot Shader Mapping
@@ -97,7 +126,7 @@ export function getDefaultShaderForMascot(mascotId: MascotId) {
 }
 
 /** Get preset configs for a mascot */
-export function getPresetsForMascot(mascotId: MascotId) {
+export function getPresetsForMascot(mascotId: MascotId): Record<string, Record<string, unknown>> {
   switch (mascotId) {
     case 'sol':
       return {
@@ -173,3 +202,13 @@ export function getShaderStats() {
     totalPresets: 17,
   };
 }
+
+// ============================================
+// Factory functions (declarations)
+// ============================================
+
+declare function createSolarGlow(config?: unknown): import('./solarGlow').SolarGlowShader;
+declare function createLunarGlow(config?: unknown): import('./lunarGlow').LunarGlowShader;
+declare function createBinaryCode(config?: unknown): import('./binaryCode').BinaryCodeShader;
+declare function createFireVFX(config?: unknown): import('./fireVFX').FireVFXShader;
+declare function createMagicSparkle(config?: unknown): import('./magicSparkle').MagicSparkleShader;

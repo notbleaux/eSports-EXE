@@ -1,9 +1,10 @@
-[Ver001.000]
+[Ver002.000]
 
 /**
  * Mobile Library Index
  * 
- * Centralized exports for mobile-first responsive utilities.
+ * Centralized exports for mobile-first responsive utilities and
+ * screen reader optimization for VoiceOver and TalkBack.
  * 
  * @module lib/mobile
  */
@@ -60,3 +61,70 @@ export type {
   UseViewportOptions,
   ViewportState,
 } from './viewport';
+
+// VoiceOver support (iOS)
+export {
+  isVoiceOverEnabled,
+  getIOSVersion,
+  supportsAdvancedVoiceOver,
+  announceToVoiceOver,
+  stopVoiceOverAnnouncements,
+  createRotorConfig,
+  setupRotorNavigation,
+  getCustomActionAttributes,
+  executeCustomAction,
+  createRegionConfig,
+  getRegionAttributes,
+  announceRegionChange,
+  useVoiceOver,
+  optimizeForVoiceOver,
+  createAccessibleLabel,
+  formatNumberForVoiceOver,
+  formatPercentageForVoiceOver,
+  VOICEOVER_CSS,
+  TRAIT_TO_ROLE,
+} from './voiceover';
+
+export type {
+  VoiceOverRotorConfig,
+  VoiceOverRotorItem,
+  VoiceOverCustomAction,
+  VoiceOverRegionConfig,
+  VoiceOverTrait,
+  VoiceOverPriority,
+  VoiceOverAnnouncementOptions,
+  VoiceOverState,
+} from './voiceover';
+
+// TalkBack support (Android)
+export {
+  isTalkBackEnabled,
+  getAndroidVersion,
+  supportsAdvancedTalkBack,
+  supportsAccessibilityDelegate,
+  announceToTalkBack,
+  createTraversalManager,
+  TalkBackTraversalManager,
+  buildNodeInfo,
+  performAction,
+  createGestureManager,
+  TalkBackGestureManager,
+  useTalkBack,
+  optimizeForTalkBack,
+  formatNumberForTalkBack,
+  getTalkBackAttributes,
+  TALKBACK_CSS,
+  TALKBACK_VIBRATIONS,
+  TALKBACK_EARCONS,
+} from './talkback';
+
+export type {
+  TalkBackTraversalConfig,
+  AccessibilityNodeInfo,
+  TalkBackAction,
+  TalkBackGesture,
+  TalkBackGestureHandler,
+  TalkBackState,
+  TalkBackAnnouncementOptions,
+  TraversalStrategy,
+} from './talkback';
