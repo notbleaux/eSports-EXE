@@ -1,6 +1,5 @@
-[Ver002.000]
-
-/**
+/** [Ver002.000]
+ *
  * Mobile Library Index
  * 
  * Centralized exports for mobile-first responsive utilities and

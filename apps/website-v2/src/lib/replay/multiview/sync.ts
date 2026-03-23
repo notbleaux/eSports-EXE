@@ -12,6 +12,9 @@
 
 import { useTimelineStore, type PlaybackState } from '../timeline/state';
 import { MAX_SYNC_DRIFT_MS } from './state';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('SyncManager');
 
 // ============================================================================
 // Types
@@ -351,7 +354,7 @@ export class SyncManager {
       try {
         listener(event);
       } catch (error) {
-        console.error('Sync event listener error:', error);
+        logger.error('Sync event listener error', { error: error instanceof Error ? error.message : String(error) });
       }
     });
   }

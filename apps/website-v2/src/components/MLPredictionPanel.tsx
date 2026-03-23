@@ -7,6 +7,7 @@
 
 import React, { useState, useCallback, useRef } from 'react'
 import { useMLInference } from '../hooks/useMLInference'
+import { mlLogger } from '@/utils/logger'
 import { PanelSkeleton } from './grid/PanelSkeleton'
 import { 
   Activity, 
@@ -83,8 +84,11 @@ export const MLPredictionPanel: React.FC<MLPredictionPanelProps> = ({
     retry
   } = useMLInference({
     useWorker: true,
-    onProgress: (p) => console.log('[ML Progress]', p),
-    onWorkerError: (e) => console.error('[ML Worker Error]', e)
+    onProgress: (p) => mlLogger.info('ML progress update', p),
+    onWorkerError: (e) => mlLogger.error('ML worker error', { 
+      error: e instanceof Error ? e.message : String(e),
+      stack: e instanceof Error ? e.stack : undefined,
+    })
   })
 
   const [predictions, setPredictions] = useState<Prediction[]>([])

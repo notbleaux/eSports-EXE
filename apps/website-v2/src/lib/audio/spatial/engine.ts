@@ -18,6 +18,7 @@
  * - Supports mascot voice and effect spatialization
  */
 
+import { createLogger } from '@/utils/logger';
 import {
   type Vector3,
   type AudioSourceId,
@@ -48,6 +49,12 @@ import {
   ENVIRONMENT_PRESETS,
   SPEED_OF_SOUND_AIR,
 } from './types';
+
+// ============================================================================
+// Logger
+// ============================================================================
+
+const logger = createLogger('SpatialAudioEngine');
 
 // ============================================================================
 // Spatial Audio Engine Class
@@ -1033,7 +1040,7 @@ export class SpatialAudioEngine {
         try {
           handler(event);
         } catch (error) {
-          console.error('Spatial audio event handler error:', error);
+          logger.error('Spatial audio event handler error', { error: error instanceof Error ? error.message : String(error) });
         }
       });
     }

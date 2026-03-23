@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Mobile Screen Reader Tests
  * 
  * Comprehensive test suite for VoiceOver and TalkBack support.

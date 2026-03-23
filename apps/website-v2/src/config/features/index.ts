@@ -7,6 +7,10 @@
  * [Ver001.000]
  */
 
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('Features');
+
 // Feature flag definitions
 export interface FeatureFlags {
   // OPERA Hub Features
@@ -140,7 +144,7 @@ export function setFeatureOverride(feature: keyof FeatureFlags, enabled: boolean
     localStorage.setItem('featureFlags', JSON.stringify(current));
     window.location.reload();
   } catch (e) {
-    console.error('Failed to set feature override:', e);
+    logger.error('Failed to set feature override', { error: e instanceof Error ? e.message : String(e) });
   }
 }
 

@@ -24,6 +24,7 @@ import { LiveChat } from './LiveChat';
 import { useLiveData } from './hooks/useLiveData';
 import { mockLiveData } from './mockData';
 import type { LiveContainerProps, LiveMatch, LiveEvent, Stream } from './types';
+import { streamingLogger } from '@/utils/logger';
 
 const OPERA_COLOR = colors.hub.opera.base;
 const OPERA_GLOW = colors.hub.opera.glow;
@@ -192,7 +193,9 @@ export const LiveContainer: React.FC<LiveContainerProps> = ({
               platform={activeStream.platform}
               matchId={activeStream.matchId}
               autoPlay={true}
-              onError={(error) => console.error('Stream error:', error)}
+              onError={(error) => streamingLogger.error('Stream error', {
+                error: error instanceof Error ? error.message : String(error),
+              })}
               matchInfo={
                 currentMatch
                   ? {

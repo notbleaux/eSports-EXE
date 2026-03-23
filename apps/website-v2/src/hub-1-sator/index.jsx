@@ -28,6 +28,9 @@ import { VirtualDataGrid } from './components/VirtualDataGrid';
 import { VirtualPlayerGrid } from './components/VirtualPlayerGrid';
 import { PlayerRatingCard } from './components/PlayerRatingCard';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('SATOR');
 import { 
   MLInferenceErrorBoundary, 
   HubErrorBoundary,
@@ -1072,7 +1075,11 @@ function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }) {
                 console.log(`[SATOR] SimRating calculated for ${player.name}:`, result);
               }}
               onError={(error) => {
-                console.error(`[SATOR] SimRating error for ${player.name}:`, error);
+                logger.error('SimRating calculation error', {
+                  error: error instanceof Error ? error.message : String(error),
+                  playerName: player.name,
+                  playerId: player.id,
+                });
               }}
             />
           ))}

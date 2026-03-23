@@ -6,6 +6,7 @@
  */
 
 import React, { Component, type ReactNode } from 'react'
+import { mlLogger } from '@/utils/logger'
 
 interface Props {
   children: ReactNode
@@ -48,11 +49,13 @@ export class MLInferenceErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     this.setState({ errorInfo })
     
-    // Log to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[MLInferenceErrorBoundary] Caught error:', error)
-      console.error('Component stack:', errorInfo.componentStack)
-    }
+    // Log with structured logger
+    mlLogger.error('ML inference error caught', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      errorName: error.name,
+    })
     
     // Call optional error handler
     this.props.onError?.(error, errorInfo)

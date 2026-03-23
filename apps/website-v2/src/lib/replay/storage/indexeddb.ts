@@ -8,6 +8,9 @@
  */
 
 import type { Replay, GameType } from '../types';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('IndexedDB');
 
 // ============================================================================
 // Database Configuration
@@ -326,7 +329,7 @@ export async function storeReplay(
     const quota = await getStorageQuota();
     return { success: true, quota };
   } catch (error) {
-    console.error('[IndexedDB] Store failed:', error);
+    logger.error('Store failed', { error: error instanceof Error ? error.message : String(error) });
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Storage failed' 
@@ -378,7 +381,7 @@ export async function retrieveReplay(id: string): Promise<{
     
     return { replay, metadata };
   } catch (error) {
-    console.error('[IndexedDB] Retrieve failed:', error);
+    logger.error('Retrieve failed', { error: error instanceof Error ? error.message : String(error) });
     return { 
       error: error instanceof Error ? error.message : 'Retrieval failed',
       metadata: null as unknown as ReplayMetadata
@@ -398,7 +401,7 @@ export async function getMetadata(id: string): Promise<ReplayMetadata | null> {
       request.onerror = () => reject(request.error);
     });
   } catch (error) {
-    console.error('[IndexedDB] Get metadata failed:', error);
+    logger.error('Get metadata failed', { error: error instanceof Error ? error.message : String(error) });
     return null;
   }
 }
@@ -451,7 +454,7 @@ export async function deleteReplay(id: string): Promise<{ success: boolean; erro
     
     return { success: true };
   } catch (error) {
-    console.error('[IndexedDB] Delete failed:', error);
+    logger.error('Delete failed', { error: error instanceof Error ? error.message : String(error) });
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Delete failed' 
@@ -525,7 +528,7 @@ export async function queryReplays(
     
     return { metadata, total, hasMore };
   } catch (error) {
-    console.error('[IndexedDB] Query failed:', error);
+    logger.error('Query failed', { error: error instanceof Error ? error.message : String(error) });
     return { metadata: [], total: 0, hasMore: false };
   }
 }
@@ -547,7 +550,7 @@ export async function getUniqueMaps(): Promise<string[]> {
     const maps = new Set(all.map(m => m.mapName));
     return Array.from(maps).sort();
   } catch (error) {
-    console.error('[IndexedDB] Get maps failed:', error);
+    logger.error('Get maps failed', { error: error instanceof Error ? error.message : String(error) });
     return [];
   }
 }
@@ -568,7 +571,7 @@ export async function getUniqueTags(): Promise<string[]> {
     
     return allTags.map(t => t.tag).sort();
   } catch (error) {
-    console.error('[IndexedDB] Get tags failed:', error);
+    logger.error('Get tags failed', { error: error instanceof Error ? error.message : String(error) });
     return [];
   }
 }
@@ -609,7 +612,7 @@ export async function addTags(id: string, tags: string[]): Promise<{ success: bo
     
     return { success: true };
   } catch (error) {
-    console.error('[IndexedDB] Add tags failed:', error);
+    logger.error('Add tags failed', { error: error instanceof Error ? error.message : String(error) });
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Add tags failed' 
@@ -648,7 +651,7 @@ export async function removeTags(id: string, tags: string[]): Promise<{ success:
     
     return { success: true };
   } catch (error) {
-    console.error('[IndexedDB] Remove tags failed:', error);
+    logger.error('Remove tags failed', { error: error instanceof Error ? error.message : String(error) });
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Remove tags failed' 
@@ -763,7 +766,7 @@ export async function storeThumbnail(replayId: string, blob: Blob): Promise<void
       });
     }
   } catch (error) {
-    console.error('[IndexedDB] Store thumbnail failed:', error);
+    logger.error('Store thumbnail failed', { error: error instanceof Error ? error.message : String(error) });
   }
 }
 
@@ -784,7 +787,7 @@ export async function getThumbnail(replayId: string): Promise<Blob | null> {
     
     return thumbnail?.data || null;
   } catch (error) {
-    console.error('[IndexedDB] Get thumbnail failed:', error);
+    logger.error('Get thumbnail failed', { error: error instanceof Error ? error.message : String(error) });
     return null;
   }
 }
@@ -840,7 +843,7 @@ export async function getStorageQuota(): Promise<StorageQuota> {
       replayCount: allMetadata.length,
     };
   } catch (error) {
-    console.error('[IndexedDB] Get quota failed:', error);
+    logger.error('Get quota failed', { error: error instanceof Error ? error.message : String(error) });
     return { total: 0, used: 0, available: 0, replayCount: 0 };
   }
 }
@@ -891,7 +894,7 @@ export async function cleanupStorage(
     
     return { deleted, freed };
   } catch (error) {
-    console.error('[IndexedDB] Cleanup failed:', error);
+    logger.error('Cleanup failed', { error: error instanceof Error ? error.message : String(error) });
     return { deleted: 0, freed: 0 };
   }
 }

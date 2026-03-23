@@ -6,7 +6,7 @@
  * Features:
  * - Returns current load level (low/medium/high/critical)
  * - Subscribe to load changes
- - Manual override option
+ * - Manual override option
  * - Integration with React component lifecycle
  * 
  * Integration:
@@ -24,6 +24,9 @@ import {
   useRef,
   useMemo,
 } from 'react';
+import { createLogger } from '@/utils/logger';
+const logger = createLogger('useCognitiveLoad');
+
 import type {
   CognitiveLoadState,
   CognitiveLoadLevel,
@@ -113,7 +116,9 @@ function notifySubscribers(state: CognitiveLoadState): void {
     try {
       callback(state);
     } catch (error) {
-      console.error('Error in cognitive load subscriber:', error);
+      logger.error('Error in cognitive load subscriber', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   });
 }
@@ -257,14 +262,14 @@ export function useCognitiveLoad(
   }, []);
 
   // Start task tracking
-  const startTask = useCallback((taskId: string, expectedTime: number, optimalSteps: number) => {
+  const startTask = useCallback(async (taskId: string, expectedTime: number, optimalSteps: number) => {
     // Import dynamically to avoid circular dependencies
     const { startTask: detectorStartTask } = await import('../lib/cognitive/loadDetector');
     detectorStartTask(taskId, expectedTime, optimalSteps);
   }, []);
 
   // Complete task tracking
-  const completeTask = useCallback((taskId: string, completed: boolean) => {
+  const completeTask = useCallback(async (taskId: string, completed: boolean) => {
     // Import dynamically to avoid circular dependencies
     const { completeTask: detectorCompleteTask } = await import('../lib/cognitive/loadDetector');
     detectorCompleteTask(taskId, completed);
@@ -399,7 +404,7 @@ export function useCognitiveMetric(
  *   
  *   return (
  *     <form onFocus={handleStart} onSubmit={handleComplete}>
- *       {/* form fields */}
+ *       // form fields
  *     </form>
  *   );
  * }
@@ -464,12 +469,10 @@ export function useCognitiveTaskTracker() {
 
 export default useCognitiveLoad;
 
-// Re-export types
+// Re-export types from lib
 export type {
   CognitiveLoadState,
   CognitiveLoadLevel,
   LoadDetectionConfig,
   UseCognitiveLoadReturn,
-  UseCognitiveLoadOptions,
-  UseCognitiveLoadResult,
 };

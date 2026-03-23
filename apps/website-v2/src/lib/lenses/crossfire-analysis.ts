@@ -20,7 +20,7 @@ import type {
   Player,
   MapBounds,
   LensResult,
-  LensRenderOptions
+  LensRenderOptions,
   Site
 } from './tactical-types'
 

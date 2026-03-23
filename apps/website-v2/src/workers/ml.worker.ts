@@ -7,6 +7,19 @@
 
 /// <reference lib="webworker" />
 
+// Simple logger for worker context
+const workerLogger = {
+  error: (msg: string, meta?: Record<string, unknown>) => {
+    console.error(`[ML Worker] ${msg}`, meta ? JSON.stringify(meta) : '');
+  },
+  warn: (msg: string, meta?: Record<string, unknown>) => {
+    console.warn(`[ML Worker] ${msg}`, meta ? JSON.stringify(meta) : '');
+  },
+  info: (msg: string, meta?: Record<string, unknown>) => {
+    console.info(`[ML Worker] ${msg}`, meta ? JSON.stringify(meta) : '');
+  }
+};
+
 import type { 
   MLWorkerCommand, 
   MLWorkerResponse, 
@@ -54,7 +67,10 @@ async function loadTensorFlow(): Promise<typeof import('@tensorflow/tfjs')> {
     return tf
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to load TensorFlow.js'
-    console.error('[ML Worker] Failed to load TensorFlow.js:', errorMessage)
+    workerLogger.error('Failed to load TensorFlow.js', { 
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined 
+    })
     throw new Error(`TensorFlow.js load failed: ${errorMessage}`)
   }
 }

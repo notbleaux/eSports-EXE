@@ -13,6 +13,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createLogger } from '@/utils/logger';
 import type {
   KnowledgeGraph,
   HelpTopic,
@@ -22,6 +23,12 @@ import type {
   KnowledgeGraphSearchFilters,
   KnowledgeGraphRecommendationContext,
 } from '@sator/services/help';
+
+// ============================================================================
+// Logger
+// ============================================================================
+
+const logger = createLogger('useKnowledgeGraph');
 
 // ============================================================================
 // Hook Options
@@ -104,7 +111,9 @@ export function useKnowledgeGraph(
       cacheRef.current.clear();
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to load knowledge graph'));
-      console.error('Error loading knowledge graph:', err);
+      logger.error('Error loading knowledge graph', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -143,7 +152,10 @@ export function useKnowledgeGraph(
       cacheRef.current.set(cacheKey, data);
       return data;
     } catch (err) {
-      console.error('Error finding related topics:', err);
+      logger.error('Error finding related topics', {
+        error: err instanceof Error ? err.message : String(err),
+        topicId,
+      });
       return [];
     }
   }, [apiEndpoint]);
@@ -173,7 +185,10 @@ export function useKnowledgeGraph(
       cacheRef.current.set(cacheKey, data);
       return data;
     } catch (err) {
-      console.error('Error finding prerequisites:', err);
+      logger.error('Error finding prerequisites', {
+        error: err instanceof Error ? err.message : String(err),
+        topicId,
+      });
       return [];
     }
   }, [apiEndpoint]);
@@ -204,7 +219,11 @@ export function useKnowledgeGraph(
       cacheRef.current.set(cacheKey, data);
       return data;
     } catch (err) {
-      console.error('Error finding path:', err);
+      logger.error('Error finding path', {
+        error: err instanceof Error ? err.message : String(err),
+        fromTopicId,
+        toTopicId,
+      });
       return [];
     }
   }, [apiEndpoint]);
@@ -237,7 +256,10 @@ export function useKnowledgeGraph(
 
       return await response.json();
     } catch (err) {
-      console.error('Error searching topics:', err);
+      logger.error('Error searching topics', {
+        error: err instanceof Error ? err.message : String(err),
+        query,
+      });
       return [];
     }
   }, [apiEndpoint]);
@@ -261,7 +283,10 @@ export function useKnowledgeGraph(
 
       return await response.json();
     } catch (err) {
-      console.error('Error getting recommendations:', err);
+      logger.error('Error getting recommendations', {
+        error: err instanceof Error ? err.message : String(err),
+        context,
+      });
       return [];
     }
   }, [apiEndpoint]);

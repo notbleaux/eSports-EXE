@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { createLogger } from '@/utils/logger';
 import type {
   Organization,
   TeamRanking,
@@ -21,6 +22,8 @@ const PURPLE = {
   glow: 'rgba(157, 78, 221, 0.4)',
   muted: '#7a3aaa',
 };
+
+const logger = createLogger('useRankingsData');
 
 // ============================================================================
 // MOCK DATA - Organizations
@@ -677,7 +680,9 @@ export function useRankingsData(): UseRankingsDataReturn {
       setOrgRankings(data);
     } catch (err) {
       setError('Failed to fetch organization rankings');
-      console.error(err);
+      logger.error('Failed to fetch organization rankings', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setLoading(prev => ({ ...prev, organizations: false }));
     }
@@ -702,7 +707,9 @@ export function useRankingsData(): UseRankingsDataReturn {
       setTeamRankings(data);
     } catch (err) {
       setError('Failed to fetch team rankings');
-      console.error(err);
+      logger.error('Failed to fetch team rankings', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setLoading(prev => ({ ...prev, teams: false }));
     }
@@ -727,7 +734,9 @@ export function useRankingsData(): UseRankingsDataReturn {
       setPlayerRankings(data);
     } catch (err) {
       setError('Failed to fetch player rankings');
-      console.error(err);
+      logger.error('Failed to fetch player rankings', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setLoading(prev => ({ ...prev, players: false }));
     }

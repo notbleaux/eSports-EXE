@@ -11,6 +11,9 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import { RefreshCw, X, Download, Sparkles } from 'lucide-react'
+import { createLogger } from '@/utils/logger'
+
+const logger = createLogger('UpdateNotification')
 
 interface UpdateNotificationProps {
   checkInterval?: number // milliseconds
@@ -58,7 +61,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
         try {
           await registration.update()
         } catch (error) {
-          console.error('[UpdateNotification] Update check failed:', error)
+          logger.error('Update check failed', { error: error instanceof Error ? error.message : String(error) })
         }
       }
     }
@@ -108,7 +111,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
         // Set up periodic update checks
         intervalId = setInterval(checkForUpdates, checkInterval)
       } catch (error) {
-        console.error('[UpdateNotification] Setup failed:', error)
+        logger.error('Setup failed', { error: error instanceof Error ? error.message : String(error) })
       }
     }
 

@@ -5,6 +5,8 @@
  * [Ver001.000]
  */
 
+import { mlLogger } from '@/utils/logger';
+
 export interface PredictionEvent {
   timestamp: number
   latency: number
@@ -190,7 +192,7 @@ export function createMLAnalytics(maxEvents: number = DEFAULT_MAX_EVENTS) {
       state.errors = state.errors.slice(-state.maxEvents)
     }
 
-    console.error(`[ML Analytics] Error in ${context}:`, error.message)
+    mlLogger.error(`Error in ${context}`, { error: error.message, context })
   }
 
   /**

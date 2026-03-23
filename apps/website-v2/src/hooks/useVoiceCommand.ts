@@ -20,6 +20,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { createLogger } from '@/utils/logger';
 import type {
   VoiceState,
   SupportedLanguage,
@@ -477,7 +478,9 @@ export function useVoiceCommand(
       recognitionRef.current.start();
       setHasPermission(true);
     } catch (err) {
-      console.error('[useVoiceCommand] Failed to start recognition:', err);
+      logger.error('Failed to start recognition', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       setError({
         code: 'unknown',
         message: 'Failed to start voice recognition.',

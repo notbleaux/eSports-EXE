@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Viewport Adapter for Mobile Devices
  * 
  * Manages viewport meta tag, orientation changes, and safe area insets

@@ -13,6 +13,9 @@
 import { Component, type ReactNode, type ErrorInfo, type MouseEvent } from 'react';
 import { AlertTriangle, RefreshCw, X } from 'lucide-react';
 import { colors } from '@/theme/colors';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('PanelErrorBoundary');
 
 const HUB_COLORS = {
   SATOR: colors.hub.sator,
@@ -213,12 +216,15 @@ export class PanelErrorBoundary extends Component<PanelErrorBoundaryProps, Panel
       this.props.onError(error, errorInfo, this.props.panelId);
     }
     
-    // Console error for debugging
-    console.error(
-      `PanelErrorBoundary caught error in panel "${this.props.panelTitle}":`,
-      error,
-      errorInfo
-    );
+    // Log with structured logger
+    logger.error('Panel error caught', {
+      panelId: this.props.panelId,
+      panelTitle: this.props.panelTitle,
+      hub: this.props.hub,
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+    });
   }
   
   handleRetry = (): void => {
@@ -277,8 +283,12 @@ export function usePanelErrorBoundary(
     hub,
     onClose,
     onError: (error: Error, _errorInfo: ErrorInfo, panelId: string): void => {
-      // Could send to analytics service
-      console.error(`Panel ${panelId} error:`, error);
+      // Send to analytics service via logger
+      logger.error('Panel error reported', {
+        panelId,
+        error: error.message,
+        stack: error.stack,
+      });
     }
   };
 }

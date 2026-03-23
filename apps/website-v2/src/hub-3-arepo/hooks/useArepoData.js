@@ -6,6 +6,7 @@
  * [Ver002.000] - Migrated to backend search API
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { createLogger } from '@/utils/logger';
 import { useNJZStore } from '@/shared/store/njzStore';
 import { 
   searchAll, 
@@ -28,6 +29,8 @@ import {
 } from '@/api/crossReference';
 
 // Mock data for development - replace with actual API calls
+
+const logger = createLogger('useArepoData');
 const MOCK_DOCUMENTATION = [
   { 
     id: 1, 
@@ -226,7 +229,7 @@ export function useArepoData(options = {}) {
     } catch (err) {
       if (err.name !== 'AbortError') {
         setSearchError(err.message || 'Search failed');
-        console.error('Backend search error:', err);
+        logger.error('Backend search error', { error: err.message });
       }
     } finally {
       setSearchLoading(false);
@@ -690,7 +693,7 @@ export function useCrossReferenceEngine() {
         setQueryHistory(JSON.parse(stored));
       }
     } catch (e) {
-      console.error('Failed to load query history:', e);
+      logger.error('Failed to load query history', { error: e.message });
     }
     
     // Also fetch saved queries from API

@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Mobile Layout Test Suite
  * 
  * Comprehensive tests for responsive layout components

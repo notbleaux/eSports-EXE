@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Touch-friendly Button Component
  * 
  * Mobile-optimized button with 44px minimum touch target,

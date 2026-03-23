@@ -13,6 +13,19 @@
 
 /// <reference lib="webworker" />
 
+// Simple logger for worker context
+const workerLogger = {
+  error: (msg: string, meta?: Record<string, unknown>) => {
+    console.error(`[Lens Worker] ${msg}`, meta ? JSON.stringify(meta) : '');
+  },
+  warn: (msg: string, meta?: Record<string, unknown>) => {
+    console.warn(`[Lens Worker] ${msg}`, meta ? JSON.stringify(meta) : '');
+  },
+  info: (msg: string, meta?: Record<string, unknown>) => {
+    console.info(`[Lens Worker] ${msg}`, meta ? JSON.stringify(meta) : '');
+  }
+};
+
 import type {
   HeatmapCell,
   FlowVector,
@@ -478,7 +491,7 @@ function initializeHeatmapShaders(gl: WebGLRenderingContext): void {
   gl.linkProgram(program)
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('Shader program link failed:', gl.getProgramInfoLog(program))
+    workerLogger.error('Shader program link failed', { infoLog: gl.getProgramInfoLog(program) || undefined })
     return
   }
 
@@ -507,7 +520,7 @@ function createShader(gl: WebGLRenderingContext, type: number, source: string): 
   gl.compileShader(shader)
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error('Shader compile error:', gl.getShaderInfoLog(shader))
+    workerLogger.error('Shader compile error', { infoLog: gl.getShaderInfoLog(shader) || undefined })
     gl.deleteShader(shader)
     return null
   }
@@ -800,7 +813,11 @@ ctx.onmessage = (event: MessageEvent<LensWorkerMessage>) => {
 // ============================================================================
 
 ctx.onerror = (error: ErrorEvent) => {
-  console.error('Lens Worker Error:', error)
+  workerLogger.error('Worker error', { 
+    message: error.message,
+    filename: error.filename,
+    lineno: error.lineno,
+  })
 
   sendResponse({
     id: 'error',

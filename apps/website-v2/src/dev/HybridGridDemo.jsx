@@ -6,6 +6,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { UnifiedGrid } from '../components/UnifiedGrid'
 import { useDynamicStore } from '../store/dynamicStore'
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('HybridGridDemo');
 
 // Generate 50 test panels
 const generatePanels = () => {
@@ -46,7 +49,7 @@ export default function HybridGridDemo() {
   }, [])
 
   const handleError = useCallback((error) => {
-    console.error('HybridGrid error:', error)
+    logger.error('HybridGrid error', { error: error instanceof Error ? error.message : String(error) })
   }, [])
 
   const targetMet = metrics.renderTime > 0 && metrics.renderTime < 16

@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Breakpoint System for Mobile-First Responsive Design
  * 
  * Provides consistent breakpoint values and hooks for the 4NJZ4 TENET Platform.

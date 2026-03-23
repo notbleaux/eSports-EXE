@@ -13,6 +13,7 @@
 import { useTimelineStore } from '../timeline/state';
 import { useMultiViewStore, type POVAssignment, type ViewSlot } from './state';
 import { SyncManager, type SyncAdapter } from './sync';
+import { createLogger } from '@/utils/logger';
 
 // ============================================================================
 // Types
@@ -179,8 +180,17 @@ export class TransitionController {
   }
 
   private executeCallbacks(): void {
+    const logger = createLogger('TransitionController');
     this.onCompleteCallbacks.forEach(cb => {
-      try { cb(); } catch (e) { /* ignore */ }
+      try { 
+        cb(); 
+      } catch (e) { 
+        logger.warn('POV callback failed', { 
+          error: e instanceof Error ? e.message : String(e),
+          stack: e instanceof Error ? e.stack : undefined,
+          timestamp: Date.now() 
+        });
+      }
     });
     this.onCompleteCallbacks = [];
   }
@@ -284,14 +294,28 @@ export class POVSwitcher {
       this.currentPOV = newPOV;
 
       // Notify listeners
+      const logger = createLogger('POVSwitcher');
       this.onSwitchCallbacks.forEach(cb => {
-        try { cb(previousPOV, newPOV); } catch (e) { /* ignore */ }
+        try { 
+          cb(previousPOV, newPOV); 
+        } catch (e) { 
+          logger.warn('POV switch callback failed', { 
+            error: e instanceof Error ? e.message : String(e),
+            stack: e instanceof Error ? e.stack : undefined,
+            timestamp: Date.now() 
+          });
+        }
       });
 
       onComplete?.();
       return true;
     } catch (error) {
-      console.error('POV switch failed:', error);
+      const logger = createLogger('POVSwitcher');
+      logger.error('POV switch failed', { 
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: Date.now()
+      });
       return false;
     }
   }

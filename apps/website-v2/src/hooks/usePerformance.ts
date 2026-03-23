@@ -19,8 +19,11 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createLogger } from '@/utils/logger'
 import type { RenderMetrics, InteractionMetrics, PerformanceConfig, PerformanceAlert } from '../types/performance'
 import { DEFAULT_PERFORMANCE_CONFIG } from '../types/performance'
+
+const logger = createLogger('usePerformance')
 
 /** Performance metrics state */
 interface PerformanceState {
@@ -236,10 +239,10 @@ export function usePerformance({
         const endTime = performance.now()
         const duration = endTime - startTime
 
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.error(`[Performance] ${name} failed after ${duration.toFixed(2)}ms:`, error)
-        }
+        logger.error(`${name} failed`, {
+          duration: `${duration.toFixed(2)}ms`,
+          error: error instanceof Error ? error.message : String(error),
+        })
 
         throw error
       }

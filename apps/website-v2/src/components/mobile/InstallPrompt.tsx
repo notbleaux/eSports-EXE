@@ -14,6 +14,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Zap, Smartphone, Wifi, Shield } from 'lucide-react';
 import { usePWA } from '../../hooks/usePWA';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('InstallPrompt');
 
 interface InstallPromptProps {
   /** Delay before showing prompt (ms) */
@@ -88,7 +91,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
         onInstall?.();
       }
     } catch (error) {
-      console.error('[InstallPrompt] Install failed:', error);
+      logger.error('Install failed', { error: error instanceof Error ? error.message : String(error) });
     } finally {
       setIsInstalling(false);
     }

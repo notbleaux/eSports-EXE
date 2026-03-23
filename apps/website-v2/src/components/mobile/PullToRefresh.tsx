@@ -13,6 +13,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, useAnimation, PanInfo } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('PullToRefresh');
 
 interface PullToRefreshProps {
   /** Callback when refresh is triggered */
@@ -122,7 +125,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       try {
         await onRefresh();
       } catch (error) {
-        console.error('[PullToRefresh] Refresh failed:', error);
+        logger.error('Refresh failed', { error: error instanceof Error ? error.message : String(error) });
       } finally {
         setIsRefreshing(false);
         setPullDistance(0);

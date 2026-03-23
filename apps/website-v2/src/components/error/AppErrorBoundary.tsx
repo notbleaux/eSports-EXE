@@ -8,6 +8,9 @@
 
 import React, { Component, type ReactNode } from 'react'
 import { AlertTriangle, RefreshCw, Home, Activity } from 'lucide-react'
+import { createLogger } from '@/utils/logger'
+
+const logger = createLogger('AppErrorBoundary')
 
 interface Props {
   children: ReactNode
@@ -48,22 +51,16 @@ export class AppErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     this.setState({ errorInfo })
     
-    // Log error in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[AppErrorBoundary] Caught error:', error)
-      console.error('Component stack:', errorInfo.componentStack)
-    }
+    // Log with structured logger
+    logger.error('Application error caught', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      errorName: error.name,
+    })
     
     // Report to external service if configured
     this.props.onError?.(error, errorInfo)
-    
-    // Log to console for monitoring
-    console.error(
-      '%c[AppErrorBoundary] Application Error',
-      'color: #ef4444; font-weight: bold;',
-      '\nError:', error.message,
-      '\nStack:', error.stack
-    )
   }
 
   handleRetry = (): void => {

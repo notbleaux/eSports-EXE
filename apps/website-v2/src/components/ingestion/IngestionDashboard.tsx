@@ -16,6 +16,9 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('IngestionDashboard');
 import {
   Database,
   Upload,
@@ -473,7 +476,10 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
       }));
 
     } catch (error) {
-      console.error('Failed to load ingestion data:', error);
+      logger.error('Failed to load ingestion data', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -500,7 +506,10 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
         setShowAddSource(false);
       }
     } catch (error) {
-      console.error('Failed to create source:', error);
+      logger.error('Failed to create source', {
+        error: error instanceof Error ? error.message : String(error),
+        sourceType: type,
+      });
     }
   };
 
@@ -509,7 +518,10 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
       await api.sources.syncSource(sourceId);
       await loadData();
     } catch (error) {
-      console.error('Failed to sync source:', error);
+      logger.error('Failed to sync source', {
+        error: error instanceof Error ? error.message : String(error),
+        sourceId,
+      });
     }
   };
 
@@ -520,7 +532,10 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
       await api.sources.deleteSource(sourceId);
       await loadData();
     } catch (error) {
-      console.error('Failed to delete source:', error);
+      logger.error('Failed to delete source', {
+        error: error instanceof Error ? error.message : String(error),
+        sourceId,
+      });
     }
   };
 
@@ -537,7 +552,12 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
       setJobs(prev => [...prev, job]);
       setShowCreateJob(false);
     } catch (error) {
-      console.error('Failed to create job:', error);
+      logger.error('Failed to create job', {
+        error: error instanceof Error ? error.message : String(error),
+        jobName: name,
+        sourceId,
+        dataTypes,
+      });
     }
   };
 

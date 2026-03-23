@@ -24,6 +24,9 @@ import {
   PARSER_PERFORMANCE_LIMITS,
   PARSE_ERROR_CODES,
 } from './types';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('ReplayWorker');
 
 // ============================================================================
 // Worker Message Types
@@ -213,7 +216,11 @@ export class ReplayParserWorker {
    * Handle worker errors
    */
   private handleError(error: ErrorEvent): void {
-    console.error('Parser worker error:', error);
+    logger.error('Parser worker error', {
+      error: error.message,
+      filename: error.filename,
+      lineno: error.lineno,
+    });
     
     // Reject all pending requests
     this.pendingRequests.forEach((request) => {
@@ -226,7 +233,9 @@ export class ReplayParserWorker {
    * Handle message errors
    */
   private handleMessageError(error: MessageEvent): void {
-    console.error('Parser worker message error:', error);
+    logger.error('Parser worker message error', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 
   /**

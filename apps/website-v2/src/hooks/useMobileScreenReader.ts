@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * useMobileScreenReader Hook
  * 
  * Unified mobile screen reader detection and management for iOS VoiceOver

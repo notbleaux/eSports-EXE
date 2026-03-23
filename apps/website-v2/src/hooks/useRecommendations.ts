@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createLogger } from '@/utils/logger';
 import type {
   KnowledgeNode,
   PersonalizedRecommendation,
@@ -22,6 +23,12 @@ import type {
   ExpertiseLevel,
   UserExpertiseProfile,
 } from '@sator/types/help';
+
+// ============================================================================
+// Logger
+// ============================================================================
+
+const logger = createLogger('useRecommendations');
 
 // ============================================================================
 // Hook Options
@@ -195,7 +202,11 @@ export function useRecommendations(
       }
       
       setError(err instanceof Error ? err : new Error('Failed to fetch recommendations'));
-      console.error('Recommendations error:', err);
+      logger.error('Recommendations error', {
+        error: err instanceof Error ? err.message : String(err),
+        userId,
+        currentNodeId,
+      });
     } finally {
       if (!controller.signal.aborted) {
         setIsLoading(false);
@@ -267,7 +278,10 @@ export function useRecommendations(
         await fetchRecommendations();
       }
     } catch (err) {
-      console.error('Error marking node as completed:', err);
+      logger.error('Error marking node as completed', {
+        error: err instanceof Error ? err.message : String(err),
+        nodeId,
+      });
     }
   }, [userId, apiEndpoint, fetchRecommendations]);
 
@@ -293,7 +307,10 @@ export function useRecommendations(
       // Optimistic update
       setInProgressNodes(prev => [...prev.filter(id => id !== nodeId), nodeId]);
     } catch (err) {
-      console.error('Error marking node as in progress:', err);
+      logger.error('Error marking node as in progress', {
+        error: err instanceof Error ? err.message : String(err),
+        nodeId,
+      });
     }
   }, [userId, apiEndpoint]);
 
@@ -318,7 +335,10 @@ export function useRecommendations(
         setInProgressNodes(prev => [...prev, nodeId]);
       }
     } catch (err) {
-      console.error('Error recording node access:', err);
+      logger.error('Error recording node access', {
+        error: err instanceof Error ? err.message : String(err),
+        nodeId,
+      });
     }
   }, [userId, apiEndpoint, inProgressNodes, completedNodes]);
 
@@ -356,7 +376,11 @@ export function useRecommendations(
       const data = await response.json();
       return data.path || null;
     } catch (err) {
-      console.error('Error getting learning path:', err);
+      logger.error('Error getting learning path', {
+        error: err instanceof Error ? err.message : String(err),
+        fromNodeId,
+        toNodeId,
+      });
       return null;
     }
   }, [userId, apiEndpoint]);

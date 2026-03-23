@@ -8,6 +8,9 @@
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import * as Sentry from '@sentry/react';
 import { AlertTriangle, RefreshCw, Home, Activity } from 'lucide-react';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('SentryErrorBoundary');
 
 interface Props {
   children: ReactNode;
@@ -50,11 +53,14 @@ export class SentryErrorBoundary extends Component<Props, State> {
 
     this.setState({ errorInfo, eventId });
 
-    // Log in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[SentryErrorBoundary] Caught error:', error);
-      console.error('Component stack:', errorInfo.componentStack);
-    }
+    // Log with structured logger
+    logger.error('Error caught and reported to Sentry', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      eventId,
+      errorName: error.name,
+    });
 
     // Call optional error handler
     this.props.onError?.(error, errorInfo);

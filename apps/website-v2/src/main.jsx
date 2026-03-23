@@ -14,6 +14,9 @@ import './styles/mobile.css'
 // Use AppErrorBoundary from components/error for consistency
 import { AppErrorBoundary } from './components/error'
 import { performanceMonitor } from './monitoring/PerformanceMonitor'
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('Main');
 
 // Initialize performance monitoring immediately
 performanceMonitor.initialize();
@@ -87,7 +90,7 @@ const registerServiceWorker = async () => {
 
       return registration
     } catch (error) {
-      console.error('[SW] Registration failed:', error)
+      logger.error('Service worker registration failed', { error: error instanceof Error ? error.message : String(error) })
     }
   } else {
     console.log('[SW] Service workers not supported')

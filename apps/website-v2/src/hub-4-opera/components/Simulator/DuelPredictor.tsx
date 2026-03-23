@@ -6,6 +6,9 @@
  */
 
 import React, { useState, useMemo } from 'react';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('DuelPredictor');
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Swords, 
@@ -85,7 +88,12 @@ const DuelPredictor: React.FC<DuelPredictorProps> = ({ scenario: initialScenario
       const result = await predictDuel(selectedScenario, playerAId, playerBId, context);
       setPrediction(result);
     } catch (error) {
-      console.error('Duel prediction failed:', error);
+      logger.error('Duel prediction failed', {
+        error: error instanceof Error ? error.message : String(error),
+        scenario: selectedScenario,
+        playerAId,
+        playerBId,
+      });
     }
   };
 

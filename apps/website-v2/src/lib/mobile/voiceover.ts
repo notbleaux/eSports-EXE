@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * VoiceOver Support Library
  * 
  * iOS VoiceOver specific optimizations and attributes for the 4NJZ4 TENET Platform.

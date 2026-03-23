@@ -25,6 +25,9 @@ import { useGridWorker } from '@/hooks/workers/useGridWorker';
 import { WorkerPool, getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
 import type { GridColumn, GridRow, GridVisibleRange } from '@/types/worker';
 import { colors } from '@/theme/colors';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('VirtualDataGrid');
 
 export interface VirtualDataGridProps {
   data: GridRow[];
@@ -286,7 +289,10 @@ export const VirtualDataGrid = forwardRef<VirtualDataGridRef, VirtualDataGridPro
     cellWidth: 100,
     cellHeight: rowHeight,
     onError: (error) => {
-      console.error('Grid worker error:', error);
+      logger.error('Grid worker error', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
     }
   });
 
@@ -325,7 +331,10 @@ export const VirtualDataGrid = forwardRef<VirtualDataGridRef, VirtualDataGridPro
         });
         setIsReady(true);
       } catch (error) {
-        console.error('Failed to render grid:', error);
+        logger.error('Failed to render grid', {
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
       }
     };
 

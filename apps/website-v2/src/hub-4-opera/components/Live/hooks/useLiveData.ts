@@ -10,6 +10,7 @@
  * [Ver002.000] - Replaced mock data with actual API integration
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { streamingLogger } from '@/utils/logger';
 import type {
   Stream,
   LiveEvent,
@@ -175,7 +176,9 @@ export const useLiveData = (): UseLiveDataReturn => {
           console.log('[useLiveData] Unknown message type:', message.type);
       }
     } catch (err) {
-      console.error('[useLiveData] Failed to parse WebSocket message:', err);
+      streamingLogger.error('Failed to parse WebSocket message', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }, []);
 
@@ -207,7 +210,9 @@ export const useLiveData = (): UseLiveDataReturn => {
       ws.onmessage = handleWebSocketMessage;
       
       ws.onerror = (err) => {
-        console.error('[useLiveData] WebSocket error:', err);
+        streamingLogger.error('WebSocket error', {
+          error: err instanceof Error ? err.message : String(err),
+        });
         setError(new Error('WebSocket connection error'));
       };
       
@@ -232,7 +237,10 @@ export const useLiveData = (): UseLiveDataReturn => {
       
       wsRef.current = ws;
     } catch (err) {
-      console.error('[useLiveData] Failed to create WebSocket:', err);
+      streamingLogger.error('Failed to create WebSocket', {
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
       setError(new Error('Failed to establish real-time connection'));
     }
   }, [handleWebSocketMessage]);
@@ -310,8 +318,16 @@ export const useLiveData = (): UseLiveDataReturn => {
     pollingRef.current = setInterval(() => {
       // Only poll if WebSocket is not connected
       if (!isConnected) {
-        fetchLiveMatches().then(setLiveMatches).catch(console.error);
-        fetchChatMessages().then(setChatMessages).catch(console.error);
+        fetchLiveMatches().then(setLiveMatches).catch((err) => {
+          streamingLogger.error('Failed to fetch live matches during polling', {
+            error: err instanceof Error ? err.message : String(err),
+          });
+        });
+        fetchChatMessages().then(setChatMessages).catch((err) => {
+          streamingLogger.error('Failed to fetch chat messages during polling', {
+            error: err instanceof Error ? err.message : String(err),
+          });
+        });
       }
     }, POLLING_INTERVAL);
   }, [fetchLiveMatches, fetchChatMessages, isConnected]);

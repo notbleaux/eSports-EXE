@@ -6,6 +6,7 @@
  */
 
 import React, { Component, type ReactNode } from 'react'
+import { streamingLogger } from '@/utils/logger'
 
 interface Props {
   children: ReactNode
@@ -52,10 +53,12 @@ export class StreamingErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     this.setState({ errorInfo })
     
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[StreamingErrorBoundary] Caught error:', error)
-      console.error('Component stack:', errorInfo.componentStack)
-    }
+    // Log with structured logger
+    streamingLogger.error('Streaming error caught', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+    })
     
     this.props.onError?.(error, errorInfo)
   }

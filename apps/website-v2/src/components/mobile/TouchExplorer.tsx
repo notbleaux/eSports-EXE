@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * TouchExplorer Component
  * 
  * Touch-to-speak exploration mode for mobile screen readers.

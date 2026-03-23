@@ -23,6 +23,9 @@ import {
   InstallPrompt,
   PullToRefresh 
 } from './components/mobile';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('App');
 
 // Error Boundaries (eager loaded for error handling)
 import { 
@@ -157,7 +160,7 @@ function DashboardGrid() {
   }, []);
 
   const handleError = useCallback((error) => {
-    console.error('[DashboardGrid] Worker error:', error);
+    logger.error('DashboardGrid worker error', { error: error instanceof Error ? error.message : String(error) });
     fallbackToDom();
     setIsLoading(false);
   }, [fallbackToDom]);

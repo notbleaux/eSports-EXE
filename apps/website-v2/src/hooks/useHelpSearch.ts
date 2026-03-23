@@ -12,11 +12,18 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createLogger } from '@/utils/logger';
 import type {
   SearchResult,
   AutocompleteSuggestion,
   UserExpertiseProfile,
 } from '@sator/types/help';
+
+// ============================================================================
+// Logger
+// ============================================================================
+
+const logger = createLogger('useHelpSearch');
 
 // ============================================================================
 // Hook Options
@@ -180,7 +187,10 @@ export function useHelpSearch(
       }
       
       setError(err instanceof Error ? err : new Error('Search failed'));
-      console.error('Search error:', err);
+      logger.error('Search error', {
+        error: err instanceof Error ? err.message : String(err),
+        query: searchQuery,
+      });
     } finally {
       if (!controller.signal.aborted) {
         setIsSearching(false);
@@ -211,7 +221,10 @@ export function useHelpSearch(
       const data: AutocompleteSuggestion[] = await response.json();
       setSuggestions(data);
     } catch (err) {
-      console.error('Error fetching suggestions:', err);
+      logger.error('Error fetching suggestions', {
+        error: err instanceof Error ? err.message : String(err),
+        partial,
+      });
       setSuggestions([]);
     } finally {
       setIsLoadingSuggestions(false);

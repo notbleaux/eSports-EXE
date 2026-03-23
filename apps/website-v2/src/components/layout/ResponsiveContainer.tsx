@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Responsive Container Component
  * 
  * Adaptive container that adjusts max-width, padding, and margins

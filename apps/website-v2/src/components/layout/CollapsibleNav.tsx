@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * Collapsible Navigation Component
  * 
  * Mobile-first navigation with hamburger menu and slide-out drawer.

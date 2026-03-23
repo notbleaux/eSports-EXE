@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { mlLogger } from '@/utils/logger'
 import { 
   Box, 
   Database, 
@@ -206,7 +207,9 @@ export const MLModelRegistry: React.FC<MLModelRegistryProps> = ({
       const tests = await mlRegistry.getABTests()
       setABTests(tests)
     } catch (err) {
-      console.error('Failed to load A/B tests:', err)
+      mlLogger.error('Failed to load A/B tests', {
+        error: err instanceof Error ? err.message : String(err),
+      })
     }
   }, [])
   
@@ -216,7 +219,9 @@ export const MLModelRegistry: React.FC<MLModelRegistryProps> = ({
       const deps = await mlRegistry.getActiveDeployments()
       setDeployments(deps)
     } catch (err) {
-      console.error('Failed to load deployments:', err)
+      mlLogger.error('Failed to load deployments', {
+        error: err instanceof Error ? err.message : String(err),
+      })
     }
   }, [])
   
@@ -226,7 +231,10 @@ export const MLModelRegistry: React.FC<MLModelRegistryProps> = ({
       const history = await mlRegistry.getModelMetrics(modelId, { limit: 100 })
       setMetrics(history.metrics)
     } catch (err) {
-      console.error('Failed to load metrics:', err)
+      mlLogger.error('Failed to load metrics', {
+        error: err instanceof Error ? err.message : String(err),
+        modelId,
+      })
     }
   }, [])
   
@@ -255,7 +263,13 @@ export const MLModelRegistry: React.FC<MLModelRegistryProps> = ({
     if (selectedModel && compareModel && viewMode === 'compare') {
       mlRegistry.compareModels(selectedModel.id, compareModel.id)
         .then(setComparison)
-        .catch(console.error)
+        .catch((err) => {
+          mlLogger.error('Failed to compare models', {
+            error: err instanceof Error ? err.message : String(err),
+            modelId1: selectedModel.id,
+            modelId2: compareModel.id,
+          })
+        })
     }
   }, [selectedModel, compareModel, viewMode])
   

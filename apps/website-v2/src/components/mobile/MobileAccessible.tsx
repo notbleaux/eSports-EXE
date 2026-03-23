@@ -1,6 +1,5 @@
-[Ver001.000]
-
-/**
+/** [Ver001.000]
+ *
  * MobileAccessible Components
  * 
  * Mobile accessibility wrapper components and utilities for the 4NJZ4 TENET Platform.

@@ -841,7 +841,7 @@ export class AnimationSequencer {
         try {
           handler(event);
         } catch (error) {
-          console.error('[AnimationSequencer] Event handler error:', error);
+          this.log('error', 'Event handler error', { error: error instanceof Error ? error.message : String(error) });
         }
       });
     }

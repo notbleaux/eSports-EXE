@@ -13,6 +13,7 @@
  * - Compressor/limiter for audio safety
  */
 
+import { createLogger } from '@/utils/logger';
 import {
   type AudioState,
   type AudioCategory,
@@ -37,6 +38,12 @@ import {
   MAX_QUEUE_SIZE,
   PRIORITY_WEIGHTS,
 } from './types';
+
+// ============================================================================
+// Logger
+// ============================================================================
+
+const logger = createLogger('AudioManager');
 
 // ============================================================================
 // Audio Manager Class
@@ -112,7 +119,9 @@ export class AudioManager {
 
     // Auto-initialize if requested
     if (config.autoResume !== false) {
-      this.initialize().catch(console.error);
+      this.initialize().catch((err) => {
+        logger.error('Auto-initialization failed', { error: err instanceof Error ? err.message : String(err) });
+      });
     }
   }
 
@@ -924,7 +933,7 @@ export class AudioManager {
         try {
           handler(event);
         } catch (error) {
-          console.error('Audio event handler error:', error);
+          logger.error('Audio event handler error', { error: error instanceof Error ? error.message : String(error) });
         }
       });
     }
@@ -936,7 +945,7 @@ export class AudioManager {
         try {
           handler(event);
         } catch (error) {
-          console.error('Audio wildcard handler error:', error);
+          logger.error('Audio wildcard handler error', { error: error instanceof Error ? error.message : String(error) });
         }
       });
     }

@@ -19,6 +19,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { cn } from '@/utils/cn';
 import { colors } from '@/theme/colors';
 import type { LiveStreamViewerProps, StreamPlatform, ViewerState } from './types';
+import { streamingLogger } from '@/utils/logger';
 
 interface MatchInfo {
   teamA: { name: string; score: number; logo: string };
@@ -295,7 +296,9 @@ export const LiveStreamViewer: React.FC<LiveStreamViewerExtendedProps> = ({
         setViewerState((prev) => ({ ...prev, isFullscreen: false }));
       }
     } catch (err) {
-      console.error('Fullscreen error:', err);
+      streamingLogger.error('Fullscreen error', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }, []);
 

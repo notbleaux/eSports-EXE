@@ -13,6 +13,9 @@ import WinProbabilityGauge from './WinProbabilityGauge';
 import type { TeamH2HCompareProps, TeamPredictionResult, H2HHistory } from './types';
 import { useSimulator } from './hooks/useSimulator';
 import { PURPLE, mockTeams } from './mockData';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('TeamH2HCompare');
 
 interface TeamStat {
   label: string;
@@ -77,7 +80,11 @@ const TeamH2HCompare: React.FC<TeamH2HCompareProps> = ({ onPredict }) => {
       const history = getH2HHistory(teamAId, teamBId);
       setH2hHistory(history);
     } catch (error) {
-      console.error('Prediction failed:', error);
+      logger.error('Prediction failed', {
+        error: error instanceof Error ? error.message : String(error),
+        teamAId,
+        teamBId,
+      });
     }
   };
 

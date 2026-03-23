@@ -9,6 +9,9 @@
 
 import type { Position3D } from '../types';
 import type { CameraState, EasingFunction } from './modes';
+import { createLogger } from '@/utils/logger';
+
+const logger = createLogger('CameraPathRecording');
 
 // ============================================================================
 // Path Types
@@ -569,7 +572,7 @@ export class PathStorage {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(paths));
     } catch (e) {
-      console.error('Failed to save camera path:', e);
+      logger.error('Failed to save camera path', { error: e instanceof Error ? e.message : String(e) });
     }
   }
 
@@ -589,7 +592,7 @@ export class PathStorage {
       const data = localStorage.getItem(STORAGE_KEY);
       return data ? JSON.parse(data) : [];
     } catch (e) {
-      console.error('Failed to load camera paths:', e);
+      logger.error('Failed to load camera paths', { error: e instanceof Error ? e.message : String(e) });
       return [];
     }
   }
@@ -607,7 +610,7 @@ export class PathStorage {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
       return true;
     } catch (e) {
-      console.error('Failed to delete camera path:', e);
+      logger.error('Failed to delete camera path', { error: e instanceof Error ? e.message : String(e) });
       return false;
     }
   }
@@ -630,7 +633,7 @@ export class PathStorage {
         return path;
       }
     } catch (e) {
-      console.error('Failed to import camera path:', e);
+      logger.error('Failed to import camera path', { error: e instanceof Error ? e.message : String(e) });
     }
     return null;
   }
@@ -642,7 +645,7 @@ export class PathStorage {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (e) {
-      console.error('Failed to clear camera paths:', e);
+      logger.error('Failed to clear camera paths', { error: e instanceof Error ? e.message : String(e) });
     }
   }
 }

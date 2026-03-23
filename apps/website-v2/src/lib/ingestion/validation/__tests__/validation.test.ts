@@ -835,7 +835,7 @@ describe('Validation System Integration', () => {
       { id: '550e8400-e29b-41d4-a716-446655440000', name: '  Player 1  ', kills: 10, deaths: 5 },
       { id: '550e8400-e29b-41d4-a716-446655440001', name: 'Player 2', kills: undefined, deaths: 3 },
       { id: '550e8400-e29b-41d4-a716-446655440000', name: 'Player 1', kills: 10, deaths: 5 }, // duplicate
-      { id: 'name': 'Invalid Player' }, // missing id
+      { name: 'Invalid Player' }, // missing id
     ];
 
     // Step 1: Clean the data
