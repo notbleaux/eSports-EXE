@@ -1,0 +1,706 @@
+/**
+ * Dropout Bear Mascot - CSS Only Animation
+ * ========================================
+ * A pure CSS animated bear mascot with varsity jacket
+ * 
+ * Colors:
+ * - Primary fur: #8B4513
+ * - Secondary: #D2691E
+ * - Light/snout: #DEB887
+ * - Dark: #5D3A1A
+ * - Jacket: #DC143C
+ * - Gold trim: #FFD700
+ * - Outline: #2D1810
+ */
+
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+  --bear-primary: #8B4513;
+  --bear-secondary: #D2691E;
+  --bear-light: #DEB887;
+  --bear-dark: #5D3A1A;
+  --bear-jacket: #DC143C;
+  --bear-gold: #FFD700;
+  --bear-outline: #2D1810;
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+.dropout-bear-container {
+  position: relative;
+  display: inline-block;
+  width: 128px;
+  height: 128px;
+}
+
+/* Size Variants */
+.dropout-bear-container.small {
+  width: 64px;
+  height: 64px;
+}
+
+.dropout-bear-container.medium {
+  width: 128px;
+  height: 128px;
+}
+
+.dropout-bear-container.large {
+  width: 256px;
+  height: 256px;
+}
+
+/* ============================================
+   BEAR BODY
+   ============================================ */
+.dropout-bear {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+/* ============================================
+   BEAR HEAD
+   ============================================ */
+.dropout-bear-head {
+  position: absolute;
+  width: 50%;
+  height: 45%;
+  left: 25%;
+  top: 10%;
+  background: var(--bear-primary);
+  border-radius: 50%;
+  border: 3px solid var(--bear-outline);
+  z-index: 10;
+  transform-origin: center bottom;
+}
+
+.dropout-bear-container.small .dropout-bear-head {
+  border-width: 2px;
+}
+
+.dropout-bear-container.large .dropout-bear-head {
+  border-width: 4px;
+}
+
+/* ============================================
+   EARS
+   ============================================ */
+.dropout-bear-ear-left,
+.dropout-bear-ear-right {
+  position: absolute;
+  width: 22%;
+  height: 22%;
+  background: var(--bear-primary);
+  border-radius: 50%;
+  border: 3px solid var(--bear-outline);
+  top: 5%;
+  z-index: 5;
+}
+
+.dropout-bear-ear-left {
+  left: 18%;
+}
+
+.dropout-bear-ear-right {
+  right: 18%;
+}
+
+.dropout-bear-ear-left::after,
+.dropout-bear-ear-right::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: var(--bear-secondary);
+  border-radius: 50%;
+  top: 25%;
+  left: 25%;
+}
+
+.dropout-bear-container.small .dropout-bear-ear-left,
+.dropout-bear-container.small .dropout-bear-ear-right {
+  border-width: 2px;
+}
+
+.dropout-bear-container.large .dropout-bear-ear-left,
+.dropout-bear-container.large .dropout-bear-ear-right {
+  border-width: 4px;
+}
+
+/* ============================================
+   EYES
+   ============================================ */
+.dropout-bear-eye-left,
+.dropout-bear-eye-right {
+  position: absolute;
+  width: 18%;
+  height: 22%;
+  background: #ffffff;
+  border-radius: 50%;
+  top: 35%;
+  border: 2px solid var(--bear-outline);
+  overflow: hidden;
+}
+
+.dropout-bear-eye-left {
+  left: 25%;
+}
+
+.dropout-bear-eye-right {
+  right: 25%;
+}
+
+.dropout-bear-eye-left::after,
+.dropout-bear-eye-right::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 55%;
+  background: #000000;
+  border-radius: 50%;
+  top: 30%;
+  left: 25%;
+}
+
+.dropout-bear-eye-left::before,
+.dropout-bear-eye-right::before {
+  content: '';
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  background: #ffffff;
+  border-radius: 50%;
+  top: 40%;
+  left: 35%;
+  z-index: 2;
+}
+
+.dropout-bear-container.small .dropout-bear-eye-left,
+.dropout-bear-container.small .dropout-bear-eye-right {
+  border-width: 1px;
+}
+
+.dropout-bear-container.large .dropout-bear-eye-left,
+.dropout-bear-container.large .dropout-bear-eye-right {
+  border-width: 3px;
+}
+
+/* ============================================
+   SNOUT
+   ============================================ */
+.dropout-bear-snout {
+  position: absolute;
+  width: 40%;
+  height: 30%;
+  background: var(--bear-light);
+  border-radius: 50%;
+  bottom: 15%;
+  left: 30%;
+  border: 2px solid var(--bear-outline);
+}
+
+.dropout-bear-snout::before {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 35%;
+  background: var(--bear-dark);
+  border-radius: 50%;
+  top: 15%;
+  left: 30%;
+}
+
+.dropout-bear-snout::after {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 2px;
+  background: var(--bear-outline);
+  bottom: 25%;
+  left: 20%;
+  border-radius: 1px;
+}
+
+.dropout-bear-container.small .dropout-bear-snout {
+  border-width: 1px;
+}
+
+.dropout-bear-container.large .dropout-bear-snout {
+  border-width: 3px;
+}
+
+/* ============================================
+   JACKET BODY
+   ============================================ */
+.dropout-bear-jacket {
+  position: absolute;
+  width: 55%;
+  height: 50%;
+  left: 22.5%;
+  bottom: 0;
+  background: var(--bear-jacket);
+  border-radius: 40% 40% 10% 10%;
+  border: 3px solid var(--bear-outline);
+  z-index: 8;
+}
+
+.dropout-bear-jacket::before {
+  content: '';
+  position: absolute;
+  width: 20%;
+  height: 80%;
+  background: var(--bear-gold);
+  left: 40%;
+  top: 10%;
+  border-radius: 10%;
+}
+
+/* Jacket collar */
+.dropout-bear-jacket::after {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 25%;
+  background: var(--bear-jacket);
+  border: 2px solid var(--bear-gold);
+  border-radius: 50% 50% 0 0;
+  top: -5%;
+  left: 20%;
+}
+
+.dropout-bear-container.small .dropout-bear-jacket {
+  border-width: 2px;
+}
+
+.dropout-bear-container.small .dropout-bear-jacket::after {
+  border-width: 1px;
+}
+
+.dropout-bear-container.large .dropout-bear-jacket {
+  border-width: 4px;
+}
+
+.dropout-bear-container.large .dropout-bear-jacket::after {
+  border-width: 3px;
+}
+
+/* ============================================
+   PAWS
+   ============================================ */
+.dropout-bear-paw-left,
+.dropout-bear-paw-right {
+  position: absolute;
+  width: 18%;
+  height: 22%;
+  background: var(--bear-light);
+  border-radius: 40%;
+  border: 2px solid var(--bear-outline);
+  bottom: 5%;
+  z-index: 9;
+  transform-origin: top center;
+}
+
+.dropout-bear-paw-left {
+  left: 20%;
+}
+
+.dropout-bear-paw-right {
+  right: 20%;
+}
+
+/* Paw pads */
+.dropout-bear-paw-left::after,
+.dropout-bear-paw-right::after {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 40%;
+  background: var(--bear-secondary);
+  border-radius: 50%;
+  bottom: 15%;
+  left: 20%;
+}
+
+.dropout-bear-container.small .dropout-bear-paw-left,
+.dropout-bear-container.small .dropout-bear-paw-right {
+  border-width: 1px;
+}
+
+.dropout-bear-container.large .dropout-bear-paw-left,
+.dropout-bear-container.large .dropout-bear-paw-right {
+  border-width: 3px;
+}
+
+/* ============================================
+   GRADUATION CAP
+   ============================================ */
+.dropout-bear-cap {
+  position: absolute;
+  width: 60%;
+  height: 25%;
+  background: var(--bear-dark);
+  border-radius: 10%;
+  top: -5%;
+  left: 20%;
+  border: 2px solid var(--bear-outline);
+  z-index: 15;
+  transform-origin: center;
+}
+
+.dropout-bear-cap::before {
+  content: '';
+  position: absolute;
+  width: 140%;
+  height: 20%;
+  background: var(--bear-dark);
+  border-radius: 5%;
+  top: 30%;
+  left: -20%;
+  border: 2px solid var(--bear-outline);
+}
+
+.dropout-bear-cap::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 80%;
+  background: var(--bear-gold);
+  right: 20%;
+  top: 40%;
+  transform: rotate(15deg);
+}
+
+.dropout-bear-container.small .dropout-bear-cap {
+  border-width: 1px;
+}
+
+.dropout-bear-container.small .dropout-bear-cap::before {
+  border-width: 1px;
+}
+
+.dropout-bear-container.large .dropout-bear-cap {
+  border-width: 3px;
+}
+
+.dropout-bear-container.large .dropout-bear-cap::before {
+  border-width: 3px;
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+/* Idle breathing animation */
+@keyframes bear-idle {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  25% {
+    transform: scale(1.02, 0.98) translateY(2px);
+  }
+  50% {
+    transform: scale(1) translateY(0);
+  }
+  75% {
+    transform: scale(0.98, 1.02) translateY(-1px);
+  }
+}
+
+/* Blink animation */
+@keyframes bear-blink {
+  0%, 90%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Head nod animation */
+@keyframes bear-head-nod {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-3deg) translateY(2px);
+  }
+  50% {
+    transform: rotate(0deg) translateY(0);
+  }
+  75% {
+    transform: rotate(3deg) translateY(2px);
+  }
+}
+
+/* Paw wave animation */
+@keyframes bear-paw-raise {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-30deg);
+  }
+  40% {
+    transform: rotate(-45deg);
+  }
+  60% {
+    transform: rotate(-30deg);
+  }
+  80% {
+    transform: rotate(-45deg);
+  }
+}
+
+/* Celebrate/jump animation */
+@keyframes bear-celebrate {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  10% {
+    transform: translateY(-15px) scale(0.95, 1.05);
+  }
+  20% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-25px) scale(0.9, 1.1);
+  }
+  40% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(0.95, 1.05);
+  }
+  60%, 80% {
+    transform: translateY(0) scale(1);
+  }
+  70% {
+    transform: translateY(-5px) scale(0.98, 1.02);
+  }
+  90% {
+    transform: translateY(-3px) scale(0.99, 1.01);
+  }
+}
+
+/* Jacket flutter during celebrate */
+@keyframes bear-jacket-flutter {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30%, 50% {
+    transform: rotate(-2deg);
+  }
+  20%, 40% {
+    transform: rotate(2deg);
+  }
+}
+
+/* Graduation cap toss animation */
+@keyframes bear-graduation-toss {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: translateY(-40px) rotate(-10deg) scale(1.1);
+  }
+  40% {
+    transform: translateY(-80px) rotate(20deg) scale(1.2);
+  }
+  50% {
+    transform: translateY(-100px) rotate(45deg) scale(1.2);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-80px) rotate(70deg) scale(1.1);
+  }
+  80% {
+    transform: translateY(-30px) rotate(90deg) scale(1.05);
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(-10px) rotate(100deg) scale(1);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Arms raise for celebration */
+@keyframes bear-arms-raise {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 50% {
+    transform: rotate(-50deg);
+  }
+  20%, 40% {
+    transform: rotate(-60deg);
+  }
+  30% {
+    transform: rotate(-55deg);
+  }
+  60% {
+    transform: rotate(-40deg);
+  }
+  70%, 90% {
+    transform: rotate(-20deg);
+  }
+  80% {
+    transform: rotate(-30deg);
+  }
+}
+
+/* ============================================
+   ANIMATION TRIGGER CLASSES
+   ============================================ */
+
+/* Idle animation */
+.animate-idle .dropout-bear {
+  animation: bear-idle 3s ease-in-out infinite;
+}
+
+.animate-idle .dropout-bear-eye-left,
+.animate-idle .dropout-bear-eye-right {
+  animation: bear-blink 4s ease-in-out infinite;
+}
+
+.animate-idle .dropout-bear-head {
+  animation: bear-head-nod 5s ease-in-out infinite;
+}
+
+/* Wave animation */
+.animate-wave .dropout-bear-paw-right {
+  animation: bear-paw-raise 1.5s ease-in-out infinite;
+}
+
+.animate-wave .dropout-bear-head {
+  animation: bear-head-nod 2s ease-in-out infinite;
+}
+
+/* Celebrate animation */
+.animate-celebrate .dropout-bear {
+  animation: bear-celebrate 2s ease-in-out;
+}
+
+.animate-celebrate .dropout-bear-jacket {
+  animation: bear-jacket-flutter 2s ease-in-out;
+}
+
+.animate-celebrate .dropout-bear-paw-left,
+.animate-celebrate .dropout-bear-paw-right {
+  animation: bear-arms-raise 2s ease-in-out;
+}
+
+.animate-celebrate .dropout-bear-head {
+  animation: bear-head-nod 1s ease-in-out 2;
+}
+
+/* Graduation toss animation */
+.animate-graduation .dropout-bear-cap {
+  animation: bear-graduation-toss 2.5s ease-in-out;
+}
+
+.animate-graduation .dropout-bear {
+  animation: bear-celebrate 2.5s ease-in-out;
+}
+
+.animate-graduation .dropout-bear-paw-left,
+.animate-graduation .dropout-bear-paw-right {
+  animation: bear-arms-raise 2.5s ease-in-out;
+}
+
+/* Combined wave and idle */
+.animate-wave-idle .dropout-bear {
+  animation: bear-idle 3s ease-in-out infinite;
+}
+
+.animate-wave-idle .dropout-bear-paw-right {
+  animation: bear-paw-raise 1.5s ease-in-out infinite;
+}
+
+.animate-wave-idle .dropout-bear-head {
+  animation: bear-head-nod 5s ease-in-out infinite;
+}
+
+.animate-wave-idle .dropout-bear-eye-left,
+.animate-wave-idle .dropout-bear-eye-right {
+  animation: bear-blink 4s ease-in-out infinite;
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+.dropout-bear-container:hover .dropout-bear-head {
+  transform: rotate(-5deg);
+  transition: transform 0.3s ease;
+}
+
+.dropout-bear-container:hover .dropout-bear-eye-left::after,
+.dropout-bear-container:hover .dropout-bear-eye-right::after {
+  transform: translateX(2px);
+  transition: transform 0.3s ease;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .dropout-bear,
+  .dropout-bear-head,
+  .dropout-bear-eye-left,
+  .dropout-bear-eye-right,
+  .dropout-bear-paw-left,
+  .dropout-bear-paw-right,
+  .dropout-bear-jacket,
+  .dropout-bear-cap {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   HTML USAGE EXAMPLE
+   ============================================
+<!-- Basic Bear -->
+<div class="dropout-bear-container medium">
+  <div class="dropout-bear">
+    <div class="dropout-bear-ear-left"></div>
+    <div class="dropout-bear-ear-right"></div>
+    <div class="dropout-bear-head">
+      <div class="dropout-bear-cap"></div>
+      <div class="dropout-bear-eye-left"></div>
+      <div class="dropout-bear-eye-right"></div>
+      <div class="dropout-bear-snout"></div>
+    </div>
+    <div class="dropout-bear-jacket"></div>
+    <div class="dropout-bear-paw-left"></div>
+    <div class="dropout-bear-paw-right"></div>
+  </div>
+</div>
+
+<!-- Animated Idle Bear -->
+<div class="dropout-bear-container medium animate-idle">
+  ...
+</div>
+
+<!-- Waving Bear -->
+<div class="dropout-bear-container medium animate-wave">
+  ...
+</div>
+
+<!-- Celebrating Bear -->
+<div class="dropout-bear-container large animate-celebrate">
+  ...
+</div>
+
+<!-- Graduation Toss Bear -->
+<div class="dropout-bear-container large animate-graduation">
+  ...
+</div>
+*/

@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Definitions for gradients and filters -->
+  <defs>
+    <radialGradient id="furGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#D2691E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A0522D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="snoutGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5DEB3;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#DEB887;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D2691E;stop-opacity:0.4" />
+    </linearGradient>
+    <linearGradient id="jacketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DC143C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B0000;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="eyeGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="90%" style="stop-color:#F0F0F0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0E0E0;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Ears -->
+  <circle cx="128" cy="128" r="64" fill="url(#furGradient)" stroke="#2D1810" stroke-width="6"/>
+  <circle cx="384" cy="128" r="64" fill="url(#furGradient)" stroke="#2D1810" stroke-width="6"/>
+  
+  <!-- Inner ears -->
+  <circle cx="128" cy="128" r="32" fill="#D2691E"/>
+  <circle cx="384" cy="128" r="32" fill="#D2691E"/>
+  <circle cx="128" cy="128" r="20" fill="#DEB887" opacity="0.6"/>
+  <circle cx="384" cy="128" r="20" fill="#DEB887" opacity="0.6"/>
+  
+  <!-- Head base -->
+  <ellipse cx="256" cy="224" rx="160" ry="144" fill="url(#furGradient)" stroke="#2D1810" stroke-width="6"/>
+  
+  <!-- Head highlight areas -->
+  <ellipse cx="208" cy="160" rx="48" ry="32" fill="#D2691E" opacity="0.4"/>
+  <ellipse cx="304" cy="160" rx="32" ry="24" fill="#5D3A1A" opacity="0.25"/>
+  <ellipse cx="256" cy="192" rx="120" ry="40" fill="#8B4513" opacity="0.2"/>
+  
+  <!-- Head shadow under chin -->
+  <ellipse cx="256" cy="280" rx="100" ry="30" fill="#5D3A1A" opacity="0.3"/>
+  
+  <!-- Snout area -->
+  <ellipse cx="256" cy="272" rx="80" ry="64" fill="url(#snoutGradient)"/>
+  <ellipse cx="256" cy="272" rx="72" ry="56" fill="#DEB887" stroke="#D2691E" stroke-width="3"/>
+  
+  <!-- Snout highlight -->
+  <ellipse cx="240" cy="256" rx="30" ry="20" fill="#F5DEB3" opacity="0.6"/>
+  
+  <!-- Nose -->
+  <ellipse cx="256" cy="256" rx="32" ry="24" fill="#2D1810"/>
+  <ellipse cx="264" cy="248" rx="12" ry="8" fill="#5D3A1A" opacity="0.7"/>
+  <ellipse cx="268" cy="244" rx="4" ry="3" fill="#8B4513" opacity="0.5"/>
+  
+  <!-- Nostrils -->
+  <ellipse cx="248" cy="260" rx="6" ry="4" fill="#000000" opacity="0.5"/>
+  <ellipse cx="264" cy="260" rx="6" ry="4" fill="#000000" opacity="0.5"/>
+  
+  <!-- Mouth -->
+  <path d="M224 304 Q256 336 288 304" stroke="#2D1810" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M224 304 Q224 288 232 296" stroke="#2D1810" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M288 304 Q288 288 280 296" stroke="#2D1810" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <!-- Mouth interior hint -->
+  <path d="M236 312 Q256 320 276 312" stroke="#5D3A1A" stroke-width="2" fill="none" opacity="0.5"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="192" cy="192" rx="40" ry="48" fill="url(#eyeGradient)" stroke="#2D1810" stroke-width="4"/>
+  <ellipse cx="320" cy="192" rx="40" ry="48" fill="url(#eyeGradient)" stroke="#2D1810" stroke-width="4"/>
+  
+  <!-- Eye shine/eyelid area -->
+  <ellipse cx="192" cy="172" rx="30" ry="15" fill="#FFFFFF" opacity="0.8"/>
+  <ellipse cx="320" cy="172" rx="30" ry="15" fill="#FFFFFF" opacity="0.8"/>
+  
+  <!-- Pupils -->
+  <circle cx="200" cy="192" r="24" fill="#2D1810"/>
+  <circle cx="328" cy="192" r="24" fill="#2D1810"/>
+  
+  <!-- Eye highlights -->
+  <circle cx="208" cy="184" r="12" fill="#FFFFFF"/>
+  <circle cx="336" cy="184" r="12" fill="#FFFFFF"/>
+  <circle cx="196" cy="200" r="6" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="324" cy="200" r="6" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="212" cy="196" r="4" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="340" cy="196" r="4" fill="#FFFFFF" opacity="0.4"/>
+  
+  <!-- Eyebrows -->
+  <path d="M160 144 Q192 128 224 144" stroke="#5D3A1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M288 144 Q320 128 352 144" stroke="#5D3A1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  
+  <!-- Eyebrow fur texture -->
+  <path d="M168 140 L176 148" stroke="#5D3A1A" stroke-width="3" opacity="0.5"/>
+  <path d="M184 136 L192 144" stroke="#5D3A1A" stroke-width="3" opacity="0.5"/>
+  <path d="M200 138 L208 146" stroke="#5D3A1A" stroke-width="3" opacity="0.5"/>
+  <path d="M296 138 L304 146" stroke="#5D3A1A" stroke-width="3" opacity="0.5"/>
+  <path d="M312 136 L320 144" stroke="#5D3A1A" stroke-width="3" opacity="0.5"/>
+  <path d="M328 140 L336 148" stroke="#5D3A1A" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Body/Jacket -->
+  <path d="M128 352 Q96 448 128 480 L192 480 L192 416 Q192 384 224 384 L288 384 Q320 384 320 416 L320 480 L384 480 Q416 448 384 352 Q352 320 256 320 Q160 320 128 352" fill="url(#jacketGradient)" stroke="#2D1810" stroke-width="6"/>
+  
+  <!-- Jacket body shading -->
+  <ellipse cx="256" cy="360" rx="100" ry="30" fill="#8B0000" opacity="0.4"/>
+  <ellipse cx="256" cy="440" rx="80" ry="20" fill="#000000" opacity="0.2"/>
+  
+  <!-- Jacket collar -->
+  <path d="M160 352 L256 400 L352 352" fill="none" stroke="#FFD700" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M176 336 L256 376 L336 336" fill="none" stroke="#DC143C" stroke-width="5"/>
+  
+  <!-- Collar interior -->
+  <path d="M168 344 L256 388 L344 344" fill="none" stroke="#8B0000" stroke-width="2"/>
+  
+  <!-- Gold trim details on jacket -->
+  <path d="M128 384 Q128 432 144 480" fill="none" stroke="#FFD700" stroke-width="6"/>
+  <path d="M384 384 Q384 432 368 480" fill="none" stroke="#FFD700" stroke-width="6"/>
+  <path d="M192 416 L192 480" fill="none" stroke="#FFD700" stroke-width="4"/>
+  <path d="M320 416 L320 480" fill="none" stroke="#FFD700" stroke-width="4"/>
+  
+  <!-- Horizontal trim lines -->
+  <line x1="136" y1="400" x2="184" y2="400" stroke="#FFD700" stroke-width="3"/>
+  <line x1="136" y1="432" x2="184" y2="432" stroke="#FFD700" stroke-width="3"/>
+  <line x1="328" y1="400" x2="376" y2="400" stroke="#FFD700" stroke-width="3"/>
+  <line x1="328" y1="432" x2="376" y2="432" stroke="#FFD700" stroke-width="3"/>
+  
+  <!-- Jacket cuffs -->
+  <rect x="136" y="456" width="48" height="24" fill="#FFD700" rx="4" stroke="#2D1810" stroke-width="2"/>
+  <rect x="328" y="456" width="48" height="24" fill="#FFD700" rx="4" stroke="#2D1810" stroke-width="2"/>
+  
+  <!-- Jacket stripes on sleeves -->
+  <line x1="144" y1="464" x2="176" y2="464" stroke="#DC143C" stroke-width="4"/>
+  <line x1="144" y1="472" x2="176" y2="472" stroke="#DC143C" stroke-width="4"/>
+  <line x1="336" y1="464" x2="368" y2="464" stroke="#DC143C" stroke-width="4"/>
+  <line x1="336" y1="472" x2="368" y2="472" stroke="#DC143C" stroke-width="4"/>
+  
+  <!-- Jacket pocket details -->
+  <rect x="148" y="408" width="32" height="24" fill="#8B0000" rx="2" stroke="#FFD700" stroke-width="2"/>
+  <rect x="332" y="408" width="32" height="24" fill="#8B0000" rx="2" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- Jacket buttons -->
+  <circle cx="256" cy="432" r="16" fill="#FFD700" stroke="#2D1810" stroke-width="3"/>
+  <circle cx="256" cy="464" r="16" fill="#FFD700" stroke="#2D1810" stroke-width="3"/>
+  
+  <!-- Button centers -->
+  <circle cx="256" cy="432" r="8" fill="#D2691E"/>
+  <circle cx="256" cy="464" r="8" fill="#D2691E"/>
+  
+  <!-- Button holes/stitching -->
+  <circle cx="252" cy="428" r="3" fill="#2D1810"/>
+  <circle cx="260" cy="428" r="3" fill="#2D1810"/>
+  <circle cx="252" cy="436" r="3" fill="#2D1810"/>
+  <circle cx="260" cy="436" r="3" fill="#2D1810"/>
+  
+  <circle cx="252" cy="460" r="3" fill="#2D1810"/>
+  <circle cx="260" cy="460" r="3" fill="#2D1810"/>
+  <circle cx="252" cy="468" r="3" fill="#2D1810"/>
+  <circle cx="260" cy="468" r="3" fill="#2D1810"/>
+  
+  <!-- Button shine -->
+  <ellipse cx="250" cy="426" rx="4" ry="2" fill="#FFFFFF" opacity="0.6"/>
+  <ellipse cx="250" cy="458" rx="4" ry="2" fill="#FFFFFF" opacity="0.6"/>
+</svg>

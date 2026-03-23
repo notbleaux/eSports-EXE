@@ -13,7 +13,15 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-export type MascotType = 'fox' | 'owl' | 'wolf' | 'hawk';
+export type MascotType = 'fox' | 'owl' | 'wolf' | 'hawk' | 'dropout-bear' | 'nj-bunny';
+
+// Mascot variant types for new mascots
+export type MascotVariant =
+  | 'default'
+  // Bear variants
+  | 'homecoming' | 'graduation' | 'late-registration' | 'yeezus' | 'donda'
+  // Bunny variants
+  | 'classic-blue' | 'attention' | 'hype-boy' | 'cookie' | 'ditto';
 export type AssetFormat = 'svg' | 'png' | 'css' | 'auto';
 export type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 
@@ -52,7 +60,7 @@ const setUserPreference = (key: string, mascot: MascotType): void => {
 
 // Rotation: random mascot
 const getRandomMascot = (): MascotType => {
-  const mascots: MascotType[] = ['fox', 'owl', 'wolf', 'hawk'];
+  const mascots: MascotType[] = ['fox', 'owl', 'wolf', 'hawk', 'dropout-bear', 'nj-bunny'];
   return mascots[Math.floor(Math.random() * mascots.length)];
 };
 
@@ -240,7 +248,9 @@ const LoadingAnimation: React.FC<{ size: number; mascot: MascotType }> = ({ size
     fox: '#F97316',
     owl: '#6366F1',
     wolf: '#475569',
-    hawk: '#DC2626'
+    hawk: '#DC2626',
+    'dropout-bear': '#8B4513',
+    'nj-bunny': '#0000FF'
   };
 
   return (

@@ -1,7 +1,8 @@
-/** [Ver002.000]
+/** [Ver003.000]
  * MascotGallery Component
  * =======================
  * Grid layout with responsive breakpoints for displaying mascot cards.
+ * Includes 6 mascots: Fox, Owl, Wolf, Hawk, Dropout Bear, NJ Bunny.
  * 
  * Features:
  * - Responsive grid (1-4 columns based on screen size)
@@ -174,6 +175,23 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
     { value: 'wave', label: 'Wave' },
     { value: 'celebrate', label: 'Celebrate' },
   ];
+  
+  // Variant selectors for new mascots with multiple styles
+  const bearVariants: { value: string; label: string }[] = [
+    { value: 'homecoming', label: 'Homecoming' },
+    { value: 'graduation', label: 'Graduation' },
+    { value: 'late-registration', label: 'Late Registration' },
+    { value: 'yeezus', label: 'Yeezus' },
+    { value: 'donda', label: 'Donda' },
+  ];
+  
+  const bunnyVariants: { value: string; label: string }[] = [
+    { value: 'classic-blue', label: 'Classic Blue' },
+    { value: 'attention', label: 'Attention' },
+    { value: 'hype-boy', label: 'Hype Boy' },
+    { value: 'cookie', label: 'Cookie' },
+    { value: 'ditto', label: 'Ditto' },
+  ];
 
   // Map mascot IDs to mascot types for MascotAssetEnhanced
   const getMascotType = (id: string): MascotType => {
@@ -183,6 +201,8 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
       bin: 'wolf',
       fat: 'hawk',
       uni: 'fox', // fallback to fox for uni
+      bear: 'dropout-bear',
+      bunny: 'nj-bunny',
     };
     return typeMap[id] || 'fox';
   };

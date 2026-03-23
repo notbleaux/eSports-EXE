@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Definitions for gradients -->
+  <defs>
+    <radialGradient id="furGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#D2691E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="snoutGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#DEB887;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D2691E;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Ears -->
+  <circle cx="64" cy="64" r="32" fill="url(#furGradient)" stroke="#2D1810" stroke-width="4"/>
+  <circle cx="192" cy="64" r="32" fill="url(#furGradient)" stroke="#2D1810" stroke-width="4"/>
+  <circle cx="64" cy="64" r="16" fill="#D2691E"/>
+  <circle cx="192" cy="64" r="16" fill="#D2691E"/>
+  <!-- Inner ear detail -->
+  <circle cx="64" cy="64" r="10" fill="#DEB887" opacity="0.5"/>
+  <circle cx="192" cy="64" r="10" fill="#DEB887" opacity="0.5"/>
+  
+  <!-- Head base -->
+  <ellipse cx="128" cy="112" rx="80" ry="72" fill="url(#furGradient)" stroke="#2D1810" stroke-width="4"/>
+  
+  <!-- Head shading -->
+  <ellipse cx="104" cy="80" rx="24" ry="16" fill="#D2691E" opacity="0.4"/>
+  <ellipse cx="152" cy="80" rx="16" ry="12" fill="#5D3A1A" opacity="0.3"/>
+  <ellipse cx="128" cy="96" rx="60" ry="20" fill="#8B4513" opacity="0.3"/>
+  
+  <!-- Snout area -->
+  <ellipse cx="128" cy="136" rx="40" ry="32" fill="url(#snoutGradient)"/>
+  <ellipse cx="128" cy="136" rx="36" ry="28" fill="#DEB887" stroke="#D2691E" stroke-width="2"/>
+  
+  <!-- Nose -->
+  <ellipse cx="128" cy="128" rx="16" ry="12" fill="#2D1810"/>
+  <ellipse cx="132" cy="124" rx="6" ry="4" fill="#5D3A1A" opacity="0.6"/>
+  <ellipse cx="132" cy="124" rx="2" ry="1.5" fill="#8B4513" opacity="0.4"/>
+  
+  <!-- Mouth -->
+  <path d="M112 152 Q128 168 144 152" stroke="#2D1810" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M112 152 Q112 144 116 148" stroke="#2D1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M144 152 Q144 144 140 148" stroke="#2D1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="96" cy="96" rx="20" ry="24" fill="#FFFFFF" stroke="#2D1810" stroke-width="3"/>
+  <ellipse cx="160" cy="96" rx="20" ry="24" fill="#FFFFFF" stroke="#2D1810" stroke-width="3"/>
+  
+  <!-- Pupils -->
+  <circle cx="100" cy="96" r="12" fill="#2D1810"/>
+  <circle cx="164" cy="96" r="12" fill="#2D1810"/>
+  
+  <!-- Eye highlights -->
+  <circle cx="104" cy="92" r="6" fill="#FFFFFF"/>
+  <circle cx="168" cy="92" r="6" fill="#FFFFFF"/>
+  <circle cx="98" cy="100" r="3" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="162" cy="100" r="3" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Eyebrows -->
+  <path d="M80 72 Q96 64 112 72" stroke="#5D3A1A" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M144 72 Q160 64 176 72" stroke="#5D3A1A" stroke-width="5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Body/Jacket -->
+  <path d="M64 176 Q48 224 64 240 L96 240 L96 208 Q96 192 112 192 L144 192 Q160 192 160 208 L160 240 L192 240 Q208 224 192 176 Q176 160 128 160 Q80 160 64 176" fill="#DC143C" stroke="#2D1810" stroke-width="4"/>
+  
+  <!-- Jacket shading -->
+  <ellipse cx="128" cy="180" rx="50" ry="15" fill="#8B0000" opacity="0.3"/>
+  
+  <!-- Jacket collar -->
+  <path d="M80 176 L128 200 L176 176" fill="none" stroke="#FFD700" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 168 L128 188 L168 168" fill="none" stroke="#DC143C" stroke-width="3"/>
+  
+  <!-- Gold trim details -->
+  <path d="M64 192 Q64 216 72 240" fill="none" stroke="#FFD700" stroke-width="4"/>
+  <path d="M192 192 Q192 216 184 240" fill="none" stroke="#FFD700" stroke-width="4"/>
+  <path d="M96 208 L96 240" fill="none" stroke="#FFD700" stroke-width="3"/>
+  <path d="M160 208 L160 240" fill="none" stroke="#FFD700" stroke-width="3"/>
+  
+  <!-- Horizontal trim lines -->
+  <line x1="68" y1="200" x2="92" y2="200" stroke="#FFD700" stroke-width="2"/>
+  <line x1="164" y1="200" x2="188" y2="200" stroke="#FFD700" stroke-width="2"/>
+  
+  <!-- Jacket cuffs -->
+  <rect x="68" y="228" width="24" height="12" fill="#FFD700" rx="2" stroke="#2D1810" stroke-width="1"/>
+  <rect x="164" y="228" width="24" height="12" fill="#FFD700" rx="2" stroke="#2D1810" stroke-width="1"/>
+  
+  <!-- Jacket stripes on sleeves -->
+  <line x1="72" y1="232" x2="88" y2="232" stroke="#DC143C" stroke-width="2"/>
+  <line x1="72" y1="236" x2="88" y2="236" stroke="#DC143C" stroke-width="2"/>
+  <line x1="168" y1="232" x2="184" y2="232" stroke="#DC143C" stroke-width="2"/>
+  <line x1="168" y1="236" x2="184" y2="236" stroke="#DC143C" stroke-width="2"/>
+  
+  <!-- Jacket buttons -->
+  <circle cx="128" cy="216" r="8" fill="#FFD700" stroke="#2D1810" stroke-width="2"/>
+  <circle cx="128" cy="232" r="8" fill="#FFD700" stroke="#2D1810" stroke-width="2"/>
+  
+  <!-- Button details -->
+  <circle cx="128" cy="216" r="4" fill="#D2691E"/>
+  <circle cx="126" cy="214" r="1.5" fill="#FFD700"/>
+  <circle cx="130" cy="214" r="1.5" fill="#FFD700"/>
+  <circle cx="126" cy="218" r="1.5" fill="#FFD700"/>
+  <circle cx="130" cy="218" r="1.5" fill="#FFD700"/>
+  
+  <circle cx="128" cy="232" r="4" fill="#D2691E"/>
+  <circle cx="126" cy="230" r="1.5" fill="#FFD700"/>
+  <circle cx="130" cy="230" r="1.5" fill="#FFD700"/>
+  <circle cx="126" cy="234" r="1.5" fill="#FFD700"/>
+  <circle cx="130" cy="234" r="1.5" fill="#FFD700"/>
+</svg>

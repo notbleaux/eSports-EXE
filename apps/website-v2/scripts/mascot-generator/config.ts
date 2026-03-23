@@ -1,12 +1,14 @@
 /**
  * Mascot Generation Configuration
  * 
- * [Ver001.000]
+ * [Ver002.000]
  * 
  * Fine-tuning configuration for 3-option pipeline:
  * - Option 1: SVG (scalable, immediate)
  * - Option 2: Canvas/PNG (pixel-perfect)
  * - Option 3: CSS (zero-dependency)
+ * 
+ * Includes 6 mascots: Fox, Owl, Wolf, Hawk, Dropout Bear, NJ Bunny
  */
 
 export interface ColorPalette {
@@ -177,6 +179,45 @@ declare module './config' {
 }
 
 export const ALL_MASCOTS = [FOX_MASCOT, OWL_MASCOT, WOLF_MASCOT, HAWK_MASCOT];
+
+// ============================================
+// NEW MASCOT IMPORTS (v2.0)
+// ============================================
+
+export {
+  DROPOUT_BEAR_MASCOT,
+  NJ_BUNNY_MASCOT,
+  BEAR_VARIANT_COLORS,
+  BUNNY_VARIANT_COLORS,
+  BEAR_GENERATION_OPTIONS,
+  BUNNY_GENERATION_OPTIONS,
+  NEW_MASCOTS,
+  ALL_VARIANTS,
+  getVariantColors,
+  hasVariants,
+  getVariantNames,
+} from './config-new-mascots';
+
+// Extended mascot array including new mascots
+export const ALL_MASCOTS_EXTENDED = [
+  FOX_MASCOT,
+  OWL_MASCOT,
+  WOLF_MASCOT,
+  HAWK_MASCOT,
+  // New mascots imported from config-new-mascots
+];
+
+// Helper to get all 6 mascots (needs runtime import resolution)
+export const getAllMascots = () => [
+  FOX_MASCOT,
+  OWL_MASCOT,
+  WOLF_MASCOT,
+  HAWK_MASCOT,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('./config-new-mascots').DROPOUT_BEAR_MASCOT,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('./config-new-mascots').NJ_BUNNY_MASCOT,
+];
 
 // ============================================
 // DEFAULT GENERATION OPTIONS

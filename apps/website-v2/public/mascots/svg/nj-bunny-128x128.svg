@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- NJ Bunny Mascot - 128x128px -->
+  <!-- Minimalist line art, electric blue (#0000FF), transparent background -->
+  
+  <!-- Left Ear (floppy) -->
+  <path d="M40 32 C40 8, 24 8, 24 32 C24 48, 40 56, 48 64" 
+        fill="none" stroke="#0000FF" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Right Ear (slightly bent) -->
+  <path d="M88 32 C88 12, 104 16, 100 36 C98 48, 88 56, 80 64" 
+        fill="none" stroke="#0000FF" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Head -->
+  <ellipse cx="64" cy="72" rx="28" ry="24" 
+           fill="none" stroke="#0000FF" stroke-width="0.5"/>
+  
+  <!-- Left Eye (big round with sparkle) -->
+  <circle cx="52" cy="68" r="7.2" fill="none" stroke="#0000FF" stroke-width="0.5"/>
+  <circle cx="54" cy="66" r="1.6" fill="#0000FF"/>
+  
+  <!-- Right Eye (big round with sparkle) -->
+  <circle cx="76" cy="68" r="7.2" fill="none" stroke="#0000FF" stroke-width="0.5"/>
+  <circle cx="78" cy="66" r="1.6" fill="#0000FF"/>
+  
+  <!-- Nose -->
+  <ellipse cx="64" cy="80" rx="3.2" ry="2" fill="#0000FF"/>
+  
+  <!-- Mouth (small cute smile) -->
+  <path d="M58 84 Q64 90, 70 84" 
+        fill="none" stroke="#0000FF" stroke-width="0.5" stroke-linecap="round"/>
+  
+  <!-- Body (simple line) -->
+  <path d="M48 92 Q40 104, 40 112 Q64 116, 88 112 Q88 104, 80 92" 
+        fill="none" stroke="#0000FF" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Fluffy Tail -->
+  <circle cx="96" cy="104" r="8" fill="none" stroke="#0000FF" stroke-width="0.5"/>
+  <path d="M90 100 L92 104 L88 108 M96 96 L96 102 L100 100 M102 104 L98 106 L102 110" 
+        fill="none" stroke="#0000FF" stroke-width="0.4" stroke-linecap="round"/>
+</svg>

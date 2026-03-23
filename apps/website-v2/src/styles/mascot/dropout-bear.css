@@ -1,0 +1,744 @@
+/**
+ * Dropout Bear Mascot CSS Styles
+ * ===============================
+ * [Ver001.000]
+ * 
+ * CSS-only Dropout Bear mascot for Libre-X-eSport 4NJZ4 TENET Platform
+ * Features: Teddy bear silhouette, letterman jacket, multiple album variants
+ * Album variants: Default (College Dropout), Homecoming, Graduation, 
+ *                 Late Registration, Yeezus, Donda
+ */
+
+/* ============================================
+   BASE DROPOUT BEAR MASCOT (64x64 base size)
+   ============================================ */
+
+.dropout-bear-css {
+  --bear-jacket: #DC143C;
+  --bear-jacket-dark: #8B0000;
+  --bear-fur: #8B4513;
+  --bear-fur-dark: #5D3A1A;
+  --bear-accent: #FFD700;
+  --bear-shirt: #F5F5DC;
+  --bear-scale: 1;
+  
+  position: relative;
+  width: 64px;
+  height: 64px;
+  transform: scale(var(--bear-scale));
+  transform-origin: top left;
+  image-rendering: pixelated;
+}
+
+/* ============================================
+   HEAD & FACE
+   ============================================ */
+
+.bear-head {
+  position: absolute;
+  top: 4px;
+  left: 12px;
+  width: 40px;
+  height: 36px;
+  background: var(--bear-fur);
+  border-radius: 50% 50% 45% 45%;
+  z-index: 2;
+}
+
+/* Ears */
+.bear-ear {
+  position: absolute;
+  top: -4px;
+  width: 14px;
+  height: 14px;
+  background: var(--bear-fur);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.bear-ear--left {
+  left: 2px;
+}
+
+.bear-ear--right {
+  right: 2px;
+}
+
+.bear-ear::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: var(--bear-fur-dark);
+  border-radius: 50%;
+}
+
+/* Face Container */
+.bear-face {
+  position: absolute;
+  top: 10px;
+  left: 6px;
+  width: 28px;
+  height: 22px;
+  background: linear-gradient(180deg, var(--bear-fur) 0%, var(--bear-fur-dark) 100%);
+  border-radius: 50%;
+}
+
+/* Eyes */
+.bear-eye {
+  position: absolute;
+  top: 6px;
+  width: 6px;
+  height: 8px;
+  background: #ffffff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.bear-eye--left {
+  left: 5px;
+}
+
+.bear-eye--right {
+  right: 5px;
+}
+
+.bear-pupil {
+  position: absolute;
+  top: 2px;
+  left: 1px;
+  width: 4px;
+  height: 5px;
+  background: #1a1a1a;
+  border-radius: 50%;
+}
+
+.bear-pupil::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 1.5px;
+  height: 1.5px;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+/* Snout */
+.bear-snout {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 10px;
+  background: linear-gradient(180deg, var(--bear-fur) 0%, #D2B48C 100%);
+  border-radius: 50%;
+}
+
+.bear-nose {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 5px;
+  background: #1a1a1a;
+  border-radius: 50%;
+}
+
+.bear-nose::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 2px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+/* Mouth */
+.bear-mouth {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 4px;
+  border-bottom: 2px solid #1a1a1a;
+  border-radius: 0 0 50% 50%;
+}
+
+/* ============================================
+   BODY & JACKET
+   ============================================ */
+
+.bear-body {
+  position: absolute;
+  bottom: 4px;
+  left: 10px;
+  width: 44px;
+  height: 28px;
+  background: var(--bear-jacket);
+  border-radius: 20% 20% 30% 30%;
+  z-index: 1;
+}
+
+.bear-jacket {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--bear-jacket) 0%, var(--bear-jacket-dark) 100%);
+  border-radius: 20% 20% 30% 30%;
+}
+
+/* Collar */
+.bear-collar {
+  position: absolute;
+  top: -2px;
+  width: 16px;
+  height: 10px;
+  background: var(--bear-shirt);
+  border-radius: 0 0 50% 50%;
+}
+
+.bear-collar--left {
+  left: 4px;
+  transform: rotate(-10deg);
+}
+
+.bear-collar--right {
+  right: 4px;
+  transform: rotate(10deg);
+}
+
+/* Zipper/Buttons */
+.bear-zipper {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 16px;
+  background: var(--bear-accent);
+  border-radius: 1px;
+}
+
+.bear-zipper::before,
+.bear-zipper::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--bear-accent);
+  border-radius: 50%;
+}
+
+.bear-zipper::before {
+  top: 2px;
+}
+
+.bear-zipper::after {
+  bottom: 2px;
+}
+
+/* Pockets */
+.bear-pocket {
+  position: absolute;
+  bottom: 6px;
+  width: 10px;
+  height: 10px;
+  background: var(--bear-jacket-dark);
+  border-radius: 2px;
+  border: 1px solid var(--bear-accent);
+}
+
+.bear-pocket--left {
+  left: 6px;
+}
+
+.bear-pocket--right {
+  right: 6px;
+}
+
+/* Arms */
+.bear-arm {
+  position: absolute;
+  top: 4px;
+  width: 10px;
+  height: 18px;
+  background: var(--bear-jacket);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.bear-arm--left {
+  left: -4px;
+  transform: rotate(20deg);
+}
+
+.bear-arm--right {
+  right: -4px;
+  transform: rotate(-20deg);
+}
+
+/* Arms inner detail */
+.bear-arm::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--bear-fur);
+  border-radius: 50%;
+}
+
+/* Shadow */
+.bear-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* ============================================
+   GRADUATION CAP (Graduation variant only)
+   ============================================ */
+
+.bear-cap {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.bear-cap--top {
+  width: 36px;
+  height: 8px;
+  background: #1a1a1a;
+  border-radius: 2px;
+}
+
+.bear-cap--top::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 6px;
+  background: #1a1a1a;
+}
+
+.bear-cap--tassel {
+  position: absolute;
+  top: 2px;
+  right: -4px;
+  width: 8px;
+  height: 2px;
+  background: var(--bear-accent);
+  border-radius: 1px;
+}
+
+.bear-cap--tassel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 10px;
+  background: var(--bear-accent);
+  border-radius: 1px;
+}
+
+/* ============================================
+   VARIANT OVERRIDES
+   ============================================ */
+
+/* Homecoming - Pink jacket */
+.dropout-bear-css--homecoming {
+  --bear-jacket: #FF69B4;
+  --bear-jacket-dark: #C71585;
+  --bear-accent: #00CED1;
+  --bear-shirt: #FFF0F5;
+}
+
+/* Graduation - Purple jacket with gold accents */
+.dropout-bear-css--graduation {
+  --bear-jacket: #800080;
+  --bear-jacket-dark: #4B0082;
+  --bear-accent: #FFD700;
+  --bear-shirt: #F0E68C;
+}
+
+/* Late Registration - Maroon/burgundy */
+.dropout-bear-css--late-registration {
+  --bear-jacket: #800020;
+  --bear-jacket-dark: #4A0404;
+  --bear-accent: #D4AF37;
+  --bear-shirt: #E6E6FA;
+}
+
+/* Yeezus - Dark minimalist */
+.dropout-bear-css--yeezus {
+  --bear-jacket: #2F2F2F;
+  --bear-jacket-dark: #1A1A1A;
+  --bear-fur: #4A4A4A;
+  --bear-fur-dark: #2F2F2F;
+  --bear-accent: #FFFFFF;
+  --bear-shirt: #1A1A1A;
+}
+
+.dropout-bear-css--yeezus .bear-jacket {
+  filter: grayscale(0.3) contrast(1.1);
+}
+
+/* Donda - All black */
+.dropout-bear-css--donda {
+  --bear-jacket: #0A0A0A;
+  --bear-jacket-dark: #000000;
+  --bear-fur: #1A1A1A;
+  --bear-fur-dark: #0A0A0A;
+  --bear-accent: #333333;
+  --bear-shirt: #000000;
+}
+
+.dropout-bear-css--donda .bear-jacket,
+.dropout-bear-css--donda .bear-head,
+.dropout-bear-css--donda .bear-ear {
+  filter: grayscale(1) contrast(1.2);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Idle Animation - Gentle breathing */
+@keyframes bear-idle {
+  0%, 100% {
+    transform: scale(var(--bear-scale)) translateY(0);
+  }
+  50% {
+    transform: scale(calc(var(--bear-scale) * 1.02)) translateY(-2px);
+  }
+}
+
+.animate-idle {
+  animation: bear-idle 2s ease-in-out infinite;
+}
+
+/* Wave Animation - Head and arm wave */
+@keyframes bear-wave {
+  0%, 100% {
+    transform: scale(var(--bear-scale)) rotate(0deg);
+  }
+  25% {
+    transform: scale(var(--bear-scale)) rotate(-8deg);
+  }
+  75% {
+    transform: scale(var(--bear-scale)) rotate(8deg);
+  }
+}
+
+.animate-wave {
+  animation: bear-wave 0.6s ease-in-out 3;
+}
+
+.animate-wave .bear-arm--right {
+  animation: bear-wave-arm 0.6s ease-in-out 3;
+}
+
+@keyframes bear-wave-arm {
+  0%, 100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(-60deg) translateY(-4px);
+  }
+}
+
+/* Celebrate Animation - Happy bounce */
+@keyframes bear-celebrate {
+  0%, 100% {
+    transform: scale(var(--bear-scale)) translateY(0);
+  }
+  25% {
+    transform: scale(calc(var(--bear-scale) * 1.15)) translateY(-12px);
+  }
+  50% {
+    transform: scale(var(--bear-scale)) translateY(0);
+  }
+  75% {
+    transform: scale(calc(var(--bear-scale) * 1.1)) translateY(-6px);
+  }
+}
+
+.animate-celebrate {
+  animation: bear-celebrate 0.8s ease-out;
+}
+
+/* Graduation Animation - Cap toss */
+@keyframes bear-graduation {
+  0%, 100% {
+    transform: scale(var(--bear-scale)) translateY(0);
+  }
+  20% {
+    transform: scale(calc(var(--bear-scale) * 0.95)) translateY(4px);
+  }
+  50% {
+    transform: scale(calc(var(--bear-scale) * 1.1)) translateY(-20px);
+  }
+  80% {
+    transform: scale(var(--bear-scale)) translateY(0);
+  }
+}
+
+@keyframes bear-cap-toss {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateX(-50%) translateY(-30px) rotate(-20deg);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-45px) rotate(10deg);
+  }
+  90% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+}
+
+.animate-graduation {
+  animation: bear-graduation 1.5s ease-in-out;
+}
+
+.animate-graduation .bear-cap {
+  animation: bear-cap-toss 1.5s ease-in-out;
+}
+
+/* Blink Animation */
+@keyframes bear-blink {
+  0%, 90%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-idle .bear-eye,
+.animate-wave .bear-eye {
+  animation: bear-blink 4s ease-in-out infinite;
+}
+
+/* Ear Twitch Animation */
+@keyframes bear-ear-twitch-left {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-5deg);
+  }
+}
+
+@keyframes bear-ear-twitch-right {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(5deg);
+  }
+}
+
+.animate-idle .bear-ear--left {
+  animation: bear-ear-twitch-left 3s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-idle .bear-ear--right {
+  animation: bear-ear-twitch-right 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Shadow animation for jumping */
+@keyframes bear-shadow-pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.8);
+    opacity: 0.1;
+  }
+}
+
+.animate-celebrate .bear-shadow,
+.animate-graduation .bear-shadow {
+  animation: bear-shadow-pulse 0.8s ease-out;
+}
+
+/* ============================================
+   STATE VARIATIONS
+   ============================================ */
+
+/* Hover state */
+.dropout-bear-css:hover,
+.dropout-bear--interactive:hover {
+  filter: brightness(1.1);
+}
+
+.dropout-bear--interactive {
+  cursor: pointer;
+}
+
+/* Focus state */
+.dropout-bear-css:focus-visible,
+.dropout-bear--interactive:focus-visible {
+  outline: 3px solid var(--bear-jacket);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Active/Pressed state */
+.dropout-bear-css:active,
+.dropout-bear--interactive:active {
+  transform: scale(calc(var(--bear-scale) * 0.95));
+}
+
+/* Disabled state */
+.dropout-bear-css.disabled,
+.dropout-bear--disabled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  pointer-events: none;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .dropout-bear-css,
+  .dropout-bear-css.animate-idle,
+  .dropout-bear-css.animate-wave,
+  .dropout-bear-css.animate-celebrate,
+  .dropout-bear-css.animate-graduation,
+  .dropout-bear-css .bear-ear--left,
+  .dropout-bear-css .bear-ear--right,
+  .dropout-bear-css .bear-eye,
+  .dropout-bear-css .bear-cap,
+  .dropout-bear-css .bear-shadow,
+  .dropout-bear-css .bear-arm--right {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .dropout-bear-css {
+    --bear-fur: #5D3A1A;
+    --bear-fur-dark: #3D2817;
+    --bear-jacket: #8B0000;
+    --bear-jacket-dark: #4A0000;
+    --bear-accent: #FFD700;
+  }
+  
+  .bear-eye {
+    border: 1px solid #000000;
+  }
+  
+  .bear-nose {
+    border: 1px solid #000000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .dropout-bear-css {
+    --bear-fur: #666666;
+    --bear-fur-dark: #333333;
+    --bear-jacket: #999999;
+    --bear-jacket-dark: #666666;
+    --bear-accent: #333333;
+    filter: none !important;
+  }
+  
+  .bear-shadow {
+    display: none;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.dropout-bear-css.rounded,
+.dropout-bear--rounded {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dropout-bear-css.circular,
+.dropout-bear--circular {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.dropout-bear-css.shadow-sm,
+.dropout-bear--shadow-sm {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.dropout-bear-css.shadow-md,
+.dropout-bear--shadow-md {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.dropout-bear-css.shadow-lg,
+.dropout-bear--shadow-lg {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+}
+
+.dropout-bear-css.glow,
+.dropout-bear--glow {
+  filter: drop-shadow(0 0 20px var(--bear-jacket-dark));
+}
+
+/* SVG wrapper styles */
+.dropout-bear-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Loading state */
+.dropout-bear--loading {
+  background: linear-gradient(90deg, var(--bear-fur) 25%, var(--bear-fur-dark) 50%, var(--bear-fur) 75%);
+  background-size: 200% 100%;
+  animation: bear-loading 1.5s infinite;
+}
+
+@keyframes bear-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
