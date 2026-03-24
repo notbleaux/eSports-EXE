@@ -71,7 +71,12 @@ export default defineConfig({
     dedupe: ['react', 'react-dom', 'framer-motion']
   },
   worker: {
-    format: 'es'
+    format: 'es',
+    rollupOptions: {
+      output: {
+        entryFileNames: 'js/workers/[name]-[hash].js'
+      }
+    }
   },
   build: {
     target: 'esnext',
