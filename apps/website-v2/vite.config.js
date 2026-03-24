@@ -55,7 +55,7 @@ export default defineConfig({
     })
   ],
   // Base path: '/' for Vercel, '/eSports-EXE/' for GitHub Pages/local
-  base: process.env.VERCEL ? '/' : (process.env.VITE_BASE_PATH || '/eSports-EXE/'),
+  base: '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
