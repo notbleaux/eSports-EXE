@@ -310,3 +310,9 @@
     color: black;
   }
 }
+
+/* ==========================================================================
+   Force Design Override - Must be last to take precedence
+   ========================================================================== */
+
+@import './styles/force-design-override.css';
