@@ -93,21 +93,12 @@ export function useGridWorker(options: UseGridWorkerOptions = {}): UseGridWorker
 
     let isMounted = true
 
-    // WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
     // Create worker
-    // const worker = new Worker(new URL('./grid.worker.ts', import.meta.url), {
-    //   type: 'module',
-    // })
-    // workerRef.current = worker
-    
-    // Set error state since worker is disabled
-    const err: WorkerError = {
-      type: 'unsupported',
-      message: 'Web Workers disabled for build compatibility',
-      timestamp: Date.now(),
-    }
-    setError(err)
-    return
+    const worker = new Worker(new URL('./grid.worker.ts', import.meta.url), {
+      type: 'module',
+    })
+
+    workerRef.current = worker
 
     // Handle messages from worker
     worker.onmessage = (event: MessageEvent<WorkerResponse>) => {

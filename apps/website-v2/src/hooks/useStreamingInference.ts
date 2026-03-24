@@ -9,14 +9,20 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useMLInference } from './useMLInference'
 import type { DataStreamCommand, DataStreamResponse, StreamData } from '../workers/data-stream.worker'
 // Types defined locally to avoid conflicts
-// Constants available in '../constants/ml' if needed for future enhancements:
-// BUFFER_SIZE, MAX_STREAMING_PREDICTIONS, DEBOUNCE_MS, LAG_GREEN/RED_THRESHOLD_MS
+import { 
+  BUFFER_SIZE,
+  MAX_STREAMING_PREDICTIONS,
+  DEBOUNCE_MS,
+  LAG_GREEN_THRESHOLD_MS,
+  LAG_YELLOW_THRESHOLD_MS
+} from '../constants/ml'
 // import { analyticsSync } from '../services/analyticsSync'
-import { streamingLogger } from '../utils/logger'
+import { streamingLogger as logger } from '../utils/logger'
 
 /**
  * Debounce hook for stable debounced callbacks
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function useDebounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   fn: T,
   delay: number
@@ -96,7 +102,36 @@ export interface UseStreamingInferenceReturn {
   stop: () => void
 }
 
+/**
+ * Debounce function for limiting prediction rate
+ */
+function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
+  let lastCallTime = 0
 
+  return (...args: Parameters<T>) => {
+    const now = Date.now()
+    const timeSinceLastCall = now - lastCallTime
+
+    const execute = () => {
+      lastCallTime = Date.now()
+      fn(...args)
+    }
+
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    if (timeSinceLastCall >= delay) {
+      execute()
+    } else {
+      timeoutId = setTimeout(execute, delay - timeSinceLastCall)
+    }
+  }
+}
 
 /**
  * Calculate confidence from prediction output using softmax
@@ -206,7 +241,7 @@ export function useStreamingInference(
       try {
         const { usePredictionHistoryStore } = await import('../store/predictionHistoryStore')
         usePredictionHistoryStore.getState().addPrediction(prediction)
-      } catch {
+      } catch (e) {
         // History store not available, continue
       }
 
@@ -246,13 +281,8 @@ export function useStreamingInference(
 
   /**
    * Initialize data stream worker
-   * WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
    */
   const initWorker = useCallback((): Worker | null => {
-    // Worker disabled - returning null to use fallback mode
-    return null;
-    
-    /* Original worker code disabled:
     if (workerRef.current) {
       return workerRef.current
     }
@@ -339,7 +369,6 @@ export function useStreamingInference(
       }
       return null
     }
-    */
   }, [isPaused, processPrediction])
 
   /**
@@ -365,7 +394,7 @@ export function useStreamingInference(
     if (workerRef.current) {
       try {
         workerRef.current.postMessage({ type: 'DISCONNECT' } as DataStreamCommand)
-      } catch {
+      } catch (err) {
         // Worker may already be terminated
       }
     }
@@ -415,13 +444,13 @@ export function useStreamingInference(
             if (workerRef.current) {
               try {
                 workerRef.current.terminate()
-              } catch {
+              } catch (err) {
                 // Already terminated
               }
               workerRef.current = null
             }
           }, 100)
-        } catch {
+        } catch (err) {
           // Worker already terminated or errored
           workerRef.current = null
         }

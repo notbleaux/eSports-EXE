@@ -28,9 +28,6 @@ import { VirtualDataGrid } from './components/VirtualDataGrid';
 import { VirtualPlayerGrid } from './components/VirtualPlayerGrid';
 import { PlayerRatingCard } from './components/PlayerRatingCard';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
-import { createLogger } from '@/utils/logger';
-
-const logger = createLogger('SATOR');
 import { 
   MLInferenceErrorBoundary, 
   HubErrorBoundary,
@@ -149,10 +146,23 @@ function SatorHubContent() {
   }, []);
 
   // Initialize worker pool for multiple grids
-  // WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
   useEffect(() => {
-    // Worker disabled - using DOM fallback instead
-    return;
+    if (isWorkerSupported()) {
+      // Pre-initialize worker pool
+      const pool = getWorkerPool('grid', () => {
+        return new Worker(new URL('../workers/grid.worker.ts', import.meta.url), {
+          type: 'module'
+        });
+      }, {
+        maxWorkers: 2,
+        idleTimeoutMs: 60000
+      });
+
+      return () => {
+        // Cleanup pool on unmount
+        pool.dispose();
+      };
+    }
   }, []);
 
   // Generate mock data
@@ -1062,11 +1072,7 @@ function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }) {
                 console.log(`[SATOR] SimRating calculated for ${player.name}:`, result);
               }}
               onError={(error) => {
-                logger.error('SimRating calculation error', {
-                  error: error instanceof Error ? error.message : String(error),
-                  playerName: player.name,
-                  playerId: player.id,
-                });
+                console.error(`[SATOR] SimRating error for ${player.name}:`, error);
               }}
             />
           ))}

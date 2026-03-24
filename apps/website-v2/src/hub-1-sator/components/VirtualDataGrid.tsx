@@ -25,9 +25,6 @@ import { useGridWorker } from '@/hooks/workers/useGridWorker';
 import { WorkerPool, getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
 import type { GridColumn, GridRow, GridVisibleRange } from '@/types/worker';
 import { colors } from '@/theme/colors';
-import { createLogger } from '@/utils/logger';
-
-const logger = createLogger('VirtualDataGrid');
 
 export interface VirtualDataGridProps {
   data: GridRow[];
@@ -62,14 +59,10 @@ export interface VirtualDataGridRef {
 }
 
 // Worker factory for pool usage
-// WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
 const createGridWorker = (): Worker => {
-  throw new Error('Workers disabled for build compatibility');
-  /* Original code disabled:
   return new Worker(new URL('../../workers/grid.worker.ts', import.meta.url), {
     type: 'module'
   });
-  */
 };
 
 /**
@@ -293,10 +286,7 @@ export const VirtualDataGrid = forwardRef<VirtualDataGridRef, VirtualDataGridPro
     cellWidth: 100,
     cellHeight: rowHeight,
     onError: (error) => {
-      logger.error('Grid worker error', {
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-      });
+      console.error('Grid worker error:', error);
     }
   });
 
@@ -335,10 +325,7 @@ export const VirtualDataGrid = forwardRef<VirtualDataGridRef, VirtualDataGridPro
         });
         setIsReady(true);
       } catch (error) {
-        logger.error('Failed to render grid', {
-          error: error instanceof Error ? error.message : String(error),
-          stack: error instanceof Error ? error.stack : undefined,
-        });
+        console.error('Failed to render grid:', error);
       }
     };
 

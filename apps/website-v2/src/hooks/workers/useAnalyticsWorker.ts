@@ -14,14 +14,10 @@ import type {
 } from '../../types/worker'
 
 // Worker factory for analytics worker
-// WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
 const createAnalyticsWorker = (): Worker => {
-  throw new Error('Workers disabled for build compatibility');
-  /* Original code disabled:
   return new Worker(new URL('../../workers/analytics.worker.ts', import.meta.url), {
     type: 'module'
   })
-  */
 }
 
 interface UseAnalyticsWorkerOptions {
