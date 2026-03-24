@@ -48,7 +48,7 @@ export default defineConfig({
       '@sator/types': path.resolve(__dirname, '../../packages/shared/types'),
       '@sator/services': path.resolve(__dirname, '../../packages/shared/services/help')
     },
-    dedupe: ['react', 'react-dom', 'framer-motion']
+    dedupe: ['react', 'react-dom', 'scheduler', 'framer-motion']
   },
   worker: {
     format: 'es',
