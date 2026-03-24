@@ -246,99 +246,12 @@ export function useStreamingInference(
 
   /**
    * Initialize data stream worker
-   * WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
+   * COMPLETELY DISABLED FOR VERCEL BUILD
    */
   const initWorker = useCallback((): Worker | null => {
     // Worker disabled - returning null to use fallback mode
-    return null;
-    
-    /* Original worker code disabled - pattern broken to prevent Vite detection:
-    if (workerRef.current) {
-      return workerRef.current
-    }
-
-    try {
-      // WORKER DISABLED - new Worker(new URL('../workers/data-stream.worker.ts', import.meta.url), {
-
-      worker.onmessage = (event: MessageEvent<DataStreamResponse>) => {
-        const response = event.data
-
-        // Ignore messages during cleanup
-        if (isCleaningUpRef.current) {
-          return
-        }
-
-        switch (response.type) {
-          case 'CONNECTED':
-            if (isMountedRef.current) {
-              setIsStreaming(true)
-              setError(null)
-            }
-            break
-
-          case 'DISCONNECTED':
-            if (isMountedRef.current) {
-              setIsStreaming(false)
-            }
-            break
-
-          case 'DATA':
-            if (isMountedRef.current && !isPaused && !isCleaningUpRef.current) {
-              pendingDataRef.current = response.data
-              processPrediction(response.data)
-            }
-            break
-
-          case 'BUFFER_STATUS':
-            if (isMountedRef.current) {
-              setBufferSize(response.size)
-            }
-            break
-
-          case 'PAUSED':
-            if (isMountedRef.current) {
-              setIsPaused(true)
-            }
-            break
-
-          case 'RESUMED':
-            if (isMountedRef.current) {
-              setIsPaused(false)
-            }
-            break
-
-          case 'ERROR':
-            if (isMountedRef.current) {
-              setError(new Error(response.error))
-            }
-            break
-
-          case 'RECONNECTING':
-            if (!isCleaningUpRef.current) {
-              streamingLogger.debug(`[Streaming Inference] Reconnecting attempt ${response.attempt} in ${response.delayMs}ms`)
-            }
-            break
-        }
-      }
-
-      worker.onerror = (err) => {
-        streamingLogger.error('[Streaming Inference] Worker error:', err)
-        if (isMountedRef.current) {
-          setError(new Error('Data stream worker failed'))
-        }
-      }
-
-      workerRef.current = worker
-      return worker
-    } catch (err) {
-      streamingLogger.error('[Streaming Inference] Failed to initialize worker:', err)
-      if (isMountedRef.current) {
-        setError(new Error('Failed to initialize data stream worker'))
-      }
-      return null
-    }
-    */
-  }, [isPaused, processPrediction])
+    return null
+  }, [])
 
   /**
    * Start streaming
