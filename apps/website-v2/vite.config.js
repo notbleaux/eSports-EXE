@@ -73,6 +73,7 @@ export default defineConfig({
   worker: {
     format: 'es',
     plugins: [],
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         entryFileNames: 'js/workers/[name]-[hash].js'
