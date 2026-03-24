@@ -81,17 +81,7 @@ export default defineConfig({
     // Optimize chunk size warnings
     chunkSizeWarningLimit: 600,
     // Enable minification optimizations
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'],
-      },
-      mangle: {
-        safari10: true,
-      },
-    },
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         // Advanced manual chunks for optimal code splitting
