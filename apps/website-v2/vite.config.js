@@ -89,7 +89,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 600,
     // Enable minification optimizations
     minify: 'esbuild',
-    terserOptions: undefined,
     rollupOptions: {
       output: {
         // Advanced manual chunks for optimal code splitting
