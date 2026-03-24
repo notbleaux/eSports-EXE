@@ -72,13 +72,12 @@ export default defineConfig({
   },
   worker: {
     format: 'es',
-    minify: 'esbuild',
+    plugins: [],
     rollupOptions: {
       output: {
         entryFileNames: 'js/workers/[name]-[hash].js'
       }
-    },
-    plugins: []
+    }
   },
   build: {
     target: 'esnext',
