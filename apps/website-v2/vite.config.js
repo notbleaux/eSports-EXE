@@ -8,10 +8,11 @@ import { visualizer } from 'rollup-plugin-visualizer'
 const serviceWorkerPlugin = () => ({
   name: 'service-worker',
   async writeBundle() {
-    // Use esbuild to properly compile sw.ts to sw.js
-    const esbuild = await import('esbuild')
+    // Try to use esbuild, fallback to simple copy if not available
+    let swSource;
     
     try {
+      const esbuild = await import('esbuild')
       const result = await esbuild.build({
         entryPoints: ['./src/sw.ts'],
         bundle: false,
@@ -20,15 +21,15 @@ const serviceWorkerPlugin = () => ({
         target: 'es2020',
         platform: 'browser',
       })
-      
-      fs.writeFileSync('./dist/sw.js', result.outputFiles[0].text)
+      swSource = result.outputFiles[0].text
       console.log('[Vite] Service Worker built with esbuild')
     } catch (err) {
-      console.error('[Vite] Service Worker build failed:', err)
-      // Fallback: copy as-is if build fails
-      const swSource = fs.readFileSync('./src/sw.ts', 'utf-8')
-      fs.writeFileSync('./dist/sw.js', swSource)
+      // Fallback: copy as-is if esbuild not available or build fails
+      console.log('[Vite] esbuild not available, copying sw.ts as-is')
+      swSource = fs.readFileSync('./src/sw.ts', 'utf-8')
     }
+    
+    fs.writeFileSync('./dist/sw.js', swSource)
     
     // Copy manifest and icons
     fs.copyFileSync('./public/manifest.json', './dist/manifest.json')
