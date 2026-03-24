@@ -118,8 +118,11 @@ export class ReplayParserWorker {
 
   /**
    * Initialize the Web Worker
+   * WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
    */
   private initialize(workerScript?: string | URL): void {
+    throw new Error('Web Workers disabled for build compatibility');
+    /* Original code disabled:
     if (typeof Worker === 'undefined') {
       throw new Error('Web Workers are not supported in this environment');
     }
@@ -138,6 +141,7 @@ export class ReplayParserWorker {
     } catch (error) {
       throw new Error(`Failed to create parser worker: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
+    */
   }
 
   /**

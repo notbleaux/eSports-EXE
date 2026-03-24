@@ -62,10 +62,14 @@ export interface VirtualDataGridRef {
 }
 
 // Worker factory for pool usage
+// WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
 const createGridWorker = (): Worker => {
+  throw new Error('Workers disabled for build compatibility');
+  /* Original code disabled:
   return new Worker(new URL('../../workers/grid.worker.ts', import.meta.url), {
     type: 'module'
   });
+  */
 };
 
 /**
