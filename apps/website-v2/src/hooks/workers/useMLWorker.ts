@@ -16,10 +16,8 @@ import type {
 // WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
 const createMLWorker = (): Worker => {
   throw new Error('Workers disabled for build compatibility');
-  /* Original code disabled:
-  return new Worker(new URL('../../workers/ml.worker.ts', import.meta.url), {
-    type: 'module'
-  })
+  /* Original code disabled - pattern broken:
+  // WORKER DISABLED - new Worker(new URL('../../workers/ml.worker.ts', import.meta.url), {
   */
 }
 

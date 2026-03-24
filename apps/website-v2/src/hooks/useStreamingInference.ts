@@ -252,15 +252,13 @@ export function useStreamingInference(
     // Worker disabled - returning null to use fallback mode
     return null;
     
-    /* Original worker code disabled:
+    /* Original worker code disabled - pattern broken to prevent Vite detection:
     if (workerRef.current) {
       return workerRef.current
     }
 
     try {
-      const worker = new Worker(new URL('../workers/data-stream.worker.ts', import.meta.url), {
-        type: 'module'
-      })
+      // WORKER DISABLED - new Worker(new URL('../workers/data-stream.worker.ts', import.meta.url), {
 
       worker.onmessage = (event: MessageEvent<DataStreamResponse>) => {
         const response = event.data

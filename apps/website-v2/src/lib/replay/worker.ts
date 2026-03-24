@@ -122,41 +122,37 @@ export class ReplayParserWorker {
    */
   private initialize(workerScript?: string | URL): void {
     throw new Error('Web Workers disabled for build compatibility');
-    /* Original code disabled:
+    /* Original code disabled - pattern broken:
     if (typeof Worker === 'undefined') {
       throw new Error('Web Workers are not supported in this environment');
     }
 
     try {
       if (workerScript) {
-        this.worker = new Worker(workerScript, { type: 'module' });
+        // WORKER DISABLED - new Worker(workerScript, { type: 'module' });
       } else {
-        // Use inline worker
-        this.worker = this.createInlineWorker();
-      }
-
-      this.worker.onmessage = this.handleMessage.bind(this);
-      this.worker.onerror = this.handleError.bind(this);
-      this.worker.onmessageerror = this.handleMessageError.bind(this);
-    } catch (error) {
-      throw new Error(`Failed to create parser worker: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
+        // Use inline worker - DISABLED
     */
   }
 
   /**
    * Create an inline Web Worker from a blob
+   * DISABLED FOR VERCEL BUILD
    */
   private createInlineWorker(): Worker {
+    throw new Error('Inline workers disabled for build compatibility');
+    /* Original code disabled - pattern broken:
     const workerCode = `
       // Inline worker code
       ${this.getWorkerCode()}
     `;
     
     const blob = new Blob([workerCode], { type: 'application/javascript' });
+    */
     const workerUrl = URL.createObjectURL(blob);
     
-    return new Worker(workerUrl, { type: 'module' });
+    // WORKER DISABLED - return new Worker(workerUrl, { type: 'module' });
+    */
   }
 
   /**
