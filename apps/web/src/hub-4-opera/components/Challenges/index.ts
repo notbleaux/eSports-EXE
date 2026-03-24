@@ -18,9 +18,9 @@ export { default as useChallenges } from './hooks/useChallenges';
 
 export type {
   DailyChallenge,
-  ChallengeStreak,
+  type ChallengeStreak,
   ChallengeAttempt,
-  ChallengeResult,
+  type ChallengeResult,
   ChallengeType,
   ChallengeDifficulty,
   VideoQuizData,

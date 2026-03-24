@@ -72,7 +72,6 @@ export type {
   ContextData,
   FieldContext,
   UserPreference,
-  PreferencePattern,
   PreferenceStorage,
   DefaultProvider,
   DefaultProviderEntry,
@@ -144,7 +143,6 @@ export {
 export type {
   LearnedPreference,
   PreferenceContext,
-  PreferencePattern,
   PatternType,
   TemporalPattern,
   ContextualPattern,

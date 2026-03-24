@@ -52,7 +52,6 @@ export type {
   AnimationPriority,
   AnimationStateConfig,
   StateTransition,
-  TransitionContext,
   MascotStateData,
   AnimationEvent,
   AnimationEventType,

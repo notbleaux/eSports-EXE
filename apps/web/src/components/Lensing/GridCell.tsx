@@ -1,13 +1,12 @@
 /**
  * GridCell - react-grid-layout Item Wrapper
- * [Ver001.000]
+ * [Ver001.001]
  */
 
 import React from 'react'
-import { HubCell } from '../../../hubs/HubCell'
+import HubCell from '../../../hubs/HubCell'
 import { Panel } from '../../../store/dynamicStore'
 import { useDynamicStore } from '../../../store/dynamicStore'
-import HubCell from '../../../hubs/HubCell' // Direct import
 import { cn } from '../../../lib/utils' // Tailwind merge
 
 interface GridCellProps {

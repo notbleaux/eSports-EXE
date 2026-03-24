@@ -444,7 +444,7 @@ WolfDropout.displayName = 'WolfDropout';
 // ============================================================================
 
 export { VARIANT_COLORS as WolfDropoutVariantColors };
-export type { VariantColors as WolfDropoutVariantColors };
+export type { VariantColors as WolfDropoutVariantColorsType };
 
 // Default export
 export default WolfDropout;

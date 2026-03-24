@@ -512,7 +512,7 @@ DropoutBearMascot.displayName = 'DropoutBearMascot';
 // ============================================================================
 
 export { VARIANT_COLORS as DropoutBearVariantColors };
-export type { VariantColors as DropoutBearVariantColors };
+export type { VariantColors as DropoutBearVariantColorsType };
 
 // Default export
 export default DropoutBearMascot;

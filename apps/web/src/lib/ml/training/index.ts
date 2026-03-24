@@ -22,8 +22,6 @@ export type {
   TrainingOptions,
   TrainingProgress,
   TrainingResult,
-  CrossValidationResult,
-  FoldResult,
   MemoryStats,
   ResourceAllocation,
   OrchestratorConfig,
@@ -75,10 +73,8 @@ export {
 export type {
   ValidationStrategy,
   ValidationConfig,
-  FoldResult,
   ValidationMetrics,
   ValidationPrediction,
-  CrossValidationResult,
   OverfittingAnalysis,
   StratifiedSplit,
   LearningCurve

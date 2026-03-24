@@ -33,7 +33,7 @@ import { AnimationState } from '@/lib/animation/states';
 // Types
 // ============================================================================
 
-interface BlendVisualizerProps {
+export interface BlendVisualizerProps {
   /** Initial tree to visualize */
   initialTree?: BlendTree;
   /** Tree type to create if no initial tree */

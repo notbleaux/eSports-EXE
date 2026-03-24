@@ -376,6 +376,13 @@ export function attachAudioDebugger(
 }
 
 // ============================================================================
+// React Hooks (Re-exported from hooks)
+// ============================================================================
+
+export { useAudio } from '@/hooks/useAudio';
+export type { UseAudioReturn, UseAudioOptions } from '@/hooks/useAudio';
+
+// ============================================================================
 // Version
 // ============================================================================
 

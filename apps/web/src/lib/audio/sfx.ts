@@ -477,7 +477,7 @@ export interface SFXControllerOptions {
 }
 
 export class SFXController {
-  private queue: SFXQueue;
+  private sfxQueue: SFXQueue;
   private maxConcurrent: number;
   private onSFXStart?: (event: SFXEvent, id: string) => void;
   private onSFXEnd?: (event: SFXEvent, id: string) => void;
@@ -485,7 +485,7 @@ export class SFXController {
   private processInterval: number | null = null;
 
   constructor(options: SFXControllerOptions = {}) {
-    this.queue = new SFXQueue(options.maxQueueSize ?? 20);
+    this.sfxQueue = new SFXQueue(options.maxQueueSize ?? 20);
     this.maxConcurrent = options.maxConcurrent ?? 8;
     this.onSFXStart = options.onSFXStart;
     this.onSFXEnd = options.onSFXEnd;
@@ -547,7 +547,7 @@ export class SFXController {
   /**
    * Queue a sound effect
    */
-  queue(definition: SFXDefinition, delay?: number): boolean {
+  enqueue(definition: SFXDefinition, delay?: number): boolean {
     const event: SFXEvent = {
       id: `${definition.id}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: definition.type,
@@ -561,14 +561,14 @@ export class SFXController {
       volumeModifier: definition.volumeModifier,
     };
 
-    return this.queue.enqueue(event, delay);
+    return this.sfxQueue.enqueue(event, delay);
   }
 
   /**
    * Process the SFX queue
    */
   async processQueue(): Promise<void> {
-    if (this.queue.isProcessing() || this.queue.isEmpty()) {
+    if (this.sfxQueue.isProcessing() || this.sfxQueue.isEmpty()) {
       return;
     }
 
@@ -576,17 +576,17 @@ export class SFXController {
       return;
     }
 
-    this.queue.setProcessing(true);
+    this.sfxQueue.setProcessing(true);
 
-    const event = this.queue.dequeue();
+    const event = this.sfxQueue.dequeue();
     if (event) {
       await this.playEvent(event);
     }
 
-    this.queue.setProcessing(false);
+    this.sfxQueue.setProcessing(false);
 
     // Continue processing if more items and capacity available
-    if (!this.queue.isEmpty() && this.activeSounds.size < this.maxConcurrent) {
+    if (!this.sfxQueue.isEmpty() && this.activeSounds.size < this.maxConcurrent) {
       // Small delay to prevent flooding
       setTimeout(() => this.processQueue(), 10);
     }

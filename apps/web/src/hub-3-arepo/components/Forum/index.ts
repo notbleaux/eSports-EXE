@@ -29,7 +29,7 @@ export type {
   ThreadListItem,
   
   // Post types
-  ForumPost,
+  type ForumPost,
   
   // Form data types
   CreateThreadData,
