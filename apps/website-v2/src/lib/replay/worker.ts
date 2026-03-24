@@ -118,18 +118,45 @@ export class ReplayParserWorker {
 
   /**
    * Initialize the Web Worker
-   * COMPLETELY DISABLED FOR VERCEL BUILD
+   * WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
    */
   private initialize(workerScript?: string | URL): void {
     throw new Error('Web Workers disabled for build compatibility');
+    /* Original code disabled:
+    if (typeof Worker === 'undefined') {
+      throw new Error('Web Workers are not supported in this environment');
+    }
+
+    try {
+      if (workerScript) {
+        this.worker = new Worker(workerScript, { type: 'module' });
+      } else {
+        // Use inline worker
+        this.worker = this.createInlineWorker();
+      }
+
+      this.worker.onmessage = this.handleMessage.bind(this);
+      this.worker.onerror = this.handleError.bind(this);
+      this.worker.onmessageerror = this.handleMessageError.bind(this);
+    } catch (error) {
+      throw new Error(`Failed to create parser worker: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+    */
   }
 
   /**
    * Create an inline Web Worker from a blob
-   * DISABLED FOR VERCEL BUILD
    */
   private createInlineWorker(): Worker {
-    throw new Error('Inline workers disabled for build compatibility');
+    const workerCode = `
+      // Inline worker code
+      ${this.getWorkerCode()}
+    `;
+    
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    const workerUrl = URL.createObjectURL(blob);
+    
+    return new Worker(workerUrl, { type: 'module' });
   }
 
   /**

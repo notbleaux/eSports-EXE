@@ -123,10 +123,19 @@ export class PipelineManager {
   private initializeWorkerPool(): void {
     // WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
     mlLogger.info('Pipeline manager using main thread (workers disabled for build)')
-    /* Original code disabled - pattern broken:
+    /* Original code disabled:
     if (typeof Worker !== 'undefined') {
       try {
-        // WORKER DISABLED - new Worker(new URL('./pipeline.worker.ts', import.meta.url), {
+        this.workerPool = new WorkerPool(
+          'data',
+          () => new Worker(new URL('./pipeline.worker.ts', import.meta.url), { type: 'module' }),
+          { maxWorkers: 2, idleTimeoutMs: 60000, taskTimeoutMs: 300000 }
+        )
+        mlLogger.info('Pipeline manager initialized with worker pool')
+      } catch (error) {
+        mlLogger.warn('Failed to initialize worker pool, using main thread', { error })
+      }
+    }
     */
   }
 
