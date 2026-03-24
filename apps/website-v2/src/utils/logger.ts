@@ -1,7 +1,7 @@
 /**
  * Logger Utility
  * Simple logging utility for the application
- * [Ver001.001] - Simplified for production
+ * [Ver001.002] - Fixed for production
  */
 
 export interface Logger {
@@ -11,18 +11,18 @@ export interface Logger {
   error: (...args: unknown[]) => void;
 }
 
-// Check if we're in development mode safely
-const isDev = typeof import !== 'undefined' && 
-              typeof import.meta !== 'undefined' && 
-              import.meta.env?.DEV === true;
-
 export function createLogger(namespace: string): Logger {
   const prefix = `[${namespace}]`;
   
   return {
     debug: (...args: unknown[]) => {
-      if (isDev) {
-        console.debug(prefix, ...args);
+      // Only log in development
+      try {
+        if (import.meta.env.DEV) {
+          console.debug(prefix, ...args);
+        }
+      } catch {
+        // ignore
       }
     },
     info: (...args: unknown[]) => console.info(prefix, ...args),
@@ -31,7 +31,6 @@ export function createLogger(namespace: string): Logger {
   };
 }
 
-// Default logger instances
 export const logger = createLogger('app');
 export const mlLogger = createLogger('ml');
 export const streamingLogger = createLogger('streaming');
