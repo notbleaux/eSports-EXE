@@ -119,9 +119,9 @@ EOF
     echo -e "${GREEN}✅ Created packages/shared/.env${NC}"
 fi
 
-# Create .env file for website-v2
-if [ ! -f "apps/website-v2/.env.local" ]; then
-    cat > apps/website-v2/.env.local << EOF
+# Create .env file for web
+if [ ! -f "apps/web/.env.local" ]; then
+    cat > apps/web/.env.local << EOF
 # API Configuration
 VITE_API_URL=http://localhost:8000/v1
 VITE_WS_URL=ws://localhost:8000/v1/ws
@@ -129,7 +129,7 @@ VITE_WS_URL=ws://localhost:8000/v1/ws
 # Sentry (optional - add your DSN for error tracking)
 # VITE_SENTRY_DSN=https://xxx@xxx.ingest.sentry.io/xxx
 EOF
-    echo -e "${GREEN}✅ Created apps/website-v2/.env.local${NC}"
+    echo -e "${GREEN}✅ Created apps/web/.env.local${NC}"
 fi
 
 # Setup Python environment for API
@@ -164,10 +164,10 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
-# Install website-v2 dependencies
-if [ ! -d "apps/website-v2/node_modules" ]; then
-    echo "Installing website-v2 dependencies..."
-    cd apps/website-v2
+# Install web dependencies
+if [ ! -d "apps/web/node_modules" ]; then
+    echo "Installing web dependencies..."
+    cd apps/web
     npm install
     cd "$PROJECT_ROOT"
 fi
@@ -184,7 +184,7 @@ echo -e "   ${BLUE}cd axiom-esports-data/api${NC}"
 echo -e "   ${BLUE}uvicorn main:app --reload --host 0.0.0.0 --port 8000${NC}"
 echo ""
 echo "2. Start the web frontend (in a new terminal):"
-echo -e "   ${BLUE}cd apps/website-v2${NC}"
+echo -e "   ${BLUE}cd apps/web${NC}"
 echo -e "   ${BLUE}npm run dev${NC}"
 echo ""
 echo "Services will be available at:"

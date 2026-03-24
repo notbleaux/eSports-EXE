@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-const distPath = path.join(__dirname, '../apps/website-v2/dist/assets');
+const distPath = path.join(__dirname, '../apps/web/dist/assets');
 
 /**
  * Get gzipped size of a file

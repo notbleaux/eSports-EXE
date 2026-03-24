@@ -20,7 +20,7 @@ services:
           name: sator-redis
           property: connectionString
       - key: CORS_ORIGINS
-        value: "https://website-v2-ashen-mu.vercel.app"
+        value: "https://web-ashen-mu.vercel.app"
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: PANDASCORE_API_KEY

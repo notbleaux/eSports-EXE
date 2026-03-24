@@ -1,67 +1,55 @@
-﻿[Ver002.000]
+# Job Listing Board - Active Coordination
 
-# Job Listing Board (JLB)
-## Libre-X-eSport 4NJZ4 TENET Platform
+**Status:** MONOREPO REFACTOR IN PROGRESS  
+**Coordinator:** Main Agent  
+**Started:** 2026-03-24  
 
-**Version:** 2.0 (Post-Cleanup)  
-**Maintained By:** SATUR (IDE Agent)
+## Current Focus: Structural Refactoring
 
----
+The repository requires immediate structural fixes before deployment troubleshooting can continue. See CRIT assessment for details.
 
-## 🚀 Quick Start
+## Active Listings
 
-1. **New Agent?** See [FRAMEWORK/JOB_CLAIMING_PROTOCOL_v2.md](FRAMEWORK/JOB_CLAIMING_PROTOCOL_v2.md)
-2. **Looking for work?** Check [01_LISTINGS/ACTIVE/](01_LISTINGS/ACTIVE/)
-3. **Need help?** See [MASTER_INDEX.md](MASTER_INDEX.md)
+| ID | Phase | Priority | Status | Description |
+|----|-------|----------|--------|-------------|
+| REPO-REFACTOR-001 | 1 | P0 | 🔴 ACTIVE | Critical Structure Fixes |
+| REPO-REFACTOR-002 | 2 | P1 | ⏳ PENDING | Workspace & Build System |
+| REPO-REFACTOR-003 | 3 | P2 | ⏳ PENDING | Naming & Version Standardization |
+| REPO-REFACTOR-004 | 4 | P2 | ⏳ PENDING | Code Organization & Cleanup |
+| REPO-REFACTOR-005 | 5 | P1 | ⏳ PENDING | Final Validation & Deployment |
 
----
+## Quick Links
 
-## 📁 Directory Structure
+- [Phase 1: Critical Fixes](./01_LISTINGS/ACTIVE/REPO-REFACTOR-001.md)
+- [Phase 2: Build System](./01_LISTINGS/ACTIVE/REPO-REFACTOR-002.md)
+- [Phase 3: Naming/Versioning](./01_LISTINGS/ACTIVE/REPO-REFACTOR-003.md)
+- [Phase 4: Code Cleanup](./01_LISTINGS/ACTIVE/REPO-REFACTOR-004.md)
+- [Phase 5: Validation](./01_LISTINGS/ACTIVE/REPO-REFACTOR-005.md)
 
-`
-.job-board/
-├── 00_INBOX/              # Incoming tasks
-├── 01_LISTINGS/           # Available jobs
-│   └── ACTIVE/
-├── 02_CLAIMED/            # Claimed work
-├── 03_COMPLETED/          # Finished work
-├── 03_ONGOING/            # 🆕 Work in progress
-├── 04_BLOCKS/             # Blockers
-├── 05_TEMPLATES/          # Templates
-├── 06_TEAM_LEADERS/       # TL docs
-├── 06_WORK_HISTORY/       # 🆕 Work records
-├── 07_ASSISTANT_FOREMAN/  # AF docs
-├── 07_VERIFICATION/       # 🆕 Verification
-├── 08_SAF_COUNCIL/        # SAF docs
-├── 09_ARCHIVE/            # 🆕 Archive
-├── FRAMEWORK/             # Protocols
-├── SPAWN_LOGS/            # Spawn logs
-└── MASTER_INDEX.md        # 📍 Start here
-`
+## How to Participate
 
----
+1. **Review** the listing for your assigned phase
+2. **Claim** by creating a file in `.job-board/02_CLAIMED/{agent-id}/`
+3. **Execute** using appropriate skills
+4. **Report** status updates in your claimed task file
+5. **Complete** by moving to `.job-board/03_COMPLETED/`
 
-## 🧹 Recent Cleanup
+## Critical Path
 
-**Status:** Waves 1-5 Complete
+```
+Phase 1 (P0) → Phase 2 (P1) → Phase 5 (P1)
+     ↓              ↓
+Phase 3 (P2)  Phase 4 (P2)
+```
 
-- ✅ 32+ empty directories removed
-- ✅ WAVE_1_3 moved to ON-GOING
-- ✅ 22 root files archived
-- ✅ Naming standardized
-- ✅ Master index created
+## Blockers
 
-See [03_COMPLETED/CLEANUP_W1/](../03_COMPLETED/CLEANUP_W1/) for details.
+None currently. Report blockers in `.job-board/04_BLOCKS/`
 
----
+## Success Criteria
 
-## 📊 Stats
-
-- Active listings: Check 01_LISTINGS/ACTIVE/
-- Completed waves: 3 (W1.1, W1.2, W2.0)
-- On-going: W1.3 (12 agents)
-
----
-
-*JLB v2.0 - Cleaned and organized by SATUR.*
-
+- [ ] All 5 phases complete
+- [ ] Site deploys successfully
+- [ ] No "React did not mount" errors
+- [ ] All tests pass
+- [ ] Documentation updated

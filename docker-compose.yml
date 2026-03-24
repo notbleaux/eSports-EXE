@@ -77,7 +77,7 @@ services:
   # Frontend (Vite/React)
   frontend:
     build:
-      context: ./apps/website-v2
+      context: ./apps/web
       dockerfile: Dockerfile
     container_name: sator-frontend
     environment:

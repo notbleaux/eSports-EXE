@@ -5,7 +5,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "apps/website-v2/**"
+      - "apps/web/**"
       - "packages/shared/**"
       - "vercel.json"
   workflow_dispatch:

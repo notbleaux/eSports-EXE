@@ -149,7 +149,7 @@ Write-Host "===============================================================" -Fo
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Yellow
 Write-Host "  1. Start the API server:      npm run dev:api" -ForegroundColor White
-Write-Host "  2. Start the frontend:        cd apps/website-v2 && npm run dev" -ForegroundColor White
+Write-Host "  2. Start the frontend:        cd apps/web && npm run dev" -ForegroundColor White
 Write-Host "  3. Or use VS Code: tasks:      Ctrl+Shift+P -> Run Task" -ForegroundColor White
 Write-Host ""
 Write-Host "Services:" -ForegroundColor Yellow

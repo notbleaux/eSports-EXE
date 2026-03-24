@@ -137,19 +137,19 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd apps/website-v2
+          cd apps/web
           npm install
         continue-on-error: true
 
       - name: Type check
         run: |
-          cd apps/website-v2
+          cd apps/web
           npm run typecheck 2>/dev/null || echo "Type check skipped"
         continue-on-error: true
 
       - name: Build
         run: |
-          cd apps/website-v2
+          cd apps/web
           npm run build 2>/dev/null || echo "Build skipped"
         continue-on-error: true
 
@@ -171,7 +171,7 @@ jobs:
           test -f README.md && echo "✓ README.md" || echo "✗ README.md missing"
           test -f AGENTS.md && echo "✓ AGENTS.md" || echo "✗ AGENTS.md missing"
           test -d packages/shared/api && echo "✓ API directory" || echo "✗ API directory missing"
-          test -d apps/website-v2 && echo "✓ Website-v2 directory" || echo "✗ Website-v2 directory missing"
+          test -d apps/web && echo "✓ Web directory" || echo "✗ Web directory missing"
 
       - name: Check for secrets (basic)
         run: |

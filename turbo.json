@@ -13,7 +13,7 @@
       ],
       "outputs": ["dist/**", ".vercel/output/**"]
     },
-    "libre-x-4njz4-tenet-platform#build": {
+    "@esports-exe/web#build": {
       "dependsOn": ["^build"],
       "env": [
         "VITE_API_URL",

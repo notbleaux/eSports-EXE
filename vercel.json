@@ -7,8 +7,8 @@
     "enabled": true,
     "autoAlias": true
   },
-  "buildCommand": "cd apps/website-v2 && npm run build",
-  "outputDirectory": "apps/website-v2/dist",
+  "buildCommand": "cd apps/web && npm run build",
+  "outputDirectory": "apps/web/dist",
   "installCommand": "npm install",
   "framework": "vite",
   "rewrites": [
