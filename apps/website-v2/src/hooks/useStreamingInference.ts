@@ -2,26 +2,33 @@
  * useStreamingInference.ts
  * Stubbed version - workers disabled for build compatibility
  * 
- * [Ver001.000] - Stubbed to prevent Vite worker bundling issues
+ * [Ver002.000] - Stubbed to prevent Vite worker bundling issues
  */
 
-import { useState, useCallback, useEffect, useRef } from 'react'
-import { useModelStore } from '@/stores/modelStore'
-import { usePrediction } from './usePrediction'
-import type { NormalizedPlayerFrame } from '@/hub-4-opera/types'
+import { useState, useCallback } from 'react'
 
 export interface StreamingInferenceOptions {
-  wsUrl: string
+  wsUrl?: string
+  modelUrl?: string
+  maxPredictionsPerSecond?: number
   debounceDelay?: number
-  maxBatchSize?: number
+}
+
+export interface Prediction {
+  timestamp: number
+  confidence: number
+  result: unknown
 }
 
 export interface StreamingInferenceResult {
+  predictions: Prediction[]
   isStreaming: boolean
   isPaused: boolean
-  error: Error | null
+  isModelReady: boolean
+  lag: number
   throughput: number
   bufferSize: number
+  error: Error | null
   start: () => void
   stop: () => void
   pause: () => void
@@ -29,33 +36,36 @@ export interface StreamingInferenceResult {
 }
 
 export function useStreamingInference(
-  _options: StreamingInferenceOptions
+  _options: StreamingInferenceOptions = {}
 ): StreamingInferenceResult {
-  const [isStreaming] = useState(false)
-  const [isPaused] = useState(false)
-  const [error] = useState<Error | null>(new Error('Streaming disabled - workers not available'))
-  const [throughput] = useState(0)
-  const [bufferSize] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   const start = useCallback(() => {
     console.warn('[Streaming Inference] Workers disabled - streaming unavailable')
   }, [])
 
   const stop = useCallback(() => {}, [])
-  const pause = useCallback(() => {}, [])
-  const resume = useCallback(() => {}, [])
+  
+  const pause = useCallback(() => setIsPaused(true), [])
+  
+  const resume = useCallback(() => setIsPaused(false), [])
 
   return {
-    isStreaming,
+    predictions: [],
+    isStreaming: false,
     isPaused,
-    error,
-    throughput,
-    bufferSize,
+    isModelReady: false,
+    lag: 0,
+    throughput: 0,
+    bufferSize: 0,
+    error: new Error('Streaming disabled - workers not available'),
     start,
     stop,
     pause,
     resume
   }
 }
+
+export type UseStreamingInferenceReturn = StreamingInferenceResult
 
 export default useStreamingInference
