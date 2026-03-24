@@ -21,7 +21,7 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 
 | Component | Location | Technology | Status |
 |-----------|----------|------------|--------|
-| **4NJZ4 TENET Platform** | `apps/website-v2/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.0 |
+| **4NJZ4 TENET Platform** | `apps/web/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.1 |
 | **API Backend** | `packages/shared/api/` | FastAPI, Python 3.11+ | ✅ Active |
 | **Data Pipeline** | `packages/shared/axiom-esports-data/` | Python, PostgreSQL, asyncpg | ✅ Active |
 | **Simulation Game** | `platform/simulation-game/` | Godot 4, GDScript, C# | 🟡 Paused |
@@ -43,7 +43,7 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 ```
 /
 ├── apps/                          # Applications
-│   ├── website-v2/               # 4NJZ4 TENET Platform (React + Vite) - MAIN
+│   ├── web/                      # 4NJZ4 TENET Platform (React + Vite) - MAIN
 │   └── VCT Valorant eSports/     # VCT data project
 │
 ├── packages/                      # Shared packages
@@ -126,7 +126,7 @@ npm run validate:schema
 
 ### Website-V2 (4NJZ4 TENET Platform)
 
-Location: `apps/website-v2/`
+Location: `apps/web/`
 
 ```bash
 # Development server
@@ -308,7 +308,7 @@ tests/
 
 ```bash
 # E2E tests (Playwright)
-cd apps/website-v2
+cd apps/web
 npx playwright test
 
 # Python unit tests
@@ -373,7 +373,7 @@ The following checks run automatically on commit:
 
 ```bash
 # Vercel (manual)
-cd apps/website-v2
+cd apps/web
 vercel --prod
 
 # Render (via blueprint)
