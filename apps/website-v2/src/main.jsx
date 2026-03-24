@@ -5,6 +5,9 @@ import './index.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+// Mark that React is mounting (for debugging)
+window.reactRootMounted = true;
+
 root.render(
   <React.StrictMode>
     <App />
