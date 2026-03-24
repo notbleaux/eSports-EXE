@@ -2,7 +2,7 @@
  * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
  * Optimized Bundle Loading with Intelligent Prefetching
  * 
- * [Ver006.000] - Optimized code splitting with prefetch on hover
+ * [Ver007.000] - Updated with redesigned landing page components
  */
 import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
@@ -10,10 +10,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Navigation and Layout Components (eager loaded for fast initial render)
 import Navigation from './components/Navigation';
-import ModernQuarterGrid from './components/ModernQuarterGrid';
 import { AnimatedBackground } from './components/ui/AnimatedBackground';
 import { PanelSkeleton } from './components/grid/PanelSkeleton';
 import { PanelErrorBoundary } from './components/grid/PanelErrorBoundary';
+
+// New Redesigned Landing Components
+import { HeroV2 } from './components/heroes/HeroV2';
+import { HubGridV2 } from './components/hubs/HubGridV2';
+import { MascotShowcase } from './components/mascots/MascotShowcase';
 
 // PWA Components
 import { OfflineFallback, OfflineIndicator } from './components/OfflineFallback';
@@ -54,7 +58,6 @@ const MascotPreview = lazy(() => import('./pages/dev/MascotPreview'));
 
 import { UnifiedGrid } from './components/UnifiedGrid';
 import { useWorkerError } from './hooks/useWorkerError';
-import { useRowHeight } from './store/staticStore';
 import { performanceMonitor } from './monitoring/PerformanceMonitor';
 
 // Prefetch cache to track loaded modules
@@ -148,6 +151,79 @@ const PageTransition = ({ children, hubId }) => {
     </motion.div>
   );
 };
+
+// New Landing Page with redesigned components
+function LandingPage() {
+  return (
+    <div className="min-h-screen bg-off-white">
+      {/* Hero Section - Bold pink with geometric elements */}
+      <HeroV2 />
+      
+      {/* Hub Grid - Asymmetric colored cards */}
+      <HubGridV2 />
+      
+      {/* Mascot Showcase - Clean white section */}
+      <section className="py-30 bg-white">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-display uppercase mb-4 text-pure-black">Platform Mascots</h2>
+            <p className="text-text-secondary max-w-xl mb-16 text-lg">
+              Meet our dual-style mascot system. Toggle between Dropout (full-color) 
+              and NJ (minimalist) aesthetics.
+            </p>
+          </motion.div>
+          <MascotShowcase />
+        </div>
+      </section>
+      
+      {/* Footer - Simple black */}
+      <footer className="bg-pure-black text-white py-20">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 md:col-span-6">
+              <h3 className="text-4xl font-display font-bold">4NJZ4</h3>
+              <p className="mt-4 text-text-secondary">TENET Platform v2.0</p>
+            </div>
+            <div className="col-span-12 md:col-span-6 flex flex-wrap justify-start md:justify-end gap-6 md:gap-8">
+              {['SATOR', 'ROTAS', 'AREPO', 'OPERA', 'TENET'].map(hub => (
+                <Link 
+                  key={hub} 
+                  to={`/${hub.toLowerCase()}`} 
+                  className="text-sm uppercase tracking-widest hover:text-boitano-pink transition-colors duration-300"
+                >
+                  {hub}
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          {/* Bottom bar */}
+          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-text-secondary">
+              © 2026 Libre-X-eSport. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <a href="/privacy" className="text-sm text-text-secondary hover:text-white transition-colors">
+                Privacy
+              </a>
+              <a href="/terms" className="text-sm text-text-secondary hover:text-white transition-colors">
+                Terms
+              </a>
+              <a href="/contact" className="text-sm text-text-secondary hover:text-white transition-colors">
+                Contact
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
 
 // Dashboard Grid with Error Boundary and Loading State
 function DashboardGrid() {
@@ -289,16 +365,19 @@ function AppContent() {
     };
   }, []);
 
+  // Check if current route is the landing page (needs different background)
+  const isLandingPage = location.pathname === '/';
+
   return (
-    <div className="min-h-screen bg-[#050508] text-white overflow-x-hidden">
-      {/* Animated Background */}
-      <AnimatedBackground />
+    <div className={`min-h-screen overflow-x-hidden ${isLandingPage ? '' : 'bg-[#050508] text-white'}`}>
+      {/* Animated Background - only show for non-landing pages */}
+      {!isLandingPage && <AnimatedBackground />}
       
       {/* Route change handler */}
       <RouteChangeHandler />
       
-      {/* Navigation */}
-      <Navigation />
+      {/* Navigation - hide on landing page for full immersive experience */}
+      {!isLandingPage && <Navigation />}
       
       {/* Main Content */}
       <main className="relative">
@@ -312,12 +391,12 @@ function AppContent() {
         >
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            {/* Landing Page */}
+            {/* Landing Page - New Redesigned Version */}
             <Route 
               path="/" 
               element={
                 <PageTransition hubId="landing">
-                  <ModernQuarterGrid />
+                  <LandingPage />
                 </PageTransition>
               } 
             />
@@ -434,7 +513,7 @@ function AppContent() {
                       </motion.h1>
                       <p className="text-xl text-white/60 mb-2">Hub Not Found</p>
                       <p className="text-white/40 mb-8">
-                        This dimension doesn't exist in the 4NJZ4 universe.
+                        This dimension doesn&apos;t exist in the 4NJZ4 universe.
                       </p>
                       <Link 
                         to="/" 
@@ -459,8 +538,8 @@ function AppContent() {
         </Suspense>
       )}
       
-      {/* Offline Indicator */}
-      <OfflineIndicator />
+      {/* Offline Indicator - only show for non-landing pages */}
+      {!isLandingPage && <OfflineIndicator />}
       
       {/* Offline Fallback Modal */}
       {showOfflineModal && isOffline && (
@@ -470,8 +549,8 @@ function AppContent() {
       {/* Update Notification */}
       <UpdateNotification checkInterval={30 * 60 * 1000} />
       
-      {/* Mobile Bottom Navigation */}
-      <BottomNavigation />
+      {/* Mobile Bottom Navigation - only show for non-landing pages */}
+      {!isLandingPage && <BottomNavigation />}
       
       {/* PWA Install Prompt */}
       <InstallPrompt delay={3000} />

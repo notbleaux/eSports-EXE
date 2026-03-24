@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
+import './styles/design-system.css'
 import './styles/mobile.css'
 
 // Use AppErrorBoundary from components/error for consistency

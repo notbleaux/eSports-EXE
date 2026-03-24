@@ -1,41 +1,312 @@
+/**
+ * Global Styles - 4NJZ4 TENET Platform
+ * Kunsthalle Basel + Boitano Design System
+ * [Ver003.000]
+ * 
+ * This file imports Tailwind and the design system.
+ * Component-specific styles are in separate files.
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Import Design System */
+@import './styles/design-system.css';
+
+/* Import Animation Utilities */
+@import './styles/animations.css';
+
+/* Import Mobile Styles */
+@import './styles/mobile.css';
+
+/* ==========================================================================
+   Tailwind Custom Base Styles
+   ========================================================================== */
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #FAFAFA;
+    color: #000000;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  /* Focus styles aligned with design system */
+  :focus-visible {
+    outline: 2px solid #FF69B4;
+    outline-offset: 2px;
+  }
+}
+
+/* ==========================================================================
+   Tailwind Component Layer
+   ========================================================================== */
+
+@layer components {
+  /* Sharp Button Base */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply font-medium transition-all duration-300;
+    border-radius: 0;
+  }
+  
+  .btn-primary {
+    @apply btn;
+    @apply bg-pure-black text-off-white;
+    @apply border-2 border-pure-black;
+    @apply uppercase tracking-widest;
+    @apply px-8 py-4;
+  }
+  
+  .btn-primary:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  }
+  
+  .btn-secondary {
+    @apply btn;
+    @apply bg-transparent text-pure-black;
+    @apply border-2 border-pure-black;
+    @apply uppercase tracking-widest;
+    @apply px-8 py-4;
+  }
+  
+  .btn-secondary:hover {
+    @apply bg-pure-black text-off-white;
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  }
+  
+  .btn-pink {
+    @apply btn;
+    @apply bg-boitano-pink text-white;
+    @apply border-2 border-boitano-pink;
+    @apply uppercase tracking-widest;
+    @apply px-8 py-4;
+  }
+  
+  .btn-pink:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px 0px #E0559F;
+  }
+  
+  .btn-green {
+    @apply btn;
+    @apply bg-kunst-green text-white;
+    @apply border-2 border-kunst-green;
+    @apply uppercase tracking-widest;
+    @apply px-8 py-4;
+  }
+  
+  .btn-green:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px 0px #00B85C;
+  }
+  
+  /* Card Components */
+  .card {
+    @apply bg-white;
+    border-radius: 0;
+    @apply transition-all duration-300;
+  }
+  
+  .card-hover {
+    @apply card;
+    @apply hover:shadow-lg;
+  }
+  
+  .card-interactive {
+    @apply card-hover;
+    @apply cursor-pointer;
+    @apply active:scale-[0.99];
+  }
+  
+  /* Asymmetric Cards */
+  .card-pink {
+    @apply card;
+    border-left: 4px solid #FF69B4;
+    @apply p-6;
+  }
+  
+  .card-pink:hover {
+    border-left-width: 8px;
+    box-shadow: 0 0 40px rgba(255, 105, 180, 0.3);
+  }
+  
+  .card-green {
+    @apply card;
+    border-left: 4px solid #00D26A;
+    @apply p-6;
+  }
+  
+  .card-green:hover {
+    border-left-width: 8px;
+    box-shadow: 0 0 40px rgba(0, 210, 106, 0.3);
+  }
+  
+  /* Navigation */
+  .nav-link {
+    @apply px-4 py-2 text-sm font-medium;
+    @apply text-mid-gray transition-all duration-200;
+    @apply hover:text-pure-black;
+  }
+  
+  .nav-link-active {
+    @apply nav-link;
+    @apply text-pure-black font-semibold;
+  }
+  
+  /* Container */
+  .container-njz {
+    @apply max-w-container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Section */
+  .section {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  /* Form Elements */
+  .input-sharp {
+    @apply w-full px-4 py-3;
+    @apply bg-white border-2 border-light-gray;
+    border-radius: 0;
+    @apply transition-all duration-200;
+    @apply focus:outline-none focus:border-boitano-pink;
+  }
+  
+  .input-sharp::placeholder {
+    @apply text-mid-gray;
+  }
+  
+  /* Hub Badge */
+  .hub-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5;
+    @apply text-xs font-mono font-medium uppercase tracking-wider;
+    border-radius: 0;
+  }
+}
+
+/* ==========================================================================
+   Tailwind Utility Layer
+   ========================================================================== */
+
 @layer utilities {
-  .animate-sator-pulse {
-    animation: satorPulse 2s infinite;
+  /* Text Shadow */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
-  .animate-rotas-wave {
-    animation: rotasWave 3s infinite linear;
+  
+  .text-shadow-glow {
+    text-shadow: 0 0 20px currentColor;
   }
-  .animate-oooo-blink {
-    animation: ooooBlink 1.5s infinite;
+  
+  /* Backdrop Utilities */
+  .backdrop-glass {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
-  .animate-exe-sequence {
-    animation: exeSequence 5s ease-in-out infinite;
+  
+  /* Animation Utilities */
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  /* Stagger utilities */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+}
+
+/* ==========================================================================
+   Responsive Utilities
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 }
 
-@keyframes satorPulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); }
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-@keyframes rotasWave {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
 
-@keyframes ooooBlink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0.3; }
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
 }
-
-@keyframes exeSequence {
-  0% { opacity: 0.4; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0.4; }
-}
-

@@ -48,6 +48,7 @@ export type {
 // ============================================================================
 
 export { Hero, HubHero } from './Hero';
+export { HeroV2 } from './HeroV2';
 export { 
   HeroMascot, 
   FoxHeroMascot, 

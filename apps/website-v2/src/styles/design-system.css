@@ -1,0 +1,480 @@
+/**
+ * [Ver002.000]
+ * Design System - Kunsthalle Basel + Boitano Inspired
+ * 
+ * A bold, asymmetric design system featuring:
+ * - Bright Boitano pink (#FF69B4) and Kunsthalle green (#00D26A)
+ * - Sharp geometric shapes (no border radius)
+ * - Strong typographic hierarchy with Space Grotesk
+ * - Asymmetric card layouts
+ * - Mix-blend navigation effects
+ */
+
+/* ==========================================================================
+   CSS Custom Properties (Design Tokens)
+   ========================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------------
+     Colors - Primary Palette
+     ------------------------------------------------------------------------- */
+  
+  /* Boitano Pink */
+  --color-boitano-pink: #FF69B4;
+  --color-boitano-pink-dark: #E0559F;
+  --color-boitano-pink-light: #FF8DC7;
+  
+  /* Kunsthalle Green */
+  --color-kunst-green: #00D26A;
+  --color-kunst-green-dark: #00B85C;
+  --color-kunst-green-light: #33E085;
+  
+  /* Neutral Palette */
+  --color-off-white: #FAFAFA;
+  --color-pure-black: #000000;
+  --color-dark-gray: #1A1A1A;
+  --color-mid-gray: #666666;
+  --color-light-gray: #E5E5E5;
+  
+  /* Functional Colors */
+  --color-accent-glow: rgba(255, 105, 180, 0.3);
+  --color-green-glow: rgba(0, 210, 106, 0.3);
+  
+  /* -------------------------------------------------------------------------
+     Hub Colors - 5-hub NJZ System
+     ------------------------------------------------------------------------- */
+  --color-hub-sator: #000000;
+  --color-hub-rotas: #FF69B4;
+  --color-hub-arepo: #00D26A;
+  --color-hub-opera: #00D9FF;
+  --color-hub-tenet: #9D4EDD;
+  
+  /* -------------------------------------------------------------------------
+     Typography
+     ------------------------------------------------------------------------- */
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Font Sizes - Fluid Scale */
+  --text-hero: clamp(48px, 10vw, 120px);
+  --text-display: clamp(32px, 6vw, 64px);
+  --text-title: clamp(24px, 4vw, 48px);
+  --text-headline: clamp(1.5rem, 3vw, 2.5rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  
+  /* -------------------------------------------------------------------------
+     Spacing
+     ------------------------------------------------------------------------- */
+  --section-padding: clamp(4rem, 10vw, 8rem);
+  --container-max: 1440px;
+  --grid-margin: clamp(1rem, 5vw, 4rem);
+  
+  /* -------------------------------------------------------------------------
+     Effects
+     ------------------------------------------------------------------------- */
+  --shadow-sharp: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-sharp-sm: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --glow-pink: 0 0 40px rgba(255, 105, 180, 0.3);
+  --glow-green: 0 0 40px rgba(0, 210, 106, 0.3);
+  
+  /* -------------------------------------------------------------------------
+     Animation
+     ------------------------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-off-white);
+  color: var(--color-pure-black);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-boitano-pink);
+  color: white;
+}
+
+/* ==========================================================================
+   Typography Utilities
+   ========================================================================== */
+
+/* Hero Typography */
+.text-hero {
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+/* Display Typography */
+.text-display {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+/* Title Typography */
+.text-title {
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+/* Body Typography */
+.text-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.75;
+}
+
+/* ==========================================================================
+   Sharp Button Style (No Border Radius)
+   ========================================================================== */
+
+.btn-sharp {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  transition: all 0.3s var(--ease-out-expo);
+  border: 2px solid var(--color-pure-black);
+  background: var(--color-pure-black);
+  color: var(--color-off-white);
+  cursor: pointer;
+}
+
+.btn-sharp:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-sharp);
+}
+
+.btn-sharp:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* Button Variants */
+.btn-sharp-outline {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  transition: all 0.3s var(--ease-out-expo);
+  border: 2px solid var(--color-pure-black);
+  background: transparent;
+  color: var(--color-pure-black);
+  cursor: pointer;
+}
+
+.btn-sharp-outline:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-sharp);
+  background: var(--color-pure-black);
+  color: var(--color-off-white);
+}
+
+.btn-sharp-pink {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  transition: all 0.3s var(--ease-out-expo);
+  border: 2px solid var(--color-boitano-pink);
+  background: var(--color-boitano-pink);
+  color: white;
+  cursor: pointer;
+}
+
+.btn-sharp-pink:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0px 0px var(--color-boitano-pink-dark);
+}
+
+.btn-sharp-green {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  transition: all 0.3s var(--ease-out-expo);
+  border: 2px solid var(--color-kunst-green);
+  background: var(--color-kunst-green);
+  color: white;
+  cursor: pointer;
+}
+
+.btn-sharp-green:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0px 0px var(--color-kunst-green-dark);
+}
+
+/* ==========================================================================
+   Asymmetric Card Styles
+   ========================================================================== */
+
+.card-asymmetric {
+  border-radius: 0;
+  border-left: 4px solid var(--color-boitano-pink);
+  background: white;
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+}
+
+.card-asymmetric:hover {
+  border-left-width: 8px;
+  box-shadow: var(--glow-pink);
+}
+
+.card-asymmetric-green {
+  border-radius: 0;
+  border-left: 4px solid var(--color-kunst-green);
+  background: white;
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+}
+
+.card-asymmetric-green:hover {
+  border-left-width: 8px;
+  box-shadow: var(--glow-green);
+}
+
+/* ==========================================================================
+   Section Layouts
+   ========================================================================== */
+
+.section-full {
+  min-height: 100vh;
+  padding: var(--section-padding) 0;
+}
+
+.section-padding {
+  padding: var(--section-padding) 0;
+}
+
+/* ==========================================================================
+   Mix Blend Navigation
+   ========================================================================== */
+
+.nav-blend {
+  mix-blend-mode: difference;
+  color: white;
+}
+
+.nav-blend-dark {
+  mix-blend-mode: multiply;
+  color: black;
+}
+
+/* ==========================================================================
+   Container Styles
+   ========================================================================== */
+
+.container-editorial {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--grid-margin);
+  padding-right: var(--grid-margin);
+}
+
+/* ==========================================================================
+   Color Utilities
+   ========================================================================== */
+
+.bg-boitano-pink { background-color: var(--color-boitano-pink); }
+.bg-kunst-green { background-color: var(--color-kunst-green); }
+.bg-off-white { background-color: var(--color-off-white); }
+.bg-pure-black { background-color: var(--color-pure-black); }
+
+.text-boitano-pink { color: var(--color-boitano-pink); }
+.text-kunst-green { color: var(--color-kunst-green); }
+.text-off-white { color: var(--color-off-white); }
+.text-pure-black { color: var(--color-pure-black); }
+
+.border-boitano-pink { border-color: var(--color-boitano-pink); }
+.border-kunst-green { border-color: var(--color-kunst-green); }
+
+/* ==========================================================================
+   Animation Utilities
+   ========================================================================== */
+
+.animate-radial-expand {
+  animation: radialExpand 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Animation Delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* ==========================================================================
+   Keyframe Animations
+   ========================================================================== */
+
+@keyframes radialExpand {
+  0% { clip-path: circle(0% at 50% 50%); }
+  100% { clip-path: circle(150% at 50% 50%); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ==========================================================================
+   Grid Asymmetric
+   ========================================================================== */
+
+.grid-asymmetric {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+/* ==========================================================================
+   Hover Effects
+   ========================================================================== */
+
+.hover-lift {
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.hover-glow-pink:hover {
+  box-shadow: var(--glow-pink);
+}
+
+.hover-glow-green:hover {
+  box-shadow: var(--glow-green);
+}
+
+/* ==========================================================================
+   Text Gradient Utilities
+   ========================================================================== */
+
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-pink {
+  background: linear-gradient(135deg, var(--color-boitano-pink), var(--color-boitano-pink-light));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-green {
+  background: linear-gradient(135deg, var(--color-kunst-green), var(--color-kunst-green-light));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   Focus Styles
+   ========================================================================== */
+
+:focus-visible {
+  outline: 2px solid var(--color-boitano-pink);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Scrollbar Styles
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-mid-gray);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark-gray);
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+}

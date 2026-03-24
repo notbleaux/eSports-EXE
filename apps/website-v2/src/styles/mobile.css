@@ -1,5 +1,8 @@
 /**
  * NJZ Platform - Mobile Responsive Styles
+ * Kunsthalle Basel + Boitano Design System
+ * [Ver002.000]
+ * 
  * Addresses Technical Analysis: "No Mobile Strategy"
  * Target: 60% of esports audience on mobile
  */
@@ -13,9 +16,18 @@
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  
+  /* Touch targets */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
 }
 
-/* Mobile Navigation Styles */
+/* ==========================================================================
+   Mobile Navigation Styles (< 768px)
+   ========================================================================== */
+
 @media (max-width: 767px) {
   /* Hide desktop navigation elements */
   .desktop-nav {
@@ -40,18 +52,36 @@
     margin: 0.5rem 0 !important;
   }
   
-  /* Typography adjustments */
+  /* Typography adjustments for mobile */
   h1 {
-    font-size: 1.75rem !important;
+    font-size: 2rem !important;
     line-height: 2rem !important;
   }
   
   h2 {
-    font-size: 1.5rem !important;
+    font-size: 1.75rem !important;
     line-height: 1.75rem !important;
   }
   
-  /* Touch-friendly buttons */
+  /* Sharp buttons - smaller on mobile */
+  .btn-sharp,
+  .btn-primary,
+  .btn-secondary,
+  .btn-pink,
+  .btn-green {
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.875rem !important;
+  }
+  
+  /* Asymmetric cards - full width */
+  .card-asymmetric,
+  .card-asymmetric-green,
+  .card-pink,
+  .card-green {
+    width: 100% !important;
+  }
+  
+  /* Touch-friendly buttons and links */
   button, a {
     min-height: 44px;
     min-width: 44px;
@@ -69,8 +99,8 @@
   .data-table tbody tr {
     display: block;
     margin-bottom: 1rem;
-    border: 1px solid var(--void-light);
-    border-radius: 0.5rem;
+    border: 2px solid #E5E5E5;
+    border-radius: 0;
     padding: 1rem;
   }
   
@@ -84,18 +114,61 @@
   .data-table td::before {
     content: attr(data-label);
     font-weight: bold;
-    color: var(--slate);
+    color: #666666;
+  }
+  
+  /* Hero text adjustments */
+  .text-hero {
+    font-size: clamp(32px, 12vw, 48px) !important;
+  }
+  
+  .text-display {
+    font-size: clamp(24px, 8vw, 32px) !important;
+  }
+  
+  .text-title {
+    font-size: clamp(20px, 6vw, 24px) !important;
+  }
+  
+  /* Container adjustments */
+  .container-editorial,
+  .container-njz {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Section padding reduction */
+  .section-full,
+  .section-padding,
+  .section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
   }
 }
 
-/* Tablet Adjustments */
+/* ==========================================================================
+   Tablet Adjustments (768px - 1023px)
+   ========================================================================== */
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .hub-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+  
+  /* Typography adjustments */
+  .text-hero {
+    font-size: clamp(48px, 8vw, 64px) !important;
+  }
+  
+  .text-display {
+    font-size: clamp(32px, 6vw, 48px) !important;
+  }
 }
 
-/* PWA Support */
+/* ==========================================================================
+   PWA Support
+   ========================================================================== */
+
 @media (display-mode: standalone) {
   body {
     overscroll-behavior-y: none;
@@ -106,16 +179,46 @@
   }
 }
 
-/* Touch Device Optimizations */
+/* ==========================================================================
+   Touch Device Optimizations
+   ========================================================================== */
+
 @media (hover: none) and (pointer: coarse) {
   .touch-target {
     min-height: 48px;
     min-width: 48px;
     padding: 12px;
   }
+  
+  /* Disable hover effects on touch devices */
+  .btn-sharp:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-pink:hover,
+  .btn-green:hover,
+  .card-asymmetric:hover,
+  .card-asymmetric-green:hover,
+  .card-pink:hover,
+  .card-green:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Active state for touch */
+  .btn-sharp:active,
+  .btn-primary:active,
+  .btn-secondary:active,
+  .btn-pink:active,
+  .btn-green:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
 }
 
-/* Reduced Motion Support */
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -124,5 +227,46 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Landscape Mode Adjustments
+   ========================================================================== */
+
+@media (max-width: 896px) and (orientation: landscape) {
+  .section-full {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+  
+  .text-hero {
+    font-size: clamp(28px, 8vw, 40px) !important;
+  }
+}
+
+/* ==========================================================================
+   High DPI / Retina Displays
+   ========================================================================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Ensure sharp rendering on retina displays */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ==========================================================================
+   Dark Mode Mobile Adjustments
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) and (max-width: 767px) {
+  .data-table tbody tr {
+    border-color: #333333;
+  }
+  
+  .data-table td::before {
+    color: #999999;
   }
 }
