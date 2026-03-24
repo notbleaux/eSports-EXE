@@ -1,7 +1,7 @@
 {
-  "name": "libre-x-esport-4njz4-tenet",
+  "name": "njzitegeist-platform",
   "version": "2.1.0",
-  "description": "Libre-X-eSport 4NJZ4 TENET Platform — esports simulation and analytics monorepo",
+  "description": "NJZiteGeisTe — Community eSports analytics platform for Valorant and CS2",
   "private": true,
   "packageManager": "npm@10.8.0",
   "scripts": {
@@ -34,8 +34,7 @@
     "apps/*"
   ],
   "keywords": [
-    "libre-x",
-    "4njz4",
+    "njzitegeist",
     "tenet",
     "esports",
     "tactical-fps",

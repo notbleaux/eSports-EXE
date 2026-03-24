@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/Users/jacke/Documents/GitHub/eSports-EXE/*.md)"
+    ]
+  }
+}

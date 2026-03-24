@@ -15,7 +15,7 @@ export const HUBS = {
     color: '#ff9f1c',
     glowColor: 'rgba(255, 159, 28, 0.4)',
     icon: '◎',
-    path: '/sator',
+    path: '/analytics',
     stats: { records: '2.4M', status: 'active' }
   },
   rotas: {
@@ -26,7 +26,7 @@ export const HUBS = {
     color: '#00f0ff',
     glowColor: 'rgba(0, 240, 255, 0.4)',
     icon: '◈',
-    path: '/rotas',
+    path: '/stats',
     stats: { accuracy: '99.9%', status: 'active' }
   },
   arepo: {
@@ -37,7 +37,7 @@ export const HUBS = {
     color: '#0066ff',
     glowColor: 'rgba(0, 102, 255, 0.4)',
     icon: '◉',
-    path: '/arepo',
+    path: '/community',
     stats: { entries: '2,135', status: 'active' }
   },
   opera: {

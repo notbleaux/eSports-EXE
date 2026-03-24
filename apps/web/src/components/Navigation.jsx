@@ -10,11 +10,11 @@ import { Menu, X, Eye, Activity, Book, Map, Grid3X3, Zap } from 'lucide-react';
 
 // Hub configuration with exact colors
 export const HUBS = [
-  { id: 'sator', name: 'SATOR', path: '/sator', color: '#ffd700', icon: Eye, subtitle: 'The Observatory' },
-  { id: 'rotas', name: 'ROTAS', path: '/rotas', color: '#00d4ff', icon: Activity, subtitle: 'The Harmonic Layer' },
-  { id: 'arepo', name: 'AREPO', path: '/arepo', color: '#0066ff', icon: Book, subtitle: 'The Directory' },
-  { id: 'opera', name: 'OPERA', path: '/opera', color: '#9d4edd', icon: Map, subtitle: 'The Nexus' },
-  { id: 'tenet', name: 'TENET', path: '/tenet', color: '#ffffff', icon: Grid3X3, subtitle: 'The Center' },
+  { id: 'sator', name: 'Analytics', path: '/analytics', color: '#ffd700', icon: Eye, subtitle: 'The Observatory' },
+  { id: 'rotas', name: 'Stats', path: '/stats', color: '#00d4ff', icon: Activity, subtitle: 'The Harmonic Layer' },
+  { id: 'arepo', name: 'Community', path: '/community', color: '#0066ff', icon: Book, subtitle: 'The Directory' },
+  { id: 'opera', name: 'Pro Scene', path: '/pro-scene', color: '#9d4edd', icon: Map, subtitle: 'The Nexus' },
+  { id: 'tenet', name: 'Hubs', path: '/hubs', color: '#ffffff', icon: Grid3X3, subtitle: 'The Center' },
 ];
 
 // Prefetch cache to track loaded modules

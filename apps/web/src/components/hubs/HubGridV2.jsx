@@ -11,7 +11,8 @@ import { Link } from 'react-router-dom';
 const hubs = [
   {
     id: 'sator',
-    name: 'SATOR',
+    name: 'Analytics',
+    path: '/analytics',
     subtitle: 'Analytics',
     description: 'Advanced player metrics, SimRating, and RAR decomposition.',
     color: 'bg-pure-black',
@@ -22,7 +23,8 @@ const hubs = [
   },
   {
     id: 'rotas',
-    name: 'ROTAS',
+    name: 'Stats',
+    path: '/stats',
     subtitle: 'Simulation',
     description: 'Deterministic tactical FPS match simulation.',
     color: 'bg-boitano-pink',
@@ -33,7 +35,8 @@ const hubs = [
   },
   {
     id: 'arepo',
-    name: 'AREPO',
+    name: 'Community',
+    path: '/community',
     subtitle: 'Tactical Maps',
     description: 'Interactive map viewer with callouts and strategies.',
     color: 'bg-kunst-green',
@@ -44,7 +47,8 @@ const hubs = [
   },
   {
     id: 'opera',
-    name: 'OPERA',
+    name: 'Pro Scene',
+    path: '/pro-scene',
     subtitle: 'Live Events',
     description: 'Live match tracking, fantasy leagues, and predictions.',
     color: 'bg-accent-cyan',
@@ -55,7 +59,8 @@ const hubs = [
   },
   {
     id: 'tenet',
-    name: 'TENET',
+    name: 'Hubs',
+    path: '/hubs',
     subtitle: 'Central Hub',
     description: 'Settings, profile, and unified dashboard.',
     color: 'bg-accent-purple',
@@ -96,7 +101,7 @@ function HubCard({ hub, index }) {
       className={`${hub.gridClass} group relative overflow-hidden`}
     >
       <Link
-        to={`/${hub.id}`}
+        to={hub.path}
         className={`block h-full min-h-[200px] ${hub.color} ${hub.textColor} p-8 relative overflow-hidden transition-transform duration-500`}
       >
         {/* Background Pattern */}
@@ -219,10 +224,10 @@ export function HubGridV2() {
           className="mt-16 text-center"
         >
           <Link
-            to="/dashboard"
+            to="/home"
             className="inline-flex items-center gap-3 px-8 py-4 border-2 border-pure-black text-pure-black font-semibold uppercase tracking-wider text-sm hover:bg-pure-black hover:text-white transition-all duration-300"
           >
-            View Unified Dashboard
+            View Home
             <svg 
               className="w-4 h-4" 
               fill="none" 

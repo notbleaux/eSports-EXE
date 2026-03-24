@@ -10,12 +10,12 @@ import { useNJZStore, HUBS } from '../store/njzStore'
 import { ModeToggle } from '@/components/ModeToggle'
 
 const navItems = [
-  { path: '/', label: 'Central', icon: '◎', hubId: 'central' },
-  { path: '/dashboard', label: 'Grid', icon: '◈', hubId: 'grid', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
-  { path: '/sator', label: 'SATOR', icon: '◎', hubId: 'sator', color: 'text-alert-amber', borderColor: 'border-alert-amber' },
-  { path: '/rotas', label: 'ROTAS', icon: '◈', hubId: 'rotas', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
-  { path: '/arepo', label: 'AREPO', icon: '◉', hubId: 'arepo', color: 'text-porcelain', borderColor: 'border-porcelain' },
-  { path: '/opera', label: 'OPERA', icon: '◆', hubId: 'opera', color: 'text-cobalt', borderColor: 'border-cobalt' },
+  { path: '/', label: 'NJZiteGeisTe', icon: '◎', hubId: 'central' },
+  { path: '/home', label: 'Home', icon: '◈', hubId: 'grid', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
+  { path: '/analytics', label: 'Analytics', icon: '◎', hubId: 'sator', color: 'text-alert-amber', borderColor: 'border-alert-amber' },
+  { path: '/stats', label: 'Stats', icon: '◈', hubId: 'rotas', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
+  { path: '/community', label: 'Community', icon: '◉', hubId: 'arepo', color: 'text-porcelain', borderColor: 'border-porcelain' },
+  { path: '/pro-scene', label: 'Pro Scene', icon: '◆', hubId: 'opera', color: 'text-cobalt', borderColor: 'border-cobalt' },
 ]
 
 function Navigation() {
@@ -111,9 +111,9 @@ function Navigation() {
               
               {/* Grid Link */}
               <Link
-                to="/dashboard"
+                to="/home"
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors ${
-                  location.pathname === '/dashboard'
+                  location.pathname === '/home'
                     ? 'bg-signal-cyan/20 text-signal-cyan'
                     : 'bg-white/5 hover:bg-white/10 text-white/80'
                 }`}

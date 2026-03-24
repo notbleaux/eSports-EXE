@@ -5,7 +5,7 @@
  * [Ver007.000] - Updated with redesigned landing page components
  */
 import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Navigation and Layout Components (eager loaded for fast initial render)
@@ -190,13 +190,19 @@ function LandingPage() {
               <p className="mt-4 text-text-secondary">TENET Platform v2.0</p>
             </div>
             <div className="col-span-12 md:col-span-6 flex flex-wrap justify-start md:justify-end gap-6 md:gap-8">
-              {['SATOR', 'ROTAS', 'AREPO', 'OPERA', 'TENET'].map(hub => (
-                <Link 
-                  key={hub} 
-                  to={`/${hub.toLowerCase()}`} 
+              {[
+                { label: 'Analytics', path: '/analytics' },
+                { label: 'Stats', path: '/stats' },
+                { label: 'Community', path: '/community' },
+                { label: 'Pro Scene', path: '/pro-scene' },
+                { label: 'Hubs', path: '/hubs' },
+              ].map(item => (
+                <Link
+                  key={item.path}
+                  to={item.path}
                   className="text-sm uppercase tracking-widest hover:text-boitano-pink transition-colors duration-300"
                 >
-                  {hub}
+                  {item.label}
                 </Link>
               ))}
             </div>
@@ -401,19 +407,21 @@ function AppContent() {
               } 
             />
             
-            {/* Dashboard Grid */}
-            <Route 
-              path="/dashboard" 
+            {/* Home / Dashboard Grid */}
+            <Route
+              path="/home"
               element={
-                <PageTransition hubId="dashboard">
+                <PageTransition hubId="home">
                   <DashboardGrid />
                 </PageTransition>
-              } 
+              }
             />
-            
+            {/* Redirect legacy path */}
+            <Route path="/dashboard" element={<Navigate to="/home" replace />} />
+
             {/* HUB Routes - Wrapped with HubErrorBoundary and specific error boundaries */}
-            <Route 
-              path="/sator" 
+            <Route
+              path="/analytics"
               element={
                 <PageTransition hubId="sator">
                   <HubErrorBoundary hubName="sator">
@@ -424,10 +432,12 @@ function AppContent() {
                     </MLInferenceErrorBoundary>
                   </HubErrorBoundary>
                 </PageTransition>
-              } 
+              }
             />
-            <Route 
-              path="/rotas" 
+            {/* Redirect legacy path */}
+            <Route path="/sator" element={<Navigate to="/analytics" replace />} />
+            <Route
+              path="/stats"
               element={
                 <PageTransition hubId="rotas">
                   <HubErrorBoundary hubName="rotas">
@@ -440,10 +450,12 @@ function AppContent() {
                     </MLInferenceErrorBoundary>
                   </HubErrorBoundary>
                 </PageTransition>
-              } 
+              }
             />
-            <Route 
-              path="/arepo" 
+            {/* Redirect legacy path */}
+            <Route path="/rotas" element={<Navigate to="/stats" replace />} />
+            <Route
+              path="/community"
               element={
                 <PageTransition hubId="arepo">
                   <HubErrorBoundary hubName="arepo">
@@ -452,10 +464,12 @@ function AppContent() {
                     </Suspense>
                   </HubErrorBoundary>
                 </PageTransition>
-              } 
+              }
             />
-            <Route 
-              path="/opera" 
+            {/* Redirect legacy path */}
+            <Route path="/arepo" element={<Navigate to="/community" replace />} />
+            <Route
+              path="/pro-scene"
               element={
                 <PageTransition hubId="opera">
                   <HubErrorBoundary hubName="opera">
@@ -464,10 +478,12 @@ function AppContent() {
                     </Suspense>
                   </HubErrorBoundary>
                 </PageTransition>
-              } 
+              }
             />
-            <Route 
-              path="/tenet" 
+            {/* Redirect legacy path */}
+            <Route path="/opera" element={<Navigate to="/pro-scene" replace />} />
+            <Route
+              path="/hubs"
               element={
                 <PageTransition hubId="tenet">
                   <HubErrorBoundary hubName="tenet">
@@ -476,8 +492,10 @@ function AppContent() {
                     </Suspense>
                   </HubErrorBoundary>
                 </PageTransition>
-              } 
+              }
             />
+            {/* Redirect legacy path */}
+            <Route path="/tenet" element={<Navigate to="/hubs" replace />} />
             
             {/* Dev Tools - Only available in development */}
             <Route 
