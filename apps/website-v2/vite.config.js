@@ -72,7 +72,7 @@ export default defineConfig({
   },
   worker: {
     format: 'es',
-    minify: 'esbuild'
+    minify: false
   },
   build: {
     target: 'esnext',
@@ -81,8 +81,8 @@ export default defineConfig({
     sourcemap: true,
     // Optimize chunk size warnings
     chunkSizeWarningLimit: 600,
-    // Enable minification optimizations
-    minify: 'esbuild',
+    // Disable minification to avoid terser issues
+    minify: false,
     rollupOptions: {
       output: {
         // Advanced manual chunks for optimal code splitting
