@@ -1,5 +1,3 @@
-[Ver004.000]
-
 # AGENTS.md — Libre-X-eSport 4NJZ4 TENET Platform
 
 **Purpose:** This file provides essential context for AI coding agents working on the Libre-X-eSport 4NJZ4 TENET Platform project.  
@@ -31,7 +29,7 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 
 ### Version Information
 
-- **Current Version:** 2.0.0
+- **Current Version:** 2.1.0
 - **API Version:** v1
 - **WebSocket Protocol:** v1
 - **Last Updated:** March 2026

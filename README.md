@@ -1,6 +1,4 @@
-[Ver004.000]
-
-# 🏗️ Libre-X-eSport 4NJZ4 TENET Platform v2.1
+# 🏗️ Libre-X-eSport 4NJZ4 TENET Platform v2.1.0
 
 **Status:** 🟢 Production Ready  
 **Version:** 2.1.0  
