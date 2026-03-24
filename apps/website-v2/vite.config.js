@@ -52,7 +52,7 @@ export default defineConfig({
   },
   worker: {
     format: 'es',
-    minify: false
+    minify: 'esbuild'
   },
   build: {
     target: 'esnext',
@@ -60,7 +60,7 @@ export default defineConfig({
     assetsDir: 'assets',
     sourcemap: false,
     chunkSizeWarningLimit: 1000,
-    minify: false,
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         manualChunks: (id) => {
