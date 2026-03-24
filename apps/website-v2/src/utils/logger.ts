@@ -9,6 +9,7 @@ export interface Logger {
   info: (...args: unknown[]) => void;
   warn: (...args: unknown[]) => void;
   error: (...args: unknown[]) => void;
+  child: (subNamespace: string) => Logger;
 }
 
 export function createLogger(namespace: string): Logger {
@@ -28,6 +29,7 @@ export function createLogger(namespace: string): Logger {
     info: (...args: unknown[]) => console.info(prefix, ...args),
     warn: (...args: unknown[]) => console.warn(prefix, ...args),
     error: (...args: unknown[]) => console.error(prefix, ...args),
+    child: (subNamespace: string) => createLogger(`${namespace}:${subNamespace}`),
   };
 }
 
