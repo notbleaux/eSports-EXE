@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useReducedMotion, Ripple } from '@/utils/fluid.js';
+import { useReducedMotion, Ripple } from '@/utils/fluid';
 import { cn } from '@/utils/cn';
 
 /**

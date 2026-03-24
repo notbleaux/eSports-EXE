@@ -35,7 +35,7 @@
     "@use-gesture/react": "^10.3.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
-    "framer-motion": "^10.16.0",
+    "framer-motion": "^11.0.0",
     "gsap": "^3.12.0",
     "lucide-react": "^0.294.0",
     "onnxruntime-web": "^1.20.1",
@@ -64,6 +64,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.1.0",
     "autoprefixer": "^10.4.16",
+    "cross-env": "^7.0.3",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -78,7 +79,6 @@
     "typescript": "^5.9.3",
     "vite": "^8.0.2",
     "vitest": "^4.1.0",
-    "ws": "^8.14.0",
-    "cross-env": "^7.0.3"
+    "ws": "^8.14.0"
   }
 }

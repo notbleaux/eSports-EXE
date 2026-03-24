@@ -66,7 +66,8 @@ export default defineConfig({
       '@hub-5': path.resolve(__dirname, './src/hub-5-tenet'),
       '@sator/types': path.resolve(__dirname, '../../packages/shared/types'),
       '@sator/services': path.resolve(__dirname, '../../packages/shared/services/help')
-    }
+    },
+    dedupe: ['react', 'react-dom', 'framer-motion']
   },
   worker: {
     format: 'es'
@@ -253,15 +254,16 @@ export default defineConfig({
           return 'js/chunks/[name]-[hash].js';
         },
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.')
+          const name = assetInfo.name || '';
+          const info = name.split('.')
           const ext = info[info.length - 1]
-          if (/\.(css)$/i.test(assetInfo.name)) {
+          if (/\.(css)$/i.test(name)) {
             return 'css/[name]-[hash][extname]'
           }
-          if (/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(assetInfo.name)) {
+          if (/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(name)) {
             return 'img/[name]-[hash][extname]'
           }
-          if (/\.(woff2?|ttf|otf|eot)$/i.test(assetInfo.name)) {
+          if (/\.(woff2?|ttf|otf|eot)$/i.test(name)) {
             return 'fonts/[name]-[hash][extname]'
           }
           return 'assets/[name]-[hash][extname]'

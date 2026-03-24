@@ -7,11 +7,7 @@
  * Component-specific styles are in separate files.
  */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Import Design System */
+/* Import Design System - MUST be first before Tailwind */
 @import './styles/design-system.css';
 
 /* Import Animation Utilities */
@@ -19,6 +15,13 @@
 
 /* Import Mobile Styles */
 @import './styles/mobile.css';
+
+/* Force Design Override - uses !important for precedence */
+@import './styles/force-design-override.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ==========================================================================
    Tailwind Custom Base Styles
@@ -312,7 +315,5 @@
 }
 
 /* ==========================================================================
-   Force Design Override - Must be last to take precedence
+   End of Global Styles
    ========================================================================== */
-
-@import './styles/force-design-override.css';

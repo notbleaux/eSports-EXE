@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
+import { useReducedMotion, Ripple, useViscousSFX } from '@/utils/fluid';
 
 /**
  * GlowButton - Action button with glow effect
@@ -18,8 +19,7 @@ export function GlowButton({
   disabled = false,
   className,
 }) {
-import { useReducedMotion, Ripple, useViscousSFX } from '@/utils/fluid.js';
-const reducedMotion = useReducedMotion();
+  const reducedMotion = useReducedMotion();
 
   const { animateViscous } = useViscousSFX();
   const motionProps = disabled || reducedMotion ? {} : {
