@@ -2,7 +2,7 @@
   "version": 2,
   "outputDirectory": "dist",
   "framework": null,
-  "buildCommand": "cd ../.. && turbo run build --filter=libre-x-4njz4-tenet-platform",
+  "buildCommand": "cd ../.. && turbo run build --filter=@esports-exe/web",
   "routes": [
     {
       "handle": "filesystem"
