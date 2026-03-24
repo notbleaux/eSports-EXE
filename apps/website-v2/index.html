@@ -187,6 +187,20 @@
   
   <script type="module" src="/src/main.jsx"></script>
   
+  <!-- DEBUG: Check if JS loads -->
+  <script>
+    window.addEventListener('error', function(e) {
+      document.body.innerHTML = '<div style="padding:20px;background:#ff69b4;color:black;font-family:monospace;"><h1>JS Error</h1><p>' + e.message + '</p><p>' + (e.filename || '') + ':' + (e.lineno || '') + '</p></div>';
+    });
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        if (!window.reactRootMounted) {
+          document.body.innerHTML = '<div style="padding:20px;background:#ff69b4;color:black;font-family:monospace;"><h1>React did not mount</h1><p>Check console for errors</p><button onclick="location.reload()">Reload</button></div>';
+        }
+      }, 3000);
+    });
+  </script>
+  
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
