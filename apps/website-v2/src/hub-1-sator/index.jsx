@@ -149,23 +149,10 @@ function SatorHubContent() {
   }, []);
 
   // Initialize worker pool for multiple grids
+  // WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
   useEffect(() => {
-    if (isWorkerSupported()) {
-      // Pre-initialize worker pool
-      const pool = getWorkerPool('grid', () => {
-        return new Worker(new URL('../workers/grid.worker.ts', import.meta.url), {
-          type: 'module'
-        });
-      }, {
-        maxWorkers: 2,
-        idleTimeoutMs: 60000
-      });
-
-      return () => {
-        // Cleanup pool on unmount
-        pool.dispose();
-      };
-    }
+    // Worker disabled - using DOM fallback instead
+    return;
   }, []);
 
   // Generate mock data

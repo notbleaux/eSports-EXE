@@ -246,8 +246,13 @@ export function useStreamingInference(
 
   /**
    * Initialize data stream worker
+   * WORKER DISABLED FOR VERCEL BUILD - Vite 8 worker bug requires terser
    */
   const initWorker = useCallback((): Worker | null => {
+    // Worker disabled - returning null to use fallback mode
+    return null;
+    
+    /* Original worker code disabled:
     if (workerRef.current) {
       return workerRef.current
     }
@@ -334,6 +339,7 @@ export function useStreamingInference(
       }
       return null
     }
+    */
   }, [isPaused, processPrediction])
 
   /**
