@@ -17,6 +17,22 @@
       "destination": "/assets/:path*"
     },
     {
+      "source": "/js/:path*",
+      "destination": "/js/:path*"
+    },
+    {
+      "source": "/css/:path*",
+      "destination": "/css/:path*"
+    },
+    {
+      "source": "/icons/:path*",
+      "destination": "/icons/:path*"
+    },
+    {
+      "source": "/mascots/:path*",
+      "destination": "/mascots/:path*"
+    },
+    {
       "source": "/:path*.js",
       "destination": "/:path*.js"
     },
