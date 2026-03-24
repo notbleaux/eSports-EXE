@@ -5,7 +5,7 @@
  * [Ver007.000] - Updated with redesigned landing page components
  */
 import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
-import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Navigation and Layout Components (eager loaded for fast initial render)
@@ -559,14 +559,16 @@ function AppContent() {
 }
 
 /**
- * Main App component with top-level error boundary
+ * Main App component with top-level error boundary and router
  * Wraps the entire application for graceful error handling
  */
 function App() {
   return (
-    <AppErrorBoundary>
-      <AppContent />
-    </AppErrorBoundary>
+    <BrowserRouter>
+      <AppErrorBoundary>
+        <AppContent />
+      </AppErrorBoundary>
+    </BrowserRouter>
   );
 }
 
