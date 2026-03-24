@@ -72,12 +72,12 @@ export default defineConfig({
   },
   worker: {
     format: 'es',
-    minify: 'esbuild',
     rollupOptions: {
       output: {
         entryFileNames: 'js/workers/[name]-[hash].js'
       }
-    }
+    },
+    plugins: []
   },
   build: {
     target: 'esnext',
@@ -88,6 +88,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 600,
     // Enable minification optimizations
     minify: 'esbuild',
+    terserOptions: undefined,
     rollupOptions: {
       output: {
         // Advanced manual chunks for optimal code splitting
