@@ -1,6 +1,6 @@
-# [Ver003.004]
+# [Ver004.000]
 # Render.com Deployment Configuration
-# SATOR API - Production Deployment
+# SATOR API - Production Deployment with Supabase
 # NOTE: Using FREE TIER ONLY - No paid services
 
 services:
@@ -16,15 +16,22 @@ services:
       cd packages/shared/api && 
       uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
     envVars:
+      # SUPABASE DATABASE (Connection via pooler on port 6543)
       - key: DATABASE_URL
-        fromDatabase:
-          name: sator-db
-          property: connectionString
+        sync: false  # Set in Render dashboard: postgresql://postgres:DnOXmJ4kzI52VNv7@db.sxwyaxfresusroiezxxc.supabase.co:6543/postgres
+      - key: SUPABASE_URL
+        value: https://sxwyaxfresusroiezxxc.supabase.co
+      - key: SUPABASE_SERVICE_KEY
+        sync: false  # Set in Render dashboard (service_role key)
+      
+      # REDIS (Upstash or Render Redis)
       - key: REDIS_URL
         fromService:
           type: redis
           name: sator-redis
           property: connectionString
+      
+      # APP CONFIG
       - key: APP_ENVIRONMENT
         value: production
       - key: APP_NAME
@@ -34,24 +41,30 @@ services:
       - key: LOG_LEVEL
         value: INFO
       - key: CORS_ORIGINS
-        value: "https://sator-platform.vercel.app,https://sator-web.onrender.com"
+        value: "https://website-v2-ashen-mu.vercel.app,https://*.vercel.app,https://sator-platform.vercel.app"
+      
+      # SECURITY KEYS (generate in Render dashboard)
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: TOTP_ENCRYPTION_KEY
         generateValue: true
       - key: ENCRYPTION_KEY
         generateValue: true
+      
+      # PANDASCORE API (Esports data)
       - key: PANDASCORE_API_KEY
-        sync: false  # Set manually in dashboard
+        sync: false  # Set in Render dashboard: B9XAy0v6DlkQicA6s46x3uFmlS6Cr7frU32ImN5XPKO3QSkTKjE
+      
       # FREE TIER: Single worker only (no multi-worker on free)
-      # FREE TIER: Pool sizes optimized for free tier limits
       - key: DB_POOL_MIN_SIZE
         value: "2"
       - key: DB_POOL_MAX_SIZE
         value: "5"
+      
       # PYTHONPATH includes packages/shared for axiom_esports_data imports
       - key: PYTHONPATH
         value: "/opt/render/project/src/packages/shared"
+    
     healthCheckPath: /health
     autoDeploy: true
     plan: free  # FREE TIER - No costs incurred
@@ -62,14 +75,10 @@ services:
     plan: free  # FREE TIER - 100MB limit, no persistence
     ipAllowList: []  # Allow all (required for Render services)
 
-databases:
-  # NOTE: Using external free database (Supabase) 
-  # Render free PostgreSQL has been discontinued
-  # Supabase free tier: 500MB, 2GB/month transfer
-  - name: sator-db
-    plan: free  # Placeholder - actual DB is Supabase
-    databaseName: sator_production
-    user: sator_api
+# NOTE: Database is Supabase (external)
+# Supabase Project: NJZitegeiste
+# Project ID: sxwyaxfresusroiezxxc
+# Connection: postgresql://postgres:DnOXmJ4kzI52VNv7@db.sxwyaxfresusroiezxxc.supabase.co:6543/postgres
 
 # Environment group for shared variables
 envVarGroups:
@@ -81,3 +90,5 @@ envVarGroups:
         value: v1
       - key: DEPLOYMENT_TYPE
         value: "free-tier"
+      - key: DATA_SOURCE
+        value: "pandascore-live"  # Now using real esports data
