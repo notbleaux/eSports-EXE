@@ -263,14 +263,8 @@ export class TrainingOrchestrator {
   }
 
   private async createWorker(): Promise<Worker> {
-    // Dynamic import of training worker
-    const TrainingWorker = await import('../models/trainingWorker?worker')
-    const worker = new TrainingWorker.default()
-    
-    worker.onmessage = (event) => this.handleWorkerMessage(event)
-    worker.onerror = (error) => this.handleWorkerError(error)
-    
-    return worker
+    // WORKERS DISABLED for Vercel build compatibility (Vite 8 terser bug)
+    throw new Error('Training workers disabled - running on main thread')
   }
 
   // ============================================================================

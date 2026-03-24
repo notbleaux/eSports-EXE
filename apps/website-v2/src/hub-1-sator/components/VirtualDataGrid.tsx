@@ -58,11 +58,9 @@ export interface VirtualDataGridRef {
   refresh: () => void;
 }
 
-// Worker factory for pool usage
-const createGridWorker = (): Worker => {
-  return new Worker(new URL('../../workers/grid.worker.ts', import.meta.url), {
-    type: 'module'
-  });
+// Worker factory - DISABLED for Vercel build compatibility
+const createGridWorker = (): never => {
+  throw new Error('Workers disabled for build compatibility');
 };
 
 /**

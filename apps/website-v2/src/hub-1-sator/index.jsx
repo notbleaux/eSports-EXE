@@ -145,24 +145,10 @@ function SatorHubContent() {
     });
   }, []);
 
-  // Initialize worker pool for multiple grids
+  // Worker pool initialization - DISABLED for Vercel build compatibility
   useEffect(() => {
-    if (isWorkerSupported()) {
-      // Pre-initialize worker pool
-      const pool = getWorkerPool('grid', () => {
-        return new Worker(new URL('../workers/grid.worker.ts', import.meta.url), {
-          type: 'module'
-        });
-      }, {
-        maxWorkers: 2,
-        idleTimeoutMs: 60000
-      });
-
-      return () => {
-        // Cleanup pool on unmount
-        pool.dispose();
-      };
-    }
+    // Workers disabled due to Vite 8 terser bundling bug on Vercel
+    // All grid processing runs on main thread
   }, []);
 
   // Generate mock data
