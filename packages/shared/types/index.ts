@@ -66,6 +66,13 @@ export interface SimRating {
   lastUpdated: string;
 }
 
+export interface RAR {
+  playerId: string;
+  rarScore: number;
+  role: string;
+  lastUpdated: string;
+}
+
 // ─── API Response Types ────────────────────────────────────
 export interface ApiResponse<T> {
   data: T;

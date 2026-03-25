@@ -29,9 +29,9 @@ test.describe('Error Scenarios', () => {
   })
 
   test('error boundary catches runtime errors', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
-    
+
     // Inject an error to test error boundary
     await page.evaluate(() => {
       window.dispatchEvent(new ErrorEvent('error', { 
@@ -57,7 +57,7 @@ test.describe('Error Scenarios', () => {
     await page.route('**/api/**', route => route.abort('internetdisconnected'))
     
     // Navigate to a page that makes API calls
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForTimeout(2000)
     
     // Page should still render (possibly with error state)
@@ -118,7 +118,7 @@ test.describe('Error Scenarios', () => {
       })
     })
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForTimeout(2000)
     
     // Page should not crash
@@ -135,7 +135,7 @@ test.describe('Error Scenarios', () => {
       await new Promise(() => {})
     })
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForTimeout(3000)
     
     // Page should handle timeout gracefully

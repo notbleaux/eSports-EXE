@@ -32,7 +32,7 @@ except ImportError:
     logging.warning("Prometheus client not installed. Metrics endpoint will be limited.")
 
 # Import v1 routers
-from routers import players, teams, matches
+from routers import players, teams, matches, simrating
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -448,6 +448,7 @@ app.include_router(
 app.include_router(players.router, prefix="/v1")
 app.include_router(teams.router, prefix="/v1")
 app.include_router(matches.router, prefix="/v1")
+app.include_router(simrating.router, prefix="/v1")
 
 
 # WebSocket endpoints

@@ -20,7 +20,7 @@ test.describe('Hub Navigation', () => {
     
     if (await satorLink.count() === 0) {
       // Try alternative selectors
-      await page.goto('/sator')
+      await page.goto('/analytics')
     } else {
       await satorLink.click()
     }
@@ -39,7 +39,7 @@ test.describe('Hub Navigation', () => {
     const rotasLink = page.locator('[data-hub="rotas"], [data-testid="hub-rotas"], a[href*="rotas"]').first()
     
     if (await rotasLink.count() === 0) {
-      await page.goto('/rotas')
+      await page.goto('/stats')
     } else {
       await rotasLink.click()
     }
@@ -54,7 +54,7 @@ test.describe('Hub Navigation', () => {
     const arepoLink = page.locator('[data-hub="arepo"], [data-testid="hub-arepo"], a[href*="arepo"]').first()
     
     if (await arepoLink.count() === 0) {
-      await page.goto('/arepo')
+      await page.goto('/community')
     } else {
       await arepoLink.click()
     }
@@ -69,7 +69,7 @@ test.describe('Hub Navigation', () => {
     const operaLink = page.locator('[data-hub="opera"], [data-testid="hub-opera"], a[href*="opera"]').first()
     
     if (await operaLink.count() === 0) {
-      await page.goto('/opera')
+      await page.goto('/pro-scene')
     } else {
       await operaLink.click()
     }
@@ -110,17 +110,17 @@ test.describe('Hub Navigation', () => {
 
   test('hub navigation preserves state', async ({ page }) => {
     // Go to SATOR hub
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Scroll down to capture position
     await page.evaluate(() => window.scrollTo(0, 500))
     
     // Navigate to another hub and back
-    await page.goto('/arepo')
+    await page.goto('/community')
     await page.waitForLoadState('networkidle')
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Page should load successfully
@@ -140,7 +140,7 @@ test.describe('Hub Navigation', () => {
     }
     
     // Navigate to a hub
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await expect(page).toHaveURL(/.*sator.*/i)
     
     // Verify content is visible on mobile

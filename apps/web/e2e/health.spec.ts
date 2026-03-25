@@ -24,7 +24,7 @@ test.describe('Health Check Endpoint', () => {
   })
 
   test('SATOR hub loads with analytics capabilities', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     
     // Verify SATOR hub loads
     await expect(page).toHaveURL(/.*sator.*/i)

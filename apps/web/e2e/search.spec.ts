@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test'
 test.describe('Search Functionality', () => {
   
   test.beforeEach(async ({ page }) => {
-    await page.goto('/arepo')
+    await page.goto('/community')
     await page.waitForLoadState('networkidle')
   })
 
@@ -159,7 +159,7 @@ test.describe('Search Functionality', () => {
   })
 
   test('search from different hubs', async ({ page }) => {
-    const hubs = ['/', '/sator', '/rotas', '/opera']
+    const hubs = ['/', '/analytics', '/stats', '/pro-scene']
     
     for (const hub of hubs) {
       await page.goto(hub)

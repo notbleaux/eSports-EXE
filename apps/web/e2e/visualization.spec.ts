@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test'
 test.describe('Data Visualization', () => {
   
   test('SATOR hub has analytics charts', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -36,7 +36,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('charts are interactive', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -60,7 +60,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('stat cards display data', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Look for stat cards
@@ -78,7 +78,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('heatmap visualization', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -94,7 +94,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('radar chart for player stats', async ({ page }) => {
-    await page.goto('/arepo')
+    await page.goto('/community')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -109,7 +109,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('timeline visualization', async ({ page }) => {
-    await page.goto('/opera')
+    await page.goto('/pro-scene')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -124,7 +124,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('charts respond to data updates', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -142,7 +142,7 @@ test.describe('Data Visualization', () => {
   test('responsive chart sizing', async ({ page }) => {
     // Desktop view
     await page.setViewportSize({ width: 1280, height: 720 })
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -163,7 +163,7 @@ test.describe('Data Visualization', () => {
   })
 
   test('chart legends are readable', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Look for legend
@@ -182,7 +182,7 @@ test.describe('Data Visualization', () => {
       await route.continue()
     })
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     
     // Check for loading indicator
     const loader = page.locator('.loading, [data-testid="loading"], .spinner').first()

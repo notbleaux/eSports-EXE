@@ -12,7 +12,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('View odds history for a match', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for a match with odds
@@ -48,7 +48,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Force odds recalculation', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for admin or refresh button
@@ -78,7 +78,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Odds format switching', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for odds format selector
@@ -111,7 +111,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Multiple match odds view', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for match list
@@ -140,7 +140,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Live match real-time updates', async ({ page }) => {
-    await page.goto('/rotas');
+    await page.goto('/stats');
     await page.waitForLoadState('networkidle');
 
     // Look for live indicator
@@ -177,7 +177,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Place bet flow', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for bet button on a match
@@ -213,7 +213,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Bet slip calculates potential returns', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     const stakeInput = page.locator('[data-testid="stake-input"]').or(
@@ -293,7 +293,7 @@ test.describe('Complete Betting Flows', () => {
   });
 
   test('Bet validation errors', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     const stakeInput = page.locator('[data-testid="stake-input"]').or(

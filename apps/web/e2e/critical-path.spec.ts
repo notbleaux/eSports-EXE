@@ -35,7 +35,7 @@ test.describe('Critical User Paths', () => {
 
   test('error scenario: ML failure → Error boundary → Recovery', async ({ page }) => {
     // Navigate to a hub with ML features
-    await page.goto('/sator')
+    await page.goto('/analytics')
     
     // Wait for page to load
     await page.waitForLoadState('networkidle')
@@ -67,7 +67,7 @@ test.describe('Critical User Paths', () => {
 
   test('offline scenario: Disconnect → Cached data → Reconnect', async ({ page }) => {
     // Navigate to the app and let service worker cache content
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Wait for initial content to load

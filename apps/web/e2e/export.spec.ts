@@ -12,7 +12,7 @@ import * as path from 'path'
 test.describe('Export Functionality', () => {
   
   test.beforeEach(async ({ page }) => {
-    await page.goto('/arepo')
+    await page.goto('/community')
     await page.waitForLoadState('networkidle')
   })
 
@@ -166,7 +166,7 @@ test.describe('Export Functionality', () => {
   })
 
   test('SATOR hub analytics export', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     const exportButton = page.locator('button:has-text("Export"), a:has-text("Export")').first()
@@ -176,7 +176,7 @@ test.describe('Export Functionality', () => {
   })
 
   test('OPERA timeline export', async ({ page }) => {
-    await page.goto('/opera')
+    await page.goto('/pro-scene')
     await page.waitForLoadState('networkidle')
     
     const exportButton = page.locator('button:has-text("Export"), a:has-text("Export")').first()

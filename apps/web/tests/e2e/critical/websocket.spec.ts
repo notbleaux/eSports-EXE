@@ -14,7 +14,7 @@ test.describe('Critical WebSocket Flows', () => {
   test.describe('Gateway Connection', () => {
     test('WebSocket connects on hub load', async ({ page }) => {
       // Navigate to SATOR hub which uses WebSocket
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Wait for WebSocket to potentially connect
@@ -44,7 +44,7 @@ test.describe('Critical WebSocket Flows', () => {
     });
 
     test('WebSocket shows connection state transitions', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       
       // Monitor for any connection state changes
       const wsStatus = page.locator('[data-testid="ws-status"]');
@@ -78,7 +78,7 @@ test.describe('Critical WebSocket Flows', () => {
 
     test('ROTAS hub initializes streaming WebSocket', async ({ page }) => {
       // ROTAS hub has StreamingErrorBoundary and handles live data
-      await page.goto('/rotas');
+      await page.goto('/stats');
       await page.waitForLoadState('networkidle');
       
       // Wait for streaming components to initialize
@@ -104,7 +104,7 @@ test.describe('Critical WebSocket Flows', () => {
 
   test.describe('Channel Subscription', () => {
     test('can subscribe to match channels', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(2000);
 
@@ -139,7 +139,7 @@ test.describe('Critical WebSocket Flows', () => {
     });
 
     test('channel list displays available channels', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Look for channel list or match list
@@ -169,7 +169,7 @@ test.describe('Critical WebSocket Flows', () => {
 
   test.describe('Auto-Reconnect', () => {
     test('WebSocket attempts reconnection after disconnect', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(3000);
 
@@ -211,7 +211,7 @@ test.describe('Critical WebSocket Flows', () => {
 
     test('connection maintains state across navigation', async ({ page }) => {
       // Start at SATOR hub
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(2000);
 
@@ -219,7 +219,7 @@ test.describe('Critical WebSocket Flows', () => {
       const initialStatus = await page.locator('[data-testid="ws-status"]').textContent().catch(() => 'unknown');
       
       // Navigate to another hub
-      await page.goto('/rotas');
+      await page.goto('/stats');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(2000);
 
@@ -239,7 +239,7 @@ test.describe('Critical WebSocket Flows', () => {
 
   test.describe('Error Handling', () => {
     test('WebSocket errors are handled gracefully', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Look for error boundaries or error messages
@@ -266,7 +266,7 @@ test.describe('Critical WebSocket Flows', () => {
     });
 
     test('retry button appears on connection failure', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(3000);
 
@@ -296,7 +296,7 @@ test.describe('Critical WebSocket Flows', () => {
 
   test.describe('Heartbeat', () => {
     test('WebSocket maintains connection with heartbeat', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
       
       // Wait for initial connection

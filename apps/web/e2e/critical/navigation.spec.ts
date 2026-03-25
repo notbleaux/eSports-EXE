@@ -9,10 +9,10 @@ import { test, expect } from '@playwright/test';
 test.describe('Critical Navigation Flows', () => {
   const hubs = [
     { path: '/', name: 'Landing' },
-    { path: '/sator', name: 'SATOR' },
-    { path: '/rotas', name: 'ROTAS' },
-    { path: '/arepo', name: 'AREPO' },
-    { path: '/opera', name: 'OPERA' },
+    { path: '/analytics', name: 'SATOR' },
+    { path: '/stats', name: 'ROTAS' },
+    { path: '/community', name: 'AREPO' },
+    { path: '/pro-scene', name: 'OPERA' },
     { path: '/tenet', name: 'TENET' },
   ];
 
@@ -79,10 +79,10 @@ test.describe('Critical Navigation Flows', () => {
 
     test('back button navigation works', async ({ page }) => {
       // Navigate to two hubs
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
       
-      await page.goto('/rotas');
+      await page.goto('/stats');
       await page.waitForLoadState('networkidle');
 
       // Go back
@@ -90,7 +90,7 @@ test.describe('Critical Navigation Flows', () => {
       await page.waitForLoadState('networkidle');
 
       // Should be back at sator
-      expect(page.url()).toContain('/sator');
+      expect(page.url()).toContain('/analytics');
     });
 
     test('404 page displays for unknown routes', async ({ page }) => {
@@ -136,7 +136,7 @@ test.describe('Critical Navigation Flows', () => {
       await page.waitForLoadState('networkidle');
 
       // Look for hub links
-      const hubLinks = page.locator('a[href*="/sator"], a[href*="/rotas"], a[href*="/tenet"]');
+      const hubLinks = page.locator('a[href*="/analytics"], a[href*="/stats"], a[href*="/tenet"]');
       const count = await hubLinks.count();
 
       if (count > 0) {

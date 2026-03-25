@@ -49,7 +49,7 @@ test.describe('Mobile Responsiveness', () => {
   })
 
   test('SATOR hub on mobile', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Content should fit within viewport
@@ -149,7 +149,7 @@ test.describe('Mobile Responsiveness', () => {
 
   test('tablets render correctly', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 })
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Content should be visible

@@ -44,14 +44,21 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 - Vercel config corrected (SPA routing + pnpm install)
 - packages/shared/apps/sator-web/ removed
 
-**Phase 4: Data Layer** — IN PROGRESS
+**Phase 4: Data Layer** — COMPLETE
 - ✓ SQLAlchemy models (Player, Team, Match)
 - ✓ Alembic migrations (001_initial_schema)
 - ✓ FastAPI routers (/v1/players, /v1/teams, /v1/matches)
 - ✓ TanStack Query hooks (usePlayers, useTeams, useMatches)
 - ✓ PandaScore API client
 - ✓ CORS + QueryClientProvider configured
-- → Next: DB query implementation, hub integration, data ingestion
+- ✓ Hub data integration: SATOR (usePlayers), OPERA (useMatches via ScheduleViewer)
+- ✓ Playwright E2E routes updated (124 route strings across 23 files)
+
+**Phase 5: Live Data + SimRating ML** — NEXT
+  → /valorant world route (replace placeholder)
+  → WebSocket live match updates
+  → SimRating ML engine (TF.js WASM)
+  → Player/Team profile pages
 
 ---
 

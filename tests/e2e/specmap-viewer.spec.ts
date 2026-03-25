@@ -25,8 +25,8 @@ const WS_BASE_URL = process.env.WS_URL || 'ws://localhost:8000';
 test.describe('SpecMapViewer', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to ROTAS hub
-    await page.goto('/rotas');
-    
+    await page.goto('/stats');
+
     // Wait for map to load with timeout
     await page.waitForSelector('[data-testid="specmap-canvas"]', { 
       timeout: 10000,
@@ -53,7 +53,7 @@ test.describe('SpecMapViewer', () => {
         { timeout: 5000 }
       );
       
-      await page.goto('/rotas');
+      await page.goto('/stats');
       const response = await responsePromise;
       
       expect(response.status()).toBe(200);
@@ -79,7 +79,7 @@ test.describe('SpecMapViewer', () => {
         route.fulfill({ status: 500, body: '{"detail": "Server error"}' })
       );
       
-      await page.goto('/rotas');
+      await page.goto('/stats');
       
       // Should show error state
       const errorMessage = page.locator('[data-testid="map-error"]');
@@ -408,7 +408,7 @@ test.describe('SpecMapViewer', () => {
     test('should load map data within 2 seconds', async ({ page }) => {
       const startTime = Date.now();
       
-      await page.goto('/rotas');
+      await page.goto('/stats');
       await page.waitForSelector('[data-testid="specmap-canvas"]', { 
         timeout: 2000,
         state: 'visible'
@@ -476,7 +476,7 @@ test.describe('SpecMapViewer', () => {
       // Emulate reduced motion
       await page.emulateMedia({ reducedMotion: 'reduce' });
       
-      await page.goto('/rotas');
+      await page.goto('/stats');
       
       // Animations should be disabled or instant
       const mode3D = page.locator('[data-testid="mode-3d"]');

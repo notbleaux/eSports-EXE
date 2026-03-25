@@ -30,7 +30,7 @@ test.describe('Critical Performance Tests', () => {
     });
 
     test('hub pages load within acceptable time', async ({ page }) => {
-      const hubs = ['/sator', '/rotas', '/arepo'];
+      const hubs = ['/analytics', '/stats', '/community'];
       
       for (const hub of hubs) {
         const startTime = Date.now();
@@ -56,7 +56,7 @@ test.describe('Critical Performance Tests', () => {
 
   test.describe('Lazy Loading', () => {
     test('heavy components are lazy loaded', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Check for loading indicators
@@ -148,7 +148,7 @@ test.describe('Critical Performance Tests', () => {
       await page.waitForLoadState('networkidle');
 
       // Navigate between hubs multiple times
-      const hubs = ['/sator', '/rotas', '/arepo', '/opera', '/tenet'];
+      const hubs = ['/analytics', '/stats', '/community', '/pro-scene', '/tenet'];
       
       for (let i = 0; i < 3; i++) {
         for (const hub of hubs) {

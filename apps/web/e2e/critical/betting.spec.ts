@@ -14,7 +14,7 @@ test.describe('Critical Betting Flows', () => {
   test.describe('Match Odds Display', () => {
     test('match page displays team odds', async ({ page }) => {
       // Navigate to a hub where match data might be displayed
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Look for odds display elements
@@ -58,7 +58,7 @@ test.describe('Critical Betting Flows', () => {
     });
 
     test('odds display updates when match data loads', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Wait for any loading states to complete
@@ -95,7 +95,7 @@ test.describe('Critical Betting Flows', () => {
     });
 
     test('betting interface elements are present', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Look for common betting UI elements
@@ -128,7 +128,7 @@ test.describe('Critical Betting Flows', () => {
 
   test.describe('Live Match Updates', () => {
     test('live indicator shows for active matches', async ({ page }) => {
-      await page.goto('/rotas'); // ROTAS hub handles streaming/live data
+      await page.goto('/stats'); // ROTAS hub handles streaming/live data
       await page.waitForLoadState('networkidle');
 
       // Look for live indicator
@@ -155,7 +155,7 @@ test.describe('Critical Betting Flows', () => {
     });
 
     test('match status updates are displayed', async ({ page }) => {
-      await page.goto('/rotas');
+      await page.goto('/stats');
       await page.waitForLoadState('networkidle');
 
       // Look for match status elements
@@ -189,7 +189,7 @@ test.describe('Critical Betting Flows', () => {
 
   test.describe('Odds Calculation', () => {
     test('odds values are within valid range', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Look for any numeric values that could be odds
@@ -230,7 +230,7 @@ test.describe('Critical Betting Flows', () => {
     });
 
     test('betting slip calculates potential returns', async ({ page }) => {
-      await page.goto('/sator');
+      await page.goto('/analytics');
       await page.waitForLoadState('networkidle');
 
       // Look for stake input and potential returns display

@@ -232,7 +232,7 @@ test.describe('Accessibility', () => {
   })
 
   test('aria-current on active navigation', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Look for current page indicator

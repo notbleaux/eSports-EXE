@@ -1,12 +1,31 @@
 // WORKERS DISABLED FOR VERCEL BUILD - stub accepts options but does nothing
-export const useAnalyticsWorker = (_options?: unknown) => ({ 
-  isReady: false, 
-  isLoading: false, 
-  error: new Error('Analytics Workers disabled'), 
+export const useAnalyticsWorker = (_options?: unknown) => ({
+  isReady: false,
+  isLoading: false,
+  isCalculating: false,
+  error: new Error('Analytics Workers disabled'),
   stats: { calculationsCompleted: 0, lastCalculationTime: 0 },
-  calculateSimRating: async () => { throw new Error('Workers disabled'); },
-  calculateRAR: async () => { throw new Error('Workers disabled'); },
-  aggregateData: async () => { throw new Error('Workers disabled'); },
+  calculateSimRating: async (_payload?: unknown) => { throw new Error('Workers disabled'); },
+  calculateRAR: async (_payload?: unknown) => { throw new Error('Workers disabled'); },
+  aggregateData: async (_payload?: unknown) => { throw new Error('Workers disabled'); },
+  terminate: () => {}
+});
+
+export const useBatchSimRatings = (_options?: unknown) => ({
+  isReady: false,
+  isCalculating: false,
+  error: new Error('Workers disabled'),
+  calculateBatch: async (_players?: unknown) => { throw new Error('Workers disabled'); },
+  terminate: () => {}
+});
+
+export const useRealtimeSimRating = (_options?: unknown) => ({
+  isReady: false,
+  isCalculating: false,
+  currentRating: null,
+  error: new Error('Workers disabled'),
+  start: () => {},
+  stop: () => {},
   terminate: () => {}
 });
 

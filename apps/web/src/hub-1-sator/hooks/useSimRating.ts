@@ -66,7 +66,7 @@ export function useSimRating(options: UseSimRatingOptions = {}): UseSimRatingRet
   const { enableCache = true, onError, onCalculated } = options
   
   const analytics = useAnalyticsWorker({
-    onError: (error) => {
+    onError: (error: Error) => {
       setError(error)
       onError?.(error)
     }

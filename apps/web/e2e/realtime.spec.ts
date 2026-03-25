@@ -17,7 +17,7 @@ test.describe('Real-time Updates', () => {
       wsUrls.push(ws.url())
     })
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
     
@@ -27,7 +27,7 @@ test.describe('Real-time Updates', () => {
   })
 
   test('live match updates received', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Look for live indicator
@@ -47,7 +47,7 @@ test.describe('Real-time Updates', () => {
   })
 
   test('reconnects on connection loss', async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Simulate offline
@@ -63,7 +63,7 @@ test.describe('Real-time Updates', () => {
   })
 
   test('subscription to match events', async ({ page }) => {
-    await page.goto('/opera')
+    await page.goto('/pro-scene')
     await page.waitForLoadState('networkidle')
     
     // Look for event stream or timeline
@@ -87,7 +87,7 @@ test.describe('Real-time Updates', () => {
       })
     })
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(3000)
     
@@ -106,7 +106,7 @@ test.describe('Real-time Updates', () => {
       }
     })
     
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
     
     // Page should still work with polling fallback
@@ -114,7 +114,7 @@ test.describe('Real-time Updates', () => {
   })
 
   test('multiple hub real-time consistency', async ({ page }) => {
-    const hubs = ['/sator', '/opera']
+    const hubs = ['/analytics', '/pro-scene']
     
     for (const hub of hubs) {
       await page.goto(hub)

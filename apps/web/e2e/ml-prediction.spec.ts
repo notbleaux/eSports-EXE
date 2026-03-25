@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test'
 test.describe('ML Prediction Flow', () => {
   
   test.beforeEach(async ({ page }) => {
-    await page.goto('/sator')
+    await page.goto('/analytics')
     await page.waitForLoadState('networkidle')
   })
 

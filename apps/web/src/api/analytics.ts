@@ -7,7 +7,8 @@
 import { ANALYTICS_ENDPOINTS, ANALYTICS_BATCH } from '../config/analytics'
 import { privacyService, scrubPii } from '../services/privacy'
 import { logger } from '../utils/logger'
-import type { PredictionEvent, ModelLoadEvent, MLError } from '../types/ml'
+// ML event types reserved for future analytics event tracking
+// import type { PredictionEvent, ModelLoadEvent, MLError } from '../types/ml'
 
 const analyticsLogger = logger.child('AnalyticsAPI')
 

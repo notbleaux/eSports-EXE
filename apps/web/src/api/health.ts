@@ -167,11 +167,11 @@ async function checkAPIHealth(): Promise<APIHealth> {
   
   try {
     // Try to fetch a lightweight endpoint
-    const response = await api.get('/v1/health/ping', { 
+    await api.get('/v1/health/ping', {
       timeout: 5000,
-      retry: false 
+      retry: false
     })
-    
+
     const latency = performance.now() - startTime
     
     return {

@@ -353,7 +353,7 @@ test.describe('UI Component Interactions', () => {
   });
 
   test('Loading spinner and skeleton states', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for loading indicators

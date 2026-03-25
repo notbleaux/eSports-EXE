@@ -12,7 +12,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('Subscribe to all channel types', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
@@ -50,7 +50,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('Unsubscribe from specific channel', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
@@ -83,7 +83,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('WebSocket message history', async ({ page }) => {
-    await page.goto('/rotas');
+    await page.goto('/stats');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(3000);
 
@@ -116,8 +116,8 @@ test.describe('Complete WebSocket Flows', () => {
     const page2 = await context.newPage();
     
     // Navigate both to SATOR hub
-    await page.goto('/sator');
-    await page2.goto('/sator');
+    await page.goto('/analytics');
+    await page2.goto('/analytics');
     
     await page.waitForLoadState('networkidle');
     await page2.waitForLoadState('networkidle');
@@ -139,7 +139,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('WebSocket error recovery', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
@@ -172,7 +172,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('WebSocket heartbeat maintenance', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
@@ -196,7 +196,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('Channel filtering and routing', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
@@ -224,7 +224,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('WebSocket authentication', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(3000);
 
@@ -245,7 +245,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('Message rate limiting display', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
 
     // Look for rate limit indicators
@@ -265,7 +265,7 @@ test.describe('Complete WebSocket Flows', () => {
   });
 
   test('Connection metrics display', async ({ page }) => {
-    await page.goto('/sator');
+    await page.goto('/analytics');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(3000);
 
