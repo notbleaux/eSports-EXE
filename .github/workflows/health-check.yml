@@ -1,0 +1,84 @@
+name: Platform Health Check
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # Every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check API health endpoint
+        id: api_health
+        env:
+          API_URL: ${{ secrets.API_URL }}
+        run: |
+          TARGET="${API_URL:-https://your-api.onrender.com}/health"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$TARGET" || echo "000")
+          echo "api_status=$STATUS" >> $GITHUB_OUTPUT
+          if [ "$STATUS" = "200" ]; then
+            echo "✓ API healthy (HTTP $STATUS)"
+          else
+            echo "✗ API unhealthy (HTTP $STATUS)"
+          fi
+
+      - name: Check frontend health
+        id: frontend_health
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 10 \
+            "https://your-app.vercel.app/" || echo "000")
+          echo "frontend_status=$STATUS" >> $GITHUB_OUTPUT
+          if [ "$STATUS" = "200" ]; then
+            echo "✓ Frontend healthy (HTTP $STATUS)"
+          else
+            echo "✗ Frontend unhealthy (HTTP $STATUS)"
+          fi
+
+      - name: Check Phase 7 files exist
+        run: |
+          files=(
+            "apps/web/src/hub-4-opera/components/TournamentBracket.tsx"
+            "apps/web/src/hub-4-opera/hooks/useTournamentData.ts"
+            "apps/web/src/hub-1-sator/components/PlayerCompare.tsx"
+            "apps/web/src/hub-1-sator/components/TopPerformers.tsx"
+            "apps/web/src/pages/NotFoundPage.tsx"
+            "apps/web/src/shared/api/hooks/useAuth.ts"
+            "packages/shared/api/routers/oauth.py"
+            ".lighthouserc.json"
+          )
+          all_ok=true
+          for f in "${files[@]}"; do
+            if [ -f "$f" ]; then
+              echo "✓ $f"
+            else
+              echo "✗ MISSING: $f"
+              all_ok=false
+            fi
+          done
+          $all_ok || exit 1
+
+      - name: Generate health report
+        if: always()
+        run: |
+          echo "## Platform Health Report" > health_report.md
+          echo "**Timestamp:** $(date -u +\"%Y-%m-%dT%H:%M:%SZ\")" >> health_report.md
+          echo "" >> health_report.md
+          echo "| Service | Status |" >> health_report.md
+          echo "|---------|--------|" >> health_report.md
+          echo "| API (Render) | ${{ steps.api_health.outputs.api_status }} |" >> health_report.md
+          echo "| Frontend (Vercel) | ${{ steps.frontend_health.outputs.frontend_status }} |" >> health_report.md
+          cat health_report.md
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Health check FAILED — review logs above"
+          # Discord webhook integration point (add DISCORD_WEBHOOK_URL secret)
+          # curl -H "Content-Type: application/json" \
+          #   -d "{\"content\":\"⚠️ NJZiteGeisTe health check failed at $(date -u)\"}" \
+          #   "$DISCORD_WEBHOOK_URL"

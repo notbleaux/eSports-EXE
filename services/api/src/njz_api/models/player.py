@@ -20,3 +20,4 @@ class Player(Base):
 
     team = relationship("Team", back_populates="players")
     stats = relationship("PlayerStats", back_populates="player", cascade="all, delete-orphan")
+    calculations = relationship("SimCalculation", back_populates="player", cascade="all, delete-orphan")

@@ -165,8 +165,8 @@ export interface HubCardProps {
 
 export const HubCard: React.FC<HubCardProps> = ({ hub, index }) => {
   const gridConfig = GRID_CONFIG[index];
-  const minHeight = hub.size === 'large' ? 'min-h-[400px]' : 
-                    hub.size === 'full' ? 'min-h-[280px]' : 'min-h-[320px]';
+  const minHeight = hub.size === 'large' ? 'min-h-[280px] md:min-h-[400px]' :
+                    hub.size === 'full' ? 'min-h-[200px] md:min-h-[280px]' : 'min-h-[240px] md:min-h-[320px]';
 
   // Determine text color based on background
   const isDarkBg = hub.color.includes('pure-black');
@@ -351,7 +351,7 @@ export const HubGridV2: React.FC<HubGridV2Props> = ({
   showHeader = true,
 }) => {
   return (
-    <section className={`py-24 md:py-32 bg-off-white ${className}`}>
+    <section className={`py-24 md:py-32 bg-off-white overflow-x-hidden ${className}`}>
       <div className="container mx-auto px-6 md:px-8">
         {/* Section Header */}
         {showHeader && <HubSectionHeader />}

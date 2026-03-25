@@ -13,7 +13,9 @@ import asyncio
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, WebSocket, Request
+from fastapi import FastAPI, WebSocket, Request, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from database import get_db
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -32,7 +34,7 @@ except ImportError:
     logging.warning("Prometheus client not installed. Metrics endpoint will be limited.")
 
 # Import v1 routers
-from routers import players, teams, matches, simrating, ws_matches, webhooks
+from routers import players, teams, matches, simrating, ws_matches, webhooks, oauth as v1_oauth
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -82,6 +84,29 @@ from axiom_esports_data.api.src.middleware.firewall import FirewallMiddleware
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Sentry — optional, activates when SENTRY_DSN env var is set
+try:
+    import sentry_sdk
+    from sentry_sdk.integrations.fastapi import FastApiIntegration
+    from sentry_sdk.integrations.starlette import StarletteIntegration
+
+    _sentry_dsn = os.getenv("SENTRY_DSN")
+    if _sentry_dsn:
+        sentry_sdk.init(
+            dsn=_sentry_dsn,
+            environment=os.getenv("APP_ENVIRONMENT", "production"),
+            traces_sample_rate=0.1,
+            integrations=[
+                StarletteIntegration(transaction_style="endpoint"),
+                FastApiIntegration(transaction_style="endpoint"),
+            ],
+        )
+        logger.info("Sentry initialized")
+    else:
+        logger.info("SENTRY_DSN not set — Sentry disabled")
+except ImportError:
+    logger.info("sentry-sdk not installed — Sentry disabled")
 
 # JWT Secret validation (P0 Security Fix)
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
@@ -451,6 +476,7 @@ app.include_router(matches.router, prefix="/v1")
 app.include_router(simrating.router, prefix="/v1")
 app.include_router(ws_matches.router)
 app.include_router(webhooks.router, prefix="/v1")
+app.include_router(v1_oauth.router, prefix="/v1")
 
 
 # WebSocket endpoints
@@ -500,6 +526,22 @@ async def unified_gateway(websocket: WebSocket):
         logger.info(f"WebSocket connection closed for {user_id}: {e}")
     finally:
         await gateway.disconnect(user_id)
+
+
+# Admin sync endpoint
+@app.post("/v1/admin/sync", tags=["admin"])
+async def trigger_sync(db: AsyncSession = Depends(get_db)):
+    """
+    Manually trigger a PandaScore player stats sync.
+    In production, protect this with admin authentication.
+    """
+    from services.api.src.njz_api.clients.pandascore import PandaScoreClient
+    from services.api.src.njz_api.scripts.sync_pandascore import sync_player_stats
+
+    api_key = os.getenv("PANDASCORE_API_KEY", "")
+    client = PandaScoreClient(api_key=api_key)
+    await sync_player_stats(client, db)
+    return {"status": "ok", "message": "Player stats sync complete"}
 
 
 # Root endpoint

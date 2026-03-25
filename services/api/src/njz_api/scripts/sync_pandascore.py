@@ -15,10 +15,13 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
+from sqlalchemy import select
+
 from njz_api.clients.pandascore import PandaScoreClient
 from njz_api.models.team import Team
 from njz_api.models.player import Player
 from njz_api.models.match import Match
+from njz_api.models.player_stats import PlayerStats
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
 PANDASCORE_API_KEY = os.environ.get("PANDASCORE_API_KEY", "")
@@ -53,6 +56,92 @@ async def sync_teams(client: PandaScoreClient, session: AsyncSession) -> None:
 
     await session.commit()
     print("Teams synced.")
+
+
+async def sync_players(client: PandaScoreClient, session: AsyncSession) -> None:
+    """Fetch players from PandaScore and upsert to DB."""
+    for game in ["valorant", "cs2"]:
+        if game == "valorant":
+            players = await client.get_valorant_players()
+        else:
+            players = await client.get_cs2_players()
+
+        for p in players:
+            stmt = pg_insert(Player).values(
+                pandascore_id=p.get("id"),
+                name=p.get("name", ""),
+                slug=p.get("slug", ""),
+                nationality=p.get("nationality"),
+                game=game,
+            ).on_conflict_do_update(
+                index_elements=["pandascore_id"],
+                set_=dict(
+                    name=p.get("name", ""),
+                    slug=p.get("slug", ""),
+                    nationality=p.get("nationality"),
+                ),
+            )
+            await session.execute(stmt)
+
+    await session.commit()
+    print("Players synced.")
+
+
+async def sync_player_stats(client: PandaScoreClient, session: AsyncSession) -> None:
+    """For each player in DB, fetch recent stats from PandaScore and insert into player_stats."""
+    import httpx
+
+    result = await session.execute(select(Player))
+    players = result.scalars().all()
+
+    for player in players:
+        raw_stats = None
+        try:
+            fetcher = (
+                client.get_valorant_player_stats
+                if player.game == "valorant"
+                else client.get_cs2_player_stats
+            )
+            try:
+                raw_stats = await fetcher(player.pandascore_id)
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 429:
+                    # Rate limited — wait 2s and retry once
+                    await asyncio.sleep(2)
+                    raw_stats = await fetcher(player.pandascore_id)
+                elif e.response.status_code == 404:
+                    # Player not found in PandaScore — skip silently
+                    continue
+                else:
+                    raise
+
+            for s in (raw_stats or [])[:10]:  # Last 10 matches per player
+                kills = s.get("kills", 0) or 0
+                deaths = s.get("deaths", 1) or 1
+                assists = s.get("assists", 0) or 0
+                try:
+                    stmt = pg_insert(PlayerStats).values(
+                        player_id=player.id,
+                        game=player.game,
+                        kills=kills,
+                        deaths=deaths,
+                        assists=assists,
+                        headshot_pct=float(s.get("headshots_percentage", 0) or 0),
+                        kd_ratio=round(kills / max(deaths, 1), 2),
+                        acs=float(s.get("average_combat_score", 0) or 0),
+                    ).on_conflict_do_nothing()
+                    await session.execute(stmt)
+                except Exception as db_err:
+                    await session.rollback()
+                    print(f"  DB insert failed for player {player.id}: {db_err}")
+                    break
+
+        except Exception as e:
+            print(f"Stats fetch failed for player {player.id} ({player.slug}): {e}")
+            continue
+
+    await session.commit()
+    print("Player stats synced.")
 
 
 async def sync_matches(client: PandaScoreClient, session: AsyncSession) -> None:
@@ -97,7 +186,9 @@ async def main() -> None:
     client = PandaScoreClient(api_key=PANDASCORE_API_KEY)
     async with AsyncSessionLocal() as session:
         await sync_teams(client, session)
+        await sync_players(client, session)
         await sync_matches(client, session)
+        await sync_player_stats(client, session)
 
     await engine.dispose()
     print("Sync complete.")

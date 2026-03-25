@@ -1,7 +1,7 @@
 {
-  "name": "4NJZ4 TENET",
-  "short_name": "4NJZ4",
-  "description": "Advanced esports analytics and simulation platform - SATOR Analytics, ROTAS Simulation, and tactical FPS insights",
+  "name": "NJZiteGeisTe",
+  "short_name": "NJZ",
+  "description": "Community eSports analytics and simulation platform for Valorant and CS2",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
@@ -101,10 +101,10 @@
       ]
     },
     {
-      "name": "ROTAS Simulation",
-      "short_name": "Simulation",
-      "description": "Run match simulations",
-      "url": "/rotas",
+      "name": "ROTAS Stats",
+      "short_name": "Stats",
+      "description": "Stats reference and leaderboards",
+      "url": "/stats",
       "icons": [
         { "src": "/icons/icon-192x192.png", "sizes": "192x192" },
         { "src": "/icons/icon-96x96.png", "sizes": "96x96" }
@@ -114,7 +114,7 @@
       "name": "Player Search",
       "short_name": "Players",
       "description": "Search player statistics",
-      "url": "/sator/players",
+      "url": "/analytics",
       "icons": [
         { "src": "/icons/icon-192x192.png", "sizes": "192x192" },
         { "src": "/icons/icon-96x96.png", "sizes": "96x96" }
@@ -131,7 +131,7 @@
   },
   "protocol_handlers": [
     {
-      "protocol": "web+4njz4",
+      "protocol": "web+njzitegeiste",
       "url": "/%s"
     }
   ],

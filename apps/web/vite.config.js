@@ -59,7 +59,7 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 500,
     minify: 'esbuild',
     rollupOptions: {
       output: {
@@ -82,6 +82,9 @@ export default defineConfig({
           }
           if (id.includes('node_modules/recharts') || id.includes('node_modules/d3')) {
             return 'vendor-charts'
+          }
+          if (id.includes('node_modules/gsap')) {
+            return 'vendor-gsap'
           }
         },
         entryFileNames: 'js/[name]-[hash].js',

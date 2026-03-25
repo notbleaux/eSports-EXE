@@ -491,6 +491,6 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 
 ---
 
-**Libre-X-eSport 4NJZ4 TENET Platform** — *4eva and Nvr Die*
+**NJZiteGeisTe Platform** — Community eSports Analytics for Valorant & CS2
 
 *Last Updated: March 15, 2026*

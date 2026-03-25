@@ -3,7 +3,7 @@
 **Purpose:** This file provides essential context for AI coding agents working on the NJZiteGeisTe Platform project.
 **Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
 **Repository:** https://github.com/notbleaux/eSports-EXE  
-**Last Updated:** 2026-03-19
+**Last Updated:** 2026-03-25
 
 ---
 
@@ -57,12 +57,41 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
   ✓ E2E routes synced (124 updates across 23 test files)
 
 **Phase 5: SimRating ML + Live Data** — IN PROGRESS
-  → SimRating v2: real stats-based calculation (replace heuristic)
-  → PandaScore webhook integration (push vs pull)
-  → Player stats ingestion (K/D/A, win rate, round impact)
-  → AREPO community features (forums, fan follows)
-  → PWA offline support (service worker)
-  → Performance: bundle < 500KB gzipped, LCP < 2.5s
+  ✓ player_stats table (migration 002_player_stats)
+  ✓ PlayerStats SQLAlchemy model (services/api/src/njz_api/models/player_stats.py)
+  ✓ PandaScore stats fetcher (pandascore.py + sync_pandascore.py — teams, players, matches, stats)
+  ✓ SimRating v2 (real K/D/A + ACS + headshot% formula with v1 fallback)
+  ✓ PandaScore webhook receiver (/v1/webhooks/pandascore — HMAC verified)
+  ✓ WebSocket live match broadcasting (ws_matches.py + webhook wired via push_match_event)
+  ✓ sim_calculations audit table (migration 003, SimCalculation model)
+  ✓ AREPO hub refactored as Cross-Reference Engine
+  ✓ Player profile page — real SimRating v2 score + component stats
+  ✓ Team profile page — real roster + recent matches
+  ✓ ROTAS leaderboard — v2 scores, grade badges (S/A/B/C/D/F), source tags, game filter
+  ✓ PWA manifest + service worker (sw.ts v3, manifest.json)
+  ✓ Vite bundle: gsap chunk added, chunkSizeWarningLimit → 500
+  ✓ Performance targets documented (docs/PERFORMANCE_TARGETS.md)
+  ✓ /v1/admin/sync endpoint for manual stats refresh
+
+**Phase 6** — COMPLETE (agents 81-88)
+
+**Phase 7: Bracket, Mobile, CI, Auth, Compare, Errors, Health** — IN PROGRESS
+  ✓ OPERA tournament bracket (TournamentBracket.tsx, 8-team single-elim, useTournamentData.ts)
+  ✓ Mobile responsive audit (HubGridV2 overflow, ROTAS table scroll, LandingPage hamburger nav, docs/MOBILE_AUDIT.md)
+  ✓ Lighthouse CI (.lighthouserc.json, ci.yml lighthouse job, docs/PERFORMANCE_TARGETS.md v2)
+  ✓ OAuth Google/Discord (packages/shared/api/routers/oauth.py, useAuth.ts hook, .env.example)
+  ✓ SATOR PlayerCompare + TopPerformers (3-player compare panel, top-5 by game)
+  ✓ Error boundaries + 404 (NotFoundPage.tsx, HubRoute wrapper in App.tsx with AppErrorBoundary)
+  ✓ Health check cron (.github/workflows/health-check.yml — every 30 min)
+  ✓ Sentry integration (shared/lib/sentry.ts, main.jsx initSentry(), HubErrorBoundary captureException, API sentry_sdk.init)
+
+  **Phase 8 (Next):**
+  → Sentry error tracking (initSentry in main.tsx + backend sentry_sdk.init)
+  → OAuth full token exchange (replace stub in routers/oauth.py)
+  → TensorFlow.js WASM SimRating ML model
+  → Supabase real-time subscriptions
+  → E2E Playwright coverage for /player/:slug, /team/:slug, bracket tab
+  → Load testing (Locust)
 
 ---
 

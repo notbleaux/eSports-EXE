@@ -4,6 +4,7 @@
  * [Ver002.000] - Consolidated: Merged legacy ellipse visualization and analytics
  */
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSimRatingLeaderboard } from '@/shared/api/hooks';
 import { 
@@ -103,19 +104,25 @@ const mockData = [
   { metric: 'Talent Potential', value: 94.2, trend: '+3.8%', status: 'good' }
 ];
 
+const GRADE_COLOR = {
+  S: '#ffd700', A: '#22c55e', B: '#3b82f6',
+  C: '#f59e0b', D: '#ef4444', F: '#6b7280',
+};
+
 function RotasHubContent() {
   const [activeLayer, setActiveLayer] = useState('surface');
   const [activeLayers, setActiveLayers] = useState(['persona']);
   const [selectedMetric, setSelectedMetric] = useState(null);
+  const [lbGame, setLbGame] = useState(undefined); // 'valorant' | 'cs2' | undefined
   const { addNotification } = useNJZStore();
   const { state, setState } = useHubState('rotas');
-  
+
   // Fetch ROTAS data
   const { analytics, predictions, isLoading, error } = useRotasData();
 
   // SimRating leaderboard
-  const { data: lbData, isLoading: lbLoading } = useSimRatingLeaderboard();
-  const topPlayers = lbData?.leaderboard?.slice(0, 5) ?? [];
+  const { data: lbData, isLoading: lbLoading } = useSimRatingLeaderboard(lbGame);
+  const topPlayers = lbData?.leaderboard?.slice(0, 10) ?? [];
 
   // Layer toggle for Jungian system
   const toggleLayer = (layerId) => {
@@ -790,18 +797,60 @@ function RotasHubContent() {
           </GlassCard>
 
           {/* SimRating Leaderboard */}
-          <div className="simrating-leaderboard mt-4 p-4 bg-gray-800 rounded-lg">
-            <h3 className="text-sm font-semibold text-purple-400 mb-2">SimRating Top 5</h3>
+          <div className="simrating-leaderboard mt-4 p-4 bg-gray-800 rounded-lg overflow-x-auto">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-purple-400">SimRating Top 10</h3>
+              <div className="flex gap-1">
+                {[undefined, 'valorant', 'cs2'].map((g) => (
+                  <button
+                    key={String(g)}
+                    onClick={() => setLbGame(g)}
+                    className={`text-xs px-2 py-1 rounded transition-colors ${
+                      lbGame === g
+                        ? 'bg-purple-700 text-white'
+                        : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                    }`}
+                  >
+                    {g === undefined ? 'All' : g === 'valorant' ? 'VCT' : 'CS2'}
+                  </button>
+                ))}
+              </div>
+            </div>
             {lbLoading ? (
               <p className="text-gray-500 text-xs">Loading...</p>
             ) : topPlayers.length === 0 ? (
               <p className="text-gray-500 text-xs">No data yet — run sync_pandascore.py to seed.</p>
             ) : (
               <div className="space-y-1">
-                {topPlayers.map((p, i) => (
-                  <div key={p.player_id} className="flex justify-between text-xs text-gray-300">
-                    <span>#{i + 1} {p.player_name}</span>
-                    <span className="text-purple-300">{p.simrating} <span className="text-yellow-400">({p.grade})</span></span>
+                {topPlayers.map((p) => (
+                  <div key={p.player_id} className="flex items-center justify-between text-xs text-gray-300 py-1 border-b border-gray-700 last:border-0">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-gray-500 w-5 shrink-0">#{p.rank}</span>
+                      <Link
+                        to={`/player/${p.player_slug}`}
+                        className="hover:text-purple-300 transition-colors truncate"
+                      >
+                        {p.player_name}
+                      </Link>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 ml-2">
+                      <span
+                        className="font-bold text-xs w-4 text-center"
+                        style={{ color: GRADE_COLOR[p.grade] ?? '#6b7280' }}
+                      >
+                        {p.grade}
+                      </span>
+                      <span className="text-purple-300 font-mono">{p.simrating?.toFixed(1)}</span>
+                      <span
+                        className="text-xs px-1 rounded"
+                        style={{
+                          backgroundColor: p.source === 'v2_stats' ? 'rgba(34,197,94,0.15)' : 'rgba(107,114,128,0.15)',
+                          color: p.source === 'v2_stats' ? '#22c55e' : '#6b7280',
+                        }}
+                      >
+                        {p.source === 'v2_stats' ? 'v2' : 'est.'}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>

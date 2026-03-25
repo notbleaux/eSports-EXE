@@ -12,7 +12,7 @@ test.describe('Critical User Paths', () => {
   test('user journey: Landing → SATOR Hub → Prediction → Result', async ({ page }) => {
     // Step 1: Landing page loads
     await page.goto('/')
-    await expect(page).toHaveTitle(/4NJZ4|TENET|Libre-X/)
+    await expect(page).toHaveTitle(/NJZiteGeisTe|TENET/)
     
     // Step 2: Navigate to SATOR Hub
     const satorLink = page.getByRole('link', { name: /SATOR|Observatory/i }).first()
@@ -71,14 +71,14 @@ test.describe('Critical User Paths', () => {
     await page.waitForLoadState('networkidle')
     
     // Wait for initial content to load
-    await expect(page.getByText(/4NJZ4|TENET|SATOR|Platform/i).first()).toBeVisible()
+    await expect(page.getByText(/NJZiteGeisTe|TENET|SATOR|Platform/i).first()).toBeVisible()
     
     // Simulate offline by blocking network
     await page.context().setOffline(true)
     
     // In offline mode, the existing page should still show cached content
     // (Service worker caches the page on first load)
-    const content = page.getByText(/Observatory|SATOR|Offline|Cached|4NJZ4/i).first()
+    const content = page.getByText(/Observatory|SATOR|Offline|Cached|NJZiteGeisTe/i).first()
     await expect(content).toBeVisible({ timeout: 5000 })
     
     // Restore network

@@ -308,7 +308,7 @@ export interface CircuitStandingsProps {
 }
 
 /** Tab type for main interface */
-export type HubTab = 'overview' | 'schedule' | 'standings' | 'patches' | 'fantasy';
+export type HubTab = 'overview' | 'schedule' | 'standings' | 'patches' | 'fantasy' | 'bracket';
 
 // ============================================================================
 // LEGACY TYPES (DEPRECATED - kept for backward compatibility)

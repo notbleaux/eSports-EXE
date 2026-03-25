@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App.jsx'
 import './index.css'
+import { initSentry } from './shared/lib/sentry'
+
+// Initialize Sentry before app mounts (no-op if VITE_SENTRY_DSN not set)
+initSentry();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

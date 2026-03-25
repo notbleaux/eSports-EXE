@@ -1,9 +1,13 @@
 """WebSocket endpoints for live match updates."""
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from datetime import datetime
+from collections import deque
 import asyncio
 
 router = APIRouter(prefix="/ws", tags=["websocket"])
+
+# In-memory buffer for recent live match events (last 50)
+_live_event_buffer: deque = deque(maxlen=50)
 
 
 class MatchConnectionManager:
@@ -29,11 +33,28 @@ class MatchConnectionManager:
 manager = MatchConnectionManager()
 
 
+async def push_match_event(event: dict) -> None:
+    """
+    Called by the webhook router when a PandaScore event arrives.
+    Buffers the event and broadcasts to all connected WebSocket clients.
+    """
+    _live_event_buffer.append(event)
+    message = {
+        "type": "match_event",
+        "event": event.get("event_type"),
+        "match_id": event.get("match_id"),
+        "data": event,
+        "timestamp": event.get("received_at"),
+    }
+    await manager.broadcast(message)
+
+
 @router.websocket("/matches/live")
 async def live_matches(websocket: WebSocket) -> None:
     """
-    WebSocket for live match feed. Sends heartbeat every 30s.
-    Phase 5 will push PandaScore webhook events here.
+    WebSocket for live match feed.
+    Sends heartbeat every 30s with buffered events.
+    Pushes PandaScore webhook events to all clients via push_match_event().
     """
     await manager.connect(websocket)
     try:
@@ -41,7 +62,8 @@ async def live_matches(websocket: WebSocket) -> None:
             await websocket.send_json({
                 "type": "heartbeat",
                 "timestamp": datetime.utcnow().isoformat(),
-                "live_matches": [],
+                "live_matches": list(_live_event_buffer)[-10:],
+                "connected_clients": len(manager.active),
             })
             await asyncio.sleep(30)
     except WebSocketDisconnect:

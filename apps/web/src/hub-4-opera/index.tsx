@@ -11,12 +11,12 @@ import {
   FileText,
   BarChart3,
   MapPin,
-  Filter,
   RefreshCw,
   Tv,
   Target,
   Globe,
   Swords,
+  GitBranch,
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
@@ -29,6 +29,8 @@ import ScheduleViewer from './components/ScheduleViewer';
 import PatchNotesReader from './components/PatchNotesReader';
 import CircuitStandings from './components/CircuitStandings';
 import { FantasyContainer } from './components/Fantasy';
+import TournamentBracket from './components/TournamentBracket';
+import { useTournamentData } from './hooks/useTournamentData';
 import type { 
   Tournament, 
   TournamentFilters, 
@@ -50,6 +52,7 @@ const HUB_CONFIG = {
 // Tab configuration
 const TABS: { id: HubTab; label: string; icon: typeof Trophy }[] = [
   { id: 'overview', label: 'Overview', icon: Trophy },
+  { id: 'bracket', label: 'Bracket', icon: GitBranch },
   { id: 'schedule', label: 'Schedule', icon: Calendar },
   { id: 'standings', label: 'Standings', icon: BarChart3 },
   { id: 'patches', label: 'Patches', icon: FileText },
@@ -84,12 +87,14 @@ function OperaHubContent(): JSX.Element {
     setSelectedPatch,
     standings,
     loading,
-    error,
+    error: _error,
     refreshTournaments,
     refreshPatches,
     refreshStandings,
     theme,
   } = useOperaData();
+
+  const { bracket } = useTournamentData(selectedTournament, schedules);
 
   // Handle tournament selection
   const handleSelectTournament = (tournament: Tournament) => {
@@ -97,9 +102,9 @@ function OperaHubContent(): JSX.Element {
     setState({ selectedTournament: tournament.tournament_id });
     addNotification(`Selected ${tournament.name}`, 'info');
     
-    // Switch to schedule tab when selecting a tournament
+    // Switch to bracket tab when selecting a tournament from overview
     if (activeTab === 'overview') {
-      setActiveTab('schedule');
+      setActiveTab('bracket');
     }
   };
 
@@ -385,6 +390,24 @@ function OperaHubContent(): JSX.Element {
                       </div>
                     </div>
                   </GlassCard>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'bracket' && (
+              <motion.div
+                key="bracket"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                {bracket ? (
+                  <TournamentBracket bracket={bracket} />
+                ) : (
+                  <div className="p-8 text-center opacity-60 text-sm">
+                    Select a tournament from the sidebar to view its bracket.
+                  </div>
                 )}
               </motion.div>
             )}

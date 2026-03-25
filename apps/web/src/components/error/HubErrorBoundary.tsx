@@ -9,6 +9,7 @@ import React, { Component, type ReactNode } from 'react'
 import { RefreshCw, Layers } from 'lucide-react'
 import { logger } from '../../utils/logger'
 import { HubErrorFallback } from './HubErrorFallback'
+import { captureException } from '@/shared/lib/sentry'
 
 interface Props {
   children: ReactNode
@@ -116,6 +117,12 @@ export class HubErrorBoundary extends Component<Props, State> {
     // Report to parent if callback provided
     this.props.onError?.(error, errorInfo, hubName)
     
+    // Report to Sentry (no-op if not configured)
+    captureException(error, {
+      hub: hubName,
+      componentStack: errorInfo.componentStack ?? '',
+    })
+
     // Send to analytics in production
     if (process.env.NODE_ENV === 'production') {
       this.reportToAnalytics(error, errorInfo)

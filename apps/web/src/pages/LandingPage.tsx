@@ -13,7 +13,7 @@
  * - Footer
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { HubGridV2 } from '@/components/hubs/HubGridV2';
 import { MascotShowcase } from '@/components/mascots/MascotShowcase';
 
@@ -42,7 +42,17 @@ const addRotationKeyframe = () => {
 // Component
 // ============================================================================
 
+const NAV_LINKS = [
+  { label: 'Analytics', href: '/analytics' },
+  { label: 'Stats', href: '/stats' },
+  { label: 'Community', href: '/community' },
+  { label: 'Pro Scene', href: '/pro-scene' },
+  { label: 'Hubs', href: '/hubs' },
+];
+
 export function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     addRotationKeyframe();
   }, []);
@@ -59,17 +69,13 @@ export function LandingPage() {
         </div>
         
         {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 p-6 mix-blend-difference">
+        <nav className="fixed top-0 left-0 right-0 z-50 p-4 md:p-6 mix-blend-difference">
           <div className="container mx-auto flex justify-between items-center text-white">
             <span className="text-2xl font-display font-bold tracking-tight">NJZiteGeisTe</span>
-            <div className="flex gap-8">
-              {[
-                { label: 'Analytics', href: '/analytics' },
-                { label: 'Stats', href: '/stats' },
-                { label: 'Community', href: '/community' },
-                { label: 'Pro Scene', href: '/pro-scene' },
-                { label: 'Hubs', href: '/hubs' },
-              ].map(link => (
+
+            {/* Desktop links */}
+            <div className="hidden md:flex gap-8">
+              {NAV_LINKS.map(link => (
                 <a
                   key={link.label}
                   href={link.href}
@@ -79,7 +85,34 @@ export function LandingPage() {
                 </a>
               ))}
             </div>
+
+            {/* Hamburger button (mobile only) */}
+            <button
+              className="md:hidden flex flex-col gap-1.5 p-1"
+              onClick={() => setMenuOpen(prev => !prev)}
+              aria-label="Toggle menu"
+            >
+              <span className={`block w-6 h-0.5 bg-white transition-transform duration-200 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-opacity duration-200 ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-transform duration-200 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            </button>
           </div>
+
+          {/* Mobile dropdown */}
+          {menuOpen && (
+            <div className="md:hidden mt-2 bg-black/90 rounded-lg p-4 space-y-3 container mx-auto">
+              {NAV_LINKS.map(link => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="block text-sm uppercase tracking-widest text-white hover:underline font-semibold py-1"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          )}
         </nav>
         
         {/* Main content */}
@@ -130,7 +163,7 @@ export function LandingPage() {
         {/* Hub preview cards at bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <div className="container mx-auto">
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
               {[
                 { name: 'SATOR', color: 'bg-kunst-green', stat: '2.4M', href: '/analytics' },
                 { name: 'ROTAS', color: 'bg-black text-white', stat: '99.9%', href: '/stats' },

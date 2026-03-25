@@ -53,7 +53,7 @@ jobs:
       - name: Commit Health Report
         run: |
           git config user.name "Agent Monitor"
-          git config user.email "monitor@libre-x.dev"
+          git config user.email "monitor@njzitegeiste.dev"
           git add .job-board/SPAWN_DASHBOARD.md || true
           git add health_report.md || true
           git commit -m "[AUTO] Health check - $(date -u +"%H:%M")" || echo "No changes"

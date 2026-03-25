@@ -100,6 +100,26 @@ class PandaScoreClient:
         endpoint = "/valorant/teams" if game == "valorant" else "/csgo/teams"
         return await self._get(f"{endpoint}/{team_id}")
 
+    # ── Player Stats ──────────────────────────────────────────
+
+    async def get_valorant_player_stats(
+        self, player_id: int, page: int = 1, per_page: int = 50
+    ) -> list:
+        """Fetch recent per-match stats for a Valorant player."""
+        return await self._get(
+            f"/valorant/players/{player_id}/stats",
+            params={"page": page, "per_page": per_page},
+        )
+
+    async def get_cs2_player_stats(
+        self, player_id: int, page: int = 1, per_page: int = 50
+    ) -> list:
+        """Fetch recent per-match stats for a CS2 player."""
+        return await self._get(
+            f"/csgo/players/{player_id}/stats",
+            params={"page": page, "per_page": per_page},
+        )
+
 
 # Module-level singleton — use this in route handlers
 pandascore = PandaScoreClient()

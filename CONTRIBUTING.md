@@ -1,9 +1,9 @@
 [Ver002.000]
 
 # 🤝 CONTRIBUTING.md
-## How to Contribute to Libre-X-eSport 4NJZ4 TENET Platform
+## How to Contribute to NJZiteGeisTe Platform
 
-**Project:** Libre-X-eSport 4NJZ4 TENET Platform (formerly SATOR-eXe-ROTAS / NJZ Platform)  
+**Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform)  
 **Repository:** https://github.com/notbleaux/eSports-EXE
 
 ---

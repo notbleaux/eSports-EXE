@@ -37,6 +37,8 @@ import { useNJZStore, useHubState } from '@/shared/store/njzStore';
 import { getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
 import { useSimRating } from './hooks/useSimRating';
 import { usePlayers } from '@/shared/api/hooks';
+import TopPerformers from './components/TopPerformers';
+import PlayerCompare from './components/PlayerCompare';
 
 const HUB_CONFIG = {
   name: 'SATOR',
@@ -785,6 +787,16 @@ function SatorHubContent() {
               <div>Compression: Zstd</div>
               <div>Hash: SHA-256</div>
             </div>
+          </GlassCard>
+
+          {/* Top Performers */}
+          <GlassCard hoverGlow={HUB_CONFIG.glow}>
+            <TopPerformers />
+          </GlassCard>
+
+          {/* Player Compare */}
+          <GlassCard hoverGlow={HUB_CONFIG.glow}>
+            <PlayerCompare />
           </GlassCard>
         </motion.div>
       </div>

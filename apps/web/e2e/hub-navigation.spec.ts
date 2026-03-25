@@ -1,6 +1,6 @@
 /**
  * Hub Navigation E2E Tests
- * Tests navigation between all 4 hubs of the 4NJZ4 TENET Platform
+ * Tests navigation between all 5 hubs of the NJZiteGeisTe Platform
  * 
  * [Ver001.000]
  */
