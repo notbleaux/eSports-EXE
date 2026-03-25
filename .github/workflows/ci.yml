@@ -27,6 +27,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.0
+
+      - name: Verify lockfile
+        run: pnpm install --frozen-lockfile
+        # Required: ensures lockfile matches package.json
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -129,29 +138,43 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.0
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Install dependencies
         run: |
           cd apps/web
-          npm install
+          pnpm install --frozen-lockfile
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Type check
         run: |
           cd apps/web
-          npm run typecheck 2>/dev/null || echo "Type check skipped"
+          pnpm run typecheck
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Build
         run: |
           cd apps/web
-          npm run build 2>/dev/null || echo "Build skipped"
+          pnpm run build
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "apps/web/dist" ]; then
+            echo "Build output missing — dist/ not found"
+            exit 1
+          fi
+          echo "Build output verified at apps/web/dist/"
+          ls apps/web/dist/ | head -10
 
   # ==========================================================================
   # Job 4: Repository Health Check

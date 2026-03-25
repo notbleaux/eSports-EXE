@@ -1,15 +1,5 @@
 {
-  "version": 2,
-  "outputDirectory": "dist",
-  "framework": null,
-  "buildCommand": "cd ../.. && turbo run build --filter=@esports-exe/web",
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

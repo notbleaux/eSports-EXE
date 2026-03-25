@@ -1,125 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "name": "libre-x-4njz4-tenet-platform",
-  "alias": ["sator-platform.vercel.app"],
+  "name": "njzitegeist-platform",
   "github": {
     "enabled": true,
     "autoAlias": true
   },
-  "buildCommand": "cd apps/web && npm run build",
+  "buildCommand": "turbo run build --filter=@njzitegeist/web",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install",
-  "framework": "vite",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": null,
   "rewrites": [
-    {
-      "source": "/assets/:path*",
-      "destination": "/assets/:path*"
-    },
-    {
-      "source": "/js/:path*",
-      "destination": "/js/:path*"
-    },
-    {
-      "source": "/css/:path*",
-      "destination": "/css/:path*"
-    },
-    {
-      "source": "/icons/:path*",
-      "destination": "/icons/:path*"
-    },
-    {
-      "source": "/mascots/:path*",
-      "destination": "/mascots/:path*"
-    },
-    {
-      "source": "/:path*.js",
-      "destination": "/:path*.js"
-    },
-    {
-      "source": "/:path*.wasm",
-      "destination": "/:path*.wasm"
-    },
-    {
-      "source": "/:path*.css",
-      "destination": "/:path*.css"
-    },
-    {
-      "source": "/:path*.png",
-      "destination": "/:path*.png"
-    },
-    {
-      "source": "/:path*.jpg",
-      "destination": "/:path*.jpg"
-    },
-    {
-      "source": "/:path*.jpeg",
-      "destination": "/:path*.jpeg"
-    },
-    {
-      "source": "/:path*.svg",
-      "destination": "/:path*.svg"
-    },
-    {
-      "source": "/:path*.gif",
-      "destination": "/:path*.gif"
-    },
-    {
-      "source": "/:path*.webp",
-      "destination": "/:path*.webp"
-    },
-    {
-      "source": "/:path*.ico",
-      "destination": "/:path*.ico"
-    },
-    {
-      "source": "/:path*.json",
-      "destination": "/:path*.json"
-    },
-    {
-      "source": "/:path*.woff",
-      "destination": "/:path*.woff"
-    },
-    {
-      "source": "/:path*.woff2",
-      "destination": "/:path*.woff2"
-    },
-    {
-      "source": "/:path*.ttf",
-      "destination": "/:path*.ttf"
-    },
-    {
-      "source": "/:path*.otf",
-      "destination": "/:path*.otf"
-    },
-    {
-      "source": "/:path*.eot",
-      "destination": "/:path*.eot"
-    },
-    {
-      "source": "/sator/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/rotas/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/arepo/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/opera/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/tenet/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/((?!api|assets|.*\\.js$|.*\\.wasm$|.*\\.css$|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.gif$|.*\\.webp$|.*\\.ico$|.*\\.json$|.*\\.woff$|.*\\.woff2$|.*\\.ttf$|.*\\.otf$|.*\\.eot$).+)",
-      "destination": "/index.html"
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "redirects": [
     {

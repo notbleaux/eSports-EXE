@@ -1,6 +1,6 @@
 [Ver002.000]
 
-# Architecture Documentation v2 — 4NJZ4 TENET Platform
+# Architecture Documentation v2 — NJZiteGeisTe Platform
 
 **Version:** 2.1.0  
 **Last Updated:** 2026-03-15  
@@ -23,7 +23,7 @@
 
 ## System Overview
 
-The 4NJZ4 TENET Platform is a comprehensive esports analytics and simulation system built on a modern, scalable architecture.
+The NJZiteGeisTe Platform is a comprehensive esports analytics and simulation system built on a modern, scalable architecture.
 
 ### Key Components
 

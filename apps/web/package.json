@@ -21,7 +21,7 @@
     "test:visual:bunny": "playwright test --config=playwright-visual.config.ts -g 'NJ Bunny'",
     "test:visual:baseline:generate": "node tests/visual/scripts/generate-baselines.js",
     "analyze:bundle": "node scripts/analyze-bundle.js",
-    "build:analyze": "npm run build && npm run analyze:bundle"
+    "build:analyze": "pnpm run build && pnpm run analyze:bundle"
   },
   "dependencies": {
     "@gsap/react": "^2.0.0",

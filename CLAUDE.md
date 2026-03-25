@@ -29,17 +29,17 @@ User-facing route names:
 ### Root Monorepo
 
 ```bash
-npm install                    # Install all workspace dependencies
-npm run build                  # Build all workspaces (Turbo)
-npm run typecheck              # TypeScript check across all packages
-npm run dev:web                # Vite dev server for web app (port 5173)
-npm run dev:api                # FastAPI dev server (port 8000)
-npm run test:unit              # Web unit tests (Vitest)
-npm run test:e2e               # Playwright E2E tests
-npm run test:firewall          # Data partition security tests
-npm run validate:schema        # Stats schema validation
-npm run docker:up              # Start PostgreSQL + Redis in Docker
-npm run docker:down            # Stop Docker services
+pnpm install                   # Install all workspace dependencies
+pnpm run build                 # Build all workspaces (Turbo)
+pnpm run typecheck             # TypeScript check across all packages
+pnpm run dev:web               # Vite dev server for web app (port 5173)
+pnpm run dev:api               # FastAPI dev server (port 8000)
+pnpm run test:unit             # Web unit tests (Vitest)
+pnpm run test:e2e              # Playwright E2E tests
+pnpm run test:firewall         # Data partition security tests
+pnpm run validate:schema       # Stats schema validation
+pnpm run docker:up             # Start PostgreSQL + Redis in Docker
+pnpm run docker:down           # Stop Docker services
 ```
 
 ### Web App (`apps/web/`)
@@ -76,7 +76,7 @@ godot --headless --script tests/run_tests.gd   # Run headless tests
 
 ## Architecture
 
-### Monorepo Structure (npm workspaces + Turbo)
+### Monorepo Structure (pnpm workspaces + Turbo)
 
 ```
 apps/web/                     # NJZiteGeisTe Platform — React 18 + Vite (MAIN)
@@ -85,6 +85,9 @@ packages/shared/api/          # FastAPI REST backend
 packages/shared/axiom-esports-data/   # Python data pipeline (PostgreSQL, asyncpg)
 packages/shared/packages/data-partition-lib/  # Security firewall library
 packages/shared/packages/stats-schema/        # Stats validation schemas
+services/api/                 # API service placeholder (Phase 4)
+infra/docker/                 # Docker Compose for local dev
+infra/migrations/             # Alembic migrations (Phase 4)
 platform/simulation-game/     # Godot 4 simulation engine (status: paused)
 tests/e2e/                    # Playwright E2E (95+ tests)
 tests/integration/            # Python integration tests (35+)
@@ -105,7 +108,7 @@ The web app is organized into five hubs, each with a TypeScript path alias:
 
 Additional aliases: `@/*` → `src/*`, `@shared/*` → `src/shared/*`
 
-Shared packages are also available as `@sator/types` and `@sator/services`.
+Shared packages: `@sator/types` (packages/shared/types/ — Player, Team, Match, SimRating, Game) and `@sator/services` (packages/shared/services/).
 
 ### Key Technology Choices
 
@@ -165,4 +168,4 @@ The `.job-board/` coordination system is archived in `archive/`.
 
 ## Known Duplications
 
-`packages/shared/apps/sator-web/` appears to duplicate `apps/web/` — scheduled for removal in Phase 3
+`packages/shared/apps/sator-web/` — removed in Phase 3 (no external references found)

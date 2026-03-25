@@ -14,7 +14,16 @@
       "Bash(\"C:/Users/jacke/Documents/GitHub/eSports-EXE/.env.example\":*)",
       "Bash(grep -rn \"4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/ C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.agents/ --include=*.ts --include=*.tsx --include=*.js --include=*.jsx --include=*.py --include=*.yml --include=*.yaml --include=*.md --include=*.json --exclude-dir=node_modules --exclude-dir=archive --exclude-dir=.git)",
       "Bash(grep -rn \"4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/ C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/shared/api/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/workflows/ --include=*.ts --include=*.tsx --include=*.js --include=*.jsx --include=*.py --include=*.yml --include=*.yaml --exclude-dir=node_modules --exclude-dir=archive)",
-      "Bash(grep -rn \"sator-api\\\\|4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/workflows/ C:/Users/jacke/Documents/GitHub/eSports-EXE/docs/ C:/Users/jacke/Documents/GitHub/eSports-EXE/scripts/ --include=*.yml --include=*.yaml --include=*.md --include=*.sh --exclude-dir=node_modules)"
+      "Bash(grep -rn \"sator-api\\\\|4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/workflows/ C:/Users/jacke/Documents/GitHub/eSports-EXE/docs/ C:/Users/jacke/Documents/GitHub/eSports-EXE/scripts/ --include=*.yml --include=*.yaml --include=*.md --include=*.sh --exclude-dir=node_modules)",
+      "Bash(grep -rn \"sator-web\\\\|shared/apps/sator-web\\\\|@sator/web\" C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/ C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/shared/api/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/ --include=*.ts --include=*.tsx --include=*.js --include=*.jsx --include=*.json --include=*.yml --include=*.yaml --exclude-dir=node_modules --exclude-dir=archive)",
+      "Bash(pnpm:*)",
+      "Bash(cd:*)",
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(head -5 grep -n \"^export default\\\\|^const.*=.*\\(\" \"C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-2-rotas/index.jsx\")",
+      "Bash(head -5 grep -n \"^export default\\\\|^const.*=.*\\(\" \"C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/index.jsx\")",
+      "Bash(head -5 grep -n \"^export default\\\\|^const.*=.*\\(\" \"C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-5-tenet/index.jsx\")",
+      "Bash(npx vite:*)"
     ]
   }
 }

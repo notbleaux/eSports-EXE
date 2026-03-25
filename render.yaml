@@ -7,8 +7,10 @@ services:
   - type: web
     name: njz-api
     env: python
-    buildCommand: "echo 'Installing...' && pip install -r packages/shared/api/requirements.txt && echo 'Done'"
-    startCommand: "cd packages/shared/api && uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1"
+    buildCommand: |
+      pip install poetry
+      poetry install --only main --no-interaction
+    startCommand: "cd packages/shared/api && poetry run uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1"
     # Require manual approval for production deploys
     autoDeploy: false
     envVars:

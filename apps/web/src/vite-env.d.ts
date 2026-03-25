@@ -1,5 +1,28 @@
-/** [Ver002.000] */
+/** [Ver002.001] */
 /// <reference types="vite/client" />
+
+// Hub JSX module declarations — allows TypeScript to resolve .jsx hub entry points
+// without requiring full type inference on JSX files (which have no .d.ts).
+declare module '@hub-1/index' {
+  import type { ComponentType } from 'react';
+  const component: ComponentType;
+  export default component;
+}
+declare module '@hub-2/index' {
+  import type { ComponentType } from 'react';
+  const component: ComponentType;
+  export default component;
+}
+declare module '@hub-3/index' {
+  import type { ComponentType } from 'react';
+  const component: ComponentType;
+  export default component;
+}
+declare module '@hub-5/index' {
+  import type { ComponentType } from 'react';
+  const component: ComponentType;
+  export default component;
+}
 
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;

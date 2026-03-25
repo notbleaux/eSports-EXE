@@ -36,9 +36,23 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 
 ---
 
+## Current Phase
+
+**Phase 3: Tooling Modernisation** — Completed
+- pnpm migration complete (pnpm-workspace.yaml + pnpm-lock.yaml)
+- Poetry pyproject.toml in place (packages/shared/api/)
+- Vercel config corrected (SPA routing + pnpm install)
+- packages/shared/apps/sator-web/ removed
+
+**Next: Phase 4 — Python Consolidation**
+- packages/shared/api/ → services/api/src/
+- Alembic migrations → infra/migrations/
+
+---
+
 ## 🏗️ Architecture
 
-### Monorepo Structure (npm workspaces)
+### Monorepo Structure (pnpm workspaces)
 
 ```
 /
@@ -58,6 +72,7 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 │   └── simulation-game/          # Godot 4 project
 │
 ├── services/                      # Backend services
+│   ├── api/                      # API service placeholder (Phase 4)
 │   └── exe-directory/            # Service registry (planned)
 │
 ├── tests/                         # Test suites
@@ -98,7 +113,7 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 | **Game Engine** | Godot 4 | 4.2+ |
 | **Game Languages** | GDScript, C# | .NET 6+ |
 | **Testing** | Playwright, Vitest, pytest, GUT | Latest |
-| **Package Manager** | npm (workspaces) | Node 18+ |
+| **Package Manager** | pnpm (workspaces) | Node 18+ |
 | **CI/CD** | GitHub Actions | — |
 
 ---
@@ -109,19 +124,19 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 
 ```bash
 # Install all dependencies
-npm install
+pnpm install
 
 # Build all workspaces
-npm run build
+pnpm run build
 
 # Type check all TypeScript packages
-npm run typecheck
+pnpm run typecheck
 
 # Test data partition firewall
-npm run test:firewall
+pnpm run test:firewall
 
 # Validate stats schema
-npm run validate:schema
+pnpm run validate:schema
 ```
 
 ### NJZiteGeisTe Platform (apps/web/)
@@ -130,22 +145,22 @@ Location: `apps/web/`
 
 ```bash
 # Development server
-npm run dev
+pnpm run dev
 
 # Production build
-npm run build
+pnpm run build
 
 # Preview production build
-npm run preview
+pnpm run preview
 
 # Lint
-npm run lint
+pnpm run lint
 
 # Type check
-npm run typecheck
+pnpm run typecheck
 
 # Unit tests
-npm run test
+pnpm run test
 
 # E2E tests
 npx playwright test
@@ -160,7 +175,7 @@ Location: `packages/shared/api/`
 uvicorn main:app --reload --port 8000 --host 0.0.0.0
 
 # Or from root
-npm run dev:api
+pnpm run dev:api
 ```
 
 ### Data Pipeline (Python)

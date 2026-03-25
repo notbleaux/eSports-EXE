@@ -249,7 +249,7 @@ curl https://api.njzitegeist.com/health
 curl https://api.njzitegeist.com/docs
 
 # Check web
-curl -I https://libre-x-esport.com
+curl -I https://njzitegeist.com
 
 # Run smoke tests
 ./scripts/smoke-tests.sh
@@ -332,7 +332,7 @@ $ curl https://api.njzitegeist.com/ready
 }
 
 # Web Check
-$ curl -s https://libre-x-esport.com | grep -o "4NJZ4"
+$ curl -s https://njzitegeist.com | grep -o "4NJZ4"
 4NJZ4
 ```
 
@@ -343,7 +343,7 @@ $ curl -s https://libre-x-esport.com | grep -o "4NJZ4"
 # scripts/smoke-tests.sh
 
 API_URL="https://api.njzitegeist.com/v1"
-WEB_URL="https://libre-x-esport.com"
+WEB_URL="https://njzitegeist.com"
 
 # Test API endpoints
 echo "Testing API..."
@@ -447,8 +447,8 @@ postgresql://...:6543/postgres
 ```python
 # Update CORS origins in config.py
 CORS_ORIGINS = [
-    "https://libre-x-esport.com",
-    "https://www.libre-x-esport.com",
+    "https://njzitegeist.com",
+    "https://www.njzitegeist.com",
     # Add any additional origins
 ]
 ```
