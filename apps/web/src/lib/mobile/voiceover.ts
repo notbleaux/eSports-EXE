@@ -2,7 +2,7 @@
  *
  * VoiceOver Support Library
  * 
- * iOS VoiceOver specific optimizations and attributes for the 4NJZ4 TENET Platform.
+ * iOS VoiceOver specific optimizations and attributes for the NJZiteGeisTe Platform.
  * Provides Rotor navigation, custom actions, and region announcements.
  * 
  * @module lib/mobile/voiceover

@@ -1,6 +1,6 @@
 /**
  * Lensing Store - TENET HUB Visibility & Configuration
- * Phase 1 of Libre-X 4NJZ4 TENET Platform
+ * Phase 1 of NJZiteGeisTe Platform
  * Manages active lenses/HUBs, integrates with dynamicStore layouts
  * [Ver001.000]
  */

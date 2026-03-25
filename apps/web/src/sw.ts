@@ -18,11 +18,11 @@ declare const self: ServiceWorkerGlobalScope
 
 // Cache versions - increment to invalidate
 const CACHE_VERSION = 'v3'
-const STATIC_CACHE = `4njz4-static-${CACHE_VERSION}`
-const API_CACHE = `4njz4-api-${CACHE_VERSION}`
-const PLAYER_CACHE = `4njz4-players-${CACHE_VERSION}`
-const IMAGE_CACHE = `4njz4-images-${CACHE_VERSION}`
-const FALLBACK_CACHE = `4njz4-fallback-${CACHE_VERSION}`
+const STATIC_CACHE = `njzitegeiste-static-${CACHE_VERSION}`
+const API_CACHE = `njzitegeiste-api-${CACHE_VERSION}`
+const PLAYER_CACHE = `njzitegeiste-players-${CACHE_VERSION}`
+const IMAGE_CACHE = `njzitegeiste-images-${CACHE_VERSION}`
+const FALLBACK_CACHE = `njzitegeiste-fallback-${CACHE_VERSION}`
 
 // Precache critical assets
 const PRECACHE_ASSETS = [
@@ -52,7 +52,7 @@ const OFFLINE_FALLBACK_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Offline - 4NJZ4 TENET</title>
+  <title>Offline - NJZiteGeisTe</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {

@@ -338,7 +338,7 @@ export function FluidDynamicsDemo(): JSX.Element {
       <header className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Fluid Dynamics Animation System</h1>
         <p className="text-white/60">
-          UI/UX animation system for the 4NJZ4 TENET Platform
+          UI/UX animation system for the NJZiteGeisTe Platform
         </p>
       </header>
       

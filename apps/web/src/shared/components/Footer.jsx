@@ -32,8 +32,7 @@ function Footer() {
             </div>
             
             <p className="text-slate text-sm mb-4">
-              Twin-file database system with SATOR/ROTAS infrastructure. 
-              4eva and Nvr Die.
+              Twin-file database system with SATOR/ROTAS infrastructure.
             </p>
             
             <div className="flex gap-4">

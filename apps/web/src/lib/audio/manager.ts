@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Audio Manager
  * =============
- * Centralized audio control system for Libre-X-eSport.
+ * Centralized audio control system for NJZiteGeisTe.
  * Manages all audio playback including SFX, voice lines, and ambient audio.
  * 
  * Features:

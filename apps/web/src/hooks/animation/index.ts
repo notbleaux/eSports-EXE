@@ -2,7 +2,7 @@
  * Animation Hooks Index
  * 
  * Central export point for all animation-related hooks.
- * Provides fluid dynamics-based animation primitives for the 4NJZ4 TENET Platform.
+ * Provides fluid dynamics-based animation primitives for the NJZiteGeisTe Platform.
  */
 
 export { useReducedMotion, useAccessibleDuration, useConditionalAnimation } from './useReducedMotion';

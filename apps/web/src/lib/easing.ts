@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Easing Functions Library
  * 
- * Fluid dynamics-inspired easing functions for the 4NJZ4 TENET Platform.
+ * Fluid dynamics-inspired easing functions for the NJZiteGeisTe Platform.
  * All easings are designed to create smooth, organic motion that respects
  * the platform's aesthetic while maintaining 60fps performance.
  * 

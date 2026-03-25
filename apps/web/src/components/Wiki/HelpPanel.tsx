@@ -59,7 +59,7 @@ export const HelpPanel: React.FC<HelpPanelProps> = ({
 
       // Load featured articles
       setArticles([
-        { id: 1, slug: 'welcome-to-4njz4', title: 'Welcome to 4NJZ4 Platform', excerpt: 'Introduction to the platform and its five hubs...', helpful_count: 234, view_count: 1205, is_featured: true, tags: [], updated_at: new Date().toISOString() },
+        { id: 1, slug: 'welcome-to-njzitegeiste', title: 'Welcome to NJZiteGeisTe Platform', excerpt: 'Introduction to the platform and its five hubs...', helpful_count: 234, view_count: 1205, is_featured: true, tags: [], updated_at: new Date().toISOString() },
         { id: 2, slug: 'daily-tokens', title: 'How to Claim Daily Tokens', excerpt: 'Learn about daily login bonuses and streaks...', helpful_count: 189, view_count: 892, is_featured: true, tags: [], updated_at: new Date().toISOString() },
         { id: 3, slug: 'forum-guide', title: 'Using the Forums', excerpt: 'Guide to posting, replying, and voting...', helpful_count: 156, view_count: 654, is_featured: false, tags: [], updated_at: new Date().toISOString() },
       ]);

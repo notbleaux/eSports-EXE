@@ -135,7 +135,7 @@ function TENETHubContent() {
               className="text-sm font-mono font-medium"
               style={{ color: HUB_CONFIG.color }}
             >
-              4NJZ4 TENET PLATFORM
+              NJZiteGeisTe Platform
             </span>
           </div>
         </motion.div>
@@ -270,7 +270,7 @@ function TENETHubContent() {
               <p className="text-sm text-gray-300 leading-relaxed">
                 The SATOR Square is a five-layer palindromic structure that reads the same 
                 forwards, backwards, and from any direction. Each ring represents one of the 
-                five hubs in the 4NJZ4 TENET Platform.
+                five hubs in the NJZiteGeisTe Platform.
               </p>
             </div>
           </GlassCard>

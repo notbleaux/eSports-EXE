@@ -1,14 +1,16 @@
-# [Ver005.000]
+# [Ver006.000]
 # Render.com Deployment Configuration
-# SATOR API - Production Deployment
+# NJZiteGeisTe Platform - Production Deployment
 # NOTE: Using FREE TIER ONLY
 
 services:
   - type: web
-    name: sator-api
+    name: njz-api
     env: python
     buildCommand: "echo 'Installing...' && pip install -r packages/shared/api/requirements.txt && echo 'Done'"
     startCommand: "cd packages/shared/api && uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1"
+    # Require manual approval for production deploys
+    autoDeploy: false
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
@@ -17,21 +19,21 @@ services:
       - key: REDIS_URL
         fromService:
           type: redis
-          name: sator-redis
+          name: njz-redis
           property: connectionString
       - key: CORS_ORIGINS
-        value: "https://web-ashen-mu.vercel.app"
+        sync: false  # MUST be set manually (comma-separated list)
       - key: JWT_SECRET_KEY
-        generateValue: true
+        sync: false  # MUST be set manually (32+ char random)
+        # Generate with: openssl rand -base64 32
       - key: PANDASCORE_API_KEY
         sync: false
       - key: PYTHONPATH
         value: "/opt/render/project/src/packages/shared"
     healthCheckPath: /health
-    autoDeploy: true
     plan: free
 
   - type: redis
-    name: sator-redis
+    name: njz-redis
     plan: free
     ipAllowList: []

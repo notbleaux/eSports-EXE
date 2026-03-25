@@ -71,8 +71,8 @@ const HUB_CONFIG = {
     borderColor: 'rgba(255, 255, 255, 0.3)'
   },
   GLOBAL: {
-    name: '4NJZ4',
-    subtitle: 'TENET Platform',
+    name: 'NJZiteGeisTe',
+    subtitle: 'NJZiteGeisTe Platform',
     color: '#9d4edd',
     glow: 'rgba(157, 78, 221, 0.4)',
     bgColor: 'rgba(157, 78, 221, 0.1)',

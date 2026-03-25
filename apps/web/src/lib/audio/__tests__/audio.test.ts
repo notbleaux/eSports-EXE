@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Audio System Tests
  * ==================
- * Comprehensive test suite for the Libre-X-eSport audio system.
+ * Comprehensive test suite for the NJZiteGeisTe audio system.
  * Tests AudioManager, VoiceController, SFXController, and related utilities.
  * 
  * Coverage:

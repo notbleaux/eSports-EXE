@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * GPU-Accelerated Heatmap Renderer for 4NJZ4 TENET Platform
+ * GPU-Accelerated Heatmap Renderer for NJZiteGeisTe Platform
  * WebGL-based heatmap rendering with CPU fallback
  * 
  * Features:

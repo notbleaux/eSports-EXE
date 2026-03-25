@@ -29,6 +29,7 @@ export {
 // Utility Components
 // ============================================================================
 
+export { MascotShowcase } from './MascotShowcase';
 export { MascotCard } from './MascotCard';
 export { MascotGallery } from './MascotGallery';
 export { MascotStatsRadar } from './MascotStatsRadar';

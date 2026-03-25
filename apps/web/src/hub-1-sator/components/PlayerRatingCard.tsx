@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * PlayerRatingCard Component for 4NJZ4 TENET Platform
+ * PlayerRatingCard Component for NJZiteGeisTe Platform
  * 
  * Displays a player card with SimRating calculated via Web Worker.
  * Shows loading state during calculation and supports both compact

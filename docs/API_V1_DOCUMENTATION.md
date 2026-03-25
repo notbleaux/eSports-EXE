@@ -1,8 +1,8 @@
 [Ver002.001]
 
-# API v1 Documentation — Libre-X-eSport 4NJZ4 TENET Platform
+# API v1 Documentation — NJZiteGeisTe Platform
 
-**Base URL:** `https://api.libre-x-esport.com/v1`  
+**Base URL:** `https://api.njzitegeist.com/v1`  
 **Protocol:** HTTPS / WebSocket Secure (WSS)  
 **Last Updated:** 2026-03-15
 
@@ -583,14 +583,14 @@ GET /v1/search/suggestions?q={partial}
 ### Connection
 
 ```
-wss://api.libre-x-esport.com/ws/gateway
+wss://api.njzitegeist.com/ws/gateway
 ```
 
 ### Authentication
 
 Connect with token:
 ```
-wss://api.libre-x-esport.com/ws/gateway?token=<jwt_token>
+wss://api.njzitegeist.com/ws/gateway?token=<jwt_token>
 ```
 
 Or authenticate after connection:
@@ -876,8 +876,8 @@ X-RateLimit-Reset: 1710507600
 
 ```typescript
 // Initialize client
-const api = new LibreXESportAPI({
-  baseURL: 'https://api.libre-x-esport.com/v1',
+const api = new NJZiteGeisTe({
+  baseURL: 'https://api.njzitegeist.com/v1',
   token: 'your-jwt-token'
 });
 
@@ -897,10 +897,10 @@ ws.subscribe('match:12345', (update) => {
 ### Python
 
 ```python
-from libre_x_esport import Client
+from njzitegeist import Client
 
 client = Client(
-    base_url="https://api.libre-x-esport.com/v1",
+    base_url="https://api.njzitegeist.com/v1",
     token="your-jwt-token"
 )
 

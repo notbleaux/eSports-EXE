@@ -1,7 +1,7 @@
-# AGENTS.md — Libre-X-eSport 4NJZ4 TENET Platform
+# AGENTS.md — NJZiteGeisTe Platform
 
-**Purpose:** This file provides essential context for AI coding agents working on the Libre-X-eSport 4NJZ4 TENET Platform project.  
-**Project:** Libre-X-eSport 4NJZ4 TENET Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)  
+**Purpose:** This file provides essential context for AI coding agents working on the NJZiteGeisTe Platform project.
+**Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
 **Repository:** https://github.com/notbleaux/eSports-EXE  
 **Last Updated:** 2026-03-19
 
@@ -9,19 +9,19 @@
 
 ## 📋 Project Overview
 
-Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platform focused on tactical FPS games (Valorant with planned Counter-Strike 2 support). The platform provides:
+NJZiteGeisTe Platform is an esports simulation and analytics platform focused on tactical FPS games (Valorant with planned Counter-Strike 2 support). The platform provides:
 
 - **SATOR Analytics:** Advanced player metrics (SimRating, RAR) with confidence weighting
 - **eXe Directory:** Service registry and coordination hub
 - **ROTAS Simulation:** Deterministic tactical FPS match simulation (Godot 4)
-- **4NJZ4 TENET Platform:** 5-hub web interface (SATOR, ROTAS, AREPO, OPERA, TENET Central Hub)
+- **NJZiteGeisTe Platform:** 5-hub web interface (SATOR, ROTAS, AREPO, OPERA, TENET Central Hub)
 - **Pandascore Integration:** Official API for legal esports data access
 
 ### Key Components
 
 | Component | Location | Technology | Status |
 |-----------|----------|------------|--------|
-| **4NJZ4 TENET Platform** | `apps/web/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.1 |
+| **NJZiteGeisTe Platform** | `apps/web/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.1 |
 | **API Backend** | `packages/shared/api/` | FastAPI, Python 3.11+ | ✅ Active |
 | **Data Pipeline** | `packages/shared/axiom-esports-data/` | Python, PostgreSQL, asyncpg | ✅ Active |
 | **Simulation Game** | `platform/simulation-game/` | Godot 4, GDScript, C# | 🟡 Paused |
@@ -43,7 +43,7 @@ Libre-X-eSport 4NJZ4 TENET Platform is an esports simulation and analytics platf
 ```
 /
 ├── apps/                          # Applications
-│   ├── web/                      # 4NJZ4 TENET Platform (React + Vite) - MAIN
+│   ├── web/                      # NJZiteGeisTe Platform (React + Vite) - MAIN
 │   └── VCT Valorant eSports/     # VCT data project
 │
 ├── packages/                      # Shared packages
@@ -124,7 +124,7 @@ npm run test:firewall
 npm run validate:schema
 ```
 
-### Website-V2 (4NJZ4 TENET Platform)
+### NJZiteGeisTe Platform (apps/web/)
 
 Location: `apps/web/`
 
@@ -231,10 +231,6 @@ feat(website): Add SATOR hub orbital navigation - implements 3D scene
 fix(api): Resolve VLR data parsing error - handles null values
 docs(readme): Update installation instructions
 ```
-
-**AI Agent Coordination Prefix:**
-- Use `[JLB]` prefix for Job Listing Board coordination commits
-- Use `[JLB-FOREMAN]` for foreman actions
 
 ### Document Versioning
 

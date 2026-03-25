@@ -2,7 +2,7 @@
  *
  * Breakpoint System for Mobile-First Responsive Design
  * 
- * Provides consistent breakpoint values and hooks for the 4NJZ4 TENET Platform.
+ * Provides consistent breakpoint values and hooks for the NJZiteGeisTe Platform.
  * Integrates with Tailwind CSS breakpoints for seamless responsive layouts.
  * 
  * @module mobile/breakpoints

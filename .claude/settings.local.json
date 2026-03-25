@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls -la /c/Users/jacke/Documents/GitHub/eSports-EXE/*.md)"
+      "Bash(ls -la /c/Users/jacke/Documents/GitHub/eSports-EXE/*.md)",
+      "Bash(claude install:*)",
+      "Bash(find /c/Users/jacke/Documents/GitHub/eSports-EXE/.github/workflows -name *.yml)",
+      "Bash(grep -rl from.*[''].*[^s]/shared/ /c/Users/jacke/Documents/GitHub/eSports-EXE --include=*.ts --include=*.tsx --include=*.py --include=*.json --include=*.yml --exclude-dir=node_modules --exclude-dir=archive)",
+      "Bash(grep -n \"4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" /c/Users/jacke/Documents/GitHub/eSports-EXE/.agents/skills/*.md)",
+      "Bash(grep -rn \"4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" /c/Users/jacke/Documents/GitHub/eSports-EXE/apps/ /c/Users/jacke/Documents/GitHub/eSports-EXE/packages/ /c/Users/jacke/Documents/GitHub/eSports-EXE/.github/ /c/Users/jacke/Documents/GitHub/eSports-EXE/scripts/ --include=*.ts --include=*.tsx --include=*.js --include=*.jsx --include=*.yml --include=*.yaml --include=*.json --include=*.py --include=*.md --include=*.env* --include=*.template)",
+      "Bash(ls \"C:\\\\Users\\\\jacke\\\\Documents\\\\GitHub\\\\eSports-EXE\\\\apps\\\\web\\\\src\\\\components\\\\mascots\\\\MascotShowcase\"*)",
+      "Bash(ls \"C:\\\\Users\\\\jacke\\\\Documents\\\\GitHub\\\\eSports-EXE\\\\apps\\\\web\\\\src\\\\components\\\\mascots\\\\index\"*)",
+      "Bash(grep -rl \"4NJZ4\\\\|Libre-X-eSport\\\\|libre-x-esport\\\\|4eva and Nvr Die\\\\|TENET Platform\" --include=*.tsx --include=*.ts --include=*.jsx --include=*.js --include=*.py C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/ C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/shared/)",
+      "Bash(grep -v \"\\\\.md$\")",
+      "Bash(\"C:/Users/jacke/Documents/GitHub/eSports-EXE/.env.example\":*)",
+      "Bash(grep -rn \"4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/ C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.agents/ --include=*.ts --include=*.tsx --include=*.js --include=*.jsx --include=*.py --include=*.yml --include=*.yaml --include=*.md --include=*.json --exclude-dir=node_modules --exclude-dir=archive --exclude-dir=.git)",
+      "Bash(grep -rn \"4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/ C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/shared/api/ C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/workflows/ --include=*.ts --include=*.tsx --include=*.js --include=*.jsx --include=*.py --include=*.yml --include=*.yaml --exclude-dir=node_modules --exclude-dir=archive)",
+      "Bash(grep -rn \"sator-api\\\\|4NJZ4\\\\|libre-x-esport\\\\|Libre-X-eSport\" C:/Users/jacke/Documents/GitHub/eSports-EXE/.github/workflows/ C:/Users/jacke/Documents/GitHub/eSports-EXE/docs/ C:/Users/jacke/Documents/GitHub/eSports-EXE/scripts/ --include=*.yml --include=*.yaml --include=*.md --include=*.sh --exclude-dir=node_modules)"
     ]
   }
 }

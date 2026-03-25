@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Audio System Types
  * ==================
- * Type definitions for the Libre-X-eSport audio system.
+ * Type definitions for the NJZiteGeisTe audio system.
  * Provides comprehensive audio control for mascot voices, SFX, and ambient audio.
  * 
  * Features:

@@ -257,7 +257,7 @@ class TestNotificationRequest(BaseModel):
     """Request body for sending test notification (admin only)."""
     user_id: Optional[str] = None  # If None, send to self
     title: str = "Test Notification"
-    body: str = "This is a test notification from TENET Platform"
+    body: str = "This is a test notification from NJZiteGeisTe Platform"
     category: NotificationCategory = NotificationCategory.SYSTEM
 
 

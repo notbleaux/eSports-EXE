@@ -3,7 +3,7 @@
  * Collapsible Navigation Component
  * 
  * Mobile-first navigation with hamburger menu and slide-out drawer.
- * Supports touch gestures, 5-hub navigation for TENET Platform.
+ * Supports touch gestures, 5-hub navigation for NJZiteGeisTe Platform.
  * 
  * @module components/layout/CollapsibleNav
  */
@@ -99,42 +99,42 @@ function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Default 5 hubs for TENET Platform
+ * Default 5 hubs for NJZiteGeisTe Platform
  */
 export const DEFAULT_HUBS: NavHub[] = [
   {
     id: 'sator',
-    label: 'SATOR',
+    label: 'Analytics',
     icon: Activity,
-    href: '/hub/sator',
+    href: '/analytics',
     theme: 'sator',
   },
   {
     id: 'rotas',
-    label: 'ROTAS',
+    label: 'Stats',
     icon: Gamepad2,
-    href: '/hub/rotas',
+    href: '/stats',
     theme: 'rotas',
   },
   {
     id: 'arepo',
-    label: 'AREPO',
+    label: 'Community',
     icon: Users,
-    href: '/hub/arepo',
+    href: '/community',
     theme: 'arepo',
   },
   {
     id: 'opera',
-    label: 'OPERA',
+    label: 'Pro Scene',
     icon: BarChart3,
-    href: '/hub/opera',
+    href: '/pro-scene',
     theme: 'opera',
   },
   {
     id: 'tenet',
-    label: 'TENET',
+    label: 'Hubs',
     icon: Settings,
-    href: '/hub/tenet',
+    href: '/hubs',
     theme: 'tenet',
   },
 ];
@@ -374,7 +374,7 @@ export function CollapsibleNav({
     >
       {/* Drawer Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
-        {brand || <div className="text-xl font-bold text-porcelain">4NJZ4</div>}
+        {brand || <div className="text-xl font-bold text-porcelain">NJZiteGeisTe</div>}
         <button
           onClick={closeDrawer}
           className={cn(
@@ -518,7 +518,7 @@ export function CollapsibleNav({
       {/* Drawer Footer */}
       <div className="p-4 border-t border-white/10">
         <div className="text-xs text-porcelain/40 text-center">
-          4NJZ4 TENET Platform v2.0
+          NJZiteGeisTe Platform v2.0
         </div>
       </div>
     </motion.div>

@@ -71,7 +71,7 @@ function Navigation() {
                   NJZ ¿!?
                 </span>
                 <span className="text-xs text-slate font-mono">
-                  4eva and Nvr Die
+                  NJZiteGeisTe Platform
                 </span>
               </div>
             </Link>

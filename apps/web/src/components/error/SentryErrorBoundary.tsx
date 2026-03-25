@@ -125,7 +125,7 @@ export class SentryErrorBoundary extends Component<Props, State> {
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-4">
                 <Activity className="w-4 h-4 text-red-400" />
-                <span className="text-sm font-mono text-red-400">4NJZ4 TENET Platform</span>
+                <span className="text-sm font-mono text-red-400">NJZiteGeisTe Platform</span>
               </div>
             </div>
 
@@ -230,7 +230,7 @@ export class SentryErrorBoundary extends Component<Props, State> {
 
             {/* Footer */}
             <p className="text-center text-white/30 text-sm mt-6">
-              Libre-X-eSport 4NJZ4 TENET Platform
+              NJZiteGeisTe Platform
             </p>
           </div>
         </div>

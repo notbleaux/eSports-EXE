@@ -2,7 +2,7 @@
  * Data Cleaner
  * 
  * Removes duplicates, fills missing values, normalizes formats, and detects outliers
- * for Libre-X-eSport 4NJZ4 TENET Platform data ingestion.
+ * for NJZiteGeisTe Platform data ingestion.
  * 
  * [Ver001.000]
  * 

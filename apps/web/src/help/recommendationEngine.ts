@@ -2,7 +2,7 @@
 /**
  * Recommendation Engine
  * =====================
- * Personalized help content recommendation system for the 4NJZ4 TENET Platform.
+ * Personalized help content recommendation system for the NJZiteGeisTe Platform.
  * Provides intelligent suggestions based on user expertise, learning progress,
  * and identified knowledge gaps.
  */

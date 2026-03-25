@@ -1,5 +1,5 @@
 # [Ver008.000] - Comprehensive CI Pipeline
-# Libre-X-eSport 4NJZ4 TENET Platform
+# NJZiteGeisTe Platform
 # 
 # This workflow runs on every push and PR to main branch.
 # It performs code quality checks, security scans, and test execution.
@@ -37,20 +37,20 @@ jobs:
         run: |
           pip install black ruff bandit safety
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Check Python formatting (Black)
         run: |
           black --check --diff packages/shared/api || true
-        continue-on-error: true
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Run Ruff linter
         run: |
           ruff check packages/shared/api || true
-        continue-on-error: true
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Security scan with Bandit
         run: |
           bandit -r packages/shared/api -f json -o bandit-report.json || true
-        continue-on-error: true
 
       - name: Upload security report
         uses: actions/upload-artifact@v4
@@ -104,6 +104,7 @@ jobs:
           pip install pytest pytest-asyncio asyncpg redis httpx
           pip install -r packages/shared/api/requirements.txt || true
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Run unit tests
         env:
           TEST_DATABASE_URL: postgresql://sator:sator_test@localhost:5432/sator_test
@@ -112,13 +113,12 @@ jobs:
           TOTP_ENCRYPTION_KEY: test-totp-key-for-ci-32-chars
         run: |
           pytest tests/unit -v --tb=short || true
-        continue-on-error: true
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Test API imports
         run: |
           cd packages/shared/api
           python -c "from main import app; print('API imports successful')" || true
-        continue-on-error: true
 
   # ==========================================================================
   # Job 3: Frontend Build Check
@@ -135,23 +135,23 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Install dependencies
         run: |
           cd apps/web
           npm install
-        continue-on-error: true
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Type check
         run: |
           cd apps/web
           npm run typecheck 2>/dev/null || echo "Type check skipped"
-        continue-on-error: true
 
+      # REQUIRED: this step must pass for CI to succeed
       - name: Build
         run: |
           cd apps/web
           npm run build 2>/dev/null || echo "Build skipped"
-        continue-on-error: true
 
   # ==========================================================================
   # Job 4: Repository Health Check
@@ -173,6 +173,7 @@ jobs:
           test -d packages/shared/api && echo "✓ API directory" || echo "✗ API directory missing"
           test -d apps/web && echo "✓ Web directory" || echo "✗ Web directory missing"
 
+      # Required: must pass for CI to succeed
       - name: Check for secrets (basic)
         run: |
           echo "=== Checking for potential secrets ==="
@@ -181,7 +182,6 @@ jobs:
           else
             echo "✓ No obvious secrets found"
           fi
-        continue-on-error: true
 
       - name: Summary
         run: |

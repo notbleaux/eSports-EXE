@@ -1,7 +1,7 @@
 /**
  * Data Validation and Cleaning System
  * 
- * Comprehensive data validation and cleaning for Libre-X-eSport 4NJZ4 TENET Platform.
+ * Comprehensive data validation and cleaning for NJZiteGeisTe Platform.
  * 
  * [Ver001.000]
  * 

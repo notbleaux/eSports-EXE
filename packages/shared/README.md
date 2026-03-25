@@ -1,6 +1,6 @@
 [Ver001.000]
 
-# Shared Packages — Libre-X-eSport Platform
+# Shared Packages — NJZiteGeisTe Platform
 
 **Location:** `packages/shared/`  
 **Purpose:** Shared libraries and components for the SATOR platform

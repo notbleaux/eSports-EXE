@@ -54,12 +54,12 @@ const platformNodes: KnowledgeNode[] = [
   createNode({
     id: 'platform-overview',
     title: 'Platform Overview',
-    description: 'Introduction to the Libre-X-eSport 4NJZ4 TENET Platform',
+    description: 'Introduction to the NJZiteGeisTe Platform',
     type: 'concept',
     status: 'published',
     difficulty: 'beginner',
     keywords: ['platform', 'overview', 'introduction', 'getting started', 'welcome'],
-    content: 'The 4NJZ4 TENET Platform is a comprehensive esports simulation and analytics platform featuring five interconnected hubs: SATOR Analytics, ROTAS Simulation, AREPO Marketplace, OPERA Operations, and TENET Central Hub.',
+    content: 'The NJZiteGeisTe Platform is a comprehensive esports simulation and analytics platform featuring five interconnected hubs: SATOR Analytics, ROTAS Simulation, AREPO Marketplace, OPERA Operations, and TENET Central Hub.',
   }),
   createNode({
     id: 'getting-started',
@@ -69,7 +69,7 @@ const platformNodes: KnowledgeNode[] = [
     status: 'published',
     difficulty: 'beginner',
     keywords: ['getting started', 'tutorial', 'beginner', 'first steps', 'introduction'],
-    content: 'Welcome to the 4NJZ4 TENET Platform. This guide will walk you through account setup, dashboard navigation, and your first analytics exploration.',
+    content: 'Welcome to the NJZiteGeisTe Platform. This guide will walk you through account setup, dashboard navigation, and your first analytics exploration.',
   }),
   createNode({
     id: 'account-setup',
@@ -747,7 +747,7 @@ export function createSampleKnowledgeGraph() {
   const graph = createKnowledgeGraph(
     'help-knowledge-graph',
     'Help Documentation Knowledge Graph',
-    'Comprehensive knowledge graph for 4NJZ4 TENET Platform help documentation'
+    'Comprehensive knowledge graph for NJZiteGeisTe Platform help documentation'
   );
 
   // Add all nodes

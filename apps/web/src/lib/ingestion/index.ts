@@ -1,7 +1,7 @@
 /**
  * Data Ingestion Pipeline
  * =======================
- * External esports data ingestion system for Libre-X-eSport.
+ * External esports data ingestion system for NJZiteGeisTe.
  * 
  * Features:
  * - RESTful API client with auth, rate limiting, and retry logic

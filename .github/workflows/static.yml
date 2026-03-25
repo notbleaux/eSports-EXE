@@ -37,13 +37,13 @@ jobs:
         working-directory: ./apps/web
         run: npm install
         
+      # REQUIRED: this step must pass for CI to succeed
       - name: Build
         working-directory: ./apps/web
         run: npm run build
         env:
           VITE_API_URL: "https://api.libreauxnjz.io"
           VITE_APP_ENV: "production"
-        continue-on-error: true
           
       - name: Setup Pages
         uses: actions/configure-pages@v5

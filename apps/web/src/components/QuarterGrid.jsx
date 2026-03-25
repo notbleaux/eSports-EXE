@@ -298,7 +298,7 @@ function QuarterGrid() {
           transition={{ duration: 3, repeat: Infinity }}
         >
           <span className="w-2 h-2 bg-[#00d4ff] rounded-full animate-pulse" />
-          <span className="text-sm font-mono text-white/60">4NJZ4 TENET Platform v2.0</span>
+          <span className="text-sm font-mono text-white/60">NJZiteGeisTe Platform v2.0</span>
         </motion.div>
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">

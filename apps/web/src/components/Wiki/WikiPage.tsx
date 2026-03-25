@@ -57,15 +57,15 @@ export const WikiPage: React.FC<WikiPageProps> = ({ defaultSlug }) => {
         setArticle({
           id: 1,
           slug: currentSlug,
-          title: currentSlug === 'welcome-to-4njz4' 
-            ? 'Welcome to 4NJZ4 Platform' 
+          title: currentSlug === 'welcome-to-njzitegeiste'
+            ? 'Welcome to NJZiteGeisTe Platform'
             : 'Sample Article',
           category_id: 1,
           category: { id: 1, slug: 'getting-started', name: 'Getting Started', icon: 'rocket', article_count: 5, sort_order: 1, is_help_category: true },
           author_id: 'system',
-          content: `# Welcome to 4NJZ4 Platform
+          content: `# Welcome to NJZiteGeisTe Platform
 
-The **Libre-X-eSport 4NJZ4 TENET Platform** is your ultimate destination for esports analytics, simulation, and community engagement.
+The **NJZiteGeisTe Platform** is your ultimate destination for esports analytics, simulation, and community engagement.
 
 ## The Five Hubs
 
@@ -93,7 +93,7 @@ Navigate between hubs and access your personalized dashboard.
 5. **Start predicting** on OPERA matches
 
 Happy analyzing!`,
-          content_html: '<h1>Welcome to 4NJZ4 Platform</h1><p>The <strong>Libre-X-eSport 4NJZ4 TENET Platform</strong> is your ultimate destination...</p>',
+          content_html: '<h1>Welcome to NJZiteGeisTe Platform</h1><p>The <strong>NJZiteGeisTe Platform</strong> is your ultimate destination...</p>',
           excerpt: 'Introduction to the platform and its five hubs',
           tags: ['getting started', 'overview', 'guide'],
           is_published: true,
@@ -145,7 +145,7 @@ Happy analyzing!`,
               Knowledge Base
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Find guides, tutorials, and answers to common questions about the 4NJZ4 platform.
+              Find guides, tutorials, and answers to common questions about the NJZiteGeisTe platform.
             </p>
           </div>
 

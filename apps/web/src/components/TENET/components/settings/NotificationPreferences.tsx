@@ -317,7 +317,7 @@ export const NotificationPreferences: React.FC = () => {
     try {
       await sendTestNotification(
         'Test Notification',
-        'This is a test from TENET Platform! 🎉'
+        'This is a test from NJZiteGeisTe Platform! 🎉'
       );
       setSuccessMessage('Test notification sent! Check your device.');
     } catch (err) {

@@ -251,7 +251,7 @@ export const OfflineFallback: React.FC = () => {
         {/* Footer */}
         <div className="px-6 py-3 bg-[#0a0a0f] border-t border-[#2a2a3a] text-center">
           <p className="text-xs text-gray-600">
-            4NJZ4 TENET Platform • Offline Mode
+            NJZiteGeisTe Platform • Offline Mode
           </p>
         </div>
       </div>

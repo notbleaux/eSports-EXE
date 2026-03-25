@@ -2,7 +2,7 @@
 
 # Mascot Animation Guide
 
-Complete reference for mascot animations in the 4NJZ4 TENET Platform.
+Complete reference for mascot animations in the NJZiteGeisTe Platform.
 
 ## Table of Contents
 

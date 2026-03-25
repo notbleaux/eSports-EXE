@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * Lazy Lens Loading System for 4NJZ4 TENET Platform
+ * Lazy Lens Loading System for NJZiteGeisTe Platform
  * Dynamic lens imports with preloading and memory management
  * 
  * Features:

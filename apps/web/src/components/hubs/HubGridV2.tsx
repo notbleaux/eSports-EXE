@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom';
 export interface Hub {
   id: string;
   name: string;
+  path: string;
   subtitle: string;
   description: string;
   color: string;
@@ -41,6 +42,7 @@ export const HUBS: Hub[] = [
   {
     id: 'sator',
     name: 'SATOR',
+    path: '/analytics',
     subtitle: 'The Observatory',
     description: 'Raw data ingestion with orbital ring navigation and real-time analytics.',
     color: 'bg-kunst-green',
@@ -51,6 +53,7 @@ export const HUBS: Hub[] = [
   {
     id: 'rotas',
     name: 'ROTAS',
+    path: '/stats',
     subtitle: 'The Harmonic Layer',
     description: 'Advanced predictive analytics with ellipse layer blending technology.',
     color: 'bg-boitano-pink',
@@ -61,6 +64,7 @@ export const HUBS: Hub[] = [
   {
     id: 'arepo',
     name: 'AREPO',
+    path: '/community',
     subtitle: 'The Directory',
     description: 'Comprehensive Q&A, documentation, and knowledge base system.',
     color: 'bg-pure-black text-white',
@@ -71,6 +75,7 @@ export const HUBS: Hub[] = [
   {
     id: 'opera',
     name: 'OPERA',
+    path: '/pro-scene',
     subtitle: 'The Nexus',
     description: 'Interactive maps with fog of war and spatial visualization tools.',
     color: 'bg-kunst-green',
@@ -81,6 +86,7 @@ export const HUBS: Hub[] = [
   {
     id: 'tenet',
     name: 'TENET',
+    path: '/hubs',
     subtitle: 'The Center',
     description: 'Unify all perspectives—the palindromic hubs all connect here.',
     color: 'bg-boitano-pink',
@@ -181,7 +187,7 @@ export const HubCard: React.FC<HubCardProps> = ({ hub, index }) => {
       `}
     >
       <Link
-        to={`/${hub.id}`}
+        to={hub.path}
         className="block h-full w-full"
       >
         {/* Card Content */}

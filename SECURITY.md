@@ -4,7 +4,7 @@
 
 ## Supported Versions
 
-The following versions of the Libre-X-eSport 4NJZ4 TENET Platform are currently supported with security updates:
+The following versions of the NJZiteGeisTe Platform are currently supported with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -21,7 +21,7 @@ We take security seriously. If you discover a security vulnerability, please rep
 ### How to Report
 
 1. **DO NOT** create a public GitHub issue for security vulnerabilities
-2. Email security concerns to: security@libre-x-esport.dev
+2. Email security concerns to: security@njzitegeist.com
 3. Include the following in your report:
    - Description of the vulnerability
    - Steps to reproduce (proof of concept)
@@ -192,8 +192,8 @@ We recognize security researchers who report valid vulnerabilities:
 
 ## Contact
 
-- **Security Team**: security@libre-x-esport.dev
-- **PGP Key**: [Download Public Key](https://libre-x-esport.dev/security-pgp.key)
+- **Security Team**: security@njzitegeist.com
+- **PGP Key**: [Download Public Key](https://njzitegeist.com/security-pgp.key)
 - **Emergency**: +1-XXX-XXX-XXXX (24/7 hotline)
 
 ---

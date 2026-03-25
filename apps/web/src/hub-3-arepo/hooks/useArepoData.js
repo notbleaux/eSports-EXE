@@ -36,7 +36,7 @@ const MOCK_DOCUMENTATION = [
     id: 1, 
     title: 'Platform Overview', 
     category: 'getting-started', 
-    content: 'Comprehensive overview of the Libre-X-eSport platform...',
+    content: 'Comprehensive overview of the NJZiteGeisTe platform...',
     lastUpdated: '2026-03-10',
     views: 2400
   },

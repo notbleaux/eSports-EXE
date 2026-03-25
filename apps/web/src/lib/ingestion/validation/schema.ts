@@ -2,7 +2,7 @@
  * Schema Validator
  * 
  * JSON Schema validation, type checking, required field validation, and custom validators
- * for Libre-X-eSport 4NJZ4 TENET Platform data ingestion.
+ * for NJZiteGeisTe Platform data ingestion.
  * 
  * [Ver001.000]
  * 

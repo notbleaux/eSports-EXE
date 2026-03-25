@@ -1,4 +1,4 @@
-# 🏗️ Libre-X-eSport 4NJZ4 TENET Platform v2.1.0
+# 🏗️ NJZiteGeisTe Platform v2.1.0
 
 **Status:** 🟢 Production Ready  
 **Version:** 2.1.0  
@@ -8,13 +8,13 @@
 
 ## 📋 Overview
 
-The Libre-X-eSport 4NJZ4 TENET Platform is a comprehensive esports analytics and simulation platform focused on tactical FPS games (Valorant with planned Counter-Strike support).
+The NJZiteGeisTe Platform is a comprehensive esports analytics and simulation platform focused on tactical FPS games (Valorant with planned Counter-Strike support).
 
 ### Key Features
 
 - **SATOR Analytics:** Advanced player metrics (SimRating, RAR) with confidence weighting
 - **ROTAS Simulation:** Deterministic tactical FPS match simulation (Godot 4)
-- **4NJZ4 TENET Platform:** 4-hub web interface with real-time updates
+- **NJZiteGeisTe Platform:** 5-hub web interface with real-time updates
 - **Pandascore Integration:** Official API for legal esports data access
 - **WebSocket Real-time:** Live match updates and player statistics
 - **ML Predictions:** TensorFlow.js-based prediction engine
@@ -31,7 +31,7 @@ The Libre-X-eSport 4NJZ4 TENET Platform is a comprehensive esports analytics and
 main-repo/
 ├── 📁 apps/                      # Applications
 │   ├── website/                 # Original static website (Legacy)
-│   ├── website-v2/             # 4NJZ4 TENET Platform (React 18, Vite)
+│   ├── web/                    # NJZiteGeisTe Platform (React 18, Vite)
 │   └── VCT Valorant eSports/   # VCT data project (Python, FastAPI)
 │
 ├── 📁 packages/                  # Shared packages
@@ -137,15 +137,15 @@ Access the application:
 
 ## 📊 Platform Components
 
-### 4NJZ4 Hubs
+### NJZiteGeisTe Hubs
 
 | Hub | Name | Purpose | Color | Route |
 |-----|------|---------|-------|-------|
-| 1 | **SATOR** | The Observatory — Analytics & Insights | Gold `#ff9f1c` | `/sator` |
-| 2 | **ROTAS** | The Harmonic Layer — Simulations & ML | Cyan `#00f0ff` | `/rotas` |
-| 3 | **AREPO** | The Directory — Information & Search | Blue `#0066ff` | `/arepo` |
-| 4 | **OPERA** | The Action Layer — Maps & Visualization | Purple `#9d4edd` | `/opera` |
-| 5 | **TENET** | Central Hub — Platform Overview | White `#ffffff` | `/` |
+| 1 | **SATOR** | The Observatory — Analytics & Insights | Gold `#ff9f1c` | `/analytics` |
+| 2 | **ROTAS** | The Harmonic Layer — Stats Reference | Cyan `#00f0ff` | `/stats` |
+| 3 | **AREPO** | The Directory — Community & Forums | Blue `#0066ff` | `/community` |
+| 4 | **OPERA** | The Action Layer — Pro eSports | Purple `#9d4edd` | `/pro-scene` |
+| 5 | **TENET** | Central Hub — WorldHUBs Selector | White `#ffffff` | `/hubs` |
 
 ### Technology Stack
 
@@ -227,7 +227,7 @@ npm run test:all
 
 ### Base URL
 ```
-https://api.libre-x-esport.com/v1
+https://api.njzitegeist.com/v1
 ```
 
 ### Key Endpoints
@@ -250,7 +250,7 @@ GET /v1/search/?q=TenZ            # Unified search
 GET /v1/search/suggestions?q=Te   # Autocomplete
 
 # WebSocket
-wss://api.libre-x-esport.com/v1/ws  # Real-time updates
+wss://api.njzitegeist.com/v1/ws  # Real-time updates
 ```
 
 See [API Documentation](docs/API_V1_DOCUMENTATION.md) for complete reference.
@@ -259,7 +259,7 @@ See [API Documentation](docs/API_V1_DOCUMENTATION.md) for complete reference.
 
 ## 🎨 Mascot System
 
-The 4NJZ4 TENET Platform features an advanced mascot system with multiple asset formats, animations, and accessibility features.
+The NJZiteGeisTe Platform features an advanced mascot system with multiple asset formats, animations, and accessibility features.
 
 ### Mascot Characters
 

@@ -2,7 +2,7 @@
  *
  * TalkBack Support Library
  * 
- * Android TalkBack specific optimizations and attributes for the 4NJZ4 TENET Platform.
+ * Android TalkBack specific optimizations and attributes for the NJZiteGeisTe Platform.
  * Provides custom traversal order, accessibility node info, and gesture handling.
  * 
  * @module lib/mobile/talkback

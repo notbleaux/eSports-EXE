@@ -1,5 +1,5 @@
 # [Ver003.000] - Production Deployment Workflow
-# Libre-X-eSport 4NJZ4 TENET Platform
+# NJZiteGeisTe Platform
 #
 # This workflow deploys to Render.com using the blueprint in infrastructure/render.yaml
 # Trigger: Manual only (for safety)
@@ -89,23 +89,24 @@ jobs:
           echo "  2. Click 'New +' → 'Blueprint'"
           echo "  3. Select this repository and branch"
           echo ""
-          echo "url=https://sator-api.onrender.com" >> $GITHUB_OUTPUT
+          echo "url=https://njz-api.onrender.com" >> $GITHUB_OUTPUT
 
+      # Non-blocking: reporting step only — deploy is already complete
       - name: Post-deployment health check
         run: |
           echo "Waiting for deployment to stabilize..."
           sleep 30
-          
+
           echo "Checking health endpoint..."
           for i in {1..5}; do
-            if curl -sf https://sator-api.onrender.com/health 2>/dev/null; then
+            if curl -sf https://njz-api.onrender.com/health 2>/dev/null; then
               echo "✓ Health check passed"
               exit 0
             fi
             echo "Attempt $i failed, retrying..."
             sleep 10
           done
-          
+
           echo "⚠ Health check failed - check Render dashboard"
         continue-on-error: true
 
@@ -125,5 +126,5 @@ jobs:
           echo "Commit: ${{ github.sha }}"
           echo ""
           echo "Next steps:"
-          echo "  - Verify deployment: https://sator-api.onrender.com/health"
+          echo "  - Verify deployment: https://njz-api.onrender.com/health"
           echo "  - Check logs: https://dashboard.render.com/"

@@ -1,7 +1,7 @@
 """
 Token Economy Service
 ===================
-NJZ Token system for the 4NJZ4 platform.
+NJZ Token system for the NJZiteGeisTe platform.
 Handles user wallets, transactions, daily claims, and rewards.
 """
 

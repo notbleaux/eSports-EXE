@@ -1,5 +1,5 @@
 /** [Ver003.000] - Added Grid Worker types for VirtualDataGrid
- * Worker Types for 4NJZ4 TENET Platform
+ * Worker Types for NJZiteGeisTe Platform
  * Type definitions for Web Workers infrastructure
  */
 

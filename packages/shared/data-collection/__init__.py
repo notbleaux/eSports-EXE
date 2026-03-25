@@ -1,5 +1,5 @@
 """
-Data Collection Pipeline for Libre-X TENET Platform
+Data Collection Pipeline for NJZiteGeisTe Platform
 Phase 2: VLR.gg scraper, transformer, scheduler
 """
 

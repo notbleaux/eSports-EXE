@@ -169,10 +169,10 @@ function Navigation() {
               </motion.div>
               <div className="hidden sm:flex flex-col">
                 <span className="font-bold text-lg tracking-tight text-white">
-                  4NJZ4
+                  NJZiteGeisTe
                 </span>
                 <span className="text-xs text-white/50 font-mono">
-                  TENET Platform
+                  NJZiteGeisTe Platform
                 </span>
               </div>
             </Link>

@@ -1,5 +1,5 @@
 /**
- * 4NJZ4 TENET Platform Color Palette
+ * NJZiteGeisTe Platform Color Palette
  *
  * [Ver001.000]
  * SATOR (Cyan) | ROTAS (Red) | AREPO (Yellow) | OPERA (Magenta) | TENET (Purple)

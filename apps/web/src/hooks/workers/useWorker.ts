@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * useWorker Hook for 4NJZ4 TENET Platform
+ * useWorker Hook for NJZiteGeisTe Platform
  * Generic worker management hook with lifecycle handling
  */
 

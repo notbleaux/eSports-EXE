@@ -2,7 +2,7 @@
  * UI Components Index
  * 
  * Central export point for all UI components.
- * Provides fluid dynamics-enhanced components for the 4NJZ4 TENET Platform.
+ * Provides fluid dynamics-enhanced components for the NJZiteGeisTe Platform.
  */
 
 // GlassCard and variants

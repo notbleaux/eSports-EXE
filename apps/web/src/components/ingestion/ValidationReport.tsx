@@ -2,7 +2,7 @@
  * ValidationReport Component
  * 
  * Display validation errors, quality dashboard, repair recommendations, and export reports
- * for Libre-X-eSport 4NJZ4 TENET Platform data ingestion.
+ * for NJZiteGeisTe Platform data ingestion.
  * 
  * [Ver001.000]
  * 

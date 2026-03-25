@@ -1,6 +1,6 @@
 [Ver004.000]
 
-# Master Changelog — Libre-X-eSport 4NJZ4 TENET Platform
+# Master Changelog — NJZiteGeisTe Platform
 
 **Version:** 2.1.0  
 **Last Updated:** 2026-03-15  
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This changelog documents all changes made during Phases 1-4 of the 4NJZ4 TENET Platform development, culminating in a production-ready esports analytics and simulation platform.
+This changelog documents all changes made during Phases 1-4 of the NJZiteGeisTe Platform development, culminating in a production-ready esports analytics and simulation platform.
 
 ---
 

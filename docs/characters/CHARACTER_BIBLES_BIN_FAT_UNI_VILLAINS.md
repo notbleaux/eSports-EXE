@@ -1,6 +1,6 @@
 [Ver001.000]
 
-# 4NJZ4 Character Bibles: Bin, Fat, Uni + Villains
+# NJZiteGeisTe Character Bibles: Bin, Fat, Uni + Villains
 **Agent:** 1-C (Heroes)  
 **Team:** TL-H1  
 **Deliverables:** 3 Hero Bibles + 3 Villain Bibles  

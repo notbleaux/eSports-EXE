@@ -91,7 +91,6 @@ function CentralGrid() {
           
           <p className="text-xl text-slate max-w-2xl mx-auto mb-8">
             Twin-file database system with SATOR/ROTAS infrastructure.
-            <span className="text-porcelain"> 4eva and Nvr Die.</span>
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 text-sm font-mono text-slate">

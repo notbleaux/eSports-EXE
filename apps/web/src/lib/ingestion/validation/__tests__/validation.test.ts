@@ -2,7 +2,7 @@
  * Validation System Tests
  * 
  * Comprehensive test suite for data validation and cleaning system
- * for Libre-X-eSport 4NJZ4 TENET Platform.
+ * for NJZiteGeisTe Platform.
  * 
  * [Ver001.000]
  * 

@@ -9,7 +9,7 @@ import { getEnvironment } from './environment'
 const env = getEnvironment()
 
 // Base WebSocket URL
-export const WS_BASE_URL = env.VITE_WS_URL || 'wss://api.libre-x-esport.com/v1/ws'
+export const WS_BASE_URL = env.VITE_WS_URL || 'wss://api.njzitegeiste.com/v1/ws'
 
 // WebSocket Endpoints
 export const WS_ENDPOINTS = {

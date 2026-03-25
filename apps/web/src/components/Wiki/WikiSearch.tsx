@@ -45,8 +45,8 @@ export const WikiSearch: React.FC<WikiSearchProps> = ({
     const mockResults: WikiArticleSummary[] = [
       {
         id: 1,
-        slug: 'welcome-to-4njz4',
-        title: 'Welcome to 4NJZ4 Platform',
+        slug: 'welcome-to-njzitegeiste',
+        title: 'Welcome to NJZiteGeisTe Platform',
         category_name: 'Getting Started',
         excerpt: 'Introduction to the platform and its five hubs...',
         helpful_count: 234,

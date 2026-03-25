@@ -165,8 +165,8 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
                   
                   {/* App Info */}
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-white">4NJZ4 Platform</h3>
-                    <p className="text-sm text-white/60">TENET Esports Analytics</p>
+                    <h3 className="text-lg font-bold text-white">NJZiteGeisTe Platform</h3>
+                    <p className="text-sm text-white/60">NJZiteGeisTe Esports Analytics</p>
                     <div className="flex items-center gap-1 mt-1">
                       <span className="text-xs text-white/40">Free</span>
                       <span className="text-white/20">•</span>

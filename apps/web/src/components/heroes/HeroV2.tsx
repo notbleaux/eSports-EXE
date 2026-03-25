@@ -187,7 +187,7 @@ export function HeroV2({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              4NJZ4
+              NJZiteGeisTe
             </motion.a>
 
             {/* Nav Links */}

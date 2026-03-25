@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Audio Library
  * =============
- * Central export point for the Libre-X-eSport audio system.
+ * Central export point for the NJZiteGeisTe audio system.
  * Provides comprehensive audio control for mascot voices, SFX, and ambient audio.
  * 
  * Usage:

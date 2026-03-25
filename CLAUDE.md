@@ -17,7 +17,12 @@ Architecture hierarchy:
     - AREPO — Community, Players & Fans
 
 Developer hub names (SATOR/ROTAS/OPERA/AREPO) are internal identifiers.
-User-facing route names: /analytics, /stats, /pro-scene, /community
+User-facing route names:
+- SATOR → /analytics
+- ROTAS → /stats
+- OPERA → /pro-scene
+- AREPO → /community
+- TENET/tezet → /hubs
 
 ## Commands
 
@@ -92,11 +97,11 @@ The web app is organized into five hubs, each with a TypeScript path alias:
 
 | Hub | Path | Alias | Purpose |
 |-----|------|-------|---------|
-| SATOR | `hub-1-sator/` | `@hub-1/*` | Analytics & player metrics |
-| ROTAS | `hub-2-rotas/` | `@hub-2/*` | Simulation & ML |
-| AREPO | `hub-3-arepo/` | `@hub-3/*` | Directory & search |
-| OPERA | `hub-4-opera/` | `@hub-4/*` | Maps & visualization |
-| TENET | `hub-5-tenet/` | `@hub-5/*` | Central platform hub |
+| SATOR | `hub-1-sator/` | `@hub-1/*` | Advanced Analytics — SimRating, RAR, player metrics |
+| ROTAS | `hub-2-rotas/` | `@hub-2/*` | Stats Reference — historical data, leaderboards |
+| AREPO | `hub-3-arepo/` | `@hub-3/*` | Community — forums, players, fans |
+| OPERA | `hub-4-opera/` | `@hub-4/*` | Pro eSports — tournaments, pro scene, live matches |
+| TENET | `hub-5-tenet/` | `@hub-5/*` | WorldHUBs — central platform, game-world selector |
 
 Additional aliases: `@/*` → `src/*`, `@shared/*` → `src/shared/*`
 
@@ -131,8 +136,6 @@ feat(website): Add SATOR hub orbital navigation - implements 3D scene
 fix(api): Resolve VLR data parsing error - handles null values
 ```
 
-Use `[JLB]` prefix for AI agent job-board coordination commits.
-
 ### Document Versioning
 
 All documents must include a version header:
@@ -151,9 +154,14 @@ All: trailing whitespace, end-of-file, YAML/JSON validation, detect-secrets, 100
 
 Strict mode is on. `noUnusedLocals` and `noUnusedParameters` are enabled — unused variables will fail type-check.
 
-## AI Agent Coordination
+## Agent Coordination
 
-The `.job-board/` directory is an AI agent coordination system. The `.agents/` directory contains project-specific AI skills. `AGENTS.md` at the repo root provides the authoritative context for AI agents working on this project.
+AI agents working on this project should read `AGENTS.md` at the repo root
+for current context and guidelines.
+
+The `.agents/` directory contains project-specific Claude Code skills.
+
+The `.job-board/` coordination system is archived in `archive/`.
 
 ## Known Duplications
 

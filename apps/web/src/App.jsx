@@ -1,5 +1,5 @@
 /**
- * Main App Component - Libre-X-eSport 4NJZ4 TENET Platform
+ * Main App Component - NJZiteGeisTe Platform
  * Optimized Bundle Loading with Intelligent Prefetching
  * 
  * [Ver007.000] - Updated with redesigned landing page components
@@ -186,8 +186,8 @@ function LandingPage() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-12 md:col-span-6">
-              <h3 className="text-4xl font-display font-bold">4NJZ4</h3>
-              <p className="mt-4 text-text-secondary">TENET Platform v2.0</p>
+              <h3 className="text-4xl font-display font-bold">NJZiteGeisTe</h3>
+              <p className="mt-4 text-text-secondary">NJZiteGeisTe Platform v2.0</p>
             </div>
             <div className="col-span-12 md:col-span-6 flex flex-wrap justify-start md:justify-end gap-6 md:gap-8">
               {[
@@ -211,7 +211,7 @@ function LandingPage() {
           {/* Bottom bar */}
           <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-text-secondary">
-              © 2026 Libre-X-eSport. All rights reserved.
+              © 2026 NJZiteGeisTe. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="/privacy" className="text-sm text-text-secondary hover:text-white transition-colors">
@@ -531,7 +531,7 @@ function AppContent() {
                       </motion.h1>
                       <p className="text-xl text-white/60 mb-2">Hub Not Found</p>
                       <p className="text-white/40 mb-8">
-                        This dimension doesn&apos;t exist in the 4NJZ4 universe.
+                        This dimension doesn&apos;t exist in the NJZiteGeisTe universe.
                       </p>
                       <Link 
                         to="/" 

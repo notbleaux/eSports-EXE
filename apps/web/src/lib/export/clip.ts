@@ -277,7 +277,7 @@ export async function captureClip(
     ...DEFAULT_CLIP_OPTIONS,
     ...options,
     metadata: {
-      platform: '4NJZ4-TENET',
+      platform: 'NJZiteGeisTe',
       specmapVersion: '2.0.0',
       timestamp: Date.now(),
       ...options.metadata,

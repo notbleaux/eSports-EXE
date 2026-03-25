@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This document outlines the expansion of the 4NJZ4 TENET Platform to support Counter-Strike 2 (CS2), building on the existing Valorant foundation. The expansion leverages our proprietary SimRating and RAR analytics systems while adapting to CS2's unique mechanics.
+This document outlines the expansion of the NJZiteGeisTe Platform to support Counter-Strike 2 (CS2), building on the existing Valorant foundation. The expansion leverages our proprietary SimRating and RAR analytics systems while adapting to CS2's unique mechanics.
 
 ### Key Differences: Valorant vs CS2
 

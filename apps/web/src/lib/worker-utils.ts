@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * Worker Utilities for 4NJZ4 TENET Platform
+ * Worker Utilities for NJZiteGeisTe Platform
  * Worker pool management, message serialization, and cleanup utilities
  */
 

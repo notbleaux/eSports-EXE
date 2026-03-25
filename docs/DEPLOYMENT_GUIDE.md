@@ -1,6 +1,6 @@
 [Ver002.000]
 
-# Deployment Guide — 4NJZ4 TENET Platform
+# Deployment Guide — NJZiteGeisTe Platform
 
 **Version:** 2.1.0  
 **Last Updated:** 2026-03-15
@@ -21,7 +21,7 @@
 
 ## Overview
 
-This guide covers deploying the 4NJZ4 TENET Platform to production using the zero-cost stack:
+This guide covers deploying the NJZiteGeisTe Platform to production using the zero-cost stack:
 
 | Component | Service | Purpose |
 |-----------|---------|---------|
@@ -97,7 +97,7 @@ The repository includes `infrastructure/render.yaml`:
 ```yaml
 services:
   - type: web
-    name: libre-x-esport-api
+    name: njz-api
     runtime: python
     plan: free
     buildCommand: |
@@ -173,8 +173,8 @@ vercel --prod
 
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
-| `VITE_API_URL` | Yes | API base URL | `https://api.libre-x-esport.com/v1` |
-| `VITE_WS_URL` | Yes | WebSocket URL | `wss://api.libre-x-esport.com/v1/ws` |
+| `VITE_API_URL` | Yes | API base URL | `https://api.njzitegeist.com/v1` |
+| `VITE_WS_URL` | Yes | WebSocket URL | `wss://api.njzitegeist.com/v1/ws` |
 
 ### GitHub Secrets (CI/CD)
 
@@ -226,7 +226,7 @@ psql $DATABASE_URL -f infrastructure/migrations/006_performance_indexes.sql
 git push origin main
 
 # Option 2: Manual deploy
-render deploy --service libre-x-esport-api
+render deploy --service njz-api
 ```
 
 ### 4. Deploy Web
@@ -243,10 +243,10 @@ git push origin main
 
 ```bash
 # Check API health
-curl https://api.libre-x-esport.com/health
+curl https://api.njzitegeist.com/health
 
 # Check API docs
-curl https://api.libre-x-esport.com/docs
+curl https://api.njzitegeist.com/docs
 
 # Check web
 curl -I https://libre-x-esport.com
@@ -313,7 +313,7 @@ curl http://localhost:8000/api/notifications/vapid-public-key
 
 ```bash
 # API Health
-$ curl https://api.libre-x-esport.com/health
+$ curl https://api.njzitegeist.com/health
 {
   "status": "healthy",
   "version": "2.1.0",
@@ -321,7 +321,7 @@ $ curl https://api.libre-x-esport.com/health
 }
 
 # API Readiness
-$ curl https://api.libre-x-esport.com/ready
+$ curl https://api.njzitegeist.com/ready
 {
   "status": "ready",
   "checks": {
@@ -342,7 +342,7 @@ $ curl -s https://libre-x-esport.com | grep -o "4NJZ4"
 #!/bin/bash
 # scripts/smoke-tests.sh
 
-API_URL="https://api.libre-x-esport.com/v1"
+API_URL="https://api.njzitegeist.com/v1"
 WEB_URL="https://libre-x-esport.com"
 
 # Test API endpoints
@@ -367,7 +367,7 @@ echo "All smoke tests passed!"
 
 ```bash
 # Option 1: Redeploy previous version (Render)
-render deploy --service libre-x-esport-api --commit <previous-commit>
+render deploy --service njz-api --commit <previous-commit>
 
 # Option 2: Manual rollback
 git checkout v2.0.x
@@ -419,7 +419,7 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - run: curl -s https://api.libre-x-esport.com/health
+      - run: curl -s https://api.njzitegeist.com/health
 ```
 
 ### Database Connection Issues

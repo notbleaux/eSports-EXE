@@ -9,8 +9,8 @@ import { getEnvironment } from './environment'
 const env = getEnvironment()
 
 // Base URLs
-export const API_BASE_URL = env.VITE_API_URL || 'https://api.libre-x-esport.com'
-export const WS_BASE_URL = env.VITE_WS_URL || 'wss://api.libre-x-esport.com/v1/ws'
+export const API_BASE_URL = env.VITE_API_URL || 'https://api.njzitegeiste.com'
+export const WS_BASE_URL = env.VITE_WS_URL || 'wss://api.njzitegeiste.com/v1/ws'
 
 // Unified WebSocket
 export const WS_UNIFIED = WS_BASE_URL

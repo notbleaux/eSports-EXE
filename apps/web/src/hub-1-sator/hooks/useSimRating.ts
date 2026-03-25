@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * useSimRating Hook for 4NJZ4 TENET Platform
+ * useSimRating Hook for NJZiteGeisTe Platform
  * Hook for calculating SimRating with Web Worker support
  * 
  * Features:

@@ -2,7 +2,7 @@
  * Quality Scorer
  * 
  * Data quality scoring, completeness metrics, accuracy estimation, and confidence levels
- * for Libre-X-eSport 4NJZ4 TENET Platform data ingestion.
+ * for NJZiteGeisTe Platform data ingestion.
  * 
  * [Ver001.000]
  * 

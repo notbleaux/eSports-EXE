@@ -13,11 +13,11 @@ import { cn } from '@/lib/utils';
 
 // Hub configuration
 const HUBS = [
-  { id: 'sator', name: 'SATOR', path: '/sator', color: '#ffd700', icon: Eye, subtitle: 'The Observatory' },
-  { id: 'rotas', name: 'ROTAS', path: '/rotas', color: '#00d4ff', icon: Activity, subtitle: 'The Harmonic Layer' },
-  { id: 'arepo', name: 'AREPO', path: '/arepo', color: '#0066ff', icon: Book, subtitle: 'The Directory' },
-  { id: 'opera', name: 'OPERA', path: '/opera', color: '#9d4edd', icon: Map, subtitle: 'The Nexus' },
-  { id: 'tenet', name: 'TENET', path: '/tenet', color: '#ffffff', icon: Grid3X3, subtitle: 'The Center' },
+  { id: 'sator', name: 'Analytics', path: '/analytics', color: '#ffd700', icon: Eye, subtitle: 'The Observatory' },
+  { id: 'rotas', name: 'Stats', path: '/stats', color: '#00d4ff', icon: Activity, subtitle: 'The Harmonic Layer' },
+  { id: 'arepo', name: 'Community', path: '/community', color: '#0066ff', icon: Book, subtitle: 'The Directory' },
+  { id: 'opera', name: 'Pro Scene', path: '/pro-scene', color: '#9d4edd', icon: Map, subtitle: 'The Nexus' },
+  { id: 'tenet', name: 'Hubs', path: '/hubs', color: '#ffffff', icon: Grid3X3, subtitle: 'The Center' },
 ];
 
 const ALL_PATHS = ['/', ...HUBS.map(h => h.path)];
@@ -271,7 +271,7 @@ export const SwipeableNavigation: React.FC<SwipeableNavigationProps> = ({
                       <Zap className="w-5 h-5 text-[#0a0a0f]" />
                     </div>
                     <div>
-                      <span className="font-bold text-lg text-white">4NJZ4</span>
+                      <span className="font-bold text-lg text-white">NJZiteGeisTe</span>
                       <span className="text-xs text-white/50 block">Swipe to navigate</span>
                     </div>
                   </div>

@@ -2,7 +2,7 @@
 /**
  * Push Notifications Service
  * ==========================
- * Web Push Protocol client implementation for TENET Platform.
+ * Web Push Protocol client implementation for NJZiteGeisTe Platform.
  * 
  * Handles:
  * - Browser permission requests
@@ -485,7 +485,7 @@ export async function updatePreferences(
  */
 export async function sendTestNotification(
   title: string = 'Test Notification',
-  body: string = 'This is a test notification from TENET Platform'
+  body: string = 'This is a test notification from NJZiteGeisTe Platform'
 ): Promise<boolean> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/notifications/test`, {

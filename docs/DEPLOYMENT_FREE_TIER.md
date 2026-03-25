@@ -1,7 +1,7 @@
 [Ver001.000]
 
 # Free Tier Deployment Guide
-## Libre-X-eSport 4NJZ4 TENET Platform
+## NJZiteGeisTe Platform
 
 **Last Updated:** 2026-03-16  
 **Version:** 2.1.0  
@@ -176,7 +176,7 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - run: curl -sf https://api.libre-x-esport.com/health || true
+      - run: curl -sf https://api.njzitegeist.com/health || true
 ```
 
 ### 3. No Redis Persistence

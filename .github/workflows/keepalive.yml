@@ -21,8 +21,8 @@ jobs:
         run: |
           echo "Pinging production API at $(date -u)"
           # Update with your actual Render API URL after deployment
-          curl -sf https://sator-api.onrender.com/health || \
-          curl -sf https://api.libre-x-esport.com/health || \
+          curl -sf https://njz-api.onrender.com/health || \
+          curl -sf https://api.njzitegeist.com/health || \
           echo "Ping failed (may be deploying or URL not set)"
         timeout-minutes: 2
 
@@ -34,7 +34,7 @@ jobs:
         run: |
           echo "Pinging staging API at $(date -u)"
           # Update with your actual staging Render API URL
-          curl -sf https://sator-api-staging.onrender.com/health || \
+          curl -sf https://njz-api-staging.onrender.com/health || \
           echo "Ping failed (may be deploying or URL not set)"
         timeout-minutes: 2
 

@@ -1,7 +1,7 @@
 {
   "name": "@njzitegeist/web",
   "version": "2.1.0",
-  "description": "Libre-X-eSport 4NJZ4 TENET Platform — 4eva and Nvr Die",
+  "description": "NJZiteGeisTe — Community eSports analytics platform (Valorant & CS2)",
   "type": "module",
   "scripts": {
     "dev": "vite",

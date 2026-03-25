@@ -10,9 +10,9 @@ const env = getEnvironment()
 
 // Analytics endpoints
 export const ANALYTICS_ENDPOINTS = {
-  events: `${env.VITE_API_URL || 'https://api.libre-x-esport.com'}/v1/analytics/events`,
-  batch: `${env.VITE_API_URL || 'https://api.libre-x-esport.com'}/v1/analytics/batch`,
-  dashboard: `${env.VITE_WS_URL || 'wss://api.libre-x-esport.com'}/v1/analytics/dashboard`
+  events: `${env.VITE_API_URL || 'https://api.njzitegeiste.com'}/v1/analytics/events`,
+  batch: `${env.VITE_API_URL || 'https://api.njzitegeiste.com'}/v1/analytics/batch`,
+  dashboard: `${env.VITE_WS_URL || 'wss://api.njzitegeiste.com'}/v1/analytics/dashboard`
 } as const
 
 // Batch configuration

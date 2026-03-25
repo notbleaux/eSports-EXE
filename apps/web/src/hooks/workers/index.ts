@@ -1,5 +1,5 @@
 /** [Ver002.000]
- * Worker Hooks Index for 4NJZ4 TENET Platform
+ * Worker Hooks Index for NJZiteGeisTe Platform
  * Export all worker-related hooks
  */
 

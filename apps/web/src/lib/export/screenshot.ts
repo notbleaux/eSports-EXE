@@ -127,7 +127,7 @@ export async function captureScreenshot(
     ...DEFAULT_SCREENSHOT_OPTIONS,
     ...options,
     metadata: {
-      platform: '4NJZ4-TENET',
+      platform: 'NJZiteGeisTe',
       specmapVersion: '2.0.0',
       timestamp: Date.now(),
       ...options.metadata,
@@ -180,7 +180,7 @@ export async function captureScreenshot(
       onProgress?.(progress);
 
       const watermark = generateWatermark({
-        text: opts.watermarkText || 'Libre-X 4NJZ4',
+        text: opts.watermarkText || 'NJZiteGeisTe',
         width: canvas.width,
         height: canvas.height,
       });

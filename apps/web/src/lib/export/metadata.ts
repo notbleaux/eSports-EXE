@@ -193,7 +193,7 @@ export function createMetadata(
   resolution: ExportMetadata['resolution']
 ): ExportMetadata {
   return {
-    platform: '4NJZ4-TENET',
+    platform: 'NJZiteGeisTe',
     specmapVersion: '2.0.0',
     timestamp: Date.now(),
     format,

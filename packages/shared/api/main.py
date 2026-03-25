@@ -165,7 +165,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="SATOR Esports API",
     description="""
-    Libre-X-eSport 4NJZ4 TENET Platform API
+    NJZiteGeisTe Platform API
     
     Provides endpoints for:
     - **SATOR**: Esports analytics hub (players, teams, matches, stats)
@@ -498,7 +498,7 @@ async def root():
     return {
         "name": "SATOR Esports API",
         "version": "2.1.0",
-        "description": "Libre-X-eSport 4NJZ4 TENET Platform",
+        "description": "NJZiteGeisTe Platform",
         "documentation": "/docs",
         "health": "/health",
         "websocket": "/ws/sator",
