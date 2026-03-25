@@ -47,5 +47,17 @@
 | `infrastructure/vercel.json` | Completely replaced — was referencing deleted paths (website/, sator-web/) |
 | `apps/web/vercel.json` | Legacy `routes` format replaced with `rewrites` |
 
-## Phase 4: Python Consolidation (Planned)
-- packages/shared/api/ → services/api/src/
+## Phase 4: Data Layer (In Progress)
+
+### Completed
+- SQLAlchemy models created: Player, Team, Match (services/api/src/)
+- Alembic migration 001_initial_schema applied (infra/migrations/)
+- FastAPI routers scaffolded: /v1/players, /v1/teams, /v1/matches
+- TanStack Query hooks added to web app: usePlayers, useTeams, useMatches
+- PandaScore API client implemented
+- CORS middleware and QueryClientProvider configured in web app
+
+### Next Steps
+- DB query implementation (replace stub responses with real queries)
+- Hub integration (wire data hooks into SATOR, ROTAS, OPERA hub components)
+- Data ingestion pipeline (PandaScore → PostgreSQL via axiom-esports-data)

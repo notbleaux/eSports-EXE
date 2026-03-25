@@ -31,6 +31,9 @@ except ImportError:
     PROMETHEUS_AVAILABLE = False
     logging.warning("Prometheus client not installed. Metrics endpoint will be limited.")
 
+# Import v1 routers
+from routers import players, teams, matches
+
 # Import route modules
 from src.tokens.token_routes import router as token_router
 from src.forum.forum_routes import router as forum_router
@@ -440,6 +443,11 @@ app.include_router(
     prefix="/api",
     tags=["notifications"],
 )
+
+# v1 resource routers
+app.include_router(players.router, prefix="/v1")
+app.include_router(teams.router, prefix="/v1")
+app.include_router(matches.router, prefix="/v1")
 
 
 # WebSocket endpoints

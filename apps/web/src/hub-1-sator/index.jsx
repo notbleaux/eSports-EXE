@@ -36,6 +36,7 @@ import {
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
 import { getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
 import { useSimRating } from './hooks/useSimRating';
+import { usePlayers } from '@/shared/api/hooks';
 
 const HUB_CONFIG = {
   name: 'SATOR',
@@ -119,9 +120,12 @@ const playerGridColumns = [
 
 function SatorHubContent() {
   const [stats, setStats] = useState([]);
-  const [players, setPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Live player data from API
+  const { data: playersData, isLoading: playersLoading, isError: playersError } = usePlayers('valorant');
+  const players = playersData?.players ?? [];
   const addNotification = useNJZStore(state => state.addNotification);
   const { state, setState } = useHubState('sator');
   const gridRef = useRef(null);
@@ -168,18 +172,9 @@ function SatorHubContent() {
           { value: 99.9, label: 'Uptime %', trend: 'neutral' },
         ];
 
-        const mockPlayers = Array.from({ length: 5 }, (_, i) => ({
-          id: `player-${i}`,
-          name: ['TenZ', 'aspas', 'yay', 'Derke', 'something'][i],
-          team: ['Sentinels', 'LOUD', 'Cloud9', 'Fnatic', 'Paper Rex'][i],
-          rating: [1.45, 1.42, 1.38, 1.35, 1.33][i],
-          trend: 'up'
-        }));
-
         const mockGridData = generateMockPlayerData(1000);
 
         setStats(mockStats);
-        setPlayers(mockPlayers);
         setGridData(mockGridData);
       } catch (err) {
         setError(err.message);
@@ -559,20 +554,14 @@ function SatorHubContent() {
               </button>
             </div>
             
-            {error ? (
-              <div 
-                className="p-4 rounded-lg text-center"
-                style={{ 
-                  backgroundColor: 'rgba(255, 70, 85, 0.1)',
-                  color: colors.status.error,
-                }}
-              >
-                {error}
-              </div>
+            {playersLoading ? (
+              <div className="loading">Loading players...</div>
+            ) : playersError ? (
+              <div className="error">Failed to load player data.</div>
             ) : (
               <div className="space-y-4">
                 {players.map((player, index) => (
-                  <PlayerWidget 
+                  <PlayerWidget
                     key={player.id}
                     player={player}
                     rank={index + 1}

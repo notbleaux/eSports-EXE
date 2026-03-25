@@ -27,7 +27,9 @@
     "optimize:css": "node scripts/optimize-css.js",
     "optimize:svgs": "node scripts/optimize-svgs.js",
     "turbo:login": "turbo login",
-    "turbo:link": "turbo link"
+    "turbo:link": "turbo link",
+    "db:migrate": "cd services/api && poetry run alembic -c ../../infra/migrations/alembic.ini upgrade head",
+    "db:generate": "cd services/api && poetry run alembic -c ../../infra/migrations/alembic.ini revision --autogenerate"
   },
   "workspaces": [
     "packages/*",

@@ -1,12 +1,13 @@
 /**
  * ScheduleViewer Component
  * Show match schedule for selected tournament
- * [Ver001.000]
+ * [Ver001.001]
  */
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Play, CheckCircle, Calendar, ExternalLink, Trophy } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { useMatches } from '@/shared/api/hooks';
 import type { MatchSchedule, Tournament, MatchStatus } from '../types';
 
 // Purple theme colors
@@ -22,7 +23,37 @@ interface ScheduleViewerProps {
   loading: boolean;
 }
 
-function ScheduleViewer({ schedules, tournament, loading }: ScheduleViewerProps): JSX.Element {
+function ScheduleViewer({ schedules: _schedulesProp, tournament, loading }: ScheduleViewerProps): JSX.Element {
+  const { data, isLoading, isError } = useMatches('valorant', 'not_started');
+
+  if (isLoading) return <div className="loading">Loading matches...</div>;
+  if (isError) return <div className="error">Failed to load match data.</div>;
+
+  const liveMatches = data?.matches ?? [];
+
+  // Map Match objects from the API to MatchSchedule shape for rendering
+  const schedules: MatchSchedule[] = liveMatches.map((m) => ({
+    schedule_id: Number(m.id) || 0,
+    tournament_id: 0,
+    match_id: m.id,
+    round_name: '',
+    stage: undefined,
+    team_a_id: undefined,
+    team_b_id: undefined,
+    team_a_name: m.teamA.name,
+    team_b_name: m.teamB.name,
+    scheduled_at: m.scheduledAt,
+    stream_url: undefined,
+    status: m.status === 'upcoming' ? 'scheduled' : (m.status as MatchStatus),
+    team_a_score: undefined,
+    team_b_score: undefined,
+    winner_team_id: undefined,
+    duration_minutes: undefined,
+    sator_match_ref: undefined,
+    created_at: m.scheduledAt,
+    updated_at: m.scheduledAt,
+  }));
+
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { 

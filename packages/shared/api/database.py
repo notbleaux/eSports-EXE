@@ -4,6 +4,29 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Optional, Any, List
 import os
 
+# ---------------------------------------------------------------------------
+# SQLAlchemy async session dependency (used by v1 routers)
+# ---------------------------------------------------------------------------
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+
+_DATABASE_URL = os.environ.get("DATABASE_URL", "")
+
+_engine = create_async_engine(_DATABASE_URL, echo=False) if _DATABASE_URL else None
+_AsyncSessionLocal = (
+    sessionmaker(_engine, class_=AsyncSession, expire_on_commit=False)
+    if _engine
+    else None
+)
+
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """FastAPI dependency that provides an async SQLAlchemy database session."""
+    if _AsyncSessionLocal is None:
+        raise RuntimeError("DATABASE_URL is not configured")
+    async with _AsyncSessionLocal() as session:
+        yield session
+
 class DatabasePool:
     """Manages asyncpg connection pool for PostgreSQL."""
     

@@ -38,15 +38,20 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 
 ## Current Phase
 
-**Phase 3: Tooling Modernisation** — Completed
+**Phase 3: Tooling Modernisation** — COMPLETE
 - pnpm migration complete (pnpm-workspace.yaml + pnpm-lock.yaml)
 - Poetry pyproject.toml in place (packages/shared/api/)
 - Vercel config corrected (SPA routing + pnpm install)
 - packages/shared/apps/sator-web/ removed
 
-**Next: Phase 4 — Python Consolidation**
-- packages/shared/api/ → services/api/src/
-- Alembic migrations → infra/migrations/
+**Phase 4: Data Layer** — IN PROGRESS
+- ✓ SQLAlchemy models (Player, Team, Match)
+- ✓ Alembic migrations (001_initial_schema)
+- ✓ FastAPI routers (/v1/players, /v1/teams, /v1/matches)
+- ✓ TanStack Query hooks (usePlayers, useTeams, useMatches)
+- ✓ PandaScore API client
+- ✓ CORS + QueryClientProvider configured
+- → Next: DB query implementation, hub integration, data ingestion
 
 ---
 
