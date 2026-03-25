@@ -34,6 +34,16 @@
 - [ ] Deploy frontend to Vercel
 - [ ] Confirm GET /health returns {"status": "healthy"}
 
+## Final Build Status
+
+| Check | Result |
+|-------|--------|
+| TypeScript (pre-existing errors) | 2,805 pre-existing (animation/shader/tests) |
+| Vite production build | PASS (4.32s, 675 kB JS) |
+| CI pipeline | PASS (4 jobs: quality, python-tests, frontend-build, repo-health) |
+| SimRating | Heuristic v1 (pandascore_id % 60 + 40, stable per player) |
+| WebSocket | Heartbeat mode (live events in Phase 5) |
+
 ## Phase 5 — Next Steps
 
 - /valorant world route — replace "coming soon" placeholder with tezet grid

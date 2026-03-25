@@ -1,9 +1,50 @@
 """Redis caching implementation for API responses."""
 import json
+import os
 import redis
+import redis.asyncio as aioredis
 import hashlib
 from typing import Any, Optional, Callable
 from functools import wraps
+
+# ---------------------------------------------------------------------------
+# Async helpers for FastAPI hot paths
+# Gracefully no-ops when REDIS_URL is not set (local dev without Redis).
+# ---------------------------------------------------------------------------
+REDIS_URL = os.environ.get("REDIS_URL", "")
+_async_redis: Optional[aioredis.Redis] = None
+
+
+async def _get_async_redis() -> Optional[aioredis.Redis]:
+    global _async_redis
+    if _async_redis is None and REDIS_URL:
+        _async_redis = aioredis.from_url(REDIS_URL, decode_responses=True)
+    return _async_redis
+
+
+async def cache_get(key: str) -> Optional[Any]:
+    """Return cached value or None (no-op if Redis unavailable)."""
+    r = await _get_async_redis()
+    if r is None:
+        return None
+    val = await r.get(key)
+    return json.loads(val) if val else None
+
+
+async def cache_set(key: str, value: Any, ttl: int = 300) -> None:
+    """Store value with TTL in seconds. No-op if Redis unavailable."""
+    r = await _get_async_redis()
+    if r is None:
+        return
+    await r.setex(key, ttl, json.dumps(value, default=str))
+
+
+async def cache_delete(key: str) -> None:
+    """Delete a cached key. No-op if Redis unavailable."""
+    r = await _get_async_redis()
+    if r is None:
+        return
+    await r.delete(key)
 
 
 class CacheManager:

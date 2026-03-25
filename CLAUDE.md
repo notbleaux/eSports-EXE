@@ -108,6 +108,8 @@ The web app is organized into five hubs, each with a TypeScript path alias:
 
 Additional aliases: `@/*` → `src/*`, `@shared/*` → `src/shared/*`
 
+Profile routes (added Phase 4): `/player/:slug` (Player profile page), `/team/:slug` (Team profile page).
+
 Shared packages: `@sator/types` (packages/shared/types/ — Player, Team, Match, SimRating, Game) and `@sator/services` (packages/shared/services/).
 
 ### Key Technology Choices

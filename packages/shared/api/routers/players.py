@@ -12,6 +12,7 @@ if _REPO_ROOT not in sys.path:
 
 from services.api.src.njz_api.models.player import Player
 from database import get_db
+from cache import cache_get, cache_set
 
 router = APIRouter(prefix="/players", tags=["players"])
 
@@ -20,16 +21,24 @@ router = APIRouter(prefix="/players", tags=["players"])
 async def list_players(
     game: Optional[str] = Query(None, description="Filter by game: valorant or cs2"),
     team_id: Optional[int] = Query(None),
+    slug: Optional[str] = Query(None, description="Filter by player slug"),
     limit: int = Query(50, le=200),
     offset: int = Query(0),
     db: AsyncSession = Depends(get_db),
 ):
-    """List players with optional game/team filters."""
+    """List players with optional game/team/slug filters."""
+    cache_key = f"players:{game}:{team_id}:{slug}:{limit}:{offset}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return cached
+
     stmt = select(Player)
     if game:
         stmt = stmt.where(Player.game == game)
     if team_id:
         stmt = stmt.where(Player.team_id == team_id)
+    if slug:
+        stmt = stmt.where(Player.slug == slug)
     stmt = stmt.offset(offset).limit(limit)
 
     result = await db.execute(stmt)
@@ -40,10 +49,12 @@ async def list_players(
         count_stmt = count_stmt.where(Player.game == game)
     if team_id:
         count_stmt = count_stmt.where(Player.team_id == team_id)
+    if slug:
+        count_stmt = count_stmt.where(Player.slug == slug)
     count_result = await db.execute(count_stmt)
     total = len(count_result.scalars().all())
 
-    return {
+    result = {
         "players": [
             {
                 "id": p.id,
@@ -60,6 +71,8 @@ async def list_players(
         "limit": limit,
         "offset": offset,
     }
+    await cache_set(cache_key, result, ttl=120)
+    return result
 
 
 @router.get("/{player_id}")

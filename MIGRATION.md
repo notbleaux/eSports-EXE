@@ -61,3 +61,20 @@
 - DB query implementation (replace stub responses with real queries)
 - Hub integration (wire data hooks into SATOR, ROTAS, OPERA hub components)
 - Data ingestion pipeline (PandaScore → PostgreSQL via axiom-esports-data)
+
+## Phase 5: SimRating ML + Live Data (IN PROGRESS)
+Starting: 2026-03-25
+
+### Goals
+- Replace heuristic SimRating with real stats-based ML model
+- Implement PandaScore webhook receiver for live match events
+- Build player stats ingestion pipeline (K/D/A, win rate, round impact)
+- Expand player profile pages with full stats breakdown
+- Add community features to AREPO hub (follows, discussions)
+- Achieve PWA compliance (offline LandingPage, install prompt)
+
+### Architecture Changes
+- New table: player_stats (per-match statistics)
+- New table: sim_calculations (SimRating history/audit)
+- New endpoint: POST /v1/webhooks/pandascore (live event receiver)
+- New service: packages/shared/simengine/ (SimRating calculation service)

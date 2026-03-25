@@ -36,6 +36,10 @@ const TENETHub = lazy(() => import('@hub-5/index'));
 // Game world components
 const CS2World = lazy(() => import('./hub-cs2/index'));
 
+// Page components
+const PlayerProfilePage = lazy(() => import('./pages/PlayerProfilePage'));
+const TeamProfilePage = lazy(() => import('./pages/TeamProfilePage'));
+
 // Valorant game world — placeholder until built
 const ValorantWorld = () => (
   <div className="p-20 text-center">
@@ -58,6 +62,8 @@ function App() {
         <Route path="/hubs" element={<Suspense fallback={<HubFallback />}><TENETHub /></Suspense>} />
         <Route path="/cs2" element={<Suspense fallback={<HubFallback />}><CS2World /></Suspense>} />
         <Route path="/valorant" element={<ValorantWorld />} />
+        <Route path="/player/:slug" element={<Suspense fallback={<HubFallback />}><PlayerProfilePage /></Suspense>} />
+        <Route path="/team/:slug" element={<Suspense fallback={<HubFallback />}><TeamProfilePage /></Suspense>} />
         {/* Legacy redirects */}
         <Route path="/sator" element={<Navigate to="/analytics" replace />} />
         <Route path="/rotas" element={<Navigate to="/stats" replace />} />

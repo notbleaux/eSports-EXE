@@ -5,6 +5,7 @@
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSimRatingLeaderboard } from '@/shared/api/hooks';
 import { 
   Activity, 
   TrendingUp, 
@@ -111,6 +112,10 @@ function RotasHubContent() {
   
   // Fetch ROTAS data
   const { analytics, predictions, isLoading, error } = useRotasData();
+
+  // SimRating leaderboard
+  const { data: lbData, isLoading: lbLoading } = useSimRatingLeaderboard();
+  const topPlayers = lbData?.leaderboard?.slice(0, 5) ?? [];
 
   // Layer toggle for Jungian system
   const toggleLayer = (layerId) => {
@@ -772,17 +777,36 @@ function RotasHubContent() {
             <h3 className="font-semibold mb-4" style={{ color: colors.text.primary }}>
               About BASE
             </h3>
-            
+
             <p className="text-sm mb-4" style={{ color: colors.text.secondary }}>
               Base Analytics System for Esports (BASE) processes RAWS data through multi-layer harmonic analysis.
             </p>
-            
+
             <div className="text-xs font-mono space-y-1" style={{ color: colors.text.muted }}>
               <div>Jungian Archetype Mapping</div>
               <div>Harmonic Wave Analysis</div>
               <div>Probability Cloud Modeling</div>
             </div>
           </GlassCard>
+
+          {/* SimRating Leaderboard */}
+          <div className="simrating-leaderboard mt-4 p-4 bg-gray-800 rounded-lg">
+            <h3 className="text-sm font-semibold text-purple-400 mb-2">SimRating Top 5</h3>
+            {lbLoading ? (
+              <p className="text-gray-500 text-xs">Loading...</p>
+            ) : topPlayers.length === 0 ? (
+              <p className="text-gray-500 text-xs">No data yet — run sync_pandascore.py to seed.</p>
+            ) : (
+              <div className="space-y-1">
+                {topPlayers.map((p, i) => (
+                  <div key={p.player_id} className="flex justify-between text-xs text-gray-300">
+                    <span>#{i + 1} {p.player_name}</span>
+                    <span className="text-purple-300">{p.simrating} <span className="text-yellow-400">({p.grade})</span></span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 

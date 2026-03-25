@@ -45,20 +45,24 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 - packages/shared/apps/sator-web/ removed
 
 **Phase 4: Data Layer** — COMPLETE
-- ✓ SQLAlchemy models (Player, Team, Match)
-- ✓ Alembic migrations (001_initial_schema)
-- ✓ FastAPI routers (/v1/players, /v1/teams, /v1/matches)
-- ✓ TanStack Query hooks (usePlayers, useTeams, useMatches)
-- ✓ PandaScore API client
-- ✓ CORS + QueryClientProvider configured
-- ✓ Hub data integration: SATOR (usePlayers), OPERA (useMatches via ScheduleViewer)
-- ✓ Playwright E2E routes updated (124 route strings across 23 files)
+  ✓ SQLAlchemy models (Player, Team, Match)
+  ✓ Alembic migrations (001_initial_schema)
+  ✓ FastAPI routers (/v1/players, /v1/teams, /v1/matches, /v1/simrating)
+  ✓ TanStack Query hooks (usePlayers, useTeams, useMatches, useSimRating)
+  ✓ Redis caching layer (cache.py)
+  ✓ WebSocket live match feed (/ws/matches/live)
+  ✓ Player + Team profile pages (/player/:slug, /team/:slug)
+  ✓ ROTAS leaderboard connected to SimRating API
+  ✓ Vite production build passing (4.32s, 675 kB JS)
+  ✓ E2E routes synced (124 updates across 23 test files)
 
-**Phase 5: Live Data + SimRating ML** — NEXT
-  → /valorant world route (replace placeholder)
-  → WebSocket live match updates
-  → SimRating ML engine (TF.js WASM)
-  → Player/Team profile pages
+**Phase 5: SimRating ML + Live Data** — IN PROGRESS
+  → SimRating v2: real stats-based calculation (replace heuristic)
+  → PandaScore webhook integration (push vs pull)
+  → Player stats ingestion (K/D/A, win rate, round impact)
+  → AREPO community features (forums, fan follows)
+  → PWA offline support (service worker)
+  → Performance: bundle < 500KB gzipped, LCP < 2.5s
 
 ---
 

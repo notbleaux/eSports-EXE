@@ -9,14 +9,15 @@ interface TeamsResponse {
   offset: number;
 }
 
-export function useTeams(game?: 'valorant' | 'cs2', region?: string) {
+export function useTeams(game?: 'valorant' | 'cs2', region?: string, slug?: string) {
   const params = new URLSearchParams();
-  if (game) params.set('game', game);
-  if (region) params.set('region', region);
+  if (game) params.append('game', game);
+  if (region) params.append('region', region);
+  if (slug) params.append('slug', slug);
   const query = params.toString();
 
   return useQuery({
-    queryKey: ['teams', game, region],
+    queryKey: ['teams', game, region, slug],
     queryFn: () => apiFetch<TeamsResponse>(
       query ? `/teams?${query}` : '/teams'
     ),

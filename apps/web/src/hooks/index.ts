@@ -88,7 +88,7 @@ export {
 export type {
   UseLiveMatchOptions,
   UseLiveMatchReturn,
-} from './useLiveMatch';
+} from '../lib/realtime/types';
 
 // Service Worker & PWA
 export { useServiceWorker } from './useServiceWorker';

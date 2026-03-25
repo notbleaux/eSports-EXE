@@ -48,7 +48,7 @@ export default defineConfig({
       '@sator/types': path.resolve(__dirname, '../../packages/shared/types'),
       '@sator/services': path.resolve(__dirname, '../../packages/shared/services/help')
     },
-    dedupe: ['react', 'react-dom', 'scheduler', 'framer-motion']
+    dedupe: ['react', 'react-dom', 'framer-motion']
   },
   worker: {
     format: 'es',
@@ -63,11 +63,26 @@ export default defineConfig({
     minify: 'esbuild',
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
-            return 'vendor';
+        manualChunks(id) {
+          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) {
+            return 'vendor-three'
           }
-          return 'app';
+          if (
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react-router-dom') ||
+            id.includes('node_modules/react/')
+          ) {
+            return 'vendor-react'
+          }
+          if (id.includes('node_modules/@tanstack/react-query')) {
+            return 'vendor-query'
+          }
+          if (id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion'
+          }
+          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3')) {
+            return 'vendor-charts'
+          }
         },
         entryFileNames: 'js/[name]-[hash].js',
         chunkFileNames: 'js/[name]-[hash].js',
