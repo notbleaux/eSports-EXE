@@ -19,3 +19,4 @@ class Player(Base):
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     team = relationship("Team", back_populates="players")
+    stats = relationship("PlayerStats", back_populates="player", cascade="all, delete-orphan")

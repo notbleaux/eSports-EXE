@@ -61,6 +61,9 @@ import {
 // Import cross-reference hook
 import { useCrossReferenceEngine } from './hooks/useArepoData';
 
+// Import shared API hooks for live community data
+import { useMatches, usePlayers, useTeams } from '@/shared/api/hooks';
+
 // HUB CONFIG - Exact colors as specified
 const HUB_CONFIG = {
   name: 'AREPO',
@@ -147,6 +150,12 @@ function ArepoHubContent() {
   const { state, setState } = useHubState('arepo');
   const { queryHistory } = useCrossReferenceEngine();
 
+  // Live community data
+  const { data: matchData } = useMatches(undefined, 'finished');
+  const { data: playerData } = usePlayers();
+  const { data: teamData } = useTeams();
+  const recentMatches = matchData?.matches?.slice(0, 5) ?? [];
+
   const handleCategorySelect = useCallback((category) => {
     setActiveCategory(category);
     setState({ selectedCategory: category });
@@ -195,6 +204,13 @@ function ArepoHubContent() {
 
   return (
     <HubWrapper hubId="arepo">
+      {/* Community Stats Bar */}
+      <div className="community-stats-bar flex gap-6 p-3 bg-gray-900 rounded-lg mb-4 text-sm text-gray-400">
+        <span>Players tracked: <strong className="text-white">{playerData?.total ?? '—'}</strong></span>
+        <span>Teams tracked: <strong className="text-white">{teamData?.total ?? '—'}</strong></span>
+        <span>Recent matches: <strong className="text-white">{matchData?.total ?? '—'}</strong></span>
+      </div>
+
       {/* Stats Row */}
       <div className="max-w-6xl mx-auto mb-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -685,6 +701,20 @@ function ArepoHubContent() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+
+      {/* Recent Matches */}
+      <div className="recent-matches mt-4 p-4 bg-gray-800 rounded-lg">
+        <h3 className="text-sm font-semibold text-purple-400 mb-2">Recent Matches</h3>
+        {recentMatches.length === 0
+          ? <p className="text-gray-500 text-xs">No finished matches yet — run sync_pandascore.py to seed.</p>
+          : recentMatches.map((m) => (
+              <div key={m.id} className="flex justify-between text-xs text-gray-300 mb-1">
+                <span>{m.name ?? m.id}</span>
+                <span className="text-green-400">{m.status}</span>
+              </div>
+            ))
+        }
       </div>
     </HubWrapper>
   );
