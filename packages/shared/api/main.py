@@ -39,6 +39,7 @@ from routers.ws_players import router as ws_players_router
 from routers.search import router as search_router
 from routers.forum import router as forum_v1_router
 from routers.admin import router as admin_router
+from routers.export import router as export_router
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -485,6 +486,7 @@ app.include_router(v1_oauth.router, prefix="/v1")
 app.include_router(search_router, prefix="/v1")
 app.include_router(forum_v1_router, prefix="/v1")
 app.include_router(admin_router, prefix="/v1")
+app.include_router(export_router, prefix="/v1")
 
 
 # WebSocket endpoints

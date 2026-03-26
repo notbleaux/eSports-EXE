@@ -1,5 +1,26 @@
-// [Ver001.000] TensorFlow.js SimRating ML inference — WASM backend.
+// [Ver001.001] TensorFlow.js SimRating ML inference — WASM backend.
 import * as tf from '@tensorflow/tfjs';
+
+// Normalization ranges for raw stat inputs → 0-1 scale
+// kd_ratio: typical range 0.3–3.5, acs: 30–500, consistency/precision: 0–25
+const NORM = {
+  kd: [0.3, 3.5] as [number, number],
+  acs: [30, 500] as [number, number],
+  consistency: [0, 25] as [number, number],
+  precision: [0, 25] as [number, number],
+};
+
+function normalize(val: number, min: number, max: number): number {
+  return Math.max(0, Math.min(1, (val - min) / (max - min)));
+}
+
+function fallbackScore(kd: number, acs: number, consistency: number, precision: number): number {
+  const nkd = normalize(kd, NORM.kd[0], NORM.kd[1]);
+  const nacs = normalize(acs, NORM.acs[0], NORM.acs[1]);
+  const ncon = normalize(consistency, NORM.consistency[0], NORM.consistency[1]);
+  const npre = normalize(precision, NORM.precision[0], NORM.precision[1]);
+  return Math.round((nkd * 0.35 + nacs * 0.35 + ncon * 0.15 + npre * 0.15) * 100);
+}
 
 let model: tf.LayersModel | null = null;
 let backendReady = false;
@@ -47,9 +68,18 @@ export async function inferSimRating(components: {
   kd_score: number; acs_score: number;
   consistency_score: number; precision_score: number;
 }): Promise<number> {
-  const input = [components.kd_score, components.acs_score,
-                 components.consistency_score, components.precision_score];
-  if (!backendReady || !model) return input.reduce((a, b) => a + b, 0);
+  if (!backendReady || !model) {
+    return fallbackScore(
+      components.kd_score, components.acs_score,
+      components.consistency_score, components.precision_score,
+    );
+  }
+  const input = [
+    normalize(components.kd_score, NORM.kd[0], NORM.kd[1]),
+    normalize(components.acs_score, NORM.acs[0], NORM.acs[1]),
+    normalize(components.consistency_score, NORM.consistency[0], NORM.consistency[1]),
+    normalize(components.precision_score, NORM.precision[0], NORM.precision[1]),
+  ];
   const tensor = tf.tensor2d([input], [1, 4]);
   try {
     const pred = model.predict(tensor) as tf.Tensor;
@@ -75,8 +105,17 @@ export async function inferSimRatingDeduped(
 export async function inferSimRatingBatch(
   batch: Array<{ key: string } & Parameters<typeof inferSimRating>[0]>
 ): Promise<number[]> {
-  if (!model) return batch.map(b => Object.values(b).slice(1).reduce((a: number, v) => a + (v as number), 0));
-  const inputs = batch.map(b => [b.kd_score, b.acs_score, b.consistency_score, b.precision_score]);
+  if (!model) {
+    return batch.map(b =>
+      fallbackScore(b.kd_score, b.acs_score, b.consistency_score, b.precision_score)
+    );
+  }
+  const inputs = batch.map(b => [
+    normalize(b.kd_score, NORM.kd[0], NORM.kd[1]),
+    normalize(b.acs_score, NORM.acs[0], NORM.acs[1]),
+    normalize(b.consistency_score, NORM.consistency[0], NORM.consistency[1]),
+    normalize(b.precision_score, NORM.precision[0], NORM.precision[1]),
+  ]);
   const tensor = tf.tensor2d(inputs, [inputs.length, 4]);
   try {
     const pred = model.predict(tensor) as tf.Tensor;

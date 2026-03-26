@@ -12,7 +12,7 @@ from typing import Optional
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import RedirectResponse, JSONResponse, Response as FastAPIResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -189,7 +189,10 @@ async def oauth_callback(
                     "code": code,
                     "redirect_uri": cfg["redirect_uri"],
                 },
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
+                headers={
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Accept": "application/json",
+                },
             )
             token_resp.raise_for_status()
             token_data = token_resp.json()
@@ -358,7 +361,10 @@ async def oauth_callback(
 
         await db.commit()
     except Exception as exc:
-        logger.warning("DB upsert failed during OAuth for %s — issuing token without persistence: %s", provider, exc)
+        logger.error(
+            "OAuth DB upsert failed for %s:%s — JWT issued without DB record. Error: %s",
+            provider, provider_id, exc,
+        )
         await db.rollback()
         # Still issue a JWT so the user isn't locked out; persistence retried on next login
         user_id = f"{provider}:{provider_id}"
@@ -381,7 +387,20 @@ async def oauth_callback(
     )
 
     # ------------------------------------------------------------------
-    # 5. Redirect to frontend with token
+    # 5. Set HttpOnly cookie and redirect to frontend
+    # Passing the JWT as a URL param exposes it in browser history and server
+    # logs. Use a SameSite=Lax HttpOnly cookie instead.
     # ------------------------------------------------------------------
-    params = urllib.parse.urlencode({"oauth": "success", "access_token": access_token})
-    return RedirectResponse(url=f"{frontend_url}{redirect_to}?{params}")
+    redirect_url = f"{frontend_url}{redirect_to}?oauth=success"
+    response = RedirectResponse(url=redirect_url, status_code=302)
+    secure = os.getenv("APP_ENVIRONMENT", "development") == "production"
+    response.set_cookie(
+        key="njz_access_token",
+        value=access_token,
+        httponly=True,
+        samesite="lax",
+        secure=secure,
+        max_age=expire_minutes * 60,
+        path="/",
+    )
+    return response

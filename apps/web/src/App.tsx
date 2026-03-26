@@ -35,9 +35,6 @@ const AREPOHub = lazy(() => import('@hub-3/index'));
 const OPERAHub = lazy(() => import('@hub-4/index'));
 const TENETHub = lazy(() => import('@hub-5/index'));
 
-// Game world components
-const CS2World = lazy(() => import('./hub-cs2/index'));
-
 // Page components
 const PlayerProfilePage = lazy(() => import('./pages/PlayerProfilePage'));
 const TeamProfilePage = lazy(() => import('./pages/TeamProfilePage'));

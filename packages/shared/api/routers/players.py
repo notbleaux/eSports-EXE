@@ -47,15 +47,14 @@ async def list_players(
     result = await db.execute(stmt)
     players = result.scalars().all()
 
-    count_stmt = select(Player)
+    count_stmt = select(func.count(Player.id))
     if game:
         count_stmt = count_stmt.where(Player.game == game)
     if team_id:
         count_stmt = count_stmt.where(Player.team_id == team_id)
     if slug:
         count_stmt = count_stmt.where(Player.slug == slug)
-    count_result = await db.execute(count_stmt)
-    total = len(count_result.scalars().all())
+    total = (await db.execute(count_stmt)).scalar_one()
 
     result = {
         "players": [
@@ -90,13 +89,15 @@ async def list_player_stats(
     except ImportError:
         try:
             from njz_api.models.player_stats import PlayerStats
-        except ImportError:
-            return {"stats": []}
+        except ImportError as e:
+            import logging
+            logging.getLogger(__name__).error("PlayerStats model import failed: %s", e)
+            raise HTTPException(status_code=503, detail="Stats service unavailable")
 
     stmt = (
         select(
             Player.id.label("player_id"),
-            Player.handle if hasattr(Player, 'handle') else Player.name.label("handle"),
+            Player.name.label("handle"),
             Player.slug,
             Player.game,
             func.avg(PlayerStats.kd_ratio).label("avg_kd"),
@@ -105,7 +106,7 @@ async def list_player_stats(
             func.count(PlayerStats.id).label("games"),
         )
         .join(PlayerStats, PlayerStats.player_id == Player.id)
-        .group_by(Player.id, Player.slug, Player.game)
+        .group_by(Player.id, Player.name, Player.slug, Player.game)
         .order_by(func.avg(PlayerStats.kd_ratio).desc())
         .limit(limit)
     )

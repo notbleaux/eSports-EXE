@@ -3,7 +3,7 @@
 **Purpose:** This file provides essential context for AI coding agents working on the NJZiteGeisTe Platform project.
 **Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
 **Repository:** https://github.com/notbleaux/eSports-EXE  
-**Last Updated:** 2026-03-26
+**Last Updated:** 2026-03-26 (Phase 10 initiated)
 
 ---
 
@@ -114,12 +114,31 @@ All phases 1-8 complete. See docs/PRE_DEPLOY_CHECKLIST.md.
   ✓ test_api_firewall.py UTF-16 corruption fixed
   ✓ E2E test coverage: 59 static tests + 5 new feature specs
 
-## Known Gaps (Phase 10):
+**Phase 10: Hardening, Security, Accessibility** — IN PROGRESS (2026-03-26)
+  ✓ Forum migrated to PostgreSQL (migration 005, ForumPost/Comment/Flag ORM models, JWT auth on writes)
+  ✓ FantasyDataFilter recursive filtering — deepSanitize + deepValidate at all nesting depths + test suite
+  ✓ players.py GROUP BY bug fixed, count query optimised, silent ImportError → 503
+  ✓ players.py hasattr fragility removed — Player.name used consistently
+  ✓ oauth.py GitHub Accept: application/json header added to token exchange
+  ✓ oauth.py JWT moved from URL param to HttpOnly SameSite=Lax cookie
+  ✓ oauth.py DB upsert failure now logs at ERROR level with provider:id context
+  ✓ simrating-model.ts fallback uses weighted normalised average (0-100 scale, was raw sum)
+  ✓ simrating-model.ts input normalization applied before tensor creation (kd 0.3-3.5, acs 30-500)
+  ✓ playwright.config.ts testDir fixed: ../../tests/e2e (was ./e2e — all tests missing from CI)
+  ✓ mascot-cross-browser.spec.ts vacuous expect(true).toBe(true) replaced with real assertions
+  ✓ follows.spec.ts rewritten to test FollowButton component interaction
+  ✓ E2E specs added: sim-rating, player-profile, search, admin, mobile-responsive, accessibility
+  ✓ Admin API extended: /admin/users, /admin/flags, /admin/flags/:id, /admin/posts/:id, /admin/ml/train, /admin/ml/status
+  ✓ Data export API: GET /v1/export/players|matches|simratings (CSV + NDJSON streaming, auth required)
+  ✓ cache_warmup.py: leaderboard pre-population at startup for all games × 10 pages
+  ✓ AGENTS.md stale gap corrected: scheduled_at already exists in Match model + migration 001
+
+## Known Gaps (Phase 10 remaining):
 → ML model training not run (2K synthetic samples, needs 50K+ real matches post-Pandascore sync)
-→ Forum posts use in-memory store (needs PostgreSQL migration + ORM model)
-→ EsportsCalendar wired to /matches endpoint (needs scheduled_at field in Match model)
-→ data-partition-lib FantasyDataFilter recursive filtering TODO in FantasyDataFilter.ts
-→ E2E target: 28 actual vs 95+ claimed — needs test expansion sprint
+→ Admin import endpoint (POST /v1/admin/import/players) not yet implemented
+→ WCAG 2.1 AA audit: @axe-core/playwright not yet installed (tests skip gracefully)
+→ Mobile responsiveness: AREPO/ROTAS Tailwind responsive classes not fully audited
+→ Cache warmup not wired into main.py lifespan (see cache_warmup.py warm_leaderboard_cache)
 
 ---
 

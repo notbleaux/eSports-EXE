@@ -56,7 +56,20 @@
       "Bash(ls ~/.nvm/versions/node/*/bin/node)",
       "Bash(command -v npx)",
       "Bash(\"/c/Program Files/nodejs/npx\" tsc --noEmit)",
-      "Bash(export PATH=\"$PATH:/c/Program Files/nodejs\")"
+      "Bash(export PATH=\"$PATH:/c/Program Files/nodejs\")",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(where py:*)",
+      "Bash(cmd /c \"where python 2>nul & where py 2>nul & where python3 2>nul\")",
+      "Bash(/c/Users/jacke/AppData/Local/Programs/Python/Python312/python.exe --version)",
+      "Bash(/c/Python312/python.exe --version)",
+      "Bash(ls /c/Python*)",
+      "Bash(ls /c/Users/jacke/AppData/Local/Microsoft/WindowsApps/python*)",
+      "Bash(/c/Users/jacke/anaconda3/python.exe -c \"\nwith open\\('C:/Users/jacke/Documents/GitHub/eSports-EXE/tests/integration/test_api_firewall.py', 'rb'\\) as f:\n    raw = f.read\\(\\)\nif raw[:2] == b'\\\\xff\\\\xfe':\n    text = raw[2:].decode\\('utf-16-le'\\)\nelif raw[:2] == b'\\\\xfe\\\\xff':\n    text = raw[2:].decode\\('utf-16-be'\\)\nelse:\n    text = raw.decode\\('utf-8'\\)\nwith open\\('C:/Users/jacke/Documents/GitHub/eSports-EXE/tests/integration/test_api_firewall.py', 'wb'\\) as f:\n    f.write\\(text.encode\\('utf-8'\\)\\)\nprint\\('Converted. Lines:', text.count\\(chr\\(10\\)\\), '| First 120 chars:', repr\\(text[:120]\\)\\)\n\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

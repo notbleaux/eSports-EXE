@@ -89,13 +89,12 @@ test.describe('TEST-006: Mascot Cross-Browser Compatibility', () => {
         const mascot = page.locator('[data-testid="mascot"], .mascot-clickable, button[class*="mascot"]').first();
         
         if (await mascot.isVisible().catch(() => false)) {
-          // Click the mascot
+          // Click the mascot and verify page is still functional (no crash)
           await mascot.click();
-          
-          // Verify click was registered (check for state change or popup)
-          // This will depend on actual implementation
           await page.waitForTimeout(100);
-          expect(true).toBe(true);
+          await expect(page.locator('body')).not.toContainText('Unhandled error');
+        } else {
+          test.skip(true, 'No clickable mascot element on this page');
         }
       });
 
@@ -158,7 +157,10 @@ test.describe('TEST-006: Mascot Cross-Browser Compatibility', () => {
                    el.classList.toString().includes('animate');
           });
           
-          expect(hasAnimation || true).toBe(true); // Animation presence is optional
+          // Animation presence is optional — skip rather than vacuous assert
+          if (!hasAnimation) {
+            test.skip(true, 'No animation detected on mascot element');
+          }
         }
       });
     });
@@ -263,8 +265,8 @@ test.describe('TEST-006: Mascot Cross-Browser Compatibility', () => {
           await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
           await page.waitForTimeout(100);
           
-          // Touch should be handled
-          expect(true).toBe(true);
+          // Verify no crash after touch
+          await expect(page.locator('body')).not.toContainText('Unhandled error');
         }
       }
     });
