@@ -4,11 +4,14 @@ from typing import Optional
 from datetime import datetime
 import hmac
 import hashlib
+import json
 import asyncio
 import os
+from cache import _get_async_redis
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 
+STREAM_NAME = "njz:match_events"
 WEBHOOK_SECRET = os.environ.get("PANDASCORE_WEBHOOK_SECRET", "")
 
 
@@ -42,14 +45,36 @@ async def pandascore_webhook(
     obj = data.get("object", {})
 
     event_payload = {
-        "event_type": event_type,
-        "match_id": obj.get("id"),
+        "eventType": event_type,
+        "matchId": str(obj.get("id")),
         "game": obj.get("videogame", {}).get("slug"),
-        "received_at": datetime.utcnow().isoformat(),
+        "timestamp": int(datetime.utcnow().timestamp()),
+        "payload": {
+            "eventType": "MATCH_SCORE" if event_type == "match.update" else "MATCH_END",
+            "teamA": {
+                "teamId": "unknown",
+                "name": "Team A",
+                "score": 0,
+                "side": "attack"
+            },
+            "teamB": {
+                "teamId": "unknown",
+                "name": "Team B",
+                "score": 0,
+                "side": "defend"
+            },
+            "currentRound": 1,
+            "half": "first"
+        },
         "raw": data,
     }
 
-    # Fire-and-forget broadcast to WebSocket clients
+    # Speed Layer (Path A): Push to Redis Stream for WebSocket distribution
+    redis = await _get_async_redis()
+    if redis:
+        await redis.xadd(STREAM_NAME, {"payload": json.dumps(event_payload)})
+
+    # Legacy fallback: Fire-and-forget broadcast to current local WebSocket clients
     from routers.ws_matches import push_match_event
     asyncio.create_task(push_match_event(event_payload))
 

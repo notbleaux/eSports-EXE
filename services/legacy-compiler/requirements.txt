@@ -2,10 +2,8 @@ fastapi
 uvicorn
 pydantic
 pydantic-settings
-sqlalchemy
-asyncpg
 httpx
-numpy
-scipy
+beautifulsoup4
 redis
 python-dotenv
+aiohttp

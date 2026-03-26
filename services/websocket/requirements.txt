@@ -1,11 +1,6 @@
 fastapi
 uvicorn
+redis
 pydantic
 pydantic-settings
-sqlalchemy
-asyncpg
-httpx
-numpy
-scipy
-redis
 python-dotenv

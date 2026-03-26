@@ -24,61 +24,56 @@
 
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LandingPage } from '@/pages/LandingPage';
+import { TeNeTPortal, TeNETDirectory, WorldPortRouter } from '@/hub-5-tenet';
 import { AppErrorBoundary } from '@/components/error';
 import { AdminGuard } from '@/components/AdminGuard';
 
-// Hub components — lazy loaded for code splitting
-const SATORHub = lazy(() => import('@hub-1/index'));
-const ROTASHub = lazy(() => import('@hub-2/index'));
-const AREPOHub = lazy(() => import('@hub-3/index'));
-const OPERAHub = lazy(() => import('@hub-4/index'));
-const TENETHub = lazy(() => import('@hub-5/index'));
-
-// Page components
+// Lazy load pages for code splitting
 const PlayerProfilePage = lazy(() => import('./pages/PlayerProfilePage'));
 const TeamProfilePage = lazy(() => import('./pages/TeamProfilePage'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// Game world page (Valorant + CS2 tezet grid)
-const GameWorldPage = lazy(() => import('@/pages/GameWorldPage'));
-
-// Admin page
-const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
-
-const HubFallback = () => <div className="p-20 text-center">Loading...</div>;
-
-function HubRoute({ children }: { children: React.ReactNode }) {
-  return (
-    <AppErrorBoundary>
-      <Suspense fallback={<HubFallback />}>
-        {children}
-      </Suspense>
-    </AppErrorBoundary>
-  );
-}
+/**
+ * HubRoute Wrapper
+ * Adds AppErrorBoundary to route elements
+ */
+const HubRoute = ({ children }: { children: React.ReactNode }) => (
+  <AppErrorBoundary>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      {children}
+    </Suspense>
+  </AppErrorBoundary>
+);
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/analytics"  element={<HubRoute><SATORHub /></HubRoute>} />
-        <Route path="/stats"      element={<HubRoute><ROTASHub /></HubRoute>} />
-        <Route path="/community"  element={<HubRoute><AREPOHub /></HubRoute>} />
-        <Route path="/pro-scene"  element={<HubRoute><OPERAHub /></HubRoute>} />
-        <Route path="/hubs"       element={<HubRoute><TENETHub /></HubRoute>} />
-        <Route path="/cs2"        element={<HubRoute><GameWorldPage /></HubRoute>} />
-        <Route path="/valorant"   element={<HubRoute><GameWorldPage /></HubRoute>} />
+        <Route path="/" element={<TeNeTPortal />} />
+        <Route path="/hubs" element={<TeNETDirectory />} />
+        
+        {/* World-Port Hierarchical Routing */}
+        <Route path="/:gameId/*" element={<WorldPortRouter />} />
+
+        {/* Legacy redirects */}
+        <Route path="/valorant" element={<Navigate to="/valorant/analytics" replace />} />
+        <Route path="/cs2"      element={<Navigate to="/cs2/analytics"      replace />} />
+        <Route path="/analytics"  element={<Navigate to="/valorant/analytics" replace />} />
+        <Route path="/stats"      element={<Navigate to="/valorant/stats" replace />} />
+        <Route path="/community"  element={<Navigate to="/valorant/community" replace />} />
+        <Route path="/pro-scene"  element={<Navigate to="/valorant/pro-scene" replace />} />
+        <Route path="/sator" element={<Navigate to="/valorant/analytics" replace />} />
+        <Route path="/rotas" element={<Navigate to="/valorant/stats" replace />} />
+        <Route path="/arepo" element={<Navigate to="/valorant/community" replace />} />
+        <Route path="/opera" element={<Navigate to="/valorant/pro-scene" replace />} />
+        <Route path="/tenet" element={<Navigate to="/hubs" replace />} />
+
+        {/* Global profile pages */}
         <Route path="/player/:slug" element={<HubRoute><PlayerProfilePage /></HubRoute>} />
         <Route path="/team/:slug"   element={<HubRoute><TeamProfilePage /></HubRoute>} />
         <Route path="/admin" element={<AdminGuard><HubRoute><AdminDashboard /></HubRoute></AdminGuard>} />
-        {/* Legacy redirects */}
-        <Route path="/sator" element={<Navigate to="/analytics" replace />} />
-        <Route path="/rotas" element={<Navigate to="/stats" replace />} />
-        <Route path="/arepo" element={<Navigate to="/community" replace />} />
-        <Route path="/opera" element={<Navigate to="/pro-scene" replace />} />
-        <Route path="/tenet" element={<Navigate to="/hubs" replace />} />
+
         {/* 404 fallback */}
         <Route path="*" element={<HubRoute><NotFoundPage /></HubRoute>} />
       </Routes>
