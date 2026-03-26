@@ -162,18 +162,39 @@ class SecurityHeadersMiddleware:
             await response(scope, receive, send_with_security_headers)
 
 
+try:
+    from cache_warmup import warm_leaderboard_cache
+    _CACHE_WARMUP_AVAILABLE = True
+except ImportError:
+    _CACHE_WARMUP_AVAILABLE = False
+    logger.info("cache_warmup not importable — leaderboard warm-up skipped")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager - handles startup and shutdown."""
     # Startup - LAZY INITIALIZATION (non-blocking)
     logger.info("Starting SATOR API...")
-    
+
     # Don't block on DB connection - let first request trigger it
     logger.info("API initialized (database will connect on first request)")
-    
+
     # Start background task for lens updates
     lens_task = asyncio.create_task(simulate_lens_updates())
     logger.info("Lens update simulation started")
+
+    # Cache warm-up: pre-populate leaderboard keys so first requests hit cache
+    if _CACHE_WARMUP_AVAILABLE:
+        async def _warmup():
+            try:
+                from database import AsyncSessionLocal  # type: ignore[import]
+                async with AsyncSessionLocal() as warm_db:
+                    await warm_leaderboard_cache(warm_db)
+            except Exception as exc:
+                logger.warning("Cache warm-up failed (non-fatal): %s", exc)
+
+        asyncio.create_task(_warmup())
+        logger.info("Leaderboard cache warm-up task scheduled")
     
     yield
     

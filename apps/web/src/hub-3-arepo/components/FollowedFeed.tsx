@@ -1,30 +1,36 @@
-// [Ver001.000] Feed of followed players with unfollow option.
+// [Ver002.000] Feed of followed players with unfollow option.
 import { Link } from 'react-router-dom';
 import { useFollows } from '../hooks/useFollows';
 
 export function FollowedFeed() {
   const { followed, unfollow, count } = useFollows();
   if (count === 0) return (
-    <div style={{ color: '#6b7280', padding: '1rem', textAlign: 'center' }}>
+    <div className="p-4 text-center text-gray-500">
       <p>No players followed yet.</p>
-      <p style={{ fontSize: '0.8rem' }}>Hit "+ Follow" on any player below.</p>
+      <p className="text-xs mt-1">Hit &quot;+ Follow&quot; on any player below.</p>
     </div>
   );
   return (
-    <div className="followed-feed">
-      <h3 style={{ color: '#e5e7eb', marginBottom: '0.5rem' }}>
+    <div className="w-full">
+      <h3 className="text-gray-200 font-semibold mb-2 text-sm sm:text-base">
         Following ({count})
       </h3>
       {followed.map(p => (
-        <div key={p.id} style={{ display: 'flex', alignItems: 'center',
-          gap: '0.75rem', padding: '0.4rem 0', borderBottom: '1px solid #1f2937' }}>
-          <Link to={`/player/${p.slug}`} style={{ color: '#6366f1', flex: 1 }}>
+        <div
+          key={p.id}
+          className="flex items-center gap-3 py-2 border-b border-gray-800 last:border-b-0"
+        >
+          <Link
+            to={`/player/${p.slug}`}
+            className="text-indigo-400 hover:text-indigo-300 transition-colors flex-1 min-w-0 truncate text-sm"
+          >
             {p.handle}
           </Link>
-          <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>{p.game}</span>
-          <button onClick={() => unfollow(p.id)}
-            style={{ color: '#ef4444', background: 'none', border: 'none',
-              cursor: 'pointer', fontSize: '0.75rem' }}>
+          <span className="text-gray-500 text-xs shrink-0">{p.game}</span>
+          <button
+            onClick={() => unfollow(p.id)}
+            className="text-red-400 hover:text-red-300 text-xs shrink-0 transition-colors"
+          >
             Unfollow
           </button>
         </div>

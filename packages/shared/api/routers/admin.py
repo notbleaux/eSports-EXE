@@ -1,11 +1,12 @@
-"""[Ver002.000] Admin API endpoints — user management, moderation, stats, ML triggers."""
+"""[Ver003.000] Admin API endpoints — user management, moderation, stats, ML triggers, player import."""
 import asyncio
 import logging
 import sys
 import os
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, delete, text
 
@@ -218,3 +219,79 @@ async def ml_status(current_user: TokenData = Depends(get_current_user)):
     training_status = await cache_get("ml:training:status") or "idle"
     last_trained = await cache_get("ml:last_trained")
     return {"status": training_status, "last_trained": last_trained}
+
+
+# ---------------------------------------------------------------------------
+# Player bulk import
+# ---------------------------------------------------------------------------
+
+class PlayerImportRow(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    slug: str = Field(..., min_length=1, max_length=100, pattern=r"^[a-z0-9\-]+$")
+    game: str = Field(..., pattern=r"^(valorant|cs2)$")
+    team_name: Optional[str] = Field(None, max_length=100)
+    nationality: Optional[str] = Field(None, max_length=50)
+    role: Optional[str] = Field(None, max_length=50)
+
+
+class PlayerImportRequest(BaseModel):
+    players: List[PlayerImportRow] = Field(..., min_length=1, max_length=500)
+    upsert: bool = Field(False, description="If true, update existing players matched by slug")
+
+
+@router.post("/import/players", summary="Bulk-import player records", status_code=200)
+async def import_players(
+    payload: PlayerImportRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: TokenData = Depends(get_current_user),
+):
+    """
+    Bulk-import up to 500 player records in a single request.
+
+    - Skips (or upserts when `upsert=true`) records whose slug already exists.
+    - Returns counts of inserted, updated, and skipped rows.
+    - Requires admin role.
+    """
+    _require_admin(current_user)
+
+    inserted = 0
+    updated = 0
+    skipped = 0
+    errors: list[dict] = []
+
+    for row in payload.players:
+        try:
+            existing = (
+                await db.execute(select(Player).where(Player.slug == row.slug))
+            ).scalar_one_or_none()
+
+            if existing is None:
+                player = Player(
+                    name=row.name,
+                    slug=row.slug,
+                    game=row.game,
+                )
+                db.add(player)
+                inserted += 1
+            elif payload.upsert:
+                existing.name = row.name
+                existing.game = row.game
+                updated += 1
+            else:
+                skipped += 1
+        except Exception as exc:
+            logger.error("Import error for slug %s: %s", row.slug, exc)
+            errors.append({"slug": row.slug, "error": str(exc)})
+
+    try:
+        await db.commit()
+    except Exception as exc:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Commit failed: {exc}") from exc
+
+    return {
+        "inserted": inserted,
+        "updated": updated,
+        "skipped": skipped,
+        "errors": errors,
+    }

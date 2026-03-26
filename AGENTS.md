@@ -133,12 +133,22 @@ All phases 1-8 complete. See docs/PRE_DEPLOY_CHECKLIST.md.
   ✓ cache_warmup.py: leaderboard pre-population at startup for all games × 10 pages
   ✓ AGENTS.md stale gap corrected: scheduled_at already exists in Match model + migration 001
 
+  ✓ Admin import endpoint: POST /v1/admin/import/players (bulk upsert up to 500 rows, admin-only)
+  ✓ @axe-core/playwright added to apps/web/package.json devDependencies (accessibility tests now active)
+  ✓ FollowedFeed (AREPO) refactored from inline styles to Tailwind responsive classes
+  ✓ Cache warmup wired into main.py lifespan (asyncio.create_task → warm_leaderboard_cache via AsyncSessionLocal)
+
 ## Known Gaps (Phase 10 remaining):
 → ML model training not run (2K synthetic samples, needs 50K+ real matches post-Pandascore sync)
-→ Admin import endpoint (POST /v1/admin/import/players) not yet implemented
-→ WCAG 2.1 AA audit: @axe-core/playwright not yet installed (tests skip gracefully)
-→ Mobile responsiveness: AREPO/ROTAS Tailwind responsive classes not fully audited
-→ Cache warmup not wired into main.py lifespan (see cache_warmup.py warm_leaderboard_cache)
+
+**Phase 1: Schema Foundation** — COMPLETE (2026-03-27)
+  ✓ data/schemas/GameNodeID.ts — canonical GameNodeID, WorldPort, TeZeT, QuarterGrid types
+  ✓ data/schemas/tenet-protocol.ts — TeneT verification protocol, trust levels, confidence scoring, Path A/B contracts
+  ✓ data/schemas/live-data.ts — WebSocket client contracts (LiveMatchView, WsMessage, LivePlayerStats)
+  ✓ data/schemas/legacy-data.ts — Historical API response contracts (VerifiedMatchSummary, SimRatingEntry, PlayerSeasonStats)
+  ✓ data/schemas/index.ts — barrel export
+  ✓ packages/@njz/types/ — pnpm workspace package, resolves from apps/web via @njz/types alias
+  ✓ No duplicate inline type definitions found in apps/web/src/ (confirmed gate 1.6)
 
 ---
 
@@ -550,29 +560,46 @@ Baseline stored in `.secrets.baseline`.
 
 ---
 
-## 🤖 AI Agent Coordination (Job Listing Board)
+## 🤖 AI Agent Coordination
 
-### Framework Location
+**The `.job-board/` system is archived. Do not use it.**
 
-- **Main:** `.job-board/README.md`
-- **Framework:** `memory/JOB_LISTING_BOARD_FRAMEWORK.md`
+### Required Reading Before Any Task
 
-### Key Directories
+All agents must read in order:
+1. `MASTER_PLAN.md` — Current phase, ecosystem scope, phase gates
+2. `.agents/AGENT_CONTRACT.md` — Domain boundaries, prohibited actions, TENET terminology
+3. `.agents/PHASE_GATES.md` — Which phases are unlocked (check before starting phase work)
+4. `.agents/SCHEMA_REGISTRY.md` — All canonical types (prevents duplicate type definitions)
 
-| Directory | Purpose |
-|-----------|---------|
-| `00_INBOX/{agent-id}/` | Your incoming tasks |
-| `01_LISTINGS/ACTIVE/` | Available tasks |
-| `02_CLAIMED/{agent-id}/` | Your claimed tasks |
-| `03_COMPLETED/` | Finished tasks |
-| `04_BLOCKS/` | Obstacles and solutions |
-| `05_TEMPLATES/` | Task templates |
+### Coordination System Files
 
-### Foreman Schedule
+| File | Purpose |
+|------|---------|
+| `.agents/AGENT_CONTRACT.md` | Behavioral contract — binds all agents |
+| `.agents/PHASE_GATES.md` | Go/No-Go criteria per phase |
+| `.agents/SCHEMA_REGISTRY.md` | Registry of all canonical types |
+| `.agents/COORDINATION_PROTOCOL.md` | Multi-agent conflict prevention (archived, for reference) |
 
-- Activates at **:00** and **:30** (30-minute blocks)
-- Maximum **1 foreman** active at any time
-- Privileges **expire after exactly 30 minutes**
+### Agent Domain Map
+
+| Domain | Scope |
+|--------|-------|
+| `schema-agent` | `data/schemas/`, `packages/@njz/types/` |
+| `frontend-agent` | `apps/web/src/`, `packages/@njz/ui/` |
+| `backend-agent` | `packages/shared/api/`, `services/` |
+| `pipeline-agent` | `packages/shared/axiom-esports-data/`, `services/legacy-compiler/` |
+| `infra-agent` | `infra/`, `.github/workflows/`, `docker-compose*.yml` |
+| `docs-agent` | `docs/`, `AGENTS.md`, `CLAUDE.md`, `MASTER_PLAN.md` |
+| `test-agent` | `tests/`, `*.spec.ts`, `*.spec.py` |
+
+### Sub-Agent Orchestration (Phase 5+)
+
+For multi-stream parallel work, use coordinator + specialist pattern:
+- Coordinator reads `MASTER_PLAN.md §8` and dispatches specialists
+- Each specialist operates within its declared domain
+- Schema boundary is the synchronization point between domains
+- Full model documented in `MASTER_PLAN.md §8`
 
 ### Agent Skills
 
@@ -585,7 +612,7 @@ Project-specific skills in `.agents/skills/`:
 - `sator-deployment` — Deployment automation
 - `sator-godot-dev` — Godot game development
 - `sator-simulation` — Simulation mechanics
-- `sator-extraction` — Web scraping (VLR.gg)
+- `sator-extraction` — Web scraping (VLR.gg, Liquidpedia)
 - `sator-sator-square` — D3.js/WebGL visualization
 - `sator-data-firewall` — Data partition firewall
 
@@ -613,10 +640,14 @@ Project-specific skills in `.agents/skills/`:
 3. **Data Partition:** Never expose game-only fields to web platform
 4. **No Secrets:** Never commit credentials; use environment variables
 5. **Test Changes:** Run appropriate tests before committing
-6. **Job Board:** Check `.job-board/` for task coordination
-7. **Skills Available:** Use `.agents/skills/` for domain-specific guidance
-8. **API v1:** All new API work should use `/v1/` prefix
-9. **Pre-commit:** Install hooks with `pre-commit install`
+6. **TENET Is Not a Hub:** `hub-5-tenet/` is the TeNET navigation layer. Do not add content features to it. See `docs/architecture/TENET_TOPOLOGY.md`.
+7. **Schema First:** Check `.agents/SCHEMA_REGISTRY.md` before creating any new type
+8. **Phase Gates:** Check `.agents/PHASE_GATES.md` before starting any phase work
+9. **Agent Contract:** Read `.agents/AGENT_CONTRACT.md` before starting any task
+10. **Skills Available:** Use `.agents/skills/` for domain-specific guidance
+11. **API v1:** All new API work should use `/v1/` prefix
+12. **Pre-commit:** Install hooks with `pre-commit install`
+13. **Root Cleanliness:** Do not create `.md` files at the repo root. Reports go in `docs/reports/`, architecture in `docs/architecture/`, archives in `docs/archive/`.
 
 ---
 

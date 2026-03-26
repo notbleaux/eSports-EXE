@@ -23,6 +23,8 @@
       "@hub-3/*": ["src/hub-3-arepo/*"],
       "@hub-4/*": ["src/hub-4-opera/*"],
       "@hub-5/*": ["src/hub-5-tenet/*"],
+      "@njz/types": ["../../packages/@njz/types/src/index.ts"],
+      "@njz/types/*": ["../../packages/@njz/types/src/*"],
       "@sator/types": ["../../packages/shared/types"],
       "@sator/types/*": ["../../packages/shared/types/*"],
       "@sator/services": ["../../packages/shared/services/help"],

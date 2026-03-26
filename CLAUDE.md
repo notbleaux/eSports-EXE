@@ -4,25 +4,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**NJZiteGeisTe Platform** (v2.1.0) — A community eSports analytics and simulation platform for Valorant and CS2.
+**NJZ eSports — NJZiteGeisTe Platform** (v2.1.0) — A community eSports analytics and simulation platform for Valorant and CS2.
 
-Architecture hierarchy:
-- TENET: Universal WorldHUBs top layer (game-agnostic)
-- tenet: Game-specific world (e.g., /valorant, /cs2)
-- tezet: Hub selector within each game world (2x2 grid)
-- Four hub types (appear in every tezet):
-    - SATOR — Advanced Analytics
-    - ROTAS — Stats Reference
-    - OPERA — Professional eSports Information
-    - AREPO — Community, Players & Fans
+### TENET Architecture — CRITICAL: Read Before Modifying Any Route, Hub, or Data Layer
 
-Developer hub names (SATOR/ROTAS/OPERA/AREPO) are internal identifiers.
-User-facing route names:
-- SATOR → /analytics
-- ROTAS → /stats
-- OPERA → /pro-scene
-- AREPO → /community
-- TENET/tezet → /hubs
+TENET is a **data networking and verification topology**, NOT a 5th content hub. Full documentation: `docs/architecture/TENET_TOPOLOGY.md`.
+
+Correct hierarchy:
+- **TeNeT** — User-facing Home Portal (entry page, auth, onboarding)
+- **TeNET** — Network Directory (routes users to World-Ports by game; URL: `/hubs`)
+- **World-Ports** — Game-specific entry points (`/valorant`, `/cs2`, etc.)
+- **GameNodeID** — Base unit carrying the standardized 2×2 Quarter GRID
+- **Quarter GRID** — The four WorldTree hubs present in every GameNodeID:
+    - SATOR — Advanced Analytics → `/analytics`
+    - AREPO — Community, Players & Fans → `/community`
+    - OPERA — Professional eSports → `/pro-scene`
+    - ROTAS — Stats Reference / Simulation → `/stats`
+- **TeZeT** — World-Tree within each Quarter (hub-specific sub-branches)
+- **tenet** (lowercase) — Network channels / database directory (maps the GameNodeID base)
+- **TeneT Key.Links** — Verification bridge: parses, verifies, and tiers data from all sources
+
+`hub-5-tenet/` in the frontend is the **TeNET navigation layer** (portal + directory + routing). It is NOT a content hub.
+
+### Data Flow — Two Paths
+
+- **Path A (Live):** Pandascore webhook → Redis → WebSocket → Companion/Extension/Overlay (low-latency, eventual accuracy)
+- **Path B (Legacy):** All sources → TeneT Key.Links verification → PostgreSQL truth layer → SATOR analytics (high granularity, authoritative)
+
+Full data architecture: `docs/architecture/TENET_TOPOLOGY.md`
+Schema types: `data/schemas/GameNodeID.ts`, `data/schemas/tenet-protocol.ts`
 
 ## Commands
 
@@ -96,15 +106,15 @@ tests/load/                   # Load testing (Locust, k6)
 
 ### Frontend Hub Architecture (`apps/web/src/`)
 
-The web app is organized into five hubs, each with a TypeScript path alias:
+The web app has four content hubs + one navigation layer:
 
-| Hub | Path | Alias | Purpose |
-|-----|------|-------|---------|
-| SATOR | `hub-1-sator/` | `@hub-1/*` | Advanced Analytics — SimRating, RAR, player metrics |
-| ROTAS | `hub-2-rotas/` | `@hub-2/*` | Stats Reference — historical data, leaderboards |
-| AREPO | `hub-3-arepo/` | `@hub-3/*` | Community — forums, players, fans |
-| OPERA | `hub-4-opera/` | `@hub-4/*` | Pro eSports — tournaments, pro scene, live matches |
-| TENET | `hub-5-tenet/` | `@hub-5/*` | WorldHUBs — central platform, game-world selector |
+| Directory | Path Alias | Role | Type |
+|-----------|------------|------|------|
+| `hub-1-sator/` | `@hub-1/*` | SATOR — Advanced Analytics (SimRating, RAR, player metrics) | Content Hub |
+| `hub-2-rotas/` | `@hub-2/*` | ROTAS — Stats Reference (historical data, leaderboards) | Content Hub |
+| `hub-3-arepo/` | `@hub-3/*` | AREPO — Community (forums, players, fans) | Content Hub |
+| `hub-4-opera/` | `@hub-4/*` | OPERA — Pro eSports (tournaments, pro scene, live matches) | Content Hub |
+| `hub-5-tenet/` | `@hub-5/*` | TeNET Navigation Layer (portal, game-world directory, routing) | **Navigation Layer — NOT a content hub** |
 
 Additional aliases: `@/*` → `src/*`, `@shared/*` → `src/shared/*`
 
@@ -123,7 +133,9 @@ Shared packages: `@sator/types` (packages/shared/types/ — Player, Team, Match,
 
 ### Data Flow
 
-Pandascore API → Python data pipeline (`axiom-esports-data`) → PostgreSQL → FastAPI → TanStack Query → React hubs. WebSockets provide real-time match updates. The `data-partition-lib` enforces security boundaries between data sources.
+**Live (Path A):** Pandascore webhook → Redis Streams → WebSocket service → Frontend (low-latency score/round updates)
+**Legacy (Path B):** All sources → TeneT Key.Links verification bridge → PostgreSQL truth layer → FastAPI → TanStack Query → Content hubs (authoritative, high-granularity)
+**Shared:** `data-partition-lib` enforces security boundaries between game simulation data and web platform data.
 
 ## Code Style
 
@@ -161,12 +173,15 @@ Strict mode is on. `noUnusedLocals` and `noUnusedParameters` are enabled — unu
 
 ## Agent Coordination
 
-AI agents working on this project should read `AGENTS.md` at the repo root
-for current context and guidelines.
+AI agents working on this project MUST read these files before starting any task:
+1. `MASTER_PLAN.md` — Current phase, scope, and full ecosystem plan
+2. `.agents/AGENT_CONTRACT.md` — Behavioral contract (domain boundaries, prohibited actions)
+3. `.agents/PHASE_GATES.md` — Which phases are unlocked
+4. `.agents/SCHEMA_REGISTRY.md` — All canonical types (check before creating any new type)
 
-The `.agents/` directory contains project-specific Claude Code skills.
+The `.agents/` directory contains project-specific skills and the coordination system.
 
-The `.job-board/` coordination system is archived in `archive/`.
+The `.job-board/` coordination system is archived in `archive/` — do not use it.
 
 ## Known Duplications
 
