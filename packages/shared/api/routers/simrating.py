@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, Depends, HTTPException
+from fastapi import APIRouter, Query, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import Optional
@@ -15,6 +15,7 @@ from services.api.src.njz_api.models.player import Player
 from services.api.src.njz_api.models.player_stats import PlayerStats
 from services.api.src.njz_api.models.sim_calculation import SimCalculation
 from cache import cache_get, cache_set, cache_delete
+from services.leaderboard_cache import get_cached_leaderboard, set_cached_leaderboard
 
 router = APIRouter(prefix="/simrating", tags=["simrating"])
 
@@ -146,19 +147,8 @@ async def get_player_simrating(player_id: int, db: AsyncSession = Depends(get_db
     return {"player_id": player_id, "player_slug": player.slug, **calc}
 
 
-@router.get("/leaderboard")
-async def get_simrating_leaderboard(
-    game: Optional[str] = Query(None, description="valorant or cs2"),
-    limit: int = Query(20, le=100),
-    offset: int = Query(0),
-    db: AsyncSession = Depends(get_db),
-):
-    """Top players ranked by SimRating v2 (descending)."""
-    cache_key = f"simrating:leaderboard:{game}:{limit}:{offset}"
-    cached = await cache_get(cache_key)
-    if cached:
-        return cached
-
+async def _compute_leaderboard(db: AsyncSession, game: Optional[str], limit: int, offset: int = 0) -> dict:
+    """Compute leaderboard data without caching. Used by the endpoint and cache warming."""
     stmt = select(Player)
     if game:
         stmt = stmt.where(Player.game == game)
@@ -184,12 +174,71 @@ async def get_simrating_leaderboard(
         entry["rank"] = i
 
     page = ranked[offset: offset + limit]
-    response = {
+    return {
         "leaderboard": page,
         "total": len(ranked),
         "game": game,
         "limit": limit,
         "offset": offset,
     }
-    await cache_set(cache_key, response, ttl=300)
-    return response
+
+
+@router.get("/leaderboard")
+async def get_simrating_leaderboard(
+    response: Response,
+    game: Optional[str] = Query(None, description="valorant or cs2"),
+    limit: int = Query(20, le=100),
+    offset: int = Query(0),
+    db: AsyncSession = Depends(get_db),
+):
+    """Top players ranked by SimRating v2 (descending)."""
+    response.headers["Cache-Control"] = "public, max-age=120, stale-while-revalidate=300"
+
+    cached = await get_cached_leaderboard(game, limit)
+    if cached:
+        return cached
+
+    result = await _compute_leaderboard(db, game, limit, offset)
+    await set_cached_leaderboard(game, limit, result)
+    return result
+
+
+@router.get("/position", summary="Position-based SimRating for a player")
+async def get_position_simrating(
+    player_id: int = Query(...),
+    position: str = Query("flex", pattern="^(duelist|initiator|controller|sentinel|flex)$"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Return overall + role-specific SimRating breakdown."""
+    import sys, os
+    _ml = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'services', 'api', 'src', 'njz_api', 'ml')
+    if _ml not in sys.path:
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..'))
+    try:
+        from services.api.src.njz_api.ml.position_simrating import calculate_position_simrating
+        from services.api.src.njz_api.models.player_stats import PlayerStats
+    except ImportError:
+        return {"error": "ML module not available"}
+
+    from sqlalchemy import func
+    stmt = (
+        select(
+            func.avg(PlayerStats.kd_ratio).label("avg_kd"),
+            func.avg(PlayerStats.acs).label("avg_acs"),
+            func.avg(PlayerStats.headshot_pct).label("avg_hs"),
+            func.count(PlayerStats.id).label("games"),
+        )
+        .where(PlayerStats.player_id == player_id)
+    )
+    result = await db.execute(stmt)
+    row = result.one_or_none()
+    if not row or not row.games:
+        return {"player_id": player_id, "position": position, "ratings": None, "reason": "no_stats"}
+
+    kd    = min(float(row.avg_kd or 0) / 2.0, 1.0) * 25
+    acs   = min(float(row.avg_acs or 0) / 300.0, 1.0) * 25
+    cons  = min(float(row.games) / 20.0, 1.0) * 25
+    prec  = min(float(row.avg_hs or 0) / 30.0, 1.0) * 25
+
+    ratings = calculate_position_simrating(kd, acs, cons, prec, position)
+    return {"player_id": player_id, "position": position, "ratings": ratings, "games": row.games}

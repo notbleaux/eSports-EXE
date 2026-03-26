@@ -5,3 +5,7 @@ export { usePlayerSimRating, useSimRatingLeaderboard } from './useSimRating';
 export { useLiveMatches } from './useLiveMatches';
 export { useAuth } from './useAuth';
 export type { AuthUser, OAuthProvider } from './useAuth';
+export { usePlayerStats } from './usePlayerStats';
+export { useSearch } from './useSearch';
+export { usePlayerStatsLive } from './usePlayerStatsLive';
+export type { LiveStatsUpdate } from './usePlayerStatsLive';

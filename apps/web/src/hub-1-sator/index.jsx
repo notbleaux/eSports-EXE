@@ -36,6 +36,7 @@ import {
 import { useNJZStore, useHubState } from '@/shared/store/njzStore';
 import { getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
 import { useSimRating } from './hooks/useSimRating';
+import { initMLBackend } from '@hub-1/ml';
 import { usePlayers } from '@/shared/api/hooks';
 import TopPerformers from './components/TopPerformers';
 import PlayerCompare from './components/PlayerCompare';
@@ -142,6 +143,13 @@ function SatorHubContent() {
     supported: false, 
     offscreen: false 
   });
+
+  // Initialise ML backend on mount (TensorFlow.js WASM/WebGPU)
+  useEffect(() => {
+    initMLBackend().catch(err =>
+      console.warn('[NJZ SATOR] ML backend init failed:', err)
+    );
+  }, []);
 
   // Check worker capabilities on mount
   useEffect(() => {

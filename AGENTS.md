@@ -3,7 +3,7 @@
 **Purpose:** This file provides essential context for AI coding agents working on the NJZiteGeisTe Platform project.
 **Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
 **Repository:** https://github.com/notbleaux/eSports-EXE  
-**Last Updated:** 2026-03-25
+**Last Updated:** 2026-03-26
 
 ---
 
@@ -85,13 +85,41 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
   ✓ Health check cron (.github/workflows/health-check.yml — every 30 min)
   ✓ Sentry integration (shared/lib/sentry.ts, main.jsx initSentry(), HubErrorBoundary captureException, API sentry_sdk.init)
 
-  **Phase 8 (Next):**
-  → Sentry error tracking (initSentry in main.tsx + backend sentry_sdk.init)
-  → OAuth full token exchange (replace stub in routers/oauth.py)
-  → TensorFlow.js WASM SimRating ML model
-  → Supabase real-time subscriptions
-  → E2E Playwright coverage for /player/:slug, /team/:slug, bracket tab
-  → Load testing (Locust)
+**Phase 8: ML Training + Community + Quality** — COMPLETE (agents 97-104)
+  ✓ OAuth full token exchange (routers/oauth.py — httpx exchange, user upsert, JWT issuance, frontend redirect)
+  ✓ SimRating ML training script (services/api/src/njz_api/ml/train_simrating.py) + TFJS loadTrainedModel()
+  ✓ Player follow system (useFollows, FollowButton, FollowedFeed) in AREPO hub
+  ✓ Playwright E2E: follows.spec.ts, error-boundaries.spec.ts, tournament-bracket.spec.ts
+  ✓ CDN caching headers (vercel.json) + API Cache-Control on GET /v1/players
+  ✓ GameWorldPage (/valorant, /cs2 tezet grid) replacing placeholder
+  ✓ ROTAS raw stats tab (usePlayerStats hook + GET /v1/players/stats endpoint)
+  ✓ Pre-deploy smoke test (tests/smoke/smoke_test.sh)
+  ✓ PRE_DEPLOY_CHECKLIST.md + CACHING_STRATEGY.md + PHASE8_COMPLETE.md
+
+## Status: DEPLOYMENT READY
+All phases 1-8 complete. See docs/PRE_DEPLOY_CHECKLIST.md.
+
+**Phase 9: Post-Launch Features** — IN PROGRESS
+  ✓ usePlayerStats URL bug fixed (apiFetch normalization — was double /v1/v1/players/stats)
+  ✓ Unified search API (GET /v1/search/) + useSearch hook
+  ✓ OAuth CSRF state validation fixed (secrets.token_urlsafe nonce)
+  ✓ OAuth GitHub provider added (GITHUB_CLIENT_ID/SECRET env vars)
+  ✓ Auth DB migration (004_auth_users_oauth_accounts.py — tables were missing)
+  ✓ ML pipeline audit: initMLBackend() now called in SATOR hub on mount
+  ✓ Forum API (/v1/forum/posts, comments, flag) + useForumPosts hook
+  ✓ Position-based SimRating (position_simrating.py + GET /v1/simrating/position)
+  ✓ eSports calendar component (EsportsCalendar.tsx in OPERA hub)
+  ✓ Push notifications (pushNotifications.ts + sw.ts push/notificationclick handlers)
+  ✓ PostgreSQL version corrected: docker-compose.yml 14 → 15
+  ✓ test_api_firewall.py UTF-16 corruption fixed
+  ✓ E2E test coverage: 59 static tests + 5 new feature specs
+
+## Known Gaps (Phase 10):
+→ ML model training not run (2K synthetic samples, needs 50K+ real matches post-Pandascore sync)
+→ Forum posts use in-memory store (needs PostgreSQL migration + ORM model)
+→ EsportsCalendar wired to /matches endpoint (needs scheduled_at field in Match model)
+→ data-partition-lib FantasyDataFilter recursive filtering TODO in FantasyDataFilter.ts
+→ E2E target: 28 actual vs 95+ claimed — needs test expansion sprint
 
 ---
 

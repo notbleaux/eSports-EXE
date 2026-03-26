@@ -2,7 +2,7 @@
 services:
   # PostgreSQL Database
   db:
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     container_name: sator-db
     environment:
       POSTGRES_DB: sator

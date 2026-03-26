@@ -1,2 +1,6 @@
 .vercel
 .env.local
+
+# ML model files (generated — not committed)
+/public/models/simrating/*.bin
+/public/models/simrating/model.json

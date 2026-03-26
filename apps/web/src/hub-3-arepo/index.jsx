@@ -61,6 +61,9 @@ import {
 // Import cross-reference hook
 import { useCrossReferenceEngine } from './hooks/useArepoData';
 
+// Import follow system
+import { FollowedFeed } from './components/FollowedFeed';
+
 // Import shared API hooks for live community data
 import { useMatches, usePlayers, useTeams } from '@/shared/api/hooks';
 
@@ -204,6 +207,11 @@ function ArepoHubContent() {
 
   return (
     <HubWrapper hubId="arepo">
+      {/* Followed Players Feed */}
+      <div className="max-w-6xl mx-auto mb-6">
+        <FollowedFeed />
+      </div>
+
       {/* Community Stats Bar */}
       <div className="community-stats-bar flex gap-6 p-3 bg-gray-900 rounded-lg mb-4 text-sm text-gray-400">
         <span>Players tracked: <strong className="text-white">{playerData?.total ?? '—'}</strong></span>

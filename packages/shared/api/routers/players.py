@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Query, Depends, HTTPException
+from fastapi import APIRouter, Query, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import Optional
 import sys
 import os
@@ -25,8 +25,11 @@ async def list_players(
     limit: int = Query(50, le=200),
     offset: int = Query(0),
     db: AsyncSession = Depends(get_db),
+    response: Response = None,
 ):
     """List players with optional game/team/slug filters."""
+    if response:
+        response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     cache_key = f"players:{game}:{team_id}:{slug}:{limit}:{offset}"
     cached = await cache_get(cache_key)
     if cached:
@@ -73,6 +76,51 @@ async def list_players(
     }
     await cache_set(cache_key, result, ttl=120)
     return result
+
+
+@router.get("/stats", summary="Aggregated player stats")
+async def list_player_stats(
+    game: Optional[str] = Query(None),
+    limit: int = Query(50, le=200),
+    db: AsyncSession = Depends(get_db),
+):
+    """Aggregated K/D, ACS, HS% per player from player_stats table."""
+    try:
+        from services.api.src.njz_api.models.player_stats import PlayerStats
+    except ImportError:
+        try:
+            from njz_api.models.player_stats import PlayerStats
+        except ImportError:
+            return {"stats": []}
+
+    stmt = (
+        select(
+            Player.id.label("player_id"),
+            Player.handle if hasattr(Player, 'handle') else Player.name.label("handle"),
+            Player.slug,
+            Player.game,
+            func.avg(PlayerStats.kd_ratio).label("avg_kd"),
+            func.avg(PlayerStats.acs).label("avg_acs"),
+            func.avg(PlayerStats.headshot_pct).label("avg_hs_pct"),
+            func.count(PlayerStats.id).label("games"),
+        )
+        .join(PlayerStats, PlayerStats.player_id == Player.id)
+        .group_by(Player.id, Player.slug, Player.game)
+        .order_by(func.avg(PlayerStats.kd_ratio).desc())
+        .limit(limit)
+    )
+    if game:
+        stmt = stmt.where(Player.game == game)
+    result = await db.execute(stmt)
+    rows = result.all()
+    return {"stats": [
+        {"player_id": r.player_id, "handle": r.handle, "slug": r.slug,
+         "game": r.game, "avg_kd": round(float(r.avg_kd or 0), 2),
+         "avg_acs": round(float(r.avg_acs or 0), 1),
+         "avg_hs_pct": round(float(r.avg_hs_pct or 0), 1),
+         "games": r.games}
+        for r in rows
+    ]}
 
 
 @router.get("/{player_id}")

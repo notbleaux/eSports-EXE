@@ -35,6 +35,10 @@ except ImportError:
 
 # Import v1 routers
 from routers import players, teams, matches, simrating, ws_matches, webhooks, oauth as v1_oauth
+from routers.ws_players import router as ws_players_router
+from routers.search import router as search_router
+from routers.forum import router as forum_v1_router
+from routers.admin import router as admin_router
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -475,8 +479,12 @@ app.include_router(teams.router, prefix="/v1")
 app.include_router(matches.router, prefix="/v1")
 app.include_router(simrating.router, prefix="/v1")
 app.include_router(ws_matches.router)
+app.include_router(ws_players_router)
 app.include_router(webhooks.router, prefix="/v1")
 app.include_router(v1_oauth.router, prefix="/v1")
+app.include_router(search_router, prefix="/v1")
+app.include_router(forum_v1_router, prefix="/v1")
+app.include_router(admin_router, prefix="/v1")
 
 
 # WebSocket endpoints

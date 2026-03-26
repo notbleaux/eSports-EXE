@@ -26,6 +26,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from '@/pages/LandingPage';
 import { AppErrorBoundary } from '@/components/error';
+import { AdminGuard } from '@/components/AdminGuard';
 
 // Hub components — lazy loaded for code splitting
 const SATORHub = lazy(() => import('@hub-1/index'));
@@ -42,13 +43,11 @@ const PlayerProfilePage = lazy(() => import('./pages/PlayerProfilePage'));
 const TeamProfilePage = lazy(() => import('./pages/TeamProfilePage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// Valorant game world — placeholder until built
-const ValorantWorld = () => (
-  <div className="p-20 text-center">
-    <h1 className="text-4xl font-bold">Valorant</h1>
-    <p className="text-gray-500 mt-4">Game world — coming soon</p>
-  </div>
-);
+// Game world page (Valorant + CS2 tezet grid)
+const GameWorldPage = lazy(() => import('@/pages/GameWorldPage'));
+
+// Admin page
+const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
 
 const HubFallback = () => <div className="p-20 text-center">Loading...</div>;
 
@@ -72,10 +71,11 @@ function App() {
         <Route path="/community"  element={<HubRoute><AREPOHub /></HubRoute>} />
         <Route path="/pro-scene"  element={<HubRoute><OPERAHub /></HubRoute>} />
         <Route path="/hubs"       element={<HubRoute><TENETHub /></HubRoute>} />
-        <Route path="/cs2"        element={<HubRoute><CS2World /></HubRoute>} />
-        <Route path="/valorant"   element={<HubRoute><ValorantWorld /></HubRoute>} />
+        <Route path="/cs2"        element={<HubRoute><GameWorldPage /></HubRoute>} />
+        <Route path="/valorant"   element={<HubRoute><GameWorldPage /></HubRoute>} />
         <Route path="/player/:slug" element={<HubRoute><PlayerProfilePage /></HubRoute>} />
         <Route path="/team/:slug"   element={<HubRoute><TeamProfilePage /></HubRoute>} />
+        <Route path="/admin" element={<AdminGuard><HubRoute><AdminDashboard /></HubRoute></AdminGuard>} />
         {/* Legacy redirects */}
         <Route path="/sator" element={<Navigate to="/analytics" replace />} />
         <Route path="/rotas" element={<Navigate to="/stats" replace />} />
