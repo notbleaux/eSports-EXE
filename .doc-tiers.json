@@ -1,0 +1,38 @@
+{
+  "_comment": "Doc tier classification per S2 bloat solution. Agents: check tier before loading any doc. Do not load T2 files.",
+  "T0": [
+    "MASTER_PLAN.md",
+    ".agents/PHASE_GATES.md",
+    ".agents/AGENT_CONTRACT.md",
+    "ARCHIVE_MASTER_DOSSIER.md",
+    ".agents/CODEOWNER_CHECKLIST.md"
+  ],
+  "T1": [
+    ".agents/SCHEMA_REGISTRY.md",
+    ".agents/PHASE_1_COMPLETION_SUMMARY.md",
+    ".agents/PHASE_2_PLAN.md",
+    ".agents/PHASE_3-6_DETAILED_PLAN.md",
+    ".agents/PHASE_5_IMPLEMENTATION_PLAN.md",
+    ".agents/COORDINATION_PROTOCOL.md",
+    ".agents/AGENT_REGISTRY.md",
+    "docs/architecture/TENET_TOPOLOGY.md",
+    "docs/architecture/REPO_STRUCTURE_DECISION.md",
+    "docs/superpowers/specs/"
+  ],
+  "T2": [
+    "xCOMP_*",
+    ".agents/xCOMP_VERIFICATION_NOTEBOOK.md",
+    "archive/",
+    ".agents/PHASE_1_REVIEW_REFINEMENTS.md",
+    ".agents/REFINEMENTS_COMPLETE.md",
+    ".agents/PHASE_2_LAUNCH_CHECKLIST.md",
+    ".agents/PHASE_2_EXECUTION_STATUS.md",
+    ".agents/PHASE_3_LAUNCH.md",
+    ".agents/PHASE_3_COMPLETION_STATUS.md",
+    ".agents/PHASE_3-4_EXECUTION_REFINEMENT.md",
+    ".agents/PHASE_3-6_FINAL_IMPLEMENTATION_PLAN.md",
+    ".agents/PHASE_4_IMPLEMENTATION_GUIDE.md",
+    ".agents/PHASE_4_COMPLETION_STATUS.md",
+    "apps/web/INTEGRATION_SUMMARY.md"
+  ]
+}
