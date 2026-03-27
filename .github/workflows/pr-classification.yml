@@ -25,7 +25,7 @@ jobs:
 
           # Check for explicit CRIT override paths
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}..HEAD)
-          CRIT_PATHS=$(echo "$CHANGED_FILES" | grep -E '^(data/schemas/|services/[^/]+/models\.py|services/[^/]+/schemas\.py|\.github/|infra/|package\.json$|docker-compose)' || true)
+          CRIT_PATHS=$(echo "$CHANGED_FILES" | grep -E '^(data/schemas/|services/[^/]+/models\.py|services/[^/]+/schemas\.py|\.github/|infra/|package\.json$|docker-compose\.ya?ml$)' || true)
 
           # Deletion check: > 5 files deleted
           DELETED_COUNT=$(git diff --diff-filter=D --name-only origin/${{ github.base_ref }}..HEAD | wc -l)
