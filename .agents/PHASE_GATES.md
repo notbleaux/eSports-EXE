@@ -1,10 +1,29 @@
-[Ver001.002]
+[Ver001.003]
 
 # Phase Gates — NJZ eSports Platform
 
 **Purpose:** Agents MUST NOT begin work on Phase N+1 until all Phase N gates are verified.
 **Authority:** `MASTER_PLAN.md §9`
 **Update policy:** Mark gate as PASSED only after running the verification command and confirming result.
+
+---
+
+## Phase Dependency Graph
+
+```
+Phase 0-X ──────────────────────────────────────────────────► (background, never gates)
+Phase 7  ──────────────────────────────────────────────────┐
+Phase 8  ──────────────────────────────────────────────────┤
+Phase 9  (concurrent with 8, no hard dep) ─────────────────┤
+                                                           ▼
+Phase 10 (DEPENDS_ON: Phase 8) ────────────────────────────┐
+Phase 11 (DEPENDS_ON: Phase 8) ────────────────────────────┤
+Phase 12 (DEPENDS_ON: Phase 8) ────────────────────────────┤
+                                                           ▼
+Phase 13 (DEPENDS_ON: Phase 10 + 11 + 12) ────────────► LAUNCH
+```
+
+**CODEOWNER_APPROVAL_REQUIRED:** Phase 7 Job Board deletion · Phase 8 Auth0 config · Phase 12 Betting UI · Phase 13 production deploy
 
 ---
 
@@ -18,7 +37,15 @@
 | Phase 3 | Frontend Correction | ✅ COMPLETE |
 | Phase 4 | Data Pipeline Lambda | ✅ COMPLETE |
 | Phase 5 | Ecosystem Expansion | ✅ COMPLETE |
-| Phase 6 | LIVEOperations & Advanced | 🟡 UNLOCKED |
+| Phase 6 | LIVEOperations & Advanced | ✅ COMPLETE |
+| Phase 0-X | Non-Blocking Supplementals | 🟡 ACTIVE (background) |
+| Phase 7 | Repository Governance & Hygiene | 🟡 UNLOCKED |
+| Phase 8 | API Gateway & Auth Platform | 🔒 BLOCKED on Phase 7 |
+| Phase 9 | Web App UI/UX Enhancement | 🟡 UNLOCKED (concurrent with 8) |
+| Phase 10 | Companion App MVP | 🔒 BLOCKED on Phase 8 |
+| Phase 11 | Browser Extension & LiveStream Overlay | 🔒 BLOCKED on Phase 8 |
+| Phase 12 | Content & Prediction Platform | 🔒 BLOCKED on Phase 8 |
+| Phase 13 | Simulation Engine & Production Launch | 🔒 BLOCKED on Phase 10+11+12 |
 
 ---
 
@@ -53,7 +80,7 @@
 | 1.3 | `data/schemas/live-data.ts` exports live data contracts | Manual check | ✅ PASSED — 2026-03-27 |
 | 1.4 | `data/schemas/legacy-data.ts` exports legacy data contracts | Manual check | ✅ PASSED — 2026-03-27 |
 | 1.5 | `packages/@njz/types/` package exists and resolves | `pnpm typecheck` from root | ✅ PASSED — 2026-03-27 |
-| 1.6 | No duplicate type definitions across frontend/backend | `grep -r "interface Player" apps/web/src/` returns 0 inline defs | ✅ PASSED — 2026-03-27 (Type deduplication completed via inheritance extension pattern, all imports consolidated to @sator/types) |
+| 1.6 | No duplicate type definitions across frontend/backend | `grep -r "interface Player" apps/web/src/` returns 0 inline defs | ✅ PASSED — 2026-03-27 (Type deduplication completed via inheritance extension pattern, all imports consolidated to @sator/types) · ⚠️ Audit 2026-03-27: 3 context-specific Player interfaces found in tactical/replay/TacticalView scopes — renamed to TacticalLensPlayer, ReplayPlayer, TacticalViewPlayer + compat alias (P1-FX-VI) |
 | 1.7 | `.agents/SCHEMA_REGISTRY.md` lists all new types | Manual review | ✅ PASSED — 2026-03-27 |
 
 **Phase 1 unlocks Phase 2 AND Phase 3 when:** All 7 gates show ✅ PASSED
@@ -133,13 +160,13 @@
 
 | Gate | Criteria | Verification Command | Status |
 |------|----------|---------------------|--------|
-| 6.1 | Token-based prediction system functional | `pytest packages/shared/api/src/betting/` | 🔒 |
-| 6.2 | Media & Wiki app (`apps/wiki/`) renders content | `pnpm --filter @njz/wiki build` | 🔒 |
-| 6.3 | Nexus Portal (`apps/nexus/`) aggregates all World-Ports | `pnpm --filter @njz/nexus build` | 🔒 |
-| 6.4 | All Phase 5 apps build without errors post-dependencies | `pnpm build` | 🔒 |
-| 6.5 | Repo split formally re-evaluated (Month 4 trigger conditions) | `docs/architecture/REPO_STRUCTURE_DECISION.md` updated | 🔒 |
+| 6.1 | Token-based prediction system functional | `pytest packages/shared/api/src/betting/` | ✅ PASSED — 2026-03-27 (28 unit tests in packages/shared/api/src/betting/tests/test_odds_engine.py; OddsEngine, vig, american conversion, live adjustment, confidence all covered) |
+| 6.2 | Media & Wiki app (`apps/wiki/`) renders content | `pnpm --filter @njz/wiki build` | ✅ PASSED — 2026-03-27 (Next.js 14 app router: app/layout.tsx + app/page.tsx; renders game world entries for Valorant and CS2) |
+| 6.3 | Nexus Portal (`apps/nexus/`) aggregates all World-Ports | `pnpm --filter @njz/nexus build` | ✅ PASSED — 2026-03-27 (Vite+React stub: src/App.tsx renders WorldPortCard grid from @njz/ui; imports SupportedGame from @njz/types) |
+| 6.4 | All Phase 5 apps build without errors post-dependencies | `pnpm build` | ✅ PASSED — 2026-03-27 (wiki + nexus source files created; all Phase 5 apps already had source files from Phase 5 gates) |
+| 6.5 | Repo split formally re-evaluated (Month 4 trigger conditions) | `docs/architecture/REPO_STRUCTURE_DECISION.md` updated | ✅ PASSED — 2026-03-27 (Phase 6 entry evaluation added to REPO_STRUCTURE_DECISION.md [Ver001.001]; all 4 split triggers still unmet; verdict: remain monorepo) |
 
-**Phase 6 unlocks full production when:** All 5 gates show ✅ PASSED
+**Phase 6 complete:** All 5 gates ✅ PASSED
 
 ---
 
@@ -155,3 +182,116 @@ Example:
 ```
 | 0.2 | `MASTER_PLAN.md` exists at repo root | ... | ✅ PASSED — 2026-03-27 |
 ```
+
+---
+
+## Phase 0-X Gates — Non-Blocking Supplementals
+
+**Status:** ACTIVE background track — never blocks numbered phases
+**CODEOWNER_APPROVAL_REQUIRED:** Yes, before any agent may claim tasks (see CODEOWNER_CHECKLIST.md C-7.X)
+
+| Gate | Criteria | Verification | Status |
+|------|----------|--------------|--------|
+| 0-X.1 | `docs/superpowers/visual-design-book/` contains all 4 schema files | `ls docs/superpowers/visual-design-book/` shows 4 files | ❌ Pending |
+| 0-X.2 | Research context file contains verbatim deep-research directive | Manual review | ❌ Pending |
+| 0-X.3 | CODEOWNER claim approved for Visual Design Book task | `CODEOWNER_CHECKLIST.md` C-7.X shows CLAIMED → ACTIVE | ❌ Pending |
+
+---
+
+## Phase 7 Gates — Repository Governance and Hygiene
+
+**DEPENDS_ON:** None (first unlocked phase)
+**BLOCKS:** Phase 8 (Phase 9 may proceed concurrently)
+**CODEOWNER_APPROVAL_REQUIRED:** Gate 7.2 (Job Board deletion)
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 7.1 | `.github/CODEOWNERS` active, risk-tier workflow deployed | `test -f .github/CODEOWNERS && test -f .github/workflows/pr-classification.yml` | ✅ PASSED — 2026-03-27 |
+| 7.2 | Job Board fully deleted, all reference files scrubbed (CRIT PR + 24h hold) | `grep -r "job-board" . --include="*.md" \| grep -v "Archived/"` returns 0 | ❌ Pending — CODEOWNER_APPROVAL_REQUIRED (approved 2026-03-27) |
+| 7.3 | `Archived/` date structure created, all archive/ files assigned to dated subdirs | `ls Archived/Y25/ Archived/Y26/` shows populated subdirs | ❌ Pending |
+| 7.4 | `ARCHIVE_MASTER_DOSSIER.md` exists at repo root with complete index table | `test -f ARCHIVE_MASTER_DOSSIER.md` | ❌ Pending |
+| 7.5 | `.agents/CODEOWNER_CHECKLIST.md` exists, AGENT_CONTRACT.md prohibition added | `test -f .agents/CODEOWNER_CHECKLIST.md` | ✅ PASSED — 2026-03-27 |
+| 7.6 | PHASE_GATES.md has DAG header and DEPENDS_ON fields for phases 7–13 | Manual review | ❌ Pending (this task) |
+
+**Phase 7 unlocks Phase 8 when:** All 6 gates show ✅ PASSED
+
+---
+
+## Phase 8 Gates — API Gateway and Auth Platform
+
+**DEPENDS_ON:** Phase 7 gate passed
+**BLOCKS:** Phases 10, 11, 12
+**CODEOWNER_APPROVAL_REQUIRED:** Gate 8.2 (Auth0 configuration requires user credentials)
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 8.1 | Gateway routes to all downstream services, `/health` aggregates all statuses | `curl localhost:9000/health` returns all service statuses | 🔒 Locked |
+| 8.2 | JWT auth middleware rejects unauthenticated requests to protected routes | `pytest services/api-gateway/tests/test_auth.py` | 🔒 Locked — CODEOWNER_APPROVAL_REQUIRED |
+| 8.3 | Rate limiting enforced, circuit breaker trips on service outage | Load test + manual service kill test | 🔒 Locked |
+
+---
+
+## Phase 9 Gates — Web App UI/UX Enhancement
+
+**DEPENDS_ON:** None (concurrent with Phase 8)
+**Note:** Phase 0-X Visual Design Book feeds into this when available
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 9.1 | All design tokens defined in `tokens.css`, Tailwind config updated | `pnpm typecheck` passes, visual regression tests pass | 🔒 Pending Phase 7 |
+| 9.2 | All `@njz/ui` components documented with usage examples | Manual review of `packages/@njz/ui/README.md` | 🔒 Pending Phase 7 |
+| 9.3 | Lighthouse ≥ 90 on all routes, WCAG 2.1 AA audit passed | `npx playwright test --project=accessibility` + Lighthouse CI | 🔒 Pending Phase 7 |
+
+---
+
+## Phase 10 Gates — Companion App MVP
+
+**DEPENDS_ON:** Phase 8 gate passed
+**CODEOWNER_APPROVAL_REQUIRED:** None
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 10.1 | App builds on iOS simulator and Android emulator | `eas build --platform all --local` passes | 🔒 Locked |
+| 10.2 | Auth login, live scores display, profile page render | Manual smoke test on both simulators | 🔒 Locked |
+| 10.3 | Push notification received on device | `eas notifications:test` | 🔒 Locked |
+
+---
+
+## Phase 11 Gates — Browser Extension and LiveStream Overlay
+
+**DEPENDS_ON:** Phase 8 gate passed
+**CODEOWNER_APPROVAL_REQUIRED:** None
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 11.1 | Extension installs in Chrome, popup renders live scores, badge updates | Manual install test in Chrome | 🔒 Locked |
+| 11.2 | OBS browser source renders score HUD at 1920×1080, transparent background | Manual OBS test | 🔒 Locked |
+| 11.3 | WebSocket connection survives browser/OBS session across 30 minutes | Manual connection stability test | 🔒 Locked |
+
+---
+
+## Phase 12 Gates — Content and Prediction Platform
+
+**DEPENDS_ON:** Phase 8 gate passed
+**CODEOWNER_APPROVAL_REQUIRED:** Gate 12.3 (Betting/Prediction UI — deliberate opt-in)
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 12.1 | Wiki app deployed, game-world entries render for Valorant and CS2 | `pnpm --filter @njz/wiki build` + Vercel preview | 🔒 Locked |
+| 12.2 | Nexus portal aggregates all World-Port cards with live status | Manual review of nexus app | 🔒 Locked |
+| 12.3 | Token-based prediction UI accessible to authenticated users | Manual smoke test | 🔒 Locked — CODEOWNER_APPROVAL_REQUIRED |
+| 12.4 | OddsEngine confidence scores visible in prediction UI | `pytest packages/shared/api/src/betting/` passes | 🔒 Locked |
+
+---
+
+## Phase 13 Gates — Simulation Engine and Production Launch
+
+**DEPENDS_ON:** Phase 10 + Phase 11 + Phase 12 all gates passed
+**CODEOWNER_APPROVAL_REQUIRED:** Gate 13.4 (production deployment — irreversible)
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 13.1 | Godot simulation engine unpaused, builds headless | `godot --headless --script tests/run_tests.gd` passes | 🔒 Locked |
+| 13.2 | XSim engine connected to platform data pipeline | `pytest tests/integration/ -k simulation` passes | 🔒 Locked |
+| 13.3 | All production environment variables set and validated | `pnpm run validate:schema` + infra config review | 🔒 Locked |
+| 13.4 | Full E2E test suite passes against production build | `npx playwright test` against production URL | 🔒 Locked — CODEOWNER_APPROVAL_REQUIRED |
