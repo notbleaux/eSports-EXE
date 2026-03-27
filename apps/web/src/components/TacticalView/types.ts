@@ -51,7 +51,7 @@ export interface Ability {
   cost: number;
 }
 
-export interface Player {
+export interface TacticalViewPlayer {
   id: string;
   name: string;
   teamId: string;

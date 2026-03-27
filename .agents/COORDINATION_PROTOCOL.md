@@ -56,7 +56,6 @@ LEVEL 5: Human Override (final)
 
 **Communication:**
 - Channel: `.agents/channels/cli-team/`
-- Inbox: `.job-board/00_INBOX/kimi-cli-001/`
 
 ### 2.2 VS Code Agent (`sator-vscode-001`)
 
@@ -75,7 +74,6 @@ LEVEL 5: Human Override (final)
 
 **Communication:**
 - Channel: `.agents/channels/ide-team/`
-- Inbox: `.job-board/00_INBOX/vscode-agent-001/`
 
 ### 2.3 Open-Claw Cloud Agent (`sator-openclaw-001`)
 
@@ -94,7 +92,6 @@ LEVEL 5: Human Override (final)
 
 **Communication:**
 - Channel: `.agents/channels/cloud-team/`
-- Inbox: `.job-board/00_INBOX/openclaw-cloud-001/`
 
 ---
 
@@ -197,19 +194,13 @@ const response = await fetch('http://localhost:8080/agent/message', {
 
 ### 5.1 Morning Sync (All Agents)
 
-1. **Check Inbox:**
-   ```bash
-   # Each agent checks their JLB inbox
-   ls .job-board/00_INBOX/{agent-id}/NEW/
-   ```
-
-2. **Review Locks:**
+1. **Review Locks:**
    ```bash
    # Check for stale locks
    find .agents/active/*/locks/ -name "*.json" -mmin +30
    ```
 
-3. **Channel Updates:**
+2. **Channel Updates:**
    ```bash
    # Read broadcast messages
    ls -lt .agents/channels/broadcast/
@@ -236,36 +227,17 @@ rm .agents/active/{agent-id}/locks/{filename}.json
 echo '{"from":"...","type":"FILE_CHANGED","..."}' > .agents/channels/broadcast/$(date +%s).json
 ```
 
-### 5.3 Evening Handoff
+### 5.2 Evening Handoff
 
 1. Release all locks
-2. Update task status in JLB
-3. Leave status message in channel
-4. Commit all coordination files
+2. Leave status message in channel
+3. Commit all coordination files
 
 ---
 
 ## VI. EMERGENCY PROCEDURES
 
-### 6.1 Deadlock Resolution
-
-If two agents lock files that depend on each other:
-
-```bash
-# 1. Identify deadlock
-# Both agents report in broadcast channel
-
-# 2. Foreman (Kimi CLI) intervenes
-# Review both locks and decide priority
-
-# 3. Release lower priority lock
-rm .agents/active/{lower-priority-agent}/locks/{file}.json
-
-# 4. Document in BLOCKS/
-echo "Deadlock resolved: ..." > .job-board/04_BLOCKS/DEADLOCK-{timestamp}.md
-```
-
-### 6.2 Agent Crash Recovery
+### 6.1 Agent Crash Recovery
 
 If an agent crashes with active locks:
 
@@ -287,29 +259,7 @@ echo "Lock released due to agent crash..." >> .agents/audit/emergency-releases.l
 
 ## VII. TOOLS & UTILITIES
 
-### 7.1 Check Lock Status
-
-```bash
-# Check if file is locked
-node .agents/tools/check-lock.js --file=src/App.tsx
-```
-
-### 7.2 List Active Locks
-
-```bash
-# Show all active locks
-node .agents/tools/list-locks.js
-```
-
-### 7.3 Send Message to Agent
-
-```bash
-# Send message to another agent
-node .agents/tools/send-message.js \
-  --from=sator-kimi-cli-001 \
-  --to=sator-vscode-001 \
-  --message="Working on shared component"
-```
+[Tooling section removed - integrated into agent coordination system]
 
 ---
 
@@ -317,19 +267,17 @@ node .agents/tools/send-message.js \
 
 ### 8.1 Do's
 
-✅ Lock files before editing  
-✅ Check inbox before starting work  
-✅ Broadcast significant changes  
-✅ Release locks promptly  
-✅ Use JLB for task coordination  
-✅ Respect zone boundaries  
+✅ Lock files before editing
+✅ Broadcast significant changes
+✅ Release locks promptly
+✅ Respect zone boundaries
 
 ### 8.2 Don'ts
 
-❌ Edit files without checking locks  
-❌ Hold locks for >30 minutes  
-❌ Ignore broadcast messages  
-❌ Cross into another agent's zone without coordination  
+❌ Edit files without checking locks
+❌ Hold locks for >30 minutes
+❌ Ignore broadcast messages
+❌ Cross into another agent's zone without coordination
 ❌ Modify `.agents/` files directly (except own workspace)  
 
 ---

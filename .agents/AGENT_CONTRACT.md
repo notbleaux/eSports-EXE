@@ -103,8 +103,6 @@ Agents must use this terminology consistently:
 
 ## Coordination Between Agents
 
-The old job-board (`.job-board/`) is archived. Do not use it.
-
 **How agents coordinate now:**
 1. Read `MASTER_PLAN.md` to understand current phase and priorities
 2. Read `.agents/PHASE_GATES.md` to confirm phase is unlocked

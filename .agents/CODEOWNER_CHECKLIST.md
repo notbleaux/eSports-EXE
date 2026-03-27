@@ -25,7 +25,7 @@ An agent MUST NOT begin a CODEOWNER_APPROVAL_REQUIRED task without a CLAIMED ent
 
 | ID | Task | Status | Agent | Notes |
 |----|------|--------|-------|-------|
-| C-7.2 | Job Board permanent deletion — 329 files `[CRIT]` PR | CLAIMED → ACTIVE | notbleaux | CODEOWNER approved 2026-03-27 — 24h hold applies at PR merge |
+| C-7.2 | Job Board permanent deletion — 329 files `[CRIT]` PR | COMPLETED | notbleaux | Deletion complete 2026-03-27 — reference scrub complete — ready for PR merge |
 | C-7.X | Visual Design Book — Phase 0-X research task claim | UNCLAIMED | — | Deep research agent preferred |
 
 ### Phase 8 — API Gateway and Auth

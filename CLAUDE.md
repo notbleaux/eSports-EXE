@@ -181,7 +181,17 @@ AI agents working on this project MUST read these files before starting any task
 
 The `.agents/` directory contains project-specific skills and the coordination system.
 
-The `.job-board/` coordination system is archived in `archive/` — do not use it.
+### Doc Tier Policy — Check Before Loading Any Document
+
+`.doc-tiers.json` at repo root classifies all docs into three tiers. **Check tier before loading any `.md` file.**
+
+| Tier | Policy |
+| ---- | ------ |
+| T0 | Always load — core orientation (3 files max) |
+| T1 | Load on request or when task requires it |
+| T2 | Do NOT load — archived/completed, context waste |
+
+T2 files are prefixed `xCOMP_` or live under `archive/`. Loading T2 costs context with no benefit.
 
 ## Known Duplications
 

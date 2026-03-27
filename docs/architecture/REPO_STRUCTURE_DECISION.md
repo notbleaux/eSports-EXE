@@ -1,10 +1,10 @@
-[Ver001.000]
+[Ver001.001]
 
 # Repository Structure Decision — NJZ eSports Platform
 
 **Date:** 2026-03-27
 **Authority:** `MASTER_PLAN.md §1` (Repository Decision)
-**Reviewed At:** Phase 5 entry gate (gate 5.6)
+**Reviewed At:** Phase 5 entry gate (gate 5.6) · Phase 6 entry gate (gate 6.5)
 
 ---
 
@@ -82,3 +82,32 @@ eSports-EXE/                   ← Monorepo root
 ---
 
 *This document satisfies Phase 5 gate 5.6. Re-evaluate at Phase 6 entry.*
+
+---
+
+## Phase 6 Entry Re-Evaluation (Gate 6.5 — 2026-03-27)
+
+### Verdict: Remain Monorepo — Split Conditions Still Unmet
+
+| Split Trigger Condition | Current State | Recommendation |
+|------------------------|---------------|----------------|
+| Team exceeds 8 active developers | Not reached | Stay monorepo |
+| CI build times exceed 25 minutes | Under threshold | Stay monorepo |
+| Offline Game requires independent versioning | Paused, not production-ready | Stay monorepo |
+| Companion App reaches production-ready | Phase 6 stub only | Stay monorepo |
+
+**All four split trigger conditions remain unmet at Phase 6 entry.**
+
+### Phase 6 Additions
+
+Since the Phase 5 evaluation, two new apps have been scaffolded:
+- `apps/wiki/` — Next.js 14 SSG media and knowledge base
+- `apps/nexus/` — Vite+React aggregated World-Port directory
+
+Both consume `@njz/types` and `@njz/ui` as workspace packages and add no new cross-repo dependencies. There is no technical pressure to split at this time.
+
+### Next Evaluation
+
+Re-evaluate when the Companion App (`apps/companion/`) approaches production-ready status or when any trigger condition is met. Estimated checkpoint: Month 6+.
+
+*This document satisfies Phase 6 gate 6.5.*

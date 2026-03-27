@@ -1,29 +1,32 @@
 ---
 name: sator-coordination
-description: "AI Agent Coordination for 4NJZ4 TENET Platform using filesystem-based Job Listing Board (JLB). USE FOR: task claiming, work coordination, file locking, agent communication, foreman scheduling. DO NOT USE FOR: general project management, external coordination tools, non-SATOR projects."
+description: "[DEPRECATED 2026-03-27] AI Agent Coordination for TENET Platform. The Job Listing Board (JLB) and filesystem-based coordination system have been archived. Agent coordination now uses AGENT_CONTRACT.md phase gates and schema boundaries. This skill is retained for historical reference only."
 license: MIT
 metadata:
   author: SATOR Team
   version: "2.1.0"
+  status: DEPRECATED
 ---
 
-# SATOR Coordination (Job Listing Board)
+# SATOR Coordination (Job Listing Board) — DEPRECATED
 
-> **FILESYSTEM-BASED AGENT COORDINATION**
+> **STATUS: ARCHIVED 2026-03-27**
 >
-> Location: `.job-board/` (future implementation)
+> The `.job-board/` system has been permanently deleted per Task 12.
 > Simple, effective coordination without external dependencies.
 > File locking prevents conflicts. Foreman scheduling prevents collisions.
 
-## Triggers
+## Status
 
-Activate this skill when user wants to:
-- Coordinate work between multiple AI agents
-- Implement filesystem-based task management
-- Set up file locking patterns for safe collaboration
-- Create JLB (Job Listing Board) workflow
-- Schedule foreman activations
-- Manage agent inbox/claim/completed workflow
+**THIS SKILL IS DEPRECATED.** The Job Board system was permanently deleted 2026-03-27. Agent coordination now follows the pattern documented in `.agents/AGENT_CONTRACT.md`:
+
+1. Read `MASTER_PLAN.md` to understand current phase and priorities
+2. Read `.agents/PHASE_GATES.md` to confirm phase is unlocked
+3. Work within your declared domain
+4. After completing work, update `AGENTS.md` under the relevant phase section
+5. The schema boundary is the synchronization point — schema must be committed before dependent domains start
+
+**Do not use this skill.** Refer to `.agents/AGENT_CONTRACT.md §Coordination Between Agents` for the current coordination model.
 
 ## Rules
 

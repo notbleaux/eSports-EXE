@@ -11,7 +11,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import type { CameraMode, CameraState } from '../../lib/replay/camera/modes';
 import type { CameraPath } from '../../lib/replay/camera/pathRecording';
 import type { DetectedAction } from '../../lib/replay/camera/actionDetection';
-import type { Player } from '../../lib/replay/types';
+import type { ReplayPlayer } from '../../lib/replay/types';
 import {
   Video,
   Users,
@@ -45,7 +45,7 @@ export interface CameraControlsProps {
   /** Current director mode (auto/manual) */
   directorMode: 'auto' | 'manual' | 'cinematic';
   /** Available players to follow */
-  players: Player[];
+  players: ReplayPlayer[];
   /** Currently selected player */
   selectedPlayerId?: string;
   /** Currently selected action */

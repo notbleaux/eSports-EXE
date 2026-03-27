@@ -67,7 +67,6 @@ Activate this skill when user wants to:
 | Combat resolution, duels | `sator-simulation` |
 | Render, Vercel, CI/CD | `sator-deployment` |
 | Cross-component features | `sator-end-to-end` |
-| Agent coordination, JLB | `sator-coordination` |
 
 ## Project Architecture
 
@@ -102,7 +101,6 @@ Libre-X-eSport 4NJZ4 TENET Platform
 │   └── load/                    # Load testing
 │
 ├── docs/                        # Documentation
-├── .job-board/                  # AI agent coordination
 └── .agents/skills/              # Project-specific AI skills
 ```
 
@@ -255,7 +253,6 @@ func process_tick() -> void:
 ```
 
 **Types:** feat, fix, docs, style, refactor, test, chore
-**AI Agent Prefix:** Use `[JLB]` for Job Listing Board commits
 
 ### Testing Requirements
 
@@ -293,7 +290,7 @@ All documents MUST include version header:
 2. Review docs/ARCHITECTURE_V2.md for system design
 3. Consult AGENTS.md for conventions
 4. Check existing code for patterns
-5. Review .job-board/ for task coordination
+5. Review AGENTS.md and PHASE_GATES.md for current phase and status
 
 ## References
 

@@ -90,6 +90,14 @@ export type {
   UseLiveMatchReturn,
 } from '../lib/realtime/types';
 
+// TanStack Query — Data Fetching Hooks
+export { useMatchHistory } from './useMatchHistory';
+export { useLiveMatches as useLiveMatchesQuery } from './useLiveMatches';
+export { useMatchData } from './useMatchData';
+export { useMatchHistoryDetail } from './useMatchHistoryDetail';
+export { useReviewQueue } from './useReviewQueue';
+export type { ReviewQueueItem } from './useReviewQueue';
+
 // Service Worker & PWA
 export { useServiceWorker } from './useServiceWorker';
 export { usePWA } from './usePWA';

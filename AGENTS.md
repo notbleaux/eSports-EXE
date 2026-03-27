@@ -193,7 +193,6 @@ All phases 1-8 complete. See docs/PRE_DEPLOY_CHECKLIST.md.
 ├── infrastructure/                # Deployment configs
 │   └── render.yaml               # Render deployment
 │
-├── .job-board/                   # AI agent coordination system
 ├── .agents/skills/               # Project-specific AI skills
 └── .github/workflows/            # CI/CD pipelines
 ```
@@ -561,8 +560,6 @@ Baseline stored in `.secrets.baseline`.
 ---
 
 ## 🤖 AI Agent Coordination
-
-**The `.job-board/` system is archived. Do not use it.**
 
 ### Required Reading Before Any Task
 

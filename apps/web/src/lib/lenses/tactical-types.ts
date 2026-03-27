@@ -19,8 +19,8 @@ import type { Vector2D } from '@/hub-3-arepo/components/TacticalMap/types'
 // Shared Types
 // ============================================================================
 
-/** Player reference with position */
-export interface Player {
+/** Player reference with position (tactical lens context) */
+export interface TacticalLensPlayer {
   id: string
   name: string
   team: 'attackers' | 'defenders'
@@ -29,6 +29,9 @@ export interface Player {
   rotation: number // degrees, 0 = right/east
   isAlive: boolean
 }
+
+/** @deprecated Use TacticalLensPlayer. Kept for backwards compatibility. */
+export type Player = TacticalLensPlayer
 
 /** Site location on map */
 export interface Site {

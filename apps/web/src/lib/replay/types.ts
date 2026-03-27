@@ -95,7 +95,7 @@ export interface Zone {
 // Player Types
 // ============================================================================
 
-export interface Player {
+export interface ReplayPlayer {
   id: string;
   name: string;
   teamId: string;
