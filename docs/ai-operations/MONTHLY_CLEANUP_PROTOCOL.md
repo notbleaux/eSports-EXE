@@ -1,10 +1,11 @@
-[Ver001.000]
+[Ver001.001]
 
 # Monthly Cleanup Protocol — NJZ eSports Platform
 
 **Purpose:** Formalises the monthly maintenance cycle for documentation, session plans, archive index, and governance files.
 **Tier:** T1 — load during M-Q1 through M-Q4 cadence sessions.
 **Authority:** `MASTER_PLAN.md §12` (Monthly Cleanup Protocol), `.agents/ARCHIVE_INDEX_SCHEDULE.md`
+**Framework:** NJZPOF v0.2
 
 ---
 
@@ -53,15 +54,31 @@ git add ARCHIVE_MASTER_DOSSIER.md
 
 ---
 
-## M-Q3: FAQ + PHASE_GATES Review
+## M-Q3: FAQ + PHASE_GATES Review + Gate Freshness Check
 
-1. **ARCHIVE_MASTER_DOSSIER FAQ:** Re-read the 10 FAQ items. If any answer is now stale (e.g., migration status changed), update it.
+1. **ARCHIVE_MASTER_DOSSIER FAQ:** Re-read the 10 FAQ items. If any answer is now stale (e.g., migration status changed), update it. Review Cross-Reference Map against new archived files — add new Q&A rows if new topics were introduced.
 
-2. **PHASE_GATES.md audit:** Check each gate with `❌ Pending` status:
-   - Has the gate condition been met? If so, mark `✅ PASSED — YYYY-MM-DD`
+2. **PHASE_GATES.md audit — gate freshness check:**
+   ```bash
+   # Find all gates with Last Verified older than 30 days (Staleness Drift)
+   grep "Last Verified:" .agents/PHASE_GATES.md
+   # Compare each date against today; any > 30 days = Staleness Drift
+   ```
+   - For stale gates: re-run their verification command; update `Last Verified: YYYY-MM-DD` in PHASE_GATES.md
+   - For pending gates: has the gate condition been met? If so, mark `✅ PASSED — YYYY-MM-DD`
    - Is any gate blocked on a USER_INPUT_REQUIRED? If so, verify the blocker is still valid
+   - Closure SLA: see `docs/ai-operations/DRIFT-CLOSURE-SLA.md`
 
 3. **Doc tiers audit:** Scan for any new `.md` files in `.agents/` or root that aren't tiered in `.doc-tiers.json`. Add them to the appropriate tier.
+
+4. **Governance archive snapshot:**
+   ```bash
+   # The governance-archive.yml CI workflow runs monthly automatically.
+   # Verify the last snapshot exists in docs/governance-archive/
+   ls docs/governance-archive/ | tail -5
+   # If missing or >35 days old, trigger manually:
+   # gh workflow run governance-archive.yml
+   ```
 
 ---
 

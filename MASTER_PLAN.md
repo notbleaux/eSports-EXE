@@ -1,4 +1,4 @@
-[Ver001.002]
+[Ver001.003]
 
 # NJZ eSports Platform — Master Restructuring & Ecosystem Plan
 
@@ -872,7 +872,19 @@ C-8.2: Auth0 configuration — requires Auth0 tenant credentials from user befor
 ## 11. Agent Operational Protocol
 
 **Authority:** This section governs how all AI agents operate within this project. Rules here override agent defaults.
+**Framework:** NJZPOF v0.2 — all rules in §11-13 are part of this framework.
 **Full detail:** `docs/ai-operations/SESSION_LIFECYCLE.md` (T1)
+**Drift SLA:** `docs/ai-operations/DRIFT-CLOSURE-SLA.md` (T1) — mandatory closure times for all drift types
+**ADR format:** `docs/governance/ADR-TEMPLATE.md` (T1) — MADR format for architecture decisions
+**Phase deliverables:** `docs/governance/PHASE-DELIVERABLES-TEMPLATE.md` (T1) — 3×3×3 framework, one instance per phase
+
+### 11.6 Architecture Decision Log (ADRs)
+
+MASTER-tier architectural decisions are recorded inline in Phase Logbooks using MADR format. For cross-phase decisions, a summary line is added here:
+
+| ADR Reference | Title | Gate | Logbook |
+|--------------|-------|------|---------|
+| ADR-7.3.2026-03-27 | Risk-Tier Commit Tags Appended, Not Prepended | 7.3 | Phase-7-LOGBOOK.md |
 
 ### 11.1 Session Lifecycle — 5 Stages (Mandatory, No Stage May Be Skipped)
 
@@ -932,6 +944,7 @@ Risk tag is MANDATORY. Missing tag = CI fails.
 
 **Authority:** Governs session-scoped planning artefacts. These are temporary — they are NOT permanent project records.
 **Full detail:** `docs/ai-operations/SESSION_WORKPLAN_TEMPLATE.md` (T1), `docs/ai-operations/SESSION_LIFECYCLE.md` (T1)
+**Drift SLA:** All drift types must close within times defined in `docs/ai-operations/DRIFT-CLOSURE-SLA.md`
 
 ### 12.1 Session Files
 
@@ -951,16 +964,21 @@ The Session TODO is synced from this document's phase checklist at session start
 - Any item marked `[x]` in the TODO that is NOT yet in PHASE_GATES.md is incomplete — do not advance the phase
 - If a TODO item was not completed, it must appear in CONTEXT_FORWARD under "What Is In Progress"
 
-### 12.3 Context Forward — Handoff Contract
+### 12.3 Context Forward — Handoff Contract (NJZPOF v0.2 Schema)
 
 `CONTEXT_FORWARD.md` must include:
 
+- `**Valid Until:**` date (+7 days from session date)
+- `**Interrupted At:**` gate + completion % (if session was interrupted), or "none"
+- `**Staleness Override Authority:**` CODEOWNER re-verification OR explicit user approval required if past Valid Until
+- `**Resumption Strategy:**` restart/resume/validate per SESSION_LIFECYCLE.md Stage 2B table
 - Gates completed this session (with commit hashes)
 - Work in progress (task name + where it stopped)
+- `**Branch Points Encountered:**` — options considered and choice made (per gate)
 - Open questions for next session
 - Files needing attention
 - USER_INPUT_REQUIRED status
-- Explicit "Do NOT Redo" list (prevents re-doing completed work)
+- Explicit "Do NOT Redo" list (cross-reference: PHASE_GATES.md is authoritative)
 
 ### 12.4 Phase Logbook — Permanent Record
 
@@ -974,15 +992,16 @@ Each phase has a logbook at `.agents/phase-logbooks/Phase-N-LOGBOOK.md`. Logbook
 
 **Authority:** Formalises the monthly maintenance cycle. Run at M-Q1 through M-Q4 cadence.
 **Full detail:** `docs/ai-operations/MONTHLY_CLEANUP_PROTOCOL.md` (T1)
+**Registry:** `.doc-registry.json` — unified index of all consolidation files; route all archive queries through it
 
 ### 13.1 Monthly Calendar
 
 | Quarter | Days | Primary Task |
 |---------|------|--------------|
-| M-Q1 | 1–7 | Archive scan, session workplan audit |
-| M-Q2 | 8–14 | ARCHIVE_MASTER_DOSSIER index table update |
-| M-Q3 | 15–21 | FAQ + PHASE_GATES review, doc tiers audit |
-| M-Q4 | 22–end | Session workplan cleanup (>30 days), version bumps, commit |
+| M-Q1 | 1–7 | Archive scan, session workplan audit, seed new templates |
+| M-Q2 | 8–14 | ARCHIVE_MASTER_DOSSIER index update + Cross-Reference Map audit |
+| M-Q3 | 15–21 | Gate freshness check (Staleness Drift), FAQ + doc tiers audit, governance archive verify |
+| M-Q4 | 22–end | Session workplan cleanup (>30 days), version bumps, phase deliverables consolidation, commit |
 
 ### 13.2 Dossier Consolidation Rule (Mandatory Before Any Archiving)
 
@@ -998,7 +1017,7 @@ This rule applies at both session close (Stage 5D) and monthly M-Q4 cleanup.
 
 ### 13.3 Approved Root-Level Files
 
-These 5 files are the ONLY valid `.md` files at repo root. All others must be moved to `docs/`, `.agents/`, or `Archived/`:
+The canonical list is in `.doc-tiers.json` under `manifest.approved_root_files`. These 7 files are the ONLY valid `.md` files at repo root:
 
 | File | Tier | Purpose |
 |------|------|---------|
@@ -1007,6 +1026,8 @@ These 5 files are the ONLY valid `.md` files at repo root. All others must be mo
 | `CLAUDE.md` | T0-equiv | Claude Code instructions |
 | `README.md` | T0-equiv | Repository entry point |
 | `ARCHIVE_MASTER_DOSSIER.md` | T0 | Archive index |
+| `CONTRIBUTING.md` | T0-equiv | Contribution guidelines |
+| `SECURITY.md` | T0-equiv | Security disclosure policy |
 
 ### 13.4 Archive Repository Migration (Future)
 
@@ -1014,4 +1035,4 @@ When `notbleaux/eSports-EXE-archives` is created (USER_INPUT_REQUIRED — user m
 
 ---
 
-*This document is the single source of truth for all structural and operational decisions. All agents read this before starting work. Last reviewed: 2026-03-27 [Ver001.002]*
+*This document is the single source of truth for all structural and operational decisions. All agents read this before starting work. Last reviewed: 2026-03-27 [Ver001.003] — NJZPOF v0.2 integrated*

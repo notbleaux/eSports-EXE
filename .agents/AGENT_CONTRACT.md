@@ -1,4 +1,4 @@
-[Ver001.002]
+[Ver001.003]
 
 # Agent Contract — NJZ eSports Platform
 
@@ -31,6 +31,57 @@ An agent MUST complete the 5-stage Session Lifecycle (full detail: `docs/ai-oper
 **Stage 5 — Close:** Update PHASE_GATES.md for completed gates. Append to Phase Logbook. Write CONTEXT_FORWARD. Run archiving/deletion final check.
 
 If any of these files cannot be read (missing, corrupted), **stop and report** before proceeding.
+
+---
+
+## Subagent Payload Schema
+
+When dispatching a subagent, provide exactly this context — no more, no less:
+
+```
+[Gate Number]: [N.X — name of gate]
+[Phase Status Summary]: From CONTEXT_FORWARD.md — current phase, last 3 PASSED gates, DO NOT REDO list
+[Task Description]: [specific, bounded task — one gate only]
+[Expected Deliverables]: [C1 measurable outcome] / [files to create or modify] / [verification command]
+[Commit Convention]: [type(scope): description [RISK-TAG]]
+```
+
+**Never include in subagent payload:**
+- Full MASTER_PLAN.md (too large; provide only the current phase section if needed)
+- Full PHASE_GATES.md (provide only the current gate row)
+- Full AGENT_CONTRACT.md (subagents are dispatched workers, not coordinators)
+
+**If subagent returns BLOCKED status:** Re-dispatch with the specific missing context added. Do not retry without change.
+
+---
+
+## Auth Expansion Trigger
+
+Current authorization model: single CODEOWNER (`@notbleaux`). This is correct for solo operation.
+
+**Upgrade to 4-class auth when:** >3 concurrent workers operate on the repo in a single sprint.
+
+4-class model (for future reference only — do NOT implement until trigger condition is met):
+- Class A: MASTER-tier decisions — repo owner only
+- Class B: Phase gate approval — repo owner or designated lead
+- Class C: Domain work execution — any authorized agent
+- Class D: Read-only audit — any observer
+
+Until trigger: single-owner model remains. Do not add auth infrastructure preemptively.
+
+---
+
+## Phase Iteration Versioning
+
+If a phase must be re-entered after completion (regression, scope change, or critical artifact loss):
+
+1. Do NOT overwrite the existing Phase-N-LOGBOOK.md
+2. Create `Phase-N-LOGBOOK-Iteration-2.md` (increment for further re-entries)
+3. Add header: `[Re-entry: YYYY-MM-DD — Reason: [regression/scope-change/artifact-loss]]`
+4. Update PHASE_GATES.md: add `[Re-entry: YYYY-MM-DD]` note to affected gates
+5. MASTER_PLAN.md: note re-entry under the phase checklist
+
+This preserves the original phase completion record while tracking re-entry separately.
 
 ---
 

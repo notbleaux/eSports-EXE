@@ -1,0 +1,112 @@
+name: Governance Archive Snapshot
+
+on:
+  schedule:
+    # Run on the 1st of every month at 00:00 UTC
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger (optional)'
+        required: false
+        default: 'Manual governance snapshot'
+
+permissions:
+  contents: write
+
+jobs:
+  governance-snapshot:
+    name: Create Monthly Governance Snapshot
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set snapshot date
+        id: date
+        run: echo "SNAPSHOT_DATE=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+
+      - name: Create governance-archive directory
+        run: mkdir -p docs/governance-archive
+
+      - name: Copy governance files to snapshot
+        run: |
+          SNAPSHOT_DIR="docs/governance-archive/${{ steps.date.outputs.SNAPSHOT_DATE }}"
+          mkdir -p "$SNAPSHOT_DIR"
+
+          # Core governance files
+          cp .agents/PHASE_GATES.md "$SNAPSHOT_DIR/PHASE_GATES.md"
+          cp .agents/CODEOWNER_CHECKLIST.md "$SNAPSHOT_DIR/CODEOWNER_CHECKLIST.md"
+          cp .agents/AGENT_CONTRACT.md "$SNAPSHOT_DIR/AGENT_CONTRACT.md"
+
+          # Phase logbooks (all of them)
+          if ls .agents/phase-logbooks/*.md 1>/dev/null 2>&1; then
+            mkdir -p "$SNAPSHOT_DIR/phase-logbooks"
+            cp .agents/phase-logbooks/*.md "$SNAPSHOT_DIR/phase-logbooks/"
+          fi
+
+          # ARCHIVE_MASTER_DOSSIER
+          cp ARCHIVE_MASTER_DOSSIER.md "$SNAPSHOT_DIR/ARCHIVE_MASTER_DOSSIER.md"
+
+          echo "Snapshot created at $SNAPSHOT_DIR"
+          ls -la "$SNAPSHOT_DIR"
+
+      - name: Write snapshot manifest
+        run: |
+          SNAPSHOT_DIR="docs/governance-archive/${{ steps.date.outputs.SNAPSHOT_DATE }}"
+          MANIFEST="$SNAPSHOT_DIR/SNAPSHOT_MANIFEST.md"
+
+          cat > "$MANIFEST" << EOF
+          # Governance Snapshot — ${{ steps.date.outputs.SNAPSHOT_DATE }}
+
+          **Generated:** ${{ steps.date.outputs.SNAPSHOT_DATE }}
+          **Trigger:** ${{ github.event_name }} (${{ github.event.inputs.reason || 'scheduled monthly' }})
+          **Commit:** ${{ github.sha }}
+
+          ## Files Included
+
+          EOF
+
+          for f in "$SNAPSHOT_DIR"/*.md "$SNAPSHOT_DIR"/phase-logbooks/*.md; do
+            [ -f "$f" ] && echo "- $(basename $f)" >> "$MANIFEST"
+          done
+
+          echo "" >> "$MANIFEST"
+          echo "## Phase Status at Snapshot Time" >> "$MANIFEST"
+          echo "" >> "$MANIFEST"
+          grep "✅ COMPLETE\|🔒 BLOCKED\|🟡 UNLOCKED\|🟡 ACTIVE" .agents/PHASE_GATES.md >> "$MANIFEST" || true
+
+      - name: Update governance-archive index
+        run: |
+          INDEX="docs/governance-archive/INDEX.md"
+
+          # Create index if it doesn't exist
+          if [ ! -f "$INDEX" ]; then
+            cat > "$INDEX" << 'EOF'
+          # Governance Archive Index
+
+          Monthly snapshots of governance files. Each directory is an immutable point-in-time record.
+
+          | Snapshot Date | Commit | Phase Status Summary |
+          |--------------|--------|---------------------|
+          EOF
+          fi
+
+          # Get current phase summary (last COMPLETE/BLOCKED/UNLOCKED lines)
+          PHASE_SUMMARY=$(grep "COMPLETE\|BLOCKED" .agents/PHASE_GATES.md | grep -oE "Phase [0-9]+-?[A-Z]?" | tr '\n' ', ' | sed 's/,$//')
+
+          echo "| ${{ steps.date.outputs.SNAPSHOT_DATE }} | \`${{ github.sha }}\` | $PHASE_SUMMARY |" >> "$INDEX"
+
+      - name: Commit snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add docs/governance-archive/
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+
+          git commit -m "chore(governance): monthly snapshot ${{ steps.date.outputs.SNAPSHOT_DATE }} [SAFE]"
+          git push

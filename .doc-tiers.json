@@ -1,5 +1,6 @@
 {
-  "_comment": "Doc tier classification per S2 bloat solution. Agents: check tier before loading any doc. Do not load T2 files.",
+  "_comment": "Doc tier classification: answers 'should I load this file?' (T0=always, T1=on-request, T2=never). For 'which consolidation file answers my query?' see .doc-registry.json — a separate, non-overlapping concern.",
+  "_framework": "NJZPOF v0.2",
   "T0": [
     "MASTER_PLAN.md",
     ".agents/PHASE_GATES.md",
@@ -21,11 +22,17 @@
     "docs/architecture/TENET_TOPOLOGY.md",
     "docs/architecture/REPO_STRUCTURE_DECISION.md",
     "docs/QUICK_REFERENCE.md",
+    "docs/ai-operations/DRIFT-CLOSURE-SLA.md",
     "docs/ai-operations/ESCALATION_PROTOCOL.md",
     "docs/ai-operations/SESSION_LIFECYCLE.md",
     "docs/ai-operations/SESSION_WORKPLAN_TEMPLATE.md",
     "docs/ai-operations/MONTHLY_CLEANUP_PROTOCOL.md",
-    "docs/superpowers/specs/"
+    "docs/governance/ADR-TEMPLATE.md",
+    "docs/governance/PHASE-DELIVERABLES-TEMPLATE.md",
+    "docs/superpowers/specs/",
+    ".doc-registry.json",
+    ".agents/archiving/DOSSIER_CREATION_TEMPLATE.md",
+    ".agents/indexing/FILTER_RULES.md"
   ],
   "T2": [
     "xCOMP_*",
@@ -37,10 +44,22 @@
     ".agents/PHASE_2_EXECUTION_STATUS.md",
     ".agents/PHASE_3_LAUNCH.md",
     ".agents/PHASE_3_COMPLETION_STATUS.md",
-    ".agents/PHASE_3-4_EXECUTION_REFINEMENT.md",
+    ".agents/PHASE_3-6_EXECUTION_REFINEMENT.md",
     ".agents/PHASE_3-6_FINAL_IMPLEMENTATION_PLAN.md",
     ".agents/PHASE_4_IMPLEMENTATION_GUIDE.md",
     ".agents/PHASE_4_COMPLETION_STATUS.md",
     "apps/web/INTEGRATION_SUMMARY.md"
-  ]
+  ],
+  "manifest": {
+    "_comment": "Canonical list of approved root-level .md files. Any root .md NOT in this list is stale and must be archived.",
+    "approved_root_files": [
+      "MASTER_PLAN.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "README.md",
+      "ARCHIVE_MASTER_DOSSIER.md",
+      "CONTRIBUTING.md",
+      "SECURITY.md"
+    ]
+  }
 }

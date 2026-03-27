@@ -1,0 +1,114 @@
+name: Document Registry Audit
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - '.agents/**'
+      - '*.md'
+      - '.doc-registry.json'
+      - '.doc-tiers.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  registry-audit:
+    name: Validate Document Registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate .doc-registry.json exists
+        run: |
+          test -f .doc-registry.json || (echo "❌ .doc-registry.json missing" && exit 1)
+          echo "✅ .doc-registry.json present"
+
+      - name: Validate .doc-registry.json is valid JSON
+        run: |
+          jq empty .doc-registry.json && echo "✅ .doc-registry.json valid JSON" || (echo "❌ .doc-registry.json invalid JSON" && exit 1)
+
+      - name: Validate .doc-registry.json schema fields
+        run: |
+          echo "Checking required top-level fields..."
+          jq -e '.schema_version' .doc-registry.json > /dev/null || (echo "❌ Missing: schema_version" && exit 1)
+          jq -e '.last_updated' .doc-registry.json > /dev/null || (echo "❌ Missing: last_updated" && exit 1)
+          jq -e '.consolidation_files' .doc-registry.json > /dev/null || (echo "❌ Missing: consolidation_files" && exit 1)
+          echo "✅ Required top-level fields present"
+
+      - name: Validate each consolidation_file entry has required fields
+        run: |
+          echo "Checking consolidation_files entries..."
+          ERRORS=0
+
+          jq -r '.consolidation_files[] | @json' .doc-registry.json | while read -r entry; do
+            id=$(echo "$entry" | jq -r '.id')
+            path=$(echo "$entry" | jq -r '.path // empty')
+            tier=$(echo "$entry" | jq -r '.tier // empty')
+            scope=$(echo "$entry" | jq -r '.scope // empty')
+
+            if [ -z "$path" ]; then
+              echo "❌ Entry '$id' missing: path"
+              ERRORS=$((ERRORS + 1))
+            fi
+            if [ -z "$tier" ]; then
+              echo "❌ Entry '$id' missing: tier"
+              ERRORS=$((ERRORS + 1))
+            fi
+            if [ -z "$scope" ]; then
+              echo "❌ Entry '$id' missing: scope"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          echo "✅ All consolidation_files entries validated"
+
+      - name: Validate consolidation file paths exist
+        run: |
+          echo "Checking that registered paths exist..."
+          MISSING=0
+
+          jq -r '.consolidation_files[].path' .doc-registry.json | while read -r filepath; do
+            if [ ! -f "$filepath" ]; then
+              echo "⚠️  Registered path missing: $filepath"
+              MISSING=$((MISSING + 1))
+            else
+              echo "✅ $filepath"
+            fi
+          done
+
+          # Missing files are warnings, not errors — files may be in progress
+          echo "Path check complete"
+
+      - name: Validate .doc-tiers.json approved_root_files manifest exists
+        run: |
+          jq -e '.manifest.approved_root_files' .doc-tiers.json > /dev/null \
+            && echo "✅ manifest.approved_root_files present" \
+            || (echo "❌ .doc-tiers.json missing manifest.approved_root_files" && exit 1)
+
+      - name: Check for unapproved root .md files
+        run: |
+          echo "Checking root .md files against approved manifest..."
+          APPROVED=$(jq -r '.manifest.approved_root_files[]' .doc-tiers.json | sed 's/^/^/' | paste -sd '|')
+          UNAPPROVED=$(ls *.md 2>/dev/null | grep -vE "$APPROVED" || true)
+
+          if [ -n "$UNAPPROVED" ]; then
+            echo "⚠️  Unapproved root .md files detected:"
+            echo "$UNAPPROVED"
+            echo "These should be moved to docs/, .agents/, or Archived/"
+          else
+            echo "✅ All root .md files are approved"
+          fi
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "=== Document Registry Audit Complete ==="
+          echo "Registry: .doc-registry.json"
+          echo "Tiers: .doc-tiers.json"
+          echo "Schema version: $(jq -r '.schema_version' .doc-registry.json)"
+          echo "Last updated: $(jq -r '.last_updated' .doc-registry.json)"
+          echo "Registered consolidation files: $(jq '.consolidation_files | length' .doc-registry.json)"

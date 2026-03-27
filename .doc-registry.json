@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-03-27T11:55:00Z",
+  "last_updated": "2026-03-27T11:55:00Z",
+  "valid_until": "2026-04-27T11:55:00Z",
+  "authority": "NJZPOF Pillar 4 (MCP); audit PASS 2 Bullet 3",
+  "purpose": "Single source of truth for document routing. Agents use this registry to answer 'where do I find information about X?' instead of searching multiple indices.",
+  "consolidation_files": [
+    {
+      "id": "archive-master-dossier",
+      "path": "ARCHIVE_MASTER_DOSSIER.md",
+      "tier": "T0",
+      "authority": "MASTER",
+      "scope": "All archived files (144 documents), general cross-reference index, historical records from 2026-03-17 onward",
+      "schema_version": "1.0",
+      "created_at": "2026-03-17",
+      "last_updated": "2026-03-27",
+      "valid_until": "2026-04-27",
+      "contains": {
+        "topic_map": true,
+        "index_table": true,
+        "cross_reference_map": true,
+        "faq_section": true,
+        "maintenance_notes": true
+      },
+      "queries_it_answers": [
+        "What was implemented in Phase N?",
+        "Where is document X archived?",
+        "What tests were run during Phase Y?",
+        "What decisions were made about component Z?",
+        "Which files are in the Archived/Y26/M03/ directory?",
+        "What is the summary of all archived work?"
+      ],
+      "parent_registry": null,
+      "child_registries": [
+        "archive-index-mvp",
+        "deliverables-index"
+      ]
+    },
+    {
+      "id": "archive-index-mvp",
+      "path": "docs/archive/INDEX.md",
+      "tier": "T1",
+      "authority": "PHASE",
+      "scope": "MVP specifications, design system deliverables, specifications complete for implementation phase",
+      "schema_version": "1.0",
+      "created_at": "2026-03-22",
+      "last_updated": "2026-03-22",
+      "valid_until": "2026-04-22",
+      "contains": {
+        "quick_start": true,
+        "mvp_specifications": true,
+        "design_system": true,
+        "review_critique": true,
+        "demo_data": true,
+        "repository_status": true,
+        "implementation_roadmap": true,
+        "tech_stack": true,
+        "design_principles": true,
+        "definition_of_done": true,
+        "external_references": true,
+        "team_roles": true,
+        "document_versioning": true,
+        "next_steps": true
+      },
+      "queries_it_answers": [
+        "What is the current MVP specification?",
+        "Where are the design tokens defined?",
+        "What is the implementation roadmap?",
+        "Where do I find the style brief?"
+      ],
+      "parent_registry": "archive-master-dossier",
+      "child_registries": []
+    },
+    {
+      "id": "deliverables-index",
+      "path": "docs/reports/DELIVERABLES_INDEX.md",
+      "tier": "T1",
+      "authority": "PHASE",
+      "scope": "Production-ready deliverables, component library, technical specifications, demo data, verification and acceptance criteria",
+      "schema_version": "1.0",
+      "created_at": "2026-03-22",
+      "last_updated": "2026-03-22",
+      "valid_until": "2026-04-22",
+      "contains": {
+        "overview": true,
+        "design_system_assets": true,
+        "annotated_wireframes": true,
+        "component_library": true,
+        "technical_specifications": true,
+        "demo_data": true,
+        "project_documentation": true,
+        "acceptance_criteria": true,
+        "implementation_roadmap": true,
+        "quick_links": true,
+        "unified_master_plan_section": true,
+        "pipeline_tracking": true,
+        "quality_gates": true
+      },
+      "queries_it_answers": [
+        "What production deliverables have been completed?",
+        "Where are the component library files?",
+        "What are the technical specifications for TeNET tools?",
+        "What is the status of the unified master plan?",
+        "Where is the pipeline tracking board?"
+      ],
+      "parent_registry": "archive-master-dossier",
+      "child_registries": []
+    },
+    {
+      "id": "phase-gates",
+      "path": ".agents/PHASE_GATES.md",
+      "tier": "T0",
+      "authority": "MASTER",
+      "scope": "Phase execution gates and state machine authority for all task completion",
+      "schema_version": "1.0",
+      "created_at": "2026-03-27",
+      "last_updated": "2026-03-27",
+      "valid_until": "2026-04-27",
+      "contains": {
+        "phase_list": true,
+        "gate_status": true,
+        "verification_commands": true,
+        "last_verified_dates": true,
+        "completion_proofs": true
+      },
+      "queries_it_answers": [
+        "Is gate X.Y marked as PASSED?",
+        "What is the verification command for gate X.Y?",
+        "When was gate X.Y last verified?",
+        "What gates are blocking Phase N unlock?"
+      ],
+      "parent_registry": null,
+      "child_registries": []
+    },
+    {
+      "id": "schema-registry",
+      "path": ".agents/SCHEMA_REGISTRY.md",
+      "tier": "T0",
+      "authority": "MASTER",
+      "scope": "Canonical type definitions and schema specifications to prevent duplicate types",
+      "schema_version": "1.0",
+      "created_at": "2026-03-27",
+      "last_updated": "2026-03-27",
+      "valid_until": "2026-04-27",
+      "contains": {
+        "type_index": true,
+        "schema_definitions": true,
+        "cross_references": true
+      },
+      "queries_it_answers": [
+        "Is type X already defined?",
+        "Where is the canonical definition of interface Y?",
+        "What fields does schema Z have?"
+      ],
+      "parent_registry": null,
+      "child_registries": []
+    },
+    {
+      "id": "archive-index-schedule",
+      "path": ".agents/ARCHIVE_INDEX_SCHEDULE.md",
+      "tier": "T1",
+      "authority": "PHASE",
+      "scope": "Monthly (M-Q1–Q4) rolling schedule for archive index updates and maintenance",
+      "schema_version": "1.0",
+      "created_at": "2026-03-27",
+      "last_updated": "2026-03-27",
+      "valid_until": "2026-04-27",
+      "contains": {
+        "schedule": true,
+        "m_q1_steps": true,
+        "m_q2_steps": true,
+        "m_q3_steps": true,
+        "m_q4_steps": true,
+        "spawning_sequence": true,
+        "migration_status": true
+      },
+      "queries_it_answers": [
+        "When should archive index be updated?",
+        "What M-Q phase should I run this month?",
+        "How do I verify archive completeness?"
+      ],
+      "parent_registry": null,
+      "child_registries": []
+    }
+  ],
+  "filter_tags_available": [
+    "phase:N",
+    "topic:X",
+    "date:YYYY-MM",
+    "author:agent-name"
+  ],
+  "tag_definitions_location": ".agents/indexing/FILTER_RULES.md",
+  "approved_root_files_location": ".doc-tiers.json#manifest.approved_root_files",
+  "notes": "This registry is the authoritative router. All other consolidation files (ARCHIVE_MASTER_DOSSIER, INDEX.md, DELIVERABLES_INDEX.md) are children. Agents should query this registry first to determine which consolidation file answers their question."
+}

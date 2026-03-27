@@ -1,20 +1,24 @@
-[Ver001.000]
+[Ver001.001]
 
 # Archive Master Dossier — NJZ eSports Platform
 
 **Tier:** T0 — always loaded by all agents.
 **Authority:** `docs/superpowers/specs/2026-03-27-master-plan-extension-phase7-13-design.md §7.4`
-**Last updated:** 2026-03-27
+**Schema Version:** 1.0
+**Last Updated:** 2026-03-27
+**Last Validated:** 2026-03-27
 **Next scheduled update:** M-Q4 of 2026-04 (see `.agents/ARCHIVE_INDEX_SCHEDULE.md`)
+**Query routing:** This file answers "where is X archived?" — for other index types see `.doc-registry.json`
+**Filter syntax:** Tag-based queries available from Phase 9 onward — see `.agents/indexing/FILTER_RULES.md`
 
 ---
 
 ## Summary
 
-- **Total archived files:** 144
+- **Total archived files:** 144 (exact count at 2026-03-27; 3 dossiers + 141 standalone)
 - **Date range covered:** 2026-03-17 – 2026-03-27 (all files migrated on 2026-03-17)
-- **Migration status:** Pending — `Archived/` not yet pushed to `notbleaux/eSports-EXE-archives`
-- **Archive repo:** Not yet created — planned for Phase 7 completion
+- **Migration status:** READY — `notbleaux/eSports-EXE-archives` created. Subtree push pending CODEOWNER approval (see CODEOWNER_CHECKLIST.md C-ARCH.1). Do not push until approved — this removes `Archived/` from current repo.
+- **Archive repo:** `notbleaux/eSports-EXE-archives` — created 2026-03-27. Cross-reference linking and bidirectional archive features now unblocked.
 
 ---
 

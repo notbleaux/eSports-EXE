@@ -1,10 +1,29 @@
-[Ver001.003]
+[Ver001.004]
 
 # Phase Gates — NJZ eSports Platform
 
 **Purpose:** Agents MUST NOT begin work on Phase N+1 until all Phase N gates are verified.
 **Authority:** `MASTER_PLAN.md §9`
+**Framework:** NJZPOF v0.2
 **Update policy:** Mark gate as PASSED only after running the verification command and confirming result.
+**Last Verified format:** Each PASSED gate records `Last Verified: YYYY-MM-DD | Verified In: [local+CI]`
+**Seal date format:** Each phase section records `[Seal Date: YYYY-MM-DD]` when all gates first PASSED
+
+---
+
+## Phase Regression Detection
+
+Before unlocking Phase N+1, re-run the verification commands for the last 3 PASSED gates of Phase N.
+This prevents phantom completion where artifacts were deleted after gates were marked PASSED.
+
+```bash
+# Example: verify Phase 7 regression check before starting Phase 8
+test -f .github/CODEOWNERS && echo "7.1 ✅" || echo "7.1 ❌ ARTIFACT_MISSING"
+test -f .agents/CODEOWNER_CHECKLIST.md && echo "7.5 ✅" || echo "7.5 ❌ ARTIFACT_MISSING"
+test -f ARCHIVE_MASTER_DOSSIER.md && echo "7.4 ✅" || echo "7.4 ❌ ARTIFACT_MISSING"
+```
+
+If any artifact is missing → mark gate `❌ ARTIFACT_MISSING` → apply Artifact Drift SLA from `docs/ai-operations/DRIFT-CLOSURE-SLA.md`.
 
 ---
 
@@ -174,14 +193,20 @@ Phase 13 (DEPENDS_ON: Phase 10 + 11 + 12) ────────────�
 ## How to Update This File
 
 When a gate is passed:
-1. Change `❌ Pending` or `🔒` to `✅ PASSED — <date>`
+1. Change `❌ Pending` or `🔒` to `✅ PASSED — <date> · Last Verified: <date> · Verified In: [local|CI|local+CI]`
 2. Include the verification output or a reference to the passing CI run
 3. Update the Phase Status table at the top
-4. If all gates for a phase pass, mark that phase as `✅ COMPLETE` and the next as `🟡 UNLOCKED`
+4. If all gates for a phase pass: mark phase as `✅ COMPLETE`, add `**Seal Date:** YYYY-MM-DD` to phase header, mark next phase as `🟡 UNLOCKED`
+5. Run regression detection commands before marking next phase as active
 
-Example:
+When re-verifying an existing gate (Staleness Drift check):
+- Update `Last Verified: YYYY-MM-DD` in the gate's Status cell
+- Update `Verified In:` if environment has changed
+- Commit as: `chore(drift-fix): re-verify gate N.X staleness drift [SAFE]`
+
+Example gate status format:
 ```
-| 0.2 | `MASTER_PLAN.md` exists at repo root | ... | ✅ PASSED — 2026-03-27 |
+✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local+CI
 ```
 
 ---
@@ -204,15 +229,16 @@ Example:
 **DEPENDS_ON:** None (first unlocked phase)
 **BLOCKS:** Phase 8 (Phase 9 may proceed concurrently)
 **CODEOWNER_APPROVAL_REQUIRED:** Gate 7.2 (Job Board deletion)
+**Seal Date:** 2026-03-27
 
 | Gate | Criteria | Verification Command | Status |
 |------|----------|---------------------|--------|
-| 7.1 | `.github/CODEOWNERS` active, risk-tier workflow deployed | `test -f .github/CODEOWNERS && test -f .github/workflows/pr-classification.yml` | ✅ PASSED — 2026-03-27 |
-| 7.2 | Job Board fully deleted, all reference files scrubbed (CRIT PR + 24h hold) | `grep -r "job-board" . --include="*.md" \| grep -v "Archived/"` returns intentional references only | ✅ PASSED — 2026-03-27 (329 files deleted via `git rm -r archive/.job-board/`; reference scrub completed on CLAUDE.md, AGENTS.md, AGENT_CONTRACT.md, COORDINATION_PROTOCOL.md) |
-| 7.3 | `Archived/` date structure created, all archive/ files assigned to dated subdirs | `ls Archived/Y25/ Archived/Y26/` shows populated subdirs | ✅ PASSED — 2026-03-27 (144 files moved to Archived/Y26/M03/docs/) |
-| 7.4 | `ARCHIVE_MASTER_DOSSIER.md` exists at repo root with complete index table | `test -f ARCHIVE_MASTER_DOSSIER.md` | ✅ PASSED — 2026-03-27 |
-| 7.5 | `.agents/CODEOWNER_CHECKLIST.md` exists, AGENT_CONTRACT.md prohibition added | `test -f .agents/CODEOWNER_CHECKLIST.md` | ✅ PASSED — 2026-03-27 |
-| 7.6 | PHASE_GATES.md has DAG header and DEPENDS_ON fields for phases 7–13 | Manual review | ✅ PASSED — 2026-03-27 (DAG header present lines 13–24, DEPENDS_ON fields documented for all phases 7–13) |
+| 7.1 | `.github/CODEOWNERS` active, risk-tier workflow deployed | `test -f .github/CODEOWNERS && test -f .github/workflows/pr-classification.yml` | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7.2 | Job Board fully deleted, all reference files scrubbed (CRIT PR + 24h hold) | `grep -r "job-board" . --include="*.md" \| grep -v "Archived/"` returns intentional references only | ✅ PASSED — 2026-03-27 (329 files deleted; reference scrub completed) · Last Verified: 2026-03-27 · Verified In: local |
+| 7.3 | `Archived/` date structure created, all archive/ files assigned to dated subdirs | `ls Archived/Y25/ Archived/Y26/` shows populated subdirs | ✅ PASSED — 2026-03-27 (144 files moved to Archived/Y26/M03/docs/) · Last Verified: 2026-03-27 · Verified In: local |
+| 7.4 | `ARCHIVE_MASTER_DOSSIER.md` exists at repo root with complete index table | `test -f ARCHIVE_MASTER_DOSSIER.md` | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7.5 | `.agents/CODEOWNER_CHECKLIST.md` exists, AGENT_CONTRACT.md prohibition added | `test -f .agents/CODEOWNER_CHECKLIST.md` | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7.6 | PHASE_GATES.md has DAG header and DEPENDS_ON fields for phases 7–13 | Manual review | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
 
 **Phase 7 unlocks Phase 8 when:** All 6 gates show ✅ PASSED
 
@@ -222,19 +248,20 @@ Example:
 
 **DEPENDS_ON:** Phase 7
 **STATUS:** ✅ COMPLETE (2026-03-27)
+**Seal Date:** 2026-03-27
 
 | Gate | Criteria | Status |
 |------|----------|--------|
-| 7-S.1 | `.agents/SKILL_MAP.md` exists and classifies all agent types | ✅ PASSED — 2026-03-27 |
-| 7-S.2 | `docs/ai-operations/ESCALATION_PROTOCOL.md` exists with decision matrix | ✅ PASSED — 2026-03-27 |
-| 7-S.3 | `docs/QUICK_REFERENCE.md` exists with current phase status and commands | ✅ PASSED — 2026-03-27 |
-| 7-S.4 | `.github/workflows/agent-validation.yml` exists with doc-version-headers and no-inline-types checks | ✅ PASSED — 2026-03-27 |
-| 7-S.5 | `docs/ai-operations/SESSION_LIFECYCLE.md` exists with 5-stage lifecycle + dossier consolidation rule | ✅ PASSED — 2026-03-27 |
-| 7-S.6 | `docs/ai-operations/SESSION_WORKPLAN_TEMPLATE.md` exists | ✅ PASSED — 2026-03-27 |
-| 7-S.7 | `docs/ai-operations/MONTHLY_CLEANUP_PROTOCOL.md` exists with M-Q1/Q4 cadence + dossier consolidation | ✅ PASSED — 2026-03-27 |
-| 7-S.8 | Root directory contains only approved files (MASTER_PLAN, AGENTS, CLAUDE, README, ARCHIVE_MASTER_DOSSIER, CONTRIBUTING, SECURITY) | ✅ PASSED — 2026-03-27 (13 stale files archived as dossiers) |
-| 7-S.9 | `AGENT_CONTRACT.md` Ver001.002 — 5-stage session lifecycle mandatory | ✅ PASSED — 2026-03-27 |
-| 7-S.10 | `.doc-tiers.json` updated with T1 entries for all new operational docs | ✅ PASSED — 2026-03-27 |
+| 7-S.1 | `.agents/SKILL_MAP.md` exists and classifies all agent types | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.2 | `docs/ai-operations/ESCALATION_PROTOCOL.md` exists with decision matrix | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.3 | `docs/QUICK_REFERENCE.md` exists with current phase status and commands | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.4 | `.github/workflows/agent-validation.yml` exists with doc-version-headers and no-inline-types checks | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.5 | `docs/ai-operations/SESSION_LIFECYCLE.md` exists with 5-stage lifecycle + dossier consolidation rule | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.6 | `docs/ai-operations/SESSION_WORKPLAN_TEMPLATE.md` exists | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.7 | `docs/ai-operations/MONTHLY_CLEANUP_PROTOCOL.md` exists with M-Q1/Q4 cadence + dossier consolidation | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.8 | Root directory contains only approved files (MASTER_PLAN, AGENTS, CLAUDE, README, ARCHIVE_MASTER_DOSSIER, CONTRIBUTING, SECURITY) | ✅ PASSED — 2026-03-27 (13 stale files archived as dossiers) · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.9 | `AGENT_CONTRACT.md` Ver001.002 — 5-stage session lifecycle mandatory | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
+| 7-S.10 | `.doc-tiers.json` updated with T1 entries for all new operational docs | ✅ PASSED — 2026-03-27 · Last Verified: 2026-03-27 · Verified In: local |
 
 ---
 
