@@ -1,0 +1,132 @@
+# .github/workflows/agent-validation.yml
+# Provides immediate CI feedback to agents on PRs.
+# Runs lint, typecheck, and doc validation in parallel.
+name: Agent Submission Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  typecheck:
+    name: TypeScript Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run typecheck
+        run: pnpm run typecheck
+
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run lint
+        run: pnpm run lint 2>/dev/null || echo "No lint script configured at root"
+
+  python-check:
+    name: Python Type + Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python tools
+        run: pip install ruff mypy
+      - name: Ruff lint
+        run: |
+          ruff check packages/shared/ services/ || echo "Ruff issues found (non-blocking)"
+      - name: mypy check
+        run: |
+          mypy packages/shared/api/ --ignore-missing-imports || echo "mypy issues found (non-blocking)"
+
+  doc-version-headers:
+    name: Doc Version Header Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check all modified .md files have version headers
+        run: |
+          # Get list of .md files changed in this PR
+          git fetch origin ${{ github.base_ref }}
+          CHANGED_MD=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep '\.md$' || true)
+
+          if [ -z "$CHANGED_MD" ]; then
+            echo "No .md files changed — skipping doc header check"
+            exit 0
+          fi
+
+          FAILED=0
+          for file in $CHANGED_MD; do
+            if [ -f "$file" ]; then
+              FIRST_LINE=$(head -1 "$file")
+              if ! echo "$FIRST_LINE" | grep -qE '^\[Ver[0-9]+\.[0-9]+\]'; then
+                echo "MISSING VERSION HEADER: $file"
+                FAILED=1
+              fi
+            fi
+          done
+
+          if [ "$FAILED" = "1" ]; then
+            echo ""
+            echo "All modified .md files must start with a version header: [VerMMM.mmm]"
+            echo "Example: [Ver001.000]"
+            exit 1
+          fi
+
+          echo "All modified .md files have valid version headers ✅"
+
+  no-inline-types:
+    name: No Inline Type Definitions in Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for inline interface/type definitions in hub components
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED_TS=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep -E 'apps/web/src/hub-[1-4].*\.tsx?$' || true)
+
+          if [ -z "$CHANGED_TS" ]; then
+            echo "No hub component files changed — skipping inline type check"
+            exit 0
+          fi
+
+          FAILED=0
+          for file in $CHANGED_TS; do
+            if [ -f "$file" ]; then
+              # Check for top-level interface/type declarations (not imports)
+              INLINE=$(grep -nE '^(export )?(interface|type) [A-Z]' "$file" | grep -v 'from "@njz' | grep -v '// compat' || true)
+              if [ -n "$INLINE" ]; then
+                echo "INLINE TYPE DEFINITION in $file:"
+                echo "$INLINE"
+                FAILED=1
+              fi
+            fi
+          done
+
+          if [ "$FAILED" = "1" ]; then
+            echo ""
+            echo "Hub components must not define inline types. Import from @njz/types instead."
+            exit 1
+          fi
+
+          echo "No inline type definitions in hub components ✅"

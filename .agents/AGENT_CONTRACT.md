@@ -1,4 +1,4 @@
-[Ver001.001]
+[Ver001.002]
 
 # Agent Contract — NJZ eSports Platform
 
@@ -10,13 +10,25 @@
 
 ## Before Starting Any Task
 
-An agent MUST read these files in order before writing a single line of code:
+An agent MUST complete the 5-stage Session Lifecycle (full detail: `docs/ai-operations/SESSION_LIFECYCLE.md`) before writing a single line of code.
+
+**Stage 1 — Cleanup:** Delete `.agents/session/` files from the previous session (anything older than today). Check for stale root `.md` files and archive them. Check for fragment clusters — consolidate into dossiers before archiving.
+
+**Stage 2 — Orient (read in this order):**
 
 1. `MASTER_PLAN.md` — Current phase, what is in scope, what is not
 2. `.agents/PHASE_GATES.md` — Confirm the phase you are working on is unlocked
-3. `.agents/SCHEMA_REGISTRY.md` — Check all relevant types before creating any
-4. `AGENTS.md` — Current known gaps and project state
-5. `CLAUDE.md` — Code conventions and commit format
+3. `.agents/CODEOWNER_CHECKLIST.md` — Check for UNCLAIMED / PENDING USER_INPUT_REQUIRED. **If any exist for the current phase: STOP and report to user before proceeding.**
+4. `.agents/session/CONTEXT_FORWARD.md` — Previous session handoff (check DO NOT REDO list)
+5. `.agents/phase-logbooks/Phase-N-LOGBOOK.md` — Current phase history
+6. `.agents/SCHEMA_REGISTRY.md` — Check relevant types before creating any
+7. `CLAUDE.md` — Code conventions and commit format
+
+**Stage 3 — Plan:** Create `.agents/session/NOTEBOOK-YYYY-MM-DD.md` and `.agents/session/TODO-YYYY-MM-DD.md`. Sync TODO from the current phase checklist in MASTER_PLAN.md.
+
+**Stage 4 — Work:** Execute tasks. Run drift check before each new gate (re-read phase section in MASTER_PLAN.md; if what you're about to do is NOT there, stop and confirm).
+
+**Stage 5 — Close:** Update PHASE_GATES.md for completed gates. Append to Phase Logbook. Write CONTEXT_FORWARD. Run archiving/deletion final check.
 
 If any of these files cannot be read (missing, corrupted), **stop and report** before proceeding.
 
@@ -125,6 +137,9 @@ A task is complete when:
 - [ ] `AGENTS.md` updated with completed work under correct phase
 - [ ] If new types were introduced: `.agents/SCHEMA_REGISTRY.md` updated
 - [ ] If a Phase Gate is now met: `.agents/PHASE_GATES.md` updated
+- [ ] Session Notebook updated with decisions made
+- [ ] Session TODO items marked `[x]`
+- [ ] Stage 5 close completed: logbook appended, CONTEXT_FORWARD written
 
 ---
 
