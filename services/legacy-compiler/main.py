@@ -630,6 +630,7 @@ class DataAggregator:
         """
         Collect match data from all available sources.
         Returns aggregated SourceDataPayload for TeneT verification.
+        Includes conflict detection: flags if sources disagree (>10 point difference).
         """
         logger.info(f"DataAggregator: Aggregating data for match {match_id}")
 
@@ -657,11 +658,21 @@ class DataAggregator:
                 "capturedAt": datetime.utcnow().isoformat()
             })
 
+        # Detect conflicts between sources
+        conflict_analysis = detect_conflicts(sources, threshold_points=10)
+        if conflict_analysis["has_conflicts"]:
+            logger.warning(
+                f"DataAggregator: Conflicts detected for match {match_id}: "
+                f"{conflict_analysis['conflict_count']} conflicts, "
+                f"confidence_impact: {conflict_analysis['confidence_impact']}"
+            )
+
         return {
             "entityId": match_id,
             "entityType": "match",
             "sources": sources,
-            "sourceCount": len(sources)
+            "sourceCount": len(sources),
+            "conflicts": conflict_analysis
         }
 
     async def get_scraper_status(self) -> List[Dict[str, Any]]:
