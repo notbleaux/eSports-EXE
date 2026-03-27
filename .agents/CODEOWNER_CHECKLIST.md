@@ -32,7 +32,7 @@ An agent MUST NOT begin a CODEOWNER_APPROVAL_REQUIRED task without a CLAIMED ent
 | ID | Task | Status | Agent | Notes |
 |----|------|--------|-------|-------|
 | C-7.2 | Job Board permanent deletion — 329 files `[CRIT]` PR | COMPLETED | notbleaux | Deletion complete 2026-03-27 — reference scrub complete — ready for PR merge |
-| C-7.X | Visual Design Book — Phase 0-X research task claim | UNCLAIMED | — | Deep research agent preferred |
+| C-7.X | Visual Design Book — Phase 0-X research task claim | CLAIMED → ACTIVE | claude-sonnet-4-6 | Approved by @notbleaux 2026-03-27 via session instruction. 3-batch research: R1–R6 + S1 synthesis. Reports to `docs/superpowers/visual-design-book/reports/`. |
 
 ### Phase 8 — API Gateway and Auth
 
