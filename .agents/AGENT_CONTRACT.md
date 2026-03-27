@@ -1,4 +1,4 @@
-[Ver001.000]
+[Ver001.001]
 
 # Agent Contract — NJZ eSports Platform
 
@@ -60,6 +60,8 @@ If your task requires changes in more than one domain:
 - Commit secrets, API keys, or database URLs
 - Use `--no-verify` on commits
 - Create `TODO.md`, `QUICK_FIX_GUIDE_*.md`, `IMPLEMENTATION_SUMMARY_*.md` at the root
+- Begin any task listed in `.agents/CODEOWNER_CHECKLIST.md` without that task showing `CLAIMED → ACTIVE` status confirmed by @notbleaux
+- Merge or approve a `[CRIT]` PR before the 24-hour hold period has elapsed after CODEOWNER approval
 
 ---
 

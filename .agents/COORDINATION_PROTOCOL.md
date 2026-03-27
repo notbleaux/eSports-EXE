@@ -339,3 +339,92 @@ node .agents/tools/send-message.js \
 **Review:** Weekly  
 
 *Protocol active. Agents may begin coordinated operations.*
+
+---
+
+[Ver001.000]
+
+# Coordination Protocol — NJZ eSports Platform
+
+**Authority:** `.agents/AGENT_CONTRACT.md`
+**Tier:** T1 — load when coordinating multi-agent work.
+
+---
+
+## Time-Quarter Cadence
+
+### Daily Quarters
+
+| Label | Time Window | Purpose |
+|-------|-------------|---------|
+| Q1 | 00:00–06:00 | Overnight async tasks, batch jobs, archive scans |
+| Q2 | 06:00–12:00 | Morning verification passes, gate checks |
+| Q3 | 12:00–18:00 | Active implementation, PR submissions |
+| Q4 | 18:00–24:00 | Review, final passes, commit + push |
+
+### Weekly Quarters
+
+| Label | Days | Purpose |
+|-------|------|---------|
+| W1 | Mon–Tue | Phase gate task execution |
+| W2 | Wed | Structural reviews, CODEOWNER touchpoints |
+| W3 | Thu | Integration + cross-service work |
+| W4 | Fri | Final passes, PR submissions for the week |
+| W5 | Sat | Optional overflow |
+| W+1 | Sun | Compression day — archive index updates, memory consolidation, doc cleanup |
+
+### Monthly Quarters
+
+| Label | Days | Purpose |
+|-------|------|---------|
+| M-Q1 | 1–7 | Archive scan (see ARCHIVE_INDEX_SCHEDULE.md) |
+| M-Q2 | 8–14 | Index table update |
+| M-Q3 | 15–21 | FAQ and cross-reference update |
+| M-Q4 | 22–end | Version bump + commit |
+
+---
+
+## Agent Spawning Sequence
+
+### Standard Multi-Agent Task
+
+1. **Async Verifier** (1 agent): runs 9 verification passes across 2 phases
+   - Phase 1 (passes 1–5): read all relevant files, check for gaps/conflicts
+   - Phase 2 (passes 6–9): cross-check interdependencies
+   - Outputs: consolidated verification report → triggers next spawn
+
+2. **On report received**, spawn in parallel:
+   - **Foreman** (1): owns final commit, coordinates sub-agents, resolves conflicts
+   - **Sub-agents** (3): execute specific implementation segments assigned by Foreman
+   - **Standard agents** (5): validation, typecheck, test runs, lint
+
+3. **Final Pass** (Foreman, 3 phases):
+   - Phase A: Accuracy
+   - Phase B: Consistency
+   - Phase C: Completeness
+
+### Spawn Log Format
+
+Every spawned agent session MUST create a log at `.agents/spawn-logs/YYYY-MM-DD/<agent-id>.md`:
+
+```markdown
+[Ver001.000]
+
+# Agent Spawn Log — <agent-id>
+
+**Date:** YYYY-MM-DD
+**Phase:** Phase N
+**Task:** [task description]
+**Spawned by:** <parent-agent-id> | CODEOWNER
+
+## Verification Passes
+[results of each pass]
+
+## Actions Taken
+[files modified, PRs created]
+
+## Status
+[ ] In progress / [x] Complete / [ ] Blocked
+
+**Blocker (if any):** [description]
+```
