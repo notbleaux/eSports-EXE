@@ -13,9 +13,9 @@
 | Phase | Name | Status |
 |-------|------|--------|
 | Phase 0 | Immediate Housekeeping | ✅ COMPLETE |
-| Phase 1 | Schema Foundation | 🟡 UNLOCKED |
-| Phase 2 | Service Architecture | 🔒 LOCKED |
-| Phase 3 | Frontend Correction | 🔒 LOCKED |
+| Phase 1 | Schema Foundation | ✅ COMPLETE |
+| Phase 2 | Service Architecture | 🟡 UNLOCKED |
+| Phase 3 | Frontend Correction | 🟡 UNLOCKED |
 | Phase 4 | Data Pipeline Lambda | 🔒 LOCKED |
 | Phase 5 | Ecosystem Expansion | 🔒 LOCKED |
 | Phase 6 | LIVEOperations & Advanced | 🔒 LOCKED |
@@ -53,7 +53,7 @@
 | 1.3 | `data/schemas/live-data.ts` exports live data contracts | Manual check | ✅ PASSED — 2026-03-27 |
 | 1.4 | `data/schemas/legacy-data.ts` exports legacy data contracts | Manual check | ✅ PASSED — 2026-03-27 |
 | 1.5 | `packages/@njz/types/` package exists and resolves | `pnpm typecheck` from root | ✅ PASSED — 2026-03-27 |
-| 1.6 | No duplicate type definitions across frontend/backend | `grep -r "interface Player" apps/web/src/` returns 0 inline defs | 🔒 |
+| 1.6 | No duplicate type definitions across frontend/backend | `grep -r "interface Player" apps/web/src/` returns 0 inline defs | ✅ PASSED — 2026-03-27 (Type deduplication completed via inheritance extension pattern, all imports consolidated to @sator/types) |
 | 1.7 | `.agents/SCHEMA_REGISTRY.md` lists all new types | Manual review | ✅ PASSED — 2026-03-27 |
 
 **Phase 1 unlocks Phase 2 AND Phase 3 when:** All 7 gates show ✅ PASSED
@@ -66,12 +66,12 @@
 
 | Gate | Criteria | Verification Command | Status |
 |------|----------|---------------------|--------|
-| 2.1 | `services/tenet-verification/README.md` exists | `test -f services/tenet-verification/README.md` | 🔒 |
-| 2.2 | `services/tenet-verification/` health endpoint returns 200 | `curl localhost:8001/health` | 🔒 |
-| 2.3 | `services/websocket/README.md` exists | `test -f services/websocket/README.md` | 🔒 |
-| 2.4 | `services/legacy-compiler/README.md` exists | `test -f services/legacy-compiler/README.md` | 🔒 |
-| 2.5 | Each new service has at least one unit test | `pytest services/*/tests/ -v` passes | 🔒 |
-| 2.6 | Cross-service type contracts match Phase 1 schemas | Manual review of Pydantic vs TypeScript types | 🔒 |
+| 2.1 | `services/tenet-verification/README.md` exists | `test -f services/tenet-verification/README.md` | ✅ PASSED — 2026-03-27 (Phase 2.1 complete) |
+| 2.2 | `services/tenet-verification/` health endpoint returns 200 | `curl localhost:8001/health` | 🟡 READY (Phase 2.3 will add lifespan) |
+| 2.3 | `services/websocket/README.md` exists | `test -f services/websocket/README.md` | ✅ PASSED — 2026-03-27 (Phase 2.1 complete) |
+| 2.4 | `services/legacy-compiler/README.md` exists | `test -f services/legacy-compiler/README.md` | ✅ PASSED — 2026-03-27 (Phase 2.1 complete) |
+| 2.5 | Each new service has at least one unit test | `pytest services/*/tests/ -v` passes | 🟡 IN PROGRESS (Phase 2.3) |
+| 2.6 | Cross-service type contracts match Phase 1 schemas | Manual review of Pydantic vs TypeScript types | 🟡 IN PROGRESS (Phase 2.3) |
 
 **Phase 2 unlocks Phase 4 when (together with Phase 3):** All 6 gates show ✅ PASSED
 
