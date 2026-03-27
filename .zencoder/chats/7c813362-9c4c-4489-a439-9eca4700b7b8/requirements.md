@@ -1,233 +1,491 @@
-# Product Requirements Document — Minimap Extraction Service
+[Ver001.000]
 
-**Feature:** Minimap Extraction Service
-**Project:** NJZiteGeisTe Platform (NJZ eSports)
-**PRD Version:** 0.1 (Draft — Pending Clarification)
-**Created:** 2026-03-27
-**Status:** DRAFT — 4 clarifying questions raised (see bottom)
+# Product Requirements Document — Minimap Archival System
 
----
-
-## 1. Purpose
-
-Build a backend data collection service that extracts minimap frames from recorded VCT and eSports game videos (Valorant-focused, with a reusable architecture for future games). The service feeds the `minimap_analysis` source channel in the TeneT Key.Links verification pipeline (trust level: MEDIUM, weight: 0.8), contributing to Path B (Static Truth Legacy) confidence scoring.
+**Project:** NJZ eSports Platform  
+**Feature:** Minimap Archival System  
+**Prerequisite for:** Minimap Extraction Service (video analysis features)  
+**Status:** Requirements Phase  
+**Created:** 2026-03-27  
+**Last Updated:** 2026-03-27
 
 ---
 
-## 2. Context
+## Executive Summary
 
-The `minimap_analysis` data source type is already defined in `data/schemas/tenet-protocol.ts` and assigned MEDIUM trust level. The TeneT Verification Service at `services/tenet-verification/` already accepts `minimap_analysis` payloads via `POST /v1/verify`. This service fills that source slot by actually producing the payloads.
-
-The service lives at `services/minimap-extractor/` and follows the same FastAPI + async Python patterns used by `services/legacy-compiler/` and `services/tenet-verification/`.
+The **Minimap Archival System** is a content-addressed storage and lifecycle management platform for esports video frame sequences extracted by the Minimap Extraction Service. It provides unified storage abstraction (local/S3/R2), intelligent deduplication, retention policies, and audit trails. This system is a critical prerequisite enabling the Minimap Extraction Service to reliably process, store, and manage extracted frame artifacts at scale.
 
 ---
 
-## 3. Goals
+## 1. Feature Overview
 
-| Priority | Goal |
-|----------|------|
-| P0 | Extract minimap frame sequences from recorded game videos |
-| P0 | Classify video segments by content type (live round, between-round, non-live/filler) |
-| P0 | Compress and package extracted frames into a service-appropriate format |
-| P1 | Aggregate minimap frame data across multiple recorded games for a given match/player |
-| P1 | Submit extracted minimap data to TeneT Verification Service as `minimap_analysis` source |
-| P2 | Modular game configuration so future games (CS2, LoL) can define their own minimap regions |
+### 1.1 Purpose
 
----
+Provide a robust, auditable, scalable storage and lifecycle management layer for minimap frame sequences and associated metadata extracted from esports VODs. Enable the Minimap Extraction Service to:
+- Store extracted minimap crops and manifests durably
+- Deduplicate content via content-addressable storage (CAS)
+- Enforce retention and cleanup policies
+- Track frame lineage and verification state
+- Support multi-region/multi-cloud deployments
 
-## 4. Non-Goals
+### 1.2 Scope
 
-- Real-time minimap extraction from live streams (Path A is handled by `services/websocket/`)
-- Computer vision inference on extracted frames (player position detection, spike tracking) — this is a future ML layer, not this service
-- Video hosting or CDN management — the service processes videos, it does not store or serve them
-- Building a UI for this service — admin access is API-only
+**In Scope:**
+- Content-addressable frame storage (JPEG crops, manifests, metadata)
+- Multi-backend abstraction (local filesystem, AWS S3, Cloudflare R2)
+- Metadata indexing and lifecycle management (PostgreSQL)
+- Retention and garbage collection policies
+- Frame pinning (prevent deletion for important matches)
+- Audit logging and versioning
+- Health checks and storage metrics
 
----
-
-## 5. Functional Requirements
-
-### 5.1 Video Ingestion
-
-- **FR-01:** Accept a video source reference (file path or URL — see Clarification Q1) and a game identifier (`valorant`, `cs2`, etc.)
-- **FR-02:** Support videos from local filesystem paths (absolute paths on server)
-- **FR-03 (conditional):** If URL-based ingestion is in scope, support download from YouTube/Twitch VOD URLs via `yt-dlp` (free, no licensing cost)
-- **FR-04:** Validate that the video file/URL is accessible before beginning extraction (fail fast)
-
-### 5.2 Minimap Region Extraction
-
-- **FR-05:** For each configured game, use a per-game minimap region spec (pixel coordinates or percentage-based crop box) to crop the minimap from each sampled frame
-- **FR-06:** Valorant minimap region is configurable via a game config file — initial coordinates target the standard broadcast overlay position (bottom-left corner, approximately 15–20% of frame width)
-- **FR-07:** Sampling rate is configurable (default: 1 frame per second); memory mode trades off frame count against RAM usage
-- **FR-08:** Apply JPEG compression to extracted frames at configurable quality (default: 70%) to minimize storage footprint
-
-### 5.3 Content Classification (Segment Detection)
-
-- **FR-09:** Classify each sampled frame into one of three segment types:
-  - `ROUND_LIVE` — Active gameplay (minimap shows player movement, round timer active)
-  - `BETWEEN_ROUND` — Buy phase, round end screen, brief transitions
-  - `NON_LIVE` — Commercial break, halftime, pre/post-game, stream offline cards
-- **FR-10:** Classification uses simple heuristics: brightness variance, minimap region pixel entropy, and optionally frame difference between consecutive samples
-- **FR-11:** Produce a segment timeline: ordered list of `{ start_sec, end_sec, segment_type, frame_count }` entries per video
-- **FR-12:** Flag segment boundaries (transitions between types) with timestamps for downstream use
-
-### 5.4 Frame Aggregation
-
-- **FR-13:** For a given match ID, aggregate minimap frame data across multiple game VODs (e.g., map 1, map 2, map 3)
-- **FR-14:** Associate each frame batch with: `match_id`, `game`, `map_name` (if determinable), `segment_type`, `video_source`, `extracted_at`
-- **FR-15:** Produce a summary payload per extraction job: frame count, segment breakdown, extraction duration, sampling rate, any errors
-
-### 5.5 TeneT Integration
-
-- **FR-16:** After successful extraction, submit a `minimap_analysis` source payload to `services/tenet-verification/` at `POST /v1/verify`
-- **FR-17:** The verification payload includes: entity_id (match_id), entity_type (`match`), game, source_type (`minimap_analysis`), trust_level (`MEDIUM`), weight (0.8), and the extraction summary as `data`
-- **FR-18:** Handle TeneT verification responses: log confidence score and routing decision; retry on transient 5xx failures (max 3 retries, exponential backoff)
-
-### 5.6 Frame Storage
-
-- **FR-19:** Extracted frames are written to a configurable output directory (local filesystem, or S3-compatible path — see Clarification Q3)
-- **FR-20:** Frame file naming convention: `{match_id}/{map_name}/{segment_type}/{frame_index:06d}.jpg`
-- **FR-21:** A per-job manifest file (`manifest.json`) is written alongside frames: includes frame metadata, segment timeline, and job summary
-
-### 5.7 Memory Management
-
-- **FR-22:** Process video in streaming/chunked fashion — do not load entire video into RAM
-- **FR-23:** Configurable frame buffer size (default: 30 frames in memory at a time before flushing to disk/output)
-- **FR-24:** Release video reader resources immediately after extraction completes (context manager pattern)
-- **FR-25:** Log memory usage at extraction start, midpoint, and end (for monitoring)
-
-### 5.8 API Endpoints
-
-- `POST /v1/extract` — Submit an extraction job (match_id, game, video_source, options)
-- `GET /v1/jobs/{job_id}` — Check job status and results
-- `GET /v1/jobs` — List extraction jobs (filterable by game, match_id, status)
-- `DELETE /v1/jobs/{job_id}` — Cancel a running job or delete a completed job record
-- `GET /v1/config/games` — List supported game minimap configs
-- `GET /health` — Service health check
-- `GET /ready` — Readiness probe
-
-### 5.9 Game Configuration System
-
-- **FR-26:** Game minimap configs are defined in a `config/games/` directory as JSON files (one per game)
-- **FR-27:** Valorant config defines: minimap crop region (x, y, width, height as % of frame), expected frame rate range, segment detection thresholds
-- **FR-28:** Adding a new game requires only a new JSON config file — no code changes
+**Out of Scope:**
+- Video transcoding or re-encoding
+- Real-time streaming of frame sequences (handled by Minimap Extraction Service)
+- Computer vision analysis (belongs to Minimap Extraction Service)
+- TeneT verification logic (belongs to TeneT Key.Links service)
+- Compression beyond JPEG (may be future optimization)
 
 ---
 
-## 6. Non-Functional Requirements
+## 2. User Stories & Use Cases
 
-| Category | Requirement |
-|----------|-------------|
-| **Performance** | Process 1 hour of 1080p video in < 15 minutes on a standard VPS (2 vCPU, 4GB RAM) at 1fps sampling |
-| **Memory** | Peak RAM usage < 512 MB per extraction job at default settings |
-| **Budget** | Zero external API or licensing costs (OpenCV + FFmpeg + yt-dlp only) |
-| **Modularity** | New game support requires only a config file addition, no code change |
-| **Reliability** | Jobs survive service restart (persist job state to PostgreSQL) |
-| **Observability** | Structured logging (JSON), /metrics endpoint for Prometheus |
-| **Compliance** | Respect robots.txt and rate limits for any remote video downloads; no copyright-infringing redistribution of frames |
+### 2.1 Use Case: Extract and Archive Minimap Frames
+
+**Actor:** Minimap Extraction Service  
+**Flow:**
+1. Extraction service processes Valorant VOD
+2. Extracts minimap crops at 1 fps (frames A and B)
+3. Calls Archival API: `POST /v1/archive/frames` with frame batch
+4. Archival system computes content hash, checks for duplicates
+5. Stores JPEG crops to backend storage (S3/local)
+6. Writes frame metadata to PostgreSQL
+7. Returns manifest with archive IDs and storage locations
+8. Extraction service links manifest to extraction job
+
+**Outcome:** Frame data persisted durably, deduplicated, indexed for query.
+
+### 2.2 Use Case: Query Archived Frames by Match
+
+**Actor:** Frontend/Dashboard, TeneT Key.Links Service  
+**Flow:**
+1. Query API: `GET /v1/archive/matches/{match_id}/frames`
+2. Returns paginated list of frame metadata, sorted by timestamp
+3. Includes storage URLs, content hashes, stream type (A/B), and verification status
+4. Supports filtering by segment type, tier, or confidence
+
+**Outcome:** Easy retrieval and visualization of archived frames for a match.
+
+### 2.3 Use Case: Pin Frames to Prevent Deletion
+
+**Actor:** TeneT Key.Links Service  
+**Flow:**
+1. After verification completes, TeneT marks high-confidence frames as "pinned"
+2. Calls API: `POST /v1/archive/frames/{frame_id}/pin` with reason and ttl
+3. Archival system updates frame metadata, skips in garbage collection
+4. Audit log records who/when/why frame was pinned
+
+**Outcome:** Frames retained indefinitely (or until TTL) for historical queries and re-analysis.
+
+### 2.4 Use Case: Cleanup Old Frames
+
+**Actor:** Garbage Collection Job (cron)  
+**Flow:**
+1. Job runs daily: `POST /v1/archive/gc` with retention_days param
+2. Queries unpinned frames older than retention_days
+3. Deletes frame JPEG/manifest from backend storage
+4. Removes metadata from PostgreSQL
+5. Returns deletion summary and metrics
+6. Logs to audit trail
+
+**Outcome:** Storage cost controlled, old data automatically cleaned.
+
+### 2.5 Use Case: Migrate Frames Between Storage Backends
+
+**Actor:** Operations/Admin  
+**Flow:**
+1. Initiate migration: `POST /v1/archive/storage/migrate?from=s3&to=r2`
+2. Job streams frames from source backend to destination
+3. Verifies content hash matches original
+4. Updates metadata pointer to new location
+5. Deletes from source (after verification)
+6. Returns migration status and metrics
+
+**Outcome:** Seamless cloud provider changes without data loss.
 
 ---
 
-## 7. Integration Points
+## 3. Core Requirements
+
+### 3.1 Functional Requirements (FR)
+
+| ID | Requirement | Priority | Notes |
+|---|---|---|---|
+| **FR-01** | Content-addressed storage with SHA-256 hashing | Critical | Prevent duplicate frame storage; enable deduplication |
+| **FR-02** | Multi-backend abstraction (local, S3, R2) | Critical | Support dev (local) and prod (cloud) deployments |
+| **FR-03** | Frame metadata persistence (PostgreSQL) | Critical | Index frames by match, segment, timestamp, verification state |
+| **FR-04** | Batch frame upload endpoint | High | `POST /v1/archive/frames` accepts up to 1000 frames in single request |
+| **FR-05** | Frame query by match ID | High | `GET /v1/archive/matches/{match_id}/frames` with pagination |
+| **FR-06** | Frame pinning mechanism | High | `POST /v1/archive/frames/{id}/pin` prevents GC deletion |
+| **FR-07** | Retention policy enforcement | High | Configurable TTL per frame or batch; default 90 days for unpinned |
+| **FR-08** | Garbage collection API | High | `POST /v1/archive/gc` with configurable retention days |
+| **FR-09** | Storage health checks | Medium | `GET /health/storage` verifies backend connectivity and quotas |
+| **FR-10** | Audit logging for all mutations | Medium | Track frame creation, pinning, deletion with actor/timestamp/reason |
+| **FR-11** | Storage migration tooling | Medium | Migrate frames between backends without downtime |
+| **FR-12** | Manifest versioning | Medium | Support schema evolution; track manifest format version |
+
+### 3.2 Non-Functional Requirements (NFR)
+
+| ID | Requirement | Priority | Target | Notes |
+|---|---|---|---|---|
+| **NFR-01** | Throughput (frame ingest) | High | 1000 frames/min on 2 vCPU | Batch writes to reduce overhead |
+| **NFR-02** | Latency (upload response) | High | <2s for batch upload (P99) | Includes S3 PUT; async manifest write OK |
+| **NFR-03** | Storage efficiency | High | <50 MB per match (1 fps, 30-min match) | JPEG compression tuned; deduplication helps |
+| **NFR-04** | Availability | High | 99.5% uptime | Graceful S3 failures; fallback to local temp |
+| **NFR-05** | Durability | Critical | 11-9s (99.999999999%) | Use S3 versioning + cross-region backup (future) |
+| **NFR-06** | Query latency (metadata) | Medium | <500ms for 10K frames (P99) | Index on match_id, timestamp; pagination limit 100 |
+| **NFR-07** | GC throughput | Medium | 10K frames/hour | Async, non-blocking; can be slow |
+| **NFR-08** | Cost | Medium | <$100/month storage (initial) | Optimize compression; archive cold frames to Glacier (future) |
+
+---
+
+## 4. Data Model
+
+### 4.1 PostgreSQL Schema (Migration 006)
+
+```sql
+-- Archive frames table
+CREATE TABLE archive_frames (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  content_hash VARCHAR(64) NOT NULL UNIQUE,  -- SHA-256
+  match_id UUID NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
+  extraction_job_id UUID NOT NULL,
+  frame_index INT NOT NULL,  -- 0-based frame number in stream
+  stream_type VARCHAR(10) NOT NULL CHECK (stream_type IN ('A', 'B')),  -- A=crop, B=analysis
+  segment_type VARCHAR(20) NOT NULL CHECK (segment_type IN (
+    'IN_ROUND', 'BETWEEN_ROUND', 'HALFTIME', 'BUY_PHASE', 'UNKNOWN'
+  )),
+  timestamp_ms BIGINT NOT NULL,  -- milliseconds in VOD
+  storage_backend VARCHAR(20) NOT NULL CHECK (storage_backend IN ('local', 's3', 'r2')),
+  storage_path VARCHAR(255) NOT NULL,  -- relative path or S3 key
+  storage_url TEXT NOT NULL,  -- signed URL (S3) or file:// path
+  file_size_bytes BIGINT NOT NULL,
+  mime_type VARCHAR(20) NOT NULL DEFAULT 'image/jpeg',
+  is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
+  pin_reason VARCHAR(255),
+  pin_expires_at TIMESTAMP,
+  tenet_verification_id UUID,  -- link to TeneT result
+  accuracy_tier VARCHAR(20) CHECK (accuracy_tier IN ('STANDARD', 'MEDIUM', 'HIGH')),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  deleted_at TIMESTAMP  -- soft delete for audit trail
+);
+
+CREATE INDEX idx_archive_frames_match_id ON archive_frames(match_id);
+CREATE INDEX idx_archive_frames_content_hash ON archive_frames(content_hash);
+CREATE INDEX idx_archive_frames_timestamp ON archive_frames(timestamp_ms);
+CREATE INDEX idx_archive_frames_pinned ON archive_frames(is_pinned) WHERE NOT is_pinned;
+CREATE INDEX idx_archive_frames_created ON archive_frames(created_at DESC);
+
+-- Archive manifests (one per extraction batch)
+CREATE TABLE archive_manifests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  extraction_job_id UUID NOT NULL UNIQUE,
+  match_id UUID NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
+  frame_count INT NOT NULL,
+  frame_ids TEXT[] NOT NULL,  -- array of frame UUIDs
+  manifest_version VARCHAR(10) NOT NULL DEFAULT '1.0',
+  content_hash VARCHAR(64),  -- hash of manifest JSON
+  storage_path VARCHAR(255),  -- where manifest.json is stored
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_archive_manifests_match_id ON archive_manifests(match_id);
+
+-- Audit trail for archival operations
+CREATE TABLE archive_audit_log (
+  id BIGSERIAL PRIMARY KEY,
+  action VARCHAR(50) NOT NULL,  -- 'create', 'pin', 'unpin', 'delete', 'migrate'
+  frame_id UUID REFERENCES archive_frames(id),
+  manifest_id UUID REFERENCES archive_manifests(id),
+  actor_id UUID REFERENCES users(id),  -- admin/service principal
+  old_value JSONB,
+  new_value JSONB,
+  reason VARCHAR(255),
+  timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+  ip_address INET
+);
+
+CREATE INDEX idx_archive_audit_log_frame_id ON archive_audit_log(frame_id);
+CREATE INDEX idx_archive_audit_log_timestamp ON archive_audit_log(timestamp DESC);
+```
+
+### 4.2 Pydantic Schemas (Python)
+
+```python
+# archival/schemas.py
+from datetime import datetime
+from typing import Optional, List
+from pydantic import BaseModel, Field
+from enum import Enum
+
+class StreamType(str, Enum):
+    A = "A"
+    B = "B"
+
+class SegmentType(str, Enum):
+    IN_ROUND = "IN_ROUND"
+    BETWEEN_ROUND = "BETWEEN_ROUND"
+    HALFTIME = "HALFTIME"
+    BUY_PHASE = "BUY_PHASE"
+    UNKNOWN = "UNKNOWN"
+
+class StorageBackend(str, Enum):
+    LOCAL = "local"
+    S3 = "s3"
+    R2 = "r2"
+
+class FrameMetadata(BaseModel):
+    match_id: str
+    extraction_job_id: str
+    frame_index: int
+    stream_type: StreamType
+    segment_type: SegmentType
+    timestamp_ms: int
+    accuracy_tier: Optional[str] = "STANDARD"
+    tenet_verification_id: Optional[str] = None
+
+class FrameUploadRequest(BaseModel):
+    frames: List[dict]  # list of (content_hash, jpeg_bytes, metadata)
+    manifest_data: Optional[dict] = None
+
+class ArchiveFrame(BaseModel):
+    id: str
+    content_hash: str
+    match_id: str
+    frame_index: int
+    stream_type: StreamType
+    segment_type: SegmentType
+    timestamp_ms: int
+    storage_url: str
+    file_size_bytes: int
+    is_pinned: bool
+    created_at: datetime
+
+class FrameQueryResponse(BaseModel):
+    frames: List[ArchiveFrame]
+    total_count: int
+    page: int
+    page_size: int
+```
+
+---
+
+## 5. API Endpoints
+
+### 5.1 Frame Management
+
+**POST /v1/archive/frames** — Upload frame batch  
+- **Request:** `FrameUploadRequest` with up to 1000 frames
+- **Response:** `{ frame_ids: [str], manifest_id: str, duplicates_skipped: int }`
+- **Auth:** Service principal or admin
+
+**GET /v1/archive/matches/{match_id}/frames** — Query frames by match  
+- **Params:** `?page=1&page_size=100&segment_type=IN_ROUND&stream_type=A`
+- **Response:** `FrameQueryResponse`
+- **Auth:** Public (read-only)
+
+**GET /v1/archive/frames/{frame_id}** — Get single frame metadata  
+- **Response:** `ArchiveFrame`
+- **Auth:** Public
+
+**POST /v1/archive/frames/{frame_id}/pin** — Pin frame (prevent GC)  
+- **Request:** `{ reason: str, ttl_days: Optional[int] }`
+- **Response:** `{ pinned_at: datetime, expires_at: Optional[datetime] }`
+- **Auth:** Service principal (TeneT) or admin
+
+**POST /v1/archive/frames/{frame_id}/unpin** — Remove pin  
+- **Response:** `{ unpinned_at: datetime }`
+- **Auth:** Service principal or admin
+
+### 5.2 Garbage Collection
+
+**POST /v1/archive/gc** — Run garbage collection  
+- **Request:** `{ retention_days: int = 90, dry_run: bool = False }`
+- **Response:** `{ deleted_count: int, freed_bytes: int, duration_ms: int }`
+- **Auth:** Admin only
+
+### 5.3 Storage Operations
+
+**GET /health/storage** — Check storage backend health  
+- **Response:** `{ backend: str, status: str, quota_bytes: int, used_bytes: int }`
+- **Auth:** Public
+
+**POST /v1/archive/storage/migrate** — Migrate frames between backends  
+- **Request:** `{ from_backend: str, to_backend: str, dry_run: bool = False }`
+- **Response:** `{ migrated_count: int, failed_count: int, duration_ms: int }`
+- **Auth:** Admin only
+
+**POST /v1/archive/storage/verify** — Verify frame integrity (checksum)  
+- **Request:** `{ frame_ids: Optional[List[str]] }` (empty = all)
+- **Response:** `{ verified_count: int, checksum_failures: int }`
+- **Auth:** Admin only
+
+### 5.4 Audit & Metrics
+
+**GET /v1/archive/audit** — Query audit log  
+- **Params:** `?action=delete&since=2026-03-20&limit=100`
+- **Response:** `{ logs: [AuditEntry], total_count: int }`
+- **Auth:** Admin only
+
+**GET /metrics/archive** — Prometheus metrics  
+- **Metrics:** `archive_frame_count`, `archive_storage_bytes`, `archive_gc_duration_ms`, `archive_upload_latency_p99`
+- **Auth:** Prometheus scraper
+
+---
+
+## 6. Acceptance Criteria
+
+### 6.1 Functional Acceptance
+
+- [ ] **AC-01:** Frames uploaded via `POST /v1/archive/frames` are persisted to backend storage and indexed in PostgreSQL
+- [ ] **AC-02:** Duplicate frames (same content hash) are detected; only stored once; metadata linked correctly
+- [ ] **AC-03:** Frames can be queried by match via `GET /v1/archive/matches/{match_id}/frames` with correct pagination
+- [ ] **AC-04:** Pinned frames are excluded from garbage collection runs
+- [ ] **AC-05:** Unpinned frames older than retention_days are deleted by GC job
+- [ ] **AC-06:** All mutations (create, pin, delete) are logged to audit trail with actor, timestamp, reason
+- [ ] **AC-07:** Storage health check detects backend failures and returns appropriate status
+
+### 6.2 Performance Acceptance
+
+- [ ] **AC-08:** Batch upload of 1000 frames completes in <2 seconds (P99) on 2 vCPU
+- [ ] **AC-09:** Query for 10K match frames returns in <500ms (P99) with index usage
+- [ ] **AC-10:** GC job processes 10K frames in <1 hour without blocking API
+
+### 6.3 Integration Acceptance
+
+- [ ] **AC-11:** Minimap Extraction Service can upload frames and receive manifest IDs
+- [ ] **AC-12:** TeneT Key.Links can query frames and pin high-confidence results
+- [ ] **AC-13:** Frontend can query and display archived frame grid for a match
+- [ ] **AC-14:** Storage backend abstraction allows seamless switching between local/S3/R2
+
+### 6.4 Quality Acceptance
+
+- [ ] **AC-15:** All code follows project conventions (black, ruff, mypy passing)
+- [ ] **AC-16:** Integration tests cover all major workflows (upload, query, pin, gc, migrate)
+- [ ] **AC-17:** E2E test verifies Extraction Service → Archival → TeneT flow
+- [ ] **AC-18:** Prometheus metrics exported; storage graphs visible in monitoring dashboard
+
+---
+
+## 7. Assumptions & Constraints
+
+### 7.1 Assumptions
+
+1. **Frame Size:** Minimap crops ~100-200 KB as JPEG; full 30-minute match ~50-100 MB storage
+2. **Retention Policy:** Default 90 days for unpinned frames; pinned indefinitely until manual unpin or TTL
+3. **Deduplication Value:** ~10-20% of frames are duplicates (halftime, replays); CAS saves significant storage
+4. **Concurrent Uploads:** Peak load ~100 frames/sec (e.g., 10 parallel extraction jobs, 10 fps each)
+5. **Query Patterns:** Frontend queries 1 match at a time; TeneT queries in batches post-analysis
+6. **Storage Backend:** S3 preferred for production; R2 as fallback/alternative; local for dev
+
+### 7.2 Constraints
+
+- **Database:** PostgreSQL 15+ (soft delete via `deleted_at` for audit trail)
+- **Storage:** AWS S3 or Cloudflare R2 (not GCS; not Azure Blob — can add later)
+- **Budget:** <$1000/month for 1 year of frame data at full scale (optimization may be needed)
+- **Latency:** S3 PUTs add ~300-500ms; async options explored in Phase 2
+
+---
+
+## 8. Dependencies & Relationships
+
+### 8.1 Dependency on Archival System
+
+**Minimap Extraction Service** depends on Archival System for:
+- Durable frame storage with deduplication (Phase 1 MVP)
+- Manifest generation and linking (Phase 2)
+- S3/R2 backend support (Phase 3)
+- Garbage collection integration (Phase 4)
+
+### 8.2 Dependency Chain
 
 ```
-Video Source (local path or VOD URL)
-        ↓
-services/minimap-extractor/   [NEW — this service]
-        ↓ POST /v1/verify (minimap_analysis source)
-services/tenet-verification/  [existing]
-        ↓ PATH_B_LEGACY routing
-PostgreSQL truth layer         [existing]
+Minimap Extraction Service
+  ↓ (stores frames via)
+Minimap Archival System
+  ↓ (verified by + linked to)
+TeneT Key.Links Service
+  ↓ (pins frames + queries metadata)
+Frontend Dashboard
 ```
 
----
+### 8.3 Related Systems
 
-## 8. Technology Decisions (Proposed)
-
-| Concern | Decision | Rationale |
-|---------|----------|-----------|
-| Video decoding | OpenCV (`cv2`) + FFmpeg subprocess | Free, battle-tested, memory-efficient |
-| VOD download | `yt-dlp` (optional, if URL input in scope) | Free, no API keys required |
-| Frame compression | OpenCV `imencode` with JPEG quality param | Built-in, no extra dependency |
-| Async job queue | Python `asyncio` + background task (FastAPI `BackgroundTasks`) | Matches existing service patterns; Celery only if job queue grows |
-| Job persistence | PostgreSQL (AsyncSession via asyncpg) | Consistent with all other services |
-| Service port | 8004 | Follows: tenet-verification=8001, websocket=8002, legacy-compiler=8003 |
-| Python version | 3.11+ | Consistent with all services |
+- **PostgreSQL:** Metadata storage and indexing
+- **S3/R2:** Frame JPEG storage
+- **Redis:** Optional—frame metadata buffering (future optimization)
+- **Prometheus:** Metrics export (storage size, GC performance)
+- **Audit Trail:** Integration with global platform audit system
 
 ---
 
-## 9. Out-of-Scope (Explicitly Deferred)
+## 9. Success Metrics
 
-- ML-based minimap object detection (player dots, spike, bomb plant) — future Phase
-- Real-time live stream minimap extraction — Path A concern
-- Browser-accessible frame viewer UI
-- Automated video sourcing (this service processes videos, it does not discover them)
-
----
-
-## 10. Assumptions Made (Minor Details)
-
-These were decided without clarification — please flag if incorrect:
-
-- **A1:** The service produces JPEG compressed crops, not raw pixel data, to keep storage practical on a free-tier deployment
-- **A2:** Segment classification uses pixel-level heuristics (no ML model required) — sufficient for flagging non-live segments; accuracy does not need to be perfect since the TeneT pipeline has a manual review queue for low-confidence results
-- **A3:** The service port is 8004, continuing the existing service port convention
-- **A4:** The minimap crop region for Valorant is a fixed percentage-based box (bottom-left corner), consistent with standard Valorant broadcast overlays — exact coordinates TBD in technical spec from reference screenshots
-- **A5:** Job queue is in-process (FastAPI BackgroundTasks) initially; Celery/Redis queue only if concurrency demands it
+| Metric | Target | Rationale |
+|--------|--------|-----------|
+| **Frame ingest throughput** | 1000 frames/min | Supports parallel extraction jobs |
+| **P99 upload latency** | <2s | User-facing Minimap Extraction job progress |
+| **Deduplication ratio** | >10% | Storage cost savings |
+| **Query latency (10K frames)** | <500ms | Dashboard responsiveness |
+| **GC duration (10K frames)** | <1 hour | Non-blocking background job |
+| **Storage cost** | <$100/month | Reasonable cloud budget |
+| **Data durability** | 11-9s | S3 inherent guarantees |
+| **Audit log completeness** | 100% of mutations | Compliance and forensics |
 
 ---
 
-## 11. Clarifying Questions (4 — Impact on Scope)
+## 10. Out-of-Scope / Future
 
-These require user input before finalizing scope. They affect implementation complexity significantly.
-
----
-
-### Q1 — Video Input Method (HIGH IMPACT)
-
-> Are the videos already downloaded to the server as local files, or does the service need to download them from a URL (YouTube, Twitch VOD, or another platform)?
-
-- **Option A — Local files only:** Simpler. No `yt-dlp` dependency. Assumes a separate process has already fetched the video.
-- **Option B — URL download included:** The service downloads from YouTube/Twitch/VOD URL using `yt-dlp` before extraction. Adds `yt-dlp` as a dependency and a download phase.
-- **Option C — Both:** Accept either a file path or a URL.
-
-*Assumed Option A for now (local files), with Option C noted as the preferred design. Please confirm.*
+- **Compression beyond JPEG:** Investigate AVIF or WebP for frontend display (Phase 2+)
+- **Cold storage archival:** Move frames >1 year old to Glacier/Deep Archive (Phase 3+)
+- **Frame CDN caching:** Front archived frames with CloudFlare CDN (Phase 4+)
+- **Frame versioning:** Track different encodings of same source frame (future)
+- **Blockchain audit trail:** Immutable ledger for compliance (post-launch)
+- **Cross-region replication:** Automatic backup to secondary region (Phase 2+)
 
 ---
 
-### Q2 — Minimap Frame Output: Images or Extracted Data? (CRITICAL SCOPE QUESTION)
+## 11. Deliverables
 
-> Should the service output **raw image files** (JPEG crops of the minimap), or should it also **analyze the images** to extract structured data (e.g., player positions as coordinates, alive/dead status, spike location)?
+### Phase 1 (MVP)
+1. PostgreSQL migration (`006_archival_system.py`)
+2. Pydantic schemas (`archival/schemas.py`)
+3. FastAPI router with core endpoints (`archival/routers/frames.py`)
+4. Storage abstraction layer (`archival/storage/base.py`, `local.py`)
+5. Unit tests (`tests/unit/test_archival_*.py`)
+6. Integration test (E2E upload → query → delete)
 
-- **Option A — Image crops only:** The service captures and stores JPEG crops. Downstream ML services analyze them. Simpler, faster to build, lower accuracy risk.
-- **Option B — Structured extraction:** The service runs computer vision (OpenCV template matching or basic segmentation) to extract player dot positions, alive/dead indicators, etc. as JSON data. More complex, significantly higher scope.
-
-*Assumed Option A (image crops only) for the current phase. Please confirm.*
-
----
-
-### Q3 — Frame Storage Backend (MEDIUM IMPACT)
-
-> Where should extracted minimap frames be stored?
-
-- **Option A — Local filesystem:** Frames written to a configured directory on the service host. Simplest. Works for development and small-scale use.
-- **Option B — S3 / Cloudflare R2:** Frames uploaded to object storage. More appropriate for production scale. MASTER_PLAN.md mentions S3/R2 for raw video/HTML archives.
-- **Option C — Both (configurable):** Local filesystem in dev, S3/R2 in production via environment variable.
-
-*MASTER_PLAN.md lists S3/R2 for archival data. Option C assumed as the target design, with local-only as the Phase 1 MVP. Please confirm.*
+### Phase 2+
+1. S3/R2 backend implementation
+2. Garbage collection job
+3. Storage migration tooling
+4. Audit logging
+5. Prometheus metrics
+6. Frontend integration
 
 ---
 
-### Q4 — Segment Classification Accuracy Requirement (MEDIUM IMPACT)
+## 12. Questions for Clarification
 
-> How accurate does the between-round / non-live classification need to be for the minimap data to be useful?
-
-The segment classifier distinguishes "active gameplay" from "buy phase" and "non-live filler." Getting this right requires:
-
-- **Option A — Best-effort heuristics:** Brightness variance + pixel entropy. Fast, ~80% accuracy. Acceptable because the TeneT pipeline has a manual review queue for uncertain results.
-- **Option B — Higher accuracy required:** Needs reference frame matching (detect known screen layouts for buy phase, halftime) using OpenCV template matching. More robust, ~95% accuracy, but requires maintaining reference image assets per game.
-
-*Option A assumed (heuristics-only) for Phase 1. Please confirm, or specify an accuracy target.*
+**None at this time.** The requirements are derived from the Minimap Extraction Service plan and project conventions. Reasonable assumptions made based on typical frame storage needs.
 
 ---
 
-*End of PRD — awaiting user confirmation on Q1–Q4 before proceeding to Technical Specification.*
+## Sign-Off
+
+**Prepared by:** Zencoder (AI Agent)  
+**Date:** 2026-03-27  
+**Status:** Ready for Technical Specification  
+**Next Step:** Await user confirmation before proceeding to spec.md
