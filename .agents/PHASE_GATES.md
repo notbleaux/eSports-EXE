@@ -39,8 +39,9 @@ Phase 13 (DEPENDS_ON: Phase 10 + 11 + 12) ────────────�
 | Phase 5 | Ecosystem Expansion | ✅ COMPLETE |
 | Phase 6 | LIVEOperations & Advanced | ✅ COMPLETE |
 | Phase 0-X | Non-Blocking Supplementals | 🟡 ACTIVE (background) |
-| Phase 7 | Repository Governance & Hygiene | 🟡 UNLOCKED |
-| Phase 8 | API Gateway & Auth Platform | 🔒 BLOCKED on Phase 7 |
+| Phase 7 | Repository Governance & Hygiene | ✅ COMPLETE (2026-03-27) |
+| Phase 7-S | Supplemental Governance Frameworks | ✅ COMPLETE (2026-03-27) |
+| Phase 8 | API Gateway & Auth Platform | 🔒 BLOCKED — USER_INPUT_REQUIRED (Auth0) |
 | Phase 9 | Web App UI/UX Enhancement | 🟡 UNLOCKED (concurrent with 8) |
 | Phase 10 | Companion App MVP | 🔒 BLOCKED on Phase 8 |
 | Phase 11 | Browser Extension & LiveStream Overlay | 🔒 BLOCKED on Phase 8 |
@@ -208,12 +209,32 @@ Example:
 |------|----------|---------------------|--------|
 | 7.1 | `.github/CODEOWNERS` active, risk-tier workflow deployed | `test -f .github/CODEOWNERS && test -f .github/workflows/pr-classification.yml` | ✅ PASSED — 2026-03-27 |
 | 7.2 | Job Board fully deleted, all reference files scrubbed (CRIT PR + 24h hold) | `grep -r "job-board" . --include="*.md" \| grep -v "Archived/"` returns intentional references only | ✅ PASSED — 2026-03-27 (329 files deleted via `git rm -r archive/.job-board/`; reference scrub completed on CLAUDE.md, AGENTS.md, AGENT_CONTRACT.md, COORDINATION_PROTOCOL.md) |
-| 7.3 | `Archived/` date structure created, all archive/ files assigned to dated subdirs | `ls Archived/Y25/ Archived/Y26/` shows populated subdirs | ❌ Pending |
-| 7.4 | `ARCHIVE_MASTER_DOSSIER.md` exists at repo root with complete index table | `test -f ARCHIVE_MASTER_DOSSIER.md` | ❌ Pending |
+| 7.3 | `Archived/` date structure created, all archive/ files assigned to dated subdirs | `ls Archived/Y25/ Archived/Y26/` shows populated subdirs | ✅ PASSED — 2026-03-27 (144 files moved to Archived/Y26/M03/docs/) |
+| 7.4 | `ARCHIVE_MASTER_DOSSIER.md` exists at repo root with complete index table | `test -f ARCHIVE_MASTER_DOSSIER.md` | ✅ PASSED — 2026-03-27 |
 | 7.5 | `.agents/CODEOWNER_CHECKLIST.md` exists, AGENT_CONTRACT.md prohibition added | `test -f .agents/CODEOWNER_CHECKLIST.md` | ✅ PASSED — 2026-03-27 |
 | 7.6 | PHASE_GATES.md has DAG header and DEPENDS_ON fields for phases 7–13 | Manual review | ✅ PASSED — 2026-03-27 (DAG header present lines 13–24, DEPENDS_ON fields documented for all phases 7–13) |
 
 **Phase 7 unlocks Phase 8 when:** All 6 gates show ✅ PASSED
+
+---
+
+## Phase 7-S Gates — Supplemental Governance Deliverables
+
+**DEPENDS_ON:** Phase 7
+**STATUS:** ✅ COMPLETE (2026-03-27)
+
+| Gate | Criteria | Status |
+|------|----------|--------|
+| 7-S.1 | `.agents/SKILL_MAP.md` exists and classifies all agent types | ✅ PASSED — 2026-03-27 |
+| 7-S.2 | `docs/ai-operations/ESCALATION_PROTOCOL.md` exists with decision matrix | ✅ PASSED — 2026-03-27 |
+| 7-S.3 | `docs/QUICK_REFERENCE.md` exists with current phase status and commands | ✅ PASSED — 2026-03-27 |
+| 7-S.4 | `.github/workflows/agent-validation.yml` exists with doc-version-headers and no-inline-types checks | ✅ PASSED — 2026-03-27 |
+| 7-S.5 | `docs/ai-operations/SESSION_LIFECYCLE.md` exists with 5-stage lifecycle + dossier consolidation rule | ✅ PASSED — 2026-03-27 |
+| 7-S.6 | `docs/ai-operations/SESSION_WORKPLAN_TEMPLATE.md` exists | ✅ PASSED — 2026-03-27 |
+| 7-S.7 | `docs/ai-operations/MONTHLY_CLEANUP_PROTOCOL.md` exists with M-Q1/Q4 cadence + dossier consolidation | ✅ PASSED — 2026-03-27 |
+| 7-S.8 | Root directory contains only approved files (MASTER_PLAN, AGENTS, CLAUDE, README, ARCHIVE_MASTER_DOSSIER, CONTRIBUTING, SECURITY) | ✅ PASSED — 2026-03-27 (13 stale files archived as dossiers) |
+| 7-S.9 | `AGENT_CONTRACT.md` Ver001.002 — 5-stage session lifecycle mandatory | ✅ PASSED — 2026-03-27 |
+| 7-S.10 | `.doc-tiers.json` updated with T1 entries for all new operational docs | ✅ PASSED — 2026-03-27 |
 
 ---
 
