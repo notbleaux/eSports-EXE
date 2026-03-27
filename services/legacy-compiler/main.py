@@ -258,19 +258,33 @@ class VLRScraper:
         """
         Scrape VLR.gg player page for match history.
         Returns list of match summaries.
+        Circuit breaker: Fail fast if VLR is unavailable.
+        Retry: Exponential backoff on transient failures.
         """
         logger.info(f"VLRScraper: Fetching match history for player {player_id}")
+
+        # Check circuit breaker
+        if not vlr_breaker.is_closed():
+            logger.warning(f"VLRScraper: Circuit breaker is {vlr_breaker.get_state()}, skipping request")
+            vlr_breaker.record_failure()
+            return []
+
         try:
             await vlr_limiter.wait()
 
-            url = f"https://www.vlr.gg/player/{player_id}/matches"
-            async with httpx.AsyncClient(follow_redirects=True) as client:
-                resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                })
-                resp.raise_for_status()
+            async def fetch_and_parse():
+                url = f"https://www.vlr.gg/player/{player_id}/matches"
+                async with httpx.AsyncClient(follow_redirects=True) as client:
+                    resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    })
+                    resp.raise_for_status()
+                return resp.text
 
-            soup = BeautifulSoup(resp.text, 'html.parser')
+            # Retry with exponential backoff
+            html = await retry_with_backoff(fetch_and_parse, max_retries=3, base_delay=1.0)
+
+            soup = BeautifulSoup(html, 'html.parser')
             matches = []
 
             # Parse match rows (VLR.gg table structure)
@@ -285,28 +299,44 @@ class VLRScraper:
                     continue
 
             logger.info(f"VLRScraper: Found {len(matches)} matches for player {player_id}")
+            vlr_breaker.record_success()
             return matches
 
         except Exception as e:
             logger.error(f"VLRScraper: Error fetching match history: {e}")
+            vlr_breaker.record_failure()
             return []
 
     async def scrape_tournament(self, tournament_id: str) -> Dict[str, Any]:
         """
         Scrape tournament bracket and results from VLR.gg
+        Circuit breaker: Fail fast if VLR is unavailable.
+        Retry: Exponential backoff on transient failures.
         """
         logger.info(f"VLRScraper: Fetching tournament {tournament_id}")
+
+        # Check circuit breaker
+        if not vlr_breaker.is_closed():
+            logger.warning(f"VLRScraper: Circuit breaker is {vlr_breaker.get_state()}, skipping request")
+            vlr_breaker.record_failure()
+            return {"source": "vlr", "tournament_id": tournament_id, "error": "Circuit breaker open", "matches": []}
+
         try:
             await vlr_limiter.wait()
 
-            url = f"https://www.vlr.gg/event/{tournament_id}"
-            async with httpx.AsyncClient(follow_redirects=True) as client:
-                resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                })
-                resp.raise_for_status()
+            async def fetch_and_parse():
+                url = f"https://www.vlr.gg/event/{tournament_id}"
+                async with httpx.AsyncClient(follow_redirects=True) as client:
+                    resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    })
+                    resp.raise_for_status()
+                return resp.text
 
-            soup = BeautifulSoup(resp.text, 'html.parser')
+            # Retry with exponential backoff
+            html = await retry_with_backoff(fetch_and_parse, max_retries=3, base_delay=1.0)
+
+            soup = BeautifulSoup(html, 'html.parser')
 
             # Extract tournament name and basic info
             title_tag = soup.find('h1')
@@ -321,6 +351,7 @@ class VLRScraper:
                     matches.append(match_data)
 
             logger.info(f"VLRScraper: Found {len(matches)} matches in tournament {tournament_id}")
+            vlr_breaker.record_success()
             return {
                 "source": "vlr",
                 "tournament_id": tournament_id,
@@ -331,6 +362,7 @@ class VLRScraper:
 
         except Exception as e:
             logger.error(f"VLRScraper: Error fetching tournament: {e}")
+            vlr_breaker.record_failure()
             return {"source": "vlr", "tournament_id": tournament_id, "error": str(e), "matches": []}
 
     def _parse_match_row(self, row) -> Optional[Dict[str, Any]]:
@@ -379,20 +411,34 @@ class LiquidpediaScraper:
     async def scrape_team_roster(self, team_name: str) -> Dict[str, Any]:
         """
         Scrape Liquidpedia team page for current roster
+        Circuit breaker: Fail fast if Liquidpedia is unavailable.
+        Retry: Exponential backoff on transient failures.
         """
         logger.info(f"LiquidpediaScraper: Fetching roster for {team_name}")
+
+        # Check circuit breaker
+        if not liquidpedia_breaker.is_closed():
+            logger.warning(f"LiquidpediaScraper: Circuit breaker is {liquidpedia_breaker.get_state()}, skipping request")
+            liquidpedia_breaker.record_failure()
+            return {"source": "liquidpedia", "team_name": team_name, "error": "Circuit breaker open", "players": []}
+
         try:
             await liquidpedia_limiter.wait()
 
-            # Liquidpedia URL format: /valorant/[Team_Name]
-            url = f"https://liquipedia.net/valorant/{team_name.replace(' ', '_')}"
-            async with httpx.AsyncClient(follow_redirects=True) as client:
-                resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                })
-                resp.raise_for_status()
+            async def fetch_and_parse():
+                # Liquidpedia URL format: /valorant/[Team_Name]
+                url = f"https://liquipedia.net/valorant/{team_name.replace(' ', '_')}"
+                async with httpx.AsyncClient(follow_redirects=True) as client:
+                    resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    })
+                    resp.raise_for_status()
+                return resp.text
 
-            soup = BeautifulSoup(resp.text, 'html.parser')
+            # Retry with exponential backoff
+            html = await retry_with_backoff(fetch_and_parse, max_retries=3, base_delay=1.0)
+
+            soup = BeautifulSoup(html, 'html.parser')
 
             # Extract roster from infobox
             roster_table = soup.find('table', class_=re.compile(r'infobox'))
@@ -409,6 +455,7 @@ class LiquidpediaScraper:
                         })
 
             logger.info(f"LiquidpediaScraper: Found {len(players)} players for {team_name}")
+            liquidpedia_breaker.record_success()
             return {
                 "source": "liquidpedia",
                 "team_name": team_name,
@@ -418,24 +465,39 @@ class LiquidpediaScraper:
 
         except Exception as e:
             logger.error(f"LiquidpediaScraper: Error fetching roster: {e}")
+            liquidpedia_breaker.record_failure()
             return {"source": "liquidpedia", "team_name": team_name, "error": str(e), "players": []}
 
     async def scrape_tournament_history(self, game: str) -> List[Dict[str, Any]]:
         """
         Scrape tournament listings from Liquidpedia
+        Circuit breaker: Fail fast if Liquidpedia is unavailable.
+        Retry: Exponential backoff on transient failures.
         """
         logger.info(f"LiquidpediaScraper: Fetching tournament history for {game}")
+
+        # Check circuit breaker
+        if not liquidpedia_breaker.is_closed():
+            logger.warning(f"LiquidpediaScraper: Circuit breaker is {liquidpedia_breaker.get_state()}, skipping request")
+            liquidpedia_breaker.record_failure()
+            return []
+
         try:
             await liquidpedia_limiter.wait()
 
-            url = f"https://liquipedia.net/{game}/Tournaments"
-            async with httpx.AsyncClient(follow_redirects=True) as client:
-                resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                })
-                resp.raise_for_status()
+            async def fetch_and_parse():
+                url = f"https://liquipedia.net/{game}/Tournaments"
+                async with httpx.AsyncClient(follow_redirects=True) as client:
+                    resp = await client.get(url, timeout=settings.SCRAPER_TIMEOUT, headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    })
+                    resp.raise_for_status()
+                return resp.text
 
-            soup = BeautifulSoup(resp.text, 'html.parser')
+            # Retry with exponential backoff
+            html = await retry_with_backoff(fetch_and_parse, max_retries=3, base_delay=1.0)
+
+            soup = BeautifulSoup(html, 'html.parser')
             tournaments = []
 
             # Extract tournament links
@@ -453,10 +515,12 @@ class LiquidpediaScraper:
                     })
 
             logger.info(f"LiquidpediaScraper: Found {len(tournaments)} tournaments for {game}")
+            liquidpedia_breaker.record_success()
             return tournaments
 
         except Exception as e:
             logger.error(f"LiquidpediaScraper: Error fetching tournaments: {e}")
+            liquidpedia_breaker.record_failure()
             return []
 
 class YouTubeExtractor:
