@@ -1,0 +1,25 @@
+# CODEOWNERS — NJZ eSports Platform
+# Single owner: @notbleaux
+# All paths covered; highest-scrutiny overrides for schemas, services, agents, infra
+
+# Default: everything requires @notbleaux review
+*                                    @notbleaux
+
+# === Highest Scrutiny Overrides ===
+# Schema changes: breaking types affects every consumer
+data/schemas/                        @notbleaux
+packages/@njz/types/                 @notbleaux
+
+# Service models: Pydantic schema changes affect API contracts
+services/*/models.py                 @notbleaux
+services/*/schemas.py                @notbleaux
+
+# Agent coordination: governance files
+.agents/                             @notbleaux
+.github/                             @notbleaux
+
+# Infrastructure: deployment configs
+infra/                               @notbleaux
+docker-compose*.yml                  @notbleaux
+package.json                         @notbleaux
+pnpm-workspace.yaml                  @notbleaux
