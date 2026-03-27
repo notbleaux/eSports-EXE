@@ -10,3 +10,7 @@ scipy
 redis
 python-dotenv
 slowapi>=0.1.6
+# test dependencies
+aiosqlite
+pytest
+pytest-asyncio

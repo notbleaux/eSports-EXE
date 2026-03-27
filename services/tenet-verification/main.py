@@ -5,7 +5,7 @@ import asyncio
 import time
 import uuid
 from contextlib import asynccontextmanager
-from typing import List, Dict, Any, Optional
+from typing import AsyncGenerator, List, Dict, Any, Optional
 from datetime import datetime, timedelta
 from enum import Enum
 from fastapi import FastAPI, HTTPException, Query, Path as FastAPIPath, Request
@@ -124,7 +124,7 @@ AsyncSessionLocal = async_sessionmaker(
     expire_on_commit=False
 )
 
-async def get_session() -> AsyncSession:
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """Get database session"""
     async with AsyncSessionLocal() as session:
         yield session
@@ -392,9 +392,20 @@ try:
             content={"error": "Too many requests", "detail": exc.detail},
             headers={"Retry-After": "60"}
         )
+
+    def rate_limit(limit_string: str):
+        """Apply slowapi rate limiting decorator"""
+        return limiter.limit(limit_string)
+
 except ImportError:
     logger.warning("slowapi not installed. Rate limiting disabled. Install with: pip install slowapi")
     limiter = None
+
+    def rate_limit(_limit_string: str):  # type: ignore[misc]
+        """No-op rate limiter when slowapi is not installed"""
+        def decorator(func):  # type: ignore[misc]
+            return func
+        return decorator
 
 @app.get("/health")
 async def health():
@@ -406,6 +417,7 @@ async def health():
     }
 
 @app.post("/v1/verify", response_model=VerificationResult)
+@rate_limit("100/minute")
 async def verify_entity(request: VerificationRequest, http_request: Request):
     """
     Submit data for verification and get confidence score + routing decision.
@@ -546,13 +558,13 @@ async def get_review_queue(
 @app.post("/v1/review/{entity_id}")
 async def submit_manual_review(
     entity_id: str = FastAPIPath(...),
-    review: ManualReviewSubmission = None
+    review: Optional[ManualReviewSubmission] = None
 ) -> VerificationResult:
     """
     Submit a manual review decision for a flagged entity.
     Updates the verification record and review queue.
     """
-    if not review:
+    if review is None:
         raise HTTPException(status_code=400, detail="Review body required")
 
     async with AsyncSessionLocal() as session:

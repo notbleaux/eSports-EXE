@@ -7,6 +7,7 @@ import React, { useRef, useCallback, useState } from 'react';
 import { motion, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Trophy, TrendingUp, Zap, ChevronRight, RefreshCw } from 'lucide-react';
+import type { Player as BasePlayer } from '@sator/types';
 import { colors } from '@/theme/colors';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { usePinch } from '@/hooks/gestures/usePinch';
@@ -14,12 +15,9 @@ import { useSwipe } from '@/hooks/gestures/useSwipe';
 import { useLongPress } from '@/hooks/gestures/useLongPress';
 import { cn } from '@/lib/utils';
 
-// Player type definition
-interface Player {
-  id: string;
+// Extended Player type for gesture grid (augments base Player with display metrics)
+interface Player extends BasePlayer {
   name: string;
-  team?: string;
-  nationality?: string;
   rating: number;
   acs: number;
   kda?: string;

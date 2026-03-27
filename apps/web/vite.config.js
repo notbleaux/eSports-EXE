@@ -46,6 +46,7 @@ export default defineConfig({
       '@hub-4': path.resolve(__dirname, './src/hub-4-opera'),
       '@hub-5': path.resolve(__dirname, './src/hub-5-tenet'),
       '@njz/types': path.resolve(__dirname, '../../packages/@njz/types/src/index.ts'),
+      '@njz/ui': path.resolve(__dirname, '../../packages/@njz/ui/src/index.ts'),
       '@sator/types': path.resolve(__dirname, '../../packages/shared/types'),
       '@sator/services': path.resolve(__dirname, '../../packages/shared/services/help')
     },

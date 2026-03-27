@@ -516,7 +516,7 @@ export class AudioManager {
       { id: 'hub_rotas', displayName: 'ROTAS Hub', audioUrl: '/audio/ambient/rotas.mp3', loop: true, crossfadeDuration: 2000, baseVolume: 0.5 },
       { id: 'hub_arepo', displayName: 'AREPO Hub', audioUrl: '/audio/ambient/arepo.mp3', loop: true, crossfadeDuration: 2000, baseVolume: 0.5 },
       { id: 'hub_opera', displayName: 'OPERA Hub', audioUrl: '/audio/ambient/opera.mp3', loop: true, crossfadeDuration: 2000, baseVolume: 0.5 },
-      { id: 'hub_tenet', displayName: 'TENET Hub', audioUrl: '/audio/ambient/tenet.mp3', loop: true, crossfadeDuration: 2000, baseVolume: 0.5 },
+      { id: 'hub_tenet', displayName: 'TeNET Navigation', audioUrl: '/audio/ambient/tenet.mp3', loop: true, crossfadeDuration: 2000, baseVolume: 0.5 },
       { id: 'menu_main', displayName: 'Main Menu', audioUrl: '/audio/ambient/menu.mp3', loop: true, crossfadeDuration: 3000, baseVolume: 0.4 },
       { id: 'match_ongoing', displayName: 'Match Background', audioUrl: '/audio/ambient/match.mp3', loop: true, crossfadeDuration: 2000, baseVolume: 0.3 },
       { id: 'match_intense', displayName: 'Intense Match', audioUrl: '/audio/ambient/intense.mp3', loop: true, crossfadeDuration: 1500, baseVolume: 0.5 },

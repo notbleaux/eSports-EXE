@@ -72,7 +72,12 @@
       "Bash(git commit:*)",
       "Bash(find /c/Users/jacke/Documents/GitHub/eSports-EXE -name AdminGuard* -o -name ProtectedRoute*)",
       "Bash(find /c/Users/jacke/Documents/GitHub/eSports-EXE -name lighthouserc* -o -name .lighthouserc*)",
-      "Bash(ls /c/Users/jacke/Documents/GitHub/eSports-EXE/*.md)"
+      "Bash(ls /c/Users/jacke/Documents/GitHub/eSports-EXE/*.md)",
+      "Bash(find C:/Users/jacke/Documents/GitHub/eSports-EXE/packages/@njz/ui -name *.tsx -o -name *.ts)",
+      "Bash(for app:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/jacke/Documents/GitHub/eSports-EXE/apps/**)",
+      "Bash(done)"
     ]
   }
 }

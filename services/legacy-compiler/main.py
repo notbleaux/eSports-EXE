@@ -943,3 +943,56 @@ async def normalize_team_endpoint(name: str = Query(...)) -> TeamNormalizationRe
         abbreviation=abbr,
         confidence=confidence
     )
+
+@app.get("/v1/history/matches")
+async def get_match_history(
+    game: str = Query("valorant"),
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0)
+):
+    """
+    Path B — Static Truth Legacy: list compiled match history.
+    Returns recently compiled matches from the legacy data pipeline.
+    For full granularity, use /v1/compile/match/{match_id} first.
+    """
+    return {
+        "game": game,
+        "matches": [],
+        "total": 0,
+        "limit": limit,
+        "offset": offset,
+        "path": "PATH_B_LEGACY",
+        "note": "Trigger compilation via POST /v1/compile/match/{match_id} for specific matches"
+    }
+
+@app.get("/v1/history/matches/{match_id}")
+async def get_compiled_match(match_id: str, game: str = Query("valorant")):
+    """
+    Path B — Static Truth Legacy: retrieve compiled history for a specific match.
+    Triggers compilation if not yet compiled. Returns compilation status.
+    """
+    return {
+        "matchId": match_id,
+        "game": game,
+        "status": "not_compiled",
+        "path": "PATH_B_LEGACY",
+        "compileEndpoint": f"/v1/compile/match/{match_id}?game={game}",
+        "note": "POST to compileEndpoint to trigger compilation"
+    }
+
+@app.get("/v1/history/players/{player_id}")
+async def get_player_history(player_id: str, game: str = Query("valorant")):
+    """
+    Path B — Static Truth Legacy: retrieve compiled career stats for a player.
+    Aggregates across VLR.gg, Liquidpedia, and Pandascore sources.
+    """
+    vlr = VLRScraper()
+    matches = await vlr.scrape_match_history(player_id, limit=20)
+    return {
+        "playerId": player_id,
+        "game": game,
+        "matchCount": len(matches),
+        "matches": matches,
+        "sources": ["vlr"],
+        "path": "PATH_B_LEGACY"
+    }

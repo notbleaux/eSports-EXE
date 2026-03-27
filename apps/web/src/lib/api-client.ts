@@ -3,9 +3,12 @@
  * ================
  * TypeScript client for the SATOR API with JWT authentication.
  * Handles token storage, refresh, and automatic Bearer token injection.
+ *
+ * Phase 5: Added TanStack Query hooks for data fetching and real-time updates
  */
 
 import { useAuthStore } from '@/stores/authStore';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // API Base URL configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -670,6 +673,92 @@ export const operaApi = {
     return response.circuits;
   },
 };
+
+// =============================================================================
+// PHASE 5: TANSTACK QUERY HOOKS FOR REAL-TIME DATA
+// =============================================================================
+
+// Types for Phase 5
+export interface LiveMatch {
+  match_id: string;
+  game: string;
+  title?: string;
+  status: string;
+  team1_name?: string;
+  team2_name?: string;
+  team1_score?: number;
+  team2_score?: number;
+  updated_at: number;
+  confidence: number;
+  source: string;
+}
+
+export interface ReviewQueueItem {
+  item_id: string;
+  data_type: string;
+  game: string;
+  confidence: number;
+  issues: string[];
+  flagged_at: number;
+  notes?: string;
+}
+
+// Query hooks for real-time data
+export const useMatchData = (matchId: string) => {
+  return useQuery({
+    queryKey: ['match', matchId],
+    queryFn: () => apiRequest<LiveMatch>(`/api/v1/live/matches/${matchId}`),
+    staleTime: 5000,
+    refetchInterval: 10000,
+    enabled: !!matchId,
+  });
+};
+
+export const useLiveMatches = (game?: string) => {
+  return useQuery({
+    queryKey: ['matches', 'live', game],
+    queryFn: () => apiRequest<any>('/api/v1/live/matches', {}, game ? { game, confidence_min: '0.5' } : { confidence_min: '0.5' }),
+    staleTime: 3000,
+    refetchInterval: 5000,
+  });
+};
+
+export const useMatchHistory = (game: string, limit = 50, offset = 0) => {
+  return useQuery({
+    queryKey: ['matches', 'history', game, limit, offset],
+    queryFn: () => apiRequest<any>('/api/v1/history/matches', {}, { game, limit, offset, confidence_min: '0.7' }),
+    staleTime: 60000,
+  });
+};
+
+// Admin hooks
+export const useReviewQueue = (game?: string, priority = false) => {
+  return useQuery({
+    queryKey: ['review-queue', game, priority],
+    queryFn: () => apiRequest<any>('/api/v1/review-queue', {}, { game, priority, limit: '100' }),
+    staleTime: 30000,
+    refetchInterval: 60000,
+  });
+};
+
+export const useSubmitReviewDecision = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ itemId, decision, notes }: { itemId: string; decision: string; notes?: string }) => {
+      return apiRequest<any>(`/api/v1/review-queue/${itemId}/decide`, {
+        method: 'POST',
+        body: JSON.stringify({ decision, notes }),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['review-queue'] });
+    },
+  });
+};
+
+// WebSocket URL
+export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8002';
 
 // =============================================================================
 // EXPORT

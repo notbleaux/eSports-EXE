@@ -7,6 +7,7 @@ import json
 import asyncio
 import logging
 import time
+from contextlib import asynccontextmanager
 from typing import Dict, List, Set, Any, Optional
 from datetime import datetime, timedelta
 from enum import Enum
@@ -264,7 +265,7 @@ class RedisStreamConsumer:
 
 # --- Message Deduplication ---
 
-class MessageDeduplica tor:
+class MessageDeduplicator:
     """Prevents duplicate messages from being broadcast"""
 
     def __init__(self, window_ms: int = 1000, cache_size: int = 10000):
@@ -474,15 +475,8 @@ class MatchConnectionManager:
             "timestamp": int(datetime.utcnow().timestamp() * 1000)
         }
 
-# --- FastAPI App ---
+# --- Global instances (created before lifespan to allow test overrides) ---
 
-app = FastAPI(
-    title="NJZ WebSocket Service",
-    description="Dedicated real-time WebSocket service for NJZ eSports (Path A Live Distribution)",
-    version=settings.APP_VERSION,
-)
-
-# Global instances
 manager = MatchConnectionManager()
 consumer = RedisStreamConsumer(
     settings.REDIS_URL,
@@ -490,21 +484,20 @@ consumer = RedisStreamConsumer(
     settings.STREAM_GROUP,
     settings.STREAM_CONSUMER
 )
-heartbeat_task: Optional[asyncio.Task] = None
 
-# --- Event Handlers ---
+# --- FastAPI Lifespan Context Manager ---
 
-@app.on_event("startup")
-async def startup_event():
-    """Initialize Redis consumer and heartbeat task"""
-    global heartbeat_task
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Modern FastAPI lifespan (replaces deprecated @app.on_event)"""
+    heartbeat_task: Optional[asyncio.Task] = None
 
+    # Startup
+    logger.info("WebSocket service starting...")
     try:
-        # Start Redis stream consumer in background
         asyncio.create_task(consumer.listen(manager))
         logger.info("Redis stream consumer started")
 
-        # Start heartbeat task
         async def send_heartbeats():
             while True:
                 try:
@@ -518,39 +511,37 @@ async def startup_event():
 
         heartbeat_task = asyncio.create_task(send_heartbeats())
         logger.info(f"Heartbeat task started (interval: {settings.HEARTBEAT_INTERVAL}s)")
-
     except Exception as e:
-        logger.error(f"Startup failed: {e}")
+        logger.error(f"WebSocket service startup failed: {e}")
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on shutdown"""
-    global heartbeat_task
+    yield  # Service running
 
+    # Shutdown
     logger.info("WebSocket service shutting down...")
-
-    # Stop heartbeat
     if heartbeat_task:
         heartbeat_task.cancel()
-
-    # Stop consumer
     await consumer.stop()
-
-    # Close all connections
-    for websockets in manager.match_subscriptions.values():
-        for ws in websockets:
+    for match_ws_set in manager.match_subscriptions.values():
+        for ws in match_ws_set:
             try:
                 await ws.close()
             except Exception:
                 pass
-
     for ws in manager.global_subscribers:
         try:
             await ws.close()
         except Exception:
             pass
-
     logger.info("WebSocket service shutdown complete")
+
+# --- FastAPI App ---
+
+app = FastAPI(
+    title="NJZ WebSocket Service",
+    description="Dedicated real-time WebSocket service for NJZ eSports (Path A Live Distribution)",
+    version=settings.APP_VERSION,
+    lifespan=lifespan,
+)
 
 # --- Routes ---
 
@@ -605,4 +596,33 @@ async def ready():
         "status": "ready" if redis_ok else "not_ready",
         "redis": "connected" if redis_ok else "disconnected",
         "consumer_running": consumer.running
+    }
+
+@app.get("/v1/matches/live")
+async def get_live_matches():
+    """
+    REST fallback for clients that cannot use WebSocket.
+    Returns current live match subscriptions and connection metrics.
+    Path A distribution — eventual accuracy.
+    """
+    return {
+        "liveMatches": list(manager.match_subscriptions.keys()),
+        "metrics": manager.get_metrics(),
+        "note": "For real-time updates, connect to /ws/matches/live"
+    }
+
+@app.get("/v1/matches/{match_id}/events")
+async def get_match_events(match_id: str):
+    """
+    REST fallback: recent events for a specific match.
+    Returns current subscriber count and connection status.
+    Use /ws/matches/{match_id}/live for real-time streaming.
+    """
+    match_subscribers = len(manager.match_subscriptions.get(match_id, set()))
+    return {
+        "matchId": match_id,
+        "subscriberCount": match_subscribers,
+        "isLive": match_subscribers > 0,
+        "wsEndpoint": f"/ws/matches/{match_id}/live",
+        "note": "Full event history is available via Path B (legacy-compiler service)"
     }

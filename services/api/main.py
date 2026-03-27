@@ -49,6 +49,12 @@ from src.rotas.map_routes import router as maps_router, handle_lens_websocket, s
 from src.betting.routes import router as betting_router
 from src.notifications.routes import router as notification_router
 
+# Import webhook handlers (Phase 4: Live Data Pipeline)
+from src.webhooks import pandascore_router
+
+# Import verification routes (Phase 4: Legacy Data Pipeline)
+from src.verification import router as verification_router
+
 # WebSocket Gateway (placeholder for unified gateway)
 class WebSocketGateway:
     """Simple WebSocket gateway manager."""
@@ -441,6 +447,19 @@ app.include_router(
     notification_router,
     prefix="/api",
     tags=["notifications"],
+)
+
+# Webhook handlers (Phase 4: Live Data Pipeline)
+app.include_router(
+    pandascore_router,
+    tags=["webhooks"],
+)
+
+# Verification routes (Phase 4: Legacy Data Pipeline)
+app.include_router(
+    verification_router,
+    prefix="/api",
+    tags=["verification"],
 )
 
 

@@ -10,7 +10,7 @@
  * - /stats - ROTAS Hub (Stats Reference)
  * - /community - AREPO Hub (Community)
  * - /pro-scene - OPERA Hub (Pro eSports)
- * - /hubs - TENET Hub (WorldHUBs / game-world selector)
+ * - /hubs - TeNET Directory (navigation layer — game-world selector)
  * - /cs2 - CS2 game world
  * - /valorant - Valorant game world (placeholder)
  *

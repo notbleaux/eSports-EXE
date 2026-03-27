@@ -6,6 +6,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import type { Player as BasePlayer } from '@sator/types';
 import { VirtualPlayerGrid } from './VirtualPlayerGrid';
 
 // Mock the colors module
@@ -26,12 +27,9 @@ vi.mock('@/theme/colors', () => ({
   },
 }));
 
-// Player type definition (matches the inline type in component)
-interface Player {
-  id: string;
+// Extended Player type matching the component (augments base Player with display metrics)
+interface Player extends BasePlayer {
   name: string;
-  team?: string;
-  nationality?: string;
   rating: number;
   acs: number;
   kda?: string;

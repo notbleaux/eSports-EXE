@@ -1,0 +1,18 @@
+{
+  "name": "@njz/websocket-client",
+  "version": "0.1.0",
+  "description": "Universal WebSocket client for NJZ eSports real-time match data (Path A)",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

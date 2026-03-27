@@ -1,0 +1,112 @@
+version: '3.9'
+
+networks:
+  service-tier:
+    driver: bridge
+  db-tier:
+    driver: bridge
+
+volumes:
+  postgres-services-data:
+  service-logs:
+
+services:
+  postgres-services:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: njz-services
+      POSTGRES_USER: services_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    networks:
+      - db-tier
+    volumes:
+      - postgres-services-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U services_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-services:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - service-tier
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  tenet-verification:
+    build:
+      context: ../../services/tenet-verification
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://services_user:${DB_PASSWORD:-postgres}@postgres-services:5432/njz-services
+      CONFIDENCE_THRESHOLD_AUTO_ACCEPT: 0.90
+      CONFIDENCE_THRESHOLD_FLAG: 0.70
+      REVIEW_QUEUE_RETENTION_DAYS: 30
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres-services:
+        condition: service_healthy
+    networks:
+      - service-tier
+      - db-tier
+    volumes:
+      - service-logs:/var/log/services
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  websocket:
+    build:
+      context: ../../services/websocket
+      dockerfile: Dockerfile
+    environment:
+      REDIS_URL: redis://redis-services:6379
+      PANDASCORE_API_KEY: ${PANDASCORE_API_KEY:-}
+      STREAM_NAME: pandascore:events
+      HOSTNAME: ws_consumer_1
+    ports:
+      - "8002:8000"
+    depends_on:
+      redis-services:
+        condition: service_healthy
+    networks:
+      - service-tier
+    volumes:
+      - service-logs:/var/log/services
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  legacy-compiler:
+    build:
+      context: ../../services/legacy-compiler
+      dockerfile: Dockerfile
+    environment:
+      VLR_RATE_LIMIT: 1.0
+      LIQUIDPEDIA_RATE_LIMIT: 0.5
+      CACHE_TTL_HOURS: 24
+      CACHE_MAX_SIZE_MB: 500
+    ports:
+      - "8003:8000"
+    networks:
+      - service-tier
+    volumes:
+      - service-logs:/var/log/services
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

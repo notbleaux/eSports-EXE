@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@njz/types": "workspace:*",
+    "@njz/ui": "workspace:*",
     "@gsap/react": "^2.0.0",
     "@react-three/drei": "^9.90.0",
     "@react-three/fiber": "^8.15.0",

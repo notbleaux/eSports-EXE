@@ -419,7 +419,7 @@ const operaNodes: KnowledgeNode[] = [
 ];
 
 // ============================================================================
-// TENET Hub Nodes (Central)
+// TeNET Navigation Layer Nodes (Central)
 // ============================================================================
 
 const tenetNodes: KnowledgeNode[] = [

@@ -219,7 +219,7 @@ export class EnvironmentAudioManager {
       baseVolume: 0.5,
     });
 
-    // TENET Hub - balanced, neutral atmosphere
+    // TeNET Navigation Layer - balanced, neutral atmosphere
     this.createSoundscape({
       id: 'tenet_hub',
       name: 'TENET Central Ambience',

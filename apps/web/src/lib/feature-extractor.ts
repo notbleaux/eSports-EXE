@@ -11,16 +11,11 @@
  */
 
 import { mlLogger } from '../utils/logger'
-// ============================================================================
-// Local Type Definitions (matching project data structures)
-// ============================================================================
+import type { Player as BasePlayer, Team as BaseTeam, Match as BaseMatch } from '@sator/types'
 
-interface Player {
-  id: string
-  name: string
-  teamId?: string
-  stats?: PlayerStats
-}
+// ============================================================================
+// Local Type Extensions (augmenting base types with stats/match data)
+// ============================================================================
 
 interface PlayerStats {
   rating?: number
@@ -38,15 +33,17 @@ interface PlayerStats {
   clutchWinRate?: number
 }
 
-interface Team {
-  id: string
+interface Player extends BasePlayer {
   name: string
+  stats?: PlayerStats
+}
+
+interface Team extends BaseTeam {
   players?: Player[]
   recentMatches?: Match[]
 }
 
-interface Match {
-  id: string
+interface Match extends BaseMatch {
   winnerId: string
   loserId?: string
   scoreWinner?: number

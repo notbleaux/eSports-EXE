@@ -8,14 +8,13 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Trophy, TrendingUp, Zap, ChevronRight } from 'lucide-react';
+import type { Player as BasePlayer } from '@sator/types';
 import { colors } from '@/theme/colors';
 import { GlassCard } from '@/components/ui/GlassCard';
-// Player type definition (inline to avoid import issues)
-interface Player {
-  id: string;
+
+// Extended Player type for virtual grid (augments base Player with display metrics)
+interface Player extends BasePlayer {
   name: string;
-  team?: string;
-  nationality?: string;
   rating: number;
   acs: number;
   kda?: string;
