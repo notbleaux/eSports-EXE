@@ -1,4 +1,4 @@
-[Ver001.000]
+[Ver001.001]
 
 # NJZ eSports Platform — Master Restructuring & Ecosystem Plan
 
@@ -550,3 +550,127 @@ Any change to `data/schemas/` or `packages/@njz/types/` requires:
 ---
 
 *This document is the single source of truth for all structural decisions. All agents read this before starting work.*
+
+---
+
+## §7 — Phase 7: Repository Governance and Hygiene
+
+**Status:** 🟡 UNLOCKED
+**DEPENDS_ON:** None
+**BLOCKS:** Phase 8
+
+### Objectives
+
+- Establish single-owner CODEOWNERS with risk-tiered auto-merge (`[SAFE]`/`[STRUCT]`/`[CRIT]`)
+- Permanently delete the Job Board (329 files, security surface, CRIT PR)
+- Reorganise `archive/` into date-indexed `Archived/Y25/` + `Archived/Y26/` structure
+- Create `ARCHIVE_MASTER_DOSSIER.md` (T0) as permanent reference replacing archived docs
+- Update agent coordination files: CODEOWNER_CHECKLIST.md, COORDINATION_PROTOCOL.md, ARCHIVE_INDEX_SCHEDULE.md, AGENT_CONTRACT.md
+
+### Gate Summary
+6 gates. See `.agents/PHASE_GATES.md §Phase 7`.
+
+### CODEOWNER_APPROVAL_REQUIRED
+Job Board deletion PR (CRIT) + Visual Design Book task claim.
+
+---
+
+## §8 — Phase 8: API Gateway and Auth Platform
+
+**Status:** 🔒 BLOCKED on Phase 7
+**DEPENDS_ON:** Phase 7
+**BLOCKS:** Phases 10, 11, 12
+
+### Objectives
+
+- Upgrade `services/api-gateway/` from placeholder to production FastAPI gateway
+- Wire Auth0 end-to-end (JWT middleware, frontend auth context, refresh token rotation)
+- Add circuit breakers, tiered rate limiting, and structured audit logging
+
+### Gate Summary
+3 gates. See `.agents/PHASE_GATES.md §Phase 8`.
+
+### CODEOWNER_APPROVAL_REQUIRED
+Auth0 configuration (requires user's Auth0 tenant credentials).
+
+---
+
+## §9 — Phase 9: Web App UI/UX Enhancement
+
+**Status:** 🟡 UNLOCKED (concurrent with Phase 8)
+**DEPENDS_ON:** None (concurrent)
+**Note:** Phase 0-X Visual Design Book feeds into this when available
+
+### Objectives
+
+- Formalise CSS design token system (`tokens.css` + Tailwind extension)
+- Document all `@njz/ui` components with usage examples
+- WCAG 2.1 AA audit + Lighthouse ≥ 90 on all routes
+
+### Gate Summary
+3 gates. See `.agents/PHASE_GATES.md §Phase 9`.
+
+---
+
+## §10 — Phase 10: Companion App MVP
+
+**Status:** 🔒 BLOCKED on Phase 8
+**DEPENDS_ON:** Phase 8
+
+### Objectives
+
+- Upgrade `apps/companion/` from Vite stub to Expo SDK project
+- Auth0 login, live match scores, player profiles, push notifications
+
+### Gate Summary
+3 gates. See `.agents/PHASE_GATES.md §Phase 10`.
+
+---
+
+## §11 — Phase 11: Browser Extension and LiveStream Overlay
+
+**Status:** 🔒 BLOCKED on Phase 8
+**DEPENDS_ON:** Phase 8
+
+### Objectives
+
+- Upgrade `apps/browser-extension/` to Manifest V3 compliant, installable Chrome extension
+- Upgrade `apps/overlay/` to production OBS browser source with score HUD and TeneT confidence badge
+
+### Gate Summary
+3 gates. See `.agents/PHASE_GATES.md §Phase 11`.
+
+---
+
+## §12 — Phase 12: Content and Prediction Platform
+
+**Status:** 🔒 BLOCKED on Phase 8
+**DEPENDS_ON:** Phase 8
+**CODEOWNER_APPROVAL_REQUIRED:** Betting/Prediction UI (deliberate opt-in)
+
+### Objectives
+
+- Deploy Wiki app (Next.js 14 SSG) and Nexus portal with live status
+- Token-based prediction system accessible to authenticated users
+- OddsEngine confidence scores surfaced in the prediction UI
+
+### Gate Summary
+4 gates. See `.agents/PHASE_GATES.md §Phase 12`.
+
+---
+
+## §13 — Phase 13: Simulation Engine and Production Launch
+
+**Status:** 🔒 BLOCKED on Phase 10 + 11 + 12
+**DEPENDS_ON:** Phases 10, 11, 12 all gated
+**CODEOWNER_APPROVAL_REQUIRED:** Production deployment (irreversible)
+
+### Objectives
+
+- Unpause Godot simulation engine, connect XSim to platform data pipeline
+- All production environment variables set and validated
+- Full E2E suite passing against production build
+- Production deploy with CODEOWNER sign-off
+
+### Gate Summary
+4 gates. See `.agents/PHASE_GATES.md §Phase 13`.
