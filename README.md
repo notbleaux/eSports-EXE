@@ -65,7 +65,6 @@ main-repo/
 │   ├── unit/godot/             # Godot unit tests (70+)
 │   └── load/                   # Load testing
 │
-├── 📁 .job-board/               # AI agent coordination system
 ├── 📁 .agents/                  # AI skills and configuration
 ├── LICENSE                      # MIT License
 ├── package.json                 # Node dependencies
@@ -404,16 +403,19 @@ git push origin main  # Auto-deploys via render.yaml
 
 ## 🤖 AI Agent Coordination
 
-This repository uses a **Job Listing Board** system for AI agent coordination:
+AI agents working on this project follow a **phase-based coordination model** using git-based state tracking and schema boundaries:
 
-- **Location:** `.job-board/`
-- **Documentation:** [AGENTS.md](AGENTS.md)
+- **Coordination Document:** [.agents/AGENT_CONTRACT.md](.agents/AGENT_CONTRACT.md)
+- **Phase Gates:** [.agents/PHASE_GATES.md](.agents/PHASE_GATES.md)
+- **Agent Guidelines:** [AGENTS.md](AGENTS.md)
 
 ### For AI Agents
 
-1. Check your inbox: `.job-board/00_INBOX/{your-agent-id}/NEW/`
-2. Browse tasks: `.job-board/01_LISTINGS/ACTIVE/`
-3. Use `[JLB]` prefix in commit messages
+1. Read `MASTER_PLAN.md` to understand current phase and scope
+2. Check `.agents/PHASE_GATES.md` to confirm your phase is unlocked
+3. Work within your declared domain per `AGENT_CONTRACT.md`
+4. Update `AGENTS.md` after completing work under the relevant phase section
+5. Schema boundaries are the synchronization point — commit schemas before dependent domains start
 
 ---
 
@@ -432,7 +434,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 feat(api): Add Pandascore integration - enables legal data source
 fix(website): Resolve WebSocket reconnection issue
 docs(readme): Update installation instructions
-[JLB] feat(sator): Implement search API
+feat(sator): Implement search API - phase 4 implementation
 ```
 
 ---
