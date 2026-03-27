@@ -1,0 +1,69 @@
+# .github/workflows/pr-classification.yml
+name: PR Classification
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read commit messages and PR title for risk tag
+        id: detect_risk
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          COMMITS=$(git log origin/${{ github.base_ref }}..HEAD --oneline)
+
+          # Check for explicit CRIT override paths
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}..HEAD)
+          CRIT_PATHS=$(echo "$CHANGED_FILES" | grep -E '^(data/schemas/|services/[^/]+/models\.py|services/[^/]+/schemas\.py|\.github/|infra/|package\.json$|docker-compose)' || true)
+
+          # Deletion check: > 5 files deleted
+          DELETED_COUNT=$(git diff --diff-filter=D --name-only origin/${{ github.base_ref }}..HEAD | wc -l)
+
+          if echo "$PR_TITLE" | grep -q '\[CRIT\]' || [ -n "$CRIT_PATHS" ] || [ "$DELETED_COUNT" -gt 5 ]; then
+            echo "tier=CRIT" >> $GITHUB_OUTPUT
+          elif echo "$PR_TITLE" | grep -q '\[STRUCT\]'; then
+            echo "tier=STRUCT" >> $GITHUB_OUTPUT
+          elif echo "$PR_TITLE" | grep -q '\[SAFE\]'; then
+            echo "tier=SAFE" >> $GITHUB_OUTPUT
+          else
+            # Auto-safe commit types: docs, test, chore (lint/format only)
+            if echo "$PR_TITLE" | grep -qE '^(docs|test|chore)\('; then
+              echo "tier=SAFE" >> $GITHUB_OUTPUT
+            else
+              echo "tier=STRUCT" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Remove existing tier labels
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --remove-label "safe-auto-merge" \
+            --remove-label "structural-review" \
+            --remove-label "critical-block" || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply tier label
+        run: |
+          TIER="${{ steps.detect_risk.outputs.tier }}"
+          if [ "$TIER" = "CRIT" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "critical-block"
+          elif [ "$TIER" = "STRUCT" ]; then
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "structural-review"
+          else
+            gh pr edit ${{ github.event.pull_request.number }} --add-label "safe-auto-merge"
+          fi
+          echo "Classified as: $TIER"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
