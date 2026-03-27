@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: WebSocket Service API
+  description: |
+    Real-time match updates via WebSocket.
+    Delivers live score updates, round changes, and match events to connected clients.
+    Features: message deduplication, heartbeat timeout detection, backpressure handling.
+  version: 1.0.0
+  contact:
+    name: NJZ eSports
+    url: https://github.com/notbleaux/eSports-EXE
+
+servers:
+  - url: ws://localhost:8002
+    description: Local WebSocket endpoint
+  - url: wss://ws.njz.dev
+    description: Production secure WebSocket
+
+tags:
+  - name: WebSocket
+    description: WebSocket connection management
+  - name: Health
+    description: Service health endpoints
+
+paths:
+  /ws/match/{match_id}:
+    get:
+      tags:
+        - WebSocket
+      summary: WebSocket upgrade endpoint
+      description: |
+        Upgrade HTTP connection to WebSocket for real-time match updates.
+        Client must send SUBSCRIBE message after connecting.
+
+        **Message Format:**
+        ```json
+        {
+          "type": "SUBSCRIBE",
+          "match_id": "match_uuid"
+        }
+        ```
+      operationId: websocket_upgrade
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Match ID to subscribe to
+      responses:
+        '101':
+          description: Switching Protocols - WebSocket connection established
+        '400':
+          description: Invalid match_id
+        '500':
+          description: Server error
+
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Service health check
+      description: Returns connection stats and service status
+      operationId: health_check
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, degraded]
+                  active_connections:
+                    type: integer
+                  total_messages_broadcast:
+                    type: integer
+                  uptime_seconds:
+                    type: number
+                  deduplicator_cache_size:
+                    type: integer
+
+components:
+  schemas:
+    WsMessage:
+      type: object
+      description: WebSocket message envelope
+      properties:
+        message_id:
+          type: string
+          format: uuid
+          description: Unique message identifier (prevents deduplication)
+        type:
+          type: string
+          enum:
+            - SUBSCRIBE
+            - UNSUBSCRIBE
+            - MATCH_UPDATE
+            - SCORE_CHANGE
+            - ROUND_CHANGE
+            - PLAYER_UPDATE
+            - HEARTBEAT
+            - PONG
+            - ERROR
+          description: Message type
+        payload:
+          type: object
+          description: Type-specific payload
+        timestamp:
+          type: string
+          format: date-time
+          description: Message timestamp (ISO 8601)
+      required:
+        - message_id
+        - type
+        - timestamp
+
+    MatchUpdate:
+      type: object
+      description: Full match state update
+      properties:
+        match_id:
+          type: string
+        team_a:
+          $ref: '#/components/schemas/TeamState'
+        team_b:
+          $ref: '#/components/schemas/TeamState'
+        current_map:
+          type: string
+        maps_completed:
+          type: integer
+          description: Number of maps completed
+        match_status:
+          type: string
+          enum: [PENDING, LIVE, COMPLETED]
+
+    TeamState:
+      type: object
+      properties:
+        team_id:
+          type: string
+        name:
+          type: string
+        logo_url:
+          type: string
+        maps_won:
+          type: integer
+        current_round:
+          type: integer
+        round_score:
+          type: integer
+
+    ScoreChange:
+      type: object
+      description: Score update event
+      properties:
+        match_id:
+          type: string
+        map_number:
+          type: integer
+        team:
+          type: string
+          enum: [team_a, team_b]
+        old_score:
+          type: integer
+        new_score:
+          type: integer
+        round_number:
+          type: integer
+        event_type:
+          type: string
+          enum: [round_won, map_won]
+
+    RoundChange:
+      type: object
+      description: Round progression event
+      properties:
+        match_id:
+          type: string
+        map_number:
+          type: integer
+        round_number:
+          type: integer
+        round_type:
+          type: string
+          enum: [normal, pistol, eco, half_buy, full_buy]
+
+    HeartbeatMessage:
+      type: object
+      description: Server heartbeat for connection maintenance
+      properties:
+        type:
+          type: string
+          const: HEARTBEAT
+        server_time:
+          type: string
+          format: date-time
+        active_connections:
+          type: integer
+          description: Total connected clients on server
+
+    PongMessage:
+      type: object
+      description: Client pong response to heartbeat
+      properties:
+        type:
+          type: string
+          const: PONG
+        received_at:
+          type: string
+          format: date-time
+
+x-websocket-config:
+  heartbeat:
+    interval_seconds: 30
+    timeout_seconds: 60
+    description: Server sends HEARTBEAT every 30s; disconnects clients without PONG for 60s
+  deduplication:
+    window_ms: 1000
+    cache_size: 10000
+    description: Prevents duplicate messages within 1s window
+  backpressure:
+    max_queue_per_client: 1000
+    queue_full_action: drop_oldest
+    description: Queues messages per client; drops oldest when queue full

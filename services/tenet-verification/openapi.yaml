@@ -1,0 +1,292 @@
+openapi: 3.0.0
+info:
+  title: TeneT Verification Service API
+  description: |
+    Data verification bridge for eSports match results and player information.
+    Accepts data from multiple sources, verifies confidence, and routes flagged
+    items to manual review queue.
+  version: 1.0.0
+  contact:
+    name: NJZ eSports
+    url: https://github.com/notbleaux/eSports-EXE
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:8001
+    description: Local development
+  - url: https://tenet-verification.njz.dev
+    description: Production
+
+tags:
+  - name: Verification
+    description: Core verification endpoints
+  - name: Review Queue
+    description: Manual review operations
+  - name: Health
+    description: Service health and status
+
+paths:
+  /v1/verify:
+    post:
+      tags:
+        - Verification
+      summary: Verify match or player data
+      description: |
+        Submit data from one or more sources for verification.
+        Returns VerificationResult with status (ACCEPTED/REJECTED/FLAGGED).
+      operationId: verify_data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        '200':
+          description: Verification successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResult'
+        '400':
+          description: Invalid request (missing required fields)
+        '429':
+          description: Rate limit exceeded (100 requests/minute)
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+              description: Seconds until rate limit resets
+        '500':
+          description: Internal server error
+      x-rate-limit:
+        requests-per-minute: 100
+        applies-to: POST /v1/verify
+
+  /v1/review-queue:
+    get:
+      tags:
+        - Review Queue
+      summary: Get flagged items for manual review
+      description: |
+        Returns all FLAGGED verifications awaiting manual review.
+        Supports pagination via limit and offset parameters.
+      operationId: get_review_queue
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Maximum number of items to return
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of items to skip
+      responses:
+        '200':
+          description: Review queue items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReviewQueueItem'
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+
+  /v1/review-queue/{id}/decide:
+    post:
+      tags:
+        - Review Queue
+      summary: Submit manual review decision
+      description: |
+        Accept or reject a flagged verification item.
+        Updates status and stores decision in audit trail.
+      operationId: submit_review_decision
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ReviewQueueItem ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                decision:
+                  type: string
+                  enum: [ACCEPT, REJECT]
+                  description: Manual review decision
+                reason:
+                  type: string
+                  description: Optional explanation for decision
+              required:
+                - decision
+      responses:
+        '200':
+          description: Decision recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewQueueItem'
+        '404':
+          description: Review item not found
+        '500':
+          description: Internal server error
+
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Service health check
+      description: Returns service status and dependencies
+      operationId: health_check
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, degraded, unhealthy]
+                  timestamp:
+                    type: string
+                    format: date-time
+                  database:
+                    type: object
+                    properties:
+                      connected:
+                        type: boolean
+                      latency_ms:
+                        type: number
+                  uptime_seconds:
+                    type: number
+
+components:
+  schemas:
+    VerificationRequest:
+      type: object
+      properties:
+        entity_id:
+          type: string
+          description: Match ID, player ID, or team ID
+        entity_type:
+          type: string
+          enum: [match, player, team]
+        game:
+          type: string
+          enum: [valorant, cs2]
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceContribution'
+          minItems: 1
+      required:
+        - entity_id
+        - entity_type
+        - game
+        - sources
+
+    SourceContribution:
+      type: object
+      properties:
+        source_type:
+          type: string
+          enum: [vlr, liquidpedia, pandascore, youtube, manual]
+        trust_level:
+          type: string
+          enum: [HIGH_TRUST, MEDIUM_TRUST, LOW_TRUST]
+        weight:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Source reliability weight
+        data:
+          type: object
+          description: Source-specific data payload
+      required:
+        - source_type
+        - trust_level
+        - weight
+        - data
+
+    VerificationResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Verification record ID
+        entity_id:
+          type: string
+        entity_type:
+          type: string
+        status:
+          type: string
+          enum: [ACCEPTED, REJECTED, FLAGGED, MANUAL_OVERRIDE]
+          description: |
+            - ACCEPTED: High confidence (>0.90)
+            - REJECTED: Low confidence (<0.70)
+            - FLAGGED: Medium confidence (0.70-0.90) or conflicts detected
+            - MANUAL_OVERRIDE: Manually reviewed and decided
+        confidence_score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        source_count:
+          type: integer
+          description: Number of sources provided
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ReviewQueueItem:
+      type: object
+      properties:
+        id:
+          type: string
+        entity_id:
+          type: string
+        entity_type:
+          type: string
+        reason:
+          type: string
+          enum: [CONFLICT_DETECTED, MANUAL_FLAG, CONFIDENCE_MEDIUM]
+        status:
+          type: string
+          enum: [PENDING, ACCEPTED, REJECTED, CLOSED]
+        created_at:
+          type: string
+          format: date-time
+        reviewed_by:
+          type: string
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          nullable: true

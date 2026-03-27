@@ -1,0 +1,405 @@
+openapi: 3.0.0
+info:
+  title: Legacy Compiler Service API
+  description: |
+    Data aggregation and conflict detection for eSports match information.
+    Scrapes data from multiple sources (VLR.gg, Liquidpedia, Pandascore),
+    aggregates information, detects conflicts, and routes to TeneT verification.
+    Features: Circuit breaker for API resilience, exponential backoff with jitter,
+    conflict detection with configurable thresholds.
+  version: 1.0.0
+  contact:
+    name: NJZ eSports
+    url: https://github.com/notbleaux/eSports-EXE
+
+servers:
+  - url: http://localhost:8003
+    description: Local development
+  - url: https://compiler.njz.dev
+    description: Production
+
+tags:
+  - name: Compilation
+    description: Data aggregation endpoints
+  - name: Scrapers
+    description: Individual scraper operations
+  - name: Health
+    description: Service health and monitoring
+
+paths:
+  /v1/compile:
+    post:
+      tags:
+        - Compilation
+      summary: Compile match data from multiple sources
+      description: |
+        Aggregate match data from all available scrapers (VLR, Liquidpedia, Pandascore).
+        Applies circuit breaker to prevent cascading failures.
+        Detects conflicts between sources and includes confidence impact.
+      operationId: compile_match_data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompileRequest'
+      responses:
+        '200':
+          description: Compilation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompileResponse'
+        '400':
+          description: Invalid request
+        '503':
+          description: Service unavailable (all scrapers circuit breaker OPEN)
+        '500':
+          description: Internal server error
+
+  /v1/scrapers/vlr/match-history:
+    post:
+      tags:
+        - Scrapers
+      summary: Scrape VLR.gg match history
+      description: |
+        Fetch match history for player or tournament from VLR.gg.
+        Applies circuit breaker and exponential backoff retry logic.
+        Circuit breaker: Opens after 5 failures, recovery timeout 60s.
+      operationId: scrape_vlr_history
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                player_id:
+                  type: string
+                limit:
+                  type: integer
+                  default: 50
+              required:
+                - player_id
+      responses:
+        '200':
+          description: Data scraped successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matches:
+                    type: array
+                    items:
+                      type: object
+        '429':
+          description: Rate limit exceeded (1 request/second)
+        '503':
+          description: VLR scraper circuit breaker is OPEN
+        '500':
+          description: Scrape failed after retries
+
+  /v1/scrapers/vlr/tournament:
+    post:
+      tags:
+        - Scrapers
+      summary: Scrape VLR.gg tournament bracket
+      operationId: scrape_vlr_tournament
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tournament_id:
+                  type: string
+              required:
+                - tournament_id
+      responses:
+        '200':
+          description: Tournament data scraped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentData'
+        '429':
+          description: Rate limit exceeded
+        '503':
+          description: VLR circuit breaker OPEN
+
+  /v1/scrapers/liquidpedia/roster:
+    post:
+      tags:
+        - Scrapers
+      summary: Scrape Liquidpedia team roster
+      operationId: scrape_liquidpedia_roster
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                team_name:
+                  type: string
+              required:
+                - team_name
+      responses:
+        '200':
+          description: Roster data scraped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RosterData'
+        '429':
+          description: Rate limit exceeded
+        '503':
+          description: Liquidpedia circuit breaker OPEN
+
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Service health and circuit breaker status
+      description: |
+        Returns service health, scraper status, and circuit breaker states.
+        Use to monitor scraper availability and recovery status.
+      operationId: health_check
+      responses:
+        '200':
+          description: Health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+  /v1/scrapers/status:
+    get:
+      tags:
+        - Health
+      summary: Detailed scraper health check
+      description: |
+        Returns latency, availability, and error information for each scraper.
+        Includes circuit breaker state and last successful scrape time.
+      operationId: scraper_status
+      responses:
+        '200':
+          description: Scraper status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scrapers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ScraperHealth'
+                  timestamp:
+                    type: string
+                    format: date-time
+
+components:
+  schemas:
+    CompileRequest:
+      type: object
+      properties:
+        match_id:
+          type: string
+        game:
+          type: string
+          enum: [valorant, cs2]
+        sources:
+          type: array
+          items:
+            type: string
+            enum: [vlr, liquidpedia, pandascore]
+          default: [vlr, liquidpedia, pandascore]
+      required:
+        - match_id
+        - game
+
+    CompileResponse:
+      type: object
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourcePayload'
+        source_count:
+          type: integer
+        conflicts:
+          $ref: '#/components/schemas/ConflictAnalysis'
+
+    SourcePayload:
+      type: object
+      properties:
+        source_type:
+          type: string
+          enum: [vlr, liquidpedia, pandascore, youtube]
+        trust_level:
+          type: string
+          enum: [HIGH_TRUST, MEDIUM_TRUST, LOW_TRUST]
+        weight:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        data:
+          type: object
+        captured_at:
+          type: string
+          format: date-time
+
+    ConflictAnalysis:
+      type: object
+      description: Conflict detection results
+      properties:
+        has_conflicts:
+          type: boolean
+        conflict_count:
+          type: integer
+        conflicts:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              values:
+                type: array
+                items:
+                  type: number
+              sources:
+                type: array
+                items:
+                  type: string
+              difference:
+                type: number
+        confidence_impact:
+          type: number
+          format: float
+          description: Reduction to confidence score (0-0.5)
+
+    TournamentData:
+      type: object
+      properties:
+        source:
+          type: string
+          const: vlr
+        tournament_id:
+          type: string
+        tournament_name:
+          type: string
+        matches:
+          type: array
+          items:
+            type: object
+        match_count:
+          type: integer
+
+    RosterData:
+      type: object
+      properties:
+        source:
+          type: string
+          const: liquidpedia
+        team_name:
+          type: string
+        players:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              raw_name:
+                type: string
+        player_count:
+          type: integer
+
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        circuit_breakers:
+          type: object
+          properties:
+            vlr:
+              $ref: '#/components/schemas/CircuitBreakerStatus'
+            liquidpedia:
+              $ref: '#/components/schemas/CircuitBreakerStatus'
+            pandascore:
+              $ref: '#/components/schemas/CircuitBreakerStatus'
+        uptime_seconds:
+          type: number
+
+    CircuitBreakerStatus:
+      type: object
+      properties:
+        state:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+        failure_count:
+          type: integer
+        last_failure_time:
+          type: string
+          format: date-time
+          nullable: true
+        recovery_attempts:
+          type: integer
+
+    ScraperHealth:
+      type: object
+      properties:
+        source:
+          type: string
+          enum: [vlr, liquidpedia, pandascore]
+        available:
+          type: boolean
+        response_time_ms:
+          type: number
+        circuit_breaker_state:
+          type: string
+          enum: [CLOSED, OPEN, HALF_OPEN]
+        last_successful_scrape:
+          type: string
+          format: date-time
+          nullable: true
+        error:
+          type: string
+          nullable: true
+        last_check:
+          type: string
+          format: date-time
+
+x-scraper-config:
+  circuit-breaker:
+    failure-threshold: 5
+    recovery-timeout: 60
+    description: Opens after 5 failures, recovers after 60s
+  retry:
+    max-retries: 3
+    backoff-base: 1.0
+    backoff-formula: 2^n * (1 ± 0.25) seconds
+    description: Exponential backoff with jitter prevents thundering herd
+  rate-limiting:
+    vlr: 1.0
+    liquidpedia: 0.5
+    pandascore: 1.0
+    description: Requests per second
+  conflict-detection:
+    threshold-points: 10
+    confidence-impact: 0.1
+    max-impact: 0.5
+    description: Flags score differences >10 points, max confidence reduction 0.5
