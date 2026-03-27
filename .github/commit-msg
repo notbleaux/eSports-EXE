@@ -1,0 +1,20 @@
+#!/bin/sh
+# .github/commit-msg — validates conventional commit format with optional risk tag
+# Install: cp .github/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+
+COMMIT_MSG_FILE="$1"
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Pattern: type(scope): description [SAFE|STRUCT|CRIT] (tag optional)
+PATTERN='^(feat|fix|docs|style|refactor|test|chore|delete)\([a-zA-Z0-9_\-]+\): .{10,}( \[(SAFE|STRUCT|CRIT)\])?'
+
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+  echo "ERROR: Commit message does not match conventional commit format."
+  echo ""
+  echo "Required format: type(scope): description [SAFE|STRUCT|CRIT]"
+  echo "Example: feat(website): add SATOR live panel [STRUCT]"
+  echo ""
+  echo "Valid types: feat, fix, docs, style, refactor, test, chore, delete"
+  echo "Risk tag: [SAFE] [STRUCT] [CRIT] — optional for docs/test/chore, required for feat/fix/refactor/delete"
+  exit 1
+fi
