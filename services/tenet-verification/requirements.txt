@@ -9,3 +9,4 @@ numpy
 scipy
 redis
 python-dotenv
+slowapi>=0.1.6
