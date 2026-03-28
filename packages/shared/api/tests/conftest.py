@@ -8,6 +8,11 @@ Shared fixtures for all API tests.
 import pytest
 import pytest_asyncio
 from unittest.mock import AsyncMock, MagicMock
+import os
+
+# Prevent database initialization during testing
+if not os.getenv("DATABASE_URL"):
+    os.environ["DATABASE_URL"] = ""
 
 
 @pytest.fixture
