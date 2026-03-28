@@ -40,6 +40,8 @@ from routers.search import router as search_router
 from routers.forum import router as forum_v1_router
 from routers.admin import router as admin_router
 from routers.export import router as export_router
+from routers.archive import router as archive_router
+from routers.extraction import router as extraction_router
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -508,6 +510,8 @@ app.include_router(search_router, prefix="/v1")
 app.include_router(forum_v1_router, prefix="/v1")
 app.include_router(admin_router, prefix="/v1")
 app.include_router(export_router, prefix="/v1")
+app.include_router(archive_router, prefix="/v1")
+app.include_router(extraction_router, prefix="/v1")
 
 
 # WebSocket endpoints

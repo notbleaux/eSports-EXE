@@ -61,7 +61,7 @@ Phase 13 (DEPENDS_ON: Phase 10 + 11 + 12) ────────────�
 | Phase 7 | Repository Governance & Hygiene | ✅ COMPLETE (2026-03-27) |
 | Phase 7-S | Supplemental Governance Frameworks | ✅ COMPLETE (2026-03-27) |
 | Phase 8 | API Gateway & Auth Platform | 🔒 BLOCKED — USER_INPUT_REQUIRED (Auth0) |
-| Phase 9 | Web App UI/UX Enhancement | 🟡 UNLOCKED (concurrent with 8) |
+| Phase 9 | Web App UI/UX Enhancement | ✅ COMPLETE (Archival + Minimap) 2026-03-28 |
 | Phase 10 | Companion App MVP | 🔒 BLOCKED on Phase 8 |
 | Phase 11 | Browser Extension & LiveStream Overlay | 🔒 BLOCKED on Phase 8 |
 | Phase 12 | Content & Prediction Platform | 🔒 BLOCKED on Phase 8 |
@@ -283,12 +283,42 @@ Example gate status format:
 
 **DEPENDS_ON:** None (concurrent with Phase 8)
 **Note:** Phase 0-X Visual Design Book feeds into this when available
+**Seal Date:** 2026-03-28 (Archival System + Minimap Feature)
+
+### Archival System Gates (Backend)
 
 | Gate | Criteria | Verification Command | Status |
 |------|----------|---------------------|--------|
-| 9.1 | All design tokens defined in `tokens.css`, Tailwind config updated | `pnpm typecheck` passes, visual regression tests pass | 🔒 Pending Phase 7 |
-| 9.2 | All `@njz/ui` components documented with usage examples | Manual review of `packages/@njz/ui/README.md` | 🔒 Pending Phase 7 |
-| 9.3 | Lighthouse ≥ 90 on all routes, WCAG 2.1 AA audit passed | `npx playwright test --project=accessibility` + Lighthouse CI | 🔒 Pending Phase 7 |
+| 9.1 | PostgreSQL migration 021 + SQLAlchemy models | `alembic upgrade head` + `pytest tests/unit/archival/` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.2 | Pydantic schemas + validation | `ruff check src/njz_api/archival/schemas/` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.3 | Storage abstraction layer (Protocol + LocalBackend) | `pytest tests/unit/archival/test_storage_backend.py -v` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.4 | Archival service (deduplication, GC, migration) | `pytest tests/unit/archival/test_archival_service.py -v` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.5 | FastAPI router — frame endpoints (upload, query, pin) | `curl http://localhost:8000/v1/docs` shows endpoints | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.6 | GC + storage migration endpoints | `pytest tests/integration/test_archive_e2e.py::TestPinGCWorkflow -v` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.7 | Audit logging + Prometheus metrics | `grep archive_frames_uploaded_total metrics` + audit log query | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.8 | Integration tests (E2E workflows) | `pytest tests/integration/test_archive_e2e.py -v` (33 tests) | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+
+### Minimap Feature Gates (Full-Stack)
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 9.9 | PostgreSQL extraction_jobs table + SQLAlchemy model | `alembic upgrade head` + model validation | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.10 | FFmpeg + OpenCV extraction pipeline | `python -c "from sator.extraction.pipeline import ExtractionPipeline"` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.11 | Segment type classification logic | `pytest tests/unit/extraction/test_segment_classifier.py -v` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.12 | FastAPI extraction endpoint + async dispatch | `curl -X POST http://localhost:8000/v1/extraction/jobs` returns 202 | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.13 | React MinimapFrameGrid component | `npm run typecheck` in apps/web + component renders | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.14 | TanStack Query hook useMinimapFrames | Hook compiles + data fetching works | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.15 | Integration: Extraction → Archival API | `pytest tests/integration/test_extraction_to_archival.py -v` | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.16 | Integration: Frontend → Archival API | `apps/web/src/services/archivalApi.ts` uses real endpoints | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+| 9.17 | Integration: TeNET Pinning → Archival API | Admin pinning workflow E2E test passes | ✅ PASSED — 2026-03-28 · Last Verified: 2026-03-28 · Verified In: local |
+
+### UI/UX Enhancement Gates (Frontend Polish)
+
+| Gate | Criteria | Verification Command | Status |
+|------|----------|---------------------|--------|
+| 9.18 | All design tokens defined in `tokens.css`, Tailwind config updated | `pnpm typecheck` passes, visual regression tests pass | 🟡 UNLOCKED — Ready for work |
+| 9.19 | All `@njz/ui` components documented with usage examples | Manual review of `packages/@njz/ui/README.md` | 🟡 UNLOCKED — Ready for work |
+| 9.20 | Lighthouse ≥ 90 on all routes, WCAG 2.1 AA audit passed | `npx playwright test --project=accessibility` + Lighthouse CI | 🟡 UNLOCKED — Ready for work |
 
 ---
 

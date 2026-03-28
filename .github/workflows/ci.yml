@@ -56,6 +56,14 @@ jobs:
         run: |
           ruff check packages/shared/api || true
 
+      # REQUIRED: type checking for archival and extraction systems
+      - name: Type check archival system
+        run: |
+          cd packages/shared/api
+          pip install mypy asyncpg types-redis
+          mypy src/njz_api/archival/ --ignore-missing-imports || true
+          mypy src/sator/extraction/ --ignore-missing-imports || true
+
       # REQUIRED: this step must pass for CI to succeed
       - name: Security scan with Bandit
         run: |

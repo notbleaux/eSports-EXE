@@ -91,9 +91,57 @@ services:
     networks:
       - sator-network
 
+  # Archival Service (Frame Storage)
+  archival:
+    build:
+      context: ./packages/shared
+      dockerfile: api/Dockerfile
+    container_name: sator-archival
+    environment:
+      DATABASE_URL: postgresql://sator:sator_dev_password@db:5432/sator
+      REDIS_URL: redis://redis:6379/0
+      ARCHIVE_LOCAL_DATA_DIR: /data/frames
+      ARCHIVE_STORAGE_BACKEND: local
+      DEFAULT_RETENTION_DAYS: "90"
+      MAX_PIN_TTL_DAYS: "365"
+      MAX_UPLOAD_SIZE_MB: "50"
+      MAX_FRAMES_PER_BATCH: "1000"
+      ENABLE_PROMETHEUS: "true"
+      ENABLE_AUDIT_LOG: "true"
+      LOG_LEVEL: INFO
+      PYTHONPATH: /app:/app/api
+    volumes:
+      - archival_data:/data/frames
+      - ./packages/shared:/app
+      - /app/__pycache__
+    ports:
+      - "8005:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    working_dir: /app/api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level info
+    networks:
+      - sator-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/v1/archive/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
 volumes:
   postgres_data:
   redis_data:
+  archival_data:
+    driver: local
 
 networks:
   sator-network:
