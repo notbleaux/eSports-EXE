@@ -281,6 +281,10 @@ export function useAudio(options: UseAudioOptions = {}): UseAudioReturn {
     audioManagerRef.current.setQuality(quality);
   }, []);
   
+  const getQuality = useCallback((): AudioQuality => {
+    return audioManagerRef.current.getQuality();
+  }, []);
+  
   // ============================================================================
   // Return Object
   // ============================================================================
@@ -318,6 +322,7 @@ export function useAudio(options: UseAudioOptions = {}): UseAudioReturn {
     
     // Settings
     setQuality,
+    getQuality,
     getCategoryVolume,
     isCategoryMuted,
   };
