@@ -45,9 +45,9 @@ const HUB_CONFIG = {
   name: 'SATOR',
   subtitle: 'The Observatory',
   description: 'Raw data ingestion with orbital ring navigation',
-  color: colors.hub.sator,           // #00d4ff
-  glow: 'rgba(0, 212, 255, 0.4)',    // derived from sator
-  muted: '#0099cc',                  // muted version of sator
+  color: colors.hub.sator.base,      // #00d4ff
+  glow: colors.hub.sator.glow,       // rgba(0, 212, 255, 0.4)
+  muted: colors.hub.sator.muted,     // #00a0c0
 };
 
 // Orbital rings data (from legacy version)

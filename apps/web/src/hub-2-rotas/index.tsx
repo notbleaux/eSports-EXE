@@ -39,9 +39,9 @@ const HUB_CONFIG = {
   name: 'ROTAS',
   subtitle: 'The Harmonic Layer',
   description: 'Analytics and predictive modeling with harmonic layer blending',
-  color: colors.hub.rotas,           // #ff4444
-  glow: 'rgba(255, 68, 68, 0.4)',    // derived from rotas
-  muted: '#cc3333',                  // muted version of rotas
+  color: colors.hub.rotas.base,      // #ff4444
+  glow: colors.hub.rotas.glow,       // rgba(255, 68, 68, 0.4)
+  muted: colors.hub.rotas.muted,     // #cc3333
 };
 
 // Jungian archetype layers (from legacy)
