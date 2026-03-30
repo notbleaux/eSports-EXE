@@ -12,8 +12,8 @@
  * - Integration with BlendTreeSystem
  */
 
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
   BlendTreeSystem,
   type BlendTree,
@@ -21,13 +21,13 @@ import {
   type BlendClip,
   type BlendResult,
   type BlendParameterConfig,
-  create1DBlendTree,
-  create2DCartesianTree,
-  create2DDirectionalTree,
+  // create1DBlendTree,
+  // create2DCartesianTree,
+  // create2DDirectionalTree,
   createMovementBlendTree,
   create8DirectionalTree,
 } from '@/lib/animation/blendTree';
-import { AnimationState } from '@/lib/animation/states';
+// import { AnimationState } from '@/lib/animation/states';
 
 // ============================================================================
 // Types
@@ -52,7 +52,7 @@ interface BlendTreeNodeProps {
   clip: BlendClip;
   weight: number;
   isActive: boolean;
-  position: { x: number; y: number };
+  position: { x: number | string; y: number | string };
   onClick?: () => void;
 }
 
@@ -181,8 +181,7 @@ const Blend1DVisualizer: React.FC<{
   tree: BlendTree;
   parameters: Map<string, number>;
   result: BlendResult;
-  onParameterChange: (name: string, value: number) => void;
-}> = ({ tree, parameters, result, onParameterChange }) => {
+}> = ({ tree, parameters, result }) => {
   if (tree.type !== '1d') return null;
 
   const clips = tree.clips;
@@ -210,7 +209,7 @@ const Blend1DVisualizer: React.FC<{
         />
         
         {/* Clip markers */}
-        {clips.map((clip, index) => {
+        {clips.map((clip) => {
           const threshold = clip.threshold ?? 0;
           const weight = result.normalizedWeights.get(clip.state) ?? 0;
           const position = ((threshold - minVal) / range) * 100;
@@ -274,11 +273,10 @@ const Blend2DVisualizer: React.FC<{
   tree: BlendTree;
   parameters: Map<string, number>;
   result: BlendResult;
-  onParameterChange: (name: string, value: number) => void;
 }> = ({ tree, parameters, result }) => {
   const isDirectional = tree.type === '2d-directional';
-  const paramX = isDirectional ? tree.parameterX : tree.parameterX;
-  const paramY = isDirectional ? tree.parameterY : tree.parameterY;
+  const paramX = (tree as any).parameterX ?? 'x';
+  const paramY = (tree as any).parameterY ?? 'y';
   
   const valueX = parameters.get(paramX) ?? 0;
   const valueY = parameters.get(paramY) ?? 0;
@@ -441,7 +439,7 @@ export const BlendVisualizer: React.FC<BlendVisualizerProps> = ({
         
       case '2d-cartesian':
         systemRef.current.register2DCartesianTree(treeId, tree);
-        ['x', 'y'].forEach((axis, i) => {
+        ['x', 'y'].forEach((_, i) => {
           const paramName = i === 0 ? tree.parameterX : tree.parameterY;
           systemRef.current!.registerParameter({
             name: paramName,
@@ -463,7 +461,7 @@ export const BlendVisualizer: React.FC<BlendVisualizerProps> = ({
         
       case '2d-directional':
         systemRef.current.register2DDirectionalTree(treeId, tree);
-        ['x', 'y'].forEach((axis, i) => {
+        ['x', 'y'].forEach((_, i) => {
           const paramName = i === 0 ? tree.parameterX : tree.parameterY;
           systemRef.current!.registerParameter({
             name: paramName,
@@ -546,7 +544,6 @@ export const BlendVisualizer: React.FC<BlendVisualizerProps> = ({
             tree={tree}
             parameters={parameters}
             result={result}
-            onParameterChange={handleParameterChange}
           />
         )}
         {(tree?.type === '2d-cartesian' || tree?.type === '2d-directional') && (
@@ -554,7 +551,6 @@ export const BlendVisualizer: React.FC<BlendVisualizerProps> = ({
             tree={tree}
             parameters={parameters}
             result={result}
-            onParameterChange={handleParameterChange}
           />
         )}
       </div>

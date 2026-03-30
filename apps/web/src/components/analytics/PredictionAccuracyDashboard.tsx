@@ -8,7 +8,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 import {
   LineChart,
   Line,
@@ -31,7 +31,7 @@ import {
   RefreshCw,
   Clock,
   CheckCircle2,
-  XCircle,
+  // XCircle,
   AlertCircle,
   BarChart3,
 } from 'lucide-react';

@@ -25,7 +25,7 @@ import {
 // Types and Interfaces
 // ============================================
 
-interface VFXEditorState {
+export interface VFXEditorState {
   selectedPreset: EffectPresetName;
   config: Partial<EmitterConfig>;
   isPlaying: boolean;

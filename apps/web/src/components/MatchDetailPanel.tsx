@@ -175,6 +175,8 @@ export function MatchDetailPanel({ matchId, onClose }: MatchDetailPanelProps) {
               <p className="text-white/50 text-sm">No historical data available</p>
             )}
           </div>
+        ) : (
+          <p className="text-white/50 text-sm">No history available</p>
         ),
         historyLoading,
         historyError
