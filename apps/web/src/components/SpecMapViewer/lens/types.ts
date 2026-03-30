@@ -31,6 +31,12 @@ export interface Lens {
   name: string
   description: string
   render: (data: GameData, options: LensOptions) => void
+  /** Default options for the lens */
+  defaultOptions?: Partial<LensOptions>
+  /** Display name for UI */
+  displayName?: string
+  /** Default opacity */
+  opacity?: number
 }
 
 /** Lens rendering options */
@@ -132,6 +138,7 @@ export interface DamageEvent extends GameEvent {
   weapon: string
   position: Vector2D
   isFatal?: boolean
+  isFirstBlood?: boolean
 }
 
 /** Sound event (footsteps, abilities, etc.) */
@@ -153,6 +160,7 @@ export interface PlayerPosition {
   position: Vector2D
   timestamp: number
   rotation?: number
+  team?: 'attackers' | 'defenders'
 }
 
 /** Timed position for trajectory rendering */
@@ -161,6 +169,7 @@ export interface TimedPosition {
   y: number
   timestamp: number
   playerId: string
+  velocity?: number
 }
 
 // ============================================================================
