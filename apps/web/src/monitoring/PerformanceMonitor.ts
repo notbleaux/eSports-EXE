@@ -13,7 +13,6 @@ import { logger } from '../utils/logger'
 type WebVitalName = 'LCP' | 'INP' | 'CLS' | 'FCP' | 'TTFB' | 'TBT' | 'FPL'
 type MLMetricName = 'inference_latency' | 'model_load_time' | 'prediction_queue_depth'
 type CircuitBreakerState = 'CLOSED' | 'OPEN' | 'HALF_OPEN'
-type PerformanceMetricType = 'web-vital' | 'resource' | 'navigation' | 'user-timing' | 'long-task'
 
 interface WebVitalMetric {
   name: WebVitalName

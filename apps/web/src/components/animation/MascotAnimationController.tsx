@@ -15,14 +15,12 @@
 import React, {
   useRef,
   useEffect,
-  useCallback,
   useState,
   forwardRef,
   useImperativeHandle,
   useMemo,
 } from 'react';
-import { motion, AnimatePresence, type Transition } from 'framer-motion';
-import * as THREE from 'three';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { MascotId } from '@/components/mascots/types';
 import {
   type AnimationState,
@@ -33,7 +31,7 @@ import {
 } from '@/lib/animation/states';
 import { AnimationStateMachine } from '@/lib/animation/stateMachine';
 import { AnimationSequencer, type AnimationSequence, type AnimationStep } from '@/lib/animation/sequencer';
-import { useAnimationBridge, useAnimationState, createAnimationBridge } from '@/lib/three/animationBridge';
+import { createAnimationBridge } from '@/lib/three/animationBridge';
 
 // ============================================================================
 // Types
@@ -108,7 +106,7 @@ interface StateLabelProps {
   progress: number;
 }
 
-const StateLabel: React.FC<StateLabelProps> = ({ state, config, isTransitioning, progress }) => (
+const StateLabel: React.FC<StateLabelProps> = ({ state: _state, config, isTransitioning, progress }) => (
   <motion.div
     className="absolute top-2 left-2 px-2 py-1 rounded text-xs font-mono pointer-events-none select-none z-10"
     style={{
@@ -143,7 +141,7 @@ interface DebugPanelProps {
   mascotId: MascotId;
 }
 
-const DebugPanel: React.FC<DebugPanelProps> = ({ stateMachine, sequencer, mascotId }) => {
+const DebugPanel: React.FC<DebugPanelProps> = ({ stateMachine, sequencer: _sequencer, mascotId }) => {
   const [currentState, setCurrentState] = useState(stateMachine.getCurrentState());
   const [progress, setProgress] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -227,7 +225,7 @@ export const MascotAnimationController = forwardRef<
 >((
   {
     mascotId,
-    currentState,
+    currentState: _currentState,
     targetState,
     controlled = false,
     initialState = 'idle',
@@ -367,7 +365,7 @@ export const MascotAnimationController = forwardRef<
   const stateConfig = DEFAULT_STATE_CONFIGS[currentAnimState];
   const isTransitioning = stateMachineRef.current?.isBlending() ?? false;
   const blendWeight = stateMachineRef.current?.getBlendWeight() ?? 1;
-  const animProgress = stateMachineRef.current?.getProgress() ?? 0;
+  const _animProgress = stateMachineRef.current?.getProgress() ?? 0;
 
   // Shared easing curves for consistency
   const easings = {
@@ -384,7 +382,7 @@ export const MascotAnimationController = forwardRef<
   };
 
   // Spring physics configurations
-  const springConfigs = {
+  const _springConfigs = {
     gentle: { stiffness: 100, damping: 15, mass: 1 },
     default: { stiffness: 300, damping: 20, mass: 1 },
     bouncy: { stiffness: 400, damping: 10, mass: 1 },

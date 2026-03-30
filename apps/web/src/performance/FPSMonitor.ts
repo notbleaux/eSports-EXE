@@ -6,7 +6,7 @@
  * Reports to analytics when thresholds are exceeded
  */
 
-import type { FPSMetrics, PerformanceConfig, PerformanceAlert, WarningLevel } from '../types/performance'
+import type { FPSMetrics, PerformanceConfig, PerformanceAlert } from '../types/performance'
 import { DEFAULT_PERFORMANCE_CONFIG } from '../types/performance'
 
 export class FPSMonitor {

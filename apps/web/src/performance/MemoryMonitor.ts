@@ -36,7 +36,7 @@ export class MemoryMonitor {
     const memory = (performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory
     if (!memory) return
 
-    const { usedJSHeapSize, totalJSHeapSize, jsHeapSizeLimit } = memory
+    const { usedJSHeapSize, jsHeapSizeLimit } = memory
     const usageRatio = usedJSHeapSize / jsHeapSizeLimit
 
     if (usageRatio > (this.config.memoryCriticalThreshold || 0.9)) {
