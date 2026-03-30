@@ -46,6 +46,8 @@ from src.sator.routes import router as sator_router
 from src.sator.websocket import handle_websocket, ws_manager
 from src.sator.rar_routes import router as rar_router
 from src.rotas.map_routes import router as maps_router, handle_lens_websocket, simulate_lens_updates
+from src.njz_api.analytics.router import router as analytics_router
+from src.njz_api.routers.tournaments import router as tournaments_router
 from src.betting.routes import router as betting_router
 from src.notifications.routes import router as notification_router
 
@@ -328,6 +330,20 @@ async def metrics():
     )
 
 
+# Circuit Breaker System Status
+from src.njz_api.middleware.circuit_breaker import get_circuit_breaker_status
+
+@app.get("/system/circuit-breakers", tags=["system", "monitoring"])
+async def system_circuit_breaker_status():
+    """
+    Get status of all circuit breakers.
+
+    Returns detailed information about all circuit breakers in the system
+    for operational monitoring and debugging.
+    """
+    return await get_circuit_breaker_status()
+
+
 # Request timing middleware
 @app.middleware("http")
 async def metrics_middleware(request: Request, call_next):
@@ -423,6 +439,13 @@ app.include_router(
     tags=["rar"],
 )
 
+# Analytics router (migrated from satorXrotas)
+app.include_router(
+    analytics_router,
+    prefix="/api/v1",
+    tags=["analytics"],
+)
+
 app.include_router(
     maps_router,
     prefix="/api",
@@ -460,6 +483,13 @@ app.include_router(
     verification_router,
     prefix="/api",
     tags=["verification"],
+)
+
+# Tournament routes with circuit breaker protection
+app.include_router(
+    tournaments_router,
+    prefix="/api/v1",
+    tags=["tournaments"],
 )
 
 
