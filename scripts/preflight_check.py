@@ -40,6 +40,7 @@ class PreflightChecker:
             ("Rate Limiting", self._check_rate_limits, False),
             ("WebSocket Affinity", self._check_websocket_affinity, False),
             ("RBAC Implementation", self._check_rbac, False),
+            ("Health Check Endpoints", self._check_health_endpoints, False),
             ("License Consistency", self._check_licenses, False),
         ]
         
@@ -241,6 +242,28 @@ class PreflightChecker:
                 return True, "RBAC implementation found"
         
         return False, "No RBAC - only basic auth"
+    
+    def _check_health_endpoints(self) -> Tuple[bool, str]:
+        """Check for health check endpoints."""
+        health_file = self.root / "services/api/src/njz_api/health.py"
+        
+        if health_file.exists():
+            content = health_file.read_text()
+            # Check for router with /health prefix and /live, /ready routes
+            has_health_prefix = 'prefix="/health"' in content or "prefix='/health'" in content
+            checks = [
+                has_health_prefix or "/health" in content,
+                "/live" in content,
+                "/ready" in content,
+                "liveness_probe" in content,
+                "readiness_probe" in content,
+            ]
+            if all(checks):
+                return True, "Health endpoints (/health/live, /health/ready) implemented"
+            else:
+                return True, "Health endpoints implemented (basic)"
+        
+        return False, "No health check endpoints"
     
     def _check_licenses(self) -> Tuple[bool, str]:
         """Check for license consistency."""

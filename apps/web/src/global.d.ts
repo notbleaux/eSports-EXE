@@ -113,13 +113,22 @@ declare module 'three' {
 // React Three Fiber - Extended types
 declare module '@react-three/fiber' {
   import * as React from 'react';
-  import { Vector3, Color } from 'three';
+  import { Vector3, Color, Mesh, Group } from 'three';
   
   export interface MeshProps {
     position?: Vector3 | [number, number, number];
     scale?: Vector3 | number;
     visible?: boolean;
     children?: React.ReactNode;
+    ref?: React.Ref<Mesh>;
+  }
+  
+  export interface GroupProps {
+    position?: Vector3 | [number, number, number];
+    scale?: Vector3 | number;
+    visible?: boolean;
+    children?: React.ReactNode;
+    ref?: React.Ref<Group>;
   }
   
   export interface MaterialProps {
@@ -129,6 +138,20 @@ declare module '@react-three/fiber' {
     side?: number;
     depthWrite?: boolean;
   }
+  
+  // Extended colors for React Three Fiber
+  export type ExtendedColors<T> = T & {
+    color?: string | Color;
+    transparent?: boolean;
+    opacity?: number;
+    side?: number;
+    depthWrite?: boolean;
+  };
+  
+  // Hook exports
+  export function useFrame(callback: (state: any, delta: number) => void): void;
+  export function useThree(): any;
+  export function useLoader(loader: any, url: string): any;
 }
 
 // Three.js examples

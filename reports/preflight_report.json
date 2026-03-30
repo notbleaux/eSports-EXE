@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-03-30T00:00:00Z",
-  "overall_score": "14/16",
-  "required_score": "14/14",
-  "percentage": 87.5,
+  "overall_score": "15/17",
+  "required_score": "15/15",
+  "percentage": 88.2,
   "status": "READY",
   "checks": [
     {
@@ -93,6 +93,12 @@
       "check": "RBAC Implementation",
       "status": "PASS",
       "details": "RBAC implementation found",
+      "optional": false
+    },
+    {
+      "check": "Health Check Endpoints",
+      "status": "PASS",
+      "details": "Health endpoints (/health/live, /health/ready) implemented",
       "optional": false
     },
     {
