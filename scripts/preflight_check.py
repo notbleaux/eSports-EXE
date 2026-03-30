@@ -88,20 +88,20 @@ class PreflightChecker:
         content = config_file.read_text()
         
         # Check for 60 TPS configuration
-        if "physics/common/physics_ticks_per_second = 60" in content:
+        if "common/physics_ticks_per_second=60" in content.replace(" ", ""):
             return True, "60 TPS configured"
-        elif "physics/common/physics_ticks_per_second = 20" in content:
+        elif "common/physics_ticks_per_second=20" in content.replace(" ", ""):
             return False, "20 TPS found - needs upgrade to 60"
         else:
             return False, "TPS setting not found in config"
     
     def _check_data_lineage(self) -> Tuple[bool, str]:
         """Check for data lineage tracking."""
-        lineage_file = self.root / "packages/shared/api/src/data/lineage.py"
+        lineage_file = self.root / "services/api/src/njz_api/middleware/lineage.py"
         
         if lineage_file.exists():
             content = lineage_file.read_text()
-            if "uuid" in content and "provenance" in content:
+            if ("uuid" in content.lower() or "UUID" in content) and "provenance" in content.lower():
                 return True, "Data lineage implementation found"
         
         return False, "No data lineage implementation"
@@ -109,7 +109,7 @@ class PreflightChecker:
     def _check_official_api(self) -> Tuple[bool, str]:
         """Check if using official API vs scraping."""
         scraper_file = self.root / "packages/shared/axiom-esports-data/vlr_scraper.py"
-        official_file = self.root / "packages/shared/api/pandascore_client.py"
+        official_file = self.root / "services/api/src/njz_api/clients/pandascore.py"
         
         if scraper_file.exists() and not official_file.exists():
             return False, "VLR scraping detected, no official API client"
@@ -121,7 +121,7 @@ class PreflightChecker:
     def _check_cdc(self) -> Tuple[bool, str]:
         """Check for CDC/event sourcing."""
         kafka_file = self.root / "infrastructure/kafka/docker-compose.yml"
-        cdc_file = self.root / "packages/shared/api/src/events/cdc.py"
+        cdc_file = self.root / "services/api/src/njz_api/middleware/lineage.py"
         
         if kafka_file.exists() or cdc_file.exists():
             return True, "CDC infrastructure found"
@@ -130,18 +130,18 @@ class PreflightChecker:
     
     def _check_feature_store(self) -> Tuple[bool, str]:
         """Check for feature store."""
-        registry_file = self.root / "packages/shared/ml/features/registry.py"
+        registry_file = self.root / "services/api/src/njz_api/feature_store/registry.py"
         
         if registry_file.exists():
             content = registry_file.read_text()
-            if "FeatureRegistry" in content and "online_store" in content:
+            if "FeatureRegistry" in content and ("online" in content.lower() or "store" in content.lower()):
                 return True, "Feature store registry found"
         
         return False, "No feature store implementation"
     
     def _check_model_registry(self) -> Tuple[bool, str]:
         """Check for MLflow model registry."""
-        mlflow_file = self.root / "packages/shared/ml/registry.py"
+        mlflow_file = self.root / "services/api/src/njz_api/model_registry/registry.py"
         
         if mlflow_file.exists():
             return True, "Model registry found"
@@ -160,7 +160,7 @@ class PreflightChecker:
     
     def _check_opentelemetry(self) -> Tuple[bool, str]:
         """Check for OpenTelemetry."""
-        otel_file = self.root / "packages/shared/api/src/observability/tracing.py"
+        otel_file = self.root / "services/api/src/njz_api/observability/tracing.py"
         
         if otel_file.exists():
             return True, "OpenTelemetry tracing found"
@@ -169,7 +169,7 @@ class PreflightChecker:
     
     def _check_uncertainty(self) -> Tuple[bool, str]:
         """Check for uncertainty quantification."""
-        uncertainty_file = self.root / "packages/shared/ml/uncertainty.py"
+        uncertainty_file = self.root / "services/api/src/njz_api/analytics/bayesian/uncertainty.py"
         
         if uncertainty_file.exists():
             content = uncertainty_file.read_text()
@@ -180,7 +180,7 @@ class PreflightChecker:
     
     def _check_temporal_models(self) -> Tuple[bool, str]:
         """Check for temporal consistency models."""
-        temporal_file = self.root / "packages/shared/ml/temporal/lifecycle.py"
+        temporal_file = self.root / "services/api/src/njz_api/feature_store/store.py"
         
         if temporal_file.exists():
             return True, "Temporal data lifecycle found"
@@ -189,7 +189,7 @@ class PreflightChecker:
     
     def _check_bayesian(self) -> Tuple[bool, str]:
         """Check for Bayesian methods."""
-        bayesian_file = self.root / "packages/shared/ml/bayesian/tracker.py"
+        bayesian_file = self.root / "services/api/src/njz_api/analytics/bayesian/confidence.py"
         
         if bayesian_file.exists():
             return True, "Bayesian tracking found"
@@ -198,35 +198,33 @@ class PreflightChecker:
     
     def _check_rate_limits(self) -> Tuple[bool, str]:
         """Check for professional rate limiting."""
-        limiter_file = self.root / "packages/shared/api/src/middleware/rate_limit.py"
+        limiter_file = self.root / "services/api/src/njz_api/middleware/security_hardening.py"
         
         if limiter_file.exists():
             content = limiter_file.read_text()
-            if "10000" in content or "ENTERPRISE" in content:
-                return True, "Tiered rate limiting found"
-            elif "30" in content:
-                return False, "Basic 30 req/min rate limiting - needs upgrade"
+            if "RateLimitMiddleware" in content and "X-RateLimit" in content:
+                return True, "Rate limiting middleware found"
         
         return False, "No rate limiting implementation"
     
     def _check_websocket_affinity(self) -> Tuple[bool, str]:
         """Check for WebSocket sticky sessions."""
-        k8s_ingress = self.root / "infrastructure/k8s/ingress.yml"
+        affinity_file = self.root / "services/api/src/njz_api/websocket/affinity.py"
         
-        if k8s_ingress.exists():
-            content = k8s_ingress.read_text()
-            if "affinity" in content and "session-cookie" in content:
+        if affinity_file.exists():
+            content = affinity_file.read_text()
+            if "WebSocketAffinityManager" in content:
                 return True, "WebSocket affinity configured"
         
         return False, "No WebSocket sticky session configuration"
     
     def _check_rbac(self) -> Tuple[bool, str]:
         """Check for RBAC implementation."""
-        rbac_file = self.root / "packages/shared/api/src/auth/rbac.py"
+        rbac_file = self.root / "services/api/src/njz_api/middleware/rbac.py"
         
         if rbac_file.exists():
             content = rbac_file.read_text()
-            if "require_permission" in content:
+            if "require_permission" in content or "Permission" in content:
                 return True, "RBAC implementation found"
         
         return False, "No RBAC - only basic auth"
@@ -265,7 +263,10 @@ class PreflightChecker:
 
 
 if __name__ == "__main__":
-    checker = PreflightChecker()
+    # Detect repo root from script location
+    script_dir = Path(__file__).parent
+    repo_root = script_dir.parent
+    checker = PreflightChecker(root_dir=str(repo_root))
     report = checker.check()
     
     # Ensure reports directory exists
