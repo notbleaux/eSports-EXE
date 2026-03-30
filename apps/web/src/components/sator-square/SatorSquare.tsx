@@ -12,11 +12,11 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { SatorLayer } from './layers/SatorLayer';
+import { SatorLayer, type SatorEvent } from './layers/SatorLayer';
 import { OperaLayer } from './layers/OperaLayer';
-import { TenetLayer } from './layers/TenetLayer';
-import { ArepoLayer } from './layers/ArepoLayer';
-import { RotasLayer } from './layers/RotasLayer';
+import { TenetLayer, type ControlZone } from './layers/TenetLayer';
+import { ArepoLayer, type ArepoMarker } from './layers/ArepoLayer';
+import { RotasLayer, type RotasTrail } from './layers/RotasLayer';
 import { useSpatialData } from './hooks/useSpatialData';
 import type { SatorSquareProps } from './index';
 
@@ -36,12 +36,54 @@ const DEFAULT_LAYERS: LayerConfig[] = [
   { id: 'rotas', name: 'ROTAS', description: 'Movement trails', enabled: true, opacity: 0.5 },
 ];
 
+// Type adapters to convert hook data to layer props
+function adaptSatorEvents(data: any[]): SatorEvent[] {
+  return data.map(d => ({
+    playerId: d.playerId || '',
+    mapX: d.mapX || 0,
+    mapY: d.mapY || 0,
+    eventType: d.eventType || 'mvp',
+    intensity: d.intensity || 0.5,
+  }));
+}
+
+function adaptControlZones(data: any[]): ControlZone[] {
+  return data.map(d => ({
+    id: d.id || '',
+    polygon: d.polygon || [],
+    controlTeam: d.controlTeam || 'contested',
+    grade: d.grade || 'C',
+    controlStrength: d.controlStrength || 0.5,
+  }));
+}
+
+function adaptArepoMarkers(data: any[]): ArepoMarker[] {
+  return data.map(d => ({
+    x: d.x || 0,
+    y: d.y || 0,
+    victimTeam: d.victimTeam || 'attack',
+    isMultikill: d.isMultikill || false,
+    multikillCount: d.multikillCount || 1,
+    isClutch: d.isClutch || false,
+    roundNumber: d.roundNumber || 1,
+    age: d.age || 0,
+  }));
+}
+
+function adaptRotasTrails(data: any[]): RotasTrail[] {
+  return data.map(d => ({
+    playerId: d.playerId || '',
+    team: d.team || 'attack',
+    positions: d.positions || [],
+    directionLR: d.directionLR || 0,
+  }));
+}
+
 export const SatorSquare: React.FC<SatorSquareProps> = ({
   matchId,
   width = 800,
   height = 800,
   activeLayers = ['sator', 'opera', 'tenet', 'arepo', 'rotas'],
-  onLayerClick,
 }) => {
   const [layers, setLayers] = useState<LayerConfig[]>(
     DEFAULT_LAYERS.map(l => ({
@@ -49,8 +91,6 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
       enabled: activeLayers.includes(l.id),
     }))
   );
-  
-  const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
   
   // Fetch spatial data from Feature Store
   const { satorEvents, arepoMarkers, rotasTrails, controlZones, visibilityMask, loading, error } = useSpatialData(matchId);
@@ -60,11 +100,6 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
       l.id === layerId ? { ...l, enabled: !l.enabled } : l
     ));
   }, []);
-  
-  const handleLayerClick = useCallback((layerId: string, data: any) => {
-    setSelectedLayer(layerId);
-    onLayerClick?.(layerId, data);
-  }, [onLayerClick]);
   
   const handleOpacityChange = useCallback((layerId: string, opacity: number) => {
     setLayers(prev => prev.map(l => 
@@ -102,7 +137,6 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
                 ? 'bg-sator-500 text-white' 
                 : 'bg-surface-700 text-surface-400'
               }
-              ${selectedLayer === layer.id ? 'ring-2 ring-sator-300' : ''}
             `}
             title={layer.description}
           >
@@ -122,7 +156,7 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
         {/* SATOR Layer - Golden Halo */}
         {layers.find(l => l.id === 'sator')?.enabled && satorEvents.length > 0 && (
           <SatorLayer
-            events={satorEvents}
+            events={adaptSatorEvents(satorEvents)}
             width={width}
             height={height}
             mapToScreen={(x, y) => [x * width, y * height]}
@@ -142,7 +176,7 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
         {/* TENET Layer - Area Control */}
         {layers.find(l => l.id === 'tenet')?.enabled && controlZones.length > 0 && (
           <TenetLayer
-            zones={controlZones}
+            zones={adaptControlZones(controlZones)}
             width={width}
             height={height}
           />
@@ -151,7 +185,7 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
         {/* AREPO Layer - Death Stains */}
         {layers.find(l => l.id === 'arepo')?.enabled && arepoMarkers.length > 0 && (
           <ArepoLayer
-            markers={arepoMarkers}
+            markers={adaptArepoMarkers(arepoMarkers)}
             width={width}
             height={height}
             currentRound={1}
@@ -162,7 +196,7 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
         {/* ROTAS Layer - Rotation Trails */}
         {layers.find(l => l.id === 'rotas')?.enabled && rotasTrails.length > 0 && (
           <RotasLayer
-            trails={rotasTrails}
+            trails={adaptRotasTrails(rotasTrails)}
             width={width}
             height={height}
             currentTick={0}

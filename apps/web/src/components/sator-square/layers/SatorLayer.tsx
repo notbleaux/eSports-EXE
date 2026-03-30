@@ -41,7 +41,7 @@ export const SatorLayer: React.FC<SatorLayerProps> = ({
   useEffect(() => {
     if (!svgRef.current) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = d3.select(svgRef.current as Element);
     svg.selectAll('.sator-halo').remove();
 
     const halos = svg
@@ -50,19 +50,19 @@ export const SatorLayer: React.FC<SatorLayerProps> = ({
       .enter()
       .append('circle')
       .attr('class', 'sator-halo')
-      .attr('cx', (d) => mapToScreen(d.mapX, d.mapY)[0])
-      .attr('cy', (d) => mapToScreen(d.mapX, d.mapY)[1])
-      .attr('r', (d) => BASE_RADIUS * (0.5 + d.intensity * 0.5))
+      .attr('cx', (d: SatorEvent) => mapToScreen(d.mapX, d.mapY)[0])
+      .attr('cy', (d: SatorEvent) => mapToScreen(d.mapX, d.mapY)[1])
+      .attr('r', (d: SatorEvent) => BASE_RADIUS * (0.5 + d.intensity * 0.5))
       .attr('fill', 'none')
-      .attr('stroke', (d) => EVENT_COLORS[d.eventType] ?? '#FFD700')
-      .attr('stroke-width', (d) => 2 + d.intensity * 3)
+      .attr('stroke', (d: SatorEvent) => EVENT_COLORS[d.eventType] ?? '#FFD700')
+      .attr('stroke-width', (d: SatorEvent) => 2 + d.intensity * 3)
       .attr('opacity', 0.8);
 
     // Pulse animation
     halos
       .append('animate')
       .attr('attributeName', 'r')
-      .attr('values', (d) => {
+      .attr('values', (d: SatorEvent) => {
         const r = BASE_RADIUS * (0.5 + d.intensity * 0.5);
         return `${r};${r * 1.4};${r}`;
       })

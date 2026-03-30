@@ -49,7 +49,7 @@ export const OperaLayer: React.FC<OperaLayerProps> = ({
 
 function renderFallback(
   canvas: HTMLCanvasElement,
-  mask: Float32Array,
+  _mask: Float32Array,
   width: number,
   height: number,
 ): void {
