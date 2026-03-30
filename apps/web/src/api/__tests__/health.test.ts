@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { getQuickHealth, getHealthStatus, type HealthCheckResponse } from '../health'
+import { getQuickHealth, getHealthStatus } from '../health'
 
 // Mock analyticsSync
 vi.mock('../../services/analyticsSync', () => ({

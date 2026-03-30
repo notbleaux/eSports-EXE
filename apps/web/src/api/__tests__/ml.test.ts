@@ -6,8 +6,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { api, ApiRequestError } from '../client'
-import { API_BASE_URL } from '../../config/api'
+import { api } from '../client'
 
 describe('ML API Endpoints', () => {
   beforeEach(() => {
