@@ -71,9 +71,9 @@ const HUB_CONFIG = {
   name: 'AREPO',
   subtitle: 'The Cross-Reference Engine',
   description: 'Connect SATOR analytics with OPERA metadata through cross-hub queries',
-  color: colors.hub.arepo.base,      // #0066ff
-  glow: colors.hub.arepo.glow,       // rgba(0, 102, 255, 0.4)
-  muted: colors.hub.arepo.muted,     // #0044cc
+  color: colors.hub.arepo,           // #ffaa00
+  glow: 'rgba(255, 170, 0, 0.4)',    // derived from arepo
+  muted: '#cc8800',                  // muted version of arepo
 };
 
 // Categories for directory navigation
@@ -204,7 +204,7 @@ function ArepoHubContent(): React.ReactElement {
     const ToolComponent = tool.component;
     return (
       <DataErrorBoundary
-        hubName="arepo"
+        hubName="AREPO"
         componentName={tool.name}
         compact
         onRetry={() => addNotification(`Retrying ${tool.name}...`, 'info')}
@@ -218,7 +218,7 @@ function ArepoHubContent(): React.ReactElement {
   };
 
   return (
-    <HubWrapper hubId="arepo">
+    <HubWrapper hubId="AREPO">
       {/* Followed Players Feed */}
       <div className="max-w-6xl mx-auto mb-6">
         <FollowedFeed />
@@ -485,7 +485,7 @@ function ArepoHubContent(): React.ReactElement {
                 <PanelErrorBoundary 
                   panelId="arepo-cross-reference" 
                   panelTitle="Cross-Reference Engine" 
-                  hub="arepo"
+                  hub="AREPO"
                 >
                   {renderCrossReferenceTool()}
                 </PanelErrorBoundary>
@@ -530,7 +530,7 @@ function ArepoHubContent(): React.ReactElement {
 
                 {/* Directory List */}
                 <DataErrorBoundary
-                  hubName="arepo"
+                  hubName="AREPO"
                   componentName="DirectoryList"
                   compact
                   onRetry={() => addNotification('Retrying directory load...', 'info')}
@@ -538,7 +538,7 @@ function ArepoHubContent(): React.ReactElement {
                   <PanelErrorBoundary 
                     panelId="arepo-directory" 
                     panelTitle="Directory" 
-                    hub="arepo"
+                    hub="AREPO"
                   >
                     <DirectoryList 
                       categories={CATEGORIES}
@@ -563,7 +563,7 @@ function ArepoHubContent(): React.ReactElement {
                   </div>
 
                   <DataErrorBoundary
-                    hubName="arepo"
+                    hubName="AREPO"
                     componentName="QuickLinks"
                     compact
                   >
@@ -609,7 +609,7 @@ function ArepoHubContent(): React.ReactElement {
                   </div>
 
                   <DataErrorBoundary
-                    hubName="arepo"
+                    hubName="AREPO"
                     componentName="GettingStarted"
                     compact
                   >
@@ -646,7 +646,7 @@ function ArepoHubContent(): React.ReactElement {
                   </div>
 
                   <DataErrorBoundary
-                    hubName="arepo"
+                    hubName="AREPO"
                     componentName="CommunityStats"
                     compact
                   >
@@ -681,7 +681,7 @@ function ArepoHubContent(): React.ReactElement {
               className="max-w-4xl mx-auto"
             >
               <DataErrorBoundary
-                hubName="arepo"
+                hubName="AREPO"
                 componentName="HelpHub"
                 compact
                 onRetry={() => addNotification('Retrying help content load...', 'info')}
@@ -689,7 +689,7 @@ function ArepoHubContent(): React.ReactElement {
                 <PanelErrorBoundary 
                   panelId="arepo-help" 
                   panelTitle="Help & Q&A" 
-                  hub="arepo"
+                  hub="AREPO"
                 >
                   <HelpHub 
                     questions={RECENT_QUESTIONS}
@@ -714,7 +714,7 @@ function ArepoHubContent(): React.ReactElement {
               <PanelErrorBoundary 
                 panelId="arepo-tactical-maps" 
                 panelTitle="Tactical Maps" 
-                hub="arepo"
+                hub="AREPO"
               >
                 <TacticalMapContainer />
               </PanelErrorBoundary>
@@ -745,14 +745,14 @@ function ArepoHubContent(): React.ReactElement {
  */
 function ArepoHub(): React.ReactElement {
   return (
-    <HubErrorBoundary hubName="arepo" componentName="ArepoHub">
+    <HubErrorBoundary hubName="AREPO" componentName="ArepoHub">
       <DataErrorBoundary
-        hubName="arepo"
+        hubName="AREPO"
         componentName="ArepoHub"
         fallback={
           <div className="min-h-screen flex items-center justify-center p-4">
             <HubErrorFallback
-              hub="arepo"
+              hub="AREPO"
               title="AREPO Cross-Reference Engine Error"
               message="Failed to load the cross-reference engine. Please try again."
               onRetry={() => window.location.reload()}
