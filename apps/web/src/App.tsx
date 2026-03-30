@@ -19,6 +19,9 @@ import { HeroV2 } from './components/heroes/HeroV2';
 import { HubGridV2 } from './components/hubs/HubGridV2';
 import { MascotShowcase } from './components/mascots/MascotShowcase';
 
+// Valorant Theme Landing
+import { ValorantLanding } from './components/landing/ValorantLanding';
+
 // PWA Components
 import { OfflineFallback, OfflineIndicator } from './components/OfflineFallback';
 import UpdateNotification from './components/UpdateNotification';
@@ -158,8 +161,24 @@ const PageTransition = ({ children, hubId }: PageTransitionProps): React.ReactNo
   );
 };
 
-// New Landing Page with redesigned components
-function LandingPage(): React.ReactNode {
+// Theme Toggle Button Component
+function ThemeToggle({ theme, onToggle }: { theme: 'light' | 'valorant'; onToggle: () => void }): React.ReactNode {
+  return (
+    <button
+      onClick={onToggle}
+      className={`fixed bottom-6 right-6 z-50 px-4 py-2 rounded-sm font-semibold uppercase tracking-wider text-sm transition-all duration-300 shadow-lg ${
+        theme === 'valorant'
+          ? 'bg-valorant-accent-red text-white hover:bg-valorant-accent-red-hover shadow-valorant-glow'
+          : 'bg-boitano-pink text-white hover:bg-boitano-pink-dark'
+      }`}
+    >
+      {theme === 'light' ? 'Switch to Valorant' : 'Switch to Light'}
+    </button>
+  );
+}
+
+// Original Landing Page (Kunsthalle/Boitano theme)
+function OriginalLanding(): React.ReactNode {
   return (
     <div className="min-h-screen bg-off-white">
       {/* Hero Section - Bold pink with geometric elements */}
@@ -235,6 +254,11 @@ function LandingPage(): React.ReactNode {
       </footer>
     </div>
   );
+}
+
+// Landing Page with Theme Switching
+function LandingPage({ theme }: { theme: 'light' | 'valorant' }): React.ReactNode {
+  return theme === 'valorant' ? <ValorantLanding /> : <OriginalLanding />;
 }
 
 // Dashboard Grid with Error Boundary and Loading State
@@ -341,6 +365,9 @@ function AppContent(): React.ReactNode {
   const [showPerformanceDashboard, setShowPerformanceDashboard] = useState<boolean>(false);
   const [isOffline, setIsOffline] = useState<boolean>(!navigator.onLine);
   const [showOfflineModal, setShowOfflineModal] = useState<boolean>(false);
+  
+  // Theme state for landing page - 'light' (Kunsthalle) or 'valorant' (dark tactical)
+  const [landingTheme, setLandingTheme] = useState<'light' | 'valorant'>('light');
 
   // Initialize performance monitoring and offline detection
   useEffect(() => {
@@ -403,12 +430,18 @@ function AppContent(): React.ReactNode {
         >
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            {/* Landing Page - New Redesigned Version */}
+            {/* Landing Page - With Theme Toggle */}
             <Route 
               path="/" 
               element={
                 <PageTransition hubId="landing">
-                  <LandingPage />
+                  <>
+                    <LandingPage theme={landingTheme} />
+                    <ThemeToggle 
+                      theme={landingTheme} 
+                      onToggle={() => setLandingTheme(prev => prev === 'light' ? 'valorant' : 'light')}
+                    />
+                  </>
                 </PageTransition>
               } 
             />

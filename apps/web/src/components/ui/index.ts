@@ -27,6 +27,14 @@ export {
 } from './GlowButton';
 export type { GlowButtonComponentProps } from './GlowButton';
 
+// Valorant-themed components
+export { ButtonV2 } from './ButtonV2';
+export type { ButtonV2Props } from './ButtonV2';
+export { PanelV2, PanelV2Header, PanelV2Footer } from './PanelV2';
+export type { PanelV2Props } from './PanelV2';
+export { ToggleV2 } from './ToggleV2';
+export type { ToggleV2Props } from './ToggleV2';
+
 // Legacy exports (maintaining backward compatibility)
 export { StatBadge } from './StatBadge';
 export { ModernCard } from './ModernCard';
