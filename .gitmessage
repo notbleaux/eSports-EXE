@@ -1,0 +1,21 @@
+# <type>(<scope>): <subject>
+# 👆 50 chars or less, imperative mood
+#
+# Body: Explain WHY this change is needed
+# - What problem does it solve?
+# - What approach was taken?
+# - Any breaking changes?
+# 👆 Wrap at 72 characters
+#
+# Footer: Reference issues, breaking changes
+# Closes #123
+# BREAKING CHANGE: Description
+#
+# Types: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
+# Scopes: api, web, sim, db, ml, infra, auth, docs, ops, root
+#
+# Examples:
+#   feat(api): Add rate limiting
+#   fix(web): Resolve TypeScript error
+#   docs(adr): Add architecture decision
+#   chore(ops): Health check [skip ci]

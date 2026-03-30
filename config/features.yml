@@ -1,0 +1,133 @@
+# Feature Flags Configuration (Unleash-compatible)
+# 
+# This file defines feature toggles for the NJZiteGeisTe Platform.
+# Flags can be overridden via environment variables or Unleash server.
+#
+# Format:
+#   <flag_name>:
+#     enabled: <bool>          # Default state
+#     description: <string>    # Human-readable purpose
+#     strategies:              # Targeting strategies
+#       - name: <strategy>
+#         parameters: {}
+
+# Data Pipeline Flags
+lineage_tracking:
+  enabled: true
+  description: "Enable data lineage tracking for all API writes"
+  strategies:
+    - name: default
+      parameters: {}
+
+cdc_streaming:
+  enabled: false
+  description: "Enable Change Data Capture to Kafka"
+  strategies:
+    - name: gradualRollout
+      parameters:
+        percentage: 10
+
+vlr_scraper_deprecation:
+  enabled: false
+  description: "Deprecate VLR.gg scraper in favor of Pandascore"
+  strategies:
+    - name: default
+      parameters: {}
+
+# ML/Analytics Flags
+simrating_v2:
+  enabled: true
+  description: "Use SimRating v2 formula with real K/D/A + ACS"
+  strategies:
+    - name: default
+      parameters: {}
+
+bayesian_inference:
+  enabled: false
+  description: "Enable Bayesian confidence scoring"
+  strategies:
+    - name: default
+      parameters: {}
+
+uncertainty_quantification:
+  enabled: false
+  description: "Enable prediction uncertainty metrics"
+  strategies:
+    - name: default
+      parameters: {}
+
+# Simulation Flags
+rotas_60tps:
+  enabled: true
+  description: "Run ROTAS simulation at 60 TPS (up from 20)"
+  strategies:
+    - name: default
+      parameters: {}
+
+deterministic_replays:
+  enabled: true
+  description: "Enable deterministic replay validation"
+  strategies:
+    - name: default
+      parameters: {}
+
+# API Flags
+rate_limiting_v2:
+  enabled: false
+  description: "Enable tiered rate limiting by user role"
+  strategies:
+    - name: gradualRollout
+      parameters:
+        percentage: 5
+
+websocket_affinity:
+  enabled: false
+  description: "Enable WebSocket sticky sessions"
+  strategies:
+    - name: default
+      parameters: {}
+
+# Observability Flags
+otel_tracing:
+  enabled: false
+  description: "Enable OpenTelemetry distributed tracing"
+  strategies:
+    - name: default
+      parameters: {}
+
+data_quality_gates:
+  enabled: false
+  description: "Enable data quality validation on ingestion"
+  strategies:
+    - name: default
+      parameters: {}
+
+# Repository Separation Flags
+mono_repo_mode:
+  enabled: true
+  description: "Run in monorepo mode (disable when repos are split)"
+  strategies:
+    - name: default
+      parameters: {}
+
+api_contract_validation:
+  enabled: false
+  description: "Strict API contract validation between services"
+  strategies:
+    - name: default
+      parameters: {}
+
+# Emergency Flags
+circuit_breaker_all:
+  enabled: false
+  description: "EMERGENCY: Circuit break all external APIs"
+  strategies:
+    - name: default
+      parameters: {}
+
+read_only_mode:
+  enabled: false
+  description: "EMERGENCY: Read-only mode for maintenance"
+  strategies:
+    - name: default
+      parameters: {}

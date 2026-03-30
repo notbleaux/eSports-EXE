@@ -56,5 +56,5 @@ jobs:
           git config user.email "monitor@njzitegeiste.dev"
           git add .job-board/SPAWN_DASHBOARD.md || true
           git add health_report.md || true
-          git commit -m "[AUTO] Health check - $(date -u +"%H:%M")" || echo "No changes"
+          git commit -m "chore(ops): Automated health check [skip ci]" || echo "No changes"
           git push || echo "No changes to push"

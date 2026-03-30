@@ -39,6 +39,10 @@ structlog>=23.2.0
 tenacity>=8.2.0
 orjson>=3.9.0
 ujson>=5.9.0
+pyyaml>=6.0.1
+
+# Feature Flags (optional - Unleash server)
+# UnleashClient>=5.12.0
 
 # Testing
 pytest>=7.4.0

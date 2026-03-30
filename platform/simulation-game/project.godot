@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="RadiantX - Tactical FPS Coach Sim"
-config/description="Deterministic tactical FPS manager with 20TPS match engine"
+config/description="Deterministic tactical FPS manager with 60TPS match engine"
 run/main_scene="res://scenes/Main.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
@@ -24,7 +24,7 @@ window/size/resizable=true
 
 [physics]
 
-common/physics_ticks_per_second=20
+common/physics_ticks_per_second=60
 common/physics_jitter_fix=0.0
 
 [rendering]

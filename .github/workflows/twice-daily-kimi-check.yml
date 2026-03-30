@@ -86,5 +86,5 @@ jobs:
           git config user.name "Agent Monitor"
           git config user.email "monitor@libre-x.dev"
           git add .job-board/CHECKS/ || true
-          git commit -m "[AUTO] $(date -u +"%H:%M") check - $(date -u +"%Y-%m-%d")" || echo "No changes"
+          git commit -m "chore(ops): Daily agent check [skip ci]" || echo "No changes"
           git push || echo "No changes to push"

@@ -1,76 +1,71 @@
-[Ver001.000]
+[Ver003.000]
 
-# 🏗️ NJZiteGeisTe Platform v2.1.0
+# NJZiteGeisTe Platform
 
-**Status:** 🟢 Production Ready  
-**Version:** 2.1.0  
-**Repository:** https://github.com/notbleaux/eSports-EXE
+[![CI Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
+[![Playwright Tests](https://github.com/notbleaux/eSports-EXE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
+[![Security Audit](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
+[![Health Check](https://github.com/notbleaux/eSports-EXE/actions/workflows/health-check.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
 
----
+[![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/eSports-EXE/main)](https://codecov.io/gh/notbleaux/eSports-EXE)
+[![License](https://img.shields.io/github/license/notbleaux/eSports-EXE)](LICENSE)
 
-## 📋 Overview
-
-The NJZiteGeisTe Platform is a comprehensive esports analytics and simulation platform focused on tactical FPS games (Valorant with planned Counter-Strike support).
-
-### Key Features
-
-- **SATOR Analytics:** Advanced player metrics (SimRating, RAR) with confidence weighting
-- **ROTAS Simulation:** Deterministic tactical FPS match simulation (Godot 4)
-- **NJZiteGeisTe Platform:** 5-hub web interface with real-time updates
-- **Pandascore Integration:** Official API for legal esports data access
-- **WebSocket Real-time:** Live match updates and player statistics
-- **ML Predictions:** TensorFlow.js-based prediction engine
-- **Feature Flags:** Gradual rollout and A/B testing support
-- **Error Tracking:** Sentry integration for production monitoring
-- **Component Docs:** Storybook for UI component documentation
-- **Mascot System:** Enhanced mascot assets with SVG/CSS/PNG formats and animations
+> **Advanced Esports Analytics & Simulation Platform for Valorant and Counter-Strike 2**
 
 ---
 
-## 📁 Repository Structure
+## 🎯 Overview
+
+NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS) is a comprehensive esports analytics and simulation platform focused on tactical FPS games. The platform provides advanced player metrics, match predictions, and deterministic tactical simulations.
+
+### Key Components
+
+| Component | Technology | Status | Description |
+|-----------|------------|--------|-------------|
+| **SATOR Analytics** | Python/FastAPI | ✅ Active | Advanced player metrics (SimRating, RAR) |
+| **ROTAS Simulation** | Godot 4/GDScript | 🟡 Paused | Deterministic match simulation |
+| **eXe Directory** | FastAPI | ✅ Active | Service registry and API gateway |
+| **Web Platform** | React 18/Vite | ✅ Active | 5-hub web interface |
+
+---
+
+## 🏗️ Architecture
 
 ```
-main-repo/
-├── 📁 apps/                      # Applications
-│   ├── website/                 # Original static website (Legacy)
-│   ├── web/                    # NJZiteGeisTe Platform (React 18, Vite)
-│   └── VCT Valorant eSports/   # VCT data project (Python, FastAPI)
-│
-├── 📁 packages/                  # Shared packages
-│   └── shared/                 # Shared libraries
-│       ├── api/                # FastAPI components
-│       ├── axiom-esports-data/ # Complete data pipeline
-│       └── packages/           # @sator/* libraries
-│
-├── 📁 platform/                  # Simulation platform
-│   └── simulation-game/        # Godot 4 project
-│
-├── 📁 services/                  # Backend services
-│   └── exe-directory/          # Service registry (Planned)
-│
-├── 📁 infrastructure/            # DevOps & Infrastructure
-│   ├── .github/workflows/      # CI/CD pipelines
-│   ├── scripts/                # Utility scripts
-│   ├── render.yaml             # Render deployment config
-│   └── vercel.json             # Vercel deployment config
-│
-├── 📁 docs/                      # Documentation
-│   ├── architecture/           # System design docs
-│   ├── guides/                 # User guides
-│   ├── API_V1_DOCUMENTATION.md # API reference
-│   ├── MIGRATION_GUIDE.md      # Migration guide
-│   └── WEBSOCKET_PROTOCOL.md   # WebSocket docs
-│
-├── 📁 tests/                     # Test suites
-│   ├── e2e/                    # Playwright E2E tests (95+)
-│   ├── integration/            # Python integration tests (35+)
-│   ├── unit/godot/             # Godot unit tests (70+)
-│   └── load/                   # Load testing
-│
-├── 📁 .agents/                  # AI skills and configuration
-├── LICENSE                      # MIT License
-├── package.json                 # Node dependencies
-└── AGENTS.md                    # AI agent documentation
+┌─────────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                             │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │   Web App    │  │ Browser Ext  │  │   Mobile (Planned)   │  │
+│  │  (React 18)  │  │  (Planned)   │  │                      │  │
+│  └──────┬───────┘  └──────┬───────┘  └──────────┬───────────┘  │
+└─────────┼─────────────────┼─────────────────────┼──────────────┘
+          │                 │                     │
+          └─────────────────┴─────────────────────┘
+                            │
+                  ┌─────────┴─────────┐
+                  │   Vercel Edge     │
+                  └─────────┬─────────┘
+                            │
+┌───────────────────────────┼─────────────────────────────────────┐
+│                      API LAYER (Render)                         │
+├───────────────────────────┼─────────────────────────────────────┤
+│  ┌────────────────────────┴──────────────────────────────────┐  │
+│  │              FastAPI (Python 3.11+)                        │  │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │  │
+│  │  │   v1/*   │  │  ws/*    │  │ /health  │  │ /admin/* │  │  │
+│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└───────────────────────────┼─────────────────────────────────────┘
+                            │
+┌───────────────────────────┼─────────────────────────────────────┐
+│                       DATA LAYER                                 │
+├───────────────────────────┼─────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────┴──────┐  ┌──────────────────────┐   │
+│  │ PostgreSQL   │  │    Redis    │  │   ML Model Store     │   │
+│  │ (Supabase)   │  │  (Upstash)  │  │ (TensorFlow.js)      │   │
+│  └──────────────┘  └─────────────┘  └──────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -79,11 +74,9 @@ main-repo/
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 18+ and pnpm 8+
 - Python 3.11+
-- PostgreSQL 14+ (or Supabase account)
-- Redis (or Upstash account)
-- Git
+- Docker (optional, for local database)
 
 ### Installation
 
@@ -92,409 +85,173 @@ main-repo/
 git clone https://github.com/notbleaux/eSports-EXE.git
 cd eSports-EXE
 
-# Install Node dependencies
-npm install
+# Install dependencies
+pnpm install
 
-# Install Python dependencies
+# Setup Python environment
 cd packages/shared
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Environment Setup
-
-```bash
-# Copy environment template
-cp .env.example .env.local
-
-# Edit .env.local with your credentials
-# Required variables:
-# - DATABASE_URL
-# - REDIS_URL
-# - VITE_API_URL
-# - PANDASCORE_API_KEY (optional, for legal data)
-```
-
-### Running Development Servers
-
-```bash
-# Terminal 1: API Server
-cd packages/shared/axiom-esports-data/api
-uvicorn main:app --reload
-
-# Terminal 2: Web Development Server
-cd apps/website-v2
-npm run dev
-
-# Terminal 3: Godot Editor (optional)
-godot --editor platform/simulation-game/project.godot
-```
-
-Access the application:
-- Web: http://localhost:5173
-- API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
-
----
-
-## 📊 Platform Components
-
-### NJZiteGeisTe Hubs
-
-| Hub | Name | Purpose | Color | Route |
-|-----|------|---------|-------|-------|
-| 1 | **SATOR** | The Observatory — Analytics & Insights | Gold `#ff9f1c` | `/analytics` |
-| 2 | **ROTAS** | The Harmonic Layer — Stats Reference | Cyan `#00f0ff` | `/stats` |
-| 3 | **AREPO** | The Directory — Community & Forums | Blue `#0066ff` | `/community` |
-| 4 | **OPERA** | The Action Layer — Pro eSports | Purple `#9d4edd` | `/pro-scene` |
-| 5 | **TENET** | Central Hub — WorldHUBs Selector | White `#ffffff` | `/hubs` |
-
-### Technology Stack
-
-| Layer | Technology | Version |
-|-------|------------|---------|
-| **Frontend** | React, Vite, Tailwind CSS | React 18, Vite 5 |
-| **3D/Visualization** | Three.js, React Three Fiber | Three 0.158 |
-| **Animation** | Framer Motion, GSAP | Framer Motion 10 |
-| **State Management** | Zustand, TanStack Query | 4.4+, 5.90+ |
-| **Backend API** | FastAPI (Python) | 3.11+ |
-| **Database** | PostgreSQL + TimescaleDB | 15+ |
-| **Cache** | Redis | 7+ |
-| **Game Engine** | Godot | 4.2+ |
-| **Testing** | Playwright, Vitest, GUT | Latest |
-| **CI/CD** | GitHub Actions | — |
-
----
-
-## 🧪 Testing
-
-### Running Tests
-
-```bash
-# E2E Tests (Playwright)
-cd apps/website-v2
-npx playwright test
-
-# Unit Tests (Vitest)
-cd apps/website-v2
-npm run test
-
-# Python Tests
-pytest tests/integration/ tests/e2e/ -v
-
-# Godot Tests
-cd platform/simulation-game
-godot --headless --script tests/run_tests.gd
-
-# Load Tests
-locust -f tests/load/locustfile.py
-
-# All Tests (CI)
-npm run test:all
-```
-
-### Test Coverage
-
-| Category | Count | Framework |
-|----------|-------|-----------|
-| E2E Tests | 95+ | Playwright |
-| Integration Tests | 35+ | pytest |
-| Unit Tests (Godot) | 70+ | GUT |
-| **Total** | **200+** | — |
-
----
-
-## 📚 Documentation
-
-### API Documentation
-
-- [API v1 Documentation](docs/API_V1_DOCUMENTATION.md) — Complete REST API reference
-- [WebSocket Protocol](docs/WEBSOCKET_PROTOCOL.md) — Real-time communication
-- [Migration Guide](docs/MIGRATION_GUIDE.md) — Upgrading from v2.0
-
-### Architecture
-
-- [Architecture v2](docs/ARCHITECTURE_V2.md) — System design and diagrams
-- [Master Changelog](docs/CHANGELOG_MASTER.md) — All changes from Phases 1-4
-
 ### Development
 
-- [AGENTS.md](AGENTS.md) — AI agent coordination and coding guidelines
-- [CONTRIBUTING.md](CONTRIBUTING.md) — Contribution guidelines
-- [DEPLOYMENT.md](DEPLOYMENT.md) — Deployment instructions
-
----
-
-## 🌐 API Quick Reference
-
-### Base URL
-```
-https://api.njzitegeist.com/v1
-```
-
-### Key Endpoints
-
 ```bash
-# Players
-GET /v1/players/{id}              # Get player by ID
-GET /v1/players/?region=Americas  # List players with filters
+# Start web app
+cd apps/web
+pnpm run dev
 
-# Matches
-GET /v1/matches/{id}              # Get match details
-GET /v1/matches/?game=valorant    # List matches
+# Start API (in another terminal)
+cd packages/shared/api
+uvicorn main:app --reload --port 8000
 
-# Analytics
-GET /v1/analytics/simrating/{id}  # SimRating breakdown
-GET /v1/analytics/leaderboard     # Leaderboard rankings
-
-# Search
-GET /v1/search/?q=TenZ            # Unified search
-GET /v1/search/suggestions?q=Te   # Autocomplete
-
-# WebSocket
-wss://api.njzitegeist.com/v1/ws  # Real-time updates
-```
-
-See [API Documentation](docs/API_V1_DOCUMENTATION.md) for complete reference.
-
----
-
-## 🎨 Mascot System
-
-The NJZiteGeisTe Platform features an advanced mascot system with multiple asset formats, animations, and accessibility features.
-
-### Mascot Characters
-
-| Mascot | Name | Element | Rarity | Color |
-|--------|------|---------|--------|-------|
-| 🦊 | **Fox** | Solar | Legendary | Orange `#F97316` |
-| 🦉 | **Owl** | Lunar | Epic | Indigo `#6366F1` |
-| 🐺 | **Wolf** | Binary | Rare | Slate `#475569` |
-| 🦅 | **Hawk** | Fire | Epic | Red `#DC2626` |
-
-### Asset Formats
-
-Mascots support multiple formats for optimal performance:
-
-| Format | Extension | Best For | Features |
-|--------|-----------|----------|----------|
-| **SVG** | `.svg` | Scalability, animations | Vector-based, crisp at any size |
-| **PNG** | `.png` | Pixel-perfect raster | High quality, no compression artifacts |
-| **CSS** | Pure CSS | Zero dependencies, fast loading | No image files required |
-| **Auto** | — | Runtime optimization | Automatically selects best format |
-
-### Usage Examples
-
-#### Basic Usage
-
-```tsx
-import { MascotAssetEnhanced } from '@/components/mascots';
-
-// Default mascot with auto format
-<MascotAssetEnhanced mascot="fox" size={128} />
-
-// Specific format
-<MascotAssetEnhanced mascot="owl" size={64} format="svg" />
-
-// With animation
-<MascotAssetEnhanced mascot="wolf" size={128} animate animation="wave" />
-```
-
-#### Gallery Component
-
-```tsx
-import { MascotGallery, MOCK_MASCOTS } from '@/components/mascots';
-
-<MascotGallery
-  mascots={MOCK_MASCOTS}
-  config={{ viewMode: 'grid', cardSize: 'md' }}
-  onMascotSelect={(mascot) => console.log('Selected:', mascot.name)}
-/>
-```
-
-### 10 Design Recommendations
-
-The mascot system implements the following recommendations:
-
-| # | Recommendation | Status | Description |
-|---|----------------|--------|-------------|
-| 1 | **Consistent Color Palette** | ✅ | Each mascot has defined primary/glow colors |
-| 2 | **Scalable Base Design** | ✅ | SVG format supports any resolution |
-| 3 | **Preview Tool** | ✅ | `/dev/mascots` route for testing all variants |
-| 4 | **Progressive Enhancement** | ✅ | Falls back from PNG → SVG → CSS automatically |
-| 5 | **User Personalization** | ✅ | localStorage remembers user mascot preferences |
-| 6 | **Loading Animations** | ✅ | Pulse animation while assets load |
-| 7 | **Mascot Rotation** | ✅ | Random mascot selection on load option |
-| 8 | **Accessibility Patterns** | ✅ | ARIA labels, keyboard navigation, screen reader support |
-| 9 | **Contextual Usage** | ✅ | Different animations for different states |
-| 10 | **Format Optimization** | ✅ | Auto-selects best format based on size |
-
-### Animation Types
-
-| Animation | Description | Use Case |
-|-----------|-------------|----------|
-| `idle` | Subtle breathing/bouncing | Default state, continuous |
-| `wave` | Playful waving gesture | Hover interactions, greetings |
-| `celebrate` | Excited celebration | Achievements, milestones |
-
-### Dev Tools
-
-Access the mascot preview tool at:
-
-```
-http://localhost:5173/dev/mascots
-```
-
-Features:
-- Format switching (SVG/PNG/CSS/Auto)
-- Size comparison (32px to 256px)
-- Animation showcase
-- Dark/light mode toggle
-
-### Troubleshooting
-
-#### Mascot not displaying
-
-1. Check that the mascot files exist in `public/mascots/{format}/`
-2. Verify the format is supported for the selected size
-3. Check browser console for 404 errors
-
-#### Animations not working
-
-1. Ensure `animate` prop is set to `true`
-2. Check that `animation` prop is one of: `idle`, `wave`, `celebrate`
-3. Verify CSS animations are not disabled via `prefers-reduced-motion`
-
-#### Performance issues
-
-1. Use `format="auto"` for optimal format selection
-2. For small sizes (≤64px), use `format="css"`
-3. For large sizes (≥512px), use `format="png"`
-4. Limit animated mascots on screen simultaneously
-
-#### Format fallbacks not working
-
-1. Ensure `progressive` prop is `true` (default)
-2. Check that fallback formats exist in the expected paths
-3. Verify `onError` callback is not suppressing errors
-
----
-
-## 🚀 Deployment
-
-### Platforms
-
-| Component | Platform | URL |
-|-----------|----------|-----|
-| Web Frontend | Vercel | https://libre-x-esport.com |
-| API Backend | Render | https://api.libre-x-esport.com |
-| Database | Supabase | PostgreSQL 15 |
-| Cache | Upstash | Redis 7 |
-
-### Deploy Commands
-
-```bash
-# Deploy Web (Vercel)
-cd apps/website-v2
-vercel --prod
-
-# Deploy API (Render)
-git push origin main  # Auto-deploys via render.yaml
-```
-
----
-
-## 🤖 AI Agent Coordination
-
-AI agents working on this project follow a **phase-based coordination model** using git-based state tracking and schema boundaries:
-
-- **Coordination Document:** [.agents/AGENT_CONTRACT.md](.agents/AGENT_CONTRACT.md)
-- **Phase Gates:** [.agents/PHASE_GATES.md](.agents/PHASE_GATES.md)
-- **Agent Guidelines:** [AGENTS.md](AGENTS.md)
-
-### For AI Agents
-
-1. Read `MASTER_PLAN.md` to understand current phase and scope
-2. Check `.agents/PHASE_GATES.md` to confirm your phase is unlocked
-3. Work within your declared domain per `AGENT_CONTRACT.md`
-4. Update `AGENTS.md` after completing work under the relevant phase section
-5. Schema boundaries are the synchronization point — commit schemas before dependent domains start
-
----
-
-## 📝 Commit Standards
-
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-<type>(<scope>): <description> - <context>
-```
-
-**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-
-**Examples:**
-```bash
-feat(api): Add Pandascore integration - enables legal data source
-fix(website): Resolve WebSocket reconnection issue
-docs(readme): Update installation instructions
-feat(sator): Implement search API - phase 4 implementation
+# Run tests
+pnpm run test
+pytest packages/shared/
 ```
 
 ---
 
 ## 📊 Project Status
 
-**Current Version:** 2.1.0  
-**Status:** Production Ready ✅
+| Metric | Status |
+|--------|--------|
+| **Build** | [![CI Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
+| **Tests** | [![Playwright Tests](https://github.com/notbleaux/eSports-EXE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
+| **Security** | [![Security Audit](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
+| **Coverage** | [![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/eSports-EXE/main)](https://codecov.io/gh/notbleaux/eSports-EXE) |
+| **Uptime** | [![Health Check](https://github.com/notbleaux/eSports-EXE/actions/workflows/health-check.yml/badge.svg)](https://status.njzitegeist.com) |
 
-### Phase Completion
+---
 
-| Phase | Status | Description |
-|-------|--------|-------------|
-| Phase 1 | ✅ Complete | Foundation (DB layer, React optimizations) |
-| Phase 2 | ✅ Complete | Performance (Web Workers, Virtual scrolling) |
-| Phase 3 | ✅ Complete | Quality (Tests, Error boundaries) |
-| Phase 4 | ✅ Complete | Production (API stabilization, Documentation) |
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework:** React 18 with TypeScript
+- **Build Tool:** Vite 5
+- **Styling:** Tailwind CSS
+- **State:** Zustand + TanStack Query
+- **Testing:** Playwright, Vitest
+
+### Backend
+- **Framework:** FastAPI (Python 3.11+)
+- **Database:** PostgreSQL (Supabase)
+- **Cache:** Redis (Upstash)
+- **Auth:** JWT + OAuth (Google, Discord, GitHub)
+- **Testing:** pytest
+
+### Infrastructure
+- **Hosting:** Vercel (Frontend), Render (Backend)
+- **Database:** Supabase (PostgreSQL)
+- **Cache:** Upstash (Redis)
+- **CI/CD:** GitHub Actions
+
+---
+
+## 🏗️ Architecture Decision Records (ADRs)
+
+Key architectural decisions are documented in `docs/adr/`:
+
+| ADR | Decision | Status |
+|-----|----------|--------|
+| [001](docs/adr/001-godot-vs-web-simulation.md) | Godot 4 vs Web-Based Simulation | ✅ Accepted |
+| [002](docs/adr/002-postgresql-vs-timescaledb.md) | PostgreSQL vs TimescaleDB | ✅ Accepted |
+| [003](docs/adr/003-monorepo-vs-multirepo.md) | Monorepo vs Multi-Repository | ✅ Accepted |
+| [004](docs/adr/004-react-vue-frontend.md) | React vs Vue Frontend | ✅ Accepted |
+| [005](docs/adr/005-fastapi-vs-flask-django.md) | FastAPI vs Flask/Django | ✅ Accepted |
+
+## 📁 Repository Structure
+
+```
+/
+├── apps/                           # Applications
+│   ├── web/                       # Main web platform (React + Vite)
+│   ├── browser-extension/         # Browser extension (planned)
+│   └── VCT Valorant eSports/      # VCT data project
+│
+├── packages/                       # Shared packages
+│   └── shared/                    # API, data pipeline, schemas
+│
+├── platform/                       # Simulation platform
+│   └── simulation-game/           # Godot 4 project (to be extracted)
+│
+├── docs/                           # Documentation
+│   ├── architecture/              # System architecture
+│   │   ├── CANONICAL_SYSTEM_ARCHITECTURE.md
+│   │   ├── DATA_FLOW_DIAGRAM.md
+│   │   ├── DEPLOYMENT_ARCHITECTURE.md
+│   │   └── DATA_PARTITION_FIREWALL.md
+│   ├── adr/                       # Architecture Decision Records
+│   ├── API_V1_DOCUMENTATION.md
+│   ├── API_VERSIONING_POLICY.md
+│   ├── DEPLOYMENT_GUIDE.md
+│   └── SECURITY_HARDENING.md      # TeXeT security guide
+│
+├── tests/                          # Test suites
+│   ├── e2e/                       # Playwright tests
+│   ├── integration/               # Python integration tests
+│   ├── simulation/                # ROTAS validation framework
+│   └── unit/                      # Unit tests
+│
+├── docker-compose.yml              # One-command dev setup
+├── Dockerfile.api                  # API container
+├── Dockerfile.web                  # Web container
+├── .devcontainer/                  # VS Code dev container
+└── .github/workflows/              # CI/CD pipelines
+```
+
+---
+
+## 📖 Documentation
+
+- **[API Documentation](docs/API_V1_DOCUMENTATION.md)** - Complete API reference
+- **[Architecture Guide](docs/ARCHITECTURE_V2.md)** - System design and patterns
+- **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Production deployment
+- **[Contributing Guide](CONTRIBUTING.md)** - Contribution guidelines
 
 ---
 
 ## 🔐 Security
 
-- Data partition firewall between game and web platforms
-- JWT authentication for API access
-- Rate limiting on all endpoints
-- Secrets detection in CI/CD
-- No credentials committed to repository
+Security is a top priority. Please see our security documentation:
 
-See [AGENTS.md#security-considerations](AGENTS.md) for details.
+- [Security Policy](SECURITY.md)
+- [Vulnerability Reporting](SECURITY.md#reporting-vulnerabilities)
+- [Security Audit Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml)
 
 ---
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Workflow
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'feat(scope): Add amazing feature'`)
+3. Commit changes (`git commit -m 'feat: Add amazing feature'`)
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📞 Contact
+## 🙏 Acknowledgments
 
-- **Repository:** https://github.com/notbleaux/eSports-EXE
-- **Issues:** https://github.com/notbleaux/eSports-EXE/issues
-- **Discussions:** https://github.com/notbleaux/eSports-EXE/discussions
+- **Pandascore** - Official esports data provider
+- **Supabase** - Database and authentication
+- **Vercel** - Frontend hosting
+- **Render** - Backend hosting
 
 ---
 
-**NJZiteGeisTe Platform** — Community eSports Analytics for Valorant & CS2
-
-*Last Updated: March 15, 2026*
+<p align="center">
+  <strong>NJZiteGeisTe Platform</strong><br>
+  Advanced Esports Analytics & Simulation
+</p>
