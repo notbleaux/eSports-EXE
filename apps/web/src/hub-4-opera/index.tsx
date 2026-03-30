@@ -44,9 +44,9 @@ const HUB_CONFIG = {
   name: 'OPERA',
   subtitle: 'eSports Hub',
   description: 'Tournament browser, schedules, patch notes, and circuit standings',
-  color: colors.hub.opera.base,      // #9d4edd
-  glow: colors.hub.opera.glow,       // rgba(157, 78, 221, 0.5)
-  muted: colors.hub.opera.muted,     // #7a3aaa
+  color: colors.hub.opera,           // #ff00ff
+  glow: 'rgba(255, 0, 255, 0.4)',    // derived from opera
+  muted: '#cc00cc',                  // muted version of opera
 };
 
 // Tab configuration
