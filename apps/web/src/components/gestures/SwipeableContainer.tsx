@@ -64,15 +64,12 @@ export const SwipeableContainer: React.FC<SwipeableContainerProps> = ({
   
   // Motion values for smooth animation
   const x = useMotionValue(0);
-  const y = useMotionValue(0);
   
   // Spring physics for smooth transitions
   const springConfig = { stiffness, damping };
   const scale = useSpring(1, springConfig);
-  const opacity = useSpring(1, springConfig);
 
   // Transform for visual feedback during swipe
-  const rotateY = useTransform(x, [-300, 0, 300], [15, 0, -15]);
   const backgroundOpacity = useTransform(
     x,
     [-300, -150, 0, 150, 300],
@@ -95,19 +92,10 @@ export const SwipeableContainer: React.FC<SwipeableContainerProps> = ({
   }, [activeIndex, calculateOffset, containerX]);
 
   // Handle swipe completion
-  const handleSwipe = useCallback((direction: SwipeDirection, state: SwipeState) => {
+  const handleSwipe = useCallback((_direction: SwipeDirection, _state: SwipeState) => {
     if (!enabled) return;
-
-    if (direction === 'left' && activeIndex < totalSlides - 1) {
-      onIndexChange(activeIndex + 1, direction);
-    } else if (direction === 'right' && activeIndex > 0) {
-      onIndexChange(activeIndex - 1, direction);
-    } else if ((direction === 'up' || direction === 'down') && onVerticalSwipe) {
-      onVerticalSwipe(direction);
-    }
-
     setDragDirection(null);
-  }, [enabled, activeIndex, totalSlides, onIndexChange, onVerticalSwipe]);
+  }, [enabled]);
 
   // Configure swipe hook
   const { bind, state: swipeState } = useSwipe(handleSwipe, {

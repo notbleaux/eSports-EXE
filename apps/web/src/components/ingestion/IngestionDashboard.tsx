@@ -15,7 +15,7 @@
  * Team: Data Ingestion (TL-S6)
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createLogger } from '@/utils/logger';
 
 const logger = createLogger('IngestionDashboard');
@@ -25,7 +25,6 @@ import {
   RefreshCw,
   Play,
   Pause,
-  Square,
   AlertCircle,
   CheckCircle,
   Clock,
@@ -33,7 +32,6 @@ import {
   AlertTriangle,
   X,
   Plus,
-  Settings,
   FileJson,
   Globe,
   FileText,
@@ -42,9 +40,6 @@ import {
   ChevronUp,
   Trash2,
   Edit2,
-  Filter,
-  Download,
-  Search,
   MoreVertical,
   Zap,
   BarChart3,
@@ -55,7 +50,6 @@ import {
 import {
   createIngestionApi,
   createBatchJobManager,
-  createConnector,
   DEFAULT_PANDASCORE_CONFIG,
   DEFAULT_LIQUIPEDIA_CONFIG,
   DEFAULT_HLTV_CONFIG,
@@ -389,7 +383,7 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
   });
   const [isLoading, setIsLoading] = useState(true);
   const [showAddSource, setShowAddSource] = useState(false);
-  const [showCreateJob, setShowCreateJob] = useState(false);
+  const [showCreateJob] = useState(false);
 
   // API and Manager refs
   const api = useMemo(() => createIngestionApi(apiConfig), [apiConfig]);
@@ -539,7 +533,7 @@ export const IngestionDashboard: React.FC<IngestionDashboardProps> = ({
     }
   };
 
-  const handleCreateJob = async (name: string, sourceId: string, dataTypes: IngestionDataType[]) => {
+  const handleCreateJob = async (_name: string, sourceId: string, dataTypes: IngestionDataType[]) => {
     const source = sources.find(s => s.config.id === sourceId);
     if (!source) return;
 

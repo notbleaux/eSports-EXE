@@ -80,7 +80,29 @@ class ReviewDecision(BaseModel):
 
 # --- Live Matches Endpoints ---
 
-@router.get("/live/matches", response_model=List[LiveMatchSummary])
+@router.get(
+    "/live/matches",
+    response_model=List[LiveMatchSummary],
+    summary="Get live matches",
+    description="""
+    Get current live matches with confidence scores.
+    
+    Returns matches with live status, filtered by confidence.
+    Source: Path A (Pandascore) or Path B (verified)
+    
+    ## Confidence Levels
+    - 0.9+ : Trusted - High confidence, auto-accepted
+    - 0.7-0.9 : High - Good confidence
+    - 0.5-0.7 : Medium - Moderate confidence
+    - 0.3-0.5 : Low - Flagged for review
+    - < 0.3 : Flagged - Requires manual review
+    
+    ## Response Codes
+    - 200: Successfully retrieved matches
+    - 500: Failed to fetch matches
+    """,
+    response_description="List of live matches with confidence scores",
+)
 async def get_live_matches(
     game: Optional[str] = Query(None, description="Filter by game: valorant, cs2"),
     confidence_min: float = Query(0.5, ge=0.0, le=1.0, description="Minimum confidence threshold")
@@ -105,7 +127,22 @@ async def get_live_matches(
             detail="Failed to fetch live matches"
         )
 
-@router.get("/live/matches/{match_id}", response_model=LiveMatchSummary)
+@router.get(
+    "/live/matches/{match_id}",
+    response_model=LiveMatchSummary,
+    summary="Get specific live match",
+    description="""
+    Get specific live match details.
+    
+    Returns current match state with confidence score.
+    
+    ## Response Codes
+    - 200: Match found and returned
+    - 404: Live match not found
+    - 500: Failed to fetch match
+    """,
+    response_description="Live match details with confidence score",
+)
 async def get_live_match(match_id: str) -> LiveMatchSummary:
     """
     Get specific live match details.
@@ -130,7 +167,31 @@ async def get_live_match(match_id: str) -> LiveMatchSummary:
 
 # --- Match History Endpoints ---
 
-@router.get("/history/matches", response_model=List[MatchHistory])
+@router.get(
+    "/history/matches",
+    response_model=List[MatchHistory],
+    summary="Get match history",
+    description="""
+    Get match history with verification confidence.
+    
+    Returns completed matches with:
+    - Verification confidence scores
+    - Identified issues
+    - Flagged for review status
+    
+    ## Filters
+    - **game**: Filter by specific game
+    - **confidence_min**: Minimum confidence threshold (default: 0.7)
+    - **show_flagged**: Include items flagged for review
+    - **limit**: Results per page (1-100, default: 50)
+    - **offset**: Pagination offset
+    
+    ## Response Codes
+    - 200: Successfully retrieved history
+    - 500: Failed to fetch history
+    """,
+    response_description="List of historical matches with verification data",
+)
 async def get_match_history(
     game: Optional[str] = Query(None, description="Filter by game"),
     limit: int = Query(50, ge=1, le=100, description="Results per page"),
@@ -167,7 +228,22 @@ async def get_match_history(
             detail="Failed to fetch match history"
         )
 
-@router.get("/history/matches/{match_id}", response_model=MatchHistory)
+@router.get(
+    "/history/matches/{match_id}",
+    response_model=MatchHistory,
+    summary="Get historical match details",
+    description="""
+    Get detailed historical match with full verification data.
+    
+    Returns verification result, identified issues, and review status.
+    
+    ## Response Codes
+    - 200: Match found with full verification data
+    - 404: Match not found
+    - 500: Failed to fetch match
+    """,
+    response_description="Historical match with verification details",
+)
 async def get_match_history_detail(match_id: str) -> MatchHistory:
     """
     Get detailed historical match with full verification data.
@@ -192,7 +268,30 @@ async def get_match_history_detail(match_id: str) -> MatchHistory:
 
 # --- Review Queue Endpoints (Admin) ---
 
-@router.get("/review-queue", response_model=List[ReviewQueueItem])
+@router.get(
+    "/review-queue",
+    response_model=List[ReviewQueueItem],
+    summary="Get review queue",
+    description="""
+    Get items flagged for manual review.
+    
+    Admin endpoint: Returns matches/data with low confidence scores.
+    
+    ## Filters
+    - **game**: Filter by specific game
+    - **priority**: Show only high priority items (confidence < 0.5)
+    - **limit**: Results per page
+    - **offset**: Pagination offset
+    
+    ## Response Codes
+    - 200: Successfully retrieved queue
+    - 500: Failed to fetch queue
+    
+    ## Required Permission
+    Admin access required
+    """,
+    response_description="List of items in review queue",
+)
 async def get_review_queue(
     game: Optional[str] = Query(None, description="Filter by game"),
     limit: int = Query(50, ge=1, le=100),
@@ -238,7 +337,32 @@ async def get_review_queue(
             detail="Failed to fetch review queue"
         )
 
-@router.post("/review-queue/{item_id}/decide", status_code=202)
+@router.post(
+    "/review-queue/{item_id}/decide",
+    status_code=202,
+    summary="Submit review decision",
+    description="""
+    Submit manual review decision for flagged item.
+    
+    ## Decision Options
+    - **approve**: Accept the data as valid
+    - **reject**: Discard the data
+    - **needs_more_data**: Flag for additional investigation
+    
+    ## Async Processing
+    This endpoint returns 202 Accepted immediately and processes
+    the decision asynchronously in the background.
+    
+    ## Response Codes
+    - 202: Decision accepted for processing
+    - 400: Invalid decision value
+    - 500: Failed to submit decision
+    
+    ## Required Permission
+    Admin access required
+    """,
+    response_description="Decision accepted for async processing",
+)
 async def submit_review_decision(
     item_id: str,
     decision: ReviewDecision,

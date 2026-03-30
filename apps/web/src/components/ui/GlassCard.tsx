@@ -81,7 +81,7 @@ export interface GlassCardProps {
   reducedMotion?: boolean;
   onClick?: () => void;
   as?: React.ElementType;
-  variant?: 'default' | 'outlined' | 'filled' | 'elevated' | 'subtle';
+  variant?: string;
 }
 
 export interface GlassCardComponentProps extends GlassCardProps {
@@ -107,6 +107,7 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardComponentProp
     onClick,
     motionProps,
     style,
+    variant,
   }, ref): JSX.Element {
     const effectiveGlowColor = glowColor || hoverGlow;
     const { prefersReducedMotion } = useReducedMotion(forceReducedMotion);
@@ -120,6 +121,18 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardComponentProp
       ? 'none' 
       : intensityConfig.boxShadow.replace(/{color}/g, glowColorValue);
     
+    // Apply variant-based styling
+    const variantClasses = {
+      default: '',
+      outlined: 'border-white/[0.15] bg-transparent',
+      filled: 'bg-white/[0.08]',
+      elevated: 'bg-white/[0.06] backdrop-blur-xl shadow-lg',
+      subtle: 'bg-white/[0.02] border-white/[0.05]',
+      primary: 'bg-white/[0.08] border-white/[0.12]',
+      secondary: 'bg-white/[0.04] border-white/[0.08]',
+      ghost: 'bg-transparent border-transparent',
+    };
+
     const baseClasses = cn(
       'relative overflow-hidden',
       elevated ? 'bg-white/[0.06]' : 'bg-white/[0.03]',
@@ -128,6 +141,7 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardComponentProp
       elevated ? 'rounded-2xl' : 'rounded-xl',
       'transition-all duration-200',
       onClick && 'cursor-pointer',
+      variant && variantClasses[variant as keyof typeof variantClasses],
       className
     );
     

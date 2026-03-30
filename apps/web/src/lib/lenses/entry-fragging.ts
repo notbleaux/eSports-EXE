@@ -112,8 +112,7 @@ export function calculate(
 ): LensResult<EntryFraggingData> {
   const {
     minSampleSize = MIN_SAMPLE_SIZE,
-    considerTiming = true,
-    considerUtility = true,
+    considerUtility: _considerUtility = true,
     siteFocus
   } = options
 
@@ -134,7 +133,7 @@ export function calculate(
   const overallStats = calculateOverallStats(attempts)
 
   // Generate recommendations
-  const recommendations = generateEntryRecommendations(positionStats, sites, considerUtility)
+  const recommendations = generateEntryRecommendations(positionStats, sites, _considerUtility)
 
   const data: EntryFraggingData = {
     attempts,
@@ -273,7 +272,7 @@ function generateEntryPoints(site: Site): Vector2D[] {
  */
 function calculatePositionStats(
   attempts: EntryAttempt[],
-  sites: Site[],
+  _sites: Site[],
   minSampleSize: number
 ): EntryPositionStats[] {
   const positionGroups = new Map<string, EntryAttempt[]>()
@@ -290,7 +289,7 @@ function calculatePositionStats(
 
   const stats: EntryPositionStats[] = []
 
-  for (const [key, group] of positionGroups) {
+  for (const [_key, group] of positionGroups) {
     if (group.length < minSampleSize) continue
 
     const avgX = group.reduce((sum, a) => sum + a.entryPoint.x, 0) / group.length
@@ -636,7 +635,7 @@ function distance(a: Vector2D, b: Vector2D): number {
  * Get entry timing category
  */
 export function getEntryTimingCategory(timeSeconds: number): string {
-  for (const [key, window] of Object.entries(ENTRY_TIMINGS)) {
+  for (const [_key, window] of Object.entries(ENTRY_TIMINGS)) {
     if (timeSeconds >= window.min && timeSeconds <= window.max) {
       return window.label
     }

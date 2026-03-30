@@ -82,11 +82,11 @@ const DOMFallbackGrid: React.FC<VirtualDataGridProps> = ({
   const [scrollTop, setScrollTop] = useState(0);
 
   const theme = {
-    backgroundColor: customTheme?.backgroundColor || colors.background.primary,
-    headerBackgroundColor: customTheme?.headerBackgroundColor || colors.background.tertiary,
-    rowBackgroundColor: customTheme?.rowBackgroundColor || colors.background.secondary,
-    alternateRowBackgroundColor: customTheme?.alternateRowBackgroundColor || colors.background.tertiary,
-    borderColor: customTheme?.borderColor || colors.border.subtle,
+    backgroundColor: customTheme?.backgroundColor || '#0a0a0f',
+    headerBackgroundColor: customTheme?.headerBackgroundColor || 'rgba(255, 255, 255, 0.05)',
+    rowBackgroundColor: customTheme?.rowBackgroundColor || 'rgba(255, 255, 255, 0.03)',
+    alternateRowBackgroundColor: customTheme?.alternateRowBackgroundColor || 'rgba(255, 255, 255, 0.05)',
+    borderColor: customTheme?.borderColor || 'rgba(255, 255, 255, 0.08)',
     textColor: customTheme?.textColor || colors.text.primary,
     headerTextColor: customTheme?.headerTextColor || colors.hub.sator,
     accentColor: customTheme?.accentColor || colors.hub.sator,
@@ -259,11 +259,11 @@ export const VirtualDataGrid = forwardRef<VirtualDataGridRef, VirtualDataGridPro
 
   // Theme configuration
   const theme = {
-    backgroundColor: customTheme?.backgroundColor || colors.background.primary,
-    headerBackgroundColor: customTheme?.headerBackgroundColor || colors.background.tertiary,
-    rowBackgroundColor: customTheme?.rowBackgroundColor || colors.background.secondary,
-    alternateRowBackgroundColor: customTheme?.alternateRowBackgroundColor || colors.background.tertiary,
-    borderColor: customTheme?.borderColor || colors.border.subtle,
+    backgroundColor: customTheme?.backgroundColor || '#0a0a0f',
+    headerBackgroundColor: customTheme?.headerBackgroundColor || 'rgba(255, 255, 255, 0.05)',
+    rowBackgroundColor: customTheme?.rowBackgroundColor || 'rgba(255, 255, 255, 0.03)',
+    alternateRowBackgroundColor: customTheme?.alternateRowBackgroundColor || 'rgba(255, 255, 255, 0.05)',
+    borderColor: customTheme?.borderColor || 'rgba(255, 255, 255, 0.08)',
     textColor: customTheme?.textColor || colors.text.primary,
     headerTextColor: customTheme?.headerTextColor || colors.hub.sator,
     accentColor: customTheme?.accentColor || colors.hub.sator,

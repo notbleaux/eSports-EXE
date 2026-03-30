@@ -354,7 +354,7 @@ export class RoundPredictor {
   /**
    * Calculate feature importance using gradient-based approach
    */
-  private async calculateFeatureImportance(input: tf.Tensor2D): Promise<FeatureImportance[]> {
+  private async calculateFeatureImportance(_input: tf.Tensor2D): Promise<FeatureImportance[]> {
     // Simplified feature importance using weight analysis
     const importance: FeatureImportance[] = []
     
@@ -370,11 +370,11 @@ export class RoundPredictor {
       for (let i = 0; i < Math.min(this.config.inputFeatures, 20); i++) {
         let sum = 0
         for (let j = 0; j < weights.shape[1]; j++) {
-          sum += Math.abs(weightData[i * weights.shape[1] + j])
+          sum += Math.abs(weightData[i * (weights.shape[1] as number) + j])
         }
         importance.push({
           featureName: `feature_${i}`,
-          importance: sum / weights.shape[1]
+          importance: sum / (weights.shape[1] as number)
         })
       }
       
@@ -476,7 +476,7 @@ export class RoundPredictor {
     
     // Combine weight data into single buffer
     let totalSize = 0
-    const shapes = weights.map(w => w.shape)
+    // const shapes = weights.map(w => w.shape)
     weightData.forEach(d => { totalSize += d.length })
     
     const weightsBin = new ArrayBuffer(totalSize * 4)

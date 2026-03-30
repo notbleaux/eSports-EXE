@@ -353,7 +353,7 @@ export const ActionTracker: React.FC<ActionTrackerProps> = ({
   metadata,
   children,
 }) => {
-  const { recordAction, context } = useHelpContext();
+  const { recordAction } = useHelpContext();
 
   const handleAction = useCallback(
     (e: React.SyntheticEvent) => {

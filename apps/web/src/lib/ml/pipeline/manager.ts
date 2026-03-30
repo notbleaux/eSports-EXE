@@ -15,19 +15,14 @@
 
 import { mlLogger } from '@/utils/logger'
 import { WorkerPool } from '@/lib/worker-utils'
-import type { PipelineConfig, PipelineResult, IngestionResult } from './dataPipeline'
-import { runDataPipeline, ingestMatchData, ingestLensData } from './dataPipeline'
+import type { PipelineConfig, PipelineResult } from './dataPipeline'
+import { runDataPipeline, ingestLensData } from './dataPipeline'
 import type { TrainingSample, Dataset } from './dataStore'
 import { 
-  storeSample, 
-  storeSamples, 
   createDataset, 
   updateDataset,
-  getDataset,
-  querySamples 
+  storeSample
 } from './dataStore'
-import type { ExtractedFeatures } from './features'
-import type { ValidationResult } from './validation'
 import { validateDataset } from './validation'
 
 // ============================================================================
@@ -287,7 +282,7 @@ export class PipelineManager {
     inputData: {
       samples?: TrainingSample[]
       datasetId?: string
-      rawData?: Parameters<typeof ingestMatchData>[0]
+      rawData?: unknown
       lensData?: Parameters<typeof ingestLensData>[0]
     },
     options: {
@@ -328,7 +323,7 @@ export class PipelineManager {
 
       // Execute each stage
       for (const stage of pipeline.stages) {
-        await this.executeStage(execution, stage, inputData, abortController.signal, options.useWorkers)
+        await this.executeStage(execution, stage, inputData, abortController.signal, options?.useWorkers)
       }
 
       execution.status = 'completed'
@@ -365,7 +360,7 @@ export class PipelineManager {
     stage: PipelineStage,
     inputData: Parameters<PipelineManager['executePipeline']>[1],
     abortSignal: AbortSignal,
-    useWorkers?: boolean
+    _useWorkers?: boolean
   ): Promise<void> {
     mlLogger.debug('Executing stage', { executionId: execution.id, stageId: stage.id })
 
@@ -374,7 +369,7 @@ export class PipelineManager {
       await Promise.all(
         stage.steps
           .filter(step => step.enabled)
-          .map(step => this.executeStep(execution, stage.id, step, inputData, abortSignal, useWorkers))
+          .map(step => this.executeStep(execution, stage.id, step, inputData, abortSignal))
       )
     } else {
       // Execute steps sequentially
@@ -385,7 +380,7 @@ export class PipelineManager {
           throw new Error('Pipeline execution aborted')
         }
 
-        await this.executeStep(execution, stage.id, step, inputData, abortSignal, useWorkers)
+        await this.executeStep(execution, stage.id, step, inputData, abortSignal)
       }
     }
   }
@@ -395,8 +390,7 @@ export class PipelineManager {
     stageId: string,
     step: PipelineStep,
     inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal,
-    useWorkers?: boolean
+    abortSignal: AbortSignal
   ): Promise<void> {
     const progress = this.createProgressUpdate(
       stageId,
@@ -489,7 +483,7 @@ export class PipelineManager {
     execution: PipelineExecution,
     step: PipelineStep,
     inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal
+    _abortSignal: AbortSignal
   ): Promise<void> {
     const progress = this.createProgressUpdate(
       'ingestion',
@@ -523,7 +517,7 @@ export class PipelineManager {
     execution: PipelineExecution,
     step: PipelineStep,
     inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal
+    _abortSignal: AbortSignal
   ): Promise<void> {
     const samples = execution.results.get('samples') as TrainingSample[] || inputData.samples || []
     
@@ -540,15 +534,15 @@ export class PipelineManager {
     execution.results.set('validation', validationResult)
 
     // Store valid samples only
-    const validSamples = samples.filter((s, i) => validationResult.sampleResults[i]?.valid)
+    const validSamples = samples.filter((_, i) => validationResult.sampleResults[i]?.valid)
     execution.results.set('samples', validSamples)
   }
 
   private async executeTransformStep(
     execution: PipelineExecution,
     step: PipelineStep,
-    inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal
+    _inputData: Parameters<PipelineManager['executePipeline']>[1],
+    _abortSignal: AbortSignal
   ): Promise<void> {
     const progress = this.createProgressUpdate(
       'transformation',
@@ -561,13 +555,14 @@ export class PipelineManager {
 
     // Transformation logic would be applied here
     // For now, samples are passed through
+    void execution
   }
 
   private async executeNormalizeStep(
     execution: PipelineExecution,
     step: PipelineStep,
-    inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal
+    _inputData: Parameters<PipelineManager['executePipeline']>[1],
+    _abortSignal: AbortSignal
   ): Promise<void> {
     const progress = this.createProgressUpdate(
       'transformation',
@@ -579,13 +574,14 @@ export class PipelineManager {
     this.notifyProgress(progress)
 
     // Normalization is handled in the full pipeline
+    execution.results.set('normalized', true)
   }
 
   private async executeSplitStep(
     execution: PipelineExecution,
     step: PipelineStep,
     inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal
+    _abortSignal: AbortSignal
   ): Promise<void> {
     const pipeline = this.pipelineDefinitions.get(execution.pipelineId)
     if (!pipeline) return
@@ -608,10 +604,10 @@ export class PipelineManager {
   }
 
   private async executeExportStep(
-    execution: PipelineExecution,
+    _execution: PipelineExecution,
     step: PipelineStep,
-    inputData: Parameters<PipelineManager['executePipeline']>[1],
-    abortSignal: AbortSignal
+    _inputData: Parameters<PipelineManager['executePipeline']>[1],
+    _abortSignal: AbortSignal
   ): Promise<void> {
     const progress = this.createProgressUpdate(
       'preparation',
@@ -676,7 +672,7 @@ export class PipelineManager {
   async executeWithWorker<T, R>(
     action: string,
     payload: T,
-    timeout?: number
+    _timeout?: number
   ): Promise<R> {
     if (!this.workerPool) {
       throw new Error('Worker pool not available')
@@ -692,7 +688,7 @@ export class PipelineManager {
   async processDataset(
     samples: TrainingSample[],
     datasetName: string,
-    config?: Partial<PipelineConfig>
+    _config?: Partial<PipelineConfig>
   ): Promise<{
     execution: PipelineExecution
     dataset?: Dataset
@@ -745,7 +741,7 @@ export class PipelineManager {
   ): Promise<{
     stored: number
     rejected: number
-    validationResults: ValidationResult[]
+    validationResults: import('./validation').ValidationResult[]
   }> {
     const { strictMode = false, storeInvalid = false } = options
 

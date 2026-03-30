@@ -220,8 +220,8 @@ export function isVoiceOverEnabled(): boolean {
   // Check for touch accessibility API (iOS)
   if ('ontouchstart' in window) {
     // VoiceOver often changes touch behavior
-    const touchEvent = document.createEvent('TouchEvent');
     try {
+      const touchEvent = document.createEvent('TouchEvent');
       touchEvent.initTouchEvent('touchstart', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, [], []);
     } catch {
       // VoiceOver may modify touch events
@@ -229,8 +229,7 @@ export function isVoiceOverEnabled(): boolean {
   }
   
   // Check for WebKit specific accessibility features
-  const hasAccessibility = 'webkitSpeechGrammarList' in window || 
-                          'speechSynthesis' in window;
+  // _hasAccessibility would check: 'webkitSpeechGrammarList' in window || 'speechSynthesis' in window
   
   // Use screen reader detection API if available
   if ('matchMedia' in window) {
@@ -552,7 +551,7 @@ export function getRegionAttributes(
  * Announce region change to VoiceOver
  */
 export function announceRegionChange(
-  regionId: string,
+  _regionId: string,
   regionLabel: string
 ): void {
   announceToVoiceOver({

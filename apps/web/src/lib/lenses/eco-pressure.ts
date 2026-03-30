@@ -286,7 +286,7 @@ function calculateTeamEconomy(
  */
 function predictNextBuy(
   data: EcoPressureInput['economies']['attackers'],
-  currentBuy: TeamEconomy['buyType'],
+  _currentBuy: TeamEconomy['buyType'],
   fullBuyThreshold: number,
   forceBuyThreshold: number
 ): TeamEconomy['buyType'] {
@@ -320,7 +320,7 @@ function predictNextBuy(
  */
 function calculatePredictionConfidence(
   data: EcoPressureInput['economies']['attackers'],
-  predictedBuy: TeamEconomy['buyType']
+  _predictedBuy: TeamEconomy['buyType']
 ): number {
   let confidence = 0.6
   

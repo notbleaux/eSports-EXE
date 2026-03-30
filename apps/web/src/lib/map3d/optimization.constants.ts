@@ -4,8 +4,6 @@
  * [Ver001.000] - CRIT-2 Resolution: Extracted magic numbers to constants
  */
 
-import * as THREE from 'three';
-
 // ============================================
 // Default Configuration Values
 // ============================================

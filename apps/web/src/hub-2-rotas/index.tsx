@@ -181,7 +181,7 @@ function RotasHubContent(): React.ReactElement {
   return (
     <motion.div
       className="min-h-screen p-4 md:p-6 lg:p-8"
-      style={{ backgroundColor: '#0f172a' }}
+      style={{ backgroundColor: '#0a0a0f' }}
       initial="hidden"
       animate="visible"
       variants={heroVariants}
@@ -556,7 +556,11 @@ function RotasHubContent(): React.ReactElement {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         className="mt-4 pt-4"
+<<<<<<< Updated upstream
                         style={{ borderTop: `1px solid rgba(255, 255, 255, 0.1)` }}
+=======
+                        style={{ borderTop: `1px solid ${'rgba(255, 255, 255, 0.1)'}` }}
+>>>>>>> Stashed changes
                       >
                         <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
                           <motion.div

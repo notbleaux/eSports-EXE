@@ -15,9 +15,9 @@
 
 import * as tf from '@tensorflow/tfjs'
 import { mlLogger } from '@/utils/logger'
-import type { TrainingSample, Dataset } from './dataStore'
+import type { TrainingSample } from './dataStore'
 import type { ExtractedFeatures } from './features'
-import { validateSample, calculateDistributionStats, DistributionStats } from './validation'
+import { validateSample, calculateDistributionStats } from './validation'
 
 // ============================================================================
 // Pipeline Types
@@ -585,10 +585,10 @@ export function createTFDataset(
 ): tf.data.Dataset<{ xs: tf.Tensor; ys: tf.Tensor }> {
   const { xs, ys } = samplesToTensors(samples)
   
-  let dataset = tf.data.zip({ xs: tf.data.array(xs), ys: tf.data.array(ys) })
+  const dataset = tf.data.zip({ xs: tf.data.array(xs), ys: tf.data.array(ys) })
   
   if (config.shuffle) {
-    dataset = dataset.shuffle(samples.length, config.shuffleSeed)
+    return dataset.shuffle(samples.length, config.shuffleSeed).batch(config.batchSize)
   }
   
   return dataset.batch(config.batchSize)
@@ -629,7 +629,7 @@ export async function runDataPipeline(
         rejectedCount++
         mlLogger.debug('Sample rejected', { 
           id: sample.id, 
-          errors: validation.errors.map(e => e.message) 
+          errors: validation.errors.map((e: { message: string }) => e.message) 
         })
       }
     }

@@ -6,7 +6,6 @@
 
 // Switch Control
 export {
-  SwitchControlManager,
   switchControl,
   useSwitchControl,
   TIMING_PRESETS,
@@ -23,7 +22,6 @@ export type {
 
 // Eye Tracking
 export {
-  EyeTrackingManager,
   eyeTracking,
   useEyeTracking,
   DEFAULT_CALIBRATION_POINTS,

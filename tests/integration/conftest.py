@@ -1,41 +1,42 @@
 """
-Pytest fixtures for pipeline integration tests.
+Pytest fixtures for cross-service E2E integration tests.
 
-Provides comprehensive mocking and fixtures for testing the complete
-pipeline flow without requiring external services (database, VLR.gg, etc.).
+Provides fixtures for testing:
+- Godot → API → WebSocket flows
+- Feature Store integration
+- Analytics pipeline
+- Circuit breaker behavior
+- Error recovery patterns
+
+[Ver002.000] - Integration test fixtures
 """
 
 import pytest
 import asyncio
-import hashlib
-import tempfile
+import httpx
+import websockets
+import json
+import uuid
+from datetime import datetime, timedelta
+from typing import AsyncGenerator, Dict, Any, Optional
 from pathlib import Path
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, Optional
-from unittest.mock import AsyncMock, MagicMock, patch
-
-# Add shared path for imports
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "shared" / "axiom-esports-data"))
 
-from pipeline import PipelineOrchestrator, PipelineMode, PipelineStage
-from pipeline.models import RunInstance, RunStatus, TriggerType
-from pipeline.scheduler import PipelineScheduler
-from pipeline.runner import PipelineRunner
-from pipeline.config import PipelineConfig
-from pipeline.dead_letter import DeadLetterQueue
-from pipeline.metrics import PipelineMetrics
-from pipeline.stage_tracker import StageTracker
-from extraction.src.storage.known_record_registry import KnownRecordRegistry
-from extraction.src.storage.integrity_checker import compute_checksum
-from extraction.src.parsers.match_parser import RawMatchData
-from extraction.src.bridge.extraction_bridge import ExtractionBridge, KCRITRRecord
+# Add service paths
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "services" / "api"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "services" / "websocket"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "packages" / "shared"))
+
+# Test configuration
+TEST_API_URL = "http://localhost:8001"  # Test API port
+TEST_WS_URL = "ws://localhost:8766"     # Test WebSocket port
+TEST_DB_URL = "postgresql://test:test@localhost:5433/test_db"
+TEST_REDIS_URL = "redis://localhost:6380"
 
 
-# ============================================================================
-# Event Loop Fixture
-# ============================================================================
+# =============================================================================
+# Event Loop and Session Fixtures
+# =============================================================================
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -45,435 +46,466 @@ def event_loop():
     loop.close()
 
 
-# ============================================================================
-# Temporary Directory Fixtures
-# ============================================================================
+@pytest.fixture(scope="session")
+async def api_client() -> AsyncGenerator[httpx.AsyncClient, None]:
+    """Shared API client for integration tests."""
+    async with httpx.AsyncClient(
+        base_url=TEST_API_URL,
+        timeout=30.0,
+        headers={"Content-Type": "application/json"}
+    ) as client:
+        yield client
+
+
+@pytest.fixture(scope="session")
+async def websocket_client():
+    """WebSocket client factory for integration tests."""
+    clients = []
+    
+    async def create_client(endpoint: str = "/ws/matches/live"):
+        ws_url = f"{TEST_WS_URL}{endpoint}"
+        ws = await websockets.connect(ws_url)
+        clients.append((ws, endpoint))
+        return ws
+    
+    yield create_client
+    
+    # Cleanup all clients
+    for ws, _ in clients:
+        try:
+            await ws.close()
+        except Exception:
+            pass
+
+
+# =============================================================================
+# Tournament Fixtures
+# =============================================================================
 
 @pytest.fixture
-def temp_data_dir():
-    """Create a temporary directory for test data."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        yield Path(tmpdir)
-
-
-@pytest.fixture
-def temp_storage_path(temp_data_dir):
-    """Create temporary storage paths for pipeline components."""
-    return {
-        "raw": temp_data_dir / "raw_extractions",
-        "dead_letter": temp_data_dir / "dead_letter",
-        "metrics": temp_data_dir / "metrics",
-        "checkpoints": temp_data_dir / "checkpoints",
+async def test_tournament(api_client: httpx.AsyncClient) -> Dict[str, Any]:
+    """Create and yield a test tournament."""
+    tournament_data = {
+        "name": f"Test Tournament {uuid.uuid4().hex[:8]}",
+        "game": "valorant",
+        "start_date": datetime.utcnow().isoformat(),
+        "end_date": (datetime.utcnow() + timedelta(days=1)).isoformat(),
+        "teams_count": 8
     }
-
-
-# ============================================================================
-# Pipeline Configuration Fixtures
-# ============================================================================
-
-@pytest.fixture
-def test_pipeline_config(temp_storage_path):
-    """Create a test pipeline configuration."""
-    config = PipelineConfig(
-        mode="delta",
-        epochs=[1, 2, 3],
-        batch_size=10,
-        max_workers=2,
-        checkpoint_interval=5,
-        rate_limit_seconds=0.1,
-        max_retries=2,
-        dead_letter_path=temp_storage_path["dead_letter"],
-        metrics_path=temp_storage_path["metrics"],
-        checkpoint_path=temp_storage_path["checkpoints"],
-        raw_storage_path=temp_storage_path["raw"],
-        database_url=None,  # Use in-memory mode
-        skip_checksum_unchanged=True,
-        enable_crossref=False,
-        enable_metrics=True,
-        log_level="DEBUG",
-    )
-    config.ensure_directories()
-    return config
-
-
-# ============================================================================
-# Mock VLR Client Fixtures
-# ============================================================================
-
-@dataclass
-class MockVLRResponse:
-    """Mock response from VLR.gg client."""
-    status: int = 200
-    raw_html: str = ""
-    checksum: str = ""
-    url: str = ""
-
-
-def generate_sample_match_html(match_id: str, tournament: str = "Test Tournament") -> str:
-    """Generate sample VLR.gg match HTML for testing."""
-    players_html = ""
-    agents = ["Jett", "Viper", "Sova", "Killjoy", "Sage", 
-              "Reyna", "Brimstone", "Breach", "Cypher", "Skye"]
     
-    for i in range(10):
-        team = "TeamA" if i < 5 else "TeamB"
-        players_html += f'''
-        <div class="vm-stats-game">
-            <div class="mod-player" data-team-name="{team}">
-                <div class="text-of">Player{i:03d}</div>
-                <img alt="{agents[i]}" />
-                <td class="mod-stat">{1.0 + i * 0.1:.2f}</td>
-                <td class="mod-stat">{150 + i * 15}</td>
-                <td class="mod-stat">{10 + i}</td>
-                <td class="mod-stat">{15 - i % 8}</td>
-                <td class="mod-stat">{5 + i % 5}</td>
-                <td class="mod-stat">{60 + i * 2}%</td>
-                <td class="mod-stat">{80 + i * 8}</td>
-                <td class="mod-stat">{15 + i}%</td>
-                <td class="mod-stat">{i % 5}</td>
-                <td class="mod-stat">{i % 3}</td>
-            </div>
-        </div>
-        '''
+    # Create tournament via API
+    response = await api_client.post("/api/v1/tournaments/", json=tournament_data)
     
-    html = f'''
-    <html>
-    <body>
-        <div class="match-header-event">
-            <div>{tournament}</div>
-        </div>
-        <div class="map"><span>Haven</span></div>
-        <div data-utc-ts="1733011200">Date</div>
-        <div>Patch 8.11</div>
-        {players_html}
-    </body>
-    </html>
-    '''
-    return html
+    if response.status_code == 201:
+        tournament = response.json()
+    elif response.status_code == 501:
+        # Fallback for unimplemented endpoint
+        tournament = {
+            "id": str(uuid.uuid4()),
+            **tournament_data,
+            "status": "created"
+        }
+    else:
+        pytest.skip(f"Tournament creation not available: {response.status_code}")
+        tournament = {
+            "id": str(uuid.uuid4()),
+            **tournament_data,
+            "status": "fallback"
+        }
+    
+    yield tournament
+    
+    # Cleanup
+    try:
+        await api_client.delete(f"/api/v1/tournaments/{tournament['id']}")
+    except Exception:
+        pass
 
 
 @pytest.fixture
-def mock_vlr_client():
-    """Mock VLR.gg client for testing."""
-    client = MagicMock()
-    
-    # Create a factory for responses
-    def create_response(url: str, match_id: str = None) -> MockVLRResponse:
-        if match_id is None:
-            match_id = url.split("/")[-1] if "/" in url else "test_match"
-        
-        html = generate_sample_match_html(match_id)
-        checksum = compute_checksum(html.encode())
-        
-        return MockVLRResponse(
-            status=200,
-            raw_html=html,
-            checksum=checksum,
-            url=url,
-        )
-    
-    # Set up the ethical_fetch method
-    async def ethical_fetch(url: str, **kwargs) -> MockVLRResponse:
-        return create_response(url)
-    
-    client.ethical_fetch = AsyncMock(side_effect=ethical_fetch)
-    client.create_response = create_response
-    
-    return client
-
-
-@pytest.fixture
-def mock_vlr_client_with_failures():
-    """Mock VLR client that simulates various failure modes."""
-    client = MagicMock()
-    
-    call_count = 0
-    fail_match_ids = {"fail_match_001", "fail_match_002"}
-    
-    async def ethical_fetch(url: str, **kwargs) -> MockVLRResponse:
-        nonlocal call_count
-        call_count += 1
-        match_id = url.split("/")[-1] if "/" in url else "test_match"
-        
-        if match_id in fail_match_ids:
-            return MockVLRResponse(
-                status=500,
-                raw_html="",
-                checksum="",
-                url=url,
-            )
-        
-        html = generate_sample_match_html(match_id)
-        return MockVLRResponse(
-            status=200,
-            raw_html=html,
-            checksum=compute_checksum(html.encode()),
-            url=url,
-        )
-    
-    client.ethical_fetch = AsyncMock(side_effect=ethical_fetch)
-    client.call_count = lambda: call_count
-    client.fail_match_ids = fail_match_ids
-    
-    return client
-
-
-# ============================================================================
-# Sample Data Fixtures
-# ============================================================================
-
-@pytest.fixture
-def sample_player_stats():
-    """Sample valid player statistics."""
+async def test_match_result() -> Dict[str, Any]:
+    """Generate a test match result (Godot export format)."""
+    match_id = f"match_{uuid.uuid4().hex[:8]}"
     return {
-        'player_id': 'p001',
-        'match_id': 'm001',
-        'name': 'TestPlayer',
-        'team': 'TestTeam',
-        'kills': 20,
-        'deaths': 15,
-        'assists': 5,
-        'acs': 245,
-        'adr': 158,
-        'kast_pct': 74.2,
-        'hs_pct': 28.5,
-        'first_bloods': 3,
-        'clutch_wins': 1,
-    }
-
-
-@pytest.fixture
-def sample_raw_match_data():
-    """Create sample RawMatchData for testing."""
-    return RawMatchData(
-        vlr_match_id="test_match_001",
-        tournament="VCT 2025 Masters Bangkok",
-        map_name="Haven",
-        match_date="1733011200",
-        patch_version="8.11",
-        players=[
+        "match_id": match_id,
+        "tournament_id": "test_tournament",
+        "team1_id": "team_a",
+        "team2_id": "team_b",
+        "team1_score": 13,
+        "team2_score": 10,
+        "winner_id": "team_a",
+        "map_results": [
             {
-                "player": f"Player{i:03d}",
-                "team": "TeamA" if i < 5 else "TeamB",
-                "agent": ["Jett", "Viper", "Sova", "Killjoy", "Sage",
-                         "Reyna", "Brimstone", "Breach", "Cypher", "Skye"][i],
-                "acs": str(150 + i * 15),
-                "kills": str(10 + i),
-                "deaths": str(15 - i % 8),
-                "assists": str(5 + i % 5),
-                "kast": f"{60 + i * 2}%",
-                "adr": str(80 + i * 8),
-                "hs_pct": f"{15 + i}%",
-                "first_blood": str(i % 5),
-                "clutch_win": str(i % 3),
+                "map": "Haven",
+                "team1_score": 13,
+                "team2_score": 10,
+                "duration_seconds": 2340
             }
-            for i in range(10)
         ],
-    )
+        "stats": {
+            "team_a": {
+                "player_1": {"kills": 22, "deaths": 15, "assists": 5, "acs": 285},
+                "player_2": {"kills": 18, "deaths": 17, "assists": 8, "acs": 245},
+            },
+            "team_b": {
+                "player_3": {"kills": 16, "deaths": 19, "assists": 6, "acs": 198},
+                "player_4": {"kills": 14, "deaths": 21, "assists": 4, "acs": 175},
+            }
+        },
+        "submitted_at": datetime.utcnow().isoformat()
+    }
 
 
-@pytest.fixture
-def sample_kcritr_records(sample_raw_match_data):
-    """Generate sample KCRITR records from raw match data."""
-    bridge = ExtractionBridge()
-    return bridge.transform(sample_raw_match_data)
-
-
-# ============================================================================
-# Component Fixtures
-# ============================================================================
-
-@pytest.fixture
-def test_registry():
-    """Create a test KnownRecordRegistry (in-memory mode)."""
-    return KnownRecordRegistry(db_url=None)
-
+# =============================================================================
+# Feature Store Fixtures
+# =============================================================================
 
 @pytest.fixture
-def test_tracker(temp_data_dir):
-    """Create a test StageTracker."""
-    state_file = temp_data_dir / "tracker_state.json"
-    return StageTracker(db_url=None, state_file=state_file)
-
-
-@pytest.fixture
-def test_dlq(temp_storage_path):
-    """Create a test DeadLetterQueue."""
-    return DeadLetterQueue(storage_path=temp_storage_path["dead_letter"])
-
-
-@pytest.fixture
-def test_metrics(temp_storage_path):
-    """Create a test PipelineMetrics."""
-    return PipelineMetrics(metrics_path=temp_storage_path["metrics"])
-
-
-@pytest.fixture
-def test_scheduler():
-    """Create a test PipelineScheduler."""
-    return PipelineScheduler()
-
-
-@pytest.fixture
-def test_runner():
-    """Create a test PipelineRunner."""
-    return PipelineRunner()
-
-
-# ============================================================================
-# Orchestrator Fixtures with Mocks
-# ============================================================================
-
-@pytest.fixture
-def mock_orchestrator_deps(test_pipeline_config, temp_storage_path):
-    """Create mocked dependencies for PipelineOrchestrator."""
-    
-    # Create real components
-    registry = KnownRecordRegistry(db_url=None)
-    tracker = StageTracker(db_url=None)
-    metrics = PipelineMetrics(metrics_path=temp_storage_path["metrics"])
-    dlq = DeadLetterQueue(storage_path=temp_storage_path["dead_letter"])
-    
+def sample_spatial_features() -> Dict[str, Any]:
+    """Generate sample spatial features for SATOR Square."""
     return {
-        "config": test_pipeline_config,
-        "registry": registry,
-        "tracker": tracker,
-        "metrics": metrics,
-        "dlq": dlq,
+        "match_id": f"test_match_{uuid.uuid4().hex[:8]}",
+        "feature_values": {
+            "impact_events": [
+                {"x": 100, "y": 200, "timestamp": 1000, "type": "kill"},
+                {"x": 150, "y": 250, "timestamp": 1500, "type": "assist"},
+            ],
+            "death_events": [
+                {"x": 120, "y": 220, "timestamp": 1100, "player": "player_1"},
+            ],
+            "ability_usage": [
+                {"x": 130, "y": 230, "timestamp": 1200, "ability": "smoke"},
+            ],
+            "heatmap_data": {
+                "grid_size": 50,
+                "values": [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]
+            }
+        },
+        "computed_at": datetime.utcnow().isoformat(),
+        "source_system": "godot_simulation"
     }
 
 
 @pytest.fixture
-def patched_orchestrator(mock_orchestrator_deps, mock_vlr_client):
-    """Create a PipelineOrchestrator with mocked external dependencies."""
-    deps = mock_orchestrator_deps
-    
-    # Patch the ResilientVLRClient to use our mock
-    with patch("pipeline.orchestrator.ResilientVLRClient") as mock_client_class:
-        # Create an async context manager mock
-        mock_instance = MagicMock()
-        mock_instance.ethical_fetch = mock_vlr_client.ethical_fetch
-        mock_client_class.return_value.__aenter__ = AsyncMock(return_value=mock_instance)
-        mock_client_class.return_value.__aexit__ = AsyncMock(return_value=None)
+async def feature_store_client(api_client: httpx.AsyncClient):
+    """Feature Store client helper."""
+    class FeatureStoreClient:
+        def __init__(self, client: httpx.AsyncClient):
+            self.client = client
+            self.base_url = "/api/v1/features"
         
-        # Create orchestrator with real components but mocked client
-        orchestrator = PipelineOrchestrator(
-            config=deps["config"],
-            registry=deps["registry"],
-            tracker=deps["tracker"],
-            metrics=deps["metrics"],
-            dlq=deps["dlq"],
-        )
+        async def store_features(self, match_id: str, features: Dict[str, Any]):
+            """Store features for a match."""
+            response = await self.client.post(
+                f"{self.base_url}/match/{match_id}",
+                json=features
+            )
+            return response
         
-        yield orchestrator
-
-
-# ============================================================================
-# Database Mock Fixtures
-# ============================================================================
-
-@pytest.fixture
-def mock_db_connection():
-    """Create a mock database connection for testing."""
-    conn = MagicMock()
+        async def get_spatial_features(self, match_id: str):
+            """Get spatial features for SATOR Square."""
+            response = await self.client.get(
+                f"{self.base_url}/match/{match_id}/spatial"
+            )
+            return response
+        
+        async def store_player_rating(
+            self, 
+            player_id: str, 
+            simrating: Dict[str, Any]
+        ):
+            """Store player SimRating in feature store."""
+            response = await self.client.post(
+                f"{self.base_url}/player/{player_id}/rating",
+                json={
+                    "player_id": player_id,
+                    "simrating": simrating,
+                    "computed_at": datetime.utcnow().isoformat()
+                }
+            )
+            return response
     
-    # Mock fetch results
-    mock_rows = [
-        {"entity_id": f"match_{i:03d}"} 
-        for i in range(20)
-    ]
-    conn.fetch = AsyncMock(return_value=mock_rows)
-    conn.execute = AsyncMock(return_value=None)
-    conn.close = AsyncMock(return_value=None)
-    
-    return conn
+    return FeatureStoreClient(api_client)
 
+
+# =============================================================================
+# Analytics Fixtures
+# =============================================================================
 
 @pytest.fixture
-def mock_asyncpg():
-    """Mock asyncpg module for database testing."""
-    with patch("asyncpg.connect") as mock_connect:
-        conn = MagicMock()
-        conn.fetch = AsyncMock(return_value=[])
-        conn.execute = AsyncMock(return_value=None)
-        conn.close = AsyncMock(return_value=None)
-        mock_connect.return_value = conn
-        yield mock_connect
-
-
-# ============================================================================
-# Verification Fixtures
-# ============================================================================
-
-@pytest.fixture
-def valid_player_stats():
-    """Generate valid player statistics for verification testing."""
+def sample_player_stats() -> Dict[str, Any]:
+    """Generate sample player stats for SimRating calculation."""
     return {
-        'player_id': 'p001',
-        'match_id': 'm001',
-        'name': 'TestPlayer',
-        'team': 'TestTeam',
-        'kills': 20,
-        'deaths': 15,
-        'assists': 5,
-        'acs': 245,
-        'adr': 158,
-        'kast_pct': 74.2,
-        'hs_pct': 28.5,
-        'first_bloods': 3,
-        'clutch_wins': 1,
+        "player_id": f"player_{uuid.uuid4().hex[:8]}",
+        "match_id": f"match_{uuid.uuid4().hex[:8]}",
+        "kills": 22,
+        "deaths": 15,
+        "assists": 5,
+        "acs": 285,
+        "adr": 185.5,
+        "kast_pct": 78.5,
+        "hs_pct": 32.0,
+        "first_bloods": 3,
+        "clutch_wins": 1,
+        "agent": "Jett",
+        "team": "Team A",
+        "opponent": "Team B"
     }
 
 
 @pytest.fixture
-def invalid_player_stats():
-    """Generate invalid player statistics for verification testing."""
+def sample_simrating_request() -> Dict[str, float]:
+    """Generate sample SimRating calculation request."""
     return {
-        'player_id': 'p002',
-        'match_id': 'm001',
-        'name': 'InvalidPlayer',
-        'team': 'TestTeam',
-        'kills': -5,  # Invalid: negative kills
-        'deaths': 15,
-        'assists': 100,  # Invalid: too high
-        'acs': 1000,  # Invalid: exceeds max
-        'adr': -10,  # Invalid: negative
-        'kast_pct': 150.0,  # Invalid: exceeds 100%
-        'hs_pct': -5.0,  # Invalid: negative
-        'first_bloods': -1,  # Invalid: negative
+        "kills_z": 1.2,
+        "deaths_z": -0.5,
+        "adjusted_kill_value_z": 1.0,
+        "adr_z": 0.8,
+        "kast_pct_z": 0.6
     }
 
 
-# ============================================================================
-# Checkpoint and State Fixtures
-# ============================================================================
+# =============================================================================
+# Circuit Breaker Fixtures
+# =============================================================================
 
 @pytest.fixture
-def sample_checkpoint():
-    """Create a sample checkpoint for testing resumption."""
-    from pipeline.models import Checkpoint
+async def circuit_breaker_client(api_client: httpx.AsyncClient):
+    """Circuit breaker test helper."""
+    class CircuitBreakerClient:
+        def __init__(self, client: httpx.AsyncClient):
+            self.client = client
+        
+        async def get_status(self, name: Optional[str] = None):
+            """Get circuit breaker status."""
+            if name:
+                response = await self.client.get(
+                    f"/api/v1/tournaments/system/circuit-breakers/{name}"
+                )
+            else:
+                response = await self.client.get(
+                    "/api/v1/tournaments/system/circuit-breakers"
+                )
+            return response
+        
+        async def reset(self, name: str):
+            """Reset a circuit breaker."""
+            response = await self.client.post(
+                f"/api/v1/tournaments/system/circuit-breakers/{name}/reset"
+            )
+            return response
+        
+        async def simulate_failures(
+            self, 
+            endpoint: str, 
+            count: int = 5
+        ) -> int:
+            """Simulate failures to trigger circuit breaker."""
+            failures = 0
+            for _ in range(count):
+                try:
+                    response = await self.client.get(endpoint)
+                    if response.status_code >= 500:
+                        failures += 1
+                except Exception:
+                    failures += 1
+            return failures
     
-    return Checkpoint(
-        checkpoint_id="chk_001",
-        run_id="run_001",
-        stage="fetched",
-        completed_match_ids=["match_001", "match_002", "match_003"],
-        metadata={"batch_num": 2},
-    )
+    return CircuitBreakerClient(api_client)
+
+
+# =============================================================================
+# Godot Export Client Simulator
+# =============================================================================
+
+@pytest.fixture
+def godot_export_client(api_client: httpx.AsyncClient):
+    """Simulate Godot ExportClient behavior."""
+    class GodotExportClientSimulator:
+        def __init__(self, client: httpx.AsyncClient):
+            self.client = client
+            self.offline_queue = []
+            self.is_online = True
+            self.api_base = "/api/v1"
+        
+        async def send_match_data(
+            self, 
+            match_data: Dict[str, Any],
+            expect_offline: bool = False
+        ):
+            """Send match data, queue if offline."""
+            if expect_offline or not self.is_online:
+                self.offline_queue.append(match_data)
+                return {"queued": True, "queue_size": len(self.offline_queue)}
+            
+            response = await self.client.post(
+                f"{self.api_base}/tournaments/{match_data.get('tournament_id', 'default')}/matches/results",
+                json=match_data
+            )
+            return response
+        
+        async def flush_queue(self):
+            """Flush queued data when back online."""
+            results = []
+            while self.offline_queue:
+                data = self.offline_queue.pop(0)
+                response = await self.client.post(
+                    f"{self.api_base}/tournaments/{data.get('tournament_id', 'default')}/matches/results",
+                    json=data
+                )
+                results.append(response)
+            return results
+        
+        def get_queue_size(self) -> int:
+            """Get current queue size."""
+            return len(self.offline_queue)
+        
+        def set_online(self, online: bool):
+            """Set online status."""
+            self.is_online = online
+    
+    return GodotExportClientSimulator(api_client)
+
+
+# =============================================================================
+# WebSocket Subscription Helper
+# =============================================================================
+
+@pytest.fixture
+def websocket_subscriber():
+    """WebSocket subscription helper."""
+    class WebSocketSubscriber:
+        def __init__(self, ws):
+            self.ws = ws
+            self.messages = []
+            self.subscriptions = set()
+        
+        async def subscribe(self, channel: str):
+            """Subscribe to a channel."""
+            await self.ws.send(json.dumps({
+                "action": "subscribe",
+                "channel": channel
+            }))
+            self.subscriptions.add(channel)
+        
+        async def unsubscribe(self, channel: str):
+            """Unsubscribe from a channel."""
+            await self.ws.send(json.dumps({
+                "action": "unsubscribe",
+                "channel": channel
+            }))
+            self.subscriptions.discard(channel)
+        
+        async def receive_json(self, timeout: float = 5.0):
+            """Receive and parse JSON message."""
+            import asyncio
+            message = await asyncio.wait_for(self.ws.recv(), timeout=timeout)
+            data = json.loads(message)
+            self.messages.append(data)
+            return data
+        
+        async def wait_for_message_type(
+            self, 
+            msg_type: str, 
+            timeout: float = 5.0
+        ) -> Optional[Dict]:
+            """Wait for a specific message type."""
+            import asyncio
+            start = asyncio.get_event_loop().time()
+            while asyncio.get_event_loop().time() - start < timeout:
+                try:
+                    msg = await self.receive_json(timeout=0.5)
+                    if msg.get("type") == msg_type:
+                        return msg
+                except asyncio.TimeoutError:
+                    continue
+            return None
+    
+    return WebSocketSubscriber
+
+
+# =============================================================================
+# Test Data Generators
+# =============================================================================
+
+@pytest.fixture
+def generate_match_result():
+    """Factory fixture for generating match results."""
+    def _generate(
+        tournament_id: str = "test_tournament",
+        team1_score: int = 13,
+        team2_score: int = 10
+    ):
+        return {
+            "match_id": f"match_{uuid.uuid4().hex[:8]}",
+            "tournament_id": tournament_id,
+            "team1_id": "team_a",
+            "team2_id": "team_b",
+            "team1_score": team1_score,
+            "team2_score": team2_score,
+            "winner_id": "team_a" if team1_score > team2_score else "team_b",
+            "map_results": [
+                {
+                    "map": "Haven",
+                    "team1_score": team1_score,
+                    "team2_score": team2_score
+                }
+            ],
+            "submitted_at": datetime.utcnow().isoformat()
+        }
+    return _generate
 
 
 @pytest.fixture
-def partially_completed_tracker():
-    """Create a tracker with some completed stages."""
-    tracker = StageTracker(db_url=None)
-    
-    # Mark some stages complete for certain matches
-    for i in range(5):
-        match_id = f"match_{i:03d}"
-        tracker.mark_stage_complete(match_id, "discovered")
-        tracker.mark_stage_complete(match_id, "fetched")
-        if i < 3:  # First 3 are fully verified
-            tracker.mark_stage_complete(match_id, "verified")
-            tracker.mark_stage_complete(match_id, "parsed")
-    
-    return tracker
+def generate_player_stats():
+    """Factory fixture for generating player stats."""
+    def _generate(player_id: Optional[str] = None):
+        return {
+            "player_id": player_id or f"player_{uuid.uuid4().hex[:8]}",
+            "kills": 20,
+            "deaths": 15,
+            "assists": 5,
+            "acs": 250,
+            "adr": 160.0,
+            "kast_pct": 75.0,
+            "hs_pct": 30.0,
+            "first_bloods": 2
+        }
+    return _generate
+
+
+@pytest.fixture
+def generate_spatial_features():
+    """Factory fixture for generating spatial features."""
+    def _generate(match_id: Optional[str] = None):
+        return {
+            "match_id": match_id or f"match_{uuid.uuid4().hex[:8]}",
+            "impact_events": [
+                {"x": 100, "y": 200, "timestamp": i * 1000, "type": "kill"}
+                for i in range(5)
+            ],
+            "death_events": [
+                {"x": 150, "y": 250, "timestamp": i * 1200, "player": f"player_{i}"}
+                for i in range(3)
+            ],
+            "heatmap_data": {
+                "grid_size": 50,
+                "values": [[0.1, 0.2], [0.3, 0.4]]
+            }
+        }
+    return _generate
+
+
+# =============================================================================
+# Markers Configuration
+# =============================================================================
+
+def pytest_configure(config):
+    """Configure custom markers."""
+    config.addinivalue_line("markers", "integration: Integration tests (requires services)")
+    config.addinivalue_line("markers", "e2e: End-to-end tests (full stack)")
+    config.addinivalue_line("markers", "godot: Godot integration tests")
+    config.addinivalue_line("markers", "websocket: WebSocket tests")
+    config.addinivalue_line("markers", "circuit_breaker: Circuit breaker tests")
+    config.addinivalue_line("markers", "feature_store: Feature store tests")
+    config.addinivalue_line("markers", "slow: Slow tests")

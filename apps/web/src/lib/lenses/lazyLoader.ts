@@ -25,6 +25,15 @@ export interface LensModule {
 /** Lens loading state */
 export type LensLoadingState = 'idle' | 'loading' | 'loaded' | 'error'
 
+/** Performance metrics type */
+interface PerformanceMetrics {
+  totalLoads: number
+  cacheHits: number
+  cacheMisses: number
+  totalLoadTime: number
+  evictions: number
+}
+
 /** Lens metadata for lazy loading */
 export interface LazyLensMeta {
   name: string
@@ -262,7 +271,6 @@ export class LazyLensLoader {
   private config: LazyLoaderConfig
   private progressCallbacks: Set<LoadingProgressCallback> = new Set()
   private idleCallbackId: number | null = null
-  private preloadQueue: string[] = []
   private isPreloading = false
   private performanceMetrics = {
     totalLoads: 0,
@@ -427,7 +435,7 @@ export class LazyLensLoader {
     memoryBudgetMB: number
     hitRate: number
     avgLoadTime: number
-    performance: typeof this.performanceMetrics
+    performance: PerformanceMetrics
   } {
     const cached = Array.from(this.cache.values())
     const loaded = cached.filter(e => e.state === 'loaded')
@@ -444,7 +452,7 @@ export class LazyLensLoader {
       loading: cached.filter(e => e.state === 'loading').length,
       maxCache: this.config.maxCachedLenses,
       memoryUsedMB: memoryUsed,
-      memoryBudgetMB: this.config.memoryBudget,
+      memoryBudgetMB: this.config.memoryBudgetMB,
       hitRate: Math.round(hitRate * 100) / 100,
       avgLoadTime: Math.round(avgLoadTime * 100) / 100,
       performance: { ...this.performanceMetrics }

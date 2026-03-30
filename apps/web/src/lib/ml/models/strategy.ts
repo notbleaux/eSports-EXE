@@ -303,7 +303,7 @@ export class StrategyModel {
       }
 
       // Train model
-      const history = await this.model!.fit(xs, ys, {
+      await this.model!.fit(xs, ys, {
         epochs: this.config.epochs,
         batchSize: this.config.batchSize,
         validationSplit: 0.2,
@@ -460,7 +460,7 @@ export class StrategyModel {
   private createRecommendations(
     probabilities: number[],
     matchState: MatchState,
-    opponentTendencies: OpponentTendencies
+    _opponentTendencies: OpponentTendencies
   ): RecommendedStrategy[] {
     const strategyTypes = Object.keys(STRATEGY_DEFINITIONS) as StrategyType[]
     
@@ -505,7 +505,7 @@ export class StrategyModel {
     type: StrategyType,
     confidence: number,
     matchState: MatchState,
-    rank: number
+    _rank: number
   ): RecommendedStrategy {
     const definition = STRATEGY_DEFINITIONS[type]
     const successRate = this.getStrategySuccessRate(type)
@@ -683,7 +683,7 @@ export class StrategyModel {
     const factors: AnalyzedFactor[] = []
 
     // Economy advantage
-    const econAdvantage = matchState.economy.teamBank - matchState.economy.canFullBuy ? 1 : 0
+    const econAdvantage = matchState.economy.teamBank - (matchState.economy.canFullBuy ? 1 : 0)
     factors.push({
       factor: 'Economy Advantage',
       value: econAdvantage,

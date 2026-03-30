@@ -25,7 +25,6 @@ import type {
   LurkTimingGuide,
   Player,
   MapBounds,
-  Site,
   LensResult,
   LensRenderOptions
 } from './tactical-types'
@@ -486,7 +485,7 @@ function averagePath(cluster: TimedPosition[][]): TimedPosition[] {
 /**
  * Identify risk points along path
  */
-function identifyRiskPoints(path: TimedPosition[], mapBounds: MapBounds): Vector2D[] {
+function identifyRiskPoints(path: TimedPosition[], _mapBounds: MapBounds): Vector2D[] {
   const risks: Vector2D[] = []
 
   for (const point of path) {
@@ -502,7 +501,7 @@ function identifyRiskPoints(path: TimedPosition[], mapBounds: MapBounds): Vector
 /**
  * Find potential backstab positions
  */
-function findBackstabPositions(path: TimedPosition[], mapBounds: MapBounds): Vector2D[] {
+function findBackstabPositions(path: TimedPosition[], _mapBounds: MapBounds): Vector2D[] {
   // Last few positions are potential backstab spots
   return path.slice(-3).map(p => p.position)
 }
@@ -513,7 +512,7 @@ function findBackstabPositions(path: TimedPosition[], mapBounds: MapBounds): Vec
 function identifyBackstabOpportunities(
   rounds: LurkRound[],
   optimalPaths: OptimalLurkPath[],
-  backstabWindow: number
+  _backstabWindow: number
 ): BackstabOpportunity[] {
   const opportunities: BackstabOpportunity[] = []
 
@@ -559,7 +558,7 @@ function identifyBackstabOpportunities(
           targetArea: { x: backstabPos.x + 200, y: backstabPos.y },
           optimalTiming: 40 + Math.random() * 10,
           expectedValue: path.successRate * 0.8,
-          escapeRoutes: path.escapeRoutes.slice(0, 2)
+          escapeRoutes: []
         })
       }
     }
@@ -596,7 +595,7 @@ function calculateLurkMetrics(rounds: LurkRound[]): LurkMetrics {
  */
 function generateTimingGuide(
   rounds: LurkRound[],
-  optimalPaths: OptimalLurkPath[]
+  _optimalPaths: OptimalLurkPath[]
 ): LurkTimingGuide {
   // Analyze timing distributions
   const earlyLurks = rounds.filter(r => r.timings.initialMove < LURK_PHASES.early.end)
@@ -604,7 +603,7 @@ function generateTimingGuide(
     r.timings.initialMove >= LURK_PHASES.mid.start && 
     r.timings.initialMove < LURK_PHASES.mid.end
   )
-  const lateLurks = rounds.filter(r => r.timings.initialMove >= LURK_PHASES.late.start)
+  void rounds.filter(r => r.timings.initialMove >= LURK_PHASES.late.start)
 
   const optimalBackstab = rounds.length > 0
     ? rounds.reduce((sum, r) => sum + (r.timings.backstab || 40), 0) / rounds.length
@@ -943,7 +942,7 @@ export function evaluateLurkPath(
  * Get lurk phase for a timestamp
  */
 export function getLurkPhase(timestamp: number): string {
-  for (const [key, phase] of Object.entries(LURK_PHASES)) {
+  for (const [_key, phase] of Object.entries(LURK_PHASES)) {
     if (timestamp >= phase.start && timestamp < phase.end) {
       return phase.label
     }

@@ -362,7 +362,7 @@ function generateTrafficHeatmap(
     })
   })
   
-  cellMap.forEach((cell, key) => {
+  cellMap.forEach((cell) => {
     if (cell.intensity > 0.05) {
       cells.push({
         x: cell.x,

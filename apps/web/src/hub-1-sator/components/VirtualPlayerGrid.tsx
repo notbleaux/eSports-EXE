@@ -118,8 +118,8 @@ const PlayerRow = React.memo<PlayerRowProps>(function PlayerRow({
       <div
         className="flex items-center gap-3 h-[36px] px-3 rounded-lg cursor-pointer transition-all duration-150 hover:scale-[1.01]"
         style={{
-          backgroundColor: colors.porcelain.frost,
-          border: `1px solid ${colors.border.subtle}`,
+          backgroundColor: colors.gray[100],
+          border: `1px solid ${'rgba(255, 255, 255, 0.1)'}`,
         }}
         onClick={handleClick}
         onMouseEnter={(e) => {
@@ -127,7 +127,7 @@ const PlayerRow = React.memo<PlayerRowProps>(function PlayerRow({
           e.currentTarget.style.boxShadow = `0 0 10px ${hubGlow}`;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = colors.border.subtle;
+          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
           e.currentTarget.style.boxShadow = 'none';
         }}
       >
@@ -146,7 +146,7 @@ const PlayerRow = React.memo<PlayerRowProps>(function PlayerRow({
         {/* Avatar */}
         <div
           className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
-          style={{ backgroundColor: colors.background.secondary }}
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
         >
           {avatar ? (
             <img

@@ -28,7 +28,7 @@ import * as THREE from 'three';
 import { FrustumCullingManager, CullingStats } from '@/lib/three/frustumCulling';
 import type { ILogger } from './optimization.logger';
 import { ConsoleLogger, NullLogger } from './optimization.logger';
-import { OPTIMIZATION_DEFAULTS, DEVICE_PROFILES, getDeviceProfileForCapabilities, detectDeviceCapabilities } from './optimization.constants';
+import { OPTIMIZATION_DEFAULTS } from './optimization.constants';
 
 // ============================================
 // Types
@@ -115,8 +115,8 @@ export class MapFrustumCuller extends FrustumCullingManager {
    * Register map objects with automatic categorization
    */
   registerMapObjects(mapGroup: THREE.Group): void {
-    mapGroup.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+    mapGroup.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
         const id = child.uuid;
         const isStatic = !child.userData.dynamic;
 
@@ -141,7 +141,7 @@ export class MapFrustumCuller extends FrustumCullingManager {
   /**
    * Register zone for zone-based culling
    */
-  registerZone(zoneId: string, bounds: THREE.Box3): void {
+  registerZone(zoneId: string): void {
     this.zoneVisibility.set(zoneId, true);
   }
 
@@ -340,10 +340,6 @@ export class OcclusionCuller {
 
     // Check if behind near plane
     if (center.z > 1) return true;
-
-    // Convert to screen coordinates
-    const x = (center.x * 0.5 + 0.5) * this.depthRenderTarget.width;
-    const y = (center.y * -0.5 + 0.5) * this.depthRenderTarget.height;
 
     // Simplified: assume not occluded for distant objects
     // Full implementation would read depth buffer
@@ -758,7 +754,8 @@ export class InstanceRenderer {
     const matrix = new THREE.Matrix4();
     const color = new THREE.Color();
 
-    this.batches.forEach((batch) => {
+    this.batches.forEach((batchInstance) => {
+      const batch = batchInstance;
       // CRIT-10 Fix: Resize matrices array if count has changed
       const expectedMatrixSize = batch.count * 16;
       if (batch.matrices.length !== expectedMatrixSize) {
@@ -968,7 +965,6 @@ export class MapOptimizationManager {
   private textureManager: TextureStreamManager;
   private instanceRenderer: InstanceRenderer | null = null;
   private logger: ILogger;
-  private scene: THREE.Scene;
   private stats: OptimizationStats = {
     culledObjects: 0,
     visibleObjects: 0,

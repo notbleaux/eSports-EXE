@@ -582,7 +582,7 @@ export async function generateLearningCurve(
     trainTimes: []
   }
 
-  const rng = config.randomSeed !== undefined ? mulberry32(config.randomSeed) : Math.random
+  const _rng = config.randomSeed !== undefined ? mulberry32(config.randomSeed) : Math.random
 
   for (const size of config.trainSizes) {
     if (size > samples.length) continue

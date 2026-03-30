@@ -597,6 +597,7 @@ export const AdaptiveFormProvider: React.FC<AdaptiveFormProviderProps> = ({
       cognitiveLoad: cognitiveState.level,
       data: { category: field.category },
     };
+    // Note: fieldContext data property is defined by type but not used in current implementation
 
     const smartDefault = getSmartDefault(fieldContext);
     return smartDefault?.value ?? field.defaultValue;
@@ -876,7 +877,7 @@ interface AdaptiveSectionProps {
  * AdaptiveSection - Form section with progressive disclosure
  */
 export const AdaptiveSection: React.FC<AdaptiveSectionProps> = ({
-  id,
+  id: _id,
   title,
   children,
   showAt = 'always',

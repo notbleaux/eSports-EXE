@@ -207,7 +207,58 @@ async def publish_to_redis_stream(
 
 # --- API Endpoint ---
 
-@router.post("/match-update", status_code=202)
+@router.post(
+    "/match-update",
+    status_code=202,
+    summary="Receive Pandascore match update",
+    description="""
+    Receive Pandascore match update webhook.
+    
+    This endpoint receives real-time match updates from Pandascore API
+    and processes them through the Path A (Live) data pipeline.
+    
+    ## Expected Headers
+    | Header | Description |
+    |--------|-------------|
+    | X-Pandascore-Signature | HMAC-SHA256 signature: `sha256=<hex_digest>` |
+    
+    ## Signature Verification
+    The webhook uses HMAC-SHA256 signature verification:
+    ```
+    signature = hmac-sha256(secret, body)
+    ```
+    
+    ## Event Types
+    - MATCH_START: Match has started
+    - ROUND_END: Round completed
+    - SCORE_UPDATE: Score changed
+    - MATCH_END: Match completed
+    
+    ## Processing Flow
+    1. Verify signature
+    2. Parse JSON payload
+    3. Normalize event format
+    4. Publish to Redis Stream (async)
+    5. Return 202 Accepted
+    
+    ## Response Codes
+    - 202: Webhook accepted for processing
+    - 400: Invalid JSON payload
+    - 401: Invalid signature
+    - 500: Internal server error
+    
+    ## Configuration
+    Set `PANDASCORE_WEBHOOK_SECRET` environment variable for signature verification.
+    Configure webhook URL in Pandascore dashboard:
+    `https://api.esportez-manager.com/webhooks/pandascore/match-update`
+    """,
+    responses={
+        202: {"description": "Webhook accepted for async processing"},
+        400: {"description": "Invalid JSON payload"},
+        401: {"description": "Invalid signature"},
+        500: {"description": "Internal server error"},
+    },
+)
 async def handle_match_update(
     request: Request,
     background_tasks: BackgroundTasks

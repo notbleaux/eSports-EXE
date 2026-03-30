@@ -15,7 +15,7 @@
  * - Responds to cognitive load
  */
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type {
   LearningPath,

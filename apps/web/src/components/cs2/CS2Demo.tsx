@@ -11,7 +11,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { GameSelector, type GameType } from '@/components/GameSelector';
 import { CS2MapViewer } from './CS2MapViewer';
 import { CS2WeaponCard, CS2WeaponCompare } from './CS2WeaponCard';
-import type { CS2MapData, CS2Weapon, CS2MapId } from './types';
+import type { CS2MapData, CS2Weapon } from './types';
 
 // Sample Map Data
 const SAMPLE_MAP: CS2MapData = {

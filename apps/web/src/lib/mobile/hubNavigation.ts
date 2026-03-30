@@ -233,7 +233,7 @@ export function useHubNavigation(
   }, [enabled, currentIndex, navigate, threshold, velocityThreshold, hapticEnabled, edgeSwipeEnabled, edgeSwipeThreshold, animationDuration]);
 
   // Handle pan for visual feedback
-  const handlePan = useCallback((delta: Point2D, state: GestureState) => {
+  const handlePan = useCallback((delta: Point2D, _state: GestureState) => {
     if (!visualFeedback || !enabled) return;
 
     const progress = Math.min(Math.abs(delta.x) / threshold, 1);
@@ -432,7 +432,7 @@ export interface IndicatorStyle {
  */
 export function getLeftSwipeIndicatorStyles(
   progress: number,
-  hubColor: string
+  _hubColor: string
 ): IndicatorStyle {
   const easedProgress = 1 - Math.pow(1 - progress, 3); // easeOutCubic
   
@@ -447,7 +447,7 @@ export function getLeftSwipeIndicatorStyles(
  */
 export function getRightSwipeIndicatorStyles(
   progress: number,
-  hubColor: string
+  _hubColor: string
 ): IndicatorStyle {
   const easedProgress = 1 - Math.pow(1 - progress, 3); // easeOutCubic
   
@@ -499,7 +499,7 @@ export function useHubNavigationGestures(
     content: IndicatorStyle;
   } | null;
 } {
-  const { visualFeedback = true, hapticEnabled = true, onIndicatorChange, onHubChange } = props;
+  const { visualFeedback = true, hapticEnabled = true, onIndicatorChange, onHubChange: _onHubChange } = props;
   
   const navigation = useHubNavigation({
     visualFeedback,

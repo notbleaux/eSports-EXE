@@ -5,7 +5,7 @@
  */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSwipe, SwipeDirection } from '@/hooks/gestures/useSwipe';
+import { useSwipe } from '@/hooks/gestures/useSwipe';
 import { usePinch } from '@/hooks/gestures/usePinch';
 import { useLongPress, useDoubleTap } from '@/hooks/gestures/useLongPress';
 import { cn } from '@/lib/utils';
@@ -80,7 +80,7 @@ const SwipeDemo: React.FC = () => {
  * Demo component showcasing pinch-to-zoom
  */
 const PinchDemo: React.FC = () => {
-  const [imageScale, setImageScale] = useState(1);
+  const [, setImageScale] = useState(1);
 
   const { bind, state, reset, scaleTo } = usePinch(
     (pinchState) => {

@@ -365,7 +365,6 @@ export class AggressiveFrustumCuller {
 // ============================================
 
 export class HardwareOcclusionCuller {
-  private renderer: THREE.WebGLRenderer;
   private camera: THREE.Camera;
   private gl: WebGL2RenderingContext;
   private queries = new Map<string, OcclusionQuery>();
@@ -373,40 +372,15 @@ export class HardwareOcclusionCuller {
   private occludees: CulledObject[] = [];
   private config: CullingSystemConfig;
   private frameCount = 0;
-  private depthMaterial: THREE.ShaderMaterial;
-  private occlusionScene: THREE.Scene;
-  private occlusionCamera: THREE.PerspectiveCamera;
 
   constructor(
     renderer: THREE.WebGLRenderer,
     camera: THREE.Camera,
     config: CullingSystemConfig
   ) {
-    this.renderer = renderer;
     this.camera = camera;
     this.config = config;
     this.gl = renderer.getContext() as WebGL2RenderingContext;
-
-    // Create depth material for occlusion rendering
-    this.depthMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec4 vPosition;
-        void main() {
-          vPosition = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          gl_Position = vPosition;
-        }
-      `,
-      fragmentShader: `
-        varying vec4 vPosition;
-        void main() {
-          float depth = vPosition.z / vPosition.w;
-          gl_FragColor = vec4(depth, depth, depth, 1.0);
-        }
-      `,
-    });
-
-    this.occlusionScene = new THREE.Scene();
-    this.occlusionCamera = camera.clone() as THREE.PerspectiveCamera;
   }
 
   /**
@@ -501,77 +475,6 @@ export class HardwareOcclusionCuller {
   }
 
   /**
-   * Issue occlusion query for object
-   */
-  private issueQuery(obj: CulledObject): void {
-    if (!this.gl.createQuery) return;
-
-    let query = this.queries.get(obj.id);
-    if (!query) {
-      query = {
-        id: obj.id,
-        object: obj.object,
-        query: this.gl.createQuery(),
-        pending: false,
-        result: true,
-        frameIssued: 0,
-      };
-      this.queries.set(obj.id, query);
-    }
-
-    if (query.pending) return;
-
-    // Begin query
-    this.gl.beginQuery(this.gl.ANY_SAMPLES_PASSED, query.query!);
-
-    // Render bounding box
-    this.renderBoundingBox(obj.boundingBox);
-
-    // End query
-    this.gl.endQuery(this.gl.ANY_SAMPLES_PASSED);
-
-    query.pending = true;
-    query.frameIssued = this.frameCount;
-  }
-
-  /**
-   * Render bounding box for occlusion test
-   */
-  private renderBoundingBox(box: THREE.Box3): void {
-    // Create temporary mesh for bounding box
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-
-    const geometry = new THREE.BoxGeometry(size.x, size.y, size.z);
-    const mesh = new THREE.Mesh(geometry, this.depthMaterial);
-    mesh.position.copy(center);
-
-    this.occlusionScene.add(mesh);
-    this.renderer.render(this.occlusionScene, this.occlusionCamera);
-    this.occlusionScene.remove(mesh);
-
-    geometry.dispose();
-  }
-
-  /**
-   * Get query results
-   */
-  private getQueryResults(): void {
-    this.queries.forEach((query) => {
-      if (!query.pending || !query.query) return;
-
-      const available = this.gl.getQueryParameter(query.query, this.gl.QUERY_RESULT_AVAILABLE);
-      if (available) {
-        const result = this.gl.getQueryParameter(query.query, this.gl.QUERY_RESULT);
-        query.result = result > 0;
-        query.pending = false;
-      }
-    });
-  }
-
-  /**
    * Clear queries
    */
   clear(): void {
@@ -594,7 +497,6 @@ export class PortalCuller {
   private zones = new Map<string, CullingZone>();
   private portals = new Map<string, Portal>();
   private config: CullingSystemConfig;
-  private currentZone: string | null = null;
 
   constructor(config: CullingSystemConfig) {
     this.config = config;
@@ -857,7 +759,6 @@ export class PortalCuller {
 
 export class MapCullingSystem {
   private camera: THREE.Camera;
-  private renderer: THREE.WebGLRenderer;
   private config: CullingSystemConfig;
   private objects = new Map<string, CulledObject>();
   private spatialHash: SpatialHash;
@@ -1287,7 +1188,7 @@ export function batchCull(
     margin?: number;
   } = {}
 ): { visible: THREE.Object3D[]; culled: THREE.Object3D[] } {
-  const { useBoundingSphere = true, conservative = false, margin = 0 } = options;
+  const { useBoundingSphere = true } = options;
 
   const frustum = new THREE.Frustum();
   const projScreenMatrix = new THREE.Matrix4();

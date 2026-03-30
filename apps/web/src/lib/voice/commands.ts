@@ -557,13 +557,11 @@ class VoiceCommandRegistry {
     const phrases = command.translations[language] || command.translations['en'];
     
     let bestConfidence = 0;
-    let matchedPhrase = '';
 
     for (const phrase of phrases) {
       const confidence = this.calculateConfidence(transcript, phrase);
       if (confidence > bestConfidence) {
         bestConfidence = confidence;
-        matchedPhrase = phrase;
       }
     }
 
@@ -573,7 +571,6 @@ class VoiceCommandRegistry {
         const confidence = this.calculateConfidence(transcript, phrase) * 0.9; // Slight penalty
         if (confidence > bestConfidence) {
           bestConfidence = confidence;
-          matchedPhrase = phrase;
         }
       }
     }

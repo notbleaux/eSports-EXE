@@ -59,6 +59,18 @@ export {
   type FrustrationAlertProps,
 } from './ContextDetector';
 
+// Knowledge Graph Components
+export {
+  KnowledgeGraphView,
+  type KnowledgeGraphViewProps,
+} from './KnowledgeGraphView';
+
+// Knowledge Search Components
+export {
+  KnowledgeSearch,
+  type KnowledgeSearchProps,
+} from './KnowledgeSearch';
+
 // Future component exports will be added here:
 // export { MatchHeader } from './MatchHeader';
 // export { MatchViewer } from './MatchViewer';

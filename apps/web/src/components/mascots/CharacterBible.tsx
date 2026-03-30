@@ -25,7 +25,6 @@ import {
   BookOpen,
   User,
   Home,
-  Quote,
 } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/animation/useReducedMotion';
 import type { CharacterBibleProps } from './types';

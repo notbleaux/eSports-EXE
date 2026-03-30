@@ -303,7 +303,6 @@ export const LiveBroadcast: React.FC<LiveBroadcastProps> = ({
   // Use the broadcast hook
   const {
     messages,
-    unreadMessages,
     unreadCount,
     dismiss,
     dismissAll,

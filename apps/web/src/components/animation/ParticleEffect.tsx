@@ -10,13 +10,10 @@
  * - Auto-cleanup on unmount
  */
 
-import React, { useEffect, useRef, useCallback, useState } from 'react';
-import * as THREE from 'three';
+import { useEffect, useRef, useCallback, useState } from 'react';
+
 import { ParticleSystem, ParticleEmitter, QualityLevel } from '../../lib/animation/particles/system';
-import { 
-  ParticleRenderer, 
-  generateDefaultAtlas,
-} from '../../lib/animation/particles/renderer';
+import { ParticleRenderer } from '../../lib/animation/particles/renderer';
 import {
   EffectPresetName,
   getPreset,
@@ -357,7 +354,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, [autoCleanup]);
 
   // Pause effect
-  const _pause = useCallback(() => {
+  const pauseEffect = useCallback(() => {
     if (!isActiveRef.current) return;
 
     isActiveRef.current = false;
@@ -374,7 +371,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, []);
 
   // Resume effect
-  const _resume = useCallback(() => {
+  const resumeEffect = useCallback(() => {
     if (!state.isPaused) return;
 
     isActiveRef.current = true;
@@ -502,7 +499,7 @@ export interface UseParticleEffectReturn {
 export function useParticleEffect(
   ref: React.RefObject<ParticleEffectRef>
 ): UseParticleEffectReturn {
-  const [state, _setState] = useState<ParticleEffectState>({
+  const [state] = useState<ParticleEffectState>({
     isPlaying: false,
     isPaused: false,
     progress: 0,

@@ -216,7 +216,6 @@ export class TrainingOrchestrator {
   private jobs: Map<string, TrainingJob> = new Map()
   private jobQueue: string[] = []
   private workers: Map<string, WorkerInfo> = new Map()
-  private workerPool: Worker[] = []
   private progressListeners: Set<(jobId: string, progress: TrainingProgress) => void> = new Set()
   private completionListeners: Set<(jobId: string, result: TrainingResult) => void> = new Set()
   private errorListeners: Set<(jobId: string, error: string) => void> = new Set()
@@ -239,7 +238,7 @@ export class TrainingOrchestrator {
 
   private async getWorker(): Promise<Worker> {
     // Look for available worker
-    for (const [id, info] of this.workers) {
+    for (const [, info] of this.workers) {
       if (info.status === 'idle') {
         info.status = 'busy'
         return info.worker
@@ -557,7 +556,7 @@ export class TrainingOrchestrator {
   // Worker Message Handling
   // ============================================================================
 
-  private handleWorkerMessage(event: MessageEvent): void {
+  private _handleWorkerMessage(event: MessageEvent): void {
     const { id, type, data, error } = event.data
     
     if (!id) return
@@ -578,11 +577,11 @@ export class TrainingOrchestrator {
     }
   }
 
-  private handleWorkerError(error: ErrorEvent): void {
+  private _handleWorkerError(error: ErrorEvent): void {
     mlLogger.error('Worker error', { error: error.message })
     
     // Find worker that errored
-    for (const [workerId, info] of this.workers) {
+    for (const [_workerId, info] of this.workers) {
       if (info.currentJob) {
         this.handleJobError(info.currentJob, error.message)
         info.status = 'error'
@@ -616,7 +615,7 @@ export class TrainingOrchestrator {
     job.result = result
 
     // Release worker
-    for (const [id, info] of this.workers) {
+    for (const [, info] of this.workers) {
       if (info.currentJob === jobId) {
         info.status = 'idle'
         info.currentJob = undefined
@@ -650,7 +649,7 @@ export class TrainingOrchestrator {
     job.error = error
 
     // Release worker
-    for (const [id, info] of this.workers) {
+    for (const [, info] of this.workers) {
       if (info.currentJob === jobId) {
         info.status = 'idle'
         info.currentJob = undefined
@@ -778,7 +777,7 @@ export class TrainingOrchestrator {
     this.stop()
     
     // Terminate all workers
-    for (const [id, info] of this.workers) {
+    for (const [, info] of this.workers) {
       info.worker.terminate()
     }
     this.workers.clear()

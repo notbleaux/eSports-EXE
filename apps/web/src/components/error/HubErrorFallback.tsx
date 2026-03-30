@@ -248,7 +248,7 @@ export const HubErrorCompact: React.FC<Omit<HubErrorFallbackProps, 'showDetails'
   title = 'Error',
   message = 'Something went wrong',
   onRetry,
-  componentName
+  componentName: _componentName
 }) => {
   const config = HUB_CONFIG[hub]
 

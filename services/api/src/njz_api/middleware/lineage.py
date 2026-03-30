@@ -253,7 +253,7 @@ def track_lineage(
                     entity_id = result.get('id')
                 
                 # Calculate checksum
-                data_dict = result.dict() if hasattr(result, 'dict') else dict(result)
+                data_dict = result.model_dump() if hasattr(result, 'model_dump') else dict(result)
                 checksum = hashlib.sha256(
                     json.dumps(data_dict, sort_keys=True, default=str).encode()
                 ).hexdigest()

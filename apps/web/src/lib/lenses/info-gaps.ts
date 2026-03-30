@@ -601,9 +601,9 @@ function calculateCoverageStats(
 /**
  * Generate recon position recommendations */
 function generateReconRecommendations(
-  grid: CoverageCell[][],
+  _grid: CoverageCell[][],
   gaps: InfoGap[],
-  input: InfoGapInput
+  _input: InfoGapInput
 ): InfoGapLensData['reconRecommendations'] {
   const recommendations: InfoGapLensData['reconRecommendations'] = []
   

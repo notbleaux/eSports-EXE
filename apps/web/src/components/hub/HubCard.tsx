@@ -11,7 +11,7 @@
  * - Swiss Editorial: Clean typography, intentional whitespace
  */
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -157,7 +157,6 @@ const TrendIndicator: React.FC<{ trend: HubStats['trend']; change?: string }> = 
 // ============================================================================
 
 export const HubCard: React.FC<HubCardProps> = ({
-  id,
   number,
   name,
   subtitle,

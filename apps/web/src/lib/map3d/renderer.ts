@@ -30,8 +30,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader';
-import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler';
+
 
 // ============================================
 // Types
@@ -421,7 +420,7 @@ export class Map3DRenderer {
         case 'glb':
           this.gltfLoader.load(
             url,
-            (gltf) => resolve(gltf),
+            (loadedGltf) => resolve(loadedGltf),
             onProgress,
             onError
           );
@@ -461,8 +460,8 @@ export class Map3DRenderer {
     }
 
     // Optimize materials and geometry
-    root.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+    root.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
         // Enable shadows
         child.castShadow = this.config.shadows;
         child.receiveShadow = this.config.shadows;
@@ -473,8 +472,8 @@ export class Map3DRenderer {
             ? child.material
             : [child.material];
 
-          materials.forEach((mat) => {
-            if (mat instanceof THREE.MeshStandardMaterial) {
+          materials.forEach((material) => {
+            if (material instanceof THREE.MeshStandardMaterial) {
               mat.roughness = Math.max(mat.roughness, 0.3);
               mat.metalness = Math.min(mat.metalness, 0.8);
             }
@@ -777,16 +776,16 @@ export class Map3DRenderer {
     this.controls = null;
 
     // Dispose scene objects
-    this.scene?.traverse((object) => {
-      if (object instanceof THREE.Mesh) {
-        object.geometry.dispose();
+    this.scene?.traverse((obj) => {
+      if (obj instanceof THREE.Mesh) {
+        obj.geometry.dispose();
 
-        const materials = Array.isArray(object.material)
-          ? object.material
-          : [object.material];
+        const mats = Array.isArray(obj.material)
+          ? obj.material
+          : [obj.material];
 
-        materials.forEach((material) => {
-          material.dispose();
+        mats.forEach((mat) => {
+          mat.dispose();
         });
       }
     });

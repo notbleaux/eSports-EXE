@@ -62,7 +62,7 @@ export const WolfMascot: React.FC<WolfMascotProps> = ({
   alt = 'Wolf mascot',
   disabled = false,
   glow = false,
-  theme = 'default'
+  _theme = 'default'
 }) => {
   const animationClass = animate !== 'none' ? `animate-${animate}` : '';
   const glowClass = glow ? 'drop-shadow-[0_0_20px_rgba(71,85,105,0.5)]' : '';

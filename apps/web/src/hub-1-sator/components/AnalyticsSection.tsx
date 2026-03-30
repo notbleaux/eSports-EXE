@@ -34,7 +34,7 @@ interface CompactAnalyticsCardProps {
 export function CompactAnalyticsCard({ onExpand }: CompactAnalyticsCardProps) {
   return (
     <GlassCard
-      hoverGlow={colors.hub.sator}
+      hoverGlow={colors.hub.sator.base}
       className="p-4 cursor-pointer group"
       onClick={onExpand}
     >
@@ -42,9 +42,9 @@ export function CompactAnalyticsCard({ onExpand }: CompactAnalyticsCardProps) {
         <div className="flex items-center gap-3">
           <div 
             className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: `${colors.hub.sator}20` }}
+            style={{ backgroundColor: `${colors.hub.sator.base}20` }}
           >
-            <BarChart3 className="w-5 h-5" style={{ color: colors.hub.sator }} />
+            <BarChart3 className="w-5 h-5" style={{ color: colors.hub.sator.base }} />
           </div>
           <div>
             <h3 className="text-sm font-semibold text-white">Analytics</h3>
@@ -57,7 +57,7 @@ export function CompactAnalyticsCard({ onExpand }: CompactAnalyticsCardProps) {
       {/* Mini stats preview */}
       <div className="mt-4 grid grid-cols-3 gap-2">
         <div className="text-center p-2 rounded-lg bg-white/5">
-          <div className="text-lg font-bold" style={{ color: colors.hub.sator }}>
+          <div className="text-lg font-bold" style={{ color: colors.hub.sator.base }}>
             78.5%
           </div>
           <div className="text-[10px] text-white/40 uppercase">Accuracy</div>
@@ -111,9 +111,9 @@ export function AnalyticsSection({ className = '', compact = false }: AnalyticsS
         <div className="flex items-center gap-3 mb-2">
           <div 
             className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: `${colors.hub.sator}20` }}
+            style={{ backgroundColor: `${colors.hub.sator.base}20` }}
           >
-            <BarChart3 className="w-5 h-5" style={{ color: colors.hub.sator }} />
+            <BarChart3 className="w-5 h-5" style={{ color: colors.hub.sator.base }} />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-white">Analytics</h2>

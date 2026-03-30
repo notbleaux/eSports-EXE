@@ -12,7 +12,7 @@
  * - Debug visualization
  */
 
-import React, {
+import {
   useRef,
   useEffect,
   useState,
@@ -21,7 +21,7 @@ import React, {
   useMemo,
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { MascotId } from '@/components/mascots/types';
+
 import {
   type AnimationState,
   type AnimationStateConfig,
@@ -30,7 +30,7 @@ import {
   DEFAULT_STATE_CONFIGS,
 } from '@/lib/animation/states';
 import { AnimationStateMachine } from '@/lib/animation/stateMachine';
-import { AnimationSequencer, type AnimationSequence, type AnimationStep } from '@/lib/animation/sequencer';
+import { AnimationSequencer, type AnimationSequence } from '@/lib/animation/sequencer';
 import { createAnimationBridge } from '@/lib/three/animationBridge';
 
 // ============================================================================
@@ -106,7 +106,7 @@ interface StateLabelProps {
   progress: number;
 }
 
-const StateLabel: React.FC<StateLabelProps> = ({ state: _state, config, isTransitioning, progress }) => (
+const StateLabel: React.FC<StateLabelProps> = ({ state, config, isTransitioning, progress }) => (
   <motion.div
     className="absolute top-2 left-2 px-2 py-1 rounded text-xs font-mono pointer-events-none select-none z-10"
     style={{
@@ -225,7 +225,7 @@ export const MascotAnimationController = forwardRef<
 >((
   {
     mascotId,
-    currentState: _currentState,
+    currentState,
     targetState,
     controlled = false,
     initialState = 'idle',
@@ -246,7 +246,7 @@ export const MascotAnimationController = forwardRef<
   // Create refs for instances
   const stateMachineRef = useRef<AnimationStateMachine | null>(null);
   const sequencerRef = useRef<AnimationSequencer | null>(null);
-  const bridgeRef = useRef<ReturnType<typeof createAnimationBridge> | null>(null);
+  const _bridgeRef = useRef<ReturnType<typeof createAnimationBridge> | null>(null);
   const isMountedRef = useRef(true);
 
   // State for re-rendering
@@ -267,7 +267,7 @@ export const MascotAnimationController = forwardRef<
     sequencerRef.current = new AnimationSequencer(debug);
 
     // Create animation bridge
-    bridgeRef.current = createAnimationBridge();
+    _bridgeRef.current = createAnimationBridge();
 
     // Subscribe to events
     const unsubscribeStateChange = stateMachineRef.current.on('stateChange', (event) => {
@@ -365,7 +365,16 @@ export const MascotAnimationController = forwardRef<
   const stateConfig = DEFAULT_STATE_CONFIGS[currentAnimState];
   const isTransitioning = stateMachineRef.current?.isBlending() ?? false;
   const blendWeight = stateMachineRef.current?.getBlendWeight() ?? 1;
-  const _animProgress = stateMachineRef.current?.getProgress() ?? 0;
+  // Animation progress is tracked internally by the state machine
+
+  // Force update when animation state changes (for reactivity)
+  useEffect(() => {
+    if (!stateMachineRef.current) return;
+    const interval = setInterval(() => {
+      forceAnimUpdate({});
+    }, 16);
+    return () => clearInterval(interval);
+  }, []);
 
   // Shared easing curves for consistency
   const easings = {
@@ -381,8 +390,8 @@ export const MascotAnimationController = forwardRef<
     playful: [0.68, -0.6, 0.32, 1.6] as [number, number, number, number],
   };
 
-  // Spring physics configurations
-  const _springConfigs = {
+  // Spring physics configurations (available for future use)
+  const springConfigs = {
     gentle: { stiffness: 100, damping: 15, mass: 1 },
     default: { stiffness: 300, damping: 20, mass: 1 },
     bouncy: { stiffness: 400, damping: 10, mass: 1 },

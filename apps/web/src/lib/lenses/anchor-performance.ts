@@ -771,15 +771,6 @@ export function getPerformanceTier(metrics: AnchorMetrics): string {
   return 'Poor'
 }
 
-/**
- * Distance between two points
- */
-function distance(a: Vector2D, b: Vector2D): number {
-  const dx = b.x - a.x
-  const dy = b.y - a.y
-  return Math.sqrt(dx * dx + dy * dy)
-}
-
 // ============================================================================
 // Export
 // ============================================================================

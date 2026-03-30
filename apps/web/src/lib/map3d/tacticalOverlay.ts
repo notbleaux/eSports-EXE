@@ -398,7 +398,7 @@ export class TacticalOverlay3D {
   /**
    * Add spotted effect
    */
-  private addSpottedEffect(playerId: string, position: THREE.Vector3): void {
+  private addSpottedEffect(_playerId: string, pos: THREE.Vector3): void {
     // Create pulsing ring effect
     const geometry = new THREE.RingGeometry(3, 4, 32);
     const material = new THREE.MeshBasicMaterial({
@@ -409,7 +409,7 @@ export class TacticalOverlay3D {
     });
     const ring = new THREE.Mesh(geometry, material);
     ring.rotation.x = -Math.PI / 2;
-    ring.position.copy(position);
+    ring.position.copy(pos);
     ring.position.y = 0.2;
 
     this.scene.add(ring);
@@ -519,7 +519,7 @@ export class TacticalOverlay3D {
    * Clear all trajectories
    */
   clearTrajectories(): void {
-    this.trajectories.forEach((line, id) => {
+    this.trajectories.forEach((_, id) => {
       this.removeTrajectory(id);
     });
   }
@@ -589,7 +589,7 @@ export class TacticalOverlay3D {
    * Clear all zones
    */
   clearZones(): void {
-    this.zones.forEach((mesh, id) => {
+    this.zones.forEach((_, id) => {
       this.removeZone(id);
     });
   }
@@ -619,10 +619,10 @@ export class TacticalOverlay3D {
         this.createMollyEffect(group, config);
         break;
       case 'grenade':
-        this.createGrenadeEffect(group, config);
+        this.createGrenadeEffect(group);
         break;
       case 'decoy':
-        this.createDecoyEffect(group, config);
+        this.createDecoyEffect(group);
         break;
     }
 
@@ -833,7 +833,7 @@ export class TacticalOverlay3D {
   /**
    * Create grenade effect
    */
-  private createGrenadeEffect(group: THREE.Group, config: UtilityConfig): void {
+  private createGrenadeEffect(group: THREE.Group): void {
     const geometry = new THREE.SphereGeometry(0.5, 16, 16);
     const material = new THREE.MeshBasicMaterial({ color: 0x333333 });
     const sphere = new THREE.Mesh(geometry, material);
@@ -845,7 +845,7 @@ export class TacticalOverlay3D {
   /**
    * Create decoy effect
    */
-  private createDecoyEffect(group: THREE.Group, config: UtilityConfig): void {
+  private createDecoyEffect(group: THREE.Group): void {
     const geometry = new THREE.SphereGeometry(0.3, 8, 8);
     const material = new THREE.MeshBasicMaterial({
       color: 0xffff00,
@@ -887,10 +887,10 @@ export class TacticalOverlay3D {
     const group = this.utilities.get(utilityId);
     if (group) {
       // Dispose all children
-      group.traverse((child) => {
-        if (child instanceof THREE.Mesh || child instanceof THREE.Points) {
-          child.geometry.dispose();
-          (child.material as THREE.Material).dispose();
+      group.traverse((obj) => {
+        if (obj instanceof THREE.Mesh || obj instanceof THREE.Points) {
+          obj.geometry.dispose();
+          (obj.material as THREE.Material).dispose();
         }
       });
 
@@ -903,7 +903,7 @@ export class TacticalOverlay3D {
    * Clear all utilities
    */
   clearUtilities(): void {
-    this.utilities.forEach((group, id) => {
+    this.utilities.forEach((_, id) => {
       this.removeUtility(id);
     });
   }
@@ -960,7 +960,7 @@ export class TacticalOverlay3D {
    * Clear all vision cones
    */
   clearVisionCones(): void {
-    this.visionCones.forEach((cone, id) => {
+    this.visionCones.forEach((_, id) => {
       this.removeVisionCone(id);
     });
   }
@@ -1007,7 +1007,7 @@ export class TacticalOverlay3D {
    * Clear all players
    */
   clearPlayers(): void {
-    this.playerMeshes.forEach((group, id) => {
+    this.playerMeshes.forEach((_, id) => {
       this.removePlayerPosition(id);
     });
   }

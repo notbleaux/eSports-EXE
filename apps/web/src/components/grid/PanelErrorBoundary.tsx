@@ -18,20 +18,14 @@ import { createLogger } from '@/utils/logger';
 const logger = createLogger('PanelErrorBoundary');
 
 const HUB_COLORS = {
-  SATOR: colors.hub.sator,
-  ROTAS: colors.hub.rotas,
-  AREPO: colors.hub.arepo,
-  OPERA: colors.hub.opera,
-  TENET: colors.hub.tenet,
+  SATOR: colors.hub.sator.base,
+  ROTAS: colors.hub.rotas.base,
+  AREPO: colors.hub.arepo.base,
+  OPERA: colors.hub.opera.base,
+  TENET: colors.hub.tenet.base,
 };
 
 type HubType = 'SATOR' | 'ROTAS' | 'AREPO' | 'OPERA' | 'TENET';
-
-interface HubColor {
-  base: string;
-  light: string;
-  dark: string;
-}
 
 /** Props for ErrorDisplay component */
 interface ErrorDisplayProps {
@@ -79,15 +73,15 @@ interface PanelErrorBoundaryState {
  * Error display component
  */
 function ErrorDisplay({ error, panelTitle, hub = 'SATOR', onRetry, onClose }: ErrorDisplayProps): JSX.Element {
-  const hubColor = (HUB_COLORS[hub] || colors.hub.sator) as HubColor;
+  const hubColor = HUB_COLORS[hub] || colors.hub.sator.base;
   const errorMessage = error?.message || 'Unknown error occurred';
   
   const handleMouseEnter = (e: MouseEvent<HTMLButtonElement>): void => {
-    e.currentTarget.style.backgroundColor = `${hubColor.base}30`;
+    e.currentTarget.style.backgroundColor = `${hubColor}30`;
   };
 
   const handleMouseLeave = (e: MouseEvent<HTMLButtonElement>): void => {
-    e.currentTarget.style.backgroundColor = `${hubColor.base}20`;
+    e.currentTarget.style.backgroundColor = `${hubColor}20`;
   };
   
   return (
@@ -155,8 +149,8 @@ function ErrorDisplay({ error, panelTitle, hub = 'SATOR', onRetry, onClose }: Er
             type="button"
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#14141a]"
             style={{ 
-              backgroundColor: `${hubColor.base}20`,
-              color: hubColor.base,
+              backgroundColor: `${hubColor}20`,
+              color: hubColor,
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}

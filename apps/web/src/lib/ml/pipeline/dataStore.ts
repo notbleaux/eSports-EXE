@@ -13,7 +13,6 @@
  */
 
 import { mlLogger } from '@/utils/logger'
-import type { ExtractedFeatures } from './features'
 
 // ============================================================================
 // Database Configuration
@@ -626,11 +625,13 @@ export async function getActiveVersion(): Promise<DataVersion | null> {
     const db = await getDB()
     const transaction = db.transaction([STORES.VERSIONS], 'readonly')
     const store = transaction.objectStore(STORES.VERSIONS)
-    const index = store.index('isActive')
 
     const versions = await new Promise<DataVersion[]>((resolve, reject) => {
-      const request = index.getAll(true)
-      request.onsuccess = () => resolve(request.result || [])
+      const request = store.getAll()
+      request.onsuccess = () => {
+        const allVersions = (request.result || []) as DataVersion[]
+        resolve(allVersions.filter(v => v.isActive))
+      }
       request.onerror = () => reject(request.error)
     })
 
@@ -987,11 +988,14 @@ function extractSamplesFromImport(data: unknown): TrainingSample[] {
 
 function isValidSample(data: unknown): data is TrainingSample {
   if (!data || typeof data !== 'object') return false
-  const s = data as Record<string, unknown>
+  const sample = data as Record<string, unknown>
+  const hasValidMetadata = sample.metadata !== null && 
+    sample.metadata !== undefined && 
+    typeof sample.metadata === 'object'
   return (
-    typeof s.id === 'string' &&
-    Array.isArray(s.features) &&
-    s.metadata && typeof s.metadata === 'object'
+    typeof sample.id === 'string' &&
+    Array.isArray(sample.features) &&
+    hasValidMetadata
   )
 }
 

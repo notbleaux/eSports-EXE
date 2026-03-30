@@ -347,9 +347,8 @@ export function HeroMascot({
         
         <motion.div
           className="relative z-10"
-          initial="initial"
-          animate={prefersReducedMotion ? { opacity: 1 } : variants.animate}
-          variants={prefersReducedMotion ? undefined : variants}
+          initial={prefersReducedMotion ? { opacity: 1 } : (variants.initial as any)}
+          animate={prefersReducedMotion ? { opacity: 1 } : (variants.animate as any)}
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
         >
@@ -424,10 +423,8 @@ export function HeroMascot({
         onHoverEnd={() => setIsHovered(false)}
       >
         <motion.div
-          variants={prefersReducedMotion ? {} : {
-            animate: variants.animate,
-          }}
-          animate="animate"
+          initial={prefersReducedMotion ? {} : (variants.initial as any)}
+          animate={prefersReducedMotion ? {} : (variants.animate as any)}
         >
           {effectiveFormat === 'css' ? (
             <MascotComponent 

@@ -319,7 +319,7 @@ function determineTier(successRate: number): ClutchZone['tier'] {
  */
 function generateHeatmap(
   zones: ClutchZone[],
-  bounds: ClutchZoneInput['mapBounds']
+  _bounds: ClutchZoneInput['mapBounds']
 ): HeatmapCell[] {
   const cells: HeatmapCell[] = []
   

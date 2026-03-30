@@ -204,7 +204,7 @@ export function calculate(input: TimingInput): TimingLensData {
 /**
  * Generate timing windows based on round state
  */
-function generateTimingWindows(input: TimingInput, roundDuration: number): TimingWindow[] {
+function generateTimingWindows(input: TimingInput, _roundDuration: number): TimingWindow[] {
   const windows: TimingWindow[] = []
   
   // Execute windows (mid-round)
@@ -346,7 +346,7 @@ function calculateExecuteScore(input: TimingInput, site: string): number {
 /**
  * Calculate round phases
  */
-function calculatePhases(input: TimingInput, roundDuration: number): RoundPhase[] {
+function calculatePhases(input: TimingInput, _roundDuration: number): RoundPhase[] {
   return DEFAULT_PHASES.map(phase => ({
     ...phase,
     // Adjust late phase if bomb planted

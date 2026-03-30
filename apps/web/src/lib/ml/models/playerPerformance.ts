@@ -134,7 +134,7 @@ export class PlayerPerformanceModel {
    * Build the neural network model with LSTM for sequence data
    */
   buildModel(): tf.LayersModel {
-    const { inputFeatures, lstmUnits, denseUnits, dropoutRate } = this.config
+    const { inputFeatures, lstmUnits: _lstmUnits, denseUnits, dropoutRate } = this.config
 
     // Use functional API for more complex architecture
     const input = tf.input({ shape: [inputFeatures] })
@@ -189,7 +189,7 @@ export class PlayerPerformanceModel {
       lossWeights: {
         overall_rating: 1.0,
         components: 0.5
-      },
+      } as unknown as Record<string, number>,
       metrics: {
         overall_rating: 'mae',
         components: 'mae'
@@ -242,7 +242,7 @@ export class PlayerPerformanceModel {
       }
 
       // Train model
-      const history = await this.model!.fit(xs, {
+      await this.model!.fit(xs, {
         overall_rating: ysOverall,
         components: ysComponents
       }, {
@@ -508,7 +508,7 @@ export class PlayerPerformanceModel {
   /**
    * Calculate prediction confidence
    */
-  private calculateConfidence(context: PlayerMatchContext, predictedRating: number): number {
+  private calculateConfidence(context: PlayerMatchContext, _predictedRating: number): number {
     let confidence = 0.7 // Base confidence
 
     // More historical data = higher confidence
@@ -536,7 +536,7 @@ export class PlayerPerformanceModel {
    */
   private determinePerformanceFactors(
     context: PlayerMatchContext,
-    predictedRating: number
+    _predictedRating: number
   ): PerformanceFactors {
     // Form trend
     let formTrend: 'rising' | 'stable' | 'declining' = 'stable'
@@ -584,7 +584,7 @@ export class PlayerPerformanceModel {
   private async calculateMetrics(
     xs: tf.Tensor2D,
     ysOverall: tf.Tensor2D,
-    ysComponents: tf.Tensor2D
+    _ysComponents: tf.Tensor2D
   ): Promise<PlayerPerformanceMetrics> {
     const [overallPred, componentPred] = this.model!.predict(xs) as [tf.Tensor, tf.Tensor]
     
@@ -606,7 +606,7 @@ export class PlayerPerformanceModel {
     const rmse = Math.sqrt(rmseSum / n)
     
     // Calculate R-squared
-    const meanActual = actualOverall.reduce((a, b) => a + b, 0) / n
+    const meanActual = Array.from(actualOverall).reduce((a: number, b: number) => a + b, 0) / n
     let ssTotal = 0
     let ssResidual = 0
     

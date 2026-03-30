@@ -214,7 +214,6 @@ function calculateVisiblePolygon(
   const points: Vector2D[] = [origin]
   const halfFov = fov / 2
   const startAngle = rotation - halfFov
-  const endAngle = rotation + halfFov
 
   // Cast rays at regular intervals
   const angleStep = fov / CONE_SEGMENTS
@@ -386,8 +385,7 @@ function findIntersections(
       if (intersection) {
         intersections.push({
           type: obstacle.type,
-          position: intersection,
-          distance: distance(origin, intersection)
+          position: intersection
         })
       }
     }
@@ -496,7 +494,6 @@ function calculateCoverage(
     }
   }
 
-  const totalArea = mapBounds.width * mapBounds.height
   const cellArea = cellWidth * cellHeight
 
   return {

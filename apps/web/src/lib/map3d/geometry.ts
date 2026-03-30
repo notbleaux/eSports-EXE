@@ -153,7 +153,7 @@ export class MapGeometryManager {
           resolve(gltf.scene);
         },
         undefined,
-        (error) => reject(error)
+        (err) => reject(err)
       );
     });
   }
@@ -243,7 +243,7 @@ export class MapGeometryManager {
           const mats = Array.isArray(child.material)
             ? child.material
             : [child.material];
-          mats.forEach((m) => materials.add(m));
+          mats.forEach((mat) => materials.add(mat));
         }
 
         // Enable shadows
@@ -269,10 +269,10 @@ export class MapGeometryManager {
       const geometries: THREE.BufferGeometry[] = [];
       const reduction = this.getLODReduction(level);
 
-      this.mapGroup.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.geometry) {
+      this.mapGroup.traverse((mesh) => {
+        if (mesh instanceof THREE.Mesh && mesh.geometry) {
           const simplified = this.simplifyGeometry(
-            child.geometry,
+            mesh.geometry,
             reduction
           );
           geometries.push(simplified);
@@ -333,11 +333,11 @@ export class MapGeometryManager {
 
     this.spatialGrid.clear();
 
-    this.mapGroup.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        const key = this.getSpatialKey(child.position);
+    this.mapGroup.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
+        const key = this.getSpatialKey(mesh.position);
         const cell = this.spatialGrid.get(key) || [];
-        cell.push(child);
+        cell.push(mesh);
         this.spatialGrid.set(key, cell);
       }
     });
@@ -362,11 +362,11 @@ export class MapGeometryManager {
     // Collect all walkable surfaces
     const geometries: THREE.BufferGeometry[] = [];
 
-    this.mapGroup.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+    this.mapGroup.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
         // Filter for walkable surfaces (roughly horizontal)
-        const geometry = child.geometry.clone();
-        geometry.applyMatrix4(child.matrixWorld);
+        const geometry = mesh.geometry.clone();
+        geometry.applyMatrix4(mesh.matrixWorld);
         geometries.push(geometry);
       }
     });
@@ -462,9 +462,9 @@ export class MapGeometryManager {
     );
 
     const intersects: THREE.Intersection[] = [];
-    this.mapGroup.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        const hits = raycaster.intersectObject(child);
+    this.mapGroup.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
+        const hits = raycaster.intersectObject(mesh);
         intersects.push(...hits);
       }
     });
@@ -844,17 +844,17 @@ export class MapLODManager {
     const mapGroup = this.geometry.getMapGroup();
     if (!mapGroup) return;
 
-    mapGroup.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        const dist = child.position.distanceTo(cameraPos);
+    mapGroup.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
+        const dist = mesh.position.distanceTo(cameraPos);
         const visible = dist < this.lodDistances[this.lodDistances.length - 1];
 
-        child.visible = visible && this.shouldRenderAtLOD(child, dist);
+        mesh.visible = visible && this.shouldRenderAtLOD(mesh);
 
         if (visible) {
-          this.visibleObjects.set(child.uuid, child);
+          this.visibleObjects.set(mesh.uuid, mesh);
         } else {
-          this.visibleObjects.delete(child.uuid);
+          this.visibleObjects.delete(mesh.uuid);
         }
       }
     });
@@ -863,7 +863,7 @@ export class MapLODManager {
   /**
    * Determine if object should render at current LOD
    */
-  private shouldRenderAtLOD(object: THREE.Object3D, distance: number): boolean {
+  private shouldRenderAtLOD(object: THREE.Object3D): boolean {
     // Smaller objects can be culled at closer distances
     const box = new THREE.Box3().setFromObject(object);
     const size = box.getSize(new THREE.Vector3());
@@ -871,7 +871,7 @@ export class MapLODManager {
 
     // Objects smaller than threshold are culled at distance
     const threshold = 5;
-    if (maxSize < threshold && distance > 100) return false;
+    if (maxSize < threshold) return false;
 
     return true;
   }

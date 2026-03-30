@@ -199,8 +199,7 @@ function gridBasedSimplification(
   normals?: Float32Array,
   uvs?: Float32Array,
   indices?: Uint32Array | Uint16Array,
-  targetCount?: number,
-  options?: SimplificationOptions
+  targetCount?: number
 ): { positions: number[]; normals?: number[]; uvs?: number[]; indices?: Uint32Array } {
   // Calculate bounds
   const bounds = new THREE.Box3();
@@ -214,7 +213,6 @@ function gridBasedSimplification(
   // Calculate grid cell size based on target count
   const totalVerts = positions.length / 3;
   const targetVerts = targetCount || Math.floor(totalVerts * 0.5);
-  const ratio = targetVerts / totalVerts;
   const gridCells = Math.ceil(Math.pow(targetVerts, 1 / 3));
   const cellSize = Math.max(size.x, size.y, size.z) / gridCells;
 
@@ -245,7 +243,7 @@ function gridBasedSimplification(
   const newUVs: number[] = [];
   const vertexRemap = new Map<number, number>();
 
-  clusters.forEach((cluster, key) => {
+  clusters.forEach((cluster) => {
     let cx = 0, cy = 0, cz = 0;
     let nx = 0, ny = 0, nz = 0;
     let u = 0, v = 0;
@@ -361,7 +359,7 @@ export function createLODTextureAtlas(
   
   const ctx = canvas.getContext('2d')!;
   
-  textures.forEach((tex, i) => {
+  textures.forEach((_, i) => {
     const x = (i % cols) * resolution;
     const y = Math.floor(i / cols) * resolution;
     
@@ -868,8 +866,8 @@ export class MapLODSystem {
       this.transitionManager.startTransition(obj.id, oldLevel, newLevel, fromMesh, toMesh);
     } else {
       // Immediate switch
-      lodGroup.children.forEach((child, index) => {
-        child.visible = index === newLevel;
+      lodGroup.children.forEach((_, index) => {
+        lodGroup.children[index].visible = index === newLevel;
       });
     }
 

@@ -13,7 +13,7 @@
  */
 
 import { mlLogger } from '@/utils/logger'
-import { validateFeatureVector, hasMissingValues, fillMissingValues, FEATURE_DIMENSIONS } from './features'
+import { FEATURE_DIMENSIONS } from './features'
 import type { TrainingSample } from './dataStore'
 
 // ============================================================================

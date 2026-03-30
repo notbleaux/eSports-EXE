@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class FeatureType(str, Enum):
@@ -90,11 +90,12 @@ class FeatureValue(BaseModel):
     is_valid: bool = Field(default=True)
     validation_errors: List[str] = Field(default_factory=list)
     
-    class Config:
-        json_encoders = {
+    model_config = ConfigDict(
+        json_encoders={
             Decimal: float,
             datetime: lambda v: v.isoformat(),
         }
+    )
 
 
 class FeatureView(BaseModel):

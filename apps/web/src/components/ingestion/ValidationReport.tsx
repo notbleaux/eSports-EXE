@@ -12,9 +12,9 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import type { PipelineResult, PipelineError, ValidationStage } from '@/lib/ingestion/validation/pipeline';
-import type { QualityScore, QualityGrade, QualityIssue } from '@/lib/ingestion/validation/quality';
+import type { QualityScore } from '@/lib/ingestion/validation/quality';
 import { getQualityBadge } from '@/lib/ingestion/validation/quality';
-import { AlertCircle, CheckCircle, AlertTriangle, Info, Download, Filter, ChevronDown, ChevronUp, FileJson, FileSpreadsheet } from 'lucide-react';
+import { AlertCircle, CheckCircle, AlertTriangle, Info, Download, ChevronDown, ChevronUp, FileJson, FileSpreadsheet } from 'lucide-react';
 
 // ============================================================================
 // Types

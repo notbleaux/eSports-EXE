@@ -4,7 +4,7 @@
  * Linear, directional, and hierarchical navigation patterns
  */
 
-import type { ScanTarget } from './switchControl';
+// ScanTarget type available in switchControl if needed
 
 export type NavigationMode = 'linear' | 'directional' | 'hierarchical' | 'spatial';
 

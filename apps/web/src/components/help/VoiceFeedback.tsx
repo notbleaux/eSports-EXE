@@ -32,7 +32,6 @@ import type {
   VoiceFeedbackState, 
   VoiceCommand,
   SupportedLanguage,
-  CommandMatch,
 } from '@/lib/voice/types';
 import { SUPPORTED_LANGUAGES, getVoiceCommands } from '@/lib/voice/commands';
 
@@ -487,7 +486,7 @@ export const VoicePermissionPrompt: React.FC<VoicePermissionPromptProps> = ({
 export const VoiceHelpPanel: React.FC<{
   onClose: () => void;
   reducedMotion?: boolean;
-}> = ({ onClose, reducedMotion = false }) => {
+}> = ({ onClose, reducedMotion: _reducedMotion }) => {
   const commands = getVoiceCommands();
   const categories = ['navigation', 'action', 'lens', 'system'] as const;
   
@@ -693,7 +692,7 @@ export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
           )}
           aria-label="Select voice recognition language"
         >
-          {SUPPORTED_LANGUAGES.map(lang => (
+          {SUPPORTED_LANGUAGES.map((lang: typeof SUPPORTED_LANGUAGES[0]) => (
             <option key={lang.code} value={lang.code}>
               {lang.localName}
             </option>

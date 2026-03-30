@@ -15,11 +15,19 @@ import { colors } from '@/theme/colors';
 import { useGridStore } from '@/store/gridStore';
 
 const HUB_COLORS = {
-  SATOR: colors.hub.sator,
-  ROTAS: colors.hub.rotas,
-  AREPO: colors.hub.arepo,
-  OPERA: colors.hub.opera,
-  TENET: colors.hub.tenet,
+  SATOR: colors.hub.sator.base,
+  ROTAS: colors.hub.rotas.base,
+  AREPO: colors.hub.arepo.base,
+  OPERA: colors.hub.opera.base,
+  TENET: colors.hub.tenet.base,
+};
+
+const HUB_GLOW_COLORS = {
+  SATOR: colors.hub.sator.glow,
+  ROTAS: colors.hub.rotas.glow,
+  AREPO: colors.hub.arepo.glow,
+  OPERA: colors.hub.opera.glow,
+  TENET: colors.hub.tenet.glow,
 };
 
 /**
@@ -43,7 +51,13 @@ export const DraggablePanel = memo(function DraggablePanel({
   
   // Memoize hub color calculation
   const hubColor = useMemo(() => 
-    HUB_COLORS[panel.hub] || colors.hub.sator,
+    HUB_COLORS[panel.hub] || colors.hub.sator.base,
+    [panel.hub]
+  );
+  
+  // Memoize hub glow color calculation
+  const hubGlowColor = useMemo(() => 
+    HUB_GLOW_COLORS[panel.hub] || colors.hub.sator.glow,
     [panel.hub]
   );
   
@@ -85,8 +99,8 @@ export const DraggablePanel = memo(function DraggablePanel({
         <div 
           className="flex items-center justify-between px-3 py-2 cursor-move"
           style={{ 
-            backgroundColor: `${hubColor.base}10`,
-            borderBottom: `1px solid ${hubColor.base}30`
+            backgroundColor: `${hubColor}10`,
+            borderBottom: `1px solid ${hubColor}30`
           }}
         >
           <div className="flex items-center gap-2">
@@ -127,8 +141,8 @@ export const DraggablePanel = memo(function DraggablePanel({
       `}
       style={{
         backgroundColor: 'rgba(20, 20, 26, 0.95)',
-        borderColor: `${hubColor.base}30`,
-        boxShadow: isDragging ? `0 0 30px ${hubColor.glow}` : 'none',
+        borderColor: `${hubColor}30`,
+        boxShadow: isDragging ? `0 0 30px ${hubGlowColor}` : 'none',
       }}
       role="region"
       aria-label={`${panel.title} panel${panel.isMaximized ? ' (maximized)' : ''}`}
@@ -137,15 +151,15 @@ export const DraggablePanel = memo(function DraggablePanel({
       <div 
         className="flex items-center justify-between px-3 py-2.5 cursor-move select-none"
         style={{ 
-          backgroundColor: `${hubColor.base}08`,
-          borderBottom: `1px solid ${hubColor.base}20`
+          backgroundColor: `${hubColor}08`,
+          borderBottom: `1px solid ${hubColor}20`
         }}
       >
         <div className="flex items-center gap-2">
           <Move className="w-3.5 h-3.5 text-white/30" aria-hidden="true" />
           <div 
             className="w-2 h-2 rounded-full"
-            style={{ backgroundColor: hubColor.base, boxShadow: `0 0 6px ${hubColor.glow}` }}
+            style={{ backgroundColor: hubColor, boxShadow: `0 0 6px ${hubGlowColor}` }}
             aria-hidden="true"
           />
           <span className="text-sm font-medium text-white/90">{panel.title}</span>

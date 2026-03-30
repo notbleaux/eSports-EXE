@@ -89,7 +89,50 @@ class BatchGradeRequest(BaseModel):
 
 
 # Endpoints
-@router.post("/simrating/calculate", response_model=SimRatingResponse)
+@router.post(
+    "/simrating/calculate",
+    response_model=SimRatingResponse,
+    summary="Calculate SimRating",
+    description="""
+    Calculate SimRating from z-scored components.
+    
+    ## Formula
+    SimRating uses 5 equal-weighted components (0.20 each):
+    - kills_z
+    - deaths_z (inverted, lower is better)
+    - adjusted_kill_value_z (NOT raw ACS)
+    - adr_z
+    - kast_pct_z
+    
+    ```
+    SimRating = mean(z_scores) * 50 + 100
+    ```
+    
+    ## Interpretation
+    - 100 = Average
+    - 115 = One standard deviation above average
+    - 130 = Elite performer
+    
+    ## Example Request
+    ```json
+    {
+      "kills_z": 1.2,
+      "deaths_z": -0.5,
+      "adjusted_kill_value_z": 1.0,
+      "adr_z": 0.8,
+      "kast_pct_z": 0.6
+    }
+    ```
+    
+    ## Response Codes
+    - 200: Calculation successful
+    - 400: Invalid input data
+    """,
+    responses={
+        200: {"description": "SimRating calculated successfully", "model": SimRatingResponse},
+        400: {"description": "Invalid input data"},
+    },
+)
 async def calculate_simrating(request: SimRatingRequest):
     """
     Calculate SimRating from z-scored components.
@@ -124,7 +167,54 @@ async def calculate_simrating(request: SimRatingRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/rar/calculate", response_model=RARResponse)
+@router.post(
+    "/rar/calculate",
+    response_model=RARResponse,
+    summary="Calculate RAR (Role-Adjusted Replacement)",
+    description="""
+    Calculate Role-Adjusted Replacement (RAR) value.
+    
+    RAR compares a player's performance to replacement-level
+    for their specific role.
+    
+    ## Replacement Levels by Role
+    | Role | Replacement Level |
+    |------|-------------------|
+    | Entry | 0.75 |
+    | IGL | 0.65 |
+    | Controller | 0.70 |
+    | Initiator | 0.68 |
+    | Sentinel | 0.72 |
+    
+    ## Formula
+    ```
+    RAR = RawRating / ReplacementLevel
+    ```
+    
+    ## Interpretation
+    - 1.30+ = Elite - Franchise player material
+    - 1.15+ = All-Star - Core team piece
+    - 1.00+ = Starter - Above replacement level
+    - 0.85+ = Below average - Development needed
+    - < 0.85 = Replacement level - High risk
+    
+    ## Example Request
+    ```json
+    {
+      "raw_rating": 108.2,
+      "role": "Entry"
+    }
+    ```
+    
+    ## Response Codes
+    - 200: Calculation successful
+    - 400: Invalid role or input data
+    """,
+    responses={
+        200: {"description": "RAR calculated successfully", "model": RARResponse},
+        400: {"description": "Invalid role or input data"},
+    },
+)
 async def calculate_rar(request: RARRequest):
     """
     Calculate Role-Adjusted Replacement (RAR) value.
@@ -155,7 +245,54 @@ async def calculate_rar(request: RARRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/investment/grade", response_model=InvestmentGradeResponse)
+@router.post(
+    "/investment/grade",
+    response_model=InvestmentGradeResponse,
+    summary="Grade investment prospect",
+    description="""
+    Grade a player as an investment prospect.
+    
+    Combines RAR score, age curve position, and temporal decay
+    to produce a final investment grade.
+    
+    ## Grades
+    | Grade | Range | Description |
+    |-------|-------|-------------|
+    | S+ | 2.5+ | Generational prospect |
+    | S | 2.0-2.5 | Elite investment |
+    | A+ | 1.5-2.0 | Strong buy |
+    | A | 1.0-1.5 | Good value |
+    | B | 0.5-1.0 | Developmental |
+    | C | < 0.5 | High risk |
+    
+    ## Age Curve Considerations
+    | Role | Peak Age Range |
+    |------|----------------|
+    | Entry | 20-24 |
+    | IGL | 26-30 |
+    | Controller | 22-27 |
+    | Initiator | 21-25 |
+    | Sentinel | 23-28 |
+    
+    ## Example Request
+    ```json
+    {
+      "raw_rating": 108.2,
+      "role": "Entry",
+      "age": 21,
+      "record_date": "2026-03-01T00:00:00Z"
+    }
+    ```
+    
+    ## Response Codes
+    - 200: Grading successful
+    - 400: Invalid input data
+    """,
+    responses={
+        200: {"description": "Investment grade calculated", "model": InvestmentGradeResponse},
+        400: {"description": "Invalid input data"},
+    },
+)
 async def grade_investment(request: InvestmentGradeRequest):
     """
     Grade a player as an investment prospect.
@@ -176,7 +313,36 @@ async def grade_investment(request: InvestmentGradeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/investment/grade/batch")
+@router.post(
+    "/investment/grade/batch",
+    summary="Batch grade players",
+    description="""
+    Grade multiple players at once for efficiency.
+    
+    ## Input Format
+    ```json
+    {
+      "players": [
+        {
+          "player_id": "player_001",
+          "raw_rating": 115.0,
+          "role": "IGL",
+          "age": 27,
+          "record_date": "2026-03-01T00:00:00Z"
+        }
+      ]
+    }
+    ```
+    
+    ## Response Codes
+    - 200: Batch grading completed
+    - 400: Invalid input data
+    """,
+    responses={
+        200: {"description": "Batch grading completed"},
+        400: {"description": "Invalid input data"},
+    },
+)
 async def batch_grade_investment(request: BatchGradeRequest):
     """
     Grade multiple players at once.
@@ -190,7 +356,49 @@ async def batch_grade_investment(request: BatchGradeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/age-curve/{role}/{age}", response_model=AgeCurveResponse)
+@router.get(
+    "/age-curve/{role}/{age}",
+    response_model=AgeCurveResponse,
+    summary="Get age curve analysis",
+    description="""
+    Get age curve analysis for a role and age.
+    
+    Returns career stage (rising/peak/declining) and peak proximity.
+    
+    ## Peak Ages by Role
+    | Role | Peak Range |
+    |------|------------|
+    | Entry | 20-24 |
+    | IGL | 26-30 |
+    | Controller | 22-27 |
+    | Initiator | 21-25 |
+    | Sentinel | 23-28 |
+    
+    ## Example Request
+    ```
+    GET /api/v1/analytics/age-curve/Entry/21
+    ```
+    
+    ## Example Response
+    ```json
+    {
+      "role": "Entry",
+      "age": 21,
+      "peak_range": [20, 24],
+      "career_stage": "peak",
+      "peak_proximity": 0.95
+    }
+    ```
+    
+    ## Response Codes
+    - 200: Analysis successful
+    - 400: Invalid role or age
+    """,
+    responses={
+        200: {"description": "Age curve analysis", "model": AgeCurveResponse},
+        400: {"description": "Invalid role or age"},
+    },
+)
 async def get_age_curve(role: str, age: int = Query(..., ge=16, le=45)):
     """
     Get age curve analysis for a role and age.
@@ -210,7 +418,21 @@ async def get_age_curve(role: str, age: int = Query(..., ge=16, le=45)):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/roles")
+@router.get(
+    "/roles",
+    summary="List available roles",
+    description="""
+    Get list of available roles and their replacement levels.
+    
+    ## Available Roles
+    - Entry (replacement_level: 0.75)
+    - IGL (replacement_level: 0.65)
+    - Controller (replacement_level: 0.70)
+    - Initiator (replacement_level: 0.68)
+    - Sentinel (replacement_level: 0.72)
+    """,
+    response_description="List of roles with replacement levels",
+)
 async def get_roles():
     """Get list of available roles and their replacement levels."""
     return {
@@ -221,7 +443,12 @@ async def get_roles():
     }
 
 
-@router.get("/health")
+@router.get(
+    "/health",
+    summary="Analytics health check",
+    description="Health check for analytics module. Returns status of all calculators.",
+    response_description="Analytics module status including available calculators and roles",
+)
 async def analytics_health():
     """Health check for analytics module."""
     return {

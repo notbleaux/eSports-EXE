@@ -228,8 +228,8 @@ class CircularBuffer<T> {
   calculateAverage(): number {
     if (this.count === 0) return 0;
 
-    const values = this.getAll().map((v) => (typeof v === 'number' ? v : 0));
-    return values.reduce((a, b) => a + b, 0) / values.length;
+    const allValues = this.getAll().map((v) => (typeof v === 'number' ? v : 0));
+    return allValues.reduce((a, b) => a + b, 0) / allValues.length;
   }
 }
 
@@ -810,7 +810,7 @@ export class MapPerformanceProfiler {
   /**
    * Get frame history
    */
-  getFrameHistory(count?: number): FrameMetrics[] {
+  getFrameHistory(): FrameMetrics[] {
     // Simplified - would need to store full frame metrics
     return [];
   }

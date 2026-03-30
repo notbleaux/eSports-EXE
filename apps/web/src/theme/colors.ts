@@ -1,17 +1,37 @@
 /**
  * NJZiteGeisTe Platform Color Palette
  *
- * [Ver001.000]
+ * [Ver002.000] - Updated hub colors to object format with base/glow/muted
  * SATOR (Cyan) | ROTAS (Red) | AREPO (Yellow) | OPERA (Magenta) | TENET (Purple)
  */
 
-// Hub Colors
+// Hub Colors - Object format with base, glow, and muted variants
 export const HUB_COLORS = {
-  sator: '#00d4ff', // Cyan
-  rotas: '#ff4444', // Red
-  arepo: '#ffaa00', // Orange/Yellow
-  opera: '#ff00ff', // Magenta
-  tenet: '#8b5cf6' // Purple
+  sator: {
+    base: '#00d4ff', // Cyan
+    glow: 'rgba(0, 212, 255, 0.4)',
+    muted: '#00a0c0'
+  },
+  rotas: {
+    base: '#ff4444', // Red
+    glow: 'rgba(255, 68, 68, 0.4)',
+    muted: '#cc3333'
+  },
+  arepo: {
+    base: '#ffaa00', // Orange/Yellow
+    glow: 'rgba(255, 170, 0, 0.4)',
+    muted: '#cc8800'
+  },
+  opera: {
+    base: '#ff00ff', // Magenta
+    glow: 'rgba(255, 0, 255, 0.5)',
+    muted: '#cc00cc'
+  },
+  tenet: {
+    base: '#8b5cf6', // Purple
+    glow: 'rgba(139, 92, 246, 0.4)',
+    muted: '#6b4cb3'
+  }
 } as const
 
 // Status Colors
@@ -40,7 +60,7 @@ export const GRAYSCALE = {
   950: '#030712'
 } as const
 
-// Glow effects
+// Glow effects (legacy - prefer using hub colors glow property)
 export const GLOW_COLORS = {
   satorGlow: '0 0 20px #00d4ff',
   rotasGlow: '0 0 20px #ff4444',

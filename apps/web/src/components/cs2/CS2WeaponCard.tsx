@@ -341,7 +341,6 @@ export const CS2WeaponCompare: React.FC<CS2WeaponCompareProps> = ({
         ].map((stat) => {
           const val1 = weapon1.stats[stat.key as keyof typeof weapon1.stats];
           const val2 = weapon2.stats[stat.key as keyof typeof weapon2.stats];
-          const max = Math.max(val1, val2);
           
           return (
             <div key={stat.key} className="space-y-2">

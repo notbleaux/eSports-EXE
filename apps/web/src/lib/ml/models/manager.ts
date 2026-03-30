@@ -268,10 +268,10 @@ export class ModelManager {
    * Load weights into model
    */
   private async loadWeights(
-    modelWrapper: { model: tf.LayersModel },
+    _modelWrapper: { model: tf.LayersModel },
     weightsBuffer: ArrayBuffer
   ): Promise<void> {
-    const weights = new Float32Array(weightsBuffer)
+    const _weights = new Float32Array(weightsBuffer)
     
     // This is a simplified weight loading
     // In practice, you'd need to properly reconstruct the weight tensors
@@ -688,7 +688,7 @@ export class ModelManager {
    * Get model config based on type
    */
   private getModelConfig(
-    model: RoundPredictor | PlayerPerformanceModel | StrategyModel,
+    _model: RoundPredictor | PlayerPerformanceModel | StrategyModel,
     type: ModelType
   ): unknown {
     switch (type) {
@@ -784,7 +784,7 @@ export class ModelManager {
    * Dispose all active models
    */
   dispose(): void {
-    for (const [type, model] of this.activeModels) {
+    for (const [, model] of this.activeModels) {
       if ('dispose' in model) {
         (model as { dispose(): void }).dispose()
       }

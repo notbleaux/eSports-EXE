@@ -493,7 +493,6 @@ export class TextureStreamManager {
 
   private textureLoader: THREE.TextureLoader;
   private ktx2Loader: KTX2Loader | null = null;
-  private imageLoader = new Image();
 
   constructor(config: Partial<TextureStreamConfig> = {}) {
     this.config = { ...DEFAULT_STREAM_CONFIG, ...config };
@@ -505,8 +504,9 @@ export class TextureStreamManager {
 
     // Setup KTX2 loader if compression enabled
     if (this.config.enableCompression) {
-      this.ktx2Loader = new KTX2Loader();
-      this.ktx2Loader.setTranscoderPath(this.config.ktx2TranscoderPath);
+      const loader = new KTX2Loader();
+      loader.setTranscoderPath(this.config.ktx2TranscoderPath);
+      this.ktx2Loader = loader;
     }
   }
 
@@ -560,7 +560,7 @@ export class TextureStreamManager {
    * Load a texture
    */
   private async loadTexture(request: TextureRequest): Promise<void> {
-    const { id, url, desiredResolution, mipmapLevel } = request;
+    const { id, url, desiredResolution } = request;
 
     this.loadingTextures.add(id);
     this.loadStartTimes.set(id, performance.now());
@@ -570,9 +570,9 @@ export class TextureStreamManager {
 
       // Try KTX2 first if available
       if (this.config.enableCompression && this.ktx2Loader && url.endsWith('.ktx2')) {
-        texture = await this.loadKTX2Texture(url, request.onProgress);
+        texture = await this.loadKTX2Texture(url);
       } else {
-        texture = await this.loadStandardTexture(url, request.onProgress);
+        texture = await this.loadStandardTexture(url);
       }
 
       // Configure texture
@@ -624,10 +624,7 @@ export class TextureStreamManager {
   /**
    * Load KTX2 compressed texture
    */
-  private loadKTX2Texture(
-    url: string,
-    onProgress?: (loaded: number, total: number) => void
-  ): Promise<THREE.CompressedTexture> {
+  private loadKTX2Texture(url: string): Promise<THREE.CompressedTexture> {
     return new Promise((resolve, reject) => {
       if (!this.ktx2Loader) {
         reject(new Error('KTX2 loader not initialized'));
@@ -639,13 +636,9 @@ export class TextureStreamManager {
         (texture) => {
           resolve(texture);
         },
-        (progress) => {
-          if (progress.lengthComputable) {
-            onProgress?.(progress.loaded, progress.total);
-          }
-        },
-        (error) => {
-          reject(error);
+        undefined,
+        (err) => {
+          reject(err);
         }
       );
     });
@@ -654,23 +647,16 @@ export class TextureStreamManager {
   /**
    * Load standard texture
    */
-  private loadStandardTexture(
-    url: string,
-    onProgress?: (loaded: number, total: number) => void
-  ): Promise<THREE.Texture> {
+  private loadStandardTexture(url: string): Promise<THREE.Texture> {
     return new Promise((resolve, reject) => {
       this.textureLoader.load(
         url,
         (texture) => {
           resolve(texture);
         },
-        (progress) => {
-          if (progress.lengthComputable) {
-            onProgress?.(progress.loaded, progress.total);
-          }
-        },
-        (error) => {
-          reject(error);
+        undefined,
+        (err) => {
+          reject(err);
         }
       );
     });
@@ -802,7 +788,7 @@ export class TextureStreamManager {
   /**
    * Update texture priority
    */
-  updatePriority(id: string, newPriority: number): void {
+  updatePriority(_id: string, _newPriority: number): void {
     // Re-queue with new priority if still in queue
     // Implementation would require queue modification
   }
@@ -895,11 +881,11 @@ export class TextureStreamManager {
 // ============================================
 
 export class MipmapStreamManager {
-  private config: TextureStreamConfig;
+  private _config: TextureStreamConfig;
   private loadedMips = new Map<string, number>(); // textureId -> highest loaded mip level
 
   constructor(config: TextureStreamConfig) {
-    this.config = config;
+    this._config = config;
   }
 
   /**

@@ -396,7 +396,7 @@ export function useMapGestures(
   /**
    * Handle double-tap zoom
    */
-  const handleDoubleTap = useCallback((position: Point2D) => {
+  const handleDoubleTap = useCallback((_position: Point2D) => {
     if (!cfg.doubleTapZoom) return;
 
     const currentZoom = currentZoomRef.current;
@@ -433,7 +433,7 @@ export function useMapGestures(
   /**
    * Handle gesture start
    */
-  const handleGestureStart = useCallback((gestureState: GestureState) => {
+  const handleGestureStart = useCallback((_gestureState: GestureState) => {
     // Cancel any ongoing momentum animation
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);

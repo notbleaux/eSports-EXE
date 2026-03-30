@@ -8,7 +8,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipe, SwipeDirection } from '@/hooks/gestures/useSwipe';
 import { useLongPress } from '@/hooks/gestures/useLongPress';
-import { Menu, X, Eye, Activity, Book, Map, Grid3X3, Zap } from 'lucide-react';
+import { X, Eye, Activity, Book, Map, Grid3X3, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Hub configuration

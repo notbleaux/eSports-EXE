@@ -49,8 +49,6 @@ class HeadTrackingManager {
   private config: HeadTrackingConfig;
   private stream: MediaStream | null = null;
   private videoElement: HTMLVideoElement | null = null;
-  private animationFrame: number | null = null;
-  private currentPosition: HeadPosition | null = null;
   private smoothedPosition: HeadPosition | null = null;
   private listeners: Map<string, Set<(...args: any[]) => void>> = new Map();
   private isActive: boolean = false;

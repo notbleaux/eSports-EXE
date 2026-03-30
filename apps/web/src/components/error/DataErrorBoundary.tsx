@@ -147,7 +147,7 @@ export class DataErrorBoundary extends Component<Props, State> {
   /**
    * Report error to analytics service
    */
-  private reportToAnalytics(error: Error, errorInfo: React.ErrorInfo, category: string): void {
+  private reportToAnalytics(error: Error, _errorInfo: React.ErrorInfo, category: string): void {
     try {
       // Analytics integration point
       const eventData = {

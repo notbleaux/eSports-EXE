@@ -125,7 +125,6 @@ class EyeTrackingManager {
   private dwellTargets: Map<HTMLElement, DwellTarget> = new Map();
   private listeners: Map<string, Set<(...args: any[]) => void>> = new Map();
   private cursorElement: HTMLElement | null = null;
-  private currentDwellTarget: DwellTarget | null = null;
   private calibrationPoints: CalibrationPoint[] = [];
   private currentCalibrationIndex: number = 0;
   private calibrationData: { x: number; y: number; expectedX: number; expectedY: number }[] = [];

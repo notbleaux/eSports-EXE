@@ -138,8 +138,8 @@ const PlayerRow = React.memo<React.PropsWithChildren<PlayerRowProps>>(function P
           isPressed && "scale-[0.98]"
         )}
         style={{
-          backgroundColor: colors.porcelain.frost,
-          border: `1px solid ${longPressState.isPressing ? hubColor : colors.border.subtle}`,
+          backgroundColor: colors.gray[100],
+          border: `1px solid ${longPressState.isPressing ? hubColor : 'rgba(255, 255, 255, 0.1)'}`,
           boxShadow: longPressState.isPressing ? `0 0 15px ${hubGlow}` : 'none',
         }}
         onClick={handleClick}
@@ -176,7 +176,7 @@ const PlayerRow = React.memo<React.PropsWithChildren<PlayerRowProps>>(function P
         {/* Avatar */}
         <div
           className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
-          style={{ backgroundColor: colors.background.secondary }}
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
         >
           {avatar ? (
             <img

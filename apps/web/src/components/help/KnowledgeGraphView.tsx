@@ -126,7 +126,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
   // Refs
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const simulationRef = useRef<d3.Simulation<SimulationNode, SimulationLink> | null>(null);
+  const simulationRef = useRef<d3.Simulation<SimulationNode, undefined> | null>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
 
   // State
@@ -217,7 +217,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
   useEffect(() => {
     if (!svgRef.current) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
     const { nodes, links, nodeMap } = getFilteredData();
 
     // Clear existing
@@ -229,8 +229,8 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
     // Zoom behavior
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.1, 4])
-      .on('zoom', (event) => {
-        g.attr('transform', event.transform);
+      .on('zoom', (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
+        g.attr('transform', event.transform.toString());
       });
 
     zoomRef.current = zoom;
@@ -252,34 +252,34 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
     // Links
     const link = g.append('g')
       .attr('class', 'links')
-      .selectAll('line')
+      .selectAll<SVGLineElement, SimulationLink>('line')
       .data(links)
       .enter()
       .append('line')
       .attr('stroke', '#94a3b8')
       .attr('stroke-opacity', 0.4)
-      .attr('stroke-width', d => Math.sqrt(d.strength * 2));
+      .attr('stroke-width', (d: SimulationLink) => Math.sqrt(d.strength * 2));
 
     // Nodes group
     const node = g.append('g')
       .attr('class', 'nodes')
-      .selectAll('g')
+      .selectAll<SVGGElement, SimulationNode>('g')
       .data(nodes)
       .enter()
       .append('g')
       .attr('class', 'node')
       .attr('cursor', 'pointer')
       .call(d3.drag<SVGGElement, SimulationNode>()
-        .on('start', (event, d) => {
+        .on('start', (event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
           if (!event.active) simulation.alphaTarget(0.3).restart();
           d.fx = d.x;
           d.fy = d.y;
         })
-        .on('drag', (event, d) => {
+        .on('drag', (event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
           d.fx = event.x;
           d.fy = event.y;
         })
-        .on('end', (event, d) => {
+        .on('end', (event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
           if (!event.active) simulation.alphaTarget(0);
           d.fx = null;
           d.fy = null;
@@ -288,16 +288,16 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
 
     // Node circles
     node.append('circle')
-      .attr('r', d => d.radius)
-      .attr('fill', d => d.color)
+      .attr('r', (d: SimulationNode) => d.radius)
+      .attr('fill', (d: SimulationNode) => d.color)
       .attr('stroke', '#fff')
       .attr('stroke-width', 2)
       .style('transition', 'all 0.2s ease');
 
     // Node labels
     const labels = node.append('text')
-      .text(d => d.node.title)
-      .attr('x', d => d.radius + 5)
+      .text((d: SimulationNode) => d.node.title)
+      .attr('x', (d: SimulationNode) => d.radius + 5)
       .attr('y', 4)
       .attr('font-size', '12px')
       .attr('fill', '#374151')
@@ -307,24 +307,24 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
 
     // Node interactions
     node
-      .on('click', (event, d) => {
-        event.stopPropagation();
+      .on('click', (_event: PointerEvent, d: SimulationNode) => {
+        _event.stopPropagation();
         setSelectedNodeId(d.id);
         setShowSidebar(true);
         onNodeClick?.(d.node);
       })
-      .on('mouseenter', (event, d) => {
+      .on('mouseenter', (_event: PointerEvent, d: SimulationNode) => {
         setHoveredNodeId(d.id);
         
         // Highlight connected links
         const connected = getConnectedNodes(d.id);
         link
-          .attr('stroke-opacity', l => {
+          .attr('stroke-opacity', (l: SimulationLink) => {
             const sourceId = typeof l.source === 'string' ? l.source : l.source.id;
             const targetId = typeof l.target === 'string' ? l.target : l.target.id;
             return (sourceId === d.id || targetId === d.id) ? 0.8 : 0.1;
           })
-          .attr('stroke', l => {
+          .attr('stroke', (l: SimulationLink) => {
             const sourceId = typeof l.source === 'string' ? l.source : l.source.id;
             const targetId = typeof l.target === 'string' ? l.target : l.target.id;
             return (sourceId === d.id || targetId === d.id) ? d.color : '#94a3b8';
@@ -332,7 +332,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
 
         // Dim other nodes
         node.selectAll('circle')
-          .attr('opacity', n => 
+          .attr('opacity', (n: SimulationNode) => 
             n.id === d.id || connected.has(n.id) ? 1 : 0.3
           );
       })
@@ -347,12 +347,12 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
     // Update positions on tick
     simulation.on('tick', () => {
       link
-        .attr('x1', d => (d.source as SimulationNode).x!)
-        .attr('y1', d => (d.source as SimulationNode).y!)
-        .attr('x2', d => (d.target as SimulationNode).x!)
-        .attr('y2', d => (d.target as SimulationNode).y!);
+        .attr('x1', (d: SimulationLink) => (d.source as SimulationNode).x!)
+        .attr('y1', (d: SimulationLink) => (d.source as SimulationNode).y!)
+        .attr('x2', (d: SimulationLink) => (d.target as SimulationNode).x!)
+        .attr('y2', (d: SimulationLink) => (d.target as SimulationNode).y!);
 
-      node.attr('transform', d => `translate(${d.x},${d.y})`);
+      node.attr('transform', (d: SimulationNode) => `translate(${d.x},${d.y})`);
     });
 
     // Highlight selected node
@@ -360,15 +360,15 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
       const connected = getConnectedNodes(selectedNodeId);
       
       node.selectAll('circle')
-        .attr('stroke-width', d => d.id === selectedNodeId ? 4 : 2)
-        .attr('stroke', d => {
+        .attr('stroke-width', (d: SimulationNode) => d.id === selectedNodeId ? 4 : 2)
+        .attr('stroke', (d: SimulationNode) => {
           if (d.id === selectedNodeId) return '#f59e0b';
           if (connected.has(d.id)) return '#3b82f6';
           return '#fff';
         });
 
       link
-        .attr('stroke-opacity', l => {
+        .attr('stroke-opacity', (l: SimulationLink) => {
           const sourceId = typeof l.source === 'string' ? l.source : l.source.id;
           const targetId = typeof l.target === 'string' ? l.target : l.target.id;
           return (sourceId === selectedNodeId || targetId === selectedNodeId) ? 0.8 : 0.1;

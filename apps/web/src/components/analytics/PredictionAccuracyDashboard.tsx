@@ -51,10 +51,10 @@ const CHART_COLORS = {
   error: ThemeChartColors.error,
   muted: 'rgba(255, 255, 255, 0.5)',
   grid: ThemeChartColors.grid,
-  sator: colors.hub.sator,
-  rotas: colors.hub.rotas,
-  arepo: colors.hub.arepo,
-  opera: colors.hub.opera,
+  sator: colors.hub.sator.base,
+  rotas: colors.hub.rotas.base,
+  arepo: colors.hub.arepo.base,
+  opera: colors.hub.opera.base,
 };
 
 const MODEL_COLORS = [
@@ -62,7 +62,7 @@ const MODEL_COLORS = [
   CHART_COLORS.rotas,
   CHART_COLORS.arepo,
   CHART_COLORS.opera,
-  '#8b5cf6',
+  colors.hub.tenet.base,
   '#10b981',
 ];
 

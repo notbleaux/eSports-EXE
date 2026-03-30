@@ -176,8 +176,8 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
     { value: 'celebrate', label: 'Celebrate' },
   ];
   
-  // Variant selectors for new mascots with multiple styles
-  const bearVariants: { value: string; label: string }[] = [
+  // Variant selectors for new mascots with multiple styles (reserved for future use)
+  const _bearVariants: { value: string; label: string }[] = [
     { value: 'homecoming', label: 'Homecoming' },
     { value: 'graduation', label: 'Graduation' },
     { value: 'late-registration', label: 'Late Registration' },
@@ -185,7 +185,7 @@ export const MascotGallery: React.FC<MascotGalleryProps> = ({
     { value: 'donda', label: 'Donda' },
   ];
   
-  const bunnyVariants: { value: string; label: string }[] = [
+  const _bunnyVariants: { value: string; label: string }[] = [
     { value: 'classic-blue', label: 'Classic Blue' },
     { value: 'attention', label: 'Attention' },
     { value: 'hype-boy', label: 'Hype Boy' },

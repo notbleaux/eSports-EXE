@@ -54,7 +54,7 @@ export const MLFeatureWrapper: React.FC<MLFeatureWrapperProps> = ({
   compact = false,
   onError,
   onReconnect,
-  onRetry,
+  onRetry: _onRetry,
   usesStreaming = false,
   usesML = true
 }) => {

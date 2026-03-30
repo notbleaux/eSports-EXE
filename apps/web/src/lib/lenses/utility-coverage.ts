@@ -348,7 +348,7 @@ function identifyCoverageZones(utilities: UtilityInstance[]): CoverageZone[] {
  */
 function calculateCoverageStats(
   utilities: UtilityInstance[],
-  zones: CoverageZone[],
+  _zones: CoverageZone[],
   mapBounds?: UtilityCoverageInput['mapBounds']
 ): CoverageStats {
   const mapArea = mapBounds ? mapBounds.width * mapBounds.height : 10000
@@ -481,7 +481,7 @@ function calculateOverlapArea(
 function identifyCoverageGaps(
   utilities: UtilityInstance[],
   sites?: UtilityCoverageInput['sites'],
-  mapBounds?: UtilityCoverageInput['mapBounds']
+  _mapBounds?: UtilityCoverageInput['mapBounds']
 ): CoverageGap[] {
   const gaps: CoverageGap[] = []
   

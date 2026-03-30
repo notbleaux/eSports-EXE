@@ -368,14 +368,14 @@ export function useOrientationLock() {
   const [isLocked, setIsLocked] = useState(false);
 
   const lock = useCallback(async (
-    orientation: 'portrait' | 'landscape' | 'any'
+    _orientation: 'portrait' | 'landscape' | 'any'
   ): Promise<boolean> => {
     if (typeof window === 'undefined' || !screen.orientation?.lock) {
       return false;
     }
 
     try {
-      await screen.orientation.lock(orientation);
+      await screen.orientation.lock(_orientation);
       setIsLocked(true);
       return true;
     } catch {

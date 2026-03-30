@@ -20,8 +20,7 @@ import type {
   Player,
   MapBounds,
   LensResult,
-  LensRenderOptions,
-  Site
+  LensRenderOptions
 } from './tactical-types'
 
 // ============================================================================
@@ -194,7 +193,7 @@ function analyzePairCrossfire(
  */
 function findTripleCrossfires(
   players: Player[],
-  existingSetups: CrossfireSetup[],
+  _existingSetups: CrossfireSetup[],
   optimalAngle: number,
   angleTolerance: number
 ): CrossfireSetup[] {
@@ -392,7 +391,7 @@ function calculateTripleOverlap(p1: Vector2D, p2: Vector2D, p3: Vector2D): Vecto
 /**
  * Calculate coverage value
  */
-function calculateCoverageValue(area: Vector2D[], dist: number): number {
+function calculateCoverageValue(area: Vector2D[], _dist: number): number {
   const areaSize = calculatePolygonArea(area)
   const idealArea = Math.PI * MAX_CROSSFIRE_RANGE * MAX_CROSSFIRE_RANGE * 0.5
   return Math.min(1.0, areaSize / idealArea)
@@ -530,7 +529,7 @@ function clusterPoints(points: Vector2D[], threshold: number): Vector2D[][] {
 function generateRecommendations(
   setups: CrossfireSetup[],
   coverage: { total: number; overlapping: number; gaps: Vector2D[][] },
-  mapBounds: MapBounds
+  _mapBounds: MapBounds
 ): CrossfireRecommendation[] {
   const recommendations: CrossfireRecommendation[] = []
 

@@ -126,7 +126,6 @@ export function calculate(
   const {
     commitThreshold = MIN_COMMIT_TIME,
     utilityThreshold = FAKE_UTILITY_THRESHOLD,
-    considerHistory = true,
     confidenceThreshold = 0.6
   } = options
 
@@ -197,11 +196,9 @@ function processExecuteEvents(
       })
     }
 
-    // Check for no planter indicator
-    const hasPlanter = event.playerPositions.some(p => {
-      // Check if any player is at site with plant capability
-      return true // Simplified
-    })
+    // Check for no planter indicator - simplified
+    // In a real implementation, check if any player has plant capability
+    const hasPlanter = true // Simplified assumption
 
     if (!hasPlanter) {
       indicators.push({
@@ -258,7 +255,7 @@ function processExecuteEvents(
  * Generate synthetic fake data for demonstration
  */
 function generateSyntheticFakes(
-  players: Player[],
+  _players: Player[],
   mapBounds: MapBounds,
   commitThreshold: number
 ): FakeExecute[] {
@@ -371,7 +368,7 @@ function analyzeSoundInconsistency(
  */
 function calculateFakeMetrics(
   fakes: FakeExecute[],
-  mapBounds: MapBounds
+  _mapBounds: MapBounds
 ): FakeMetrics {
   const successfulFakes = fakes.filter(f => f.success).length
   
@@ -396,7 +393,7 @@ function calculateFakeMetrics(
     sum + (f.timing.commit - f.timing.start), 0) / fakes.length
 
   // Calculate by-map metrics
-  const byMap: Record<string, FakeMapMetrics> = {}
+  const byMap: Record<string, { fakeRate: number; successRate: number; preferredTarget: string; averageDuration: number }> = {}
   
   for (const fake of fakes) {
     const mapName = fake.targetSite.name
@@ -768,7 +765,7 @@ function distance(a: Vector2D, b: Vector2D): number {
 export function analyzeCurrentExecute(
   playerPositions: Vector2D[],
   utilityUsed: string[],
-  soundEvents: string[],
+  _soundEvents: string[],
   targetSite: Site,
   elapsedTime: number
 ): { isFake: boolean; confidence: number; indicators: string[] } {

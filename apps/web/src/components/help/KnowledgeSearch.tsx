@@ -123,7 +123,7 @@ export const KnowledgeSearch: React.FC<KnowledgeSearchProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [didYouMean, setDidYouMean] = useState<string[]>([]);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [, setRecentSearches] = useState<string[]>([]);
 
   // Refs
   const inputRef = useRef<HTMLInputElement>(null);
@@ -521,7 +521,7 @@ export const KnowledgeSearch: React.FC<KnowledgeSearchProps> = ({
                   <div className="px-4 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Popular Topics
                   </div>
-                  {['Getting Started', 'SimRating', 'Tactical View', 'API Access'].map((topic, index) => (
+                  {['Getting Started', 'SimRating', 'Tactical View', 'API Access'].map((topic) => (
                     <button
                       key={topic}
                       onClick={() => handleSuggestionClick(topic)}

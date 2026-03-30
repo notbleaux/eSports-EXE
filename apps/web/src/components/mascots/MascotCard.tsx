@@ -16,7 +16,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Lock, Heart, Zap, Sparkles } from 'lucide-react';
+import { Star, Heart, Zap, Sparkles } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/animation/useReducedMotion';
 import type { MascotCardProps, GalleryCardSize } from './types';
 import { RARITY_CONFIG, ELEMENT_CONFIG, getRarityStars, getTotalPower, getHighestStat } from './mocks/mascots';

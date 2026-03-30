@@ -405,10 +405,10 @@ export const SpatialAudio = React.forwardRef<SpatialAudioRef, SpatialAudioProps>
     }, [audioUrl]);
 
     // Position synchronization
-    useFrame((state) => {
+    useFrame((frameState) => {
       if (!groupRef.current || !sourceIdRef.current) return;
 
-      const now = state.clock.elapsedTime * 1000;
+      const now = frameState.clock.elapsedTime * 1000;
       if (now - lastUpdateRef.current < updateRate) return;
       lastUpdateRef.current = now;
 

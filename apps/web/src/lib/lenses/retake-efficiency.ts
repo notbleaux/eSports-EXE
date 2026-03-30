@@ -121,7 +121,7 @@ export function calculate(
 ): LensResult<RetakeEfficiencyData> {
   const {
     movementSpeed = MOVEMENT_SPEED,
-    considerUtility = true,
+    considerUtility: _considerUtility = true,
     maxPaths = 5,
     riskTolerance = 'medium'
   } = options
@@ -557,9 +557,9 @@ function calculateRetakeMetrics(
  * Generate retake recommendations
  */
 function generateRetakeRecommendations(
-  scenarios: RetakeScenario[],
+  _scenarios: RetakeScenario[],
   paths: RetakePath[],
-  metrics: RetakeMetrics,
+  _metrics: RetakeMetrics,
   site: Site
 ): RetakeRecommendation[] {
   const recommendations: RetakeRecommendation[] = []

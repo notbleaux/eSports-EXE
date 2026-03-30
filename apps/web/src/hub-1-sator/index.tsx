@@ -238,7 +238,7 @@ function SatorHubContent(): React.ReactElement {
   return (
     <motion.div
       className="min-h-screen p-4 md:p-6 lg:p-8"
-      style={{ backgroundColor: colors.background.primary }}
+      style={{ backgroundColor: '#0a0a0f' }}
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -621,7 +621,7 @@ function SatorHubContent(): React.ReactElement {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/5 border transition-colors focus:outline-none focus:ring-2"
                 style={{ 
-                  borderColor: colors.border.subtle,
+                  borderColor: 'rgba(255, 255, 255, 0.1)',
                   color: colors.text.primary,
                 }}
                 onFocus={(e) => {
@@ -629,7 +629,7 @@ function SatorHubContent(): React.ReactElement {
                   (e.currentTarget as HTMLInputElement).style.boxShadow = `0 0 0 2px ${HUB_CONFIG.glow}`;
                 }}
                 onBlur={(e) => {
-                  (e.currentTarget as HTMLInputElement).style.borderColor = colors.border.subtle;
+                  (e.currentTarget as HTMLInputElement).style.borderColor = 'rgba(255, 255, 255, 0.1)';
                   (e.currentTarget as HTMLInputElement).style.boxShadow = 'none';
                 }}
               />
@@ -638,7 +638,7 @@ function SatorHubContent(): React.ReactElement {
                 className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                 style={{ 
                   backgroundColor: HUB_CONFIG.color,
-                  color: colors.background.primary,
+                  color: '#0a0a0f',
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.backgroundColor = HUB_CONFIG.muted;
@@ -686,7 +686,7 @@ function SatorHubContent(): React.ReactElement {
 
             <div 
               className="mt-6 pt-4 border-t flex items-center gap-2"
-              style={{ borderColor: colors.border.subtle }}
+              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
             >
               <Shield className="w-5 h-5" style={{ color: colors.status.success }} />
               <span className="text-sm font-medium" style={{ color: colors.status.success }}>
@@ -1084,7 +1084,7 @@ function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }: SimRatingSec
         {/* Worker Status Footer */}
         <div 
           className="mt-6 pt-4 border-t flex items-center justify-between text-xs"
-          style={{ borderColor: colors.border.subtle }}
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
         >
           <div className="flex items-center gap-4" style={{ color: colors.text.muted }}>
             <span>Worker Status: {isReady ? '✅ Connected' : '⏳ Loading'}</span>

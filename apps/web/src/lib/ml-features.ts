@@ -886,7 +886,7 @@ export function objectToFeatureVector(
     if (name in obj) {
       return obj[name]
     }
-    return definitions[name as keyof typeof definitions].defaultValue
+    return (definitions as Record<string, { defaultValue: number }>)[name].defaultValue
   })
 }
 

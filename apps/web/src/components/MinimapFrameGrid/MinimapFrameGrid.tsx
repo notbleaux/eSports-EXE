@@ -126,7 +126,7 @@ const LoadingState: React.FC = () => (
   <div className="flex flex-col items-center justify-center py-16">
     <Loader2
       className="w-10 h-10 mb-4 animate-spin"
-      style={{ color: colors.hub.rotas }}
+      style={{ color: colors.hub.rotas.base }}
     />
     <p className="text-lg font-medium" style={{ color: colors.text.primary }}>
       Loading frames...
@@ -169,7 +169,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({ error, onRetry }) => (
       onClick={onRetry}
       className="mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:opacity-80"
       style={{
-        backgroundColor: colors.hub.rotas,
+        backgroundColor: colors.hub.rotas.base,
         color: '#fff',
       }}
     >

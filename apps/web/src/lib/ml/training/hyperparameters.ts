@@ -14,9 +14,7 @@
  */
 
 import { mlLogger } from '@/utils/logger'
-import type { TrainingSample } from '../pipeline/dataStore'
-import type { ModelType } from '../models/manager'
-import type { TrainingResult, TrainingOptions } from './orchestrator'
+import type { TrainingResult } from './orchestrator'
 
 // ============================================================================
 // Hyperparameter Types
@@ -583,10 +581,10 @@ function suggestNextPoint(
   )
 
   // Sample around best point with decreasing variance
-  const config = configToVector(bestObs.config, space)
+  const bestConfig = configToVector(bestObs.config, space)
   const variance = 1 / Math.sqrt(state.observations.length)
 
-  const newConfig: number[] = config.map((val, i) => {
+  const newConfig: number[] = bestConfig.map((val) => {
     const noise = (rng() - 0.5) * 2 * variance
     return Math.max(0, Math.min(1, val + noise))
   })

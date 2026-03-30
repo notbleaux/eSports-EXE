@@ -4,6 +4,7 @@
 SATOR API — Main FastAPI Application
 Aggregates all hub services: SATOR, tokens, forum, fantasy, challenges, wiki, opera
 
+[Ver003.000] - Added OpenTelemetry distributed tracing
 [Ver002.000] - Added Prometheus metrics endpoint
 """
 
@@ -32,6 +33,14 @@ try:
 except ImportError:
     PROMETHEUS_AVAILABLE = False
     logging.warning("Prometheus client not installed. Metrics endpoint will be limited.")
+
+# Import observability/tracing (optional)
+try:
+    from src.njz_api.observability import setup_observability, get_health_status
+    OBSERVABILITY_AVAILABLE = True
+except ImportError:
+    OBSERVABILITY_AVAILABLE = False
+    logging.warning("Observability module not available. Tracing disabled.")
 
 # Import route modules
 from src.tokens.token_routes import router as token_router
@@ -145,6 +154,20 @@ async def lifespan(app: FastAPI):
     # Startup - LAZY INITIALIZATION (non-blocking)
     logger.info("Starting SATOR API...")
 
+    # Initialize observability (tracing, metrics)
+    if OBSERVABILITY_AVAILABLE:
+        try:
+            from src.njz_api.observability import setup_observability
+            observability = setup_observability(
+                app,
+                service_name="njz-api",
+                enable_tracing=True,
+                enable_metrics=True,
+            )
+            logger.info("Observability initialized")
+        except Exception as e:
+            logger.warning(f"Observability initialization failed: {e}")
+
     # Don't block on DB connection - let first request trigger it
     logger.info("API initialized (database will connect on first request)")
 
@@ -164,6 +187,16 @@ async def lifespan(app: FastAPI):
     except asyncio.CancelledError:
         pass
 
+    # Close traced connections if observability is enabled
+    if OBSERVABILITY_AVAILABLE:
+        try:
+            from src.njz_api.observability import close_traced_pool, close_traced_redis
+            await close_traced_pool()
+            await close_traced_redis()
+            logger.info("Traced connections closed")
+        except Exception as e:
+            logger.debug(f"Traced connections close error: {e}")
+
     try:
         await db.close()
         logger.info("Database connection closed")
@@ -173,26 +206,87 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI application
 app = FastAPI(
-    title="SATOR Esports API",
+    title="ESPORTEZ-MANAGER API",
     description="""
-    NJZiteGeisTe Platform API
-
-    Provides endpoints for:
-    - **SATOR**: Esports analytics hub (players, teams, matches, stats)
-    - **Tokens**: NJZ token economy (daily claims, transfers, leaderboards)
-    - **Forum**: Community discussions (threads, posts, replies)
-    - **Fantasy**: Fantasy esports leagues (drafts, teams, scoring)
-    - **Challenges**: Daily challenges and achievements
-    - **Wiki**: Knowledge base and guides
-    - **OPERA**: Tournament metadata and schedules
-
-    WebSocket:
-    - `/ws/sator` - Real-time SATOR updates
+    # ESPORTEZ-MANAGER API
+    
+    Tournament management system with Godot game integration for esports analytics.
+    Part of the NJZiteGeisTe Platform ecosystem.
+    
+    ## Features
+    
+    - **Tournament Management**: Create, manage, and track tournaments
+    - **Match Operations**: Submit results from Godot game or manually
+    - **Analytics**: SimRating, RAR, and investment grading calculations
+    - **Real-time Updates**: WebSocket connections for live data
+    - **Webhooks**: Pandascore integration for live match data
+    - **Circuit Breakers**: Resilient external API calls
+    
+    ## Authentication
+    
+    All endpoints require Bearer token authentication (JWT) unless marked as public.
+    
+    ```
+    Authorization: Bearer YOUR_JWT_TOKEN
+    ```
+    
+    ## Rate Limiting
+    
+    | Endpoint Type | Limit | Burst |
+    |--------------|-------|-------|
+    | Standard API | 100/min | 20 |
+    | Match Results | 10/min | 5 |
+    | Analytics | 60/min | 10 |
+    | Webhooks | 1000/min | 100 |
+    | Health Checks | No limit | - |
+    
+    ## Architecture
+    
+    The API follows the TENET data topology with two data paths:
+    
+    - **Path A (Live)**: Pandascore webhook → Redis Stream → WebSocket
+    - **Path B (Legacy)**: TeneT Key.Links → PostgreSQL → FastAPI
+    
+    ## Godot Integration
+    
+    The Godot game exports match results automatically:
+    
+    ```gdscript
+    # In Godot LiveSeasonModule
+    export_client.configure(
+        "https://api.esportez-manager.com/api/v1",
+        "your_api_key"
+    )
+    export_client.auto_export = true
+    ```
+    
+    ## WebSocket Endpoints
+    
+    - `/ws/sator` - SATOR hub live updates
+    - `/ws/lens-updates` - ROTAS lens real-time updates  
+    - `/ws/gateway` - Unified TENET gateway
+    
+    ## Links
+    
+    - [API Guide](/docs/API_GUIDE.md)
+    - [OpenAPI Spec](/docs/openapi.yaml)
+    - [GitHub Repository](https://github.com/notbleaux/eSports-EXE)
     """,
-    version="2.1.0",
+    version="1.0.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
+    openapi_tags=[
+        {"name": "health", "description": "Health check endpoints (no auth required)"},
+        {"name": "system", "description": "System health, metrics, and circuit breaker status"},
+        {"name": "monitoring", "description": "Monitoring and observability endpoints"},
+        {"name": "tournaments", "description": "Tournament management operations"},
+        {"name": "teams", "description": "Team management"},
+        {"name": "matches", "description": "Match operations and result submission"},
+        {"name": "analytics", "description": "SimRating, RAR, and investment grading calculations"},
+        {"name": "verification", "description": "TeneT verification and legacy data pipeline"},
+        {"name": "webhooks", "description": "External webhook handlers (Pandascore)"},
+    ],
 )
 
 # Register rate limiter (P0 Security Fix)
@@ -233,8 +327,28 @@ app.add_middleware(
 )
 
 
-# Health check endpoints (no auth required, no rate limiting)
-@app.get("/health", tags=["health"])
+@app.get(
+    "/health",
+    tags=["health"],
+    summary="Basic health check",
+    description="""
+    Basic health check endpoint.
+    
+    Returns API health status and basic metadata.
+    No authentication required.
+    
+    ## Response
+    ```json
+    {
+      "status": "healthy",
+      "service": "sator-api",
+      "version": "2.1.0",
+      "timestamp": "2026-03-30T22:40:00+00:00"
+    }
+    ```
+    """,
+    response_description="Health status with service metadata",
+)
 async def health_check():
     """Basic health check endpoint."""
     return {
@@ -245,7 +359,31 @@ async def health_check():
     }
 
 
-@app.get("/ready", tags=["health"])
+@app.get(
+    "/ready",
+    tags=["health"],
+    summary="Readiness check",
+    description="""
+    Readiness check for orchestration platforms.
+    
+    Checks database connectivity and returns readiness status.
+    Used by Kubernetes and other orchestration systems.
+    
+    No authentication required.
+    
+    ## Response
+    ```json
+    {
+      "ready": true,
+      "checks": {
+        "database": true
+      },
+      "timestamp": "2026-03-30T22:40:00+00:00"
+    }
+    ```
+    """,
+    response_description="Readiness status with health checks",
+)
 async def readiness_check():
     """Readiness check for orchestration platforms."""
     try:
@@ -273,7 +411,20 @@ async def readiness_check():
     }
 
 
-@app.get("/live", tags=["health"])
+@app.get(
+    "/live",
+    tags=["health"],
+    summary="Liveness check",
+    description="""
+    Liveness check - basic process health.
+    
+    Simple endpoint that returns immediately if the process is running.
+    Used by Kubernetes liveness probes.
+    
+    No authentication required.
+    """,
+    response_description="Process liveness status",
+)
 async def liveness_check():
     """Liveness check - basic process health."""
     return {"status": "alive"}
@@ -308,7 +459,26 @@ if PROMETHEUS_AVAILABLE:
     )
 
 
-@app.get("/metrics", tags=["monitoring"])
+@app.get(
+    "/metrics",
+    tags=["monitoring", "system"],
+    summary="Prometheus metrics",
+    description="""
+    Prometheus metrics endpoint.
+    
+    Returns metrics in Prometheus exposition format.
+    Requires prometheus-client package.
+    
+    ## Available Metrics
+    - `http_requests_total`: Total HTTP requests by method, endpoint, status
+    - `http_request_duration_seconds`: Request latency histogram
+    - `websocket_active_connections`: Number of active WebSocket connections
+    - `db_connections_active`: Active database connections
+    
+    No authentication required.
+    """,
+    response_description="Prometheus metrics in exposition format",
+)
 async def metrics():
     """
     Prometheus metrics endpoint.
@@ -333,7 +503,23 @@ async def metrics():
 # Circuit Breaker System Status
 from src.njz_api.middleware.circuit_breaker import get_circuit_breaker_status
 
-@app.get("/system/circuit-breakers", tags=["system", "monitoring"])
+@app.get(
+    "/system/circuit-breakers",
+    tags=["system", "monitoring"],
+    summary="Get system circuit breaker status",
+    description="""
+    Get status of all circuit breakers.
+    
+    Returns detailed information about all circuit breakers in the system
+    for operational monitoring and debugging.
+    
+    ## Circuit Breaker States
+    - **closed**: Normal operation, requests pass through
+    - **open**: Failure threshold reached, requests fail fast
+    - **half_open**: Testing recovery with limited requests
+    """,
+    response_description="Circuit breaker status for all services",
+)
 async def system_circuit_breaker_status():
     """
     Get status of all circuit breakers.
@@ -342,6 +528,43 @@ async def system_circuit_breaker_status():
     for operational monitoring and debugging.
     """
     return await get_circuit_breaker_status()
+
+
+@app.get(
+    "/system/observability",
+    tags=["system", "monitoring"],
+    summary="Get observability status",
+    description="""
+    Get status of observability components (tracing, metrics).
+    
+    Returns health status of:
+    - Distributed tracing (OpenTelemetry)
+    - Database tracing
+    - Cache tracing
+    - Prometheus metrics
+    
+    Useful for debugging observability issues.
+    """,
+    response_description="Observability component status",
+)
+async def system_observability_status():
+    """
+    Get status of observability components.
+    
+    Returns health status of tracing, metrics, and related components.
+    """
+    if not OBSERVABILITY_AVAILABLE:
+        return {
+            "status": "unavailable",
+            "message": "Observability module not installed",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+    
+    return {
+        "status": "available",
+        **get_health_status(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 # Request timing middleware
@@ -542,8 +765,18 @@ async def unified_gateway(websocket: WebSocket):
         await gateway.disconnect(user_id)
 
 
-# Root endpoint
-@app.get("/", tags=["root"])
+@app.get(
+    "/",
+    tags=["root"],
+    summary="API root",
+    description="""
+    API root - provides basic info and links.
+    
+    Returns API metadata, available endpoints, and WebSocket connections.
+    Useful for API discovery.
+    """,
+    response_description="API metadata and endpoint links",
+)
 async def root():
     """API root - provides basic info and links."""
     return {

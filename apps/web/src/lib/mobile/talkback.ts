@@ -526,7 +526,6 @@ export function createTraversalManager(): TalkBackTraversalManager {
  */
 export function buildNodeInfo(element: HTMLElement): AccessibilityNodeInfo {
   const rect = element.getBoundingClientRect();
-  const style = window.getComputedStyle(element);
   
   const info: AccessibilityNodeInfo = {
     className: element.className,

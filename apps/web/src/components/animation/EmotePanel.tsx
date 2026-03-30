@@ -13,7 +13,7 @@
  * - Unlock status display
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { MascotId } from '@/components/mascots/types';
 import {
@@ -342,7 +342,7 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
   playerLevel,
   achievements: _achievements,
   onEmoteSelect,
-  onEmotePreview,
+  onEmotePreview: _onEmotePreview,
   onFavoriteToggle,
   onQuickSlotAssign,
   onUnlockRequest,
@@ -357,7 +357,7 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmote, setSelectedEmote] = useState<EmoteDefinition | null>(null);
   const [assigningQuickSlot, setAssigningQuickSlot] = useState<number | undefined>();
-  const [_viewMode, _setViewMode] = useState<'grid' | 'list'>('grid');
+  const [, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Memoized data
   const compatibleEmotes = useMemo(() => getEmotesForMascot(mascotId), [mascotId]);
@@ -618,4 +618,3 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
 };
 
 export default EmotePanel;
-otePanel;

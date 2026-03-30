@@ -15,7 +15,6 @@
 import type {
   PostPlantData,
   PostPlantScenario,
-  PostPlantOutcome,
   PostPlantEvent,
   OptimalPostPlantPosition,
   DefuseStopPrediction,
@@ -404,7 +403,7 @@ function calculateEscapeRoutes(position: Vector2D, site: Site): Vector2D[] {
 /**
  * Calculate cover quality at position
  */
-function calculateCoverQuality(position: Vector2D): number {
+function calculateCoverQuality(_position: Vector2D): number {
   // Simplified: positions farther from center have better cover
   // In reality, this would check against map geometry
   return 0.5 + Math.random() * 0.5
@@ -505,7 +504,7 @@ function calculateWinRates(
 function generateDefusePredictions(
   scenarios: PostPlantScenario[],
   bombTimer: number,
-  defuseTime: number
+  _defuseTime: number
 ): DefuseStopPrediction[] {
   const predictions: DefuseStopPrediction[] = []
 
@@ -579,7 +578,7 @@ function findOptimalStopPosition(scenario: PostPlantScenario): Vector2D {
 /**
  * Determine utility for stopping defuse
  */
-function determineStopUtility(scenario: PostPlantScenario): string[] {
+function determineStopUtility(_scenario: PostPlantScenario): string[] {
   const utility: string[] = []
 
   // Check if line of sight is blocked
@@ -679,7 +678,6 @@ function renderScenario(ctx: CanvasRenderingContext2D, scenario: PostPlantScenar
   ctx.fill()
 
   // Draw time indicator
-  const phase = getPostPlantPhase(scenario.outcome.timeElapsed)
   ctx.font = '10px sans-serif'
   ctx.fillStyle = 'white'
   ctx.textAlign = 'center'
@@ -694,6 +692,12 @@ function renderOptimalPosition(
   position: OptimalPostPlantPosition
 ): void {
   const color = POSTPLANT_COLORS.position[position.role]
+  
+  // Draw position
+  ctx.beginPath()
+  ctx.arc(position.position.x, position.position.y, 12, 0, Math.PI * 2)
+  ctx.fillStyle = color
+  ctx.fill()
   
   // Draw position
   ctx.beginPath()
@@ -804,18 +808,6 @@ function getWinRateColor(rate: number): string {
   if (rate > 0.5) return POSTPLANT_COLORS.win.medium
   if (rate > 0.3) return POSTPLANT_COLORS.win.low
   return POSTPLANT_COLORS.win.poor
-}
-
-/**
- * Get post-plant phase
- */
-function getPostPlantPhase(timeElapsed: number): string {
-  for (const [key, phase] of Object.entries(POSTPLANT_PHASES)) {
-    if (timeElapsed >= phase.start && timeElapsed <= phase.end) {
-      return phase.label
-    }
-  }
-  return 'Unknown'
 }
 
 // ============================================================================

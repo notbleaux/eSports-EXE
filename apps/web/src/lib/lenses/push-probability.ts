@@ -342,7 +342,7 @@ function calculateUtilityFactor(
  * Calculate timing-based factor
  */
 function calculateTimingFactor(
-  site: PushProbabilityInput['sites'][0],
+  _site: PushProbabilityInput['sites'][0],
   input: PushProbabilityInput
 ): PushFactor {
   const time = input.roundTime
@@ -372,7 +372,7 @@ function calculateTimingFactor(
  * Calculate economy-based factor
  */
 function calculateEconomyFactor(
-  site: PushProbabilityInput['sites'][0],
+  _site: PushProbabilityInput['sites'][0],
   input: PushProbabilityInput
 ): PushFactor {
   const attackBuy = input.economy.attackers.canFullBuy ? 1 : 0.5
@@ -457,7 +457,7 @@ function calculateConfidence(
 function generateSiteHeatmap(
   site: PushProbabilityInput['sites'][0],
   probability: number,
-  factors: PushFactor[]
+  _factors: PushFactor[]
 ): HeatmapCell[] {
   const cells: HeatmapCell[] = []
   const gridSize = 15
@@ -532,8 +532,8 @@ function calculateRecommendedPath(
 function calculateRiskAssessment(
   probability: number,
   factors: PushFactor[],
-  site: PushProbabilityInput['sites'][0],
-  input: PushProbabilityInput
+  _site: PushProbabilityInput['sites'][0],
+  _input: PushProbabilityInput
 ): PushProbability['riskAssessment'] {
   const riskFactors: string[] = []
   let riskScore = 0.5
@@ -601,7 +601,7 @@ function generateCombinedHeatmap(sites: PushProbability[]): HeatmapCell[] {
  */
 function generateRecommendation(
   sites: PushProbability[],
-  input: PushProbabilityInput
+  _input: PushProbabilityInput
 ): PushProbabilityLensData['recommendation'] {
   const sorted = [...sites].sort((a, b) => b.probability - a.probability)
   const best = sorted[0]

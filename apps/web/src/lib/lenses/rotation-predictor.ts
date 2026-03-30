@@ -535,7 +535,7 @@ function renderPrediction(
   color: string,
   showConfidence: boolean,
   showTiming: boolean,
-  index: number,
+  _index: number,
   animationProgress: number
 ): void {
   const waypoints = prediction.waypoints

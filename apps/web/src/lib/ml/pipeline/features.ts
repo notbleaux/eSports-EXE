@@ -13,7 +13,12 @@
  * Team: ML Pipeline (TL-S3)
  */
 
-import type { Vector2D } from '@/hub-3-arepo/components/TacticalMap/types'
+// Vector2D type definition (local to avoid circular dependency)
+interface Vector2D {
+  x: number
+  y: number
+}
+
 import type { 
   Player, 
   MapBounds,
@@ -97,7 +102,7 @@ export interface ExtractedFeatures {
 // Position Feature Extraction
 // ============================================================================
 
-const MAP_SIZE = 1024 // Standard map size in game units
+// const MAP_SIZE = 1024 // Standard map size in game units
 
 /**
  * Extract position-based features from player and map data
@@ -105,7 +110,7 @@ const MAP_SIZE = 1024 // Standard map size in game units
 export function extractPositionFeatures(
   player: Player,
   mapBounds: MapBounds,
-  allPlayers: Player[]
+  _allPlayers: Player[]
 ): PositionFeatures {
   const sites = mapBounds.sites
   const siteA = sites.find(s => s.type === 'a') || sites[0]
@@ -242,7 +247,7 @@ export function encodeTimingPhase(phase: TimingFeatures['phase']): number[] {
 
 const MAX_BANK = 50000
 const FULL_BUY_THRESHOLD = 4000
-const FORCE_BUY_THRESHOLD = 2000
+// const FORCE_BUY_THRESHOLD = 2000
 
 /**
  * Extract economy features from team loadout
@@ -310,7 +315,7 @@ export function encodeBuyType(buyType: EconomyFeatures['buyType']): number[] {
 export function extractTeamCoordinationFeatures(
   players: Player[],
   crossfireData?: CrossfireData,
-  visionData?: VisionConeData
+  _visionData?: VisionConeData
 ): TeamCoordinationFeatures {
   const teamPositions = players.filter(p => p.team === players[0]?.team).map(p => p.position)
   

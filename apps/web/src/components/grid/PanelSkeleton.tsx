@@ -15,11 +15,11 @@ const PORCELAIN_COLORS = {
 };
 
 const HUB_COLORS = {
-  SATOR: colors.hub.sator,
-  ROTAS: colors.hub.rotas,
-  AREPO: colors.hub.arepo,
-  OPERA: colors.hub.opera,
-  TENET: colors.hub.tenet,
+  SATOR: colors.hub.sator.base,
+  ROTAS: colors.hub.rotas.base,
+  AREPO: colors.hub.arepo.base,
+  OPERA: colors.hub.opera.base,
+  TENET: colors.hub.tenet.base,
 };
 
 type HubType = 'SATOR' | 'ROTAS' | 'AREPO' | 'OPERA' | 'TENET';
@@ -186,7 +186,7 @@ export function PanelSkeleton({
   }
 
   // Default: panel-loading
-  const hubColor = HUB_COLORS[hub] || colors.hub.sator;
+  const hubColor = HUB_COLORS[hub] || colors.hub.sator.base;
   
   return (
     <>
@@ -296,7 +296,7 @@ interface PanelSkeletonCompactProps {
  * Compact skeleton for minimized panels
  */
 export function PanelSkeletonCompact({ hub = 'SATOR' }: PanelSkeletonCompactProps): ReactNode {
-  const hubColor = HUB_COLORS[hub] || colors.hub.sator;
+  const hubColor = HUB_COLORS[hub] || colors.hub.sator.base;
   
   return (
     <>
@@ -349,7 +349,7 @@ export function HubLoader(): ReactNode {
             <div className="absolute inset-0 rounded-full border-2 border-white/10" />
             <div 
               className="absolute inset-0 rounded-full border-2 border-t-transparent animate-spin"
-              style={{ borderColor: `${colors.hub.sator} transparent transparent transparent` }}
+              style={{ borderColor: `${colors.hub.sator.base} transparent transparent transparent` }}
             />
           </div>
           <p className="text-white/50 text-sm">Loading hub...</p>

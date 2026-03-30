@@ -6,13 +6,11 @@
  */
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ZoomIn, 
   ZoomOut, 
   Grid3X3, 
   MapPin, 
-  Layers,
   Maximize,
   Minimize,
   Crosshair,
@@ -24,8 +22,7 @@ import { GlowButton } from '@/components/ui/GlowButton';
 import type { 
   CS2MapData, 
   CS2MapViewState, 
-  CS2HeatmapData,
-  CS2_ZOOM_LIMITS 
+  CS2HeatmapData
 } from './types';
 
 interface CS2MapViewerProps {
@@ -39,7 +36,7 @@ interface CS2MapViewerProps {
 export const CS2MapViewer: React.FC<CS2MapViewerProps> = ({
   mapData,
   heatmapData,
-  onMapClick,
+  onMapClick: _onMapClick,
   readOnly = false,
   className = '',
 }) => {

@@ -169,13 +169,11 @@ export function CollapsibleNav({
   items = [],
   brand,
   position = 'left',
-  mobileWidth = '280px',
   desktopBreakpoint = 'lg',
   onDrawerChange,
   trigger,
   className,
   showOverlay = true,
-  closeOnRouteChange = true,
 }: CollapsibleNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeHub, setActiveHub] = useState<string | null>(null);
