@@ -11,10 +11,10 @@
       "path": "ARCHIVE_MASTER_DOSSIER.md",
       "tier": "T0",
       "authority": "MASTER",
-      "scope": "All archived files (144 documents), general cross-reference index, historical records from 2026-03-17 onward",
+      "scope": "All archived files (162 documents), general cross-reference index, historical records from 2026-03-17 onward",
       "schema_version": "1.0",
       "created_at": "2026-03-17",
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-03-30",
       "valid_until": "2026-04-27",
       "contains": {
         "topic_map": true,
@@ -115,7 +115,7 @@
       "scope": "Phase execution gates and state machine authority for all task completion",
       "schema_version": "1.0",
       "created_at": "2026-03-27",
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-03-30",
       "valid_until": "2026-04-27",
       "contains": {
         "phase_list": true,
@@ -141,7 +141,7 @@
       "scope": "Canonical type definitions and schema specifications to prevent duplicate types",
       "schema_version": "1.0",
       "created_at": "2026-03-27",
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-03-30",
       "valid_until": "2026-04-27",
       "contains": {
         "type_index": true,
@@ -164,7 +164,7 @@
       "scope": "Monthly (M-Q1–Q4) rolling schedule for archive index updates and maintenance",
       "schema_version": "1.0",
       "created_at": "2026-03-27",
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-03-30",
       "valid_until": "2026-04-27",
       "contains": {
         "schedule": true,

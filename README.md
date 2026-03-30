@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # 🏗️ NJZiteGeisTe Platform v2.1.0
 
 **Status:** 🟢 Production Ready  

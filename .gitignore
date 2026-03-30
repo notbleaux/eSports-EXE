@@ -51,3 +51,9 @@ apps/radiantx-game/build/
 .kimi/auth/
 .vercel
 .env*.local
+
+# Auto-generated health reports
+health_report.md
+
+# Temporary operation plans (post-operation)
+TEMP_*.md

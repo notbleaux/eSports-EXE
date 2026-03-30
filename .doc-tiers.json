@@ -12,7 +12,7 @@
     ".agents/SCHEMA_REGISTRY.md",
     ".agents/SKILL_MAP.md",
     ".agents/COORDINATION_PROTOCOL.md",
-    ".agents/AGENT_REGISTRY.md",
+    ".agents/registry/AGENT_REGISTRY.md",
     ".agents/session/CONTEXT_FORWARD.md",
     ".agents/phase-logbooks/",
     ".agents/PHASE_1_COMPLETION_SUMMARY.md",
