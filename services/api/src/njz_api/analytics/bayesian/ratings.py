@@ -189,7 +189,7 @@ class BayesianRatingSystem:
         """
         # Get current ratings
         team_a_ratings = [self.get_rating(pid) for pid in team_a_players]
-        team_b_ratings = [self.get_pid_rating(pid) for pid in team_b_players]
+        team_b_ratings = [self.get_rating(pid) for pid in team_b_players]
         
         # Calculate team ratings
         team_a_mean = np.mean([r.mean for r in team_a_ratings])

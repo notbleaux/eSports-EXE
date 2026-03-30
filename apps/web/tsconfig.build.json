@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "types": ["node"]
   },
   "include": ["src/**/*", "src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
 }

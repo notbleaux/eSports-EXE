@@ -4,62 +4,131 @@
 declare module 'three' {
   export class Scene {
     add(object: unknown): void;
+    children: unknown[];
   }
-  export class Camera {}
+  export class Camera {
+    position: Vector3;
+  }
   export class WebGLRenderer {
-    constructor(options?: { antialias?: boolean; alpha?: boolean });
+    constructor(options?: { 
+      antialias?: boolean; 
+      alpha?: boolean;
+      canvas?: HTMLCanvasElement;
+      premultipliedAlpha?: boolean;
+    });
     setSize(width: number, height: number): void;
     render(scene: Scene, camera: Camera): void;
     domElement: HTMLCanvasElement;
     dispose(): void;
+    setPixelRatio(ratio: number): void;
+    setClearColor(color: string | number, alpha?: number): void;
+    clear(): void;
+    shadowMap: {
+      enabled: boolean;
+      type: number;
+    };
   }
   export class PerspectiveCamera extends Camera {
     constructor(fov?: number, aspect?: number, near?: number, far?: number);
-    position: Vector3;
+    aspect: number;
     fov: number;
+    near: number;
+    far: number;
+    position: Vector3;
     updateProjectionMatrix(): void;
+    lookAt(target: Vector3 | { x: number; y: number; z: number }): void;
   }
   export class Vector3 {
     constructor(x?: number, y?: number, z?: number);
     x: number;
     y: number;
     z: number;
-    set(x: number, y: number, z: number): void;
+    set(x: number, y: number, z: number): this;
+    setScalar(s: number): this;
+    copy(v: Vector3): this;
+    clone(): Vector3;
+    add(v: Vector3): this;
+    sub(v: Vector3): this;
+    multiplyScalar(s: number): this;
+    distanceTo(v: Vector3): number;
   }
   export class Vector2 {
     constructor(x?: number, y?: number);
     x: number;
     y: number;
+    set(x: number, y: number): void;
   }
   export class Color {
-    constructor(color?: string | number);
+    constructor(color?: string | number | Color, g?: number, b?: number);
     r: number;
     g: number;
     b: number;
+    set(color: string | number): this;
+    getHexString(): string;
+    clone(): Color;
   }
   export class Mesh {
     position: Vector3;
     rotation: { x: number; y: number; z: number };
+    scale: Vector3;
+    visible: boolean;
+    geometry: unknown;
+    material: unknown;
+    castShadow: boolean;
+    receiveShadow: boolean;
   }
   export class Group {
     add(object: unknown): void;
+    remove(object: unknown): void;
+    position: Vector3;
+    visible: boolean;
+    getWorldPosition(target: Vector3): Vector3;
+    children: unknown[];
   }
   export class Raycaster {
     setFromCamera(coords: Vector2, camera: Camera): void;
-    intersectObjects(objects: unknown[]): Intersection[];
+    intersectObjects(objects: unknown[], recursive?: boolean): Intersection[];
   }
   export interface Intersection {
     object: Object3D;
     point: Vector3;
+    distance: number;
   }
   export class Object3D {
     position: Vector3;
     visible: boolean;
+    userData: Record<string, unknown>;
   }
   export class Plane {
     constructor(normal?: Vector3, constant?: number);
+    normal: Vector3;
+    constant: number;
   }
   export const DoubleSide: number;
+  export const FrontSide: number;
+  export const BackSide: number;
+  export const PCFSoftShadowMap: number;
+}
+
+// React Three Fiber - Extended types
+declare module '@react-three/fiber' {
+  import * as React from 'react';
+  import { Vector3, Color } from 'three';
+  
+  export interface MeshProps {
+    position?: Vector3 | [number, number, number];
+    scale?: Vector3 | number;
+    visible?: boolean;
+    children?: React.ReactNode;
+  }
+  
+  export interface MaterialProps {
+    color?: string | Color;
+    transparent?: boolean;
+    opacity?: number;
+    side?: number;
+    depthWrite?: boolean;
+  }
 }
 
 // Three.js examples
@@ -76,6 +145,8 @@ declare module 'three/examples/jsm/controls/OrbitControls' {
     maxPolarAngle: number;
     update(): void;
     dispose(): void;
+    autoRotate: boolean;
+    autoRotateSpeed: number;
   }
 }
 
