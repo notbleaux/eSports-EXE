@@ -11,31 +11,31 @@
  * [Ver001.000] - Initial component implementation (MF-5)
  */
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ImageOff } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { colors } from '@/theme/colors';
-import { SegmentTypeBadge } from './SegmentTypeBadge';
-import { VerificationBadge } from './VerificationBadge';
-import type { FrameThumbnailProps } from './types';
+import { colors } from '@/theme/colors'
+import { cn } from '@/utils/cn'
+import { motion } from 'framer-motion'
+import { ImageOff } from 'lucide-react'
+import React, { useState } from 'react'
+import { SegmentTypeBadge } from './SegmentTypeBadge'
+import { VerificationBadge } from './VerificationBadge'
+import type { FrameThumbnailProps } from './types'
 
 /**
  * Format milliseconds to HH:MM:SS.mmm display
  */
 function formatTimestamp(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  const milliseconds = Math.floor((ms % 1000));
+  const totalSeconds = Math.floor(ms / 1000)
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  const milliseconds = Math.floor(ms % 1000)
 
-  const pad = (n: number, digits: number = 2) => n.toString().padStart(digits, '0');
+  const pad = (n: number, digits: number = 2) => n.toString().padStart(digits, '0')
 
   if (hours > 0) {
-    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${pad(milliseconds, 3)}`;
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${pad(milliseconds, 3)}`
   }
-  return `${pad(minutes)}:${pad(seconds)}.${pad(milliseconds, 3)}`;
+  return `${pad(minutes)}:${pad(seconds)}.${pad(milliseconds, 3)}`
 }
 
 /**
@@ -52,17 +52,17 @@ export const FrameThumbnail: React.FC<FrameThumbnailProps> = ({
   onPinToggle,
   isAdmin = false,
   isPinning = false,
-  className,
+  className
 }) => {
-  const [imageError, setImageError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [imageError, setImageError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onClick?.();
+      e.preventDefault()
+      onClick?.()
     }
-  };
+  }
 
   return (
     <motion.div
@@ -102,8 +102,8 @@ export const FrameThumbnail: React.FC<FrameThumbnailProps> = ({
             )}
             onLoad={() => setIsLoading(false)}
             onError={() => {
-              setIsLoading(false);
-              setImageError(true);
+              setIsLoading(false)
+              setImageError(true)
             }}
             loading="lazy"
           />
@@ -141,10 +141,7 @@ export const FrameThumbnail: React.FC<FrameThumbnailProps> = ({
       {/* Metadata Footer */}
       <div className="p-2 flex items-center justify-between gap-2 bg-white/[0.02]">
         <SegmentTypeBadge type={frame.segmentType} />
-        <span
-          className="text-xs tabular-nums"
-          style={{ color: colors.text.muted }}
-        >
+        <span className="text-xs tabular-nums" style={{ color: colors.text.muted }}>
           #{frame.frameIndex.toString().padStart(4, '0')}
         </span>
       </div>
@@ -154,7 +151,7 @@ export const FrameThumbnail: React.FC<FrameThumbnailProps> = ({
         <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
       )}
     </motion.div>
-  );
-};
+  )
+}
 
-export default FrameThumbnail;
+export default FrameThumbnail
