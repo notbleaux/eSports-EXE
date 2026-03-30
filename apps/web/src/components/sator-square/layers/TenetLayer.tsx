@@ -30,10 +30,10 @@ export const TenetLayer: React.FC<TenetLayerProps> = ({ zones, width, height }) 
 
   useEffect(() => {
     if (!svgRef.current) return;
-    const svg = d3.select(svgRef.current);
+    const svg = d3.select(svgRef.current as Element);
     svg.selectAll('.tenet-zone').remove();
 
-    const line = d3.line<[number, number]>().x((d) => d[0]).y((d) => d[1]);
+    const lineGenerator = d3.line<[number, number]>().x((d) => d[0]).y((d) => d[1]);
 
     svg
       .selectAll<SVGPathElement, ControlZone>('.tenet-zone')
@@ -41,10 +41,10 @@ export const TenetLayer: React.FC<TenetLayerProps> = ({ zones, width, height }) 
       .enter()
       .append('path')
       .attr('class', 'tenet-zone')
-      .attr('d', (d) => line(d.polygon) + 'Z')
-      .attr('fill', (d) => CONTROL_COLORS[d.controlTeam])
-      .attr('fill-opacity', (d) => 0.15 + d.controlStrength * 0.25)
-      .attr('stroke', (d) => CONTROL_COLORS[d.controlTeam])
+      .attr('d', (d: ControlZone) => lineGenerator(d.polygon) + 'Z')
+      .attr('fill', (d: ControlZone) => CONTROL_COLORS[d.controlTeam])
+      .attr('fill-opacity', (d: ControlZone) => 0.15 + d.controlStrength * 0.25)
+      .attr('stroke', (d: ControlZone) => CONTROL_COLORS[d.controlTeam])
       .attr('stroke-width', 1.5)
       .attr('stroke-opacity', 0.6);
   }, [zones]);
