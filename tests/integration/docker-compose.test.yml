@@ -1,0 +1,132 @@
+# Integration Test Environment for ESPORTEZ-MANAGER
+# Cross-service E2E testing with Docker Compose
+# [Ver001.000]
+
+version: '3.8'
+
+services:
+  # PostgreSQL Test Database
+  test-db:
+    image: postgres:15-alpine
+    container_name: njz-test-db
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
+      - ../../infra/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - njz-test-network
+
+  # Redis Test Cache
+  test-redis:
+    image: redis:7-alpine
+    container_name: njz-test-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - test_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - njz-test-network
+
+  # API Service (Test Build)
+  test-api:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.api
+    container_name: njz-test-api
+    environment:
+      DATABASE_URL: postgresql://test:test@test-db:5432/test_db
+      REDIS_URL: redis://test-redis:6379
+      JWT_SECRET_KEY: test-jwt-secret-key-for-integration-tests
+      TOTP_ENCRYPTION_KEY: test-totp-key-for-integration-tests-32
+      APP_ENVIRONMENT: test
+      DEBUG: "true"
+      PYTEST_CURRENT_TEST: "1"
+    ports:
+      - "8001:8000"
+    depends_on:
+      test-db:
+        condition: service_healthy
+      test-redis:
+        condition: service_healthy
+    networks:
+      - njz-test-network
+    command: >
+      uvicorn main:app 
+      --host 0.0.0.0 
+      --port 8000 
+      --log-level debug
+
+  # WebSocket Service (Test Build)
+  test-websocket:
+    build:
+      context: ../../services/websocket
+      dockerfile: Dockerfile
+    container_name: njz-test-websocket
+    environment:
+      REDIS_URL: redis://test-redis:6379
+      STREAM_NAME: test:events
+      STREAM_GROUP: test_websocket_group
+      STREAM_CONSUMER: test_consumer_1
+      APP_VERSION: test-0.1.0
+      HEARTBEAT_INTERVAL: 5
+    ports:
+      - "8766:8000"
+    depends_on:
+      test-redis:
+        condition: service_healthy
+    networks:
+      - njz-test-network
+
+  # Test Runner
+  test-runner:
+    build:
+      context: ../..
+      dockerfile: tests/integration/Dockerfile.test
+    container_name: njz-test-runner
+    environment:
+      TEST_DATABASE_URL: postgresql://test:test@test-db:5432/test_db
+      TEST_REDIS_URL: redis://test-redis:6379
+      API_BASE_URL: http://test-api:8000
+      WS_BASE_URL: ws://test-websocket:8000
+      JWT_SECRET_KEY: test-jwt-secret-key-for-integration-tests
+    depends_on:
+      - test-api
+      - test-websocket
+    networks:
+      - njz-test-network
+    volumes:
+      - ../../tests:/app/tests
+      - ../../services:/app/services
+      - test_results:/app/test_results
+    command: >
+      pytest tests/integration 
+      -v 
+      --tb=short 
+      --cov=services.api 
+      --cov-report=xml:/app/test_results/coverage.xml
+      --cov-report=html:/app/test_results/htmlcov
+      --junitxml=/app/test_results/junit.xml
+
+volumes:
+  test_postgres_data:
+  test_redis_data:
+  test_results:
+
+networks:
+  njz-test-network:
+    driver: bridge

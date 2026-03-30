@@ -1,0 +1,51 @@
+[package]
+name = "simulation-rust"
+version = "0.1.0"
+edition = "2021"
+authors = ["NJZiteGeisTe Platform"]
+description = "Rust simulation core for tactical FPS esports"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rand = { version = "0.8", features = ["small_rng"] }
+sha2 = "0.10"
+byteorder = "1.5"
+thiserror = "1.0"
+
+# WASM support
+wasm-bindgen = { version = "0.2", optional = true }
+js-sys = { version = "0.3", optional = true }
+
+# Parallelism
+rayon = { version = "1.8", optional = true }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "combat_bench"
+harness = false
+
+[[bench]]
+name = "match_bench"
+harness = false
+
+[features]
+default = ["std"]
+std = []
+wasm = ["wasm-bindgen", "js-sys"]
+parallel = ["rayon"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.bench]
+opt-level = 3
+lto = true
+codegen-units = 1

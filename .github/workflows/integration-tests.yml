@@ -1,0 +1,259 @@
+# Integration Tests Workflow
+# Cross-service E2E testing for ESPORTEZ-MANAGER ↔ eSports-EXE
+# [Ver001.000]
+
+name: Integration Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'services/**'
+      - 'tests/integration/**'
+      - 'packages/shared/**'
+      - '.github/workflows/integration-tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'services/**'
+      - 'tests/integration/**'
+      - 'packages/shared/**'
+  workflow_dispatch:
+    inputs:
+      test_markers:
+        description: 'Pytest markers to run'
+        required: false
+        default: 'integration'
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==========================================================================
+  # Job 1: Integration Tests with Docker Compose
+  # ==========================================================================
+  integration-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6380:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-cov pytest-timeout httpx websockets
+          pip install -r services/api/requirements.txt
+
+      - name: Wait for services
+        run: |
+          # Wait for PostgreSQL
+          until pg_isready -h localhost -p 5433 -U test; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          
+          # Wait for Redis
+          until redis-cli -h localhost -p 6380 ping | grep -q PONG; do
+            echo "Waiting for Redis..."
+            sleep 2
+          done
+          
+          echo "All services ready!"
+
+      - name: Run integration tests
+        env:
+          TEST_DATABASE_URL: postgresql://test:test@localhost:5433/test_db
+          TEST_REDIS_URL: redis://localhost:6380
+          API_BASE_URL: http://localhost:8001
+          WS_BASE_URL: ws://localhost:8766
+          JWT_SECRET_KEY: test-jwt-secret-key-for-ci-integration-tests
+          TOTP_ENCRYPTION_KEY: test-totp-key-for-ci-integration-tests-32
+          PYTEST_CURRENT_TEST: "1"
+        run: |
+          pytest tests/integration \
+            -v \
+            --tb=short \
+            -m "integration or e2e" \
+            --cov=services.api \
+            --cov-report=xml:integration-coverage.xml \
+            --cov-report=html:integration-htmlcov \
+            --junitxml=integration-junit.xml \
+            --timeout=60
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-test-results
+          path: |
+            integration-coverage.xml
+            integration-junit.xml
+            integration-htmlcov/
+          retention-days: 14
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let summary = '## Integration Test Results\n\n';
+            
+            // Check for test results
+            if (fs.existsSync('integration-junit.xml')) {
+              const junit = fs.readFileSync('integration-junit.xml', 'utf8');
+              const testsMatch = junit.match(/tests="(\d+)"/);
+              const failuresMatch = junit.match(/failures="(\d+)"/);
+              const errorsMatch = junit.match(/errors="(\d+)"/);
+              
+              if (testsMatch) {
+                const total = testsMatch[1];
+                const failures = failuresMatch ? failuresMatch[1] : '0';
+                const errors = errorsMatch ? errorsMatch[1] : '0';
+                const passed = parseInt(total) - parseInt(failures) - parseInt(errors);
+                
+                summary += `| Metric | Count |\n`;
+                summary += `|--------|-------|\n`;
+                summary += `| Total | ${total} |\n`;
+                summary += `| ✅ Passed | ${passed} |\n`;
+                summary += `| ❌ Failed | ${failures} |\n`;
+                summary += `| ⚠️ Errors | ${errors} |\n`;
+              }
+            }
+            
+            // Check for coverage
+            if (fs.existsSync('integration-coverage.xml')) {
+              const coverage = fs.readFileSync('integration-coverage.xml', 'utf8');
+              const lineRateMatch = coverage.match(/line-rate="([\d.]+)"/);
+              if (lineRateMatch) {
+                const percentage = (parseFloat(lineRateMatch[1]) * 100).toFixed(2);
+                summary += `\n**Coverage: ${percentage}%**\n`;
+                
+                if (parseFloat(percentage) >= 85) {
+                  summary += '✅ Coverage target (>85%) met!\n';
+                } else {
+                  summary += `⚠️ Coverage target not met. Need >85%, have ${percentage}%\n`;
+                }
+              }
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+  # ==========================================================================
+  # Job 2: Docker Compose Integration Test
+  # ==========================================================================
+  docker-compose-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and run integration tests with Docker Compose
+        run: |
+          cd tests/integration
+          docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner
+
+      - name: Upload Docker test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docker-integration-test-results
+          path: test_results/
+          retention-days: 14
+
+      - name: Cleanup
+        if: always()
+        run: |
+          cd tests/integration
+          docker-compose -f docker-compose.test.yml down -v
+
+  # ==========================================================================
+  # Job 3: Coverage Report
+  # ==========================================================================
+  coverage-report:
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Download test results
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-test-results
+
+      - name: Check coverage threshold
+        run: |
+          if [ -f integration-coverage.xml ]; then
+            # Extract coverage percentage
+            COVERAGE=$(grep -o 'line-rate="[0-9.]*"' integration-coverage.xml | head -1 | cut -d'"' -f2)
+            COVERAGE_PCT=$(echo "$COVERAGE * 100" | bc -l | cut -d. -f1)
+            
+            echo "Coverage: ${COVERAGE_PCT}%"
+            
+            if [ "$COVERAGE_PCT" -ge 85 ]; then
+              echo "✅ Coverage target met (>85%)"
+            else
+              echo "⚠️ Coverage below target: ${COVERAGE_PCT}% (need >85%)"
+              # Don't fail the build, just warn
+            fi
+          fi
+
+  # ==========================================================================
+  # Job 4: Summary
+  # ==========================================================================
+  summary:
+    needs: [integration-tests, docker-compose-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Test Summary
+        run: |
+          echo "=========================================="
+          echo "Integration Test Summary"
+          echo "=========================================="
+          echo "Integration Tests: ${{ needs.integration-tests.result }}"
+          echo "Docker Compose Tests: ${{ needs.docker-compose-tests.result }}"
+          echo "=========================================="

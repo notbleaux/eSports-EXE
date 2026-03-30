@@ -1,0 +1,710 @@
+{
+  "info": {
+    "_postman_id": "esportez-api-v1-collection",
+    "name": "ESPORTEZ-MANAGER API",
+    "description": "Tournament management and esports analytics API collection.\n\nBase URLs:\n- Local: http://localhost:8000\n- Production: https://api.esportez-manager.com\n\nAuthentication: Bearer Token (JWT)\n\nFeatures:\n- Tournament management\n- Match result submission\n- SimRating calculations\n- RAR analytics\n- Real-time WebSocket updates",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🔍 Health & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Basic health check endpoint - no authentication required"
+          },
+          "response": []
+        },
+        {
+          "name": "Readiness Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ready",
+              "host": ["{{base_url}}"],
+              "path": ["ready"]
+            },
+            "description": "Check database connectivity and readiness"
+          },
+          "response": []
+        },
+        {
+          "name": "Liveness Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/live",
+              "host": ["{{base_url}}"],
+              "path": ["live"]
+            },
+            "description": "Basic process health check"
+          },
+          "response": []
+        },
+        {
+          "name": "Prometheus Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/metrics",
+              "host": ["{{base_url}}"],
+              "path": ["metrics"]
+            },
+            "description": "Prometheus metrics endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "Circuit Breaker Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tournaments/system/circuit-breakers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tournaments", "system", "circuit-breakers"]
+            },
+            "description": "Get status of all circuit breakers"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Circuit Breaker",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tournaments/system/circuit-breakers/tournament_list/reset",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tournaments", "system", "circuit-breakers", "tournament_list", "reset"]
+            },
+            "description": "Manually reset a circuit breaker (admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🏆 Tournaments",
+      "item": [
+        {
+          "name": "List Tournaments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tournaments?game=valorant&page=1&per_page=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tournaments"],
+              "query": [
+                {
+                  "key": "game",
+                  "value": "valorant",
+                  "description": "Game filter: valorant or cs2"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "20",
+                  "description": "Items per page (max 100)"
+                }
+              ]
+            },
+            "description": "Get list of tournaments with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tournament",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tournaments/{{tournament_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tournaments", "{{tournament_id}}"]
+            },
+            "description": "Get specific tournament by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "⚔️ Matches",
+      "item": [
+        {
+          "name": "Submit Match Result",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"match_id\": \"match_001\",\n  \"tournament_id\": \"{{tournament_id}}\",\n  \"team1_id\": \"team_alpha\",\n  \"team2_id\": \"team_beta\",\n  \"team1_score\": 13,\n  \"team2_score\": 10,\n  \"winner_id\": \"team_alpha\",\n  \"map_results\": [\n    {\n      \"map\": \"ascent\",\n      \"team1_score\": 13,\n      \"team2_score\": 10,\n      \"winner\": \"team_alpha\"\n    }\n  ],\n  \"stats\": {\n    \"team_alpha\": {\n      \"player_1\": {\n        \"kills\": 25,\n        \"deaths\": 15,\n        \"assists\": 5\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/tournaments/{{tournament_id}}/matches/results",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tournaments", "{{tournament_id}}", "matches", "results"]
+            },
+            "description": "Submit match result (called by Godot game or admin)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📊 Analytics",
+      "item": [
+        {
+          "name": "Calculate SimRating",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kills_z\": 1.2,\n  \"deaths_z\": -0.5,\n  \"adjusted_kill_value_z\": 1.0,\n  \"adr_z\": 0.8,\n  \"kast_pct_z\": 0.6\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/simrating/calculate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "simrating", "calculate"]
+            },
+            "description": "Calculate SimRating from z-scored components"
+          },
+          "response": []
+        },
+        {
+          "name": "Calculate RAR",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"raw_rating\": 108.2,\n  \"role\": \"Entry\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/rar/calculate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "rar", "calculate"]
+            },
+            "description": "Calculate Role-Adjusted Replacement value"
+          },
+          "response": []
+        },
+        {
+          "name": "Grade Investment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"raw_rating\": 108.2,\n  \"role\": \"Entry\",\n  \"age\": 21,\n  \"record_date\": \"2026-03-01T00:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/investment/grade",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "investment", "grade"]
+            },
+            "description": "Grade player as investment prospect"
+          },
+          "response": []
+        },
+        {
+          "name": "Batch Grade Players",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"players\": [\n    {\n      \"player_id\": \"player_001\",\n      \"raw_rating\": 115.0,\n      \"role\": \"IGL\",\n      \"age\": 27,\n      \"record_date\": \"2026-03-01T00:00:00Z\"\n    },\n    {\n      \"player_id\": \"player_002\",\n      \"raw_rating\": 105.0,\n      \"role\": \"Entry\",\n      \"age\": 19,\n      \"record_date\": \"2026-03-01T00:00:00Z\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/investment/grade/batch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "investment", "grade", "batch"]
+            },
+            "description": "Grade multiple players at once"
+          },
+          "response": []
+        },
+        {
+          "name": "Age Curve Analysis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/age-curve/Entry/21",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "age-curve", "Entry", "21"]
+            },
+            "description": "Get age curve analysis for role and age"
+          },
+          "response": []
+        },
+        {
+          "name": "List Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/roles",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "roles"]
+            },
+            "description": "Get list of available roles and replacement levels"
+          },
+          "response": []
+        },
+        {
+          "name": "Analytics Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "health"]
+            },
+            "description": "Health check for analytics module"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "✅ Verification",
+      "item": [
+        {
+          "name": "Get Live Matches",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/live/matches?game=valorant&confidence_min=0.8",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "live", "matches"],
+              "query": [
+                {
+                  "key": "game",
+                  "value": "valorant"
+                },
+                {
+                  "key": "confidence_min",
+                  "value": "0.8",
+                  "description": "Minimum confidence threshold (0-1)"
+                }
+              ]
+            },
+            "description": "Get current live matches with confidence scores"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Live Match",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/live/matches/{{match_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "live", "matches", "{{match_id}}"]
+            },
+            "description": "Get specific live match details"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Match History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/history/matches?game=valorant&limit=50&confidence_min=0.7",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "history", "matches"],
+              "query": [
+                {
+                  "key": "game",
+                  "value": "valorant"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "confidence_min",
+                  "value": "0.7"
+                }
+              ]
+            },
+            "description": "Get historical matches with verification data"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Review Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/review-queue?priority=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "review-queue"],
+              "query": [
+                {
+                  "key": "priority",
+                  "value": "true",
+                  "description": "High priority items (confidence < 0.5)"
+                }
+              ]
+            },
+            "description": "Get items flagged for manual review (admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Review Decision",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decision\": \"approve\",\n  \"notes\": \"Verified against official sources\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/review-queue/{{item_id}}/decide",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "review-queue", "{{item_id}}", "decide"]
+            },
+            "description": "Submit manual review decision (admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Verification Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "health"]
+            },
+            "description": "Health check for verification service"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔔 Webhooks",
+      "item": [
+        {
+          "name": "Pandascore Match Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Pandascore-Signature",
+                "value": "sha256=example_signature",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"MATCH_END\",\n  \"id\": 12345,\n  \"match\": {\n    \"id\": 12345,\n    \"name\": \"Team A vs Team B\",\n    \"status\": \"finished\",\n    \"team1\": {\n      \"id\": 1,\n      \"name\": \"Team A\"\n    },\n    \"team2\": {\n      \"id\": 2,\n      \"name\": \"Team B\"\n    },\n    \"team1_score\": 13,\n    \"team2_score\": 10\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/webhooks/pandascore/match-update",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks", "pandascore", "match-update"]
+            },
+            "description": "Receive Pandascore match update webhook"
+          },
+          "response": []
+        },
+        {
+          "name": "Webhook Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/webhooks/pandascore/health",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks", "pandascore", "health"]
+            },
+            "description": "Health check for webhook service"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔌 WebSocket Examples",
+      "item": [
+        {
+          "name": "SATOR WebSocket",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "ws://{{base_url}}/ws/sator",
+              "host": ["ws://{{base_url}}"],
+              "path": ["ws", "sator"]
+            },
+            "description": "WebSocket endpoint for SATOR live updates"
+          },
+          "response": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Lens Updates WebSocket",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "ws://{{base_url}}/ws/lens-updates",
+              "host": ["ws://{{base_url}}"],
+              "path": ["ws", "lens-updates"]
+            },
+            "description": "WebSocket endpoint for ROTAS lens updates"
+          },
+          "response": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Unified Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "ws://{{base_url}}/ws/gateway",
+              "host": ["ws://{{base_url}}"],
+              "path": ["ws", "gateway"]
+            },
+            "description": "Unified WebSocket gateway for TENET platform"
+          },
+          "response": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string",
+      "description": "API base URL"
+    },
+    {
+      "key": "api_key",
+      "value": "your_api_key_here",
+      "type": "string",
+      "description": "API authentication key"
+    },
+    {
+      "key": "tournament_id",
+      "value": "12345",
+      "type": "string",
+      "description": "Test tournament ID"
+    },
+    {
+      "key": "match_id",
+      "value": "match_001",
+      "type": "string",
+      "description": "Test match ID"
+    },
+    {
+      "key": "item_id",
+      "value": "item_001",
+      "type": "string",
+      "description": "Test review queue item ID"
+    }
+  ]
+}
