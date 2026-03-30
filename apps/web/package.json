@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint . --report-unused-disable-directives",
     "typecheck": "tsc --noEmit",
+    "typecheck:build": "tsc --noEmit -p tsconfig.build.json",
     "typecheck:watch": "tsc --noEmit --watch",
     "test": "vitest",
     "test:run": "vitest run",

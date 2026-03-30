@@ -390,7 +390,7 @@ export const SpatialAudio = React.forwardRef<SpatialAudioRef, SpatialAudioProps>
       fetch(audioUrl)
         .then(res => res.arrayBuffer())
         .then(arrayBuffer => {
-          const audioContext = spatial['engineRef']?.current?.['audioContext'];
+          const audioContext = spatial.engine?.['audioContext'];
           if (audioContext) {
             return audioContext.decodeAudioData(arrayBuffer);
           }
@@ -738,5 +738,4 @@ export const SpatialAudioVisualization: React.FC<SpatialAudioVisualizationProps>
 
 export default SpatialAudio;
 
-// Re-export specialized components
-export { MascotSpatialAudio, AmbientSpatialAudio, VoiceSpatialAudio, SpatialAudioVisualization };
+// Components are already exported above

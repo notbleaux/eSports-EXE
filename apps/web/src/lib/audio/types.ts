@@ -334,6 +334,7 @@ export interface UseAudioReturn {
   
   // Settings
   setQuality: (quality: AudioQuality) => void;
+  getQuality: () => AudioQuality;
   getCategoryVolume: (category: AudioCategory) => number;
   isCategoryMuted: (category: AudioCategory) => boolean;
 }

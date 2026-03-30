@@ -1,0 +1,28 @@
+# Checkpoint for player_stats validation
+name: player_stats_checkpoint
+config_version: 1.0
+template_name:
+module_name: great_expectations.checkpoint
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S"
+expectation_suite_name: player_stats_suite
+batch_request:
+  datasource_name: postgres_datasource
+  data_asset_name: player_stats
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction
+  - name: send_slack_notification_on_failure
+    action:
+      class_name: SlackNotificationAction
+      slack_webhook: ${SLACK_WEBHOOK_URL}
+      notify_on: failure
+      renderer:
+        module_name: great_expectations.render.renderer.slack_renderer
+        class_name: SlackRenderer
+validation_operator_name:
+validations: []
