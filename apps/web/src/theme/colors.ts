@@ -67,6 +67,21 @@ export const CHART_COLORS = {
   grid: 'rgba(255, 255, 255, 0.05)'
 } as const
 
+// Background Colors
+export const BACKGROUND_COLORS = {
+  primary: '#0f172a',    // Dark blue/slate background
+  secondary: '#1e293b',  // Slightly lighter
+  card: '#1e293b',       // Card backgrounds
+  hover: '#334155',      // Hover states
+} as const
+
+// Border Colors
+export const BORDER_COLORS = {
+  subtle: 'rgba(255, 255, 255, 0.1)',  // Subtle borders
+  default: 'rgba(255, 255, 255, 0.2)', // Default borders
+  strong: 'rgba(255, 255, 255, 0.3)',  // Stronger borders
+} as const
+
 // Export all
 export const colors = {
   hub: HUB_COLORS,
@@ -74,7 +89,9 @@ export const colors = {
   gray: GRAYSCALE,
   glow: GLOW_COLORS,
   text: TEXT_COLORS,
-  chart: CHART_COLORS
+  chart: CHART_COLORS,
+  background: BACKGROUND_COLORS,
+  border: BORDER_COLORS,
 } as const
 
 export default colors
