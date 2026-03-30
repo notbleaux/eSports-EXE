@@ -50,6 +50,10 @@ export interface LensOptions {
   opacity?: number
   /** Scale factor */
   scale?: number
+  /** Default options for the lens */
+  defaultOptions?: Partial<LensOptions>
+  /** Display name */
+  displayName?: string
 }
 
 // ============================================================================
@@ -66,6 +70,16 @@ export interface GameData {
   rounds: RoundData[]
   /** Player information */
   players: PlayerData[]
+  /** Sound events */
+  soundEvents: SoundEvent[]
+  /** Kill events */
+  killEvents: KillEvent[]
+  /** Damage events */
+  damageEvents: DamageEvent[]
+  /** Player positions over time */
+  playerPositions: PlayerPosition[]
+  /** Match metadata */
+  metadata?: Record<string, unknown>
 }
 
 /** Round data */
@@ -106,6 +120,7 @@ export interface KillEvent extends GameEvent {
   weapon: string
   headshot: boolean
   position: Vector2D
+  isFirstBlood?: boolean
 }
 
 /** Damage event */
@@ -116,6 +131,7 @@ export interface DamageEvent extends GameEvent {
   damage: number
   weapon: string
   position: Vector2D
+  isFatal?: boolean
 }
 
 /** Sound event (footsteps, abilities, etc.) */
