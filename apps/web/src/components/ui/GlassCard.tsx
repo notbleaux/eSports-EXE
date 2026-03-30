@@ -81,6 +81,7 @@ export interface GlassCardProps {
   reducedMotion?: boolean;
   onClick?: () => void;
   as?: React.ElementType;
+  variant?: 'default' | 'outlined' | 'filled' | 'elevated' | 'subtle';
 }
 
 export interface GlassCardComponentProps extends GlassCardProps {

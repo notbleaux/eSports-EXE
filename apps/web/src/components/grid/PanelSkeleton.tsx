@@ -201,15 +201,15 @@ export function PanelSkeleton({
         <div 
           className="flex items-center justify-between px-3 py-2.5"
           style={{ 
-            backgroundColor: `${hubColor.base}08`,
-            borderBottom: `1px solid ${hubColor.base}20`
+            backgroundColor: `${hubColor}08`,
+            borderBottom: `1px solid ${hubColor}20`
           }}
         >
           <div className="flex items-center gap-2">
             {/* Hub indicator dot */}
             <div 
               className="w-2 h-2 rounded-full skeleton-shimmer"
-              style={{ backgroundColor: hubColor.base }}
+              style={{ backgroundColor: hubColor }}
             />
             {/* Title placeholder */}
             <div 
@@ -255,7 +255,7 @@ export function PanelSkeleton({
                   className="flex-1 rounded-t skeleton-shimmer"
                   style={{ 
                     height: `${height}%`,
-                    backgroundColor: `${hubColor.base}30`
+                    backgroundColor: `${hubColor}30`
                   }}
                 />
               ))}
@@ -310,14 +310,14 @@ export function PanelSkeletonCompact({ hub = 'SATOR' }: PanelSkeletonCompactProp
         <div 
           className="flex items-center justify-between px-3 py-2"
           style={{ 
-            backgroundColor: `${hubColor.base}10`,
-            borderBottom: `1px solid ${hubColor.base}30`
+            backgroundColor: `${hubColor}10`,
+            borderBottom: `1px solid ${hubColor}30`
           }}
         >
           <div className="flex items-center gap-2">
             <div 
               className="w-2 h-2 rounded-full skeleton-shimmer"
-              style={{ backgroundColor: hubColor.base }}
+              style={{ backgroundColor: hubColor }}
             />
             <div 
               className="h-3 w-20 rounded skeleton-shimmer"
@@ -349,7 +349,7 @@ export function HubLoader(): ReactNode {
             <div className="absolute inset-0 rounded-full border-2 border-white/10" />
             <div 
               className="absolute inset-0 rounded-full border-2 border-t-transparent animate-spin"
-              style={{ borderColor: `${colors.hub.sator.base} transparent transparent transparent` }}
+              style={{ borderColor: `${colors.hub.sator} transparent transparent transparent` }}
             />
           </div>
           <p className="text-white/50 text-sm">Loading hub...</p>
