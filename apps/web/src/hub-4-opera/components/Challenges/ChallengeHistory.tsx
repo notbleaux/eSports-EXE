@@ -25,8 +25,8 @@ import { colors } from '@/theme/colors';
 import { cn } from '@/utils/cn';
 import type { ChallengeHistoryProps, ChallengeAttempt, ChallengeType } from './types';
 
-const OPERA_COLOR = colors.hub.opera.base;
-const OPERA_GLOW = colors.hub.opera.glow;
+const OPERA_COLOR = colors.hub.opera;
+const OPERA_GLOW = "rgba(255, 0, 255, 0.4)";
 
 // Type configurations
 const TYPE_CONFIG: Record<ChallengeType, { icon: typeof Play; label: string; color: string }> = {

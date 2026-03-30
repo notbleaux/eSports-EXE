@@ -33,8 +33,8 @@ import ChallengeStreak from './ChallengeStreak';
 import ChallengeHistory from './ChallengeHistory';
 import type { ChallengesContainerProps, ChallengeType } from './types';
 
-const OPERA_COLOR = colors.hub.opera.base;
-const OPERA_GLOW = colors.hub.opera.glow;
+const OPERA_COLOR = colors.hub.opera;
+const OPERA_GLOW = "rgba(255, 0, 255, 0.4)";
 
 type TabId = 'today' | 'upcoming' | 'history' | 'streak';
 

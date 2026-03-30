@@ -26,8 +26,8 @@ import { mockLiveData } from './mockData';
 import type { LiveContainerProps, LiveMatch, LiveEvent, Stream } from './types';
 import { streamingLogger } from '@/utils/logger';
 
-const OPERA_COLOR = colors.hub.opera.base;
-const OPERA_GLOW = colors.hub.opera.glow;
+const OPERA_COLOR = colors.hub.opera;
+const OPERA_GLOW = "rgba(255, 0, 255, 0.4)";
 
 // Convert DetailedLiveMatch to LiveMatch for ticker
 const toTickerMatch = (match: { id: string; teamA: { name: string; score: number; logo: string }; teamB: { name: string; score: number; logo: string }; map: string; tournament: string; status: 'live' | 'upcoming' | 'finished'; startTime?: string }): LiveMatch => ({

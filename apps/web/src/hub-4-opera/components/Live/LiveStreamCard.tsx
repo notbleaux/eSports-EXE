@@ -17,8 +17,8 @@ import { cn } from '@/utils/cn';
 import { colors } from '@/theme/colors';
 import type { LiveStreamCardProps, StreamPlatform } from './types';
 
-const OPERA_COLOR = colors.hub.opera.base;
-const OPERA_GLOW = colors.hub.opera.glow;
+const OPERA_COLOR = colors.hub.opera;
+const OPERA_GLOW = "rgba(255, 0, 255, 0.4)";
 const LIVE_COLOR = colors.status.live;
 
 // Platform icon component

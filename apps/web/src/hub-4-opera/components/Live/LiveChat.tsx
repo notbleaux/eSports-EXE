@@ -22,8 +22,8 @@ import { cn } from '@/utils/cn';
 import { colors } from '@/theme/colors';
 import type { LiveChatProps, ChatMessage, UserBadge } from './types';
 
-const OPERA_COLOR = colors.hub.opera.base;
-const OPERA_GLOW = colors.hub.opera.glow;
+const OPERA_COLOR = colors.hub.opera;
+const OPERA_GLOW = "rgba(255, 0, 255, 0.4)";
 
 // Badge configuration
 const BADGE_CONFIG: Record<UserBadge, { icon: typeof Shield; color: string; label: string }> = {

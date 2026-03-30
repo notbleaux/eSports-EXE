@@ -88,8 +88,8 @@ const DOMFallbackGrid: React.FC<VirtualDataGridProps> = ({
     alternateRowBackgroundColor: customTheme?.alternateRowBackgroundColor || colors.background.tertiary,
     borderColor: customTheme?.borderColor || colors.border.subtle,
     textColor: customTheme?.textColor || colors.text.primary,
-    headerTextColor: customTheme?.headerTextColor || colors.hub.sator.base,
-    accentColor: customTheme?.accentColor || colors.hub.sator.base,
+    headerTextColor: customTheme?.headerTextColor || colors.hub.sator,
+    accentColor: customTheme?.accentColor || colors.hub.sator,
   };
 
   const totalHeight = data.length * rowHeight;
@@ -265,8 +265,8 @@ export const VirtualDataGrid = forwardRef<VirtualDataGridRef, VirtualDataGridPro
     alternateRowBackgroundColor: customTheme?.alternateRowBackgroundColor || colors.background.tertiary,
     borderColor: customTheme?.borderColor || colors.border.subtle,
     textColor: customTheme?.textColor || colors.text.primary,
-    headerTextColor: customTheme?.headerTextColor || colors.hub.sator.base,
-    accentColor: customTheme?.accentColor || colors.hub.sator.base,
+    headerTextColor: customTheme?.headerTextColor || colors.hub.sator,
+    accentColor: customTheme?.accentColor || colors.hub.sator,
   };
 
   // Use grid worker hook
