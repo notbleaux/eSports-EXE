@@ -116,9 +116,9 @@ interface PredictionHistoryProps {
 }
 
 function PredictionHistory({
-  color = colors.hub.rotas.base,
-  glow = colors.hub.rotas.glow,
-  muted = colors.hub.rotas.muted,
+  color = colors.hub.rotas,
+  glow = 'rgba(255, 68, 68, 0.4)',
+  muted = '#cc3333',
 }: PredictionHistoryProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedModel, setSelectedModel] = useState<string>('all');
