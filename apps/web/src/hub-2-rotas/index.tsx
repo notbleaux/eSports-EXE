@@ -39,9 +39,9 @@ const HUB_CONFIG = {
   name: 'ROTAS',
   subtitle: 'The Harmonic Layer',
   description: 'Analytics and predictive modeling with harmonic layer blending',
-  color: colors.hub.rotas.base,      // #00d4ff
-  glow: colors.hub.rotas.glow,       // rgba(0, 212, 255, 0.4)
-  muted: colors.hub.rotas.muted,     // #00a0c0
+  color: colors.hub.rotas,           // #ff4444
+  glow: 'rgba(255, 68, 68, 0.4)',    // derived from rotas
+  muted: '#cc3333',                  // muted version of rotas
 };
 
 // Jungian archetype layers (from legacy)
@@ -181,7 +181,7 @@ function RotasHubContent(): React.ReactElement {
   return (
     <motion.div
       className="min-h-screen p-4 md:p-6 lg:p-8"
-      style={{ backgroundColor: colors.background.primary }}
+      style={{ backgroundColor: '#0f172a' }}
       initial="hidden"
       animate="visible"
       variants={heroVariants}
@@ -357,7 +357,7 @@ function RotasHubContent(): React.ReactElement {
                       >
                         <div 
                           className="pt-3 border-t flex flex-wrap gap-2"
-                          style={{ borderColor: colors.border.subtle }}
+                          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                         >
                           {layer.metrics.map((metric) => (
                             <span
@@ -556,7 +556,7 @@ function RotasHubContent(): React.ReactElement {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         className="mt-4 pt-4"
-                        style={{ borderTop: `1px solid ${colors.border.subtle}` }}
+                        style={{ borderTop: `1px solid rgba(255, 255, 255, 0.1)` }}
                       >
                         <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
                           <motion.div
