@@ -34,7 +34,7 @@ interface FeatureFlagProviderProps {
 export const FeatureFlagProvider: React.FC<FeatureFlagProviderProps> = ({ children }) => {
   const [flags, setFlags] = useState<FeatureFlags>(getFeatureFlags());
   
-  const isEnabled = useCallback((feature: keyof FeatureFlags): boolean => {
+  const _isEnabled = useCallback((feature: keyof FeatureFlags): boolean => {
     return flags[feature] ?? false;
   }, [flags]);
   

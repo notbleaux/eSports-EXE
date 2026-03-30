@@ -9,12 +9,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BookOpen, 
-  Search, 
   Menu,
-  ChevronRight,
-  Home,
-  Tag
+  Home
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { GlowButton as Button } from '@/components/ui/GlowButton';

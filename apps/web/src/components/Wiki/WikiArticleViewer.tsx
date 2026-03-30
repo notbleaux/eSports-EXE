@@ -30,7 +30,7 @@ interface WikiArticleViewerProps {
 export const WikiArticleViewer: React.FC<WikiArticleViewerProps> = ({
   article,
   onFeedback,
-  showNavigation = true,
+  _showNavigation = true,
 }) => {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);

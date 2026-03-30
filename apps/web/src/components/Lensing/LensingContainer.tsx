@@ -22,7 +22,7 @@ const LensingContainer: React.FC = () => {
   const { updateLayout } = useDynamicStore()
   const isMobile = useMediaQuery({ maxWidth: 768 })
   const { setMobile } = useLensingStore()
-  const layoutConfig = useStaticStore()
+  useStaticStore()
 
   // Sync mobile state
   useEffect(() => {

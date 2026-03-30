@@ -6,7 +6,7 @@
  * NOTE: ML features temporarily disabled due to dependency issues.
  */
 
-import React from 'react';
+
 
 export function MLPredictionPanel() {
   return (

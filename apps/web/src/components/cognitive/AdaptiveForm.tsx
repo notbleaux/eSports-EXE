@@ -22,12 +22,9 @@ import React, {
   useState,
   useCallback,
   useMemo,
-  useEffect,
   useRef,
   type ReactNode,
-  type FormEvent,
   type ChangeEvent,
-  type FocusEvent,
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CognitiveLoadLevel, CognitiveLoadState } from '../../lib/cognitive/types';
@@ -40,13 +37,10 @@ import {
   getSmartDefault,
   recordDefaultUsed,
   type FieldContext,
-  type SmartDefault,
 } from '../../lib/cognitive/adaptive/defaults';
 import {
-  predictOptimal,
   buildContext,
   getGlobalStore,
-  type PredictionResult,
 } from '../../lib/cognitive/adaptive/learning';
 
 // ============================================================================

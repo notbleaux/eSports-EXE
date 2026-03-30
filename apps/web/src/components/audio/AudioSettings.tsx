@@ -13,7 +13,7 @@
  * - Visual feedback and indicators
  */
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { cn } from '@/utils/cn';
 import { useAudio, AUDIO_PRESETS, applyAudioPreset } from '@/lib/audio';
 import type { AudioCategory, AudioQuality } from '@/lib/audio/types';
@@ -521,3 +521,4 @@ export const AudioIndicator: React.FC<AudioIndicatorProps> = ({
 // ============================================================================
 
 export default AudioSettings;
+ioSettings;

@@ -6,7 +6,6 @@
  */
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Crosshair, Map, Target, ChevronRight } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { GameSelector, type GameType } from '@/components/GameSelector';

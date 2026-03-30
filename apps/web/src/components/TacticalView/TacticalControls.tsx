@@ -6,8 +6,8 @@
  */
 
 import React from 'react';
-import { Play, Pause, SkipBack, SkipForward, ZoomIn, ZoomOut, Eye, Users, Heart, Activity } from 'lucide-react';
-import { TacticalViewState, PLAYBACK_SPEEDS } from './types';
+import { Play, Pause, ZoomIn, ZoomOut, Eye, Users, Heart, Activity } from 'lucide-react';
+import { PLAYBACK_SPEEDS } from './types';
 
 interface TacticalControlsProps {
   isPlaying: boolean;

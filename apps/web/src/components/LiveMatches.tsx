@@ -8,7 +8,7 @@
  */
 
 import { useMemo } from 'react';
-import { useLiveMatches, useWebSocket, type LiveMatch } from '@/lib/api-client';
+import { useLiveMatches, type LiveMatch } from '@/lib/api-client';
 import { useWebSocket as useWebSocketHook } from '@/lib/websocket';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Activity, AlertCircle, Wifi, WifiOff } from 'lucide-react';
