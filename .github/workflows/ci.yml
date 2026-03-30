@@ -49,25 +49,25 @@ jobs:
       # REQUIRED: this step must pass for CI to succeed
       - name: Check Python formatting (Black)
         run: |
-          black --check --diff packages/shared/api || true
+          black --check --diff packages/shared/api/
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Run Ruff linter
         run: |
-          ruff check packages/shared/api || true
+          ruff check packages/shared/api/
 
       # REQUIRED: type checking for archival and extraction systems
       - name: Type check archival system
         run: |
           cd packages/shared/api
           pip install mypy asyncpg types-redis
-          mypy src/njz_api/archival/ --ignore-missing-imports || true
-          mypy src/sator/extraction/ --ignore-missing-imports || true
+          mypy src/njz_api/archival/ --ignore-missing-imports
+          mypy src/sator/extraction/ --ignore-missing-imports
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Security scan with Bandit
         run: |
-          bandit -r packages/shared/api -f json -o bandit-report.json || true
+          bandit -r packages/shared/api -f json -o bandit-report.json
 
       - name: Upload security report
         uses: actions/upload-artifact@v4
@@ -119,7 +119,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pytest pytest-asyncio asyncpg redis httpx
-          pip install -r packages/shared/api/requirements.txt || true
+          pip install -r packages/shared/api/requirements.txt
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Run unit tests
@@ -129,13 +129,13 @@ jobs:
           JWT_SECRET_KEY: test-secret-key-for-ci
           TOTP_ENCRYPTION_KEY: test-totp-key-for-ci-32-chars
         run: |
-          pytest tests/unit -v --tb=short || true
+          pytest tests/unit -v --tb=short
 
       # REQUIRED: this step must pass for CI to succeed
       - name: Test API imports
         run: |
           cd packages/shared/api
-          python -c "from main import app; print('API imports successful')" || true
+          python -c "from main import app; print('API imports successful')"
 
   # ==========================================================================
   # Job 3: Frontend Build Check
@@ -258,7 +258,7 @@ jobs:
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.14.x
-          lhci autorun || true
+          lhci autorun
 
       - name: Upload Lighthouse results
         uses: actions/upload-artifact@v4

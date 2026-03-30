@@ -1,0 +1,72 @@
+[Ver001.000] [Part: 1/3, Phase: 0/3, Progress: 5%, Status: Unclaimed]
+
+name: Agent Coordination & Session Handoff
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  push:
+    branches: [main, develop]
+  issue_comment:
+    types: [created]
+
+jobs:
+  agent-handoff:
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '@agent') || contains(github.event.pull_request.body, 'AGENT_COMMUNICATION')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Generate Agent Report
+        id: agent_report
+        run: |
+          echo "## 🤖 AGENT COMMUNICATION LOG" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Session:** ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +"%Y-%m-%d %H:%M UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Get changed files
+          echo "### Files Modified" >> $GITHUB_STEP_SUMMARY
+          git diff --name-only HEAD~1 HEAD | head -20 | while read file; do
+            echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Actions Required" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Review changes" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Run tests" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Update documentation if needed" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const report = `
+            ## 🤖 Agent Coordination Report
+            
+            **Session ID:** ${{ github.run_id }}  
+            **Timestamp:** ${new Date().toISOString()}  
+            **Status:** Handoff Initiated  
+            
+            ### Quick Links
+            - [View Changes](${{ github.event.pull_request.html_url }}/files)
+            - [Run Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            ### For Next Agent
+            Please review the changes above and continue work if claimed.
+            Reply with \"@agent claim\" to take ownership.
+            
+            ---
+            *This is an automated agent coordination message.*
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
