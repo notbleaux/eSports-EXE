@@ -6,7 +6,7 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { request, api, ApiRequestError } from '../client'
-import { API_CONFIG, API_BASE_URL } from '../../config/api'
+import { API_BASE_URL } from '../../config/api'
 
 // Mock logger
 vi.mock('../../utils/logger', () => ({
