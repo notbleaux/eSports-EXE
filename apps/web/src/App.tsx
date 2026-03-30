@@ -241,7 +241,7 @@ function LandingPage(): React.ReactNode {
 function DashboardGrid() {
   const [isLoading, setIsLoading] = useState(true);
   const [metrics, setMetrics] = useState({ renderTime: 0, visibleCount: 0, mode: 'worker' });
-  const { hasError, errorType, retry, fallbackToDom } = useWorkerError(2);
+  const { hasError, type: errorType, retry, fallbackToDom } = useWorkerError(2);
 
   const handleMetrics = useCallback((newMetrics) => {
     setMetrics(newMetrics);
