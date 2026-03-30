@@ -11,7 +11,7 @@
  * Integration: Connects to eSports-EXE Feature Store for live data
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SatorLayer } from './layers/SatorLayer';
 import { OperaLayer } from './layers/OperaLayer';
 import { TenetLayer } from './layers/TenetLayer';
@@ -53,7 +53,7 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
   
   // Fetch spatial data from Feature Store
-  const { data: spatialData, isLoading, error } = useSpatialData(matchId);
+  const { satorEvents, arepoMarkers, rotasTrails, controlZones, visibilityMask, loading, error } = useSpatialData(matchId);
   
   const handleLayerToggle = useCallback((layerId: string) => {
     setLayers(prev => prev.map(l => 
@@ -72,7 +72,7 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
     ));
   }, []);
   
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center" style={{ width, height }}>
         <div className="text-sator-400 animate-pulse">Loading SATOR Square...</div>
@@ -120,57 +120,53 @@ export const SatorSquare: React.FC<SatorSquareProps> = ({
         <div className="absolute inset-0 bg-gradient-to-br from-surface-800 to-surface-900" />
         
         {/* SATOR Layer - Golden Halo */}
-        {layers.find(l => l.id === 'sator')?.enabled && (
+        {layers.find(l => l.id === 'sator')?.enabled && satorEvents.length > 0 && (
           <SatorLayer
-            data={spatialData}
-            opacity={layers.find(l => l.id === 'sator')?.opacity}
-            onClick={(data) => handleLayerClick('sator', data)}
+            events={satorEvents}
             width={width}
             height={height}
+            mapToScreen={(x, y) => [x * width, y * height]}
           />
         )}
         
         {/* OPERA Layer - Fog of War */}
-        {layers.find(l => l.id === 'opera')?.enabled && (
+        {layers.find(l => l.id === 'opera')?.enabled && visibilityMask && (
           <OperaLayer
-            data={spatialData}
-            opacity={layers.find(l => l.id === 'opera')?.opacity}
-            onClick={(data) => handleLayerClick('opera', data)}
             width={width}
             height={height}
+            visibilityMask={visibilityMask}
+            uncertaintyPoints={[]}
           />
         )}
         
         {/* TENET Layer - Area Control */}
-        {layers.find(l => l.id === 'tenet')?.enabled && (
+        {layers.find(l => l.id === 'tenet')?.enabled && controlZones.length > 0 && (
           <TenetLayer
-            data={spatialData}
-            opacity={layers.find(l => l.id === 'tenet')?.opacity}
-            onClick={(data) => handleLayerClick('tenet', data)}
+            zones={controlZones}
             width={width}
             height={height}
           />
         )}
         
         {/* AREPO Layer - Death Stains */}
-        {layers.find(l => l.id === 'arepo')?.enabled && (
+        {layers.find(l => l.id === 'arepo')?.enabled && arepoMarkers.length > 0 && (
           <ArepoLayer
-            data={spatialData}
-            opacity={layers.find(l => l.id === 'arepo')?.opacity}
-            onClick={(data) => handleLayerClick('arepo', data)}
+            markers={arepoMarkers}
             width={width}
             height={height}
+            currentRound={1}
+            persistRounds={3}
           />
         )}
         
         {/* ROTAS Layer - Rotation Trails */}
-        {layers.find(l => l.id === 'rotas')?.enabled && (
+        {layers.find(l => l.id === 'rotas')?.enabled && rotasTrails.length > 0 && (
           <RotasLayer
-            data={spatialData}
-            opacity={layers.find(l => l.id === 'rotas')?.opacity}
-            onClick={(data) => handleLayerClick('rotas', data)}
+            trails={rotasTrails}
             width={width}
             height={height}
+            currentTick={0}
+            trailLength={10}
           />
         )}
         

@@ -35,7 +35,7 @@ export const ArepoLayer: React.FC<ArepoLayerProps> = ({
 
   useEffect(() => {
     if (!svgRef.current) return;
-    const svg = d3.select(svgRef.current);
+    const svg = d3.select(svgRef.current as Element);
     svg.selectAll('.arepo-marker').remove();
 
     const visible = markers.filter((m) => currentRound - m.roundNumber <= persistRounds);
@@ -47,11 +47,11 @@ export const ArepoLayer: React.FC<ArepoLayerProps> = ({
       .enter()
       .append('circle')
       .attr('class', 'arepo-marker arepo-stain')
-      .attr('cx', (d) => d.x)
-      .attr('cy', (d) => d.y)
-      .attr('r', (d) => 4 + (d.multikillCount - 1) * 2)
-      .attr('fill', (d) => d.victimTeam === 'attack' ? '#4A90D9' : '#E85D5D')
-      .attr('opacity', (d) => Math.max(0.2, 1.0 - (currentRound - d.roundNumber) * 0.25));
+      .attr('cx', (d: ArepoMarker) => d.x)
+      .attr('cy', (d: ArepoMarker) => d.y)
+      .attr('r', (d: ArepoMarker) => 4 + (d.multikillCount - 1) * 2)
+      .attr('fill', (d: ArepoMarker) => d.victimTeam === 'attack' ? '#4A90D9' : '#E85D5D')
+      .attr('opacity', (d: ArepoMarker) => Math.max(0.2, 1.0 - (currentRound - d.roundNumber) * 0.25));
 
     // Clutch crowns
     const clutches = visible.filter((m) => m.isClutch);
@@ -61,8 +61,8 @@ export const ArepoLayer: React.FC<ArepoLayerProps> = ({
       .enter()
       .append('text')
       .attr('class', 'arepo-marker arepo-crown')
-      .attr('x', (d) => d.x)
-      .attr('y', (d) => d.y - 10)
+      .attr('x', (d: ArepoMarker) => d.x)
+      .attr('y', (d: ArepoMarker) => d.y - 10)
       .attr('text-anchor', 'middle')
       .attr('font-size', '12px')
       .text('♛')
