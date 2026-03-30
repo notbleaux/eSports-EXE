@@ -1,7 +1,7 @@
 /**
  * ROTAS Hub - Hub 2: The Harmonic Layer
  * Analytics and predictive modeling with ellipse layer blending
- * [Ver002.000] - Consolidated: Merged legacy ellipse visualization and analytics
+ * [Ver003.000] - Converted to TypeScript with proper default export
  */
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -98,22 +98,26 @@ const ANALYTICS_LAYERS = [
 ];
 
 const mockData = [
-  { metric: 'Match Accuracy', value: 87.3, trend: '+2.1%', status: 'good' },
-  { metric: 'Investment Score', value: 92.1, trend: '+5.4%', status: 'good' },
-  { metric: 'Risk Factor', value: 78.5, trend: '-1.2%', status: 'warning' },
-  { metric: 'Talent Potential', value: 94.2, trend: '+3.8%', status: 'good' }
+  { metric: 'Match Accuracy', value: 87.3, trend: '+2.1%', status: 'good' as const },
+  { metric: 'Investment Score', value: 92.1, trend: '+5.4%', status: 'good' as const },
+  { metric: 'Risk Factor', value: 78.5, trend: '-1.2%', status: 'warning' as const },
+  { metric: 'Talent Potential', value: 94.2, trend: '+3.8%', status: 'good' as const }
 ];
 
-const GRADE_COLOR = {
+const GRADE_COLOR: Record<string, string> = {
   S: '#ffd700', A: '#22c55e', B: '#3b82f6',
   C: '#f59e0b', D: '#ef4444', F: '#6b7280',
 };
 
-function RotasHubContent() {
+interface HubProps {
+  // Add any props needed
+}
+
+function RotasHubContent(): React.ReactElement {
   const [activeLayer, setActiveLayer] = useState('surface');
-  const [activeLayers, setActiveLayers] = useState(['persona']);
-  const [selectedMetric, setSelectedMetric] = useState(null);
-  const [lbGame, setLbGame] = useState(undefined); // 'valorant' | 'cs2' | undefined
+  const [activeLayers, setActiveLayers] = useState<string[]>(['persona']);
+  const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
+  const [lbGame, setLbGame] = useState<string | undefined>(undefined); // 'valorant' | 'cs2' | undefined
   const [statsTab, setStatsTab] = useState('leaderboard'); // 'leaderboard' | 'raw-stats'
   const { addNotification } = useNJZStore();
   const { state, setState } = useHubState('rotas');
@@ -129,7 +133,7 @@ function RotasHubContent() {
   const { data: rawStatsData, isLoading: rawStatsLoading } = usePlayerStats(lbGame);
 
   // Layer toggle for Jungian system
-  const toggleLayer = (layerId) => {
+  const toggleLayer = (layerId: string) => {
     const newLayers = activeLayers.includes(layerId) 
       ? activeLayers.filter(id => id !== layerId)
       : [...activeLayers, layerId];
@@ -143,7 +147,7 @@ function RotasHubContent() {
     );
   };
 
-  const handleLayerChange = (layerId) => {
+  const handleLayerChange = (layerId: string) => {
     setActiveLayer(layerId);
     setState({ activeLayer: layerId });
     
@@ -891,7 +895,7 @@ function RotasHubContent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {rawStatsData.stats.map((p, i) => (
+                    {rawStatsData.stats.map((p: { player_id: string; slug: string; handle: string; avg_kd: number; avg_acs: number; avg_hs_pct: number; games: number }, i: number) => (
                       <tr key={p.player_id} className="border-b border-gray-700 last:border-0">
                         <td className="py-1 text-gray-500">#{i + 1}</td>
                         <td className="py-1">
@@ -938,7 +942,10 @@ function RotasHubContent() {
   );
 }
 
-function RotasHub() {
+/**
+ * RotasHub - Root component with error boundaries
+ */
+function RotasHub(): React.ReactElement {
   return (
     <HubErrorBoundary hubName="rotas" componentName="RotasHub">
       <PanelErrorBoundary panelId="rotas-hub" panelTitle="ROTAS Analytics" hub="ROTAS">

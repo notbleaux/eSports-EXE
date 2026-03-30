@@ -38,7 +38,7 @@ export function usePerformanceMetric(metricName: string): UsePerformanceMetricRe
     return duration;
   }, [metricName]);
 
-  const measure = useCallback(<T,>(fn: () => T, name: string): T => {
+  const measure = useCallback(<T,>(fn: () => T, _name: string): T => {
     start();
     try {
       const result = fn();

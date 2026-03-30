@@ -1,5 +1,9 @@
-/** [Ver001.000] — Type declaration stub for hub-2-rotas/index.jsx */
-import type { FC } from 'react';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const RotasHub: FC<any>;
+/** [Ver002.000] — Type declaration for hub-2-rotas/index.jsx */
+import type { FC, ReactNode } from 'react';
+
+interface RotasHubProps {
+  children?: ReactNode;
+}
+
+declare const RotasHub: FC<RotasHubProps>;
 export default RotasHub;

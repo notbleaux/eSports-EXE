@@ -6,8 +6,7 @@
  * Glow: rgba(0, 102, 255, 0.4)
  * Muted: #0044cc
  * 
- * [Ver003.000] - Refactored as Cross-Reference Engine
- * [Ver002.000] - Added comprehensive error boundaries
+ * [Ver004.000] - Converted to TypeScript with proper default export
  */
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -97,14 +96,23 @@ const QUICK_LINKS = [
 
 // Recent questions data
 const RECENT_QUESTIONS = [
-  { id: 1, question: 'How do I interpret SimRating values?', answers: 3, status: 'answered' },
-  { id: 2, question: 'What is the RAR metric?', answers: 5, status: 'answered' },
-  { id: 3, question: 'API rate limits for free tier?', answers: 2, status: 'answered' },
-  { id: 4, question: 'Custom data export formats', answers: 0, status: 'open' },
+  { id: 1, question: 'How do I interpret SimRating values?', answers: 3, status: 'answered' as const },
+  { id: 2, question: 'What is the RAR metric?', answers: 5, status: 'answered' as const },
+  { id: 3, question: 'API rate limits for free tier?', answers: 2, status: 'answered' as const },
+  { id: 4, question: 'Custom data export formats', answers: 0, status: 'open' as const },
 ];
 
 // Cross-reference tools configuration
-const CROSS_REFERENCE_TOOLS = [
+interface CrossReferenceTool {
+  id: string;
+  name: string;
+  description: string;
+  icon: typeof User;
+  component: typeof PlayerTournamentSearch;
+  dataSources: string[];
+}
+
+const CROSS_REFERENCE_TOOLS: CrossReferenceTool[] = [
   {
     id: 'player-tournament',
     name: 'Player + Tournament',
@@ -139,14 +147,18 @@ const CROSS_REFERENCE_TOOLS = [
   },
 ];
 
+interface HubProps {
+  // Add any props needed
+}
+
 /**
  * ArepoHubContent - Main content component for AREPO hub
  */
-function ArepoHubContent() {
+function ArepoHubContent(): React.ReactElement {
   const [activeTab, setActiveTab] = useState('cross-reference'); // 'cross-reference' | 'directory' | 'help' | 'tactical-maps'
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState<{ id: string; name: string; icon: typeof BookOpen; items: number; color: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<{ id: number; question: string; answers: number; status: 'answered' | 'open' } | null>(null);
   const [selectedTool, setSelectedTool] = useState('query-builder');
   
   const addNotification = useNJZStore(state => state.addNotification);
@@ -159,24 +171,24 @@ function ArepoHubContent() {
   const { data: teamData } = useTeams();
   const recentMatches = matchData?.matches?.slice(0, 5) ?? [];
 
-  const handleCategorySelect = useCallback((category) => {
+  const handleCategorySelect = useCallback((category: { id: string; name: string; icon: typeof BookOpen; items: number; color: string }) => {
     setActiveCategory(category);
     setState({ selectedCategory: category });
     addNotification(`Browsing ${category.name}`, 'info');
   }, [setState, addNotification]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       addNotification(`Searching knowledge base for "${searchQuery}"...`, 'info');
     }
   };
 
-  const handleQuestionClick = (question) => {
+  const handleQuestionClick = (question: { id: number; question: string; answers: number; status: 'answered' | 'open' }) => {
     setSelectedQuestion(selectedQuestion?.id === question.id ? null : question);
   };
 
-  const handleToolSelect = (toolId) => {
+  const handleToolSelect = (toolId: string) => {
     setSelectedTool(toolId);
     const tool = CROSS_REFERENCE_TOOLS.find(t => t.id === toolId);
     if (tool) {
@@ -407,7 +419,7 @@ function ArepoHubContent() {
                   </div>
                   
                   <div className="space-y-2">
-                    {queryHistory.slice(0, 5).map((query, index) => (
+                    {queryHistory.slice(0, 5).map((query: { type: string; timestamp: string }, index: number) => (
                       <div 
                         key={index}
                         className="flex items-center gap-2 text-sm p-2 rounded-lg bg-void-mid"
@@ -716,7 +728,7 @@ function ArepoHubContent() {
         <h3 className="text-sm font-semibold text-purple-400 mb-2">Recent Matches</h3>
         {recentMatches.length === 0
           ? <p className="text-gray-500 text-xs">No finished matches yet — run sync_pandascore.py to seed.</p>
-          : recentMatches.map((m) => (
+          : recentMatches.map((m: { id: string; name: string; status: string }) => (
               <div key={m.id} className="flex justify-between text-xs text-gray-300 mb-1">
                 <span>{m.name ?? m.id}</span>
                 <span className="text-green-400">{m.status}</span>
@@ -731,7 +743,7 @@ function ArepoHubContent() {
 /**
  * ArepoHub - Root component with error boundary hierarchy
  */
-function ArepoHub() {
+function ArepoHub(): React.ReactElement {
   return (
     <HubErrorBoundary hubName="arepo" componentName="ArepoHub">
       <DataErrorBoundary

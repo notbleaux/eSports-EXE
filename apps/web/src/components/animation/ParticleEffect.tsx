@@ -16,7 +16,6 @@ import { ParticleSystem, ParticleEmitter, QualityLevel } from '../../lib/animati
 import { 
   ParticleRenderer, 
   generateDefaultAtlas,
-  TextureAtlas,
 } from '../../lib/animation/particles/renderer';
 import {
   EffectPresetName,
@@ -358,7 +357,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, [autoCleanup]);
 
   // Pause effect
-  const pause = useCallback(() => {
+  const _pause = useCallback(() => {
     if (!isActiveRef.current) return;
 
     isActiveRef.current = false;
@@ -375,7 +374,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, []);
 
   // Resume effect
-  const resume = useCallback(() => {
+  const _resume = useCallback(() => {
     if (!state.isPaused) return;
 
     isActiveRef.current = true;
@@ -503,7 +502,7 @@ export interface UseParticleEffectReturn {
 export function useParticleEffect(
   ref: React.RefObject<ParticleEffectRef>
 ): UseParticleEffectReturn {
-  const [state, setState] = useState<ParticleEffectState>({
+  const [state, _setState] = useState<ParticleEffectState>({
     isPlaying: false,
     isPaused: false,
     progress: 0,

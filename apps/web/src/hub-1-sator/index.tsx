@@ -2,7 +2,7 @@
  * SATOR Hub - Hub 1: The Observatory
  * Raw data ingestion with orbital ring navigation
  * 
- * [Ver004.000] - Added SimRating Web Worker Analytics
+ * [Ver005.000] - Converted to TypeScript with proper default export
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -121,10 +121,14 @@ const playerGridColumns = [
   { key: 'matches', header: 'Matches', width: 90, type: 'number', align: 'center' },
 ];
 
-function SatorHubContent() {
+interface HubProps {
+  // Add any props needed
+}
+
+function SatorHubContent(): React.ReactElement {
   const [stats, setStats] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Live player data from API
   const { data: playersData, isLoading: playersLoading, isError: playersError } = usePlayers('valorant');
@@ -134,10 +138,9 @@ function SatorHubContent() {
   const gridRef = useRef(null);
   
   // Orbital ring state (from legacy)
-  const [activeRing, setActiveRing] = useState(null);
+  const [activeRing, setActiveRing] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showGridView, setShowGridView] = useState(false);
   const [gridData, setGridData] = useState([]);
   const [workerCapabilities, setWorkerCapabilities] = useState({ 
     supported: false, 
@@ -187,7 +190,7 @@ function SatorHubContent() {
         setStats(mockStats);
         setGridData(mockGridData);
       } catch (err) {
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setIsLoading(false);
       }
@@ -204,32 +207,32 @@ function SatorHubContent() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleRingClick = (ringId) => {
+  const handleRingClick = (ringId: string) => {
     setActiveRing(activeRing === ringId ? null : ringId);
     addNotification(`${rings.find(r => r.id === ringId)?.label} ring activated`, 'info');
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       addNotification(`Searching RAWS for "${searchQuery}"...`, 'info');
     }
   };
 
-  const handleRowClick = (row, index) => {
-    addNotification(`Selected player: ${row.name} (Rank #${row.rank})`, 'info');
+  const handleRowClick = (row: unknown, index: number) => {
+    addNotification(`Selected player: ${(row as { name: string }).name} (Rank #${(row as { rank: number }).rank})`, 'info');
   };
 
-  const handleCellClick = (row, column, value) => {
+  const handleCellClick = (row: unknown, column: unknown, value: unknown) => {
     console.log('Cell clicked:', { row, column, value });
   };
 
   const scrollToTop = () => {
-    gridRef.current?.scrollToTop();
+    (gridRef.current as unknown as { scrollToTop: () => void })?.scrollToTop();
   };
 
   const scrollToBottom = () => {
-    gridRef.current?.scrollToBottom();
+    (gridRef.current as unknown as { scrollToBottom: () => void })?.scrollToBottom();
   };
 
   return (
@@ -350,10 +353,10 @@ function SatorHubContent() {
                     border: `1px solid ${HUB_CONFIG.muted}`,
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'transparent';
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent';
                   }}
                 >
                   Top
@@ -366,10 +369,10 @@ function SatorHubContent() {
                     border: `1px solid ${HUB_CONFIG.muted}`,
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'transparent';
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent';
                   }}
                 >
                   Bottom
@@ -554,10 +557,10 @@ function SatorHubContent() {
                   border: `1px solid ${HUB_CONFIG.muted}`,
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'transparent';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent';
                 }}
               >
                 View All
@@ -622,12 +625,12 @@ function SatorHubContent() {
                   color: colors.text.primary,
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = HUB_CONFIG.color;
-                  e.target.style.boxShadow = `0 0 0 2px ${HUB_CONFIG.glow}`;
+                  (e.currentTarget as HTMLInputElement).style.borderColor = HUB_CONFIG.color;
+                  (e.currentTarget as HTMLInputElement).style.boxShadow = `0 0 0 2px ${HUB_CONFIG.glow}`;
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = colors.border.subtle;
-                  e.target.style.boxShadow = 'none';
+                  (e.currentTarget as HTMLInputElement).style.borderColor = colors.border.subtle;
+                  (e.currentTarget as HTMLInputElement).style.boxShadow = 'none';
                 }}
               />
               <button
@@ -638,10 +641,10 @@ function SatorHubContent() {
                   color: colors.background.primary,
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = HUB_CONFIG.muted;
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = HUB_CONFIG.muted;
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = HUB_CONFIG.color;
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = HUB_CONFIG.color;
                 }}
               >
                 Query
@@ -812,14 +815,19 @@ function SatorHubContent() {
   );
 }
 
+interface SimRatingSectionProps {
+  hubColor: string;
+  hubGlow: string;
+  hubMuted: string;
+}
+
 /**
  * SimRating Analytics Section Component
  * Demonstrates Web Worker-based SimRating calculations
  */
-function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }) {
+function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }: SimRatingSectionProps): React.ReactElement {
   const addNotification = useNJZStore(state => state.addNotification);
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [calculationTimes, setCalculationTimes] = useState([]);
+  const [calculationTimes, setCalculationTimes] = useState<number[]>([]);
   
   const { 
     calculateBatch, 
@@ -1092,7 +1100,10 @@ function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }) {
   );
 }
 
-export function SatorHub() {
+/**
+ * SatorHub - Root component with error boundaries
+ */
+function SatorHub(): React.ReactElement {
   return (
     <HubErrorBoundary hubName="sator" componentName="SatorHub">
       <PanelErrorBoundary panelId="sator-hub" panelTitle="SATOR Observatory" hub="SATOR">

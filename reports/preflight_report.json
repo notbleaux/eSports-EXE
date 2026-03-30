@@ -1,7 +1,7 @@
 {
   "timestamp": "2026-03-30T00:00:00Z",
-  "overall_score": "2/16",
-  "percentage": 12.5,
+  "overall_score": "3/16",
+  "percentage": 18.8,
   "status": "NEEDS_WORK",
   "checks": [
     {
@@ -26,8 +26,8 @@
     },
     {
       "check": "CDC/Event Sourcing",
-      "status": "FAIL",
-      "details": "No CDC or Kafka infrastructure"
+      "status": "PASS",
+      "details": "CDC infrastructure found"
     },
     {
       "check": "Feature Store",
@@ -88,7 +88,6 @@
   "recommendations": [
     "PRIORITY 1: Separate monorepo into 3 repositories",
     "PRIORITY 1: Implement data lineage tracking",
-    "PRIORITY 2: Deploy Kafka for event sourcing",
     "PRIORITY 2: Add confidence intervals to SimRating"
   ]
 }

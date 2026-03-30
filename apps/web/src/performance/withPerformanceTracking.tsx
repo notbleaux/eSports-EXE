@@ -17,7 +17,7 @@ export default function withPerformanceTracking<P extends object>(
   componentName: string,
   options: WithPerformanceTrackingOptions = {}
 ): React.FC<P> {
-  const { threshold = 16, trackUpdates = false } = options;
+  const { threshold: _threshold = 16, trackUpdates = false } = options;
 
   const PerformanceTrackedComponent: React.FC<P> = (props) => {
     const renderStartTime = useRef<number>(0);

@@ -13,7 +13,7 @@
  * - Unlock status display
  */
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { MascotId } from '@/components/mascots/types';
 import {
@@ -25,12 +25,10 @@ import {
   CATEGORY_CONFIG,
   RARITY_CONFIG,
   getEmotesByCategory,
-  getEmotesByRarity,
   getEmotesForMascot,
   getFavoriteEmotes,
   getQuickSlots,
   searchEmotes,
-  isEmoteUnlocked,
   calculateUnlockCost,
 } from '@/lib/animation/emotes/library';
 
@@ -38,7 +36,7 @@ import {
 // Types
 // ============================================================================
 
-interface EmotePanelProps {
+export interface EmotePanelProps {
   /** Current mascot ID */
   mascotId: MascotId;
   /** Player's emote progress */
@@ -90,7 +88,7 @@ const EmoteCard: React.FC<EmoteCardProps> = ({
   isSelected,
   onClick,
   onFavoriteClick,
-  onQuickSlotClick,
+  onQuickSlotClick: _onQuickSlotClick,
 }) => {
   const rarityConfig = RARITY_CONFIG[emote.rarity];
 
@@ -342,7 +340,7 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
   mascotId,
   playerProgress,
   playerLevel,
-  achievements,
+  achievements: _achievements,
   onEmoteSelect,
   onEmotePreview,
   onFavoriteToggle,
@@ -359,7 +357,7 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmote, setSelectedEmote] = useState<EmoteDefinition | null>(null);
   const [assigningQuickSlot, setAssigningQuickSlot] = useState<number | undefined>();
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [_viewMode, _setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Memoized data
   const compatibleEmotes = useMemo(() => getEmotesForMascot(mascotId), [mascotId]);
@@ -620,3 +618,4 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
 };
 
 export default EmotePanel;
+otePanel;
