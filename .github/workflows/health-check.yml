@@ -28,10 +28,14 @@ jobs:
 
       - name: Check frontend health
         id: frontend_health
+        env:
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run: |
+          FRONTEND_URL="${FRONTEND_URL:-${{ secrets.FRONTEND_URL }}}"
+          TARGET="${FRONTEND_URL:-https://esports-exe.vercel.app}"
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 10 \
-            "https://your-app.vercel.app/" || echo "000")
+            "$TARGET" || echo "000")
           echo "frontend_status=$STATUS" >> $GITHUB_OUTPUT
           if [ "$STATUS" = "200" ]; then
             echo "✓ Frontend healthy (HTTP $STATUS)"
