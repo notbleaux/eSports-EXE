@@ -7,6 +7,7 @@
  * [Ver001.000]
  */
 
+import { useMemo, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as predictionsApi from '@/lib/api/predictions';
 
@@ -47,7 +48,7 @@ export function useMatchPrediction(
   } = options;
   
   return useQuery({
-    queryKey: predictionKeys.match(matchId),
+    queryKey: [...predictionKeys.match(matchId), team1Id, team2Id, currentScoreTeam1, currentScoreTeam2, roundsPlayed, mapId],
     queryFn: () => predictionsApi.getMatchPrediction({
       match_id: matchId,
       team1_id: team1Id,
@@ -170,9 +171,10 @@ export function useLiveMatchPrediction(
   });
   
   // Refresh prediction with current score
-  const refreshPrediction = (score1: number, score2: number, rounds: number) => {
+  const refreshPrediction = useCallback((score1: number, score2: number, rounds: number) => {
+    queryClient.invalidateQueries({ queryKey: predictionKeys.match(matchId) });
     liveQuery.refetch();
-  };
+  }, [matchId, queryClient, liveQuery]);
   
   return {
     prediction: cachedQuery.data || liveQuery.data,
@@ -189,13 +191,16 @@ export function useLiveMatchPrediction(
 export function usePredictionConfidence(matchId: number) {
   const { data: prediction, isLoading } = useCachedPrediction(matchId);
   
-  return {
-    confidence: prediction?.confidence ?? 0,
-    isHighConfidence: (prediction?.confidence ?? 0) > 0.7,
-    isMediumConfidence: (prediction?.confidence ?? 0) > 0.4 && (prediction?.confidence ?? 0) <= 0.7,
-    isLowConfidence: (prediction?.confidence ?? 0) <= 0.4,
-    isLoading,
-  };
+  return useMemo(() => {
+    const confidence = prediction?.confidence ?? 0;
+    return {
+      confidence,
+      isHighConfidence: confidence > 0.7,
+      isMediumConfidence: confidence > 0.4 && confidence <= 0.7,
+      isLowConfidence: confidence <= 0.4,
+      isLoading,
+    };
+  }, [prediction?.confidence, isLoading]);
 }
 
 // --- Key Factors Hook ---

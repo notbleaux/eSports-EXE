@@ -11,6 +11,7 @@ import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 from dataclasses import asdict
+from statistics import mean
 
 from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -307,7 +308,7 @@ class StatsAggregationService:
             if use_cache:
                 await self.cache.set_player_stats(
                     player_id,
-                    result_stats.dict(),
+                    result_stats.model_dump(),
                     game,
                     period_days
                 )
@@ -405,7 +406,7 @@ class StatsAggregationService:
             
             # Cache result
             if use_cache:
-                await self.cache.set_match_summary(match_id, summary.dict())
+                await self.cache.set_match_summary(match_id, summary.model_dump())
             
             return summary
             

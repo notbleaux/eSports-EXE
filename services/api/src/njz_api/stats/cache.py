@@ -337,11 +337,22 @@ class StatsCache:
         try:
             redis = await self._get_redis()
             
-            # Count keys by pattern
-            player_keys = await redis.keys(f"{self.KEY_PLAYER_STATS}:*")
-            match_keys = await redis.keys(f"{self.KEY_MATCH_SUMMARY}:*")
-            live_keys = await redis.keys(f"{self.KEY_LIVE_MATCH}:*")
-            prediction_keys = await redis.keys(f"{self.KEY_PREDICTION}:*")
+            # Count keys by pattern using scan_iter (non-blocking)
+            player_keys = []
+            async for key in redis.scan_iter(match=f"{self.KEY_PLAYER_STATS}:*"):
+                player_keys.append(key)
+            
+            match_keys = []
+            async for key in redis.scan_iter(match=f"{self.KEY_MATCH_SUMMARY}:*"):
+                match_keys.append(key)
+            
+            live_keys = []
+            async for key in redis.scan_iter(match=f"{self.KEY_LIVE_MATCH}:*"):
+                live_keys.append(key)
+            
+            prediction_keys = []
+            async for key in redis.scan_iter(match=f"{self.KEY_PREDICTION}:*"):
+                prediction_keys.append(key)
             
             return {
                 "player_stats_cached": len(player_keys),

@@ -433,6 +433,9 @@ class HeadshotCalculator:
         if total_kills < 1:
             total_kills = 1
         
+        # Validate headshots don't exceed total kills
+        headshots = min(headshots, total_kills)
+        
         hs_pct = (headshots / total_kills) * 100
         
         return CalculationResult(

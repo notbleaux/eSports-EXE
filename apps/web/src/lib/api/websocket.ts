@@ -68,7 +68,7 @@ interface WebSocketState {
 // WebSocket instance (outside store to prevent recreation)
 let ws: WebSocket | null = null;
 let reconnectAttempts = 0;
-let reconnectTimeout: NodeJS.Timeout | null = null;
+let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_DELAY = 3000;
 
@@ -296,13 +296,13 @@ export function useWebSocketActions() {
 
 // --- Auto Heartbeat ---
 
-let heartbeatInterval: NodeJS.Timeout | null = null;
+let heartbeatInterval: ReturnType<typeof setInterval> | null = null;
 
 /**
  * Start auto heartbeat.
  */
 export function startHeartbeat(intervalMs = 30000) {
-  stopHeartbeat();
+  stopHeartbeat(); // Always clear first to prevent multiple intervals
   
   heartbeatInterval = setInterval(() => {
     const { sendMessage, status } = useWebSocket.getState();

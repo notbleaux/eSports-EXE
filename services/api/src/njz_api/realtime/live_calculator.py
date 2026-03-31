@@ -283,10 +283,15 @@ class LiveStatsCalculator:
         state.status = "ended"
         state.last_updated = datetime.utcnow()
         
-        # Cleanup after a delay (would use background task in production)
-        # self._cleanup_match(match_id)
+        # Schedule cleanup after delay
+        asyncio.create_task(self._delayed_cleanup(match_id))
         
         return state
+    
+    async def _delayed_cleanup(self, match_id: int, delay: int = 300):
+        """Clean up match state after delay."""
+        await asyncio.sleep(delay)
+        self._cleanup_match(match_id)
     
     def _cleanup_match(self, match_id: int):
         """Clean up match state from memory."""

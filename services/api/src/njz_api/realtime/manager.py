@@ -280,9 +280,10 @@ class RealtimeManager:
             }
         }
         
-        # Send to all subscribers
+        # Send to all subscribers - iterate over copy to avoid modification during iteration
         disconnected = []
-        for client_id in self._match_subscribers[match_id]:
+        subscribers = list(self._match_subscribers.get(match_id, set()))
+        for client_id in subscribers:
             if client_id not in self._connections:
                 disconnected.append(client_id)
                 continue

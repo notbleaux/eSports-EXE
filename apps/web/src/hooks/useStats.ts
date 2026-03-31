@@ -199,19 +199,24 @@ export function usePollingStats(
 ) {
   const { interval = 30000, enabled = true } = options;
   const [isPolling, setIsPolling] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const playerIdRef = useRef(playerId);
   const queryClient = useQueryClient();
+  
+  // Keep ref updated to avoid stale closure
+  playerIdRef.current = playerId;
   
   const startPolling = useCallback(() => {
     if (intervalRef.current) return;
     
     setIsPolling(true);
     intervalRef.current = setInterval(() => {
+      // Use ref for latest value to avoid stale closure
       queryClient.invalidateQueries({
-        queryKey: statsKeys.player(playerId),
+        queryKey: statsKeys.player(playerIdRef.current),
       });
     }, interval);
-  }, [queryClient, playerId, interval]);
+  }, [queryClient, interval]);
   
   const stopPolling = useCallback(() => {
     if (intervalRef.current) {

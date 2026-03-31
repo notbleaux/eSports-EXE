@@ -223,7 +223,7 @@ async def get_player_match_stats(
     description="Get top players by a specific metric."
 )
 async def get_leaderboard(
-    category: str = Query("kda", regex="^(kda|acs|adr|kast|kills|headshot_pct)$"),
+    category: str = Query("kda", pattern="^(kda|acs|adr|kast|kills|headshot_pct)$"),
     game: str = Query("valorant"),
     limit: int = Query(10, ge=1, le=100),
     period_days: int = Query(30, ge=7, le=90),
@@ -415,7 +415,10 @@ async def invalidate_player_cache(
     
     Forces fresh computation on next request.
     """
-    # TODO: Add admin check
+    # Admin check required - CRITICAL: Currently allows any authenticated user
+    if not current_user or not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
     success = await stats_service.invalidate_player_cache(player_id, game)
     
     if success:
@@ -456,7 +459,10 @@ async def clear_cache(
     
     Use with caution - will cause performance degradation until cache rebuilds.
     """
-    # TODO: Add admin check
+    # Admin check required - CRITICAL: Currently allows any authenticated user
+    if not current_user or not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
     success = await stats_service.clear_cache()
     
     if success:
