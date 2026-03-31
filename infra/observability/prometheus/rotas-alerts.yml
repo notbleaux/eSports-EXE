@@ -1,0 +1,77 @@
+groups:
+  - name: rotas_alerts
+    interval: 30s
+    rules:
+      # High ingestion failure rate
+      - alert: RotasHighIngestionFailureRate
+        expr: |
+          sum(rate(rotas_ingestion_jobs_total{status="error"}[5m])) 
+          / sum(rate(rotas_ingestion_jobs_total[5m])) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High ROTAS ingestion failure rate"
+          description: "Ingestion failure rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+          runbook_url: "https://wiki.internal/runbooks/rotas-ingestion-failures"
+
+      # Data freshness SLA breach
+      - alert: RotasDataFreshnessSLABreach
+        expr: |
+          time() - rotas_last_ingestion_timestamp > 7200
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "ROTAS data freshness SLA breach"
+          description: "No successful ingestion for {{ $value | humanizeDuration }}"
+          runbook_url: "https://wiki.internal/runbooks/rotas-data-freshness"
+
+      # API high error rate
+      - alert: RotasHighAPIErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m])) 
+          / sum(rate(http_requests_total[5m])) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High ROTAS API error rate"
+          description: "API error rate is {{ $value | humanizePercentage }}"
+
+      # API slow response time
+      - alert: RotasSlowAPIResponse
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow ROTAS API response time"
+          description: "95th percentile response time is {{ $value }}s"
+
+      # Data quality issues spike
+      - alert: RotasDataQualityIssues
+        expr: |
+          sum(rate(rotas_data_quality_issues_total[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Data quality issues detected"
+          description: "{{ $value }} data quality issues per second"
+
+      # Database query performance degradation
+      - alert: RotasSlowDatabaseQueries
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(rotas_db_query_duration_seconds_bucket[5m])) by (le)
+          ) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow database queries"
+          description: "95th percentile query time is {{ $value }}s"

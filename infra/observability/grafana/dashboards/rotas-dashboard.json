@@ -1,0 +1,150 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "ROTAS - Stats Reference HUB",
+    "tags": ["rotas", "esports", "monitoring"],
+    "timezone": "UTC",
+    "schemaVersion": 36,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Ingestion Job Success Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(rotas_ingestion_jobs_total{status='success'}[5m])) / sum(rate(rotas_ingestion_jobs_total[5m])) * 100",
+            "legendFormat": "Success Rate %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 95},
+                {"color": "green", "value": 99}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Records Processed (5m)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(rotas_ingestion_records_processed_total[5m]))",
+            "legendFormat": "Records/sec"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Ingestion Errors",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(rotas_ingestion_errors_total[5m]))",
+            "legendFormat": "Errors/sec"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": 0},
+                {"color": "yellow", "value": 0.1},
+                {"color": "red", "value": 1}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "Data Freshness",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "time() - rotas_last_ingestion_timestamp",
+            "legendFormat": "Seconds since last ingestion"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": 0},
+                {"color": "yellow", "value": 3600},
+                {"color": "red", "value": 7200}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "Ingestion Duration by Entity Type",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(rotas_ingestion_duration_seconds_bucket[5m])) by (le, entity_type))",
+            "legendFormat": "{{entity_type}} p95"
+          },
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(rotas_ingestion_duration_seconds_bucket[5m])) by (le, entity_type))",
+            "legendFormat": "{{entity_type}} p50"
+          }
+        ],
+        "yAxes": [{"unit": "s"}],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "API Response Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
+            "legendFormat": "{{handler}} p95"
+          }
+        ],
+        "yAxes": [{"unit": "s"}],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 7,
+        "title": "Data Quality Issues",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(rotas_data_quality_issues_total[5m])) by (game, issue_type)",
+            "legendFormat": "{{game}} - {{issue_type}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 8,
+        "title": "Database Query Performance",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(rotas_db_query_duration_seconds_bucket[5m])) by (le, operation))",
+            "legendFormat": "{{operation}} p95"
+          }
+        ],
+        "yAxes": [{"unit": "s"}],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      }
+    ]
+  }
+}
