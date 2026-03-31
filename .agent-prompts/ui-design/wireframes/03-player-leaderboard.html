@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSports-EXE — Wireframe: Player Leaderboard</title>
+    <style>
+        :root {
+            --color-primary-bg: #0F172A;
+            --color-primary-bg-light: #1E293B;
+            --color-primary-bg-lighter: #334155;
+            --color-text-primary: #F8FAFC;
+            --color-text-secondary: #94A3B8;
+            --color-text-muted: #64748B;
+            --color-accent-rotas: #14B8A6;
+            --color-accent-opera: #F97316;
+            --font-mono: 'JetBrains Mono', monospace;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--color-primary-bg);
+            color: var(--color-text-primary);
+            font-size: 14px;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) var(--space-6);
+            background: var(--color-primary-bg-light);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent-rotas);
+            text-decoration: none;
+        }
+
+        .breadcrumb .current {
+            color: var(--color-text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        .search-box {
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--color-text-secondary);
+            width: 200px;
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-compare {
+            background: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        .btn-compare:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-filter {
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+        }
+
+        /* HUB Navigation */
+        .hub-nav {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            padding: var(--space-4);
+            background: var(--color-primary-bg);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .hub-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hub-link.active {
+            color: var(--color-accent-rotas);
+        }
+
+        .hub-icon {
+            width: 24px;
+            height: 24px;
+            background: currentColor;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .hub-link.active .hub-icon {
+            opacity: 1;
+        }
+
+        /* Role Filters */
+        .filters {
+            display: flex;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-6);
+            background: var(--color-primary-bg);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+            overflow-x: auto;
+        }
+
+        .filter-pill {
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-pill.active {
+            background: var(--color-accent-rotas);
+            border-color: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        /* Data Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-primary-bg-light);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .data-table th:hover {
+            color: var(--color-text-primary);
+        }
+
+        .data-table th.sortable::after {
+            content: ' ↕';
+            opacity: 0.3;
+        }
+
+        .data-table th.sorted {
+            color: var(--color-accent-rotas);
+        }
+
+        .data-table td {
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        /* Table Cell Content */
+        .rank {
+            font-family: var(--font-mono);
+            color: var(--color-text-muted);
+            font-weight: 600;
+        }
+
+        .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--color-primary-bg-lighter);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .checkbox.checked {
+            background: var(--color-accent-rotas);
+            border-color: var(--color-accent-rotas);
+        }
+
+        .player-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 50%;
+        }
+
+        .player-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .player-flag {
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+        }
+
+        .team-logo {
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 4px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-duelist {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+
+        .role-initiator {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+        }
+
+        .role-controller {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+        }
+
+        .role-sentinel {
+            background: rgba(168, 85, 247, 0.2);
+            color: #A855F7;
+        }
+
+        .stat {
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .stat-rating {
+            color: var(--color-accent-rotas);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-6);
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 6px;
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: var(--color-accent-rotas);
+            border-color: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        .page-info {
+            color: var(--color-text-muted);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-actions {
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                width: 150px;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: var(--space-2);
+            }
+        }
+
+        /* Annotation */
+        .annotation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="breadcrumb">
+            <a href="#">← Back</a>
+            <span>/</span>
+            <a href="#">ROTAS</a>
+            <span>/</span>
+            <span class="current">Players</span>
+        </div>
+        <div class="nav-actions">
+            <input type="text" class="search-box" placeholder="Search players...">
+            <button class="btn btn-compare">Compare (2)</button>
+            <button class="btn btn-filter">Filter ⚙</button>
+        </div>
+    </nav>
+
+    <!-- HUB Navigation -->
+    <nav class="hub-nav">
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>ROTAS</span>
+        </a>
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>SATOR</span>
+        </a>
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>OPERA</span>
+        </a>
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>AREPO</span>
+        </a>
+    </nav>
+
+    <!-- Role Filters -->
+    <div class="filters">
+        <button class="filter-pill active">All</button>
+        <button class="filter-pill">Duelist</button>
+        <button class="filter-pill">Initiator</button>
+        <button class="filter-pill">Controller</button>
+        <button class="filter-pill">Sentinel</button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">#</th>
+                    <th style="width: 40px;"><input type="checkbox" class="checkbox"></th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Role</th>
+                    <th class="sortable sorted">K/D</th>
+                    <th class="sortable">ADR</th>
+                    <th class="sortable">ACS</th>
+                    <th class="sortable">KAST%</th>
+                    <th class="sortable">Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td><input type="checkbox" class="checkbox checked"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">TenZ 🇨🇦</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>SEN</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.45</td>
+                    <td class="stat">185.2</td>
+                    <td class="stat">285.1</td>
+                    <td class="stat">72.5%</td>
+                    <td class="stat stat-rating">1.35</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td><input type="checkbox" class="checkbox checked"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">aspas 🇧🇷</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>LEV</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.42</td>
+                    <td class="stat">178.5</td>
+                    <td class="stat">272.4</td>
+                    <td class="stat">74.2%</td>
+                    <td class="stat stat-rating">1.32</td>
+                </tr>
+                <tr>
+                    <td class="rank">3</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">yay 🇺🇸</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>DIG</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.38</td>
+                    <td class="stat">175.3</td>
+                    <td class="stat">265.8</td>
+                    <td class="stat">70.1%</td>
+                    <td class="stat stat-rating">1.28</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">Demon1 🇺🇸</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>NRG</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.35</td>
+                    <td class="stat">172.1</td>
+                    <td class="stat">261.2</td>
+                    <td class="stat">68.9%</td>
+                    <td class="stat stat-rating">1.25</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">zekken 🇺🇸</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>SEN</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.32</td>
+                    <td class="stat">165.2</td>
+                    <td class="stat">255.4</td>
+                    <td class="stat">71.3%</td>
+                    <td class="stat stat-rating">1.22</td>
+                </tr>
+                <tr>
+                    <td class="rank">6</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">Sacy 🇧🇷</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>SEN</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-initiator">Initiator</span></td>
+                    <td class="stat">1.15</td>
+                    <td class="stat">142.8</td>
+                    <td class="stat">225.6</td>
+                    <td class="stat">76.4%</td>
+                    <td class="stat stat-rating">1.08</td>
+                </tr>
+                <tr>
+                    <td class="rank">7</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">Less 🇧🇷</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>LEV</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-sentinel">Sentinel</span></td>
+                    <td class="stat">1.12</td>
+                    <td class="stat">138.5</td>
+                    <td class="stat">215.2</td>
+                    <td class="stat">74.8%</td>
+                    <td class="stat stat-rating">1.05</td>
+                </tr>
+                <tr>
+                    <td class="rank">8</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">pANcada 🇧🇷</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>SEN</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-controller">Controller</span></td>
+                    <td class="stat">1.08</td>
+                    <td class="stat">135.2</td>
+                    <td class="stat">208.4</td>
+                    <td class="stat">78.2%</td>
+                    <td class="stat stat-rating">1.02</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button class="page-btn">← Prev</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="color: var(--color-text-muted);">...</span>
+        <button class="page-btn">24</button>
+        <button class="page-btn">Next →</button>
+        <span class="page-info">Showing 1-50 of 1,247</span>
+    </div>
+
+    <!-- Annotation -->
+    <div class="annotation">Wireframe v1.0 — Player Leaderboard</div>
+</body>
+</html>

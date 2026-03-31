@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSports-EXE — Wireframe: TENET Portal</title>
+    <style>
+        :root {
+            --color-primary-bg: #0F172A;
+            --color-primary-bg-light: #1E293B;
+            --color-primary-bg-lighter: #334155;
+            --color-text-primary: #F8FAFC;
+            --color-text-secondary: #94A3B8;
+            --color-text-muted: #64748B;
+            --color-accent-rotas: #14B8A6;
+            --color-accent-opera: #F97316;
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-12: 48px;
+            --space-16: 64px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-primary-bg);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) var(--space-8);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--color-accent-rotas), var(--color-accent-opera));
+            border-radius: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--space-4);
+        }
+
+        .btn-ghost {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: var(--space-16) var(--space-8);
+            background: linear-gradient(180deg, var(--color-primary-bg) 0%, var(--color-primary-bg-light) 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            background: linear-gradient(90deg, var(--color-text-primary), var(--color-accent-rotas));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Game Cards */
+        .games-section {
+            padding: var(--space-12) var(--space-8);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+        }
+
+        .game-card {
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 16px;
+            padding: var(--space-8);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-accent-rotas);
+            box-shadow: 0 0 30px rgba(20, 184, 166, 0.15);
+        }
+
+        .game-card.coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .game-card.coming-soon:hover {
+            transform: none;
+            border-color: var(--color-primary-bg-lighter);
+            box-shadow: none;
+        }
+
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 16px;
+            margin-bottom: var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .game-card h2 {
+            font-size: 28px;
+            margin-bottom: var(--space-4);
+        }
+
+        .game-stats {
+            display: flex;
+            gap: var(--space-6);
+            margin-top: var(--space-4);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-accent-rotas);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.live {
+            background: rgba(20, 184, 166, 0.2);
+            color: var(--color-accent-rotas);
+        }
+
+        .status-badge.coming-soon {
+            background: var(--color-primary-bg-lighter);
+            color: var(--color-text-muted);
+        }
+
+        /* Features */
+        .features {
+            padding: var(--space-12) var(--space-8);
+            background: var(--color-primary-bg-light);
+        }
+
+        .features h3 {
+            text-align: center;
+            font-size: 14px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: var(--space-8);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--space-8);
+            text-align: center;
+            border-top: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-muted);
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-6);
+            margin-bottom: var(--space-4);
+        }
+
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .game-stats {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+        }
+
+        /* Annotations */
+        .annotation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-accent-opera);
+            color: var(--color-primary-bg);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <span>eSports-EXE</span>
+        </div>
+        <div class="header-actions">
+            <button class="btn-ghost">⌘ Search</button>
+            <button class="btn-ghost">⚙ Settings</button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>The Esports Analytics Platform</h1>
+        <p>Unified stats and insights for tactical FPS. Cross-game analytics for Valorant and CS2.</p>
+    </section>
+
+    <!-- Game Selection -->
+    <section class="games-section">
+        <div class="games-grid">
+            <!-- Valorant Card -->
+            <div class="game-card">
+                <span class="status-badge live">Active</span>
+                <div class="game-icon">🔫</div>
+                <h2>Valorant</h2>
+                <p style="color: var(--color-text-secondary);">Tactical shooter with agent abilities. VCT circuit active.</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-value">3</span>
+                        <span class="stat-label">Live Matches</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">12</span>
+                        <span class="stat-label">Upcoming</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">156</span>
+                        <span class="stat-label">Players</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CS2 Card -->
+            <div class="game-card coming-soon">
+                <span class="status-badge coming-soon">Coming Soon</span>
+                <div class="game-icon">🎯</div>
+                <h2>Counter-Strike 2</h2>
+                <p style="color: var(--color-text-secondary);">The classic tactical shooter. CS2 Pro circuit integration in progress.</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-value">—</span>
+                        <span class="stat-label">Live Matches</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">—</span>
+                        <span class="stat-label">Upcoming</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">—</span>
+                        <span class="stat-label">Players</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <h3>What You Can Do Here</h3>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Live Match Tracking</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Player Stats</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Tournament Brackets</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Team Analytics</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Advanced Metrics</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"></div>
+                <span>Community Forums</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">API</a>
+            <a href="#">GitHub</a>
+            <a href="#">Terms</a>
+        </div>
+        <p>© 2026 eSports-EXE. Built for the competitive community.</p>
+    </footer>
+
+    <!-- Annotation -->
+    <div class="annotation">Wireframe v1.0 — TENET Portal</div>
+</body>
+</html>
