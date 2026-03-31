@@ -1,0 +1,1494 @@
+[Ver001.000]
+
+openapi: 3.1.0
+info:
+  title: ESPORTEZ-MANAGER API
+  version: 1.0.0
+  description: |
+    # ESPORTEZ-MANAGER API
+    
+    Tournament management system with Godot game integration for esports analytics.
+    
+    ## Features
+    - Tournament management (CRUD)
+    - Team registration
+    - Match scheduling
+    - Bracket generation
+    - Real-time WebSocket updates
+    - Godot game result export
+    - SimRating analytics calculations
+    - RAR (Role-Adjusted Replacement) analysis
+    
+    ## Authentication
+    All endpoints require Bearer token authentication unless otherwise specified.
+    
+    ## Rate Limiting
+    - Standard: 100 requests/minute
+    - Match export: 10 requests/minute
+    - Health checks: No limit
+    
+    ## Architecture
+    The API follows the TENET data topology with:
+    - Path A (Live): Pandascore webhook → Redis → WebSocket
+    - Path B (Legacy): TeneT Key.Links → PostgreSQL → FastAPI
+    
+  contact:
+    name: ESPORTEZ Support
+    url: https://github.com/notbleaux/eSports-EXE
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development (v1 endpoints)
+  - url: http://localhost:8000/api
+    description: Local development (legacy endpoints)
+  - url: https://api.esportez-manager.com/api/v1
+    description: Production (v1 endpoints)
+  - url: https://api.esportez-manager.com/api
+    description: Production (legacy endpoints)
+
+tags:
+  - name: tournaments
+    description: Tournament management operations
+  - name: teams
+    description: Team management
+  - name: matches
+    description: Match operations and result submission
+  - name: analytics
+    description: SimRating, RAR, and investment grading calculations
+  - name: verification
+    description: TeneT verification and legacy data pipeline
+  - name: webhooks
+    description: External webhook handlers (Pandascore)
+  - name: system
+    description: System health, metrics, and circuit breaker status
+  - name: health
+    description: Health check endpoints (no auth required)
+
+paths:
+  # ─── Health Endpoints ───────────────────────────────────────────────────────
+  /health:
+    get:
+      tags:
+        - health
+      summary: Basic health check
+      description: Returns API health status and basic metadata
+      security: []
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /ready:
+    get:
+      tags:
+        - health
+      summary: Readiness check
+      description: Checks database connectivity and readiness for traffic
+      security: []
+      responses:
+        '200':
+          description: Service is ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+
+  /live:
+    get:
+      tags:
+        - health
+      summary: Liveness check
+      description: Basic process health check for orchestration
+      security: []
+      responses:
+        '200':
+          description: Process is alive
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "alive"
+
+  /metrics:
+    get:
+      tags:
+        - system
+        - monitoring
+      summary: Prometheus metrics
+      description: Returns metrics in Prometheus exposition format
+      security: []
+      responses:
+        '200':
+          description: Metrics data
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  # ─── Tournament Endpoints ───────────────────────────────────────────────────
+  /tournaments:
+    get:
+      tags:
+        - tournaments
+      summary: List tournaments
+      description: |
+        Get list of tournaments with circuit breaker protected external API calls.
+        
+        This endpoint is protected by a circuit breaker that will:
+        - Allow up to 3 failures before opening
+        - Remain open for 30 seconds when failing
+        - Test recovery with limited requests in half-open state
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+            default: valorant
+          description: Game filter
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Items per page
+      responses:
+        '200':
+          description: List of tournaments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentListResponse'
+        '503':
+          description: Circuit breaker open or service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tournaments/{tournament_id}:
+    get:
+      tags:
+        - tournaments
+      summary: Get tournament by ID
+      description: Get detailed information about a specific tournament
+      parameters:
+        - name: tournament_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Tournament unique identifier
+      responses:
+        '200':
+          description: Tournament details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+        '404':
+          description: Tournament not found
+        '501':
+          description: Endpoint not yet implemented
+
+  /tournaments/{tournament_id}/matches/results:
+    post:
+      tags:
+        - matches
+      summary: Submit match result from Godot game
+      description: |
+        Receives match results exported from Godot LiveSeasonModule.
+        
+        This endpoint is called automatically by the Godot game when a match completes.
+        It processes player statistics, updates tournament brackets, and notifies
+        WebSocket subscribers.
+        
+        ## Godot Integration
+        ```gdscript
+        # In Godot LiveSeasonModule
+        var result = {
+            "map_name": "ascent",
+            "winner_side": "team_a",
+            "team_a_score": 13,
+            "team_b_score": 10,
+            "players": [...]
+        }
+        export_client.send_match_data(result)
+        ```
+        
+        ## Rate Limiting
+        - 10 requests per minute per tournament
+        - Burst: 5 requests
+        
+        ## Response Codes
+        - 201: Match created successfully
+        - 400: Invalid match data
+        - 404: Tournament not found
+        - 429: Rate limit exceeded
+      parameters:
+        - name: tournament_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Tournament unique identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchResult'
+      responses:
+        '201':
+          description: Match result submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchResultResponse'
+        '400':
+          description: Invalid data or tournament ID mismatch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Tournament not found
+        '429':
+          description: Rate limit exceeded
+
+  /tournaments/system/circuit-breakers:
+    get:
+      tags:
+        - system
+        - tournaments
+      summary: Get circuit breaker status
+      description: |
+        Get current status of all circuit breakers for monitoring.
+        
+        Returns detailed information about each circuit breaker including:
+        - Current state (closed, open, half_open)
+        - Failure counts
+        - Last failure time
+        - Configuration settings
+        - Call metrics
+      responses:
+        '200':
+          description: Circuit breaker status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CircuitBreakerStatusResponse'
+
+  /tournaments/system/circuit-breakers/{name}:
+    get:
+      tags:
+        - system
+        - tournaments
+      summary: Get specific circuit breaker status
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Circuit breaker name
+      responses:
+        '200':
+          description: Circuit breaker details
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /tournaments/system/circuit-breakers/{name}/reset:
+    post:
+      tags:
+        - system
+        - tournaments
+      summary: Reset a circuit breaker
+      description: Manually reset a circuit breaker to closed state (admin only)
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Circuit breaker name
+      responses:
+        '200':
+          description: Circuit breaker reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  reset_by:
+                    type: string
+                  reset_at:
+                    type: string
+                    format: date-time
+
+  # ─── Analytics Endpoints ────────────────────────────────────────────────────
+  /analytics/simrating/calculate:
+    post:
+      tags:
+        - analytics
+      summary: Calculate SimRating
+      description: |
+        Calculate SimRating from z-scored components.
+        
+        SimRating uses 5 equal-weighted components (0.20 each):
+        - kills_z
+        - deaths_z (inverted, lower is better)
+        - adjusted_kill_value_z (NOT raw ACS)
+        - adr_z
+        - kast_pct_z
+        
+        ## Formula
+        ```
+        SimRating = mean(z_scores) * 50 + 100
+        ```
+        
+        Results in a rating scale where:
+        - 100 = Average
+        - 115 = One standard deviation above average
+        - 130 = Elite performer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimRatingRequest'
+      responses:
+        '200':
+          description: SimRating calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimRatingResponse'
+        '400':
+          description: Invalid input data
+
+  /analytics/rar/calculate:
+    post:
+      tags:
+        - analytics
+      summary: Calculate RAR (Role-Adjusted Replacement)
+      description: |
+        Calculate Role-Adjusted Replacement value.
+        
+        RAR compares a player's performance to replacement-level
+        for their specific role.
+        
+        ## Replacement Levels by Role
+        - Entry: 0.75
+        - IGL: 0.65
+        - Controller: 0.70
+        - Initiator: 0.68
+        - Sentinel: 0.72
+        
+        ## Formula
+        ```
+        RAR = RawRating / ReplacementLevel
+        ```
+        
+        ## Interpretation
+        - 1.30+ = Elite - Franchise player material
+        - 1.15+ = All-Star - Core team piece
+        - 1.00+ = Starter - Above replacement level
+        - 0.85+ = Below average - Development needed
+        - < 0.85 = Replacement level - High risk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RARRequest'
+      responses:
+        '200':
+          description: RAR calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RARResponse'
+        '400':
+          description: Invalid role or input data
+
+  /analytics/investment/grade:
+    post:
+      tags:
+        - analytics
+      summary: Grade investment prospect
+      description: |
+        Grade a player as an investment prospect.
+        
+        Combines RAR score, age curve position, and temporal decay
+        to produce a final investment grade.
+        
+        ## Grades
+        - S+ (2.5+): Generational prospect
+        - S (2.0-2.5): Elite investment
+        - A+ (1.5-2.0): Strong buy
+        - A (1.0-1.5): Good value
+        - B (0.5-1.0): Developmental
+        - C (< 0.5): High risk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvestmentGradeRequest'
+      responses:
+        '200':
+          description: Investment grade calculated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestmentGradeResponse'
+        '400':
+          description: Invalid input data
+
+  /analytics/investment/grade/batch:
+    post:
+      tags:
+        - analytics
+      summary: Batch grade players
+      description: Grade multiple players at once for efficiency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchGradeRequest'
+      responses:
+        '200':
+          description: Batch grading completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                  count:
+                    type: integer
+
+  /analytics/age-curve/{role}/{age}:
+    get:
+      tags:
+        - analytics
+      summary: Get age curve analysis
+      description: |
+        Get age curve analysis for a role and age.
+        
+        Returns career stage (rising/peak/declining) and peak proximity.
+        
+        ## Peak Ages by Role
+        - Entry: 20-24
+        - IGL: 26-30
+        - Controller: 22-27
+        - Initiator: 21-25
+        - Sentinel: 23-28
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [Entry, IGL, Controller, Initiator, Sentinel]
+          description: Player role
+        - name: age
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 16
+            maximum: 45
+          description: Player age
+      responses:
+        '200':
+          description: Age curve analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgeCurveResponse'
+        '400':
+          description: Invalid role or age
+
+  /analytics/roles:
+    get:
+      tags:
+        - analytics
+      summary: List available roles
+      description: Get list of available roles and their replacement levels
+      responses:
+        '200':
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        replacement_level:
+                          type: number
+
+  /analytics/health:
+    get:
+      tags:
+        - analytics
+        - health
+      summary: Analytics health check
+      description: Health check for analytics module
+      responses:
+        '200':
+          description: Analytics module status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  calculators:
+                    type: object
+                  available_roles:
+                    type: array
+                    items:
+                      type: string
+
+  # ─── Verification Endpoints ─────────────────────────────────────────────────
+  /v1/live/matches:
+    get:
+      tags:
+        - verification
+      summary: Get live matches
+      description: |
+        Get current live matches with confidence scores.
+        
+        Source: Path A (Pandascore) or Path B (verified)
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+          description: Filter by game
+        - name: confidence_min
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.5
+          description: Minimum confidence threshold
+      responses:
+        '200':
+          description: List of live matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiveMatchSummary'
+
+  /v1/live/matches/{match_id}:
+    get:
+      tags:
+        - verification
+      summary: Get specific live match
+      description: Get current match state with confidence score
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Match unique identifier
+      responses:
+        '200':
+          description: Live match details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveMatchSummary'
+        '404':
+          description: Live match not found
+
+  /v1/history/matches:
+    get:
+      tags:
+        - verification
+      summary: Get match history
+      description: |
+        Get match history with verification confidence.
+        
+        Returns completed matches with verification confidence scores,
+        identified issues, and flagged for review status.
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+          description: Filter by game
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: Results per page
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Pagination offset
+        - name: confidence_min
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.7
+          description: Minimum confidence threshold
+        - name: show_flagged
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Include flagged items
+      responses:
+        '200':
+          description: List of historical matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchHistory'
+
+  /v1/history/matches/{match_id}:
+    get:
+      tags:
+        - verification
+      summary: Get historical match details
+      description: Get detailed historical match with full verification data
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Match unique identifier
+      responses:
+        '200':
+          description: Historical match details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchHistory'
+        '404':
+          description: Match not found
+
+  /v1/review-queue:
+    get:
+      tags:
+        - verification
+      summary: Get review queue
+      description: |
+        Get items flagged for manual review.
+        
+        Admin endpoint: Returns matches/data with low confidence scores.
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+          description: Filter by game
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: Results per page
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Pagination offset
+        - name: priority
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: High priority items (confidence < 0.5)
+      responses:
+        '200':
+          description: List of items in review queue
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewQueueItem'
+
+  /v1/review-queue/{item_id}/decide:
+    post:
+      tags:
+        - verification
+      summary: Submit review decision
+      description: |
+        Submit manual review decision for flagged item.
+        
+        Decision options:
+        - approve: Accept the data
+        - reject: Discard the data
+        - needs_more_data: Flag for additional investigation
+        
+        Returns 202 Accepted (async processing)
+      parameters:
+        - name: item_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Review item unique identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecision'
+      responses:
+        '202':
+          description: Decision accepted for processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "accepted"
+                  item_id:
+                    type: string
+                  decision:
+                    type: string
+                  timestamp:
+                    type: integer
+
+  /v1/health:
+    get:
+      tags:
+        - verification
+        - health
+      summary: Verification health check
+      description: Health check for verification service
+      responses:
+        '200':
+          description: Verification service status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  service:
+                    type: string
+                  tenet:
+                    type: string
+                  timestamp:
+                    type: integer
+
+  # ─── Webhook Endpoints ──────────────────────────────────────────────────────
+  /webhooks/pandascore/match-update:
+    post:
+      tags:
+        - webhooks
+      summary: Receive Pandascore match update
+      description: |
+        Receive Pandascore match update webhook.
+        
+        Expected headers:
+        - X-Pandascore-Signature: sha256=<hex_digest>
+        
+        ## Signature Verification
+        The webhook uses HMAC-SHA256 signature verification:
+        ```
+        signature = hmac-sha256(secret, body)
+        ```
+        
+        Returns 202 Accepted (async processing)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Raw Pandascore webhook payload
+      responses:
+        '202':
+          description: Webhook accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "accepted"
+                  match_id:
+                    type: string
+                  event_type:
+                    type: string
+                  timestamp:
+                    type: integer
+        '400':
+          description: Invalid JSON payload
+        '401':
+          description: Invalid signature
+
+  /webhooks/pandascore/health:
+    get:
+      tags:
+        - webhooks
+        - health
+      summary: Webhook health check
+      description: Health check for webhook service
+      responses:
+        '200':
+          description: Webhook service status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  service:
+                    type: string
+                  stream:
+                    type: string
+                  timestamp:
+                    type: integer
+
+  # ─── System Endpoints ───────────────────────────────────────────────────────
+  /system/circuit-breakers:
+    get:
+      tags:
+        - system
+      summary: Get system circuit breaker status
+      description: Get status of all circuit breakers in the system
+      responses:
+        '200':
+          description: Circuit breaker status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  circuit_breakers:
+                    type: object
+                  summary:
+                    type: object
+
+components:
+  schemas:
+    # ─── Health & System Schemas ──────────────────────────────────────────────
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - service
+        - version
+      properties:
+        status:
+          type: string
+          example: "healthy"
+        service:
+          type: string
+          example: "sator-api"
+        version:
+          type: string
+          example: "2.1.0"
+        timestamp:
+          type: string
+          format: date-time
+
+    ReadinessResponse:
+      type: object
+      required:
+        - ready
+        - checks
+      properties:
+        ready:
+          type: boolean
+        checks:
+          type: object
+          properties:
+            database:
+              type: boolean
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+
+    # ─── Tournament Schemas ────────────────────────────────────────────────────
+    Tournament:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+        - game
+        - status
+        - teams_count
+        - source
+      properties:
+        id:
+          type: string
+          description: Tournament unique identifier
+        name:
+          type: string
+          description: Tournament name
+        slug:
+          type: string
+          description: URL-friendly identifier
+        game:
+          type: string
+          enum: [valorant, cs2]
+          description: Game type
+        status:
+          type: string
+          enum: [upcoming, running, past, unknown]
+          description: Tournament status
+        start_date:
+          type: string
+          format: date-time
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          nullable: true
+        prize_pool:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        teams_count:
+          type: integer
+          minimum: 0
+        source:
+          type: string
+          default: "pandascore"
+          description: Data source
+
+    TournamentListResponse:
+      type: object
+      required:
+        - tournaments
+        - total
+        - page
+        - per_page
+      properties:
+        tournaments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tournament'
+        total:
+          type: integer
+        page:
+          type: integer
+        per_page:
+          type: integer
+
+    MatchResult:
+      type: object
+      required:
+        - match_id
+        - tournament_id
+        - team1_id
+        - team2_id
+        - team1_score
+        - team2_score
+        - winner_id
+      properties:
+        match_id:
+          type: string
+          description: Unique match identifier
+        tournament_id:
+          type: string
+          description: Tournament ID (must match path parameter)
+        team1_id:
+          type: string
+          description: First team ID
+        team2_id:
+          type: string
+          description: Second team ID
+        team1_score:
+          type: integer
+          minimum: 0
+          description: First team score
+        team2_score:
+          type: integer
+          minimum: 0
+          description: Second team score
+        winner_id:
+          type: string
+          description: ID of winning team
+        map_results:
+          type: array
+          items:
+            type: object
+          description: Per-map results
+        stats:
+          type: object
+          description: Player statistics
+        submitted_at:
+          type: string
+          format: date-time
+          description: Submission timestamp (auto-generated)
+
+    MatchResultResponse:
+      type: object
+      required:
+        - success
+        - message
+        - data
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            match_id:
+              type: string
+            tournament_id:
+              type: string
+            team1_id:
+              type: string
+            team2_id:
+              type: string
+            team1_score:
+              type: integer
+            team2_score:
+              type: integer
+            winner_id:
+              type: string
+            submitted_by:
+              type: string
+            submitted_at:
+              type: string
+            status:
+              type: string
+
+    CircuitBreakerStatusResponse:
+      type: object
+      required:
+        - circuit_breakers
+        - summary
+      properties:
+        circuit_breakers:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              name:
+                type: string
+              state:
+                type: string
+                enum: [closed, open, half_open]
+              failure_count:
+                type: integer
+              last_failure:
+                type: string
+                format: date-time
+                nullable: true
+              config:
+                type: object
+              metrics:
+                type: object
+        summary:
+          type: object
+          properties:
+            total:
+              type: integer
+            closed:
+              type: integer
+            open:
+              type: integer
+            half_open:
+              type: integer
+
+    # ─── Analytics Schemas ─────────────────────────────────────────────────────
+    SimRatingRequest:
+      type: object
+      required:
+        - kills_z
+        - deaths_z
+        - adjusted_kill_value_z
+        - adr_z
+        - kast_pct_z
+      properties:
+        kills_z:
+          type: number
+          description: Z-score for kills
+        deaths_z:
+          type: number
+          description: Z-score for deaths (will be inverted)
+        adjusted_kill_value_z:
+          type: number
+          description: Z-score for adjusted kill value (NOT raw ACS)
+        adr_z:
+          type: number
+          description: Z-score for ADR
+        kast_pct_z:
+          type: number
+          description: Z-score for KAST percentage
+
+    SimRatingResponse:
+      type: object
+      required:
+        - sim_rating
+        - components
+        - z_scores
+        - percentile
+        - interpretation
+      properties:
+        sim_rating:
+          type: number
+          description: Final SimRating score
+        components:
+          type: object
+          additionalProperties:
+            type: number
+        z_scores:
+          type: object
+          additionalProperties:
+            type: number
+        percentile:
+          type: number
+          description: Percentile ranking (0-100)
+        interpretation:
+          type: string
+          description: Human-readable interpretation
+
+    RARRequest:
+      type: object
+      required:
+        - raw_rating
+        - role
+      properties:
+        raw_rating:
+          type: number
+          description: Raw performance rating (SimRating)
+        role:
+          type: string
+          enum: [Entry, IGL, Controller, Initiator, Sentinel]
+          description: Player role
+
+    RARResponse:
+      type: object
+      required:
+        - role
+        - raw_rating
+        - replacement_level
+        - rar_score
+        - investment_grade
+        - interpretation
+      properties:
+        role:
+          type: string
+        raw_rating:
+          type: number
+        replacement_level:
+          type: number
+        rar_score:
+          type: number
+          description: Role-Adjusted Replacement score
+        investment_grade:
+          type: string
+        interpretation:
+          type: string
+
+    InvestmentGradeRequest:
+      type: object
+      required:
+        - raw_rating
+        - role
+        - age
+      properties:
+        raw_rating:
+          type: number
+          description: Raw performance rating
+        role:
+          type: string
+          enum: [Entry, IGL, Controller, Initiator, Sentinel]
+          description: Player role
+        age:
+          type: integer
+          minimum: 16
+          maximum: 40
+          description: Player age
+        record_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date of performance record (for decay calculation)
+
+    InvestmentGradeResponse:
+      type: object
+      required:
+        - rar_score
+        - age_factor
+        - adjusted_rar
+        - investment_grade
+        - in_peak_age
+        - career_stage
+        - peak_proximity
+        - decay_factor
+      properties:
+        rar_score:
+          type: number
+        age_factor:
+          type: number
+        adjusted_rar:
+          type: number
+        investment_grade:
+          type: string
+          description: Final investment grade (S+, S, A+, A, B, C)
+        in_peak_age:
+          type: boolean
+        career_stage:
+          type: string
+          enum: [rising, peak, declining]
+        peak_proximity:
+          type: number
+        decay_factor:
+          type: number
+
+    BatchGradeRequest:
+      type: object
+      required:
+        - players
+      properties:
+        players:
+          type: array
+          items:
+            type: object
+
+    AgeCurveResponse:
+      type: object
+      required:
+        - role
+        - age
+        - peak_range
+        - career_stage
+        - peak_proximity
+      properties:
+        role:
+          type: string
+        age:
+          type: integer
+        peak_range:
+          type: array
+          items:
+            type: integer
+          minItems: 2
+          maxItems: 2
+        career_stage:
+          type: string
+          enum: [rising, peak, declining]
+        peak_proximity:
+          type: number
+
+    # ─── Verification Schemas ──────────────────────────────────────────────────
+    LiveMatchSummary:
+      type: object
+      required:
+        - match_id
+        - game
+        - status
+        - updated_at
+        - confidence
+        - source
+      properties:
+        match_id:
+          type: string
+        game:
+          type: string
+        title:
+          type: string
+          nullable: true
+        status:
+          type: string
+        team1_name:
+          type: string
+          nullable: true
+        team2_name:
+          type: string
+          nullable: true
+        team1_score:
+          type: integer
+          nullable: true
+        team2_score:
+          type: integer
+          nullable: true
+        updated_at:
+          type: integer
+          description: Unix milliseconds timestamp
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        source:
+          type: string
+
+    MatchHistory:
+      type: object
+      required:
+        - match_id
+        - game
+        - status
+        - started_at
+        - confidence
+        - confidence_level
+        - requires_review
+      properties:
+        match_id:
+          type: string
+        game:
+          type: string
+        title:
+          type: string
+          nullable: true
+        status:
+          type: string
+        team1_name:
+          type: string
+          nullable: true
+        team2_name:
+          type: string
+          nullable: true
+        team1_score:
+          type: integer
+          nullable: true
+        team2_score:
+          type: integer
+          nullable: true
+        started_at:
+          type: integer
+          description: Unix milliseconds timestamp
+        ended_at:
+          type: integer
+          nullable: true
+          description: Unix milliseconds timestamp
+        confidence:
+          type: number
+        confidence_level:
+          type: string
+          enum: [trusted, high, medium, low, flagged]
+        verification_issues:
+          type: array
+          items:
+            type: string
+        requires_review:
+          type: boolean
+
+    ReviewQueueItem:
+      type: object
+      required:
+        - item_id
+        - data_type
+        - game
+        - confidence
+        - issues
+        - flagged_at
+      properties:
+        item_id:
+          type: string
+        data_type:
+          type: string
+          enum: [match, player, team, result]
+        game:
+          type: string
+        confidence:
+          type: number
+        issues:
+          type: array
+          items:
+            type: string
+        flagged_at:
+          type: integer
+          description: Unix milliseconds timestamp
+        notes:
+          type: string
+          nullable: true
+
+    ReviewDecision:
+      type: object
+      required:
+        - decision
+      properties:
+        decision:
+          type: string
+          enum: [approve, reject, needs_more_data]
+        notes:
+          type: string
+          nullable: true
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token authentication
+
+security:
+  - BearerAuth: []

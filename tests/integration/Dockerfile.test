@@ -1,0 +1,38 @@
+# Test Runner Dockerfile for Integration Tests
+# [Ver001.000]
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    redis-tools \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY services/api/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Install test dependencies
+RUN pip install --no-cache-dir \
+    pytest \
+    pytest-asyncio \
+    pytest-cov \
+    httpx \
+    websockets \
+    pytest-timeout \
+    pytest-xdist
+
+# Copy test files
+COPY tests/ /app/tests/
+COPY services/ /app/services/
+
+# Set Python path
+ENV PYTHONPATH=/app:/app/services/api:/app/packages/shared
+
+# Default command
+CMD ["pytest", "tests/integration", "-v"]

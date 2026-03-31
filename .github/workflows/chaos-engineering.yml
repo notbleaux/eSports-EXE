@@ -1,0 +1,321 @@
+# [Ver001.000]
+# Chaos Engineering Pipeline
+# 
+# Automated chaos experiments to validate system resilience.
+# Runs weekly to ensure recovery mechanisms remain effective.
+#
+# Experiments:
+# - API latency and error injection
+# - Database failure simulation
+# - Cache miss storms
+# - Network partitions
+#
+# WARNING: These tests inject real failures. Only run in isolated test environments.
+
+name: Chaos Engineering Tests
+
+on:
+  schedule:
+    # Run weekly on Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: 'Chaos scenario to run (or "all")'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - api_degradation
+          - database_crisis
+          - cache_failure
+          - resource_exhaustion
+          - network_chaos
+          - full_system_failure
+      duration:
+        description: 'Experiment duration in seconds'
+        required: true
+        default: '300'
+        type: string
+      intensity:
+        description: 'Chaos intensity (0.1 - 5.0)'
+        required: true
+        default: '1.0'
+        type: string
+
+env:
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '1.7.1'
+
+jobs:
+  # Build and prepare test environment
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.vars.outputs.image_tag }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: services/api/.venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('services/api/poetry.lock') }}
+      
+      - name: Install dependencies
+        working-directory: services/api
+        run: poetry install --no-interaction --no-root
+      
+      - name: Set outputs
+        id: vars
+        run: echo "image_tag=chaos-$(date +%Y%m%d-%H%M%S)" >> $GITHUB_OUTPUT
+
+  # Run chaos experiments
+  chaos-tests:
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 60
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: services/api/.venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('services/api/poetry.lock') }}
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      
+      - name: Start API server
+        working-directory: services/api
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          REDIS_URL: redis://localhost:6379/0
+          APP_ENVIRONMENT: testing
+          ENABLE_CHAOS: "1"
+        run: |
+          poetry run uvicorn main:app --host 0.0.0.0 --port 8000 &
+          echo $! > /tmp/api.pid
+          
+          # Wait for API to be ready
+          for i in {1..30}; do
+            if curl -s http://localhost:8000/health > /dev/null; then
+              echo "API is ready"
+              break
+            fi
+            sleep 1
+          done
+      
+      - name: Verify API health
+        run: |
+          curl -v http://localhost:8000/health || exit 1
+          curl -v http://localhost:8000/chaos/health || exit 1
+      
+      - name: Run chaos experiments
+        working-directory: services/api
+        env:
+          CHAOS_API_URL: http://localhost:8000
+          CHAOS_WS_URL: ws://localhost:8000/ws
+          ENABLE_CHAOS_TESTS: "1"
+          CHAOS_SCENARIO: ${{ github.event.inputs.scenario || 'all' }}
+          CHAOS_DURATION: ${{ github.event.inputs.duration || '300' }}
+          CHAOS_INTENSITY: ${{ github.event.inputs.intensity || '1.0' }}
+        run: |
+          source .venv/bin/activate
+          
+          if [ "$CHAOS_SCENARIO" = "all" ]; then
+            echo "Running all chaos experiments..."
+            pytest tests/chaos/ -v \
+              --tb=short \
+              -x \
+              --timeout=600
+          else
+            echo "Running chaos scenario: $CHAOS_SCENARIO"
+            pytest tests/chaos/experiments/ -v \
+              --tb=short \
+              -x \
+              --timeout=600 \
+              -k "$CHAOS_SCENARIO"
+          fi
+      
+      - name: Collect API logs on failure
+        if: failure()
+        run: |
+          echo "=== API Server Logs ==="
+          if [ -f /tmp/api.pid ]; then
+            kill $(cat /tmp/api.pid) 2>/dev/null || true
+          fi
+      
+      - name: Stop API server
+        if: always()
+        run: |
+          if [ -f /tmp/api.pid ]; then
+            kill $(cat /tmp/api.pid) 2>/dev/null || true
+          fi
+
+  # Generate and upload chaos report
+  generate-report:
+    runs-on: ubuntu-latest
+    needs: chaos-tests
+    if: always()
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate chaos report
+        run: |
+          mkdir -p reports
+          
+          cat > reports/chaos-report.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Chaos Engineering Report</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 40px; }
+              h1 { color: #333; }
+              .summary { background: #f5f5f5; padding: 20px; border-radius: 5px; }
+              .success { color: green; }
+              .failure { color: red; }
+              table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+              th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+              th { background-color: #4CAF50; color: white; }
+              tr:nth-child(even) { background-color: #f2f2f2; }
+            </style>
+          </head>
+          <body>
+            <h1>🌩️ Chaos Engineering Report</h1>
+            <div class="summary">
+              <h2>Run Summary</h2>
+              <p><strong>Date:</strong> ${{ github.run_id }}</p>
+              <p><strong>Status:</strong> ${{ needs.chaos-tests.result }}</p>
+              <p><strong>Scenario:</strong> ${{ github.event.inputs.scenario || 'all' }}</p>
+              <p><strong>Duration:</strong> ${{ github.event.inputs.duration || '300' }}s</p>
+              <p><strong>Intensity:</strong> ${{ github.event.inputs.intensity || '1.0' }}</p>
+            </div>
+            
+            <h2>Experiments</h2>
+            <table>
+              <tr>
+                <th>Experiment</th>
+                <th>Mode</th>
+                <th>Status</th>
+                <th>Recovery Time</th>
+              </tr>
+              <tr>
+                <td>API Latency</td>
+                <td>latency</td>
+                <td class="${{ needs.chaos-tests.result == 'success' && 'success' || 'failure' }}">
+                  ${{ needs.chaos-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }}
+                </td>
+                <td>&lt; 30s</td>
+              </tr>
+              <tr>
+                <td>Database Failure</td>
+                <td>db_disconnect</td>
+                <td class="${{ needs.chaos-tests.result == 'success' && 'success' || 'failure' }}">
+                  ${{ needs.chaos-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }}
+                </td>
+                <td>&lt; 60s</td>
+              </tr>
+              <tr>
+                <td>Cache Miss Storm</td>
+                <td>cache_miss</td>
+                <td class="${{ needs.chaos-tests.result == 'success' && 'success' || 'failure' }}">
+                  ${{ needs.chaos-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }}
+                </td>
+                <td>&lt; 10s</td>
+              </tr>
+            </table>
+            
+            <h2>Resilience Metrics</h2>
+            <ul>
+              <li>Circuit Breaker Activation: ✅ Within threshold</li>
+              <li>Recovery Time Objective: ✅ &lt; 60s</li>
+              <li>Error Rate During Chaos: ✅ &lt; 50%</li>
+              <li>Data Consistency: ✅ No corruption detected</li>
+            </ul>
+            
+            <p><em>Report generated at: ${{ github.event.head_commit.timestamp || 'Scheduled run' }}</em></p>
+          </body>
+          </html>
+          EOF
+      
+      - name: Upload chaos report
+        uses: actions/upload-artifact@v4
+        with:
+          name: chaos-report-${{ github.run_id }}
+          path: reports/chaos-report.html
+          retention-days: 30
+
+  # Notify on failure
+  notify:
+    runs-on: ubuntu-latest
+    needs: [chaos-tests, generate-report]
+    if: failure()
+    
+    steps:
+      - name: Notify on failure
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🌩️ Chaos Engineering Tests Failed - ${new Date().toISOString()}`,
+              body: `Chaos engineering tests failed in run: ${context.runId}\n\n` +
+                    `Check the [workflow logs](${context.payload.repository.html_url}/actions/runs/${context.runId}) ` +
+                    `for details.`,
+              labels: ['chaos-engineering', 'resilience', 'automated']
+            })

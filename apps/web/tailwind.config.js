@@ -118,6 +118,44 @@ export default {
           bg: '#9D4EDD',
           accent: '#B17AED',
           text: '#FFFFFF'
+        },
+        
+        /* ============================================
+           VALORANT THEME - Tactical FPS Design System
+           ============================================ */
+        valorant: {
+          // Background hierarchy
+          'bg-base': '#0F1923',
+          'bg-elevated': '#1F2731',
+          'bg-panel': '#2A3241',
+          'bg-input': '#1B2129',
+          'bg-hover': '#3A4553',
+          'bg-active': '#4A5563',
+          
+          // Text colors
+          'text-primary': '#F9FAFB',
+          'text-secondary': '#A8B2C1',
+          'text-muted': '#6B7280',
+          'text-disabled': '#4B5563',
+          
+          // Accent colors - Valorant signature
+          'accent-red': '#FF4655',
+          'accent-red-hover': '#FF5C6A',
+          'accent-teal': '#0AC8B9',
+          'accent-teal-hover': '#0BE0D0',
+          'accent-gold': '#FFB800',
+          
+          // Border colors
+          'border-subtle': 'rgba(255, 255, 255, 0.1)',
+          'border-medium': 'rgba(255, 255, 255, 0.2)',
+          'border-strong': 'rgba(255, 255, 255, 0.3)',
+          'border-red': 'rgba(255, 70, 85, 0.5)',
+          
+          // Status colors
+          'status-success': '#00D26A',
+          'status-warning': '#FFB800',
+          'status-error': '#FF4655',
+          'status-info': '#0AC8B9',
         }
       },
       
@@ -230,6 +268,14 @@ export default {
         // Layered Shadows
         'elevated': '0 1px 2px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.06)',
         'floating': '0 4px 6px rgba(0, 0, 0, 0.04), 0 10px 20px rgba(0, 0, 0, 0.08), 0 24px 48px rgba(0, 0, 0, 0.12)',
+        
+        // Valorant Tactical Shadows
+        'valorant-glow': '0 0 20px rgba(255, 70, 85, 0.4)',
+        'valorant-glow-sm': '0 0 10px rgba(255, 70, 85, 0.3)',
+        'valorant-glow-lg': '0 0 40px rgba(255, 70, 85, 0.5)',
+        'valorant-teal': '0 0 20px rgba(10, 200, 185, 0.4)',
+        'valorant-gold': '0 0 20px rgba(255, 184, 0, 0.4)',
+        'valorant-panel': '0 4px 6px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.4)',
       },
       
       /* ============================================
