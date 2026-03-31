@@ -6,6 +6,7 @@
  * [Ver001.000]
  */
 
+import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ButtonV2 } from '../ui/ButtonV2'
@@ -110,7 +111,7 @@ describe('ButtonV2', () => {
   })
 
   it('should forward ref correctly', () => {
-    const ref = { current: null as HTMLButtonElement | null }
+    const ref = React.createRef<HTMLButtonElement>()
     
     render(<ButtonV2 ref={ref}>Ref Test</ButtonV2>)
     

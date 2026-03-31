@@ -196,14 +196,14 @@ function ThemeToggle({ theme, onToggle }: { theme: 'light' | 'valorant'; onToggl
       onClick={onToggle}
       role="switch"
       aria-checked={isValorant}
-      aria-label={`Theme toggle. Current theme: ${theme}. Click to switch to ${isValorant ? 'light' : 'Valorant'} theme.`}
-      className={`fixed bottom-6 right-6 z-50 px-4 py-2 rounded-sm font-semibold uppercase tracking-wider text-sm transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-valorant-bg-base ${
+      aria-label={`Switch to ${isValorant ? 'light' : 'Valorant'} theme`}
+      title={`Current theme: ${theme}`}
+      className={`fixed bottom-6 right-6 z-50 px-4 py-2 rounded-sm font-semibold uppercase tracking-wider text-sm transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 ${
         isValorant
-          ? 'bg-valorant-accent-red text-white hover:bg-valorant-accent-red-hover shadow-valorant-glow focus:ring-valorant-accent-red'
-          : 'bg-boitano-pink text-white hover:bg-boitano-pink-dark focus:ring-boitano-pink'
+          ? 'bg-valorant-accent-red text-white hover:bg-valorant-accent-red-hover shadow-valorant-glow focus:ring-valorant-accent-red focus:ring-offset-valorant-bg-base'
+          : 'bg-boitano-pink text-white hover:bg-boitano-pink-dark focus:ring-boitano-pink focus:ring-offset-white'
       }`}
     >
-      <span className="sr-only">Current theme: {theme}. </span>
       {isValorant ? 'Switch to Light' : 'Switch to Valorant'}
     </button>
   );

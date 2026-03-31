@@ -4,7 +4,7 @@
  * 
  * [Ver001.000]
  */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type Theme = 'light' | 'valorant';
 
