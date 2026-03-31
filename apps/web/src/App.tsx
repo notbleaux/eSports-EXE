@@ -6,7 +6,7 @@
  */
 import React, { useEffect, useState, useCallback, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 // Navigation and Layout Components (eager loaded for fast initial render)
 import Navigation from './components/Navigation';
@@ -21,6 +21,9 @@ import { MascotShowcase } from './components/mascots/MascotShowcase';
 
 // Valorant Theme Landing
 import { ValorantLanding } from './components/landing/ValorantLanding';
+
+// Theme persistence hook
+import { usePersistentTheme } from './hooks/usePersistentTheme';
 
 // PWA Components
 import { OfflineFallback, OfflineIndicator } from './components/OfflineFallback';
@@ -161,18 +164,47 @@ const PageTransition = ({ children, hubId }: PageTransitionProps): React.ReactNo
   );
 };
 
+// Themed Landing Page with AnimatePresence
+function ThemedLandingPage({ theme }: { theme: 'light' | 'valorant' }): React.ReactNode {
+  const shouldReduceMotion = useReducedMotion();
+  
+  if (shouldReduceMotion) {
+    return theme === 'valorant' ? <ValorantLanding /> : <OriginalLanding />;
+  }
+  
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={theme}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 1.02 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      >
+        {theme === 'valorant' ? <ValorantLanding /> : <OriginalLanding />}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 // Theme Toggle Button Component
 function ThemeToggle({ theme, onToggle }: { theme: 'light' | 'valorant'; onToggle: () => void }): React.ReactNode {
+  const isValorant = theme === 'valorant';
+  
   return (
     <button
       onClick={onToggle}
-      className={`fixed bottom-6 right-6 z-50 px-4 py-2 rounded-sm font-semibold uppercase tracking-wider text-sm transition-all duration-300 shadow-lg ${
-        theme === 'valorant'
-          ? 'bg-valorant-accent-red text-white hover:bg-valorant-accent-red-hover shadow-valorant-glow'
-          : 'bg-boitano-pink text-white hover:bg-boitano-pink-dark'
+      role="switch"
+      aria-checked={isValorant}
+      aria-label={`Theme toggle. Current theme: ${theme}. Click to switch to ${isValorant ? 'light' : 'Valorant'} theme.`}
+      className={`fixed bottom-6 right-6 z-50 px-4 py-2 rounded-sm font-semibold uppercase tracking-wider text-sm transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-valorant-bg-base ${
+        isValorant
+          ? 'bg-valorant-accent-red text-white hover:bg-valorant-accent-red-hover shadow-valorant-glow focus:ring-valorant-accent-red'
+          : 'bg-boitano-pink text-white hover:bg-boitano-pink-dark focus:ring-boitano-pink'
       }`}
     >
-      {theme === 'light' ? 'Switch to Valorant' : 'Switch to Light'}
+      <span className="sr-only">Current theme: {theme}. </span>
+      {isValorant ? 'Switch to Light' : 'Switch to Valorant'}
     </button>
   );
 }
@@ -258,7 +290,7 @@ function OriginalLanding(): React.ReactNode {
 
 // Landing Page with Theme Switching
 function LandingPage({ theme }: { theme: 'light' | 'valorant' }): React.ReactNode {
-  return theme === 'valorant' ? <ValorantLanding /> : <OriginalLanding />;
+  return <ThemedLandingPage theme={theme} />;
 }
 
 // Dashboard Grid with Error Boundary and Loading State
@@ -367,7 +399,7 @@ function AppContent(): React.ReactNode {
   const [showOfflineModal, setShowOfflineModal] = useState<boolean>(false);
   
   // Theme state for landing page - 'light' (Kunsthalle) or 'valorant' (dark tactical)
-  const [landingTheme, setLandingTheme] = useState<'light' | 'valorant'>('light');
+  const [landingTheme, setLandingTheme] = usePersistentTheme();
 
   // Initialize performance monitoring and offline detection
   useEffect(() => {
@@ -439,7 +471,7 @@ function AppContent(): React.ReactNode {
                     <LandingPage theme={landingTheme} />
                     <ThemeToggle 
                       theme={landingTheme} 
-                      onToggle={() => setLandingTheme(prev => prev === 'light' ? 'valorant' : 'light')}
+                      onToggle={() => setLandingTheme(landingTheme === 'light' ? 'valorant' : 'light')}
                     />
                   </>
                 </PageTransition>
