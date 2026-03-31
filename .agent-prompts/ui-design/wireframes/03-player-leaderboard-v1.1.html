@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSports-EXE — Player Leaderboard (v1.1)</title>
+    <style>
+        :root {
+            --color-primary-bg: #0F172A;
+            --color-primary-bg-light: #1E293B;
+            --color-primary-bg-lighter: #334155;
+            --color-text-primary: #F8FAFC;
+            --color-text-secondary: #94A3B8;
+            --color-text-muted: #64748B;
+            --color-accent-rotas: #14B8A6;
+            --color-accent-opera: #F97316;
+            --font-mono: 'JetBrains Mono', monospace;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--color-primary-bg);
+            color: var(--color-text-primary);
+            font-size: 14px;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) var(--space-6);
+            background: var(--color-primary-bg-light);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent-rotas);
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        /* Column Customization Dropdown - NEW */
+        .column-toggle {
+            position: relative;
+        }
+
+        .column-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 8px;
+            padding: 12px;
+            min-width: 180px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .column-menu h4 {
+            font-size: 11px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .column-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .column-option input[type="checkbox"] {
+            accent-color: var(--color-accent-rotas);
+        }
+
+        .preset-btn {
+            display: block;
+            width: 100%;
+            padding: 6px 8px;
+            margin-top: 4px;
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--color-accent-rotas);
+        }
+
+        .search-box {
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--color-text-secondary);
+            width: 200px;
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-compare {
+            background: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        .btn-compare:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-filter {
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+        }
+
+        /* HUB Navigation with Active State - UPDATED */
+        .hub-nav {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            padding: var(--space-4);
+            background: var(--color-primary-bg);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .hub-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: var(--space-2) var(--space-4);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .hub-link.active {
+            color: var(--color-accent-rotas);
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .hub-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -17px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: var(--color-accent-rotas);
+            border-radius: 1px;
+        }
+
+        .hub-icon {
+            width: 24px;
+            height: 24px;
+            background: currentColor;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .hub-link.active .hub-icon {
+            opacity: 1;
+        }
+
+        /* Role Filters */
+        .filters {
+            display: flex;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-6);
+            background: var(--color-primary-bg);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+            overflow-x: auto;
+        }
+
+        .filter-pill {
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-pill.active {
+            background: var(--color-accent-rotas);
+            border-color: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        /* Skeleton Loading State - NEW */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                var(--color-primary-bg-lighter) 25%,
+                var(--color-primary-bg-light) 50%,
+                var(--color-primary-bg-lighter) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-text {
+            height: 14px;
+            width: 60px;
+        }
+
+        .skeleton-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .skeleton-badge {
+            width: 60px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        /* Data Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-primary-bg-light);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .data-table th:hover {
+            color: var(--color-text-primary);
+        }
+
+        .data-table th.sortable::after {
+            content: ' ↕';
+            opacity: 0.3;
+        }
+
+        .data-table th.sorted {
+            color: var(--color-accent-rotas);
+        }
+
+        .data-table td {
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        /* Table Cell Content */
+        .rank {
+            font-family: var(--font-mono);
+            color: var(--color-text-muted);
+            font-weight: 600;
+        }
+
+        .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--color-primary-bg-lighter);
+            border-radius: 3px;
+            cursor: pointer;
+            accent-color: var(--color-accent-rotas);
+        }
+
+        .player-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 50%;
+        }
+
+        .player-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .player-flag {
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+        }
+
+        .team-logo {
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 4px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-duelist { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .role-initiator { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .role-controller { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .role-sentinel { background: rgba(168, 85, 247, 0.2); color: #A855F7; }
+
+        .stat {
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .stat-rating {
+            color: var(--color-accent-rotas);
+        }
+
+        /* Form Column - NEW */
+        .form-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .form-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .form-win { background: #22C55E; }
+        .form-loss { background: #EF4444; }
+        .form-draw { background: #94A3B8; }
+
+        /* Empty State - NEW */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-12);
+            color: var(--color-text-muted);
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 50%;
+            margin: 0 auto var(--space-4);
+        }
+
+        /* Error State - NEW */
+        .error-state {
+            text-align: center;
+            padding: var(--space-12);
+        }
+
+        .error-state h3 {
+            color: #EF4444;
+            margin-bottom: var(--space-2);
+        }
+
+        .error-state p {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        .btn-retry {
+            padding: 8px 16px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-primary);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-retry:hover {
+            border-color: var(--color-accent-rotas);
+        }
+
+        /* Pagination with Jump - UPDATED */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-6);
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 6px;
+            color: var(--color-text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: var(--color-accent-rotas);
+            border-color: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        .page-jump {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-left: var(--space-4);
+            padding-left: var(--space-4);
+            border-left: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .page-jump input {
+            width: 50px;
+            padding: 6px;
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 4px;
+            color: var(--color-text-primary);
+            text-align: center;
+        }
+
+        .page-info {
+            color: var(--color-text-muted);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-actions { flex-wrap: wrap; }
+            .search-box { width: 150px; }
+            .column-menu { right: -50px; }
+        }
+
+        @media (max-width: 768px) {
+            .page-jump { display: none; }
+            .hub-nav { gap: var(--space-4); }
+            .hub-link { font-size: 10px; }
+        }
+
+        /* Annotation */
+        .annotation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* State Demo */
+        .state-demo {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 8px;
+            padding: 16px;
+            width: 200px;
+            z-index: 50;
+        }
+
+        .state-demo h4 {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .state-btn {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .state-btn:hover {
+            border-color: var(--color-accent-rotas);
+            color: var(--color-text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="breadcrumb">
+            <a href="#">← All Players</a>
+        </div>
+        <div class="nav-actions">
+            <input type="text" class="search-box" placeholder="Search players...">
+            <button class="btn btn-compare">Compare (2)</button>
+            <button class="btn btn-filter">Filter ⚙</button>
+            <!-- Column Customization - NEW -->
+            <div class="column-toggle">
+                <button class="btn btn-filter">Columns ▼</button>
+                <div class="column-menu">
+                    <h4>Presets</h4>
+                    <button class="preset-btn">Essential (Rank, Player, Rating)</button>
+                    <button class="preset-btn">Combat (K/D, ADR, ACS, KAST)</button>
+                    <button class="preset-btn">All Columns</button>
+                    <hr style="border-color: var(--color-primary-bg-lighter); margin: 12px 0;">
+                    <h4>Visible Columns</h4>
+                    <label class="column-option">
+                        <input type="checkbox" checked> Rank
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox" checked> Player
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox" checked> Team
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox" checked> Role
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox" checked> K/D
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox" checked> ADR
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox"> Form
+                    </label>
+                    <label class="column-option">
+                        <input type="checkbox" checked> Rating
+                    </label>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HUB Navigation - Active State Enhanced -->
+    <nav class="hub-nav">
+        <a href="#" class="hub-link active">
+            <div class="hub-icon"></div>
+            <span>ROTAS</span>
+        </a>
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>SATOR</span>
+        </a>
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>OPERA</span>
+        </a>
+        <a href="#" class="hub-link">
+            <div class="hub-icon"></div>
+            <span>AREPO</span>
+        </a>
+    </nav>
+
+    <!-- Role Filters -->
+    <div class="filters">
+        <button class="filter-pill active">All</button>
+        <button class="filter-pill">Duelist</button>
+        <button class="filter-pill">Initiator</button>
+        <button class="filter-pill">Controller</button>
+        <button class="filter-pill">Sentinel</button>
+    </div>
+
+    <!-- Data Table with Skeleton Loader -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">#</th>
+                    <th style="width: 40px;"><input type="checkbox" class="checkbox"></th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Role</th>
+                    <th class="sortable sorted">Ratio</th>
+                    <th class="sortable">ADR</th>
+                    <th class="sortable">Form</th>
+                    <th class="sortable">Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="rank">1</td>
+                    <td><input type="checkbox" class="checkbox" checked></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">TenZ 🇨🇦</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>SEN</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.45</td>
+                    <td class="stat">185.2</td>
+                    <td>
+                        <div class="form-dots">
+                            <span class="form-dot form-win"></span>
+                            <span class="form-dot form-win"></span>
+                            <span class="form-dot form-loss"></span>
+                            <span class="form-dot form-win"></span>
+                            <span class="form-dot form-win"></span>
+                        </div>
+                    </td>
+                    <td class="stat stat-rating">1.35</td>
+                </tr>
+                <tr>
+                    <td class="rank">2</td>
+                    <td><input type="checkbox" class="checkbox" checked></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="avatar"></div>
+                            <div class="player-info">
+                                <span class="player-name">aspas 🇧🇷</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-logo"></div>
+                            <span>LEV</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-duelist">Duelist</span></td>
+                    <td class="stat">1.42</td>
+                    <td class="stat">178.5</td>
+                    <td>
+                        <div class="form-dots">
+                            <span class="form-dot form-win"></span>
+                            <span class="form-dot form-win"></span>
+                            <span class="form-dot form-win"></span>
+                            <span class="form-dot form-loss"></span>
+                            <span class="form-dot form-win"></span>
+                        </div>
+                    </td>
+                    <td class="stat stat-rating">1.32</td>
+                </tr>
+                <!-- Skeleton Loading Rows - NEW -->
+                <tr>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><input type="checkbox" class="checkbox" disabled></td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="skeleton skeleton-avatar"></div>
+                            <div class="skeleton skeleton-text"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="skeleton" style="width: 20px; height: 20px; border-radius: 4px;"></div>
+                            <div class="skeleton skeleton-text"></div>
+                        </div>
+                    </td>
+                    <td><div class="skeleton skeleton-badge"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                    <td><div class="skeleton skeleton-text"></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination with Jump to Page - UPDATED -->
+    <div class="pagination">
+        <button class="page-btn">← Prev</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="color: var(--color-text-muted);">...</span>
+        <button class="page-btn">24</button>
+        <button class="page-btn">Next →</button>
+        <span class="page-info">Showing 1-50 of 1,247</span>
+        <div class="page-jump">
+            <span style="color: var(--color-text-muted); font-size: 13px;">Go to:</span>
+            <input type="number" placeholder="1" min="1" max="24">
+        </div>
+    </div>
+
+    <!-- State Demo Controls -->
+    <div class="state-demo">
+        <h4>Component States</h4>
+        <button class="state-btn">✓ Populated</button>
+        <button class="state-btn">⏳ Skeleton Loading</button>
+        <button class="state-btn">📭 Empty State</button>
+        <button class="state-btn">⚠️ Error with Retry</button>
+    </div>
+
+    <!-- Annotation -->
+    <div class="annotation">Wireframe v1.1 — Player Leaderboard</div>
+</body>
+</html>
