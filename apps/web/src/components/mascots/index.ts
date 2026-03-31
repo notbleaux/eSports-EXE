@@ -18,7 +18,7 @@ export { MascotSkeleton, MascotSkeletonCompact } from './MascotSkeleton';
 // Lazy Loading Components - Use for code splitting
 // ============================================================================
 
-export { MascotAssetLazy } from './MascotAssetLazy';
+export { MascotAssetLazy, MascotAssetLazy as MascotAssetLazyDefault, withLazyMascot } from './MascotAssetLazy';
 export { 
   MascotAssetLazyLoaded, 
   preloadMascot, 
@@ -50,7 +50,9 @@ export type {
   MascotType, 
   AssetFormat, 
   LoadingState, 
-  MascotAssetProps 
+  MascotAssetProps,
+  MascotAnimal,
+  MascotStyle
 } from './MascotAssetEnhanced';
 
 export type { 

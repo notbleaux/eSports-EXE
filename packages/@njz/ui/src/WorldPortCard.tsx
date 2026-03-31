@@ -1,9 +1,7 @@
-import React from 'react';
-
 /**
  * WorldPortCard
  * Displays a single World-Port (game) entry in the TeNET Directory.
- * [Ver001.000]
+ * [Ver001.001] - Removed unused React import
  */
 
 export interface WorldPortCardProps {
@@ -100,3 +98,5 @@ export function WorldPortCard({
     </button>
   );
 }
+
+export default WorldPortCard;

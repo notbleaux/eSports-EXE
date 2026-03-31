@@ -59,6 +59,7 @@ from src.njz_api.analytics.router import router as analytics_router
 from src.njz_api.routers.tournaments import router as tournaments_router
 from src.betting.routes import router as betting_router
 from src.notifications.routes import router as notification_router
+from src.njz_api.rotas.api.routes import router as rotas_router
 
 # Import webhook handlers (Phase 4: Live Data Pipeline)
 from src.webhooks import pandascore_router
@@ -660,6 +661,13 @@ app.include_router(
     rar_router,
     prefix="/api",
     tags=["rar"],
+)
+
+# ROTAS router - Stats Reference HUB
+app.include_router(
+    rotas_router,
+    prefix="/api/rotas",
+    tags=["rotas"],
 )
 
 # Analytics router (migrated from satorXrotas)

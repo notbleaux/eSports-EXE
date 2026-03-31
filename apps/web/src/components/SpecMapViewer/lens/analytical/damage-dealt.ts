@@ -47,7 +47,7 @@ function processDamageEvents(events: DamageEvent[]): ProcessedDamage[] {
     victim: event.victim,
     damage: event.damage,
     isCritical: event.damage >= 100,
-    isFatal: event.isFatal,
+    isFatal: event.isFatal ?? false,
     timestamp: event.timestamp,
     direction: undefined // Would be calculated from player positions
   }))
@@ -81,7 +81,7 @@ export const damageDealtLens: Lens = {
 
   defaultOptions: {
     opacity: 0.75,
-    color: 'rgb(239, 68, 68)',
+    colors: { primary: 'rgb(239, 68, 68)' },
     blendMode: 'multiply',
     animationSpeed: 1,
     showLabels: false
@@ -108,7 +108,7 @@ export const damageDealtLens: Lens = {
     if (filtered.length === 0) return
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 0.75
 
     // Group by position for clustering
     const clusters = clusterDamageEvents(filtered, 60)

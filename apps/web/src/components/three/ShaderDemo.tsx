@@ -13,6 +13,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { ShaderMaterial, BufferGeometry, Mesh } from 'three';
 import {
   SolarGlowShader,
   LunarGlowShader,
@@ -138,12 +139,12 @@ const UniformControl: React.FC<UniformControlProps> = ({
 
 interface ShaderMeshProps {
   shader: BaseShader | null;
-  geometry: THREE.BufferGeometry;
+  geometry: BufferGeometry;
 }
 
 const ShaderMesh: React.FC<ShaderMeshProps> = ({ shader, geometry }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.ShaderMaterial | null>(null);
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<ShaderMaterial | null>(null);
 
   // Compile shader when it changes
   useEffect(() => {

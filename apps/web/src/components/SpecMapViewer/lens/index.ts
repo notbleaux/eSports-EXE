@@ -1,5 +1,4 @@
-/** [Ver001.001] */
-/**
+/** [Ver001.002] - Added Vector2D export
  * SpecMapViewer Lens System
  * =========================
  * Complete lens system including creative and analytical lenses.
@@ -38,6 +37,9 @@ export type {
   HeatmapCell,
   RenderHelpers
 } from '../lenses/types'
+
+// Re-export Vector2D from TacticalMap types
+export type { Vector2D } from '@/hub-3-arepo/components/TacticalMap/types'
 
 // Export original creative lenses
 export { tensionLens } from '../lenses/tensionLens'

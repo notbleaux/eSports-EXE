@@ -1,4 +1,4 @@
-/** [Ver002.000] */
+/** [Ver002.001] - Fixed type exports from lib/broadcast/types */
 /**
  * Help Components
  * ===============
@@ -26,10 +26,14 @@ export {
   LiveBroadcast,
   BroadcastNotification,
   useLiveBroadcast,
-  type LiveBroadcastProps,
-  type BroadcastNotificationProps,
-  type UseLiveBroadcastOptions,
 } from './LiveBroadcast';
+
+// Export types from lib/broadcast/types (not from component)
+export type {
+  LiveBroadcastProps,
+  BroadcastNotificationProps,
+  UseLiveBroadcastOptions,
+} from '../../lib/broadcast/types';
 
 // Voice Feedback Component
 export {

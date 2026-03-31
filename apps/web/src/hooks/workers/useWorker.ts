@@ -1,4 +1,4 @@
-/** [Ver001.000]
+/** [Ver001.001] - Exported UseWorkerOptions and UseWorkerReturn types
  * useWorker Hook for NJZiteGeisTe Platform
  * Generic worker management hook with lifecycle handling
  */
@@ -12,7 +12,7 @@ import type {
 } from '../../types/worker'
 import { handleWorkerError, workerPerformance } from '../../lib/worker-utils'
 
-interface UseWorkerOptions {
+export interface UseWorkerOptions {
   workerType: WorkerType
   workerFactory: () => Worker
   onMessage?: (data: unknown) => void
@@ -20,7 +20,7 @@ interface UseWorkerOptions {
   onReady?: () => void
 }
 
-interface UseWorkerReturn {
+export interface UseWorkerReturn {
   isReady: boolean
   isBusy: boolean
   error: Error | null
@@ -78,59 +78,43 @@ export function useWorker(options: UseWorkerOptions): UseWorkerReturn {
           if (response.success) {
             task.resolve(response.data)
           } else {
-            const error = new Error(response.error || 'Worker task failed')
-            task.reject(error)
-            setError(error)
-            onError?.(error)
+            task.reject(new Error(response.error || 'Worker error'))
           }
         }
 
-        onMessage?.(response.data)
+        onMessage?.(response)
       }
 
-      worker.onerror = (err) => {
-        const error = handleWorkerError(err)
+      worker.onerror = (err: ErrorEvent) => {
+        const error = new Error(err.message || 'Worker error')
+        handleWorkerError(workerType, error)
         setError(error)
         onError?.(error)
 
         // Reject all pending tasks
-        for (const task of pendingTasksRef.current.values()) {
+        pendingTasksRef.current.forEach((task) => {
           task.reject(error)
-        }
+        })
         pendingTasksRef.current.clear()
-        setIsBusy(false)
       }
 
-      worker.onmessageerror = (err) => {
-        const error = handleWorkerError(err)
-        setError(error)
-        onError?.(error)
+      return () => {
+        worker.terminate()
+        // Reject all pending tasks on cleanup
+        pendingTasksRef.current.forEach((task) => {
+          task.reject(new Error('Worker terminated'))
+        })
+        pendingTasksRef.current.clear()
       }
     } catch (err) {
-      const error = handleWorkerError(err)
+      const error = err instanceof Error ? err : new Error(String(err))
+      handleWorkerError(workerType, error)
       setError(error)
       onError?.(error)
     }
+  }, [workerFactory, onMessage, onError, onReady, workerType])
 
-    // Cleanup
-    return () => {
-      if (workerRef.current) {
-        // Terminate worker
-        workerRef.current.terminate()
-        workerRef.current = null
-
-        // Reject pending tasks
-        for (const task of pendingTasksRef.current.values()) {
-          task.reject(new Error('Worker terminated'))
-        }
-        pendingTasksRef.current.clear()
-      }
-    }
-  }, [workerFactory, workerType, onMessage, onError, onReady])
-
-  /**
-   * Post a message to the worker
-   */
+  // Post message to worker
   const postMessage = useCallback(<T, R>(action: string, payload: T): Promise<R> => {
     return new Promise((resolve, reject) => {
       if (!workerRef.current) {
@@ -138,21 +122,11 @@ export function useWorker(options: UseWorkerOptions): UseWorkerReturn {
         return
       }
 
-      if (!isReady) {
-        reject(new Error('Worker not ready'))
-        return
-      }
-
-      const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
-      const message: WorkerMessage<T> = {
-        id,
-        type: workerType,
-        action,
-        payload
-      }
+      const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`
+      const message: WorkerMessage<T> = { id, action, payload }
 
       pendingTasksRef.current.set(id, {
-        resolve: resolve as (value: unknown) => void,
+        resolve: (value) => resolve(value as R),
         reject,
         startTime: performance.now()
       })
@@ -160,41 +134,29 @@ export function useWorker(options: UseWorkerOptions): UseWorkerReturn {
       setIsBusy(true)
       workerRef.current.postMessage(message)
     })
-  }, [isReady, workerType])
-
-  /**
-   * Terminate the worker
-   */
-  const terminate = useCallback(() => {
-    if (workerRef.current) {
-      workerRef.current.terminate()
-      workerRef.current = null
-      setIsReady(false)
-      setIsBusy(false)
-
-      // Reject pending tasks
-      for (const task of pendingTasksRef.current.values()) {
-        task.reject(new Error('Worker terminated'))
-      }
-      pendingTasksRef.current.clear()
-    }
   }, [])
 
-  const status: WorkerStatus | null = workerRef.current ? {
-    type: workerType,
-    id: workerRef.current as unknown as string,
-    state: isBusy ? 'busy' : error ? 'error' : isReady ? 'idle' : 'terminated',
-    taskCount,
-    errorCount: error ? 1 : 0,
-    lastActivity: Date.now()
-  } : null
+  // Terminate worker
+  const terminate = useCallback(() => {
+    workerRef.current?.terminate()
+    workerRef.current = null
+    setIsReady(false)
+
+    // Reject all pending tasks
+    pendingTasksRef.current.forEach((task) => {
+      task.reject(new Error('Worker terminated'))
+    })
+    pendingTasksRef.current.clear()
+  }, [])
 
   return {
     isReady,
     isBusy,
     error,
-    status,
+    status: isReady ? (isBusy ? 'busy' : 'idle') : 'initializing',
     postMessage,
     terminate
   }
 }
+
+export default useWorker

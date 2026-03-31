@@ -15,6 +15,82 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 export type MascotType = 'fox' | 'owl' | 'wolf' | 'hawk' | 'dropout-bear' | 'nj-bunny';
 
+// Extended mascot type for stories
+export type MascotAnimal = MascotType | 'cat' | 'dog' | 'bear' | 'bunny';
+export type MascotStyle = 'dropout' | 'nj';
+export type MascotSize = 32 | 64 | 128 | 256 | 512;
+export type MascotAnimation = 'idle' | 'wave' | 'celebrate' | 'bounce';
+
+// Mascot constants for stories
+export const MASCOT_ANIMALS: MascotAnimal[] = ['fox', 'owl', 'wolf', 'hawk', 'cat', 'dog', 'bear', 'bunny'];
+export const MASCOT_STYLES: MascotStyle[] = ['dropout', 'nj'];
+export const ALL_MASCOT_ANIMALS = MASCOT_ANIMALS;
+export const ALL_MASCOT_STYLES = MASCOT_STYLES;
+
+// Display name helpers
+export function getAnimalDisplayName(animal: MascotAnimal): string {
+  const displayNames: Record<MascotAnimal, string> = {
+    fox: 'Fox',
+    owl: 'Owl',
+    wolf: 'Wolf',
+    hawk: 'Hawk',
+    cat: 'Cat',
+    dog: 'Dog',
+    bear: 'Bear',
+    bunny: 'Bunny',
+    'dropout-bear': 'Dropout Bear',
+    'nj-bunny': 'NJ Bunny',
+  };
+  return displayNames[animal] || animal;
+}
+
+export function getStyleDisplayName(style: MascotStyle): string {
+  const displayNames: Record<MascotStyle, string> = {
+    dropout: 'Dropout Style',
+    nj: 'NJ Style',
+  };
+  return displayNames[style] || style;
+}
+
+export function getAnimalEmoji(animal: MascotAnimal): string {
+  const emojis: Record<MascotAnimal, string> = {
+    fox: '🦊',
+    owl: '🦉',
+    wolf: '🐺',
+    hawk: '🦅',
+    cat: '🐱',
+    dog: '🐶',
+    bear: '🐻',
+    bunny: '🐰',
+    'dropout-bear': '🐻',
+    'nj-bunny': '🐰',
+  };
+  return emojis[animal] || '🐾';
+}
+
+// Style toggle component
+export interface MascotStyleToggleProps {
+  currentStyle: MascotStyle;
+  onChange: (style: MascotStyle) => void;
+}
+
+export const MascotStyleToggle: React.FC<MascotStyleToggleProps> = ({ currentStyle, onChange }) => {
+  return (
+    <div className="mascot-style-toggle">
+      {MASCOT_STYLES.map((style) => (
+        <button
+          key={style}
+          onClick={() => onChange(style)}
+          className={currentStyle === style ? 'active' : ''}
+          aria-pressed={currentStyle === style}
+        >
+          {getStyleDisplayName(style)}
+        </button>
+      ))}
+    </div>
+  );
+};
+
 // Mascot variant types for new mascots
 export type MascotVariant =
   | 'default'

@@ -1,4 +1,4 @@
-/** [Ver004.000]
+/** [Ver004.002] - Fixed missing type exports
  * Hooks Index
  * 
  * Central export point for all custom React hooks.
@@ -39,7 +39,7 @@ export type {
 export { useContextDetection } from './useContextDetection';
 export type {
   UseContextDetectionReturn,
-} from './useContextDetection';
+} from '../lib/help/context-types';
 
 // ML hooks
 export { useMLInference } from './useMLInference';
@@ -72,7 +72,7 @@ export { useBroadcast, useHelpBroadcast } from './useBroadcast';
 export type {
   UseBroadcastReturn,
   UseBroadcastOptions,
-} from './useBroadcast';
+} from '../lib/broadcast/types';
 export type {
   UseHelpBroadcastOptions,
 } from './useBroadcast';

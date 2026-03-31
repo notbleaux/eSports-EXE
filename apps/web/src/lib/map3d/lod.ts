@@ -24,6 +24,7 @@
  */
 
 import * as THREE from 'three';
+import type { BufferGeometry, Material, Mesh, Texture, CanvasTexture, Sphere, Vector3, Camera, Object3D } from 'three';
 
 // ============================================
 // Types
@@ -120,10 +121,10 @@ export const DEFAULT_LOD_CONFIG: LODConfig = {
  * This is a simplified implementation - production should use a proper decimation library
  */
 export function simplifyGeometry(
-  geometry: THREE.BufferGeometry,
+  geometry: BufferGeometry,
   targetRatio: number,
   options: Partial<SimplificationOptions> = {}
-): THREE.BufferGeometry {
+): BufferGeometry {
   const opts = {
     preserveBorders: true,
     preserveUVs: true,

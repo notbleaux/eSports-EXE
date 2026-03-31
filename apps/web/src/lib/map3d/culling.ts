@@ -759,6 +759,7 @@ export class PortalCuller {
 
 export class MapCullingSystem {
   private camera: THREE.Camera;
+  private renderer: THREE.WebGLRenderer;
   private config: CullingSystemConfig;
   private objects = new Map<string, CulledObject>();
   private spatialHash: SpatialHash;
@@ -773,6 +774,7 @@ export class MapCullingSystem {
     renderer: THREE.WebGLRenderer,
     config: Partial<CullingSystemConfig> = {}
   ) {
+    this.renderer = renderer;
     this.camera = camera;
     this.renderer = renderer;
     this.config = { ...DEFAULT_CULLING_CONFIG, ...config };
@@ -1212,7 +1214,8 @@ export function batchCull(
     let isVisible = false;
 
     if (useBoundingSphere) {
-      const geometry = (obj as THREE.Mesh).geometry;
+      const mesh = obj as THREE.Mesh;
+      const geometry = mesh.geometry;
       if (geometry?.boundingSphere) {
         sphere.copy(geometry.boundingSphere);
         sphere.applyMatrix4(obj.matrixWorld);
@@ -1240,3 +1243,4 @@ export function batchCull(
 }
 
 export default MapCullingSystem;
+MapCullingSystem;

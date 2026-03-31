@@ -1,34 +1,19 @@
-/** [Ver001.000]
- * UI Components Index
+/**
+ * Valorant-Style UI Components
  * 
- * Central export point for all UI components.
- * Provides fluid dynamics-enhanced components for the NJZiteGeisTe Platform.
+ * Tactical, sharp-cornered UI primitives inspired by Valorant's aesthetic.
+ * All components use the dark base (#050817) with neon accents.
  */
 
-// GlassCard and variants
+export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './Button';
+export { Panel, PanelGrid, PanelSection, type PanelProps, type PanelVariant, type PanelPadding, type PanelAccentColor } from './Panel';
+export { Toggle, ToggleGroup, ToggleDescription, type ToggleProps, type ToggleVariant, type ToggleSize } from './Toggle';
 export { 
-  GlassCard, 
-  SatorCard, 
-  RotasCard, 
-  ArepoCard, 
-  OperaCard, 
-  TenetCard 
-} from './GlassCard';
-export type { GlassCardComponentProps } from './GlassCard';
-
-// GlowButton and variants
-export { 
-  GlowButton, 
-  SatorButton, 
-  RotasButton, 
-  ArepoButton, 
-  OperaButton, 
-  TenetButton 
-} from './GlowButton';
-export type { GlowButtonComponentProps } from './GlowButton';
-
-// Legacy exports (maintaining backward compatibility)
-export { StatBadge } from './StatBadge';
-export { ModernCard } from './ModernCard';
-export { AnimatedBackground } from './AnimatedBackground';
-export { default as ModelLoadingIndicator } from './ModelLoadingIndicator';
+  Checkbox, 
+  CheckboxGroup, 
+  CheckboxDescription, 
+  CheckboxCard,
+  type CheckboxProps,
+  type CheckboxVariant,
+  type CheckboxSize
+} from './Checkbox';

@@ -7,6 +7,9 @@
  */
 
 import type { Vector2D } from '@/hub-3-arepo/components/TacticalMap/types'
+
+/** Re-export Vector2D for lens consumers */
+export type { Vector2D }
 import type { PlayerPosition, KillEvent, GameData } from '../types'
 
 /** Team side definition */

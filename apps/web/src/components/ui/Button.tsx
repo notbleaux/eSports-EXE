@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
  * Valorant-Style Button Component
@@ -14,99 +13,19 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * 
  * @example
  * <Button variant="primary" size="lg">DEPLOY</Button>
- * <Button variant="secondary" leftIcon={<RadarIcon />}>SCAN</Button>
+ * <Button variant="secondary">SCAN</Button>
  */
 
-const buttonVariants = cva(
-  // Base styles
-  [
-    'relative inline-flex items-center justify-center',
-    'font-bold uppercase tracking-[0.15em]',
-    'transition-all duration-200 ease-out',
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-    'focus-visible:ring-[#F43F5E] focus-visible:ring-offset-[#050817]',
-    'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none',
-    'active:scale-[0.98]',
-    'overflow-hidden',
-  ],
-  {
-    variants: {
-      variant: {
-        // Primary: Red fill with glow
-        primary: [
-          'bg-[#F43F5E] text-white',
-          'border-2 border-[#F43F5E]',
-          'hover:bg-[#E11D48] hover:border-[#E11D48]',
-          'hover:shadow-[0_0_20px_rgba(244,63,94,0.5)]',
-          'active:bg-[#BE123C]',
-        ],
-        // Secondary: Outlined with red border
-        secondary: [
-          'bg-transparent text-[#F43F5E]',
-          'border-2 border-[#F43F5E]',
-          'hover:bg-[rgba(244,63,94,0.1)]',
-          'hover:shadow-[0_0_15px_rgba(244,63,94,0.3)]',
-          'active:bg-[rgba(244,63,94,0.2)]',
-        ],
-        // Cyan variant for intel/info actions
-        cyan: [
-          'bg-[#22D3EE] text-[#050817]',
-          'border-2 border-[#22D3EE]',
-          'hover:bg-[#06B6D4] hover:border-[#06B6D4]',
-          'hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]',
-          'active:bg-[#0891B2]',
-        ],
-        // Ghost: Minimal
-        ghost: [
-          'bg-transparent text-[#B8BAC4]',
-          'border-2 border-transparent',
-          'hover:bg-[#2E3652] hover:text-white',
-          'active:bg-[#1A1D2E]',
-        ],
-        // Outline: Subtle border
-        outline: [
-          'bg-transparent text-[#8A8E9E]',
-          'border-2 border-[#2E3652]',
-          'hover:border-[#5C6278] hover:text-[#B8BAC4]',
-          'active:border-[#8A8E9E]',
-        ],
-        // Danger: For destructive actions
-        danger: [
-          'bg-[#EF4444] text-white',
-          'border-2 border-[#EF4444]',
-          'hover:bg-[#DC2626] hover:border-[#DC2626]',
-          'hover:shadow-[0_0_20px_rgba(239,68,68,0.5)]',
-          'active:bg-[#B91C1C]',
-        ],
-      },
-      size: {
-        xs: ['h-7 px-3 text-[10px] gap-1.5', 'rounded-sm'],
-        sm: ['h-8 px-4 text-[11px] gap-2', 'rounded-sm'],
-        md: ['h-10 px-5 text-xs gap-2', 'rounded'],
-        lg: ['h-12 px-6 text-sm gap-2.5', 'rounded'],
-        xl: ['h-14 px-8 text-sm gap-3', 'rounded'],
-        // Icon-only sizes
-        'icon-xs': ['h-7 w-7 p-1.5', 'rounded-sm'],
-        'icon-sm': ['h-8 w-8 p-2', 'rounded-sm'],
-        'icon-md': ['h-10 w-10 p-2.5', 'rounded'],
-        'icon-lg': ['h-12 w-12 p-3', 'rounded'],
-      },
-      fullWidth: {
-        true: 'w-full',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'primary',
-      size: 'md',
-      fullWidth: false,
-    },
-  }
-);
+export type ButtonVariant = 'primary' | 'secondary' | 'cyan' | 'ghost' | 'outline' | 'danger';
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'icon-xs' | 'icon-sm' | 'icon-md' | 'icon-lg';
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Visual variant */
+  variant?: ButtonVariant;
+  /** Size of the button */
+  size?: ButtonSize;
+  /** Full width button */
+  fullWidth?: boolean;
   /** Icon displayed before the text */
   leftIcon?: React.ReactNode;
   /** Icon displayed after the text */
@@ -117,13 +36,68 @@ export interface ButtonProps
   loadingText?: string;
 }
 
+const variantStyles: Record<ButtonVariant, string> = {
+  primary: [
+    'bg-[#F43F5E] text-white',
+    'border-2 border-[#F43F5E]',
+    'hover:bg-[#E11D48] hover:border-[#E11D48]',
+    'hover:shadow-[0_0_20px_rgba(244,63,94,0.5)]',
+    'active:bg-[#BE123C]',
+  ].join(' '),
+  secondary: [
+    'bg-transparent text-[#F43F5E]',
+    'border-2 border-[#F43F5E]',
+    'hover:bg-[rgba(244,63,94,0.1)]',
+    'hover:shadow-[0_0_15px_rgba(244,63,94,0.3)]',
+    'active:bg-[rgba(244,63,94,0.2)]',
+  ].join(' '),
+  cyan: [
+    'bg-[#22D3EE] text-[#050817]',
+    'border-2 border-[#22D3EE]',
+    'hover:bg-[#06B6D4] hover:border-[#06B6D4]',
+    'hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]',
+    'active:bg-[#0891B2]',
+  ].join(' '),
+  ghost: [
+    'bg-transparent text-[#B8BAC4]',
+    'border-2 border-transparent',
+    'hover:bg-[#2E3652] hover:text-white',
+    'active:bg-[#1A1D2E]',
+  ].join(' '),
+  outline: [
+    'bg-transparent text-[#8A8E9E]',
+    'border-2 border-[#2E3652]',
+    'hover:border-[#5C6278] hover:text-[#B8BAC4]',
+    'active:border-[#8A8E9E]',
+  ].join(' '),
+  danger: [
+    'bg-[#EF4444] text-white',
+    'border-2 border-[#EF4444]',
+    'hover:bg-[#DC2626] hover:border-[#DC2626]',
+    'hover:shadow-[0_0_20px_rgba(239,68,68,0.5)]',
+    'active:bg-[#B91C1C]',
+  ].join(' '),
+};
+
+const sizeStyles: Record<ButtonSize, string> = {
+  xs: 'h-7 px-3 text-[10px] gap-1.5 rounded-sm',
+  sm: 'h-8 px-4 text-[11px] gap-2 rounded-sm',
+  md: 'h-10 px-5 text-xs gap-2 rounded',
+  lg: 'h-12 px-6 text-sm gap-2.5 rounded',
+  xl: 'h-14 px-8 text-sm gap-3 rounded',
+  'icon-xs': 'h-7 w-7 p-1.5 rounded-sm',
+  'icon-sm': 'h-8 w-8 p-2 rounded-sm',
+  'icon-md': 'h-10 w-10 p-2.5 rounded',
+  'icon-lg': 'h-12 w-12 p-3 rounded',
+};
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
-      variant,
-      size,
-      fullWidth,
+      variant = 'primary',
+      size = 'md',
+      fullWidth = false,
       leftIcon,
       rightIcon,
       isLoading,
@@ -135,14 +109,27 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const isDisabled = disabled || isLoading;
-    
-    // Determine if this is an icon-only button
     const isIconOnly = size?.startsWith('icon');
-    
+
     return (
       <button
         ref={ref}
-        className={cn(buttonVariants({ variant, size, fullWidth, className }))}
+        className={cn(
+          // Base styles
+          'relative inline-flex items-center justify-center',
+          'font-bold uppercase tracking-[0.15em]',
+          'transition-all duration-200 ease-out',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+          'focus-visible:ring-[#F43F5E] focus-visible:ring-offset-[#050817]',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'active:scale-[0.98]',
+          'overflow-hidden',
+          // Variant and size
+          variantStyles[variant],
+          sizeStyles[size],
+          fullWidth && 'w-full',
+          className
+        )}
         disabled={isDisabled}
         {...props}
       >
@@ -203,5 +190,5 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
-export { Button, buttonVariants };
+export { Button };
 export default Button;

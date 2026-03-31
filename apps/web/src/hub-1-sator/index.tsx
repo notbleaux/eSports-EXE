@@ -22,8 +22,8 @@ import {
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { colors } from '@/theme/colors';
-import { StatsGrid } from './components/StatsGrid';
-import { PlayerWidget } from './components/PlayerWidget';
+import StatsGrid from './components/StatsGrid';
+import PlayerWidget from './components/PlayerWidget';
 import { VirtualDataGrid } from './components/VirtualDataGrid';
 import { VirtualPlayerGrid } from './components/VirtualPlayerGrid';
 import { PlayerRatingCard } from './components/PlayerRatingCard';

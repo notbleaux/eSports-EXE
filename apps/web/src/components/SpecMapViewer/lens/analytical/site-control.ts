@@ -20,6 +20,8 @@ export interface SiteControlOptions extends Partial<LensOptions> {
   showPercentages?: boolean
   /** Minimum control time to display (ms) */
   minControlTime?: number
+  /** Show zone labels */
+  showLabels?: boolean
 }
 
 /** Site/area definition */

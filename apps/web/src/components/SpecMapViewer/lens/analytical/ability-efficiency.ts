@@ -39,7 +39,7 @@ const abilityCosts: Record<string, number> = {
   'q-shaped explosion': 200, 'flash': 250, 'zero/point': 0, 'NULL/cmd': 0,
   'incendiary': 250, 'stim beacon': 200, 'sky smoke': 100, 'orbital strike': 0,
   'poison cloud': 200, 'toxic screen': 0, 'snake bite': 100, 'vipers pit': 0,
-  'blast pack': 200, 'paint shells': 200, 'bouncy grenade': 200, 'showstopper': 0,
+  'blast pack': 200, 'bouncy grenade': 200,
   'flashpoint': 250, 'fault line': 0, 'aftershock': 200, 'rolling thunder': 0,
   'shrouded step': 100, 'paranoia': 250, 'dark cover': 150, 'from the shadows': 0,
   'trailblazer': 300, 'guiding light': 250, 'regrowth': 150, 'seekers': 0
@@ -51,9 +51,9 @@ const abilityCosts: Record<string, number> = {
  */
 function calculateAbilityEfficiency(data: GameData): AbilityEvent[] {
   const events: AbilityEvent[] = []
-  const soundEvents = data.soundEvents.filter(e => e.type === 'ability')
+  const abilityEvents = data.soundEvents.filter(e => e.soundType === 'ability')
 
-  soundEvents.forEach(sound => {
+  abilityEvents.forEach(sound => {
     // Find nearby kills/damage to estimate impact
     const nearbyKills = data.killEvents.filter(kill => {
       const dx = kill.position.x - sound.position.x
@@ -99,7 +99,7 @@ export const abilityEfficiencyLens: Lens = {
 
   defaultOptions: {
     opacity: 0.75,
-    color: 'rgb(34, 197, 94)',
+    colors: { primary: 'rgb(34, 197, 94)' },
     blendMode: 'source-over',
     animationSpeed: 1,
     showLabels: false
@@ -123,7 +123,7 @@ export const abilityEfficiencyLens: Lens = {
     if (filteredEvents.length === 0) return
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 0.75
 
     // Group events by position for clustering
     const clusters = groupByType ? groupEventsByProximity(filteredEvents, 100) : filteredEvents.map(e => [e])
