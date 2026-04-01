@@ -39,7 +39,8 @@ These items are critical for project success and should be prioritized immediate
 **Priority:** P0  
 **Added:** 2026-04-01  
 **Source:** EX-UI-001 (Phase 3-6 Plan)  
-**Status:** ☐ Ready
+**Status:** 📋 Spec Complete → In Sprint  
+**Sprint:** [S-Extraction-001](../../plans/sprints/S-Extraction-001-plan.md)
 
 **Description:**
 Implement the GameNodeIDFrame component for TENET navigation layer. This is a 2×2 CSS Grid component that serves as the primary navigation interface for game selection.
@@ -87,7 +88,8 @@ interface Quarter {
 **Priority:** P0  
 **Added:** 2026-04-01  
 **Source:** EX-DATA-001 (Phase 3-6 Plan)  
-**Status:** ☐ Ready
+**Status:** 📋 Spec Complete → In Sprint  
+**Sprint:** [S-Extraction-001](../../plans/sprints/S-Extraction-001-plan.md)
 
 **Description:**
 Implement the Lambda Architecture Pattern with Path A (Live) and Path B (Legacy) data flows for video/livestream systems.
