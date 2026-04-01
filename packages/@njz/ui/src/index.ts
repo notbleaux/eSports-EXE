@@ -14,3 +14,4 @@
 export * from './WorldPortCard';
 export * from './QuarterGrid';
 export * from './GameNodeBadge';
+export * from './components/GameNodeIDFrame';
