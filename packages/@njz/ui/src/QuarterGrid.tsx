@@ -1,10 +1,8 @@
-import React from 'react';
-
 /**
  * QuarterGrid
  * Renders the canonical 2×2 SATOR / AREPO / OPERA / ROTAS grid for a GameNodeID.
  * Each quadrant links to the corresponding hub route.
- * [Ver001.000]
+ * [Ver001.001] - Removed unused React import
  */
 
 export interface QuarterGridQuadrant {
@@ -100,3 +98,5 @@ export function QuarterGrid({ gameId, activeQuadrant, onQuadrantClick, className
     </div>
   );
 }
+
+export default QuarterGrid;

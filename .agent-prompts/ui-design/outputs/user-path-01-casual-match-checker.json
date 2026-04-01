@@ -1,0 +1,151 @@
+{
+  "pathId": "user-path-01-casual-match-checker",
+  "persona": {
+    "name": "casual-fan",
+    "tier": "casual",
+    "goals": [
+      "Check match results quickly",
+      "See tournament brackets",
+      "Find next match for favorite team"
+    ],
+    "painPoints": [
+      "Overwhelmed by dense stats",
+      "Hard to find basic scores on HLTV",
+      "Mobile experience is poor on existing sites"
+    ]
+  },
+  "entryPoint": {
+    "route": "/",
+    "context": "Twitter link to VCT match",
+    "entryMethod": "click"
+  },
+  "journey": {
+    "steps": [
+      {
+        "stepNumber": 1,
+        "page": "TENET Portal",
+        "route": "/",
+        "action": "Sees game cards (Valorant, CS2), clicks Valorant",
+        "outcome": "Navigates to Valorant entry page",
+        "dataRequired": [],
+        "uiComponents": ["GameSelector", "HubPreviewCards"]
+      },
+      {
+        "stepNumber": 2,
+        "page": "Valorant Entry",
+        "route": "/valorant",
+        "action": "Sees live matches and upcoming schedule",
+        "outcome": "Views match list, clicks specific match",
+        "dataRequired": ["live_matches", "upcoming_schedule"],
+        "uiComponents": ["LiveMatchCard", "ScheduleTimeline"]
+      },
+      {
+        "stepNumber": 3,
+        "page": "Match Detail",
+        "route": "/valorant/pro/matches/:id",
+        "action": "Sees winner highlighted, basic score, team lineups",
+        "outcome": "Gets match result, may click team for more",
+        "dataRequired": ["match_details", "team_lineups"],
+        "uiComponents": ["MatchScoreboard", "TeamLineup", "WinnerHighlight"]
+      },
+      {
+        "stepNumber": 4,
+        "page": "Team Profile (optional)",
+        "route": "/valorant/stats/teams/:slug",
+        "action": "Sees team roster, recent results",
+        "outcome": "May follow team or share result",
+        "dataRequired": ["team_stats", "recent_matches"],
+        "uiComponents": ["TeamHeader", "PlayerGrid", "RecentMatches"]
+      }
+    ],
+    "totalSteps": 4,
+    "estimatedTime": "1-2 minutes",
+    "decisionPoints": [
+      {
+        "step": 1,
+        "question": "Which game?",
+        "options": ["Valorant", "CS2"]
+      },
+      {
+        "step": 3,
+        "question": "Want more details?",
+        "options": ["View team", "Share result", "Check schedule", "Exit"]
+      }
+    ]
+  },
+  "exitPoint": {
+    "goal": "Found match result and winner",
+    "successMetric": "Time to result < 30 seconds",
+    "nextActions": [
+      "Share on social media",
+      "Check tournament bracket",
+      "View player stats",
+      "Set match reminder"
+    ]
+  },
+  "fileMapping": {
+    "routes": [
+      "/ → TENET Portal",
+      "/:game → Game Entry",
+      "/:game/pro/matches/:id → Match Detail",
+      "/:game/stats/teams/:slug → Team Profile"
+    ],
+    "pages": [
+      {
+        "file": "hub-5-tenet/index.tsx",
+        "purpose": "Game selection portal",
+        "hub": "tenet"
+      },
+      {
+        "file": "hub-4-opera/index.tsx",
+        "purpose": "Pro scene landing with live matches",
+        "hub": "opera"
+      },
+      {
+        "file": "hub-4-opera/pages/MatchDetail.tsx",
+        "purpose": "Match scoreboard and details",
+        "hub": "opera"
+      }
+    ],
+    "components": [
+      {
+        "file": "shared/components/GameSelector.tsx",
+        "purpose": "Valorant/CS2 selection cards",
+        "shared": true
+      },
+      {
+        "file": "shared/components/LiveMatchCard.tsx",
+        "purpose": "Live/upcoming match preview",
+        "shared": true
+      },
+      {
+        "file": "hub-4-opera/components/MatchScoreboard.tsx",
+        "purpose": "Visual match result display",
+        "shared": false,
+        "hub": "opera"
+      },
+      {
+        "file": "hub-4-opera/components/WinnerHighlight.tsx",
+        "purpose": "Prominent winner indicator",
+        "shared": false,
+        "hub": "opera"
+      }
+    ],
+    "hooks": [
+      "shared/hooks/useLiveMatches.ts",
+      "shared/hooks/useMatchDetails.ts"
+    ],
+    "stores": ["stores/gameStore.ts"],
+    "apiCalls": [
+      "GET /api/rotas/matches?status=live",
+      "GET /api/rotas/matches/:id",
+      "GET /api/rotas/teams/:id"
+    ]
+  },
+  "designTokens": {
+    "primaryColor": "#F97316",
+    "secondaryColor": "#0F172A",
+    "dataDensity": "low",
+    "complexity": "simple"
+  }
+}

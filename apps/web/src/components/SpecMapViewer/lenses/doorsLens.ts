@@ -37,6 +37,7 @@ interface RotationPattern {
   frequency: number
   lastOccurrence: number
   successRate: number
+  team: 'attackers' | 'defenders'
 }
 
 export const doorsLens: Lens = {

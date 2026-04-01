@@ -1,0 +1,782 @@
+openapi: 3.0.3
+info:
+  title: ROTAS API - Stats Reference HUB
+  description: |
+    REST API for esports statistics and data reference.
+    
+    ## Error Handling
+    
+    All errors follow a consistent format:
+    ```json
+    {
+      "success": false,
+      "error": {
+        "code": "ERROR_CODE",
+        "message": "Human-readable error description",
+        "details": {}
+      }
+    }
+    ```
+    
+    ## Pagination
+    
+    List endpoints support pagination with `page` and `per_page` parameters:
+    - Default: 20 items per page
+    - Maximum: 100 items per page
+    - Response includes `total`, `pages`, `page`, and `per_page` fields
+    
+    ## Rate Limiting
+    
+    API requests are rate-limited to:
+    - 100 requests per minute for authenticated users
+    - 20 requests per minute for anonymous users
+    
+    Rate limit headers are included in all responses:
+    - `X-RateLimit-Limit`: Maximum requests allowed
+    - `X-RateLimit-Remaining`: Requests remaining in window
+    - `X-RateLimit-Reset`: Unix timestamp when limit resets
+  
+  version: 1.0.0
+  contact:
+    name: eSports-EXE API Support
+    email: api@esports-exe.com
+
+servers:
+  - url: https://api.esports-exe.com/api/rotas
+    description: Production server
+  - url: http://localhost:8000/api/rotas
+    description: Development server
+
+paths:
+  /players:
+    get:
+      summary: List players
+      description: |
+        Get a paginated list of players with optional filtering.
+        
+        ## Query Parameters
+        - `game`: Filter by game ('valorant' or 'cs2')
+        - `team_id`: Filter by team membership
+        - `search`: Search by player name (case-insensitive partial match)
+        - `page`: Page number (default: 1)
+        - `per_page`: Items per page (default: 20, max: 100)
+        
+        ## Example
+        ```
+        GET /players?game=valorant&search=tenz&page=1&per_page=10
+        ```
+      tags:
+        - Players
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+          description: Filter by game
+        - name: team_id
+          in: query
+          schema:
+            type: integer
+          description: Filter by team ID
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by player name
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Items per page
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPlayerResponse'
+              example:
+                items:
+                  - id: 1
+                    name: "TenZ"
+                    slug: "tenz"
+                    nationality: "CA"
+                    game: "valorant"
+                    team_name: "Sentinels"
+                total: 150
+                page: 1
+                per_page: 20
+                pages: 8
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error:
+                  code: "VALIDATION_ERROR"
+                  message: "Invalid game parameter. Must be 'valorant' or 'cs2'."
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error:
+                  code: "RATE_LIMIT_EXCEEDED"
+                  message: "Too many requests. Please try again later."
+
+  /players/{player_id}:
+    get:
+      summary: Get player details
+      description: Get detailed information about a specific player.
+      tags:
+        - Players
+      parameters:
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Player ID
+      responses:
+        '200':
+          description: Player found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDetail'
+        '404':
+          description: Player not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error:
+                  code: "NOT_FOUND"
+                  message: "Player with ID 12345 not found."
+
+  /players/{player_id}/stats:
+    get:
+      summary: Get player career statistics
+      description: |
+        Get aggregated career statistics for a player.
+        
+        Stats include:
+        - Total matches played/won/lost
+        - Overall K/D ratio
+        - Averages per round (kills, damage)
+        - First bloods and clutch statistics
+        - Recent form (last 30 days)
+      tags:
+        - Players
+      parameters:
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Player ID
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+          description: Filter stats by game
+      responses:
+        '200':
+          description: Statistics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerStats'
+              example:
+                total_matches: 150
+                matches_won: 90
+                matches_lost: 60
+                overall_kd: 1.25
+                avg_kills_per_round: 0.78
+                avg_damage_per_round: 145.5
+                total_first_bloods: 45
+                total_clutches_won: 12
+                recent_win_rate: 0.65
+                recent_avg_rating: 1.15
+        '404':
+          description: Player not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teams:
+    get:
+      summary: List teams
+      description: Get a paginated list of teams with optional filtering.
+      tags:
+        - Teams
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+        - name: region
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeamResponse'
+
+  /teams/{team_id}:
+    get:
+      summary: Get team details
+      description: Get detailed information about a team including current roster.
+      tags:
+        - Teams
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Team found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamDetail'
+        '404':
+          description: Team not found
+
+  /teams/{team_id}/stats:
+    get:
+      summary: Get team statistics
+      description: Get performance statistics for a team.
+      tags:
+        - Teams
+      parameters:
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+      responses:
+        '200':
+          description: Statistics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamStats'
+
+  /matches:
+    get:
+      summary: List matches
+      description: |
+        Get a paginated list of matches.
+        
+        Results are ordered by scheduled date (most recent first).
+      tags:
+        - Matches
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+        - name: team_id
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [not_started, running, finished]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMatchResponse'
+
+  /matches/{match_id}:
+    get:
+      summary: Get match details
+      description: Get detailed information about a specific match.
+      tags:
+        - Matches
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDetail'
+        '404':
+          description: Match not found
+
+  /tournaments:
+    get:
+      summary: List tournaments
+      description: |
+        Get a list of tournaments ordered by status (ongoing, upcoming, finished) and date.
+      tags:
+        - Tournaments
+      parameters:
+        - name: game
+          in: query
+          schema:
+            type: string
+            enum: [valorant, cs2]
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [upcoming, ongoing, finished]
+        - name: tier
+          in: query
+          schema:
+            type: string
+            enum: [S, A, B, C]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTournamentResponse'
+
+  /leaderboards/kd:
+    get:
+      summary: K/D Ratio Leaderboard
+      description: Get top players ranked by K/D ratio.
+      tags:
+        - Leaderboards
+      parameters:
+        - name: game
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [valorant, cs2]
+        - name: min_matches
+          in: query
+          schema:
+            type: integer
+            default: 5
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        '200':
+          description: Leaderboard retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaderboardResponse'
+
+  /leaderboards/adr:
+    get:
+      summary: ADR Leaderboard
+      description: Get top players ranked by Average Damage per Round.
+      tags:
+        - Leaderboards
+      parameters:
+        - name: game
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [valorant, cs2]
+        - name: min_matches
+          in: query
+          schema:
+            type: integer
+            default: 5
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Leaderboard retrieved
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "NOT_FOUND"
+            message:
+              type: string
+              example: "Resource not found"
+            details:
+              type: object
+              additionalProperties: true
+
+    PlayerSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        nationality:
+          type: string
+          nullable: true
+        game:
+          type: string
+        team_name:
+          type: string
+          nullable: true
+
+    PlayerDetail:
+      allOf:
+        - $ref: '#/components/schemas/PlayerSummary'
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+
+    PlayerStats:
+      type: object
+      properties:
+        total_matches:
+          type: integer
+        matches_won:
+          type: integer
+        matches_lost:
+          type: integer
+        overall_kd:
+          type: number
+          format: float
+        avg_kills_per_round:
+          type: number
+          format: float
+        avg_damage_per_round:
+          type: number
+          format: float
+        total_first_bloods:
+          type: integer
+        total_clutches_won:
+          type: integer
+        recent_win_rate:
+          type: number
+          format: float
+        recent_avg_rating:
+          type: number
+          format: float
+
+    TeamSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        acronym:
+          type: string
+          nullable: true
+        game:
+          type: string
+        region:
+          type: string
+          nullable: true
+
+    TeamDetail:
+      allOf:
+        - $ref: '#/components/schemas/TeamSummary'
+        - type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerSummary'
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+
+    TeamStats:
+      type: object
+      properties:
+        total_matches:
+          type: integer
+        matches_won:
+          type: integer
+        matches_lost:
+          type: integer
+        win_rate:
+          type: number
+          format: float
+        total_rounds:
+          type: integer
+        rounds_won:
+          type: integer
+        round_win_rate:
+          type: number
+          format: float
+        recent_form:
+          type: array
+          items:
+            type: string
+          nullable: true
+
+    MatchSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        game:
+          type: string
+        status:
+          type: string
+        scheduled_at:
+          type: string
+          format: date-time
+          nullable: true
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+        team1_name:
+          type: string
+          nullable: true
+        team2_name:
+          type: string
+          nullable: true
+        team1_score:
+          type: integer
+        team2_score:
+          type: integer
+        winner_name:
+          type: string
+          nullable: true
+
+    MatchDetail:
+      allOf:
+        - $ref: '#/components/schemas/MatchSummary'
+        - type: object
+          properties:
+            team1_id:
+              type: integer
+              nullable: true
+            team2_id:
+              type: integer
+              nullable: true
+            winner_id:
+              type: integer
+              nullable: true
+            best_of:
+              type: integer
+            map_veto:
+              type: object
+              nullable: true
+
+    TournamentSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        game:
+          type: string
+        tier:
+          type: string
+          nullable: true
+        region:
+          type: string
+          nullable: true
+        start_date:
+          type: string
+          format: date-time
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+        prize_pool:
+          type: string
+          nullable: true
+
+    LeaderboardResponse:
+      type: object
+      properties:
+        game:
+          type: string
+        category:
+          type: string
+        players:
+          type: array
+          items:
+            type: object
+            properties:
+              rank:
+                type: integer
+              player_id:
+                type: integer
+              name:
+                type: string
+              nationality:
+                type: string
+              team:
+                type: string
+              matches:
+                type: integer
+              kd_ratio:
+                type: number
+                format: float
+
+    PaginatedResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+        total:
+          type: integer
+        page:
+          type: integer
+        per_page:
+          type: integer
+        pages:
+          type: integer
+
+    PaginatedPlayerResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerSummary'
+
+    PaginatedTeamResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/TeamSummary'
+
+    PaginatedMatchResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/MatchSummary'
+
+    PaginatedTournamentResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/TournamentSummary'

@@ -25,11 +25,11 @@ const prefetchHub = (hubId) => {
   if (prefetchCache.has(hubId)) return;
   
   const prefetchers = {
-    sator: () => import('../hub-1-sator/index.jsx'),
-    rotas: () => import('../hub-2-rotas/index.jsx'),
-    arepo: () => import('../hub-3-arepo/index.jsx'),
-    opera: () => import('../hub-4-opera/index.tsx'),
-    tenet: () => import('../hub-5-tenet/index.jsx'),
+    sator: () => import('../hub-1-sator/index.tsx'),
+    rotas: () => import('../hub-2-rotas/index.tsx'),
+    arepo: () => import('../hub-3-arepo/index.ts'),
+    opera: () => import('../hub-4-opera/index.ts'),
+    tenet: () => import('../hub-5-tenet/index.tsx'),
   };
   
   if (prefetchers[hubId]) {

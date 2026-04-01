@@ -12,6 +12,7 @@
  */
 
 import * as THREE from 'three';
+import { Quaternion, Vector3 } from 'three';
 import { lerp } from '@/lib/three/animationBridge';
 
 // ============================================================================
@@ -26,7 +27,7 @@ export interface IKTarget {
   /** Target position in world space */
   position: THREE.Vector3;
   /** Optional target rotation */
-  rotation?: THREE.Quaternion;
+  rotation?: Quaternion;
   /** Target weight (0-1) */
   weight: number;
   /** Reach distance from joint */
@@ -62,7 +63,7 @@ export interface IKResult {
   /** Chain ID */
   chainId: string;
   /** Joint rotations in local space */
-  jointRotations: Map<string, THREE.Quaternion>;
+  jointRotations: Map<string, Quaternion>;
   /** Whether solution was found */
   hasSolution: boolean;
   /** Distance error from target */
@@ -174,7 +175,7 @@ export class IKSystem {
   private isDisposed: boolean;
   private animationFrameId: number | null;
   private tempVec3: THREE.Vector3;
-  private tempQuat: THREE.Quaternion;
+  private tempQuat: Quaternion;
 
   constructor(options: IKSystemOptions = {}) {
     this.options = { ...DEFAULT_OPTIONS, ...options };
@@ -183,7 +184,7 @@ export class IKSystem {
     this.isDisposed = false;
     this.animationFrameId = null;
     this.tempVec3 = new THREE.Vector3();
-    this.tempQuat = new THREE.Quaternion();
+    this.tempQuat = new Quaternion();
 
     this.startUpdateLoop();
   }
@@ -354,7 +355,7 @@ export class IKSystem {
     targetPos: THREE.Vector3,
     poleVector: THREE.Vector3,
     boneLengths?: [number, number]
-  ): { rootRotation: THREE.Quaternion; midRotation: THREE.Quaternion } | null {
+  ): { rootRotation: Quaternion; midRotation: Quaternion } | null {
     // Calculate bone lengths if not provided
     const length1 = boneLengths?.[0] ?? rootPos.distanceTo(midPos);
     const length2 = boneLengths?.[1] ?? midPos.distanceTo(endPos);
@@ -390,17 +391,17 @@ export class IKSystem {
     const rotationAxis = new THREE.Vector3().crossVectors(toTarget, poleDir).normalize();
 
     // Create root rotation
-    const rootRotation = new THREE.Quaternion();
-    const baseRotation = new THREE.Quaternion().setFromUnitVectors(
+    const rootRotation = new Quaternion();
+    const baseRotation = new Quaternion().setFromUnitVectors(
       new THREE.Vector3(0, 0, 1),
       toTarget
     );
-    const poleRotation = new THREE.Quaternion().setFromAxisAngle(rotationAxis, angle);
+    const poleRotation = new Quaternion().setFromAxisAngle(rotationAxis, angle);
     rootRotation.multiplyQuaternions(baseRotation, poleRotation);
 
     // Create mid joint rotation (bend)
     const bendAxis = new THREE.Vector3(1, 0, 0); // Assuming X is bend axis
-    const midRotation = new THREE.Quaternion().setFromAxisAngle(bendAxis, bendAngle);
+    const midRotation = new Quaternion().setFromAxisAngle(bendAxis, bendAngle);
 
     return { rootRotation, midRotation };
   }
@@ -414,7 +415,7 @@ export class IKSystem {
     upVector: THREE.Vector3,
     maxHorizontalAngle: number,
     maxVerticalAngle: number
-  ): THREE.Quaternion {
+  ): Quaternion {
     const toTarget = this.tempVec3.subVectors(targetPos, headPos).normalize();
 
     // Convert to local space and clamp angles
@@ -432,10 +433,10 @@ export class IKSystem {
     const clampedPitch = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, pitch));
 
     // Create rotation
-    const yawQuat = new THREE.Quaternion().setFromAxisAngle(up, clampedYaw);
-    const pitchQuat = new THREE.Quaternion().setFromAxisAngle(right, clampedPitch);
+    const yawQuat = new Quaternion().setFromAxisAngle(up, clampedYaw);
+    const pitchQuat = new Quaternion().setFromAxisAngle(right, clampedPitch);
 
-    return new THREE.Quaternion().multiplyQuaternions(yawQuat, pitchQuat);
+    return new Quaternion().multiplyQuaternions(yawQuat, pitchQuat);
   }
 
   /**
@@ -448,7 +449,7 @@ export class IKSystem {
     footPos: THREE.Vector3,
     groundHeight: number,
     footOffset: number
-  ): { kneeRotation: THREE.Quaternion; ankleRotation: THREE.Quaternion } | null {
+  ): { kneeRotation: Quaternion; ankleRotation: Quaternion } | null {
     // Calculate target foot position
     const targetY = groundHeight + footOffset;
     const targetPos = footPos.clone();
@@ -497,7 +498,7 @@ export class IKSystem {
     state: IKChainState,
     jointPositions: Map<string, THREE.Vector3>
   ): IKResult {
-    const jointRotations = new Map<string, THREE.Quaternion>();
+    const jointRotations = new Map<string, Quaternion>();
     let hasSolution = false;
     let error = 0;
     let iterations = 0;

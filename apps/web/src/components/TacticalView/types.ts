@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.001] - Added Player export */
 /**
  * TacticalView Types
  * ==================
@@ -50,6 +50,9 @@ export interface Ability {
   maxCharges: number;
   cost: number;
 }
+
+/** Alias for TacticalViewPlayer - used for consistency */
+export type Player = TacticalViewPlayer;
 
 export interface TacticalViewPlayer {
   id: string;

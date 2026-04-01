@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.002] - Fixed Vector2D re-export */
 /**
  * Lens System Types
  * =================
@@ -6,7 +6,9 @@
  * Lenses provide visual overlays that reveal hidden patterns in tactical data.
  */
 
-import type { Vector2D } from '@/hub-3-arepo/components/TacticalMap/types'
+// Import and re-export Vector2D from TacticalMap types
+import type { Vector2D as TacticalMapVector2D } from '@/hub-3-arepo/components/TacticalMap/types'
+export type Vector2D = TacticalMapVector2D
 
 /** Game data structure for lens rendering */
 export interface GameData {

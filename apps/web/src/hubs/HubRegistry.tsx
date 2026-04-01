@@ -18,10 +18,10 @@ export interface HubDefinition {
 }
 
 // Lazy load HUB components (stubs - replace with real implementations)
-const SATORHub = lazy(() => import('../hub-1-sator/index.jsx'))
-const ROTASHub = lazy(() => import('../hub-2-rotas/index.jsx'))
-const AREPOHub = lazy(() => import('../hub-3-arepo/index.jsx'))
-const OPERAHub = lazy(() => import('../hub-4-opera/index.tsx'))
+const SATORHub = lazy(() => import('../hub-1-sator/index.tsx'))
+const ROTASHub = lazy(() => import('../hub-2-rotas/index.tsx'))
+const AREPOHub = lazy(() => import('../hub-3-arepo/index.ts'))
+const OPERAHub = lazy(() => import('../hub-4-opera/index.ts'))
 
 // Main Registry - 4 HUBs per TENET
 export const HUB_REGISTRY: Record<string, HubDefinition> = {

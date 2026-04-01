@@ -38,7 +38,7 @@ interface DuelEvent {
  * Extract duel events from kill events
  * A duel is defined as a kill event with clear 1v1 characteristics
  */
-function extractDuels(killEvents: KillEvent[], damageEvents: KillEvent['timestamp'][]): DuelEvent[] {
+function extractDuels(killEvents: KillEvent[], damageEvents: number[]): DuelEvent[] {
   const duels: DuelEvent[] = []
 
   killEvents.forEach(kill => {
@@ -59,7 +59,7 @@ function extractDuels(killEvents: KillEvent[], damageEvents: KillEvent['timestam
       winner: kill.killer,
       loser: kill.victim,
       timestamp: kill.timestamp,
-      isHeadshot: kill.isHeadshot,
+      isHeadshot: kill.headshot,
       weapon: kill.weapon,
       distance,
       isClutch
@@ -107,7 +107,7 @@ export const duelHistoryLens: Lens = {
 
   defaultOptions: {
     opacity: 0.8,
-    color: 'rgb(34, 197, 94)',
+    colors: { primary: 'rgb(34, 197, 94)' },
     blendMode: 'source-over',
     animationSpeed: 1,
     showLabels: false
@@ -137,7 +137,7 @@ export const duelHistoryLens: Lens = {
     if (filteredDuels.length === 0) return
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 0.8
 
     // Draw win rate heatmap background if enabled
     if (showWinRate) {

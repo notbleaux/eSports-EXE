@@ -14,6 +14,23 @@
 
 ---
 
+## 📋 Master Plan
+
+**⚠️ IMPORTANT: Before contributing or making architectural decisions, read the [Master Plan](docs/master-plan/master-plan.md).**
+
+The Master Plan is the single source of truth that prevents Design Drift and Architecture Drift. All decisions must align with the five strategic pillars and TENET architecture documented there.
+
+| Resource | Description |
+|----------|-------------|
+| [🎯 Master Plan](docs/master-plan/master-plan.md) | Single source of truth for project direction |
+| [📊 Roadmap](docs/roadmap/roadmap.md) | Development timeline and milestones |
+| [🏗️ ADRs](docs/adrs/) | Architecture Decision Records |
+| [🎨 Design System](docs/design-system/) | UI/UX guidelines and tokens |
+
+**Quick Validation:** Run `./scripts/validate-master-plan.sh` to check compliance.
+
+---
+
 ## 🎯 Overview
 
 NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS) is a comprehensive esports analytics and simulation platform focused on tactical FPS games. The platform provides advanced player metrics, match predictions, and deterministic tactical simulations.
@@ -151,8 +168,16 @@ pytest packages/shared/
 
 ## 🏗️ Architecture Decision Records (ADRs)
 
-Key architectural decisions are documented in `docs/adr/`:
+Key architectural decisions are documented in `docs/adrs/`:
 
+### Strategic Decisions
+| ADR | Decision | Status |
+|-----|----------|--------|
+| [001](docs/adrs/adr-001-tenet-architecture.md) | TENET Four-HUB Architecture | ✅ Accepted |
+| [002](docs/adrs/adr-002-tech-stack.md) | React + FastAPI Tech Stack | ✅ Accepted |
+| [003](docs/adrs/adr-003-design-tokens.md) | Design Token System | ✅ Accepted |
+
+### Historical Decisions
 | ADR | Decision | Status |
 |-----|----------|--------|
 | [001](docs/adr/001-godot-vs-web-simulation.md) | Godot 4 vs Web-Based Simulation | ✅ Accepted |
@@ -177,16 +202,31 @@ Key architectural decisions are documented in `docs/adr/`:
 │   └── simulation-game/           # Godot 4 project (to be extracted)
 │
 ├── docs/                           # Documentation
+│   ├── master-plan/               # ⭐ PROJECT MASTER PLAN
+│   │   └── master-plan.md         # Single source of truth
+│   ├── adrs/                      # Architecture Decision Records
+│   │   ├── README.md
+│   │   ├── adr-template.md
+│   │   ├── adr-001-tenet-architecture.md
+│   │   ├── adr-002-tech-stack.md
+│   │   └── adr-003-design-tokens.md
+│   ├── design-system/             # UI/UX Design System
+│   │   └── README.md
+│   ├── roadmap/                   # Development Roadmap
+│   │   └── roadmap.md
+│   ├── api-contracts/             # API Specifications
 │   ├── architecture/              # System architecture
 │   │   ├── CANONICAL_SYSTEM_ARCHITECTURE.md
 │   │   ├── DATA_FLOW_DIAGRAM.md
 │   │   ├── DEPLOYMENT_ARCHITECTURE.md
 │   │   └── DATA_PARTITION_FIREWALL.md
-│   ├── adr/                       # Architecture Decision Records
 │   ├── API_V1_DOCUMENTATION.md
 │   ├── API_VERSIONING_POLICY.md
 │   ├── DEPLOYMENT_GUIDE.md
 │   └── SECURITY_HARDENING.md      # TeXeT security guide
+│
+├── scripts/                        # Utility scripts
+│   └── validate-master-plan.sh    # Architecture validation
 │
 ├── tests/                          # Test suites
 │   ├── e2e/                       # Playwright tests
@@ -205,6 +245,12 @@ Key architectural decisions are documented in `docs/adr/`:
 
 ## 📖 Documentation
 
+### Essential Reading
+- **[🎯 Master Plan](docs/master-plan/master-plan.md)** - **START HERE** - Project direction and governance
+- **[📊 Roadmap](docs/roadmap/roadmap.md)** - Development timeline and milestones
+- **[🎨 Design System](docs/design-system/README.md)** - UI/UX guidelines and tokens
+
+### Technical Documentation
 - **[API Documentation](docs/API_V1_DOCUMENTATION.md)** - Complete API reference
 - **[Architecture Guide](docs/ARCHITECTURE_V2.md)** - System design and patterns
 - **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Production deployment

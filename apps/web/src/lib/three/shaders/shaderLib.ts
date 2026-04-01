@@ -738,16 +738,21 @@ export const GLSL_UTILS = {
     varying vec3 vWorldPosition;
   `,
 
-  // Vertex shader header
+  // Vertex shader header - use GLSL_UTILS reference instead of this
   vertexHeader: `
-    ${this.uniforms}
-    
+    uniform float uTime;
+    uniform vec2 uResolution;
+    uniform vec2 uMouse;
+
     attribute vec3 position;
     attribute vec2 uv;
     attribute vec3 normal;
-    
-    ${this.varyings}
-    
+
+    varying vec2 vUv;
+    varying vec3 vPosition;
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+
     uniform mat4 modelMatrix;
     uniform mat4 viewMatrix;
     uniform mat4 projectionMatrix;
@@ -755,12 +760,18 @@ export const GLSL_UTILS = {
     uniform mat3 normalMatrix;
   `,
 
-  // Fragment shader header
+  // Fragment shader header - use GLSL_UTILS reference instead of this
   fragmentHeader: `
     precision highp float;
-    
-    ${this.uniforms}
-    ${this.varyings}
+
+    uniform float uTime;
+    uniform vec2 uResolution;
+    uniform vec2 uMouse;
+
+    varying vec2 vUv;
+    varying vec3 vPosition;
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
   `,
 };
 

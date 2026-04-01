@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.001] - Added Vector2D export */
 /**
  * Tactical Map Components - AREPO Hub
  * ===================================
@@ -32,6 +32,7 @@ export type {
   MapViewState,
   HeatmapData,
   GridConfig,
+  Vector2D,
 } from './types';
 
 export { ZOOM_LIMITS, MAP_NAMES, VALORANT_MAPS } from './types';

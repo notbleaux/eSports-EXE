@@ -42,6 +42,14 @@ export interface AnimationOptions {
   easing?: EasingFunction;
 }
 
+// Aliases for backward compatibility with barrel exports
+export type AnimationConfig = AnimationOptions;
+
+export interface CameraBounds {
+  min: Vector3D;
+  max: Vector3D;
+}
+
 export class CameraController {
   private dimensionManager: DimensionManager;
   private currentState: CameraState;

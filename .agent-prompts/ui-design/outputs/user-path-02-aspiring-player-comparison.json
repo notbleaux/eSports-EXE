@@ -1,0 +1,184 @@
+{
+  "pathId": "user-path-02-aspiring-player-comparison",
+  "persona": {
+    "name": "aspiring-player",
+    "tier": "aspiring",
+    "goals": [
+      "Compare pro player stats",
+      "Learn from pro strategies",
+      "Improve own gameplay",
+      "Track meta changes"
+    ],
+    "painPoints": [
+      "Stats don't explain why decisions were made",
+      "Hard to compare across different sites",
+      "No VOD links to see stats in context"
+    ]
+  },
+  "entryPoint": {
+    "route": "/valorant/stats/players",
+    "context": "YouTube analysis video mentions player comparison",
+    "entryMethod": "direct_navigation"
+  },
+  "journey": {
+    "steps": [
+      {
+        "stepNumber": 1,
+        "page": "Player Leaderboard",
+        "route": "/valorant/stats/players",
+        "action": "Views ranked player list, filters by role (Duelist)",
+        "outcome": "Sees top duelists, selects two to compare",
+        "dataRequired": ["players_list", "leaderboard_rankings"],
+        "uiComponents": ["PlayerLeaderboard", "RoleFilter", "StatSorter"]
+      },
+      {
+        "stepNumber": 2,
+        "page": "Player Selection",
+        "route": "/valorant/stats/players?compare=true",
+        "action": "Selects TenZ and aspas for comparison",
+        "outcome": "System loads comparison view",
+        "dataRequired": ["player_profiles"],
+        "uiComponents": ["PlayerSearch", "ComparisonSelector", "SelectedPlayersBar"]
+      },
+      {
+        "stepNumber": 3,
+        "page": "Player Comparison",
+        "route": "/valorant/stats/compare?p1=tenz&p2=aspas",
+        "action": "Views side-by-side stats, expands detailed sections",
+        "outcome": "Analyzes differences in K/D, ADR, clutch performance",
+        "dataRequired": ["player_stats", "career_history", "match_performance"],
+        "uiComponents": [
+          "ComparisonLayout",
+          "StatRadarChart",
+          "PerformanceTimeline",
+          "MapBreakdown",
+          "ExpandableSection"
+        ]
+      },
+      {
+        "stepNumber": 4,
+        "page": "Detailed Analysis",
+        "route": "/valorant/stats/compare?p1=tenz&p2=aspas&view=detailed",
+        "action": "Opens agent-specific stats, views heatmaps",
+        "outcome": "Understands player tendencies and agent pools",
+        "dataRequired": ["agent_stats", "position_heatmaps", "economy_stats"],
+        "uiComponents": [
+          "AgentPoolChart",
+          "HeatmapVisualization",
+          "EconomyComparison",
+          "FirstBloodAnalysis"
+        ]
+      },
+      {
+        "stepNumber": 5,
+        "page": "Share/Export",
+        "route": "/valorant/stats/compare?p1=tenz&p2=aspas",
+        "action": "Clicks share button, generates link or exports image",
+        "outcome": "Shares comparison to Discord/Twitter",
+        "dataRequired": [],
+        "uiComponents": ["ShareButton", "ExportOptions", "GeneratedLink"]
+      }
+    ],
+    "totalSteps": 5,
+    "estimatedTime": "5-8 minutes",
+    "decisionPoints": [
+      {
+        "step": 1,
+        "question": "Filter by which role?",
+        "options": ["Duelist", "Initiator", "Controller", "Sentinel", "All"]
+      },
+      {
+        "step": 2,
+        "question": "Which players to compare?",
+        "options": ["Search", "From leaderboard", "Recent match"]
+      },
+      {
+        "step": 3,
+        "question": "View which metric?",
+        "options": ["Overall", "By agent", "By map", "Trends over time"]
+      }
+    ]
+  },
+  "exitPoint": {
+    "goal": "Compared two pro players and understood their differences",
+    "successMetric": "Detailed comparison viewed and shared",
+    "nextActions": [
+      "Watch VODs of compared matches",
+      "Compare with own stats",
+      "Save comparison for later",
+      "Explore similar players"
+    ]
+  },
+  "fileMapping": {
+    "routes": [
+      "/:game/stats/players → Player Leaderboard",
+      "/:game/stats/compare → Player Comparison"
+    ],
+    "pages": [
+      {
+        "file": "hub-2-rotas/index.tsx",
+        "purpose": "ROTAS hub with player access",
+        "hub": "rotas"
+      },
+      {
+        "file": "hub-2-rotas/pages/PlayerList.tsx",
+        "purpose": "Filterable, sortable player grid",
+        "hub": "rotas"
+      },
+      {
+        "file": "hub-2-rotas/pages/PlayerComparison.tsx",
+        "purpose": "Side-by-side player analysis",
+        "hub": "rotas"
+      }
+    ],
+    "components": [
+      {
+        "file": "shared/components/DataTable.tsx",
+        "purpose": "Sortable player leaderboard",
+        "shared": true
+      },
+      {
+        "file": "shared/components/RadarChart.tsx",
+        "purpose": "Multi-stat comparison visualization",
+        "shared": true
+      },
+      {
+        "file": "hub-2-rotas/components/PlayerComparisonLayout.tsx",
+        "purpose": "Split-view comparison container",
+        "shared": false,
+        "hub": "rotas"
+      },
+      {
+        "file": "hub-2-rotas/components/StatBreakdown.tsx",
+        "purpose": "Expandable detailed stats",
+        "shared": false,
+        "hub": "rotas"
+      },
+      {
+        "file": "hub-2-rotas/components/HeatmapOverlay.tsx",
+        "purpose": "Position heatmap visualization",
+        "shared": false,
+        "hub": "rotas"
+      }
+    ],
+    "hooks": [
+      "shared/hooks/usePlayers.ts",
+      "shared/hooks/usePlayerStats.ts",
+      "shared/hooks/usePlayerComparison.ts",
+      "hub-2-rotas/hooks/useHeatmapData.ts"
+    ],
+    "stores": ["stores/gameStore.ts", "stores/comparisonStore.ts"],
+    "apiCalls": [
+      "GET /api/rotas/players",
+      "GET /api/rotas/players/:id",
+      "GET /api/rotas/players/:id/stats",
+      "GET /api/rotas/leaderboards/kd"
+    ]
+  },
+  "designTokens": {
+    "primaryColor": "#14B8A6",
+    "secondaryColor": "#0F172A",
+    "dataDensity": "high",
+    "complexity": "moderate"
+  }
+}

@@ -14,6 +14,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as d3 from 'd3';
+import type { D3ZoomEvent, D3DragEvent } from 'd3';
 import { 
   ZoomIn, 
   ZoomOut, 
@@ -229,7 +230,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
     // Zoom behavior
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.1, 4])
-      .on('zoom', (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
+      .on('zoom', (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
         g.attr('transform', event.transform.toString());
       });
 
@@ -270,16 +271,16 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
       .attr('class', 'node')
       .attr('cursor', 'pointer')
       .call(d3.drag<SVGGElement, SimulationNode>()
-        .on('start', (event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
+        .on('start', (event: D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
           if (!event.active) simulation.alphaTarget(0.3).restart();
           d.fx = d.x;
           d.fy = d.y;
         })
-        .on('drag', (event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
+        .on('drag', (event: D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
           d.fx = event.x;
           d.fy = event.y;
         })
-        .on('end', (event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
+        .on('end', (event: D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) => {
           if (!event.active) simulation.alphaTarget(0);
           d.fx = null;
           d.fy = null;

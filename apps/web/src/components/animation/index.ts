@@ -1,7 +1,7 @@
 /**
  * Animation Components
  * 
- * [Ver002.000] - Fixed TypeScript exports
+ * [Ver002.001] - Fixed TypeScript exports for VFXEditorState
  */
 
 // Particle Effect exports

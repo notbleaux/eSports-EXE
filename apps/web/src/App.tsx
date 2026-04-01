@@ -46,11 +46,11 @@ import {
 } from './components/error';
 
 // Lazy load hub components for code splitting with prefetch support
-const SatorHub = lazy(() => import('./hub-1-sator/index.jsx'));
-const RotasHub = lazy(() => import('./hub-2-rotas/index.jsx'));
-const ArepoHub = lazy(() => import('./hub-3-arepo/index.jsx'));
-const OperaHub = lazy(() => import('./hub-4-opera/index.tsx'));
-const TenetHub = lazy(() => import('./hub-5-tenet/index.jsx'));
+const SatorHub = lazy(() => import('./hub-1-sator/index.tsx'));
+const RotasHub = lazy(() => import('./hub-2-rotas/index.tsx'));
+const ArepoHub = lazy(() => import('./hub-3-arepo/index.ts'));
+const OperaHub = lazy(() => import('./hub-4-opera/index.ts'));
+const TenetHub = lazy(() => import('./hub-5-tenet/index.tsx'));
 
 // Lazy load heavy ML components with dedicated chunk
 const _MLPredictionPanel = lazy(() => import('./components/MLPredictionPanel'));
@@ -74,11 +74,11 @@ const prefetchHub = (hubName: string): void => {
   if (prefetchCache.has(hubName)) return;
   
   const prefetchers: Record<string, () => Promise<unknown>> = {
-    sator: () => import('./hub-1-sator/index.jsx'),
-    rotas: () => import('./hub-2-rotas/index.jsx'),
-    arepo: () => import('./hub-3-arepo/index.jsx'),
-    opera: () => import('./hub-4-opera/index.tsx'),
-    tenet: () => import('./hub-5-tenet/index.jsx'),
+    sator: () => import('./hub-1-sator/index.tsx'),
+    rotas: () => import('./hub-2-rotas/index.tsx'),
+    arepo: () => import('./hub-3-arepo/index.ts'),
+    opera: () => import('./hub-4-opera/index.ts'),
+    tenet: () => import('./hub-5-tenet/index.tsx'),
   };
   
   const prefetcher = prefetchers[hubName];

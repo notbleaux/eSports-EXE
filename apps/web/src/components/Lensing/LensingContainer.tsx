@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useCallback } from 'react'
-import { Responsive, WidthProvider } from 'react-grid-layout'
+import { Responsive } from 'react-grid-layout'
 import GridCell from './GridCell'
 import LensSelector from './LensSelector'
 import { useLensingStore, useLensingPanels } from '../../store/lensingStore'
@@ -15,7 +15,8 @@ import { preloadHeavyHubs } from '../../hubs'
 import UnifiedGrid from '../UnifiedGrid'
 import { useMediaQuery } from 'react-responsive' // or Tailwind
 
-const ResponsiveGridLayout = WidthProvider(Responsive)
+// react-grid-layout doesn't export WidthProvider directly - we use Responsive without it
+const ResponsiveGridLayout = Responsive
 
 const LensingContainer: React.FC = () => {
   const panels = useLensingPanels()

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSports-EXE — Wireframe: Player Profile</title>
+    <style>
+        :root {
+            --color-primary-bg: #0F172A;
+            --color-primary-bg-light: #1E293B;
+            --color-primary-bg-lighter: #334155;
+            --color-text-primary: #F8FAFC;
+            --color-text-secondary: #94A3B8;
+            --color-text-muted: #64748B;
+            --color-accent-rotas: #14B8A6;
+            --color-accent-opera: #F97316;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-12: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--color-primary-bg);
+            color: var(--color-text-primary);
+            font-size: 14px;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) var(--space-6);
+            background: var(--color-primary-bg-light);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent-rotas);
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+        }
+
+        .btn-ghost {
+            background: var(--color-primary-bg);
+            border: 1px solid var(--color-primary-bg-lighter);
+            color: var(--color-text-secondary);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: linear-gradient(180deg, var(--color-primary-bg-light) 0%, var(--color-primary-bg) 100%);
+            padding: var(--space-12) var(--space-6);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .profile-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: var(--space-8);
+            align-items: flex-start;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 50%;
+            border: 4px solid var(--color-accent-rotas);
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .flag {
+            font-size: 24px;
+        }
+
+        .profile-meta {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            margin-bottom: var(--space-4);
+        }
+
+        .profile-meta a {
+            color: var(--color-accent-rotas);
+            text-decoration: none;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        /* Career Stats */
+        .career-stats {
+            background: var(--color-primary-bg-light);
+            border: 1px solid var(--color-primary-bg-lighter);
+            border-radius: 12px;
+            padding: var(--space-6);
+            margin: var(--space-8) var(--space-6);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-6);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: var(--space-4);
+            background: var(--color-primary-bg);
+            border-radius: 8px;
+        }
+
+        .stat-value-large {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-accent-rotas);
+            margin-bottom: var(--space-2);
+        }
+
+        .stat-label-small {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+            padding: 0 var(--space-6);
+        }
+
+        .tabs {
+            display: flex;
+            gap: var(--space-6);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab {
+            padding: var(--space-4) 0;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+
+        .tab.active {
+            color: var(--color-accent-rotas);
+            border-bottom-color: var(--color-accent-rotas);
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+        }
+
+        /* Agent Pool */
+        .agent-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        .agent-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-3);
+            background: var(--color-primary-bg-light);
+            border-radius: 8px;
+        }
+
+        .agent-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .agent-name {
+            width: 80px;
+            font-weight: 500;
+        }
+
+        .agent-bar-fill {
+            flex: 1;
+            height: 24px;
+            background: var(--color-primary-bg-lighter);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .agent-bar-inner {
+            height: 100%;
+            background: var(--color-accent-rotas);
+            border-radius: 4px;
+        }
+
+        .agent-stats {
+            display: flex;
+            gap: var(--space-6);
+            min-width: 120px;
+            justify-content: flex-end;
+        }
+
+        .agent-stat {
+            text-align: right;
+        }
+
+        .agent-stat-value {
+            font-weight: 600;
+        }
+
+        .agent-stat-label {
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        /* Recent Matches */
+        .matches-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .matches-table th {
+            text-align: left;
+            padding: var(--space-3) var(--space-4);
+            color: var(--color-text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .matches-table td {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--color-primary-bg-lighter);
+        }
+
+        .match-result {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .match-result.win {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+        }
+
+        .match-result.loss {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+
+        .match-score {
+            font-weight: 600;
+        }
+
+        .match-stat {
+            color: var(--color-text-secondary);
+        }
+
+        .match-stat.highlight {
+            color: var(--color-accent-rotas);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .profile-actions {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tabs {
+                overflow-x: auto;
+                gap: var(--space-4);
+            }
+
+            .agent-bar {
+                flex-wrap: wrap;
+            }
+
+            .agent-stats {
+                width: 100%;
+                justify-content: flex-start;
+                margin-top: var(--space-2);
+            }
+        }
+
+        /* Annotation */
+        .annotation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-accent-rotas);
+            color: var(--color-primary-bg);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="breadcrumb">
+            <a href="#">← Back</a>
+            <span>/</span>
+            <a href="#">Players</a>
+            <span>/</span>
+            <span style="color: var(--color-text-primary);">TenZ</span>
+        </div>
+        <div class="nav-actions">
+            <button class="btn btn-primary">Compare</button>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <header class="profile-header">
+        <div class="profile-content">
+            <div class="avatar-large"></div>
+            <div class="profile-info">
+                <h1 class="profile-name">
+                    TenZ
+                    <span class="flag">🇨🇦</span>
+                </h1>
+                <p class="profile-meta">
+                    <a href="#">Sentinels</a> (SEN) | Duelist | Active
+                </p>
+                <div class="profile-actions">
+                    <button class="btn btn-primary">+ Follow</button>
+                    <button class="btn btn-ghost">Share</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Career Stats -->
+    <section class="career-stats">
+        <h2 class="section-title">Career Stats</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value-large">1.35</div>
+                <div class="stat-label-small">Rating</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value-large">185.2</div>
+                <div class="stat-label-small">ADR</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value-large">285.1</div>
+                <div class="stat-label-small">ACS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value-large">72.5%</div>
+                <div class="stat-label-small">KAST</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value-large">1,247</div>
+                <div class="stat-label-small">Matches</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <div class="tab active">Overview</div>
+            <div class="tab">Performance</div>
+            <div class="tab">Agents</div>
+            <div class="tab">Matches</div>
+            <div class="tab">VODs</div>
+        </div>
+    </div>
+
+    <!-- Agent Pool Section -->
+    <section class="content-section">
+        <h2 class="section-title">Agent Pool (Last 90 Days)</h2>
+        <div class="agent-list">
+            <div class="agent-bar">
+                <div class="agent-icon"></div>
+                <span class="agent-name">Jett</span>
+                <div class="agent-bar-fill">
+                    <div class="agent-bar-inner" style="width: 42%;"></div>
+                </div>
+                <div class="agent-stats">
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">42%</div>
+                        <div class="agent-stat-label">Play Rate</div>
+                    </div>
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">1.45</div>
+                        <div class="agent-stat-label">K/D</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-bar">
+                <div class="agent-icon"></div>
+                <span class="agent-name">Raze</span>
+                <div class="agent-bar-fill">
+                    <div class="agent-bar-inner" style="width: 28%;"></div>
+                </div>
+                <div class="agent-stats">
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">28%</div>
+                        <div class="agent-stat-label">Play Rate</div>
+                    </div>
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">1.38</div>
+                        <div class="agent-stat-label">K/D</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-bar">
+                <div class="agent-icon"></div>
+                <span class="agent-name">Neon</span>
+                <div class="agent-bar-fill">
+                    <div class="agent-bar-inner" style="width: 15%;"></div>
+                </div>
+                <div class="agent-stats">
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">15%</div>
+                        <div class="agent-stat-label">Play Rate</div>
+                    </div>
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">1.52</div>
+                        <div class="agent-stat-label">K/D</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-bar">
+                <div class="agent-icon"></div>
+                <span class="agent-name">Other</span>
+                <div class="agent-bar-fill">
+                    <div class="agent-bar-inner" style="width: 15%;"></div>
+                </div>
+                <div class="agent-stats">
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">15%</div>
+                        <div class="agent-stat-label">Play Rate</div>
+                    </div>
+                    <div class="agent-stat">
+                        <div class="agent-stat-value">1.21</div>
+                        <div class="agent-stat-label">K/D</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Matches -->
+    <section class="content-section">
+        <h2 class="section-title">Recent Matches</h2>
+        <table class="matches-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Tournament</th>
+                    <th>Opponent</th>
+                    <th>Score</th>
+                    <th>Result</th>
+                    <th>K/D</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2d ago</td>
+                    <td>VCT Masters</td>
+                    <td>LOUD</td>
+                    <td class="match-score">2-1</td>
+                    <td><span class="match-result win">✓ Win</span></td>
+                    <td class="match-stat">24/18</td>
+                    <td class="match-stat highlight">1.42</td>
+                </tr>
+                <tr>
+                    <td>3d ago</td>
+                    <td>VCT Masters</td>
+                    <td>FNATIC</td>
+                    <td class="match-score">2-0</td>
+                    <td><span class="match-result win">✓ Win</span></td>
+                    <td class="match-stat">28/15</td>
+                    <td class="match-stat highlight">1.65</td>
+                </tr>
+                <tr>
+                    <td>5d ago</td>
+                    <td>VCT Masters</td>
+                    <td>Paper Rex</td>
+                    <td class="match-score">1-2</td>
+                    <td><span class="match-result loss">✗ Loss</span></td>
+                    <td class="match-stat">19/22</td>
+                    <td class="match-stat">0.98</td>
+                </tr>
+                <tr>
+                    <td>1w ago</td>
+                    <td>Showmatch</td>
+                    <td>Cloud9</td>
+                    <td class="match-score">1-1</td>
+                    <td><span class="match-result loss" style="background: rgba(148, 163, 184, 0.2); color: #94A3B8;">— Draw</span></td>
+                    <td class="match-stat">22/20</td>
+                    <td class="match-stat">1.12</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Annotation -->
+    <div class="annotation">Wireframe v1.0 — Player Profile</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.001] - Fixed Vector2D import */
 /**
  * Lens Render Helpers
  * ===================
@@ -10,9 +10,12 @@ import type {
   FlowVector,
   KillEvent,
   PlayerPosition,
-  Vector2D,
   RenderHelpers
 } from './types'
+
+// Import Vector2D from the re-export in types
+import type { Vector2D } from './types'
+export type { Vector2D } from './types'
 
 /** Calculate distance between two points */
 const distance = (a: Vector2D, b: Vector2D): number => {

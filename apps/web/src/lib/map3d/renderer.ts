@@ -460,8 +460,8 @@ export class Map3DRenderer {
     }
 
     // Optimize materials and geometry
-    root.traverse((mesh) => {
-      if (mesh instanceof THREE.Mesh) {
+    root.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
         // Enable shadows
         child.castShadow = this.config.shadows;
         child.receiveShadow = this.config.shadows;
@@ -472,8 +472,8 @@ export class Map3DRenderer {
             ? child.material
             : [child.material];
 
-          materials.forEach((material) => {
-            if (material instanceof THREE.MeshStandardMaterial) {
+          materials.forEach((mat) => {
+            if (mat instanceof THREE.MeshStandardMaterial) {
               mat.roughness = Math.max(mat.roughness, 0.3);
               mat.metalness = Math.min(mat.metalness, 0.8);
             }

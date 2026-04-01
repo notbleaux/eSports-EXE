@@ -53,6 +53,68 @@ export interface TransitionOptions {
   onProgress?: (progress: number) => void;
 }
 
+/** State representation for dimension system */
+export interface DimensionState {
+  mode: DimensionMode;
+  config: DimensionConfig;
+  isTransitioning: boolean;
+  transitionProgress: number;
+}
+
+/** Preset configurations for each dimension mode */
+export const DIMENSION_PRESETS: Record<DimensionMode, Partial<DimensionConfig>> = {
+  '4D': {
+    mode: '4D',
+    projection: 'perspective',
+    camera: {
+      position: { x: 32, y: 32, z: 80 },
+      target: { x: 32, y: 32, z: 0 },
+      up: { x: 0, y: 1, z: 0 },
+      fov: 60
+    }
+  },
+  '3.5D': {
+    mode: '3.5D',
+    projection: 'perspective',
+    camera: {
+      position: { x: 32, y: 20, z: 60 },
+      target: { x: 32, y: 32, z: 0 },
+      up: { x: 0, y: 1, z: 0 },
+      fov: 55
+    }
+  },
+  '3D': {
+    mode: '3D',
+    projection: 'perspective',
+    camera: {
+      position: { x: 32, y: 10, z: 50 },
+      target: { x: 32, y: 32, z: 0 },
+      up: { x: 0, y: 1, z: 0 },
+      fov: 50
+    }
+  },
+  '2.5D': {
+    mode: '2.5D',
+    projection: 'orthographic',
+    camera: {
+      position: { x: 32, y: 32, z: 40 },
+      target: { x: 32, y: 32, z: 0 },
+      up: { x: 0, y: 1, z: 0 },
+      fov: 45
+    }
+  },
+  '2D': {
+    mode: '2D',
+    projection: 'orthographic',
+    camera: {
+      position: { x: 32, y: 32, z: 30 },
+      target: { x: 32, y: 32, z: 0 },
+      up: { x: 0, y: 1, z: 0 },
+      fov: 45
+    }
+  }
+};
+
 export class DimensionManager {
   private currentMode: DimensionMode = '2D';
   private currentConfig: DimensionConfig;

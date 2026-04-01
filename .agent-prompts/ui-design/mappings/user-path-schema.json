@@ -1,0 +1,209 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "user-path-mapping",
+  "title": "User Path Mapping",
+  "description": "Complete user journey through the eSports-EXE platform",
+  "type": "object",
+  "required": [
+    "pathId",
+    "persona",
+    "entryPoint",
+    "journey",
+    "exitPoint",
+    "fileMapping"
+  ],
+  "properties": {
+    "pathId": {
+      "type": "string",
+      "description": "Unique identifier for this path",
+      "pattern": "^user-path-[0-9]{2}-[a-z-]+$"
+    },
+    "persona": {
+      "type": "object",
+      "required": ["name", "tier", "goals", "painPoints"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Persona identifier (e.g., 'casual-fan', 'aspiring-player')"
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["casual", "aspiring", "professional"],
+          "description": "Progressive disclosure tier"
+        },
+        "goals": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "painPoints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "entryPoint": {
+      "type": "object",
+      "required": ["route", "context", "entryMethod"],
+      "properties": {
+        "route": {
+          "type": "string",
+          "description": "URL path where user enters"
+        },
+        "context": {
+          "type": "string",
+          "description": "How user arrived (social, search, direct)"
+        },
+        "entryMethod": {
+          "type": "string",
+          "description": "Click, type, redirect, etc."
+        }
+      }
+    },
+    "journey": {
+      "type": "object",
+      "required": ["steps", "totalSteps", "estimatedTime"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["stepNumber", "page", "action", "outcome"],
+            "properties": {
+              "stepNumber": { "type": "integer", "minimum": 1 },
+              "page": {
+                "type": "string",
+                "description": "Page/component name"
+              },
+              "route": {
+                "type": "string",
+                "description": "URL at this step"
+              },
+              "action": {
+                "type": "string",
+                "description": "User action (click, scroll, input)"
+              },
+              "outcome": {
+                "type": "string",
+                "description": "What happens after action"
+              },
+              "dataRequired": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "API data needed for this step"
+              },
+              "uiComponents": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Components rendered at this step"
+              }
+            }
+          }
+        },
+        "totalSteps": { "type": "integer", "minimum": 1 },
+        "estimatedTime": {
+          "type": "string",
+          "description": "Typical time to complete (e.g., '2-3 minutes')"
+        },
+        "decisionPoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": { "type": "integer" },
+              "question": { "type": "string" },
+              "options": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "exitPoint": {
+      "type": "object",
+      "required": ["goal", "successMetric", "nextActions"],
+      "properties": {
+        "goal": {
+          "type": "string",
+          "description": "What user accomplished"
+        },
+        "successMetric": {
+          "type": "string",
+          "description": "How we measure success"
+        },
+        "nextActions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Possible follow-up actions"
+        }
+      }
+    },
+    "fileMapping": {
+      "type": "object",
+      "required": ["routes", "pages", "components", "hooks", "stores"],
+      "properties": {
+        "routes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Route definitions affected"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": { "type": "string" },
+              "purpose": { "type": "string" },
+              "hub": {
+                "type": "string",
+                "enum": ["rotas", "sator", "opera", "arepo", "tenet", "shared"]
+              }
+            }
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": { "type": "string" },
+              "purpose": { "type": "string" },
+              "shared": { "type": "boolean" },
+              "hub": { "type": "string" }
+            }
+          }
+        },
+        "hooks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "stores": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "apiCalls": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "designTokens": {
+      "type": "object",
+      "properties": {
+        "primaryColor": { "type": "string" },
+        "secondaryColor": { "type": "string" },
+        "dataDensity": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "very-high"]
+        },
+        "complexity": {
+          "type": "string",
+          "enum": ["simple", "moderate", "complex"]
+        }
+      }
+    }
+  }
+}

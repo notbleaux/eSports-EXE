@@ -8,6 +8,18 @@
 
 import { useCallback, useState } from 'react';
 
+/** Model information type */
+export interface ModelInfo {
+  id: string;
+  name: string;
+  version: string;
+  size: number;
+  format: 'onnx' | 'tfjs' | 'tflite';
+  inputShape: number[];
+  outputShape: number[];
+  description?: string;
+}
+
 export interface InferenceResult {
   result: unknown;
   error?: string;

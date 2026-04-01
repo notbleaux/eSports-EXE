@@ -1,0 +1,5 @@
+# Celery Configuration for ROTAS Sub-Agent Architecture
+# Distributed task queue for parallel data ingestion
+
+celery>=5.3.0
+flower>=2.0.0  # Celery monitoring dashboard

@@ -30,7 +30,7 @@ export interface Lens {
   id: string
   name: string
   description: string
-  render: (data: GameData, options: LensOptions) => void
+  render: (ctx: CanvasRenderingContext2D, data: GameData, options?: LensOptions) => void
   /** Default options for the lens */
   defaultOptions?: Partial<LensOptions>
   /** Display name for UI */
@@ -60,6 +60,12 @@ export interface LensOptions {
   defaultOptions?: Partial<LensOptions>
   /** Display name */
   displayName?: string
+  /** Blend mode for canvas */
+  blendMode?: GlobalCompositeOperation
+  /** Animation speed */
+  animationSpeed?: number
+  /** Show labels */
+  showLabels?: boolean
 }
 
 // ============================================================================
@@ -85,7 +91,10 @@ export interface GameData {
   /** Player positions over time */
   playerPositions: PlayerPosition[]
   /** Match metadata */
-  metadata?: Record<string, unknown>
+  metadata?: {
+    matchTime?: number
+    [key: string]: unknown
+  }
 }
 
 /** Round data */
@@ -138,7 +147,6 @@ export interface DamageEvent extends GameEvent {
   weapon: string
   position: Vector2D
   isFatal?: boolean
-  isFirstBlood?: boolean
 }
 
 /** Sound event (footsteps, abilities, etc.) */
@@ -161,6 +169,8 @@ export interface PlayerPosition {
   timestamp: number
   rotation?: number
   team?: 'attackers' | 'defenders'
+  /** Array of positions for trajectory rendering */
+  positions?: TimedPosition[]
 }
 
 /** Timed position for trajectory rendering */
@@ -169,7 +179,7 @@ export interface TimedPosition {
   y: number
   timestamp: number
   playerId: string
-  velocity?: number
+  velocity?: { x: number; y: number }
 }
 
 // ============================================================================

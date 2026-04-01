@@ -1,4 +1,4 @@
-/** [Ver001.000] */
+/** [Ver001.001] - Added Vector2D export */
 /**
  * Tactical Map Types
  * ==================
@@ -18,6 +18,12 @@ export type MapId =
   | 'sunset';
 
 export type GameType = 'valorant' | 'cs2';
+
+/** 2D Vector type for positions and directions */
+export interface Vector2D {
+  x: number;
+  y: number;
+}
 
 export interface MapData {
   id: MapId;

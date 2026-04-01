@@ -14,6 +14,7 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { Material, BufferGeometry } from 'three';
 import { MascotLOD, LODManager, MascotLODConfig } from '@/lib/three/lod';
 import { 
   getDefaultShaderForMascot, 
@@ -62,7 +63,7 @@ export interface Mascot3DProps {
   /** Custom geometry (if not using default) */
   geometry?: THREE.BufferGeometry;
   /** Custom material (if not using shader) */
-  material?: THREE.Material;
+  material?: Material;
   /** Enable frustum culling */
   enableCulling?: boolean;
   /** Visibility distance for culling */
@@ -119,7 +120,7 @@ function createMascotGeometry(mascotId: MascotId, customGeometry?: THREE.BufferG
 function createLODConfig(
   mascotId: MascotId, 
   geometry: THREE.BufferGeometry,
-  material?: THREE.Material
+  material?: Material
 ): MascotLODConfig {
   // Create simplified geometries for LOD levels
   const mediumDetail = geometry.clone();
@@ -185,7 +186,7 @@ export const Mascot3D = React.forwardRef<Mascot3DRefs, Mascot3DProps>(
     const meshRef = useRef<THREE.Mesh>(null);
     const shaderRef = useRef<BaseShader | null>(null);
     const lodRef = useRef<MascotLOD | null>(null);
-    const materialRef = useRef<THREE.Material | null>(null);
+    const materialRef = useRef<Material | null>(null);
     const animationTimeRef = useRef(0);
     const isVisibleRef = useRef(true);
     const frustumRef = useRef(new THREE.Frustum());

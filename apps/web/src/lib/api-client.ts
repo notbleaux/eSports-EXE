@@ -16,9 +16,17 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 // Token refresh buffer (refresh 5 minutes before expiry)
 const TOKEN_REFRESH_BUFFER_MS = 5 * 60 * 1000;
 
-interface ApiError extends Error {
+export interface ApiError extends Error {
   status?: number;
   data?: any;
+}
+
+/** Request configuration type */
+export interface RequestConfig {
+  headers?: Record<string, string>;
+  params?: Record<string, any>;
+  body?: any;
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }
 
 interface TokenResponse {
@@ -759,6 +767,39 @@ export const useSubmitReviewDecision = () => {
 
 // WebSocket URL
 export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8002';
+
+// =============================================================================
+// UNIFIED API CLIENT
+// =============================================================================
+
+/** Unified API client object */
+export const api = {
+  auth: authApi,
+  tokens: tokensApi,
+  forum: forumApi,
+  fantasy: fantasyApi,
+  challenges: challengesApi,
+  wiki: wikiApi,
+  opera: operaApi,
+  isAuthenticated,
+};
+
+/** Handle API errors consistently */
+export function handleApiError(error: unknown): ApiError {
+  if (error instanceof Error) {
+    const apiError = error as ApiError;
+    return {
+      name: apiError.name,
+      message: apiError.message,
+      status: apiError.status,
+      data: apiError.data,
+    };
+  }
+  return {
+    name: 'UnknownError',
+    message: String(error),
+  };
+}
 
 // =============================================================================
 // EXPORT

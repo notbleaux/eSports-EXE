@@ -1,0 +1,227 @@
+{
+  "pathId": "user-path-03-professional-tournament-analysis",
+  "persona": {
+    "name": "professional-analyst",
+    "tier": "professional",
+    "goals": [
+      "Deep statistical analysis of tournaments",
+      "Identify meta trends",
+      "Create predictive models",
+      "Export data for external analysis"
+    ],
+    "painPoints": [
+      "Data scattered across multiple sites",
+      "No raw export options",
+      "Inconsistent data formats",
+      "No historical trend data"
+    ]
+  },
+  "entryPoint": {
+    "route": "/valorant/analytics",
+    "context": "Research for esports article on VCT Masters",
+    "entryMethod": "direct_navigation"
+  },
+  "journey": {
+    "steps": [
+      {
+        "stepNumber": 1,
+        "page": "SATOR Analytics Hub",
+        "route": "/valorant/analytics",
+        "action": "Views available analytics tools, selects Tournament Analysis",
+        "outcome": "Enters tournament query interface",
+        "dataRequired": ["available_tools", "recent_tournaments"],
+        "uiComponents": ["AnalyticsHub", "ToolGrid", "RecentQueries"]
+      },
+      {
+        "stepNumber": 2,
+        "page": "Tournament Query Builder",
+        "route": "/valorant/analytics/tournament",
+        "action": "Selects VCT Masters 2024, sets filters (playoff stage only)",
+        "outcome": "Builds query parameters",
+        "dataRequired": ["tournaments_list", "tournament_metadata"],
+        "uiComponents": [
+          "TournamentSelector",
+          "StageFilter",
+          "TeamFilter",
+          "DateRangePicker",
+          "QueryBuilder"
+        ]
+      },
+      {
+        "stepNumber": 3,
+        "page": "Custom Metrics",
+        "route": "/valorant/analytics/tournament?custom=true",
+        "action": "Defines custom metrics (First Blood conversion, Eco round win rate)",
+        "outcome": "Builds advanced stat query",
+        "dataRequired": [],
+        "uiComponents": [
+          "MetricBuilder",
+          "FormulaEditor",
+          "PreviewPanel",
+          "SavedMetricsLibrary"
+        ]
+      },
+      {
+        "stepNumber": 4,
+        "page": "Query Results",
+        "route": "/valorant/analytics/results",
+        "action": "Views aggregated data table, applies sorting and filtering",
+        "outcome": "Analyzes tournament statistics",
+        "dataRequired": ["aggregated_stats", "custom_metrics_results"],
+        "uiComponents": [
+          "ResultsTable",
+          "ColumnCustomizer",
+          "FilterPanel",
+          "VisualizationToggle",
+          "StatChart"
+        ]
+      },
+      {
+        "stepNumber": 5,
+        "page": "Visualization",
+        "route": "/valorant/analytics/results?view=chart",
+        "action": "Switches to chart view, creates trend visualization",
+        "outcome": "Visual understanding of data patterns",
+        "dataRequired": ["time_series_data"],
+        "uiComponents": [
+          "ChartBuilder",
+          "TrendLine",
+          "CorrelationMatrix",
+          "ExportChartButton"
+        ]
+      },
+      {
+        "stepNumber": 6,
+        "page": "Export",
+        "route": "/valorant/analytics/export",
+        "action": "Exports data as CSV + generates API query link",
+        "outcome": "Downloads data, saves API query for automation",
+        "dataRequired": [],
+        "uiComponents": [
+          "ExportOptions",
+          "FormatSelector",
+          "APIQueryBuilder",
+          "DownloadButton",
+          "WebhookConfig"
+        ]
+      }
+    ],
+    "totalSteps": 6,
+    "estimatedTime": "15-20 minutes",
+    "decisionPoints": [
+      {
+        "step": 2,
+        "question": "Which tournament and stage?",
+        "options": ["Group stage", "Playoffs", "Full tournament", "Custom range"]
+      },
+      {
+        "step": 3,
+        "question": "Build custom metric or use preset?",
+        "options": ["Preset metrics", "Build custom", "Load saved"]
+      },
+      {
+        "step": 4,
+        "question": "View as table or chart?",
+        "options": ["Data table", "Chart", "Both (split view)"]
+      },
+      {
+        "step": 6,
+        "question": "Export format?",
+        "options": ["CSV", "JSON", "Excel", "API endpoint"]
+      }
+    ]
+  },
+  "exitPoint": {
+    "goal": "Analyzed tournament data and exported for further analysis",
+    "successMetric": "Data exported and API query saved",
+    "nextActions": [
+      "Import to Python/R for modeling",
+      "Schedule automated refresh",
+      "Share analysis with team",
+      "Create report template"
+    ]
+  },
+  "fileMapping": {
+    "routes": [
+      "/:game/analytics → SATOR Hub",
+      "/:game/analytics/tournament → Query Builder",
+      "/:game/analytics/results → Results View",
+      "/:game/analytics/export → Export Interface"
+    ],
+    "pages": [
+      {
+        "file": "hub-1-sator/index.tsx",
+        "purpose": "Analytics hub landing",
+        "hub": "sator"
+      },
+      {
+        "file": "hub-1-sator/pages/TournamentQuery.tsx",
+        "purpose": "Visual query builder for tournaments",
+        "hub": "sator"
+      },
+      {
+        "file": "hub-1-sator/pages/QueryResults.tsx",
+        "purpose": "Data table and visualization",
+        "hub": "sator"
+      },
+      {
+        "file": "hub-1-sator/pages/ExportInterface.tsx",
+        "purpose": "Data export and API access",
+        "hub": "sator"
+      }
+    ],
+    "components": [
+      {
+        "file": "shared/components/DataTable.tsx",
+        "purpose": "Advanced data table with filtering",
+        "shared": true
+      },
+      {
+        "file": "shared/components/ChartBuilder.tsx",
+        "purpose": "Configurable chart visualization",
+        "shared": true
+      },
+      {
+        "file": "hub-1-sator/components/QueryBuilder.tsx",
+        "purpose": "Visual SQL-like query constructor",
+        "shared": false,
+        "hub": "sator"
+      },
+      {
+        "file": "hub-1-sator/components/MetricBuilder.tsx",
+        "purpose": "Custom metric formula editor",
+        "shared": false,
+        "hub": "sator"
+      },
+      {
+        "file": "hub-1-sator/components/APIQueryDisplay.tsx",
+        "purpose": "Generated API endpoint display",
+        "shared": false,
+        "hub": "sator"
+      }
+    ],
+    "hooks": [
+      "shared/hooks/useTournaments.ts",
+      "shared/hooks/useAnalytics.ts",
+      "hub-1-sator/hooks/useQueryBuilder.ts",
+      "hub-1-sator/hooks/useCustomMetrics.ts"
+    ],
+    "stores": [
+      "stores/gameStore.ts",
+      "stores/analyticsStore.ts",
+      "stores/queryStore.ts"
+    ],
+    "apiCalls": [
+      "GET /api/rotas/tournaments",
+      "GET /api/rotas/matches",
+      "GET /api/sator/analytics (custom queries)",
+      "POST /api/sator/query (complex aggregations)"
+    ]
+  },
+  "designTokens": {
+    "primaryColor": "#14B8A6",
+    "secondaryColor": "#0F172A",
+    "dataDensity": "very-high",
+    "complexity": "complex"
+  }
+}
