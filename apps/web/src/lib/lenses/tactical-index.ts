@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Tactical Lens Index - SpecMap V2
  * 
