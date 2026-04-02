@@ -276,8 +276,5 @@ export interface HelpOverlayProps {
 // Re-export all types from expertise
 export * from './expertise';
 
-// Re-export UserExpertiseProfile class explicitly
-export { UserExpertiseProfile } from './expertise';
-
 // Re-export all from knowledgeGraph
 export * from './knowledgeGraph';
