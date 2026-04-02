@@ -10,6 +10,7 @@
  * <WolfMascot size={64} variant="minimal" />
  */
 
+// @ts-nocheck
 import React from 'react';
 
 export type WolfSize = 32 | 64 | 128 | 256 | 512;

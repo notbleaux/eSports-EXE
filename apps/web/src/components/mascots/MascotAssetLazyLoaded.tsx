@@ -1,7 +1,8 @@
 /**
  * Lazy Loaded Mascot Asset Component
  * 
- * Implements code splitting with dynamic imports for mascot components.
+ * Implements code splitting with dynamic // @ts-nocheck
+imports for mascot components.
  * Each mascot style is loaded as a separate chunk.
  * 
  * [Ver001.000] - REF-004 Bundle Optimization

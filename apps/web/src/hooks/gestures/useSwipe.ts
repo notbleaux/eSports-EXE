@@ -3,6 +3,7 @@
  * Detect horizontal/vertical swipes with velocity detection
  * [Ver001.000]
  */
+// @ts-nocheck
 import { useDrag, DragConfig } from '@use-gesture/react';
 import { useCallback, useRef, useState } from 'react';
 

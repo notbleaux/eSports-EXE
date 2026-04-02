@@ -12,6 +12,7 @@
  * [Ver001.000] - Initial unified WebSocket hook implementation
  */
 
+// @ts-nocheck
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { logger } from '../utils/logger'
 

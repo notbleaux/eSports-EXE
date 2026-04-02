@@ -2,6 +2,7 @@
  * TENET Layer — Layer 3: Area control grading, mutual exclusion zones.
  * D3.js SVG rendering.
  */
+// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 

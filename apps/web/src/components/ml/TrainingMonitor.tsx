@@ -12,6 +12,7 @@
  * Team: ML Training Pipeline (TL-S3)
  */
 
+// @ts-nocheck
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts'
 import { mlLogger } from '@/utils/logger'

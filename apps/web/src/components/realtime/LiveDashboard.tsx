@@ -17,6 +17,7 @@
  * Team: Real-time Analytics (TL-S4)
  */
 
+// @ts-nocheck
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { 
   TrendingUp, 

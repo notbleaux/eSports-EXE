@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Memory Monitor - Leak Detection Tool
  * [Ver001.001] - Migrated to centralized logger

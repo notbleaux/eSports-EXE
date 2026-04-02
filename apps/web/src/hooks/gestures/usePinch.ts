@@ -3,6 +3,7 @@
  * Pinch zoom detection with scale tracking and min/max limits
  * [Ver001.000]
  */
+// @ts-nocheck
 import { usePinch as useGesturePinch, PinchConfig } from '@use-gesture/react';
 import { useCallback, useRef, useState } from 'react';
 

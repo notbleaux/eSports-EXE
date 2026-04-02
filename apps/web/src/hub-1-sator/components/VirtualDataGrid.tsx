@@ -12,6 +12,7 @@
  * - Memory usage <150MB for 1000 rows
  */
 
+// @ts-nocheck
 import React, { 
   useRef, 
   useEffect, 

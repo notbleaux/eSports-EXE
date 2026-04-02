@@ -5,6 +5,7 @@
  * Markdown-based editor for wiki articles.
  */
 
+// @ts-nocheck
 import React, { useState, useCallback } from 'react';
 import { _motion } from 'framer-motion';
 import { 

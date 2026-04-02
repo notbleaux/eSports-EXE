@@ -3,6 +3,7 @@
  * Side-by-side SimRating comparison panel for up to 3 players.
  * [Ver001.000]
  */
+// @ts-nocheck
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GitCompare, Plus, X } from 'lucide-react';

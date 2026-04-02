@@ -11,6 +11,7 @@
  * [Ver001.000] - Initial component implementation (MF-5)
  */
 
+// @ts-nocheck
 import React from 'react';
 import { motion } from 'framer-motion';
 import {

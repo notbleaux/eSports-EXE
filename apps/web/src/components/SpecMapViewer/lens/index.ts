@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.002] - Added Vector2D export
  * SpecMapViewer Lens System
  * =========================

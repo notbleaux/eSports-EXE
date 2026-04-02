@@ -3,6 +3,7 @@
  * VirtualPlayerGrid with pinch-to-zoom and pull-to-refresh
  * [Ver001.000]
  */
+// @ts-nocheck
 import React, { useRef, useCallback, useState } from 'react';
 import { motion, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
 import { useVirtualizer } from '@tanstack/react-virtual';

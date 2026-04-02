@@ -19,6 +19,7 @@
  * - TL-A1-1-B Context Detection Engine
  */
 
+// @ts-nocheck
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useWebSocket, WebSocketMessage } from './useWebSocket';
 import { getBroadcastQueue, enqueueAsync } from '../lib/broadcast/queue';

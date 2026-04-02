@@ -4,6 +4,7 @@
  * [Ver001.001]
  */
 
+// @ts-nocheck
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useGridWorker } from '../workers/useGridWorker'

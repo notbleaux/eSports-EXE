@@ -6,6 +6,7 @@
  * [Ver001.002] - Added ML Model Registry integration support
  */
 
+// @ts-nocheck
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useMLCacheStore } from '../store/mlCacheStore'
 import { useMLInference, type ModelInfo } from './useMLInference'

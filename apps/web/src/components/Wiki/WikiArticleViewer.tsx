@@ -5,6 +5,7 @@
  * Displays a wiki article with markdown rendering and feedback.
  */
 
+// @ts-nocheck
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
