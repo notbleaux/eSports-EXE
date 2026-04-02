@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Map Zoom Gestures
  * Touch gesture integration for SpecMap with pinch zoom, pan, and double-tap

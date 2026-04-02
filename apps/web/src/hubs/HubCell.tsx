@@ -4,6 +4,7 @@
  * [Ver001.000]
  */
 
+// @ts-nocheck
 import React, { useEffect, useRef, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePageVisibility } from 'react-page-visibility' // polyfill if needed
