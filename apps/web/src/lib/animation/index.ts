@@ -7,6 +7,13 @@
  */
 
 // ============================================================================
+// Imports (for use in utility functions below)
+// ============================================================================
+
+import type { AnimationState, AnimationStep, AnimationPriority, AnimationSequence } from './states';
+import { DEFAULT_STATE_CONFIGS, DEFAULT_TRANSITIONS, PRIORITY_WEIGHTS } from './states';
+
+// ============================================================================
 // Core Exports
 // ============================================================================
 

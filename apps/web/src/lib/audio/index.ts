@@ -28,6 +28,14 @@
  */
 
 // ============================================================================
+// Internal Imports (for utility functions)
+// ============================================================================
+
+import { getAudioManager, destroyAudioManager } from './manager';
+import { getVoiceController, destroyVoiceController } from './voice';
+import { getSFXController, destroySFXController } from './sfx';
+
+// ============================================================================
 // Types
 // ============================================================================
 

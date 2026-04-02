@@ -40,6 +40,13 @@
  */
 
 // ============================================================================
+// Internal Imports (for utility functions below)
+// ============================================================================
+
+import { getSpatialAudioEngine, destroySpatialAudioEngine } from './engine';
+import { getEnvironmentAudioManager, destroyEnvironmentAudioManager } from './environment';
+
+// ============================================================================
 // Core Engine Exports
 // ============================================================================
 
