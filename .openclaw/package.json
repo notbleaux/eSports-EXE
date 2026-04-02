@@ -20,7 +20,6 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "vscode": "^1.85.0"
   },
   "engines": {
     "vscode": "^1.85.0"

@@ -21,19 +21,18 @@ class ACPSessionTreeProvider implements vscode.TreeDataProvider<vscode.TreeItem>
   getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
     if (!element) {
       const status = acpClient?.isConnected() ? "Connected" : "Disconnected";
-      return Promise.resolve([
-        new vscode.TreeItem(
-          "Status",
-          status === "Connected"
-            ? vscode.TreeItemCollapsibleState.Expanded
-            : vscode.TreeItemCollapsibleState.None,
-          status,
-        ),
-        new vscode.TreeItem(
-          "Session",
-          acpClient?.createSession() || "No active session",
-        ),
-      ]);
+      const statusItem = new vscode.TreeItem(
+        `Status: ${status}`,
+        status === "Connected"
+          ? vscode.TreeItemCollapsibleState.Expanded
+          : vscode.TreeItemCollapsibleState.None,
+      );
+      const sessionItem = new vscode.TreeItem(
+        "Session",
+        vscode.TreeItemCollapsibleState.None,
+      );
+      sessionItem.description = "Active";
+      return Promise.resolve([statusItem, sessionItem]);
     }
     return Promise.resolve([]);
   }
