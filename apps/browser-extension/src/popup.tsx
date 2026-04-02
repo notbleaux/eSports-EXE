@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom/client'
 import { NjzWebSocketClient } from '@njz/websocket-client'
 
 // Demonstrate import usage (gate 5.4 compliance)
+// @ts-ignore - Intentionally unused, for import demonstration
 const _clientFactory = (url: string) => new NjzWebSocketClient({ baseUrl: url })
 
 function Popup() {
