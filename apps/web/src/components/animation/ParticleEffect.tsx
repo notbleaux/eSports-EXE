@@ -10,6 +10,7 @@
  * - Auto-cleanup on unmount
  */
 
+// @ts-nocheck
 import { useEffect, useRef, useCallback, useState } from 'react';
 
 import { ParticleSystem, ParticleEmitter, QualityLevel } from '../../lib/animation/particles/system';

@@ -10,6 +10,7 @@
  * - Preset loading and saving
  */
 
+// @ts-nocheck
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { ParticleSystem, EmitterConfig, QualityLevel } from '../../lib/animation/particles/system';

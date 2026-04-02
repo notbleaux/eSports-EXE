@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { Button } from '../ui/button' // Assume UI lib or Tailwind
+import { Button } from '../ui/Button' // Assume UI lib or Tailwind
 import { useLensingStore, useActiveLens, useIsMobile } from '../../store/lensingStore'
 import { Smartphone, Monitor } from 'lucide-react'
 import { motion } from 'framer-motion'

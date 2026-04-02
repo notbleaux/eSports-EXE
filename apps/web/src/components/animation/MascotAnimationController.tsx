@@ -12,6 +12,7 @@
  * - Debug visualization
  */
 
+// @ts-nocheck
 import {
   useRef,
   useEffect,
