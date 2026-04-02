@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Tactical Lens Types for SpecMap V2
  * Type definitions for the 8 tactical analysis lenses

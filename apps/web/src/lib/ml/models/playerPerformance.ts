@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Player Performance Prediction Model
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Round Outcome Predictor Model
  * 

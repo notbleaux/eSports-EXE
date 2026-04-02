@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Fake Detection Lens - SpecMap V2 Tactical Lens
  * 

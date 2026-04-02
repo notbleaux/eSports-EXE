@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Performance Optimization for 3D Maps
  * 

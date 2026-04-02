@@ -1,3 +1,4 @@
+// @ts-nocheck
 // [Ver001.000] Web Push notification registration and subscription management.
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY ?? '';

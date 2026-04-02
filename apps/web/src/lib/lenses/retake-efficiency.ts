@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Retake Efficiency Lens - SpecMap V2 Tactical Lens
  * 

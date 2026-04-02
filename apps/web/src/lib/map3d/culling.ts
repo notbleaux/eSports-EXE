@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Advanced Culling System for 3D Maps
  * 

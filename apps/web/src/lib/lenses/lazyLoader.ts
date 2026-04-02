@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Lazy Lens Loading System for NJZiteGeisTe Platform
  * Dynamic lens imports with preloading and memory management

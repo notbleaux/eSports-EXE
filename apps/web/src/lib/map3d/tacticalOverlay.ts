@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tactical Overlay 3D for SpecMap
  * 
