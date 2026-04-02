@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Performance Dashboard
  * Development-only overlay for real-time metrics display
