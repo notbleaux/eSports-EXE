@@ -1,8 +1,10 @@
 import type { FC, ReactNode } from 'react';
 
-interface StatBadgeProps {
-  children?: ReactNode;
+export interface StatBadgeProps {
+  value: number;
+  label: string;
+  className?: string;
 }
 
-declare const StatBadge: FC<StatBadgeProps>;
+export declare const StatBadge: FC<StatBadgeProps>;
 export default StatBadge;
