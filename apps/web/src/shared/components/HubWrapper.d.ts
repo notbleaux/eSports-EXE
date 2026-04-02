@@ -1,28 +1,31 @@
 import type { FC, ReactNode } from 'react';
 
-interface HubWrapperProps {
-  children?: ReactNode;
+export interface HubWrapperProps {
+  hubId: string;
+  children: ReactNode;
+  className?: string;
+  showHeader?: boolean;
+  customHeader?: ReactNode;
 }
 
-declare const HubWrapper: FC<HubWrapperProps>;
-export default HubWrapper;
-
-// Named exports
 export interface HubCardProps {
-  children?: ReactNode;
-  title?: string;
+  children: ReactNode;
   className?: string;
+  accent?: 'none' | 'cyan' | 'amber' | 'gold' | 'white';
+  hover?: boolean;
   onClick?: () => void;
 }
-
-export function HubCard(props: HubCardProps): JSX.Element;
 
 export interface HubStatCardProps {
   label: string;
   value: string | number;
-  change?: string | number;
-  color?: 'cyan' | 'red' | 'green' | 'yellow';
+  change?: string;
+  color?: 'cyan' | 'amber' | 'gold' | 'green' | 'red';
   onClick?: () => void;
 }
 
-export function HubStatCard(props: HubStatCardProps): JSX.Element;
+export declare const HubWrapper: FC<HubWrapperProps>;
+export declare const HubCard: FC<HubCardProps>;
+export declare const HubStatCard: FC<HubStatCardProps>;
+
+export default HubWrapper;
