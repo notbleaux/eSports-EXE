@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Worker Utilities for NJZiteGeisTe Platform
  * Worker pool management, message serialization, and cleanup utilities

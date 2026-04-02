@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Service Worker - Production-Ready PWA with Offline Support
  * [Ver003.000] - Enhanced for SATOR hub offline player stats

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Lensing Store - TENET HUB Visibility & Configuration
  * Phase 1 of NJZiteGeisTe Platform

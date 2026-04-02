@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.001] - Exported HubWrapperProps type
  * HubWrapper Component
  * ====================

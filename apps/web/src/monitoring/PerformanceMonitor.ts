@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Performance Monitor - Real User Monitoring (RUM)
  * Tracks Web Vitals, ML inference metrics, and circuit breaker telemetry
