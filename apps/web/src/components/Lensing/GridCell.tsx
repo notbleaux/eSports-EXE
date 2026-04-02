@@ -4,10 +4,10 @@
  */
 
 import React from 'react'
-import HubCell from '../../../hubs/HubCell'
-import { Panel } from '../../../store/dynamicStore'
-import { useDynamicStore } from '../../../store/dynamicStore'
-import { cn } from '../../../lib/utils' // Tailwind merge
+import HubCell from '../../../hubs/HubCell.js'
+import { Panel } from '../../../store/dynamicStore.js'
+import { useDynamicStore } from '../../../store/dynamicStore.js'
+import { cn } from '../../../lib/utils.js' // Tailwind merge
 
 interface GridCellProps {
   panel: Panel

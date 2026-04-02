@@ -33,7 +33,7 @@ export type {
   LiveBroadcastProps,
   BroadcastNotificationProps,
   UseLiveBroadcastOptions,
-} from '../../lib/broadcast/types';
+} from '@/lib/broadcast/types';
 
 // Voice Feedback Component
 export {

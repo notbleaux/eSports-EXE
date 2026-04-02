@@ -13,7 +13,7 @@
  * - Unlock status display
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { MascotId } from '@/components/mascots/types';
 import {
@@ -24,7 +24,6 @@ import {
   EMOTE_LIBRARY,
   CATEGORY_CONFIG,
   RARITY_CONFIG,
-  getEmotesByCategory,
   getEmotesForMascot,
   getFavoriteEmotes,
   getQuickSlots,
@@ -88,7 +87,7 @@ const EmoteCard: React.FC<EmoteCardProps> = ({
   isSelected,
   onClick,
   onFavoriteClick,
-  onQuickSlotClick: _onQuickSlotClick,
+  onQuickSlotClick: _,
 }) => {
   const rarityConfig = RARITY_CONFIG[emote.rarity];
 
@@ -340,7 +339,7 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
   mascotId,
   playerProgress,
   playerLevel,
-  achievements: _achievements,
+  achievements: _,
   onEmoteSelect,
   onEmotePreview: _onEmotePreview,
   onFavoriteToggle,
@@ -357,7 +356,7 @@ export const EmotePanel: React.FC<EmotePanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmote, setSelectedEmote] = useState<EmoteDefinition | null>(null);
   const [assigningQuickSlot, setAssigningQuickSlot] = useState<number | undefined>();
-  const [, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [, _setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Memoized data
   const compatibleEmotes = useMemo(() => getEmotesForMascot(mascotId), [mascotId]);

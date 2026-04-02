@@ -19,8 +19,9 @@ import {
   forwardRef,
   useImperativeHandle,
   useMemo,
+  useCallback,
 } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Transition } from 'framer-motion';
 
 import {
   type AnimationState,
@@ -30,8 +31,9 @@ import {
   DEFAULT_STATE_CONFIGS,
 } from '@/lib/animation/states';
 import { AnimationStateMachine } from '@/lib/animation/stateMachine';
-import { AnimationSequencer, type AnimationSequence } from '@/lib/animation/sequencer';
+import { AnimationSequencer, type AnimationSequence, type AnimationStep } from '@/lib/animation/sequencer';
 import { createAnimationBridge } from '@/lib/three/animationBridge';
+import type { MascotId } from '@/components/mascots/types';
 
 // ============================================================================
 // Types
@@ -106,6 +108,9 @@ interface StateLabelProps {
   progress: number;
 }
 
+// THREE namespace stub for type declarations
+declare const THREE: typeof import('three');
+
 const StateLabel: React.FC<StateLabelProps> = ({ state, config, isTransitioning, progress }) => (
   <motion.div
     className="absolute top-2 left-2 px-2 py-1 rounded text-xs font-mono pointer-events-none select-none z-10"
@@ -141,7 +146,7 @@ interface DebugPanelProps {
   mascotId: MascotId;
 }
 
-const DebugPanel: React.FC<DebugPanelProps> = ({ stateMachine, sequencer: _sequencer, mascotId }) => {
+const DebugPanel: React.FC<DebugPanelProps> = ({ stateMachine, sequencer: _s, mascotId }) => {
   const [currentState, setCurrentState] = useState(stateMachine.getCurrentState());
   const [progress, setProgress] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -225,7 +230,7 @@ export const MascotAnimationController = forwardRef<
 >((
   {
     mascotId,
-    currentState,
+    currentState: _,
     targetState,
     controlled = false,
     initialState = 'idle',
@@ -250,7 +255,7 @@ export const MascotAnimationController = forwardRef<
   const isMountedRef = useRef(true);
 
   // State for re-rendering
-  const [, forceUpdate] = useState({});
+  const [, _forceUpdate] = useState({});
 
   // Initialize instances
   useEffect(() => {
@@ -266,8 +271,9 @@ export const MascotAnimationController = forwardRef<
     // Create sequencer
     sequencerRef.current = new AnimationSequencer(debug);
 
-    // Create animation bridge
+    // Create animation bridge (stored for future use)
     _bridgeRef.current = createAnimationBridge();
+    void _bridgeRef;
 
     // Subscribe to events
     const unsubscribeStateChange = stateMachineRef.current.on('stateChange', (event) => {
@@ -368,10 +374,11 @@ export const MascotAnimationController = forwardRef<
   // Animation progress is tracked internally by the state machine
 
   // Force update when animation state changes (for reactivity)
+  const [, _forceAnimUpdate] = useState({});
   useEffect(() => {
     if (!stateMachineRef.current) return;
     const interval = setInterval(() => {
-      forceAnimUpdate({});
+      _forceAnimUpdate({});
     }, 16);
     return () => clearInterval(interval);
   }, []);
@@ -388,15 +395,6 @@ export const MascotAnimationController = forwardRef<
     smooth: [0.4, 0, 0.2, 1] as [number, number, number, number],
     snappy: [0.2, 0, 0, 1] as [number, number, number, number],
     playful: [0.68, -0.6, 0.32, 1.6] as [number, number, number, number],
-  };
-
-  // Spring physics configurations (available for future use)
-  const springConfigs = {
-    gentle: { stiffness: 100, damping: 15, mass: 1 },
-    default: { stiffness: 300, damping: 20, mass: 1 },
-    bouncy: { stiffness: 400, damping: 10, mass: 1 },
-    stiff: { stiffness: 500, damping: 30, mass: 1 },
-    slow: { stiffness: 100, damping: 20, mass: 2 },
   };
 
   // Framer Motion variants for container with improved physics
@@ -518,4 +516,4 @@ export default MascotAnimationController;
 // ============================================================================
 
 export { AnimationStateMachine, AnimationSequencer };
-export type { AnimationSequence, AnimationStep, AnimationState };
+export type { AnimationSequence, AnimationState };

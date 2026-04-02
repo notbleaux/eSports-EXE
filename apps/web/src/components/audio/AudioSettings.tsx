@@ -13,7 +13,7 @@
  * - Visual feedback and indicators
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { cn } from '@/utils/cn';
 import { useAudio, AUDIO_PRESETS, applyAudioPreset } from '@/lib/audio';
 import type { AudioCategory, AudioQuality } from '@/lib/audio/types';
@@ -107,7 +107,7 @@ const VolumeSlider: React.FC<VolumeSliderProps> = ({
   onChange,
   onToggleMute,
   icon,
-  colorClass: _colorClass = 'bg-primary',
+  colorClass: _ = 'bg-primary',
 }) => {
   const getVolumeLevel = (): 'off' | 'low' | 'medium' | 'high' => {
     if (muted || value === 0) return 'off';
@@ -519,4 +519,3 @@ export const AudioIndicator: React.FC<AudioIndicatorProps> = ({
 // ============================================================================
 
 export default AudioSettings;
-ioSettings;

@@ -23,8 +23,11 @@ import React, {
   useCallback,
   useMemo,
   useRef,
+  useEffect,
   type ReactNode,
   type ChangeEvent,
+  type FormEvent,
+  type FocusEvent,
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { CognitiveLoadLevel, CognitiveLoadState } from '../../lib/cognitive/types';
@@ -37,10 +40,13 @@ import {
   getSmartDefault,
   recordDefaultUsed,
   type FieldContext,
+  type SmartDefault,
 } from '../../lib/cognitive/adaptive/defaults';
 import {
   buildContext,
   getGlobalStore,
+  predictOptimal,
+  type PredictionResult,
 } from '../../lib/cognitive/adaptive/learning';
 
 // ============================================================================
@@ -598,6 +604,7 @@ export const AdaptiveFormProvider: React.FC<AdaptiveFormProviderProps> = ({
       data: { category: field.category },
     };
     // Note: fieldContext data property is defined by type but not used in current implementation
+  void fieldContext.data;
 
     const smartDefault = getSmartDefault(fieldContext);
     return smartDefault?.value ?? field.defaultValue;

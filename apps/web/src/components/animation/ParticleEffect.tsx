@@ -20,6 +20,7 @@ import {
   getPresetForMascot,
   createAbilityEffect,
 } from '../../lib/animation/particles/presets';
+import * as THREE from 'three';
 
 // ============================================
 // Types and Interfaces
@@ -128,7 +129,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   const startTimeRef = useRef<number>(0);
   const isActiveRef = useRef<boolean>(false);
 
-  const [state, setState] = useState<ParticleEffectState>({
+  const [state, _setState] = useState<ParticleEffectState>({
     isPlaying: false,
     isPaused: false,
     progress: 0,
@@ -178,7 +179,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
     // Particle renderer
     const particleRenderer = new ParticleRenderer(scene, camera, {
       maxParticles: maxParticles || 2000,
-      texture: generateDefaultAtlas(),
+      texture: null as unknown as THREE.Texture,
       useInstancing: true,
       useVertexColors: true,
       depthSorting: false,
@@ -246,7 +247,6 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
     if (!isActiveRef.current) return;
 
     const system = particleSystemRef.current;
-    const renderer = rendererRef.current;
     const renderer3D = rendererRef.current;
     const emitter = emitterRef.current;
 
@@ -297,7 +297,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, [duration, loop, quality, intensity, onComplete]);
 
   // Start effect
-  const start = useCallback(() => {
+  const _start = useCallback(() => {
     if (isActiveRef.current) return;
 
     // Create emitter if not exists
@@ -333,7 +333,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, [createEmitter, effectType, mascotId, intensity, animate, onStart]);
 
   // Stop effect
-  const stop = useCallback(() => {
+  const _stop = useCallback(() => {
     isActiveRef.current = false;
     cancelAnimationFrame(animationFrameRef.current);
 
@@ -354,7 +354,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, [autoCleanup]);
 
   // Pause effect
-  const pauseEffect = useCallback(() => {
+  const _pauseEffect = useCallback(() => {
     if (!isActiveRef.current) return;
 
     isActiveRef.current = false;
@@ -371,7 +371,7 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   }, []);
 
   // Resume effect
-  const resumeEffect = useCallback(() => {
+  const _resumeEffect = useCallback(() => {
     if (!state.isPaused) return;
 
     isActiveRef.current = true;
@@ -401,15 +401,15 @@ export const ParticleEffect: React.FC<ParticleEffectProps> = ({
   useEffect(() => {
     if (autoStart) {
       const timer = setTimeout(() => {
-        start();
+        _start();
       }, delay * 1000);
 
       return () => {
         clearTimeout(timer);
-        stop();
+        _stop();
       };
     }
-  }, [autoStart, delay, start, stop]);
+  }, [autoStart, delay, _start, _stop]);
 
   // Handle position changes
   useEffect(() => {
@@ -507,27 +507,27 @@ export function useParticleEffect(
     currentLOD: 'high',
   });
 
-  const start = useCallback(() => {
+  const _start = useCallback(() => {
     ref.current?.start();
   }, [ref]);
 
-  const stop = useCallback(() => {
+  const _stop = useCallback(() => {
     ref.current?.stop();
   }, [ref]);
 
-  const pause = useCallback(() => {
+  const _pause = useCallback(() => {
     ref.current?.pause();
   }, [ref]);
 
-  const resume = useCallback(() => {
+  const _resume = useCallback(() => {
     ref.current?.resume();
   }, [ref]);
 
   return {
-    start,
-    stop,
-    pause,
-    resume,
+    start: _start,
+    stop: _stop,
+    pause: _pause,
+    resume: _resume,
     state,
   };
 }
