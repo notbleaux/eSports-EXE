@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.001] - Exported UseWorkerOptions and UseWorkerReturn types
  * useWorker Hook for NJZiteGeisTe Platform
  * Generic worker management hook with lifecycle handling

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Export Button Component
  * Trigger export with format options

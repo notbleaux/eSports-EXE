@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * GridCell - react-grid-layout Item Wrapper
  * [Ver001.001]

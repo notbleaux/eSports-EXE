@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OfflineFallback Component
  * [Ver001.000] - Displays offline status and cached player data

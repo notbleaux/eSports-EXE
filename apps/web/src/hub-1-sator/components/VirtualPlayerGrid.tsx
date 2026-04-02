@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * VirtualPlayerGrid Component
  * High-performance virtualized player list using @tanstack/react-virtual

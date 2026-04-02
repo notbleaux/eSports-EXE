@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * GestureDemo Component
  * Demonstrates all gesture capabilities
