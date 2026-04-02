@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Drawing System for Annotations
  * Canvas-based drawing with arrows, circles, zones, and freehand

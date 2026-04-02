@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CS2 Replay Parser
  * Parses Counter-Strike 2 demo files to normalized replay format

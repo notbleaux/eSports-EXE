@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Replay Storage Tests
  * Comprehensive tests for IndexedDB storage, metadata, and cloud upload

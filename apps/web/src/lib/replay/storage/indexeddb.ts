@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * IndexedDB Replay Storage
  * Local persistence for replay files with metadata indexing

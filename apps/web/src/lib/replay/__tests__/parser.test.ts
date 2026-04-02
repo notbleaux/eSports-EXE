@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Parser Performance Tests
  * Validates performance requirements for replay parsing

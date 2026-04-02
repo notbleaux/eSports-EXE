@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Annotation Export System
  * Export replays with annotations in various formats

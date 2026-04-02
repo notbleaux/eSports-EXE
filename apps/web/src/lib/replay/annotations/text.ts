@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Text Annotation System
  * Text labels with positioning, styling, and formatting

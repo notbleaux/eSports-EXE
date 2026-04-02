@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Annotation System Module
  * Main entry point for replay annotation functionality

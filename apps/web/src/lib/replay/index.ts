@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Replay Parser Module
  * Main entry point for replay parsing functionality

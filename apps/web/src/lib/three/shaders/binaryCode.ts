@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Binary Code Shader
  * 

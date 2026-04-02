@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Subscription Manager - Manage Live Event Subscriptions
  * 

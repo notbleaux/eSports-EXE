@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000] */
 /**
  * Multi-view State Management

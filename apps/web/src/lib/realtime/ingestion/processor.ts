@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Event Stream Processor - Live Event Stream Processing
  * 

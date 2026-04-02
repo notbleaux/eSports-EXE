@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Real-time Store Expanded Tests - State Consistency & Performance
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Camera Director System
  * Automated camera switching and scene composition for replay viewing

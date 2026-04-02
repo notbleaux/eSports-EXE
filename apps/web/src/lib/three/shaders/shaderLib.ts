@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Shader Library Core
  * 

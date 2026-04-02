@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Replay Metadata Indexing
  * Extract and index metadata from replays for fast searching

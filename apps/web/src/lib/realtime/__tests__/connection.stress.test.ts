@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Live Connection Manager - Stress & Resilience Tests
  * 

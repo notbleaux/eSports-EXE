@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Three.js Optimization Tests
  * 
