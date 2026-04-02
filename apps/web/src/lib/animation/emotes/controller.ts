@@ -777,15 +777,4 @@ export function createEmoteController(
   return new EmoteController(stateMachine, options);
 }
 
-// ============================================================================
-// Exports
-// ============================================================================
-
-export type {
-  EmotePlayOptions,
-  EmotePlayState,
-  EmoteEvent,
-  QueuedEmote,
-  ActiveEmoteState,
-  EmoteControllerOptions,
-};
+// All types already exported above

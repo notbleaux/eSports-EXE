@@ -640,4 +640,3 @@ if (typeof document !== 'undefined') {
 
 export default WolfNJ;
 export { VARIANT_COLORS as WolfNJVariantColors };
-export type { WolfNJMascotProps };

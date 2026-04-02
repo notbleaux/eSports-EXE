@@ -329,6 +329,3 @@ export const preloadMascots = (mascots: Array<{ mascot: MascotType; style?: Masc
 // ============================================================================
 
 export default MascotAssetLazyLoaded;
-
-// Re-export types
-export type { LazyLoadedMascotProps };
