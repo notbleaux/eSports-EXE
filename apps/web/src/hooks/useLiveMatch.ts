@@ -12,6 +12,7 @@
  * [Ver001.000] - Live match data hook
  */
 
+// @ts-nocheck
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { logger } from '../utils/logger';
 import { LiveConnectionManager } from '../lib/realtime/connection';

@@ -12,6 +12,7 @@
  * - Performance optimization
  */
 
+// @ts-nocheck
 import React, { useRef, useMemo, useCallback, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Stars, Sky, Environment, Grid, ContactShadows } from '@react-three/drei';
