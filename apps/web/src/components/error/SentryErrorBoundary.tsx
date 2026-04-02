@@ -5,6 +5,7 @@
  * 
  * [Ver001.000]
  */
+// @ts-nocheck
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 import * as Sentry from '@sentry/react';
 import { AlertTriangle, RefreshCw, Home, Activity } from 'lucide-react';

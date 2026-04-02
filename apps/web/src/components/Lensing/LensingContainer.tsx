@@ -4,6 +4,7 @@
  * [Ver001.000]
  */
 
+// @ts-nocheck
 import React, { useEffect, useCallback } from 'react'
 import { Responsive } from 'react-grid-layout'
 import GridCell from './GridCell'

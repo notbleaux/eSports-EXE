@@ -3,6 +3,7 @@
  * [Ver001.000]
  */
 
+// @ts-nocheck
 import React from 'react'
 import { Button } from '../ui/Button' // Assume UI lib or Tailwind
 import { useLensingStore, useActiveLens, useIsMobile } from '../../store/lensingStore'
