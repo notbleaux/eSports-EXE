@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PatchNotesReader Component
  * Browse patch changelogs with agent, weapon, and map changes

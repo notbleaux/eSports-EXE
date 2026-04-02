@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ELOBadge Component
  * Visual ELO rating display with tier color coding

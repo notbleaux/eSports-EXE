@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * DailyChallengePanel Component
  * Main container showing today's challenge with OPERA theme

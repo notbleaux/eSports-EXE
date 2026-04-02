@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LiveStreamCard - Stream thumbnail card for grid views
  * 

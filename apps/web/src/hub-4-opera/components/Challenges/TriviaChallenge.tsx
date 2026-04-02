@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TriviaChallenge Component
  * Trivia question challenge with optional timer

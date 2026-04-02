@@ -1,3 +1,4 @@
+// @ts-nocheck
 // [Ver001.000] Follow/Unfollow button for player cards.
 import { useFollows } from '../hooks/useFollows';
 

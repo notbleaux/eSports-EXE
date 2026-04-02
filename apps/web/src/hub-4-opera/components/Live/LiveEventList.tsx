@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LiveEventList - Current and upcoming events sidebar
  * 

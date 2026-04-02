@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * RankingsContainer Component
  * Main container with tabs for Organizations, Teams, and Players

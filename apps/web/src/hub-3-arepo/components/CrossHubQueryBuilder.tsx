@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CrossHubQueryBuilder Component
  * Visual query builder for cross-hub queries

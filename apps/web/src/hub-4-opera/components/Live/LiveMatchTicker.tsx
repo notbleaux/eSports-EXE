@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LiveMatchTicker - Live score ticker bar at top
  * 

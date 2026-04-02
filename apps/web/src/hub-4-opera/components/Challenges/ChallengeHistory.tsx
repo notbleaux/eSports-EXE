@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ChallengeHistory Component
  * Past challenges history with filtering

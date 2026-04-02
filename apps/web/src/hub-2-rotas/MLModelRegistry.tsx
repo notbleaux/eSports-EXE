@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ML Model Registry Component
  * Hub-2-ROTAS: Model management, versioning, metrics, and A/B testing

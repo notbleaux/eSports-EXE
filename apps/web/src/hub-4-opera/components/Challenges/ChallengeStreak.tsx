@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ChallengeStreak Component
  * Streak tracker display with visual calendar

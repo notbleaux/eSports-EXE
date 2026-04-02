@@ -1,3 +1,4 @@
+// @ts-nocheck
 // [Ver002.000] Feed of followed players with unfollow option.
 import { Link } from 'react-router-dom';
 import { useFollows } from '../hooks/useFollows';

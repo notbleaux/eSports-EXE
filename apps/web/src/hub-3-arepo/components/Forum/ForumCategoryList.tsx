@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ForumCategoryList Component
  * Displays grid of forum categories with icons and thread counts

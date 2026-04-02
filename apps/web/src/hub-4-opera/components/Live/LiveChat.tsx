@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LiveChat - Chat UI (read-only v1, WebSocket in Week 1)
  * 

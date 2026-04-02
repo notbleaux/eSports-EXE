@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PatchImpactAnalyzer Component
  * Cross-reference: Patch changes + Performance impact

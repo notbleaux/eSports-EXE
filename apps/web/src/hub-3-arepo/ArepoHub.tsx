@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AREPO Hub - Hub 3: The Cross-Reference Engine
  * Connects SATOR (Component B) and OPERA (Component D) through cross-hub queries

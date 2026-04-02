@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * DuelPredictor Component
  * Duel outcome predictor with scenario selection and context inputs

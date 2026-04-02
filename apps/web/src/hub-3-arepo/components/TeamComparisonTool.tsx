@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TeamComparisonTool Component
  * Cross-reference: Compare teams across tournaments

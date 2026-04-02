@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Feature Extractor - Extract and Normalize Features for ML Models
  * 

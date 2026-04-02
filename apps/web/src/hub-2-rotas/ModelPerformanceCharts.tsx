@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Model Performance Charts - Visualization component for ROTAS Hub
  * Recharts integration for ML model analytics

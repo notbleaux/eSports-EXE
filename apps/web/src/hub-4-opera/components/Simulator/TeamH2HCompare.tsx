@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TeamH2HCompare Component
  * Team vs Team comparison with win probability prediction

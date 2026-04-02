@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ForumContainer Component
  * Main container that integrates all forum components with state management

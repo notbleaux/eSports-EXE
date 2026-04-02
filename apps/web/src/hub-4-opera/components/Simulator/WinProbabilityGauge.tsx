@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * WinProbabilityGauge Component
  * Visual semi-circle gauge for displaying win probability

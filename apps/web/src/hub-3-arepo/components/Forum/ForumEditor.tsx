@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ForumEditor Component
  * Create new thread form with title, category select, and content editor

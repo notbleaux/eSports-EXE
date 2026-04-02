@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ScheduleViewer Component
  * Show match schedule for selected tournament

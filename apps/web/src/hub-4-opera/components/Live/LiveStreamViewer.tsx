@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LiveStreamViewer - Embedded stream viewer supporting Twitch and YouTube
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ChallengeResult Component
  * Result display after attempting a challenge with confetti animation

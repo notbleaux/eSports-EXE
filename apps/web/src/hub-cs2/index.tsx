@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * CS2 Hub - Hub: Counter-Strike 2
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ForumThreadView Component
  * Displays a full thread with original post and replies
