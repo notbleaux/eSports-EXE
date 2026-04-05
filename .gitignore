@@ -114,4 +114,23 @@ AGENT.md
 # FrameRef cache directory
 /.frameref
 
-CLAUDE.md
+# Personal memory/config files
+.memory/
+.memix/
+.memvid/
+.windsurfrules
+temp_repo/
+
+# Personal AI/IDE configurations
+.agent/
+.agents/rules/
+.aimemory/
+.brainsync/
+.cursor/
+.cursorrules
+.github/instructions/
+.github/prompts/
+LongTermMemory/
+
+# Cleanup scripts (local use only)
+cleanup-extensions.ps1
