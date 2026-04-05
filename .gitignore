@@ -104,3 +104,14 @@ bandit-*.json
 venv/
 ENV/
 env/
+
+# Auto-generated agent rules (personalized per developer)
+.brainsync/agent-rules.md
+
+AGENT.md
+.agent-mem/
+
+# FrameRef cache directory
+/.frameref
+
+CLAUDE.md
