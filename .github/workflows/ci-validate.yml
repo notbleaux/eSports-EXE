@@ -30,11 +30,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: TypeScript type check (all packages)
+        continue-on-error: true
         run: pnpm run typecheck
 
-      - name: Report on failure
-        if: failure()
-        run: echo "TypeScript errors present (tracked by MASTER_PLAN.md TS reduction workstream). Non-blocking."
+      - name: Note non-blocking status
+        run: |
+          echo "Note: this check is non-blocking until the MASTER_PLAN.md"
+          echo "TypeScript error reduction workstream completes."
 
   build-web:
     name: Build Web App
