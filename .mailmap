@@ -1,0 +1,11 @@
+# .mailmap — Map historical commits to canonical identity
+# Project: ZeSporteXte
+# Standard: ililix (lowercase) for all codebase references
+# Created: 2026-05-12
+
+# Map root commits to ililix
+root <root@localhost> ililix <ililix@zesportexte.local>
+root <root@iZt4nfmepp3062wycbuep2Z> ililix <ililix@zesportexte.local>
+
+# If any other historical authors exist, add mappings here
+# Format: <canonical-name> <canonical-email> <original-name> <original-email>
