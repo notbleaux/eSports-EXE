@@ -1,0 +1,20 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "ms-python.black-formatter",
+    "ms-azuretools.vscode-docker",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "bradlc.vscode-tailwindcss",
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "github.vscode-github-actions",
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
