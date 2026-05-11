@@ -17,8 +17,8 @@
 
 - **Total archived files:** 162 (exact count at 2026-03-30; 3 dossiers + 18 root-level + 141 in docs/)
 - **Date range covered:** 2026-03-17 – 2026-03-27 (all files migrated on 2026-03-17)
-- **Migration status:** READY — `notbleaux/eSports-EXE-archives` created. Subtree push pending CODEOWNER approval (see CODEOWNER_CHECKLIST.md C-ARCH.1). Do not push until approved — this removes `Archived/` from current repo.
-- **Archive repo:** `notbleaux/eSports-EXE-archives` — created 2026-03-27. Cross-reference linking and bidirectional archive features now unblocked.
+- **Migration status:** READY — `notbleaux/ZeSporteXte-archives` created. Subtree push pending CODEOWNER approval (see CODEOWNER_CHECKLIST.md C-ARCH.1). Do not push until approved — this removes `Archived/` from current repo.
+- **Archive repo:** `notbleaux/ZeSporteXte-archives` — created 2026-03-27. Cross-reference linking and bidirectional archive features now unblocked.
 
 ---
 
@@ -145,11 +145,11 @@ All discovery rounds (ROUND1_*, ROUND2_*, ROUND3_*, ROUND4_*) document the verif
 
 ## FAQ
 
-1. **Where did all the archive files go?** → `Archived/Y26/M03/docs/` in this repo (144 files, all added 2026-03-17), pending migration to `notbleaux/eSports-EXE-archives`.
+1. **Where did all the archive files go?** → `Archived/Y26/M03/docs/` in this repo (144 files, all added 2026-03-17), pending migration to `notbleaux/ZeSporteXte-archives`.
 2. **Where is the Job Board?** → Permanently deleted in Phase 7 gate 7.2. Patterns preserved in §Historical Artefacts above.
 3. **Can I load files from `Archived/`?** → These are T2 files. Do NOT load them — they are context waste. Use this dossier's index instead.
 4. **How do I know which phase a document belongs to?** → Check the filename prefix (PHASE_2_, PHASE_3_, PHASE_4_, KID003_, ROUND1_, etc.) or scan the Topic Map above.
-5. **Is there a separate archive repository?** → Not yet. Migration to `notbleaux/eSports-EXE-archives` is a Phase 7 planning deliverable.
+5. **Is there a separate archive repository?** → Not yet. Migration to `notbleaux/ZeSporteXte-archives` is a Phase 7 planning deliverable.
 6. **How often is this dossier updated?** → Monthly, following the cadence in `.agents/ARCHIVE_INDEX_SCHEDULE.md`.
 7. **What was the repo structure before Phase 0?** → See FINAL_DIRECTORY_STRUCTURE.md in Archived/Y26/M03/docs/ for the canonical structure definition.
 8. **What types existed before Phase 1?** → Type history is in git log. The canonical current types are in `data/schemas/` and `packages/@njz/types/`.
@@ -165,4 +165,4 @@ All discovery rounds (ROUND1_*, ROUND2_*, ROUND3_*, ROUND4_*) document the verif
 - **Last verified:** 2026-03-27
 - **Files in archive:** 144 (ROUND1_, ROUND2_, ROUND3_, ROUND4_, PHASE_2_, PHASE_3_, PHASE_4_, KID003_, deployment guides, QA reports, verification reports, implementation plans)
 - **Job Board status:** Deleted (329 files)
-- **Next action:** Phase 7 planning for migration to `notbleaux/eSports-EXE-archives` repository
+- **Next action:** Phase 7 planning for migration to `notbleaux/ZeSporteXte-archives` repository

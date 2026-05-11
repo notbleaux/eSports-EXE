@@ -3,7 +3,7 @@
 # Repository Assessment Report — Libre-X-eSport 4NJZ4 TENET Platform
 
 **Assessment Date:** 2026-03-16  
-**Repository:** notbleaux/eSports-EXE  
+**Repository:** notbleaux/ZeSporteXte  
 **Version:** 2.1.0  
 **Scope:** Full-stack esports analytics and simulation platform
 

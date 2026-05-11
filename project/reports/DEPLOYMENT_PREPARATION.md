@@ -76,7 +76,7 @@ dist/
 | Website | Platform | URL | Purpose |
 |---------|----------|-----|---------|
 | **website-v2** | Vercel | `satorx.vercel.app` | Primary production |
-| **website** | GitHub Pages | `notbleaux.github.io/eSports-EXE` | Legacy archive |
+| **website** | GitHub Pages | `notbleaux.github.io/ZeSporteXte` | Legacy archive |
 
 ### Why This Strategy?
 

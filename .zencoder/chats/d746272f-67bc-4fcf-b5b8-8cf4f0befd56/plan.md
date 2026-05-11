@@ -12,18 +12,18 @@ Create a Product Requirements Document (PRD) based on the feature description.
 4. Make reasonable decisions for minor details based on context and conventions
 5. If user can't clarify, make a decision, state the assumption, and continue
 
-Save the PRD to `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/requirements.md`.
+Save the PRD to `c:\Users\jacke\Documents\GitHub\ZeSporteXte\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/requirements.md`.
 
 **Stop here.** Present the PRD to the user and wait for their confirmation before proceeding.
 
 ### [ ] Step: Technical Specification
 
-Create a technical specification based on the PRD in `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/requirements.md`.
+Create a technical specification based on the PRD in `c:\Users\jacke\Documents\GitHub\ZeSporteXte\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/requirements.md`.
 
 1. Review existing codebase architecture and identify reusable components
 2. Define the implementation approach
 
-Save to `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/spec.md` with:
+Save to `c:\Users\jacke\Documents\GitHub\ZeSporteXte\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/spec.md` with:
 
 - Technical context (language, dependencies)
 - Implementation approach referencing existing code patterns
@@ -36,7 +36,7 @@ Save to `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67
 
 ### [ ] Step: Planning
 
-Create a detailed implementation plan based on `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/spec.md`.
+Create a detailed implementation plan based on `c:\Users\jacke\Documents\GitHub\ZeSporteXte\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/spec.md`.
 
 1. Break down the work into concrete tasks
 2. Each task should reference relevant contracts and include verification steps
@@ -46,7 +46,7 @@ Rule of thumb for step size: each step should represent a coherent unit of work 
 
 If the feature is trivial and doesn't warrant full specification, update this workflow to remove unnecessary steps and explain the reasoning to the user.
 
-Save to `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/plan.md`.
+Save to `c:\Users\jacke\Documents\GitHub\ZeSporteXte\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/plan.md`.
 
 **Stop here.** Present the implementation plan to the user and wait for their confirmation before proceeding.
 
@@ -54,4 +54,4 @@ Save to `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67
 
 This step should be replaced with detailed implementation tasks from the Planning step.
 
-If Planning didn't replace this step, execute the tasks in `c:\Users\jacke\Documents\GitHub\eSports-EXE\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/plan.md`, updating checkboxes as you go. Run planned tests/lint and record results in plan.md.
+If Planning didn't replace this step, execute the tasks in `c:\Users\jacke\Documents\GitHub\ZeSporteXte\.zencoder\chats\d746272f-67bc-4fcf-b5b8-8cf4f0befd56/plan.md`, updating checkboxes as you go. Run planned tests/lint and record results in plan.md.

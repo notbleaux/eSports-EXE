@@ -2,7 +2,7 @@
 
 # Patch 001: Initial Repository Migration
 
-> Migration of satorXrotas documentation and configurations to eSports-EXE
+> Migration of satorXrotas documentation and configurations to ZeSporteXte
 
 ---
 
@@ -25,10 +25,10 @@ related_patches: []
 
 ## Summary
 
-**One-line summary:** Migrated documentation, configurations, and workflows from hvrryh-web/satorXrotas to notbleaux/eSports-EXE
+**One-line summary:** Migrated documentation, configurations, and workflows from hvrryh-web/satorXrotas to notbleaux/ZeSporteXte
 
 **Detailed description:**
-This patch consolidates the two SATOR repositories by migrating all documentation, deployment configurations, and CI/CD workflows from the development repository (satorXrotas) to the production repository (eSports-EXE). The codebases were already synchronized; this patch ensures documentation parity.
+This patch consolidates the two SATOR repositories by migrating all documentation, deployment configurations, and CI/CD workflows from the development repository (satorXrotas) to the production repository (ZeSporteXte). The codebases were already synchronized; this patch ensures documentation parity.
 
 ---
 
@@ -38,7 +38,7 @@ This patch consolidates the two SATOR repositories by migrating all documentatio
 
 The project had two repositories with the same code but different documentation levels:
 - `satorXrotas`: Extensive documentation (13 files) but less visible
-- `eSports-EXE`: Same code but minimal documentation (2 files)
+- `ZeSporteXte`: Same code but minimal documentation (2 files)
 
 To establish a single source of truth, we needed to consolidate documentation in the primary production repository.
 

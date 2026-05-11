@@ -13,7 +13,7 @@
 | Directory: apps/website-v2/src/components/TENET | [PASS] | Exists |
 | File: packages/shared/api/src/betting/odds_engine.py | [PASS] | Exists (9538 bytes) |
 | Python Syntax: packages/shared/api/src/betting/odds_engine.py | [PASS] | Syntax valid |
-| Directory: tests/unit/betting | [WARN] | Directory not found: C:\Users\jacke\Documents\GitHub\eSports-EXE\tests\unit\betting |
+| Directory: tests/unit/betting | [WARN] | Directory not found: C:\Users\jacke\Documents\GitHub\ZeSporteXte\tests\unit\betting |
 | File: packages/shared/api/src/gateway/websocket_gateway.py | [PASS] | Exists (13312 bytes) |
 | Python Syntax: packages/shared/api/src/gateway/websocket_gateway.py | [PASS] | Syntax valid |
 | Directory: apps/website-v2/src/components/TENET/services | [PASS] | Exists |

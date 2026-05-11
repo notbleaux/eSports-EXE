@@ -190,7 +190,7 @@ React app = Needs build process + configuration
 - Your archive website goes live
 - 2 minutes
 - No new accounts
-- Working link: `notbleaux.github.io/eSports-EXE`
+- Working link: `notbleaux.github.io/ZeSporteXte`
 
 **Time:** 3 minutes  
 **Result:** Website live  

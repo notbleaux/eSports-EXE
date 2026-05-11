@@ -397,8 +397,8 @@ See: `services/tenet-verification/DATABASE_SCHEMA.md` for full SQL, column types
 - `/services/websocket/requirements.txt` (updated versions)
 
 ### Locations:
-- **TeneT Verification:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/tenet-verification/`
-- **WebSocket:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/`
+- **TeneT Verification:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/tenet-verification/`
+- **WebSocket:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/`
 
 ---
 

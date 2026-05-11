@@ -1,6 +1,6 @@
 # Integration Test Suite
 
-Cross-service E2E integration tests for ESPORTEZ-MANAGER ↔ eSports-EXE.
+Cross-service E2E integration tests for ESPORTEZ-MANAGER ↔ ZeSporteXte.
 
 ## Overview
 

@@ -1,6 +1,6 @@
 /**
  * Fluid, Dynamic, Adaptive UI Utilities
- * For eSports-EXE HUB improvements: container queries, scroll reveals, viscous SFX
+ * For ZeSporteXte HUB improvements: container queries, scroll reveals, viscous SFX
  * [Ver001.000]
  */
 

@@ -25,7 +25,7 @@ An agent MUST NOT begin a CODEOWNER_APPROVAL_REQUIRED task without a CLAIMED ent
 
 | ID | Task | Status | Agent | Notes |
 |----|------|--------|-------|-------|
-| C-ARCH.1 | Push `Archived/` subtree to `notbleaux/eSports-EXE-archives` then `git rm -r Archived/` `[CRIT]` | UNCLAIMED | — | Archive repo created 2026-03-27. Migration stub in `.agents/ARCHIVE_INDEX_SCHEDULE.md`. 24h hold after approval. Irreversible. |
+| C-ARCH.1 | Push `Archived/` subtree to `notbleaux/ZeSporteXte-archives` then `git rm -r Archived/` `[CRIT]` | UNCLAIMED | — | Archive repo created 2026-03-27. Migration stub in `.agents/ARCHIVE_INDEX_SCHEDULE.md`. 24h hold after approval. Irreversible. |
 
 ### Phase 7 — Repository Governance
 

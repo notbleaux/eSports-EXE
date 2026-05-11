@@ -30,7 +30,7 @@ Based on Task 4 analysis, the following issues were identified and **FIXED**:
 | Platform | URL | Purpose | Status |
 |----------|-----|---------|--------|
 | **Vercel** | `https://satorx.vercel.app` | Primary website (NJZ Platform) | Ready ✅ |
-| **GitHub Pages** | `https://notbleaux.github.io/eSports-EXE` | Archive website | Ready ✅ |
+| **GitHub Pages** | `https://notbleaux.github.io/ZeSporteXte` | Archive website | Ready ✅ |
 | **Render** | `https://sator-api.onrender.com` | API backend | Ready ✅ |
 
 ---
@@ -122,7 +122,7 @@ git push origin main
 **Option A: Blueprint (Recommended)**
 1. Go to https://dashboard.render.com/blueprints
 2. Click "New Blueprint Instance"
-3. Connect `notbleaux/eSports-EXE`
+3. Connect `notbleaux/ZeSporteXte`
 4. Render reads `infrastructure/render.yaml`
 5. Click "Apply"
 
@@ -141,7 +141,7 @@ git push origin main
 ### Step 3: Deploy Website to Vercel
 
 1. Go to https://vercel.com/new
-2. Import `notbleaux/eSports-EXE`
+2. Import `notbleaux/ZeSporteXte`
 3. Configure:
    - Framework Preset: **Vite**
    - Root Directory: `apps/website-v2`
@@ -158,13 +158,13 @@ git push origin main
 
 ### Step 4: Enable GitHub Pages (Archive)
 
-1. Go to https://github.com/notbleaux/eSports-EXE/settings/pages
+1. Go to https://github.com/notbleaux/ZeSporteXte/settings/pages
 2. Source: **Deploy from a branch**
 3. Branch: `main` → `/docs`
 4. Click **Save**
 
 **Expected Output:**
-- URL: `https://notbleaux.github.io/eSports-EXE`
+- URL: `https://notbleaux.github.io/ZeSporteXte`
 - Shows archive website
 
 ---
@@ -183,7 +183,7 @@ curl -I https://satorx.vercel.app
 # Expected: HTTP/2 200
 
 # 3. GitHub Pages
-curl -I https://notbleaux.github.io/eSports-EXE
+curl -I https://notbleaux.github.io/ZeSporteXte
 # Expected: HTTP/2 200
 ```
 

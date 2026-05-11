@@ -32,6 +32,8 @@ jobs:
           FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run: |
           FRONTEND_URL="${FRONTEND_URL:-${{ secrets.FRONTEND_URL }}}"
+          # MIGRATION NOTE (2026-05-12): Project renamed eSports-EXE → ZeSporteXte.
+          # Update this URL after Vercel project rename: https://zesportexte.vercel.app
           TARGET="${FRONTEND_URL:-https://esports-exe.vercel.app}"
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 10 \

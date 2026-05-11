@@ -26,7 +26,7 @@ This report documents the comprehensive implementation of Week 0 Foundation for 
 ### 1.1 Project Structure
 
 ```
-eSports-EXE/
+ZeSporteXte/
 ├── apps/
 │   ├── website-v2/              # React 18 + Vite frontend
 │   │   ├── src/

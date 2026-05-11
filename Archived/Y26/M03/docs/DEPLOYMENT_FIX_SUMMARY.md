@@ -121,7 +121,7 @@ VITE_APP_ENV=staging
 
 | Platform | URL | Status |
 |----------|-----|--------|
-| GitHub Pages | https://notbleaux.github.io/eSports-EXE/ | ✅ Fixed |
+| GitHub Pages | https://notbleaux.github.io/ZeSporteXte/ | ✅ Fixed |
 | Vercel Production | https://libre-x-esport.vercel.app | ✅ Configured |
 | Vercel Preview | https://staging.libre-x-esport.vercel.app | ✅ Configured |
 
@@ -140,7 +140,7 @@ VITE_APP_ENV=staging
    - Go to Settings → Pages
    - Check that deployment is triggered
    - Wait for build to complete
-   - Visit https://notbleaux.github.io/eSports-EXE/
+   - Visit https://notbleaux.github.io/ZeSporteXte/
 
 3. **Verify Vercel**
    - Connect repository to Vercel

@@ -29,7 +29,7 @@ This project can be deployed to multiple platforms:
 **Steps:**
 1. Go to https://vercel.com
 2. Click "Add New Project"
-3. Import from GitHub: `notbleaux/eSports-EXE`
+3. Import from GitHub: `notbleaux/ZeSporteXte`
 4. Configure:
    - **Framework Preset:** Vite
    - **Root Directory:** `apps/website-v2`

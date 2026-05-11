@@ -1,8 +1,8 @@
-# AGENT PROMPT: Present eSports-EXE Wireframes to User
+# AGENT PROMPT: Present ZeSporteXte Wireframes to User
 ## Task: Walk User Through UI/UX Wireframe Review
 
 **Your Role:** UI/UX Presentation Agent  
-**Task:** Present eSports-EXE wireframes to the user in a structured, visual walkthrough  
+**Task:** Present ZeSporteXte wireframes to the user in a structured, visual walkthrough  
 **Format:** 40/40 — Up to 40 segments, 40 seconds of user attention per segment  
 **Goal:** Get user feedback and approval on wireframe designs before implementation
 
@@ -10,11 +10,11 @@
 
 ## Context
 
-You are presenting **interactive HTML wireframes** for the eSports-EXE esports analytics platform. These wireframes were created following the 1/2/3/5 Master Review Framework and represent the v1.1 refined designs.
+You are presenting **interactive HTML wireframes** for the ZeSporteXte esports analytics platform. These wireframes were created following the 1/2/3/5 Master Review Framework and represent the v1.1 refined designs.
 
 ### Wireframe Files Location
 ```
-/root/.openclaw/workspace/eSports-EXE/.agent-prompts/ui-design/wireframes/
+/root/.openclaw/workspace/ZeSporteXte/.agent-prompts/ui-design/wireframes/
 ├── 01-tenet-portal-v1.1.html          (17KB)
 ├── 03-player-leaderboard-v1.1.html    (25KB)
 ├── 04-player-profile.html             (18KB)
@@ -36,7 +36,7 @@ You are presenting **interactive HTML wireframes** for the eSports-EXE esports a
 
 **Segment 1: Opening**
 - Greet the user
-- State your purpose: "I'll walk you through the eSports-EXE wireframes"
+- State your purpose: "I'll walk you through the ZeSporteXte wireframes"
 - Confirm time: "This will take about 30-40 minutes with your feedback"
 - Ask: "Ready to begin?"
 
@@ -61,7 +61,7 @@ You are presenting **interactive HTML wireframes** for the eSports-EXE esports a
 **Segment 5: How to View**
 - Give user the terminal command:
   ```bash
-  cd /root/.openclaw/workspace/eSports-EXE/.agent-prompts/ui-design/wireframes
+  cd /root/.openclaw/workspace/ZeSporteXte/.agent-prompts/ui-design/wireframes
   python3 -m http.server 8888
   ```
 - Tell them to open browser to `http://localhost:8888`
@@ -80,7 +80,7 @@ You are presenting **interactive HTML wireframes** for the eSports-EXE esports a
 **Segment 7: Header & Navigation**
 - Show: Breadcrumb (NEW in v1.1)
 - Show: Logo + Search + Settings
-- Highlight: "eSports-EXE / Select Game" breadcrumb
+- Highlight: "ZeSporteXte / Select Game" breadcrumb
 - Ask: "Is this navigation clear?"
 
 **Segment 8: Hero Section**
@@ -308,7 +308,7 @@ You are presenting **interactive HTML wireframes** for the eSports-EXE esports a
 
 1. **Navigate to the file:**
    ```bash
-   cd /root/.openclaw/workspace/eSports-EXE/.agent-prompts/ui-design/wireframes
+   cd /root/.openclaw/workspace/ZeSporteXte/.agent-prompts/ui-design/wireframes
    python3 -m http.server 8888
    ```
 
@@ -372,7 +372,7 @@ If user wants to:
 
 ## Opening Script (Copy/Paste)
 
-"Hi! I'm your UI/UX Presentation Agent. I'll walk you through the eSports-EXE wireframes we created. 
+"Hi! I'm your UI/UX Presentation Agent. I'll walk you through the ZeSporteXte wireframes we created. 
 
 We have 3 interactive wireframes to review:
 1. TENET Portal (game selection)

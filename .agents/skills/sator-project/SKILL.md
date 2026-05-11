@@ -19,7 +19,7 @@ metadata:
 
 - **Name**: Libre-X-eSport 4NJZ4 TENET Platform
 - **Former Names**: SATOR-eXe-ROTAS / NJZ Platform / RadiantX
-- **Repository**: https://github.com/notbleaux/eSports-EXE
+- **Repository**: https://github.com/notbleaux/ZeSporteXte
 - **Version**: 2.0.0
 - **License**: MIT (Game), CC BY-NC 4.0 (Data Pipeline)
 
@@ -125,8 +125,8 @@ Libre-X-eSport 4NJZ4 TENET Platform
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/notbleaux/eSports-EXE.git
-cd eSports-EXE
+git clone https://github.com/notbleaux/ZeSporteXte.git
+cd ZeSporteXte
 
 # 2. Install Node dependencies
 npm install
@@ -294,7 +294,7 @@ All documents MUST include version header:
 
 ## References
 
-- **Primary**: `notbleaux/eSports-EXE`
+- **Primary**: `notbleaux/ZeSporteXte`
 - **AGENTS.md**: Project conventions and guidelines
 - **README.md**: User overview
 - **docs/**: Architecture and API documentation

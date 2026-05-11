@@ -96,7 +96,7 @@ Before starting Task 1, verify:
 
 ```bash
 # Are you in the project root?
-pwd  # should show /path/to/eSports-EXE
+pwd  # should show /path/to/ZeSporteXte
 
 # Do you have the required tools?
 python --version  # should be 3.11+
@@ -330,7 +330,7 @@ Before starting Task 1, verify:
 
 ```bash
 # Project root?
-pwd  # should show /path/to/eSports-EXE
+pwd  # should show /path/to/ZeSporteXte
 
 # Backend tools?
 python --version  # 3.11+

@@ -1,10 +1,10 @@
-# OpenClaw Agent Manifest for eSports-EXE Project
+# OpenClaw Agent Manifest for ZeSporteXte Project
 # This file defines how multiple AI agents collaborate on this codebase
 
 project:
-  name: "eSports-EXE"
+  name: "ZeSporteXte"
   type: "esports_analytics_platform"
-  repository: "https://github.com/notbleaux/eSports-EXE"
+  repository: "https://github.com/notbleaux/ZeSporteXte"
   
 agents:
   - name: "OpenClaw-Cloud"

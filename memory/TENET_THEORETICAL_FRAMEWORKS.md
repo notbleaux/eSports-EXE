@@ -128,4 +128,4 @@ UX: Shadow work progress (integration meter)
 Dark academia + cyberpunk sacred geometry + alchemical laboratory
 SFX: Layered drones (40Hz root) + harmonic overtones + glitch artifacts
 Art: Goya Black Paintings meets Mandelbulb renders
-**eSports-EXE = ESOTERIC ANALYTICS ARCANE.** Complete theoretical + practical delivery.
+**ZeSporteXte = ESOTERIC ANALYTICS ARCANE.** Complete theoretical + practical delivery.

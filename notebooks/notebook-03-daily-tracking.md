@@ -291,7 +291,7 @@ Resolve all TypeScript compilation errors to enable strict mode and unblock prod
 | Code Quality Agent | TBD | Cleanup and hygiene |
 
 ### Important Links
-- [GitHub Repo](https://github.com/notbleaux/eSports-EXE)
+- [GitHub Repo](https://github.com/notbleaux/ZeSporteXte)
 - [CRIT Report](../CRIT_REPORT_2026-03-23.md)
 - [Master Plan Updated](./notebook-07-master-plan-updated.md)
 - [Architecture v2](../docs/ARCHITECTURE_V2.md)

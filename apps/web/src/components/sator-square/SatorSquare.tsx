@@ -8,7 +8,7 @@
  * - AREPO (Death Stains): Death location persistence
  * - ROTAS (Rotation Trails): Movement path visualization
  * 
- * Integration: Connects to eSports-EXE Feature Store for live data
+ * Integration: Connects to ZeSporteXte Feature Store for live data
  */
 
 import React, { useState, useCallback } from 'react';

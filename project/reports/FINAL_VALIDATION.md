@@ -27,7 +27,7 @@
 
 ### Manual Steps Required by User
 1. Go to https://vercel.com/new
-2. Import `notbleaux/eSports-EXE`
+2. Import `notbleaux/ZeSporteXte`
 3. Framework: Select "Vite"
 4. Root Directory: `apps/website-v2`
 5. Add Environment Variable: `VITE_API_URL`
@@ -51,12 +51,12 @@
 **Next Step:** Enable GitHub Pages in Settings
 
 ### Manual Steps Required by User
-1. Go to https://github.com/notbleaux/eSports-EXE/settings/pages
+1. Go to https://github.com/notbleaux/ZeSporteXte/settings/pages
 2. Source: Deploy from branch
 3. Branch: `main` → `/docs`
 4. Click "Save"
 
-**Expected URL:** `https://notbleaux.github.io/eSports-EXE`
+**Expected URL:** `https://notbleaux.github.io/ZeSporteXte`
 
 ---
 
@@ -137,7 +137,7 @@ project/reports/FINAL_VALIDATION.md  # This file
 | Site | URL | Content |
 |------|-----|---------|
 | **Primary** | `https://njz-platform.vercel.app` | NJZ 4-Hub Platform |
-| **Archive** | `https://notbleaux.github.io/eSports-EXE` | Original website |
+| **Archive** | `https://notbleaux.github.io/ZeSporteXte` | Original website |
 | **API** | `https://sator-api.onrender.com` | FastAPI backend |
 
 ---

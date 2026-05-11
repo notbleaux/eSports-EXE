@@ -116,14 +116,14 @@ comm -23 /tmp/registry.txt /tmp/tiers.txt  # files in registry but not in tiers 
 
 ### Check 3: Archive Repo Creation Status (Prerequisite)
 
-**Review Finding:** Audit flagged that external archive repo (`notbleaux/eSports-EXE-archives`) must exist before cross-reference linking features are enabled.
+**Review Finding:** Audit flagged that external archive repo (`notbleaux/ZeSporteXte-archives`) must exist before cross-reference linking features are enabled.
 
 **Current Status (from ARCHIVE_MASTER_DOSSIER.md line 20-21):**
-- ✅ Archive repo created: `notbleaux/eSports-EXE-archives` (2026-03-27)
+- ✅ Archive repo created: `notbleaux/ZeSporteXte-archives` (2026-03-27)
 - ⏳ Subtree push pending CODEOWNER approval (see CODEOWNER_CHECKLIST.md C-ARCH.1)
 - 🔓 Cross-reference linking unblocked (repo exists; can proceed with implementation)
 
-**Status:** [ ] Confirm archive repo exists: `gh repo view notbleaux/eSports-EXE-archives`
+**Status:** [ ] Confirm archive repo exists: `gh repo view notbleaux/ZeSporteXte-archives`
 **Status:** [ ] Update CODEOWNER_CHECKLIST.md C-ARCH.1 with subtree push command when approved
 
 ---

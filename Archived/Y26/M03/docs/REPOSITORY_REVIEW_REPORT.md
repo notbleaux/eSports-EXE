@@ -27,7 +27,7 @@
 ### 1.1 Directory Layout
 
 ```
-eSports-EXE/
+ZeSporteXte/
 ├── .github/workflows/           # CI/CD (Fixed)
 ├── .agents/skills/              # AI agent skills (60+ skills)
 ├── apps/
@@ -373,7 +373,7 @@ fbd21ff - areporting a commit message...
 
 | Platform | Status | URL | Notes |
 |----------|--------|-----|-------|
-| GitHub Pages | 🟡 Fixed | https://notbleaux.github.io/eSports-EXE/ | Pending verification |
+| GitHub Pages | 🟡 Fixed | https://notbleaux.github.io/ZeSporteXte/ | Pending verification |
 | Vercel | 🟡 Configured | TBD | Needs connection |
 | Render | ✅ Configured | TBD | Backend API |
 | TiDB Cloud | ✅ Active | - | OPERA database |

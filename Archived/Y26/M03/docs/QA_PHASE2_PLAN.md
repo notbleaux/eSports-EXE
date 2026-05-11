@@ -11,7 +11,7 @@
 
 **Commands**:
 ```bash
-cd C:\Users\jacke\Documents\GitHub\eSports-EXE\apps\website-v2
+cd C:\Users\jacke\Documents\GitHub\ZeSporteXte\apps\website-v2
 npx vitest run src/components/TacticalView/__tests__/ --reporter=verbose 2>&1
 ```
 
@@ -36,7 +36,7 @@ npx vitest run src/components/TacticalView/__tests__/ --reporter=verbose 2>&1
 
 **Commands**:
 ```bash
-cd C:\Users\jacke\Documents\GitHub\eSports-EXE\packages\shared
+cd C:\Users\jacke\Documents\GitHub\ZeSporteXte\packages\shared
 
 # Lifespan test
 & "C:\Program Files\Python311\python.exe" test_api_lifespan.py 2>&1
@@ -64,7 +64,7 @@ cd C:\Users\jacke\Documents\GitHub\eSports-EXE\packages\shared
 
 **Commands**:
 ```bash
-cd C:\Users\jacke\Documents\GitHub\eSports-EXE\apps\website-v2
+cd C:\Users\jacke\Documents\GitHub\ZeSporteXte\apps\website-v2
 npm run build 2>&1
 ```
 

@@ -151,7 +151,7 @@
 
 ### ✅ Question 3: File Paths (Clarification)
 
-**Current state:** All file references assume workspace root cwd: `c:\Users\jacke\Documents\GitHub\eSports-EXE`
+**Current state:** All file references assume workspace root cwd: `c:\Users\jacke\Documents\GitHub\ZeSporteXte`
 
 **Confirmation needed:** Do agents start with this cwd? (If yes, all relative paths will work.)
 

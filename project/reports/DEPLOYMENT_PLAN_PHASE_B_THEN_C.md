@@ -137,7 +137,7 @@ git push origin main
 
 1.2 **Navigate to Repository**
 - Look for "Your repositories" on homepage
-- OR type directly: `github.com/notbleaux/eSports-EXE`
+- OR type directly: `github.com/notbleaux/ZeSporteXte`
 - Press Enter
 - You should see the repository page with file listing
 
@@ -221,7 +221,7 @@ git push origin main
   - 🟢 **"Your site is live"** = Success
   - 🔴 **"Failed"** = Error (see troubleshooting)
 
-**Expected Result:** After 1-2 minutes, green message: "Your site is live at https://notbleaux.github.io/eSports-EXE"
+**Expected Result:** After 1-2 minutes, green message: "Your site is live at https://notbleaux.github.io/ZeSporteXte"
 
 ---
 
@@ -232,8 +232,8 @@ git push origin main
 
 4.1 **Get Your URL**
 - On GitHub Pages settings
-- Copy the URL shown (format: `https://notbleaux.github.io/eSports-EXE`)
-- OR remember: `notbleaux.github.io/eSports-EXE`
+- Copy the URL shown (format: `https://notbleaux.github.io/ZeSporteXte`)
+- OR remember: `notbleaux.github.io/ZeSporteXte`
 
 4.2 **Test on Desktop First (Optional)**
 - Open new browser tab
@@ -244,7 +244,7 @@ git push origin main
 4.3 **Test on Mobile Phone (REQUIRED)**
 - Pick up your mobile phone
 - Open phone browser (Safari, Chrome)
-- Type URL: `notbleaux.github.io/eSports-EXE`
+- Type URL: `notbleaux.github.io/ZeSporteXte`
 - Press Go/Enter
 - Wait for page to load
 
@@ -341,11 +341,11 @@ git push origin main
 
 ## What You Need To Do RIGHT NOW:
 
-1. **Open:** github.com/notbleaux/eSports-EXE/settings/pages
+1. **Open:** github.com/notbleaux/ZeSporteXte/settings/pages
 2. **Select:** Branch = main, Folder = /docs
 3. **Click:** Save
 4. **Wait:** 1-2 minutes
-5. **Check:** notbleaux.github.io/eSports-EXE on your phone
+5. **Check:** notbleaux.github.io/ZeSporteXte on your phone
 6. **Confirm:** Message me "Option B complete"
 
 ## What I Will Do:

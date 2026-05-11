@@ -23,7 +23,7 @@
 
 ```
 ⚠️ ARCHIVE VERSION — For current documentation see:
-https://github.com/notbleaux/eSports-EXE
+https://github.com/notbleaux/ZeSporteXte
 ```
 
 ### 2. Duplicate Filename Resolution

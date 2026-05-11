@@ -3,7 +3,7 @@
 ## Summary
 
 **Date:** 2026-03-30  
-**Scope:** Cross-service E2E integration tests for ESPORTEZ-MANAGER ↔ eSports-EXE  
+**Scope:** Cross-service E2E integration tests for ESPORTEZ-MANAGER ↔ ZeSporteXte  
 **Test Coverage Target:** >85%
 
 ## Test Implementation Status

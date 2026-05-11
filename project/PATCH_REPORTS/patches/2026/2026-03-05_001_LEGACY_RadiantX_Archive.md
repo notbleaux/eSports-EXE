@@ -7,7 +7,7 @@
 **Type:** Legacy Archive Integration  
 **Priority:** MEDIUM  
 **Status:** ✅ COMPLETED  
-**Related Repositories:** hvrryh-web/satorXrotas, notbleaux/eSports-EXE
+**Related Repositories:** hvrryh-web/satorXrotas, notbleaux/ZeSporteXte
 
 ---
 
@@ -33,7 +33,7 @@ Successfully archived the original RadiantX codebase from `D:\GitHUB\RadiantX` i
 | UPDATE_REPORT | satorXrotas/legacy/ | Update documentation |
 | CRIT_REPORT | satorXrotas/legacy/ | Risk analysis |
 | LEGACY_REPORT | satorXrotas/legacy/ | Historical documentation |
-| MASTER_REPORT | eSports-EXE/legacy/ | Consolidated reference |
+| MASTER_REPORT | ZeSporteXte/legacy/ | Consolidated reference |
 
 ### 3. Cross-Repository References
 - Master Report links to satorXrotas archive
@@ -80,7 +80,7 @@ RadiantX (Dec 2025)
     ↓
 satorXrotas (Feb 2026)
     ↓
-SATOR / eSports-EXE (Mar 2026+)
+SATOR / ZeSporteXte (Mar 2026+)
 ```
 
 ### Key Innovations Preserved
@@ -104,7 +104,7 @@ SATOR / eSports-EXE (Mar 2026+)
 
 ## Related Documents
 
-- **Master Report:** `eSports-EXE/legacy/MASTER_REPORT_RADIANTX_INTEGRATION.md`
+- **Master Report:** `ZeSporteXte/legacy/MASTER_REPORT_RADIANTX_INTEGRATION.md`
 - **Legacy Archive:** `satorXrotas/legacy/RadiantX/`
 - **Individual Reports:** `satorXrotas/legacy/*_RADIANTX*.md`
 

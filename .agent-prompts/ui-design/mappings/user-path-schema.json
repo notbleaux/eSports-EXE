@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "user-path-mapping",
   "title": "User Path Mapping",
-  "description": "Complete user journey through the eSports-EXE platform",
+  "description": "Complete user journey through the ZeSporteXte platform",
   "type": "object",
   "required": [
     "pathId",

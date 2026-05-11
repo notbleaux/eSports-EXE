@@ -65,7 +65,7 @@ All critical code, documentation, and historical records have been synchronized.
 
 ## 🚀 REPOSITORY STATUS
 
-**GitHub:** https://github.com/notbleaux/eSports-EXE  
+**GitHub:** https://github.com/notbleaux/ZeSporteXte  
 **Structure:** Professional IT standard  
 **Completeness:** 100% (all LEGACY content transferred)  
 **Documentation:** Comprehensive  

@@ -44,7 +44,7 @@ Phase 7 and Phase 7-S successfully deliver **functional governance architecture*
 4. **Risk/Gap Identification: MEDIUM RISK**
    - **Risk A:** GitHub labels (safe-auto-merge, requires-review, critical-change) are USER_INPUT_REQUIRED but not confirmed created. If missing, auto-merge workflow fails silently and agents will default to manual PR review (slow)
    - **Risk B:** Commit message classification ([SAFE]/[STRUCT]/[CRIT]) is honor-system only. An agent could misclassify a schema change as [SAFE] and commit it without CODEOWNER review
-   - **Risk C:** The decision matrix is accurate, but agents unfamiliar with eSports-EXE may over-escalate (e.g., treat all component updates as STRUCT) or under-escalate (treat schema-adjacent refactors as SAFE)
+   - **Risk C:** The decision matrix is accurate, but agents unfamiliar with ZeSporteXte may over-escalate (e.g., treat all component updates as STRUCT) or under-escalate (treat schema-adjacent refactors as SAFE)
 
 5. **Refinement Recommendation: MEDIUM PRIORITY**
    - **Immediate (before Phase 8):** Verify GitHub labels exist or create them. Add a check to ESCALATION_PROTOCOL.md: "GitHub labels must exist for PR classification workflow to function."
@@ -69,7 +69,7 @@ Phase 7 and Phase 7-S successfully deliver **functional governance architecture*
    - All 144 archived files are indexed with consistent metadata (filename, date, topic)
    - Root directory is clean: only 13 approved `.md` files remain (MASTER_PLAN, AGENTS, CLAUDE, README, ARCHIVE_MASTER_DOSSIER, CONTRIBUTING, SECURITY, CODEOWNERS, PHASE_GATES, SKILL_MAP, etc.)
    - Missing: `.agents/ARCHIVE_INDEX_SCHEDULE.md` specifies monthly update cadence (M-Q1, M-Q2, M-Q3, M-Q4) but does not assign responsibility. Who runs the cleanup in Month 2?
-   - Missing: Archived/ directory is a git branch copy. No separate archive repository (`notbleaux/eSports-EXE-archives`) has been created yet (deferred to Phase 7 planning per ARCHIVE_MASTER_DOSSIER.md line 17)
+   - Missing: Archived/ directory is a git branch copy. No separate archive repository (`notbleaux/ZeSporteXte-archives`) has been created yet (deferred to Phase 7 planning per ARCHIVE_MASTER_DOSSIER.md line 17)
 
 3. **Integration with Agent Workflows: STRONG**
    - SESSION_LIFECYCLE.md Stage 1 includes "dossier consolidation check" — agents must consolidate fragmented files before archiving
@@ -81,11 +81,11 @@ Phase 7 and Phase 7-S successfully deliver **functional governance architecture*
 4. **Risk/Gap Identification: MEDIUM RISK**
    - **Risk A:** SESSION_LIFECYCLE.md Stage 1C requires agents to identify and archive stale root files, but there is no hook or CI check to prevent stale files from being created in the first place. An agent could create a new root file and commit it; the cleanup would only catch it on the next session
    - **Risk B:** Dossier consolidation rule (Stage 1D) states "fragment clusters MUST be consolidated before archiving," but there is no automation or reviewer checkoff. An agent could incorrectly archive fragments separately and only be caught on the monthly M-Q2 audit
-   - **Risk C:** ARCHIVE_MASTER_DOSSIER.md FAQ item 1 ("Where did all the archive files go?") states "pending migration to `notbleaux/eSports-EXE-archives`" — this has not been done, so the Archived/ directory is in the main repo taking up space and bandwidth on each clone
+   - **Risk C:** ARCHIVE_MASTER_DOSSIER.md FAQ item 1 ("Where did all the archive files go?") states "pending migration to `notbleaux/ZeSporteXte-archives`" — this has not been done, so the Archived/ directory is in the main repo taking up space and bandwidth on each clone
 
 5. **Refinement Recommendation: MEDIUM PRIORITY**
    - **Immediate:** Add a pre-commit hook that rejects commits adding/modifying files matching `^[A-Z_]+\.md$` at the root (with whitelist of approved files)
-   - **Phase 7-S+1:** Create the `notbleaux/eSports-EXE-archives` repository and migrate Archived/ via `git push --force` to a branch, then delete from main repo
+   - **Phase 7-S+1:** Create the `notbleaux/ZeSporteXte-archives` repository and migrate Archived/ via `git push --force` to a branch, then delete from main repo
    - **Ongoing:** At Phase 8 entry, assign explicit responsibility for MONTHLY_CLEANUP_PROTOCOL runs (e.g., "First business day of each month, agent runs M-Q1 tasks and commits results")
 
 ---
@@ -437,7 +437,7 @@ The minimap extraction feature (Steps 1–3C) will adopt Phase 7/7-S governance 
 
 7. Update MONTHLY_CLEANUP_PROTOCOL.md to assign explicit responsibility for M-Q1, M-Q2, M-Q3, M-Q4 tasks (e.g., "First business day of each calendar month, designated agent runs M-Q1 tasks"). Create a `.agents/MONTHLY_CLEANUP_ASSIGNMENTS.md` file.
 
-8. Create `notbleaux/eSports-EXE-archives` repository and migrate Archived/ directory via git history rewrite, then delete from main repo. Update ARCHIVE_MASTER_DOSSIER.md with migration status.
+8. Create `notbleaux/ZeSporteXte-archives` repository and migrate Archived/ directory via git history rewrite, then delete from main repo. Update ARCHIVE_MASTER_DOSSIER.md with migration status.
 
 ---
 

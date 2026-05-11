@@ -297,7 +297,7 @@ Handoff Prompts (Lightweight)
 1. Provide absolute paths in all file references, OR
 2. Specify cwd before agent starts (e.g., "run from workspace root")
 
-**Current assumption:** Agents work from workspace root (`c:\Users\jacke\Documents\GitHub\eSports-EXE`)
+**Current assumption:** Agents work from workspace root (`c:\Users\jacke\Documents\GitHub\ZeSporteXte`)
 
 ### Gap 4: Cross-Review Skill Invocation (Low Risk)
 

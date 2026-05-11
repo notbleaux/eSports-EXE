@@ -3,7 +3,7 @@
 # 🔍 Phase 1, Step A: Patchlog Investigation Report
 **Investigation Date:** March 6, 2026  
 **Investigator:** AI Agent  
-**Scope:** MAIN Repo (eSports-EXE) PATCH_REPORTS System
+**Scope:** MAIN Repo (ZeSporteXte) PATCH_REPORTS System
 
 ---
 
@@ -12,7 +12,7 @@
 **Finding:** The patch tracking system is professionally organized and reveals a deliberate, well-documented transfer process from LEGACY to MAIN repository.
 
 **Key Discovery:** Two major migration events occurred:
-1. **March 4, 2026** — Initial documentation migration from satorXrotas to eSports-EXE
+1. **March 4, 2026** — Initial documentation migration from satorXrotas to ZeSporteXte
 2. **March 5, 2026** — RadiantX Legacy Archive integration
 
 ---
@@ -155,7 +155,7 @@ PATCH_REPORTS/
 | UPDATE_REPORT | satorXrotas/legacy/ | Update documentation |
 | CRIT_REPORT | satorXrotas/legacy/ | Risk analysis |
 | LEGACY_REPORT | satorXrotas/legacy/ | Historical documentation |
-| MASTER_REPORT | eSports-EXE/legacy/ | Consolidated reference |
+| MASTER_REPORT | ZeSporteXte/legacy/ | Consolidated reference |
 
 ### Historical Context Preserved
 ```
@@ -163,7 +163,7 @@ RadiantX (Dec 2025)
     ↓
 satorXrotas (Feb 2026)
     ↓
-SATOR / eSports-EXE (Mar 2026+)
+SATOR / ZeSporteXte (Mar 2026+)
 ```
 
 **Key Innovations Archived:**
@@ -218,7 +218,7 @@ SATOR / eSports-EXE (Mar 2026+)
 - `simulation-game/` folder
 - `tests/` folder
 
-**Implication:** The MAIN repo (eSports-EXE) has documentation and website, but LEGACY has more original code that may need transferring.
+**Implication:** The MAIN repo (ZeSporteXte) has documentation and website, but LEGACY has more original code that may need transferring.
 
 ### 3. Website Code Present in Both
 **Finding:** Both repos have `website/` folders.

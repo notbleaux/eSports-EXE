@@ -147,6 +147,8 @@ jobs:
     if: github.event.inputs.task == 'deploy-staging' || inputs.task == 'deploy-staging'
     runs-on: ubuntu-latest
     environment:
+        # MIGRATION NOTE (2026-05-12): Project renamed eSports-EXE → ZeSporteXte.
+        # Update this URL after Cloudflare Pages project rename.
       name: staging
       url: https://staging.esports-exe.pages.dev
     steps:

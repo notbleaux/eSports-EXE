@@ -3307,7 +3307,7 @@ Date: _________
 ## Monorepo Structure (Final State)
 
 ```
-NJZ eSports Monorepo (eSports-EXE)
+NJZ eSports Monorepo (ZeSporteXte)
 │
 ├── apps/
 │   ├── web/                    # Main platform (React 18 + Vite)

@@ -259,7 +259,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://notbleaux.github.io",  # GitHub Pages production
-        "https://notbleaux.github.io/eSports-EXE",
+        "https://notbleaux.github.io/ZeSporteXte",
         "http://localhost:3000",         # Local development
         "http://localhost:5173",         # Vite dev server
     ],

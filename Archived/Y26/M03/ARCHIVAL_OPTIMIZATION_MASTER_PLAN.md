@@ -140,7 +140,7 @@ Each agent report MUST follow this exact structure:
 
 ### RECOMMENDATION 1: Execute Archive Repository Migration with Validation Protocol
 
-**Description:** The `Archived/` directory contains 144 files (~2.5 MB) that have been properly indexed in `ARCHIVE_MASTER_DOSSIER.md`. The separate repository `notbleaux/eSports-EXE-archives` has been created but the subtree push remains pending CODEOWNER approval. This migration must be executed with a validation protocol to ensure zero reference breakage.
+**Description:** The `Archived/` directory contains 144 files (~2.5 MB) that have been properly indexed in `ARCHIVE_MASTER_DOSSIER.md`. The separate repository `notbleaux/ZeSporteXte-archives` has been created but the subtree push remains pending CODEOWNER approval. This migration must be executed with a validation protocol to ensure zero reference breakage.
 
 - **Enhancement:** Implement pre-migration validation script that verifies all cross-references in `ARCHIVE_MASTER_DOSSIER.md` resolve correctly before and after migration
 - **Reconciliation:** Create bidirectional linking system where `ARCHIVE_MASTER_DOSSIER.md` in main repo links to archived files, and archived files contain backlinks to main repo context

@@ -10,7 +10,7 @@ import logging
 from typing import Optional
 
 # Add packages/shared to Python path for axiom_esports_data imports
-sys.path.insert(0, r"C:\Users\jacke\Documents\GitHub\eSports-EXE\packages\shared")
+sys.path.insert(0, r"C:\Users\jacke\Documents\GitHub\ZeSporteXte\packages\shared")
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 

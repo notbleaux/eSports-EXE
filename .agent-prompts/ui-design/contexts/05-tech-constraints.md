@@ -148,7 +148,7 @@ export interface PlayerStats {
 ### Base URL
 ```
 Development: http://localhost:8000/v1
-Production: https://api.esports-exe.com/v1
+Production: https://api.zesportexte.com/v1
 ```
 
 ### Endpoints (ROTAS)

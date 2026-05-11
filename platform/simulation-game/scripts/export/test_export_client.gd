@@ -11,7 +11,7 @@ var _current_test: String = ""
 func _init():
 	print("=" * 60)
 	print("ExportClient Test Suite")
-	print("Testing integration with eSports-EXE Feature Store API")
+	print("Testing integration with ZeSporteXte Feature Store API")
 	print("=" * 60)
 	
 	# Run all tests

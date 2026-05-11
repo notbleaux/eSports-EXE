@@ -14,7 +14,7 @@ git push origin main
 ### Step 2: Connect to Vercel
 1. Go to https://vercel.com
 2. Click "Add New Project"
-3. Import `notbleaux/eSports-EXE`
+3. Import `notbleaux/ZeSporteXte`
 4. Configure:
    - Framework: Vite
    - Root: `apps/website-v2`
@@ -46,7 +46,7 @@ cp -r apps/website docs/archive-website
 Settings → Pages → Source: Deploy from branch → main → /docs
 
 ### Expected URL
-`https://notbleaux.github.io/eSports-EXE`
+`https://notbleaux.github.io/ZeSporteXte`
 
 ---
 

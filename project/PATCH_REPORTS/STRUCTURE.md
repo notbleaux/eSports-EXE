@@ -221,7 +221,7 @@ ls PATCH_REPORTS/reports/security/
 ### Root Level Files
 
 ```
-eSports-EXE/
+ZeSporteXte/
 ├── CHANGELOG.md              ← High-level changelog
 ├── PATCH_REPORTS/            ← This directory
 │   ├── changelog/LIVE.md     ← Detailed current version

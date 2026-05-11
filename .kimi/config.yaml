@@ -1,11 +1,11 @@
-# Kimi Code / Agent / Sub-Agent Configuration for eSports-EXE
+# Kimi Code / Agent / Sub-Agent Configuration for ZeSporteXte
 # This file defines permissions and constraints for AI agents working on this project
 
 project:
-  name: eSports-EXE
+  name: ZeSporteXte
   displayName: SATOR Esports Platform
   type: full-stack
-  repository: notbleaux/eSports-EXE
+  repository: notbleaux/ZeSporteXte
   description: Three-part esports simulation and analytics platform
 
 # =============================================================================
@@ -120,7 +120,7 @@ agents:
 # GITHUB INTEGRATION
 # =============================================================================
 github:
-  repository: notbleaux/eSports-EXE
+  repository: notbleaux/ZeSporteXte
   defaultBranch: main
   
   # Pull request settings
@@ -147,6 +147,8 @@ github:
 deployment:
   environments:
     staging:
+      # MIGRATION NOTE (2026-05-12): Project renamed eSports-EXE → ZeSporteXte.
+      # Update this URL after Cloudflare Pages project rename.
       autoDeploy: true
       url: https://staging.esports-exe.pages.dev
       

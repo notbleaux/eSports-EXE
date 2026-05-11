@@ -62,7 +62,7 @@ This operation deploys **15-20 parallel sub-agents** organized in a hierarchical
 1. Complete inventory of all 331 archive files across 4 locations
 2. Index discrepancy report (orphaned files, phantom entries)
 3. Consolidation recommendations with priority rankings
-4. Migration readiness assessment for `notbleaux/eSports-EXE-archives`
+4. Migration readiness assessment for `notbleaux/ZeSporteXte-archives`
 
 **Managed Scouts:**
 - Scout A1: `Archived/` Deep Analysis (160 files)

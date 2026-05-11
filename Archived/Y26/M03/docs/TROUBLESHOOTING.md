@@ -19,7 +19,7 @@
 pwd
 
 # Navigate to repository
-cd /path/to/eSports-EXE
+cd /path/to/ZeSporteXte
 
 # Verify .git exists
 ls -la | grep .git
@@ -232,12 +232,12 @@ If everything is broken:
 ```bash
 # Keep your code, reset git
 cd ..
-mv eSports-EXE eSports-EXE-backup
-git clone https://github.com/notbleaux/eSports-EXE.git
-cd eSports-EXE
+mv ZeSporteXte ZeSporteXte-backup
+git clone https://github.com/notbleaux/ZeSporteXte.git
+cd ZeSporteXte
 
 # Copy your changes from backup
-cp -r ../eSports-EXE-backup/[your-changes] .
+cp -r ../ZeSporteXte-backup/[your-changes] .
 ```
 
 ### Get Help

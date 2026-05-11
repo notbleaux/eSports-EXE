@@ -1094,9 +1094,9 @@ docs/
 #### mkdocs.yml Configuration
 ```yaml
 site_name: SATOR Documentation
-site_url: https://notbleaux.github.io/eSports-EXE
-repo_url: https://github.com/notbleaux/eSports-EXE
-repo_name: notbleaux/eSports-EXE
+site_url: https://notbleaux.github.io/ZeSporteXte
+repo_url: https://github.com/notbleaux/ZeSporteXte
+repo_name: notbleaux/ZeSporteXte
 
 theme:
   name: material

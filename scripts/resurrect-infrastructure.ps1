@@ -207,7 +207,7 @@ $Blue Infrastructure Resurrection Checklist:$Reset
 $Green Next Steps:$Reset
   - Run: .\scripts\setup-local.ps1 (for local dev)
   - Run: pytest tests/unit (for test verification)
-  - Check: https://github.com/notbleaux/eSports-EXE/actions (for CI status)
+  - Check: https://github.com/notbleaux/ZeSporteXte/actions (for CI status)
 
 "@
 

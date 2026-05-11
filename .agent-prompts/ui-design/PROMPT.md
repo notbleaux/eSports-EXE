@@ -5,7 +5,7 @@
 
 ## Your Mission
 
-Design and implement the complete website UI and frontend webpages for the full user path of the eSports-EXE platform. This is a **token-efficient, file-context-based** task — read context files instead of long prompts.
+Design and implement the complete website UI and frontend webpages for the full user path of the ZeSporteXte platform. This is a **token-efficient, file-context-based** task — read context files instead of long prompts.
 
 ---
 

@@ -1,5 +1,5 @@
 # UI/UX Wireframes — Presentation
-## eSports-EXE Frontend Design
+## ZeSporteXte Frontend Design
 
 ---
 
@@ -20,7 +20,7 @@ I've built **4 interactive HTML wireframes** that demonstrate the core user flow
 Open these files in any browser:
 
 ```bash
-cd /root/.openclaw/workspace/eSports-EXE/.agent-prompts/ui-design/wireframes
+cd /root/.openclaw/workspace/ZeSporteXte/.agent-prompts/ui-design/wireframes
 
 # Open in browser (Linux)
 firefox 01-tenet-portal.html
@@ -53,7 +53,7 @@ First impression. Game selection gateway.
 ### Screenshot Preview
 ```
 ┌─────────────────────────────────────────┐
-│  eSports-EXE        [Search] [Settings] │
+│  ZeSporteXte        [Search] [Settings] │
 ├─────────────────────────────────────────┤
 │                                         │
 │     The Esports Analytics Platform      │

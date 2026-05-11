@@ -2503,7 +2503,7 @@ async def log_request_time(request: Request, call_next):
 ## Complete Monorepo Structure (Final State)
 
 ```
-NJZ eSports Platform (eSports-EXE)
+NJZ eSports Platform (ZeSporteXte)
 ├── apps/
 │   ├── web/                       # Main platform (React 18 + Vite)
 │   ├── companion/                 # Mobile (React Native + Expo)

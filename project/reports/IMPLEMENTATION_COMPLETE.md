@@ -223,7 +223,7 @@ results = await router.fetch("SELECT * FROM players")  # Goes to replica
 - ✅ Phase 5: Handover
 - ✅ **BONUS: All 10 Actionable Items Implemented**
 
-**Repository:** https://github.com/notbleaux/eSports-EXE  
+**Repository:** https://github.com/notbleaux/ZeSporteXte  
 **Grade:** A (Production-Grade)  
 **Status:** 🟢 Ready for Production
 

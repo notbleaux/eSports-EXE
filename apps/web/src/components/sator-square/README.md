@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Source:** Migrated from satorXrotas  
-**Integration:** eSports-EXE Feature Store API
+**Integration:** ZeSporteXte Feature Store API
 
 ---
 
@@ -249,7 +249,7 @@ Each layer has configurable opacity (0-1):
 
 **Source:** satorXrotas/visualization/sator_square/
 
-**Changes for eSports-EXE:**
+**Changes for ZeSporteXte:**
 1. Updated to use Feature Store API
 2. Integrated with TanStack Query
 3. Added TypeScript types
@@ -281,8 +281,8 @@ npm test -- SatorLayer
 
 ## License
 
-MIT License - Part of eSports-EXE
+MIT License - Part of ZeSporteXte
 
 ---
 
-*Migrated from satorXrotas and enhanced for eSports-EXE Feature Store integration*
+*Migrated from satorXrotas and enhanced for ZeSporteXte Feature Store integration*

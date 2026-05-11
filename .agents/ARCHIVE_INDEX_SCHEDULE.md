@@ -6,7 +6,7 @@
 **Authority:** `docs/superpowers/specs/2026-03-27-master-plan-extension-phase7-13-design.md §14`
 **Tier:** T1 — load when working on archive tasks.
 **Framework:** NJZPOF v0.2
-**USER_INPUT_REQUIRED:** `notbleaux/eSports-EXE-archives` repo must be created before cross-reference linking features are enabled. Command: `gh repo create notbleaux/eSports-EXE-archives --private`
+**USER_INPUT_REQUIRED:** `notbleaux/ZeSporteXte-archives` repo must be created before cross-reference linking features are enabled. Command: `gh repo create notbleaux/ZeSporteXte-archives --private`
 
 ---
 
@@ -58,7 +58,7 @@ For each new file found in M-Q1 scan:
 4. Update `**Total archived files:**` count (exact number, not "144+")
 5. Update `**Last Updated:**` date in header
 
-**Cross-Reference Map:** Review new archives against common Q&A topics. If new archives answer new questions, add rows to the Cross-Reference Map section. *(Bidirectional linking deferred until `notbleaux/eSports-EXE-archives` exists.)*
+**Cross-Reference Map:** Review new archives against common Q&A topics. If new archives answer new questions, add rows to the Cross-Reference Map section. *(Bidirectional linking deferred until `notbleaux/ZeSporteXte-archives` exists.)*
 
 ```bash
 git add ARCHIVE_MASTER_DOSSIER.md
@@ -127,7 +127,7 @@ The original 9-agent spawning sequence has been simplified. For a solo repo at c
 | Status | Date Set | Notes |
 |--------|----------|-------|
 | ✅ Reorganisation complete | 2026-03-27 | archive/ → Archived/Y26/M03/ (144 files) |
-| ✅ Archive repo created | 2026-03-27 | `notbleaux/eSports-EXE-archives` exists |
+| ✅ Archive repo created | 2026-03-27 | `notbleaux/ZeSporteXte-archives` exists |
 | ⏳ Subtree push pending | 2026-03-27 | CODEOWNER approval required (C-ARCH.1) before executing push — irreversible |
 | — | — | See migration stub below for exact commands |
 
@@ -141,7 +141,7 @@ The original 9-agent spawning sequence has been simplified. For a solo repo at c
 ### Step 1 — Add archive remote (one-time setup)
 
 ```bash
-git remote add origin-archives https://github.com/notbleaux/eSports-EXE-archives.git
+git remote add origin-archives https://github.com/notbleaux/ZeSporteXte-archives.git
 # Verify:
 git remote -v
 ```
@@ -152,12 +152,12 @@ git remote -v
 git subtree push --prefix=Archived origin-archives main
 ```
 
-Expected: `Archived/` directory contents appear as root-level files in `notbleaux/eSports-EXE-archives`.
+Expected: `Archived/` directory contents appear as root-level files in `notbleaux/ZeSporteXte-archives`.
 
 ### Step 3 — Verify push succeeded
 
 ```bash
-gh repo view notbleaux/eSports-EXE-archives --json name,updatedAt
+gh repo view notbleaux/ZeSporteXte-archives --json name,updatedAt
 # Should show recent updatedAt timestamp
 ```
 
@@ -165,7 +165,7 @@ gh repo view notbleaux/eSports-EXE-archives --json name,updatedAt
 
 ```bash
 git rm -r Archived/
-git commit -m "chore(archive): migrate Archived/ to notbleaux/eSports-EXE-archives [CRIT]"
+git commit -m "chore(archive): migrate Archived/ to notbleaux/ZeSporteXte-archives [CRIT]"
 ```
 
 ### Step 5 — Update ARCHIVE_MASTER_DOSSIER.md

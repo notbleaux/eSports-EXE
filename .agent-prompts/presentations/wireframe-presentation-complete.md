@@ -1,4 +1,4 @@
-# AGENT PROMPT: eSports-EXE Wireframe Presentation
+# AGENT PROMPT: ZeSporteXte Wireframe Presentation
 ## Complete Walkthrough with Visual Descriptions
 
 Your task: Present three interactive HTML wireframes to the user and gather structured feedback.
@@ -9,7 +9,7 @@ Your task: Present three interactive HTML wireframes to the user and gather stru
 
 1. Start HTTP server:
 ```bash
-cd /root/.openclaw/workspace/eSports-EXE/.agent-prompts/ui-design/wireframes
+cd /root/.openclaw/workspace/ZeSporteXte/.agent-prompts/ui-design/wireframes
 python3 -m http.server 8888 &
 ```
 
@@ -29,9 +29,9 @@ python3 -m http.server 8888 &
 **Layout (Top to Bottom):**
 ```
 ┌────────────────────────────────────────────────────────┐
-│  eSports-EXE                    [⌘ Search] [⚙ Settings]│  ← Header
+│  ZeSporteXte                    [⌘ Search] [⚙ Settings]│  ← Header
 ├────────────────────────────────────────────────────────┤
-│  eSports-EXE / Select Game                             │  ← Breadcrumb (NEW)
+│  ZeSporteXte / Select Game                             │  ← Breadcrumb (NEW)
 ├────────────────────────────────────────────────────────┤
 │                                                        │
 │     The Esports Analytics Platform                     │  ← Hero (gradient text)
@@ -55,7 +55,7 @@ python3 -m http.server 8888 &
 │  [Team Analytics] [Advanced Metrics] [Community]       │
 ├────────────────────────────────────────────────────────┤
 │  [About] [API] [GitHub] [Terms]                        │  ← Footer
-│  © 2026 eSports-EXE                                    │
+│  © 2026 ZeSporteXte                                    │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -73,7 +73,7 @@ python3 -m http.server 8888 &
 - Focus indicators for accessibility
 
 **Ask the User:**
-1. "Does the breadcrumb ('eSports-EXE / Select Game') add clarity?"
+1. "Does the breadcrumb ('ZeSporteXte / Select Game') add clarity?"
 2. "Is the CS2 offline state clear? Does it communicate 'unavailable' well?"
 3. "Are the 6 features the right ones to highlight?"
 4. "Any changes to colors, spacing, or card sizes?"
@@ -230,7 +230,7 @@ python3 -m http.server 8888 &
 ## PRESENTATION FLOW
 
 ### Opening (1-2 minutes)
-"Hi! I'll walk you through the eSports-EXE wireframes. These are interactive HTML prototypes at v1.1 following our 1/2/3/5 Review process. 
+"Hi! I'll walk you through the ZeSporteXte wireframes. These are interactive HTML prototypes at v1.1 following our 1/2/3/5 Review process. 
 
 We have three wireframes:
 1. **TENET Portal** — Game selection gateway

@@ -216,7 +216,7 @@ src/components/help/__tests__/LiveBroadcast.test.tsx(450,9): error TS6133: 'mock
 src/components/help/ContextDetector.tsx(356,25): error TS6133: 'context' is declared but its value is never read.
 src/components/help/index.ts(29,8): error TS2724: '"./LiveBroadcast"' has no exported member named 'LiveBroadcastProps'. Did you mean 'LiveBroadcast'?
 src/components/help/index.ts(30,8): error TS2724: '"./LiveBroadcast"' has no exported member named 'BroadcastNotificationProps'. Did you mean 'BroadcastNotification'?
-src/components/help/KnowledgeGraphView.tsx(16,21): error TS7016: Could not find a declaration file for module 'd3'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/node_modules/d3/src/index.js' implicitly has an 'any' type.
+src/components/help/KnowledgeGraphView.tsx(16,21): error TS7016: Could not find a declaration file for module 'd3'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/node_modules/d3/src/index.js' implicitly has an 'any' type.
   Try `npm i --save-dev @types/d3` if it exists or add a new declaration (.d.ts) file containing `declare module 'd3';`
 src/components/help/KnowledgeGraphView.tsx(34,3): error TS6196: 'VisualNode' is declared but never used.
 src/components/help/KnowledgeGraphView.tsx(35,3): error TS6196: 'VisualEdge' is declared but never used.
@@ -440,8 +440,8 @@ src/components/mascots/__tests__/integration.test.tsx(19,47): error TS2614: Modu
 src/components/mascots/__tests__/integration.test.tsx(19,63): error TS2724: '"../MascotAssetEnhanced"' has no exported member named 'MASCOT_STYLES'. Did you mean 'MascotType'?
 src/components/mascots/__tests__/integration.test.tsx(21,15): error TS2614: Module '"../MascotAssetEnhanced"' has no exported member 'MascotAnimal'. Did you mean to use 'import MascotAnimal from "../MascotAssetEnhanced"' instead?
 src/components/mascots/__tests__/integration.test.tsx(21,29): error TS2724: '"../MascotAssetEnhanced"' has no exported member named 'MascotStyle'. Did you mean 'MascotType'?
-src/components/mascots/__tests__/integration.test.tsx(22,32): error TS6305: Output file 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/scripts/mascot-generator/config.d.ts' has not been built from source file 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/scripts/mascot-generator/config.ts'.
-src/components/mascots/__tests__/integration.test.tsx(23,83): error TS6305: Output file 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/scripts/mascot-generator/config-new-mascots.d.ts' has not been built from source file 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/scripts/mascot-generator/config-new-mascots.ts'.
+src/components/mascots/__tests__/integration.test.tsx(22,32): error TS6305: Output file 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/scripts/mascot-generator/config.d.ts' has not been built from source file 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/scripts/mascot-generator/config.ts'.
+src/components/mascots/__tests__/integration.test.tsx(23,83): error TS6305: Output file 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/scripts/mascot-generator/config-new-mascots.d.ts' has not been built from source file 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/scripts/mascot-generator/config-new-mascots.ts'.
 src/components/mascots/__tests__/integration.test.tsx(142,34): error TS2322: Type '{ animal: string; style: string; size: 128; }' is not assignable to type 'IntrinsicAttributes & MascotAssetProps'.
   Property 'animal' does not exist on type 'IntrinsicAttributes & MascotAssetProps'.
 src/components/mascots/__tests__/integration.test.tsx(156,34): error TS2322: Type '{ animal: string; style: string; size: 128; }' is not assignable to type 'IntrinsicAttributes & MascotAssetProps'.
@@ -559,10 +559,10 @@ src/components/ml/TrainingMonitor.tsx(445,19): error TS2322: Type '(value: numbe
         Type 'undefined' is not assignable to type 'number'.
 src/components/ml/TrainingMonitor.tsx(536,50): error TS6133: 'i' is declared but its value is never read.
 src/components/MLPredictionPanel.tsx(9,1): error TS6133: 'React' is declared but its value is never read.
-src/components/mobile/BottomNavigation.tsx(77,25): error TS7016: Could not find a declaration file for module '../../hub-1-sator/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-1-sator/index.jsx' implicitly has an 'any' type.
-src/components/mobile/BottomNavigation.tsx(78,25): error TS7016: Could not find a declaration file for module '../../hub-2-rotas/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-2-rotas/index.jsx' implicitly has an 'any' type.
-src/components/mobile/BottomNavigation.tsx(79,25): error TS7016: Could not find a declaration file for module '../../hub-3-arepo/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/index.jsx' implicitly has an 'any' type.
-src/components/mobile/BottomNavigation.tsx(81,25): error TS7016: Could not find a declaration file for module '../../hub-5-tenet/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-5-tenet/index.jsx' implicitly has an 'any' type.
+src/components/mobile/BottomNavigation.tsx(77,25): error TS7016: Could not find a declaration file for module '../../hub-1-sator/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-1-sator/index.jsx' implicitly has an 'any' type.
+src/components/mobile/BottomNavigation.tsx(78,25): error TS7016: Could not find a declaration file for module '../../hub-2-rotas/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-2-rotas/index.jsx' implicitly has an 'any' type.
+src/components/mobile/BottomNavigation.tsx(79,25): error TS7016: Could not find a declaration file for module '../../hub-3-arepo/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-3-arepo/index.jsx' implicitly has an 'any' type.
+src/components/mobile/BottomNavigation.tsx(81,25): error TS7016: Could not find a declaration file for module '../../hub-5-tenet/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-5-tenet/index.jsx' implicitly has an 'any' type.
 src/components/mobile/GestureDemo.tsx(21,3): error TS6133: 'Velocity2D' is declared but its value is never read.
 src/components/mobile/GestureDemo.tsx(303,53): error TS6133: 'state' is declared but its value is never read.
 src/components/mobile/GestureDemo.tsx(308,59): error TS6133: 'state' is declared but its value is never read.
@@ -1020,9 +1020,9 @@ src/components/three/PerformanceMonitor.tsx(17,1): error TS6133: 'THREE' is decl
 src/components/three/ShaderDemo.tsx(167,13): error TS6133: 'state' is declared but its value is never read.
 src/components/three/ShaderDemo.tsx(213,13): error TS6133: 'state' is declared but its value is never read.
 src/components/three/ShaderDemo.tsx(246,15): error TS2339: Property 'frameCount' does not exist on type 'RootState'.
-src/components/ui/index.ts(31,27): error TS7016: Could not find a declaration file for module './StatBadge'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/components/ui/StatBadge.jsx' implicitly has an 'any' type.
-src/components/ui/index.ts(32,28): error TS7016: Could not find a declaration file for module './ModernCard'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/components/ui/ModernCard.jsx' implicitly has an 'any' type.
-src/components/ui/index.ts(33,36): error TS7016: Could not find a declaration file for module './AnimatedBackground'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/components/ui/AnimatedBackground.jsx' implicitly has an 'any' type.
+src/components/ui/index.ts(31,27): error TS7016: Could not find a declaration file for module './StatBadge'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/components/ui/StatBadge.jsx' implicitly has an 'any' type.
+src/components/ui/index.ts(32,28): error TS7016: Could not find a declaration file for module './ModernCard'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/components/ui/ModernCard.jsx' implicitly has an 'any' type.
+src/components/ui/index.ts(33,36): error TS7016: Could not find a declaration file for module './AnimatedBackground'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/components/ui/AnimatedBackground.jsx' implicitly has an 'any' type.
 src/components/UnifiedGrid.tsx(77,51): error TS2554: Expected 0 arguments, but got 1.
 src/components/UnifiedGrid.tsx(78,24): error TS7006: Parameter 'count' implicitly has an 'any' type.
 src/components/UnifiedGrid.tsx(78,31): error TS7006: Parameter 'time' implicitly has an 'any' type.
@@ -1402,7 +1402,7 @@ src/hub-2-rotas/PredictionHistory.tsx(119,28): error TS2339: Property 'base' doe
 src/hub-2-rotas/PredictionHistory.tsx(120,27): error TS2339: Property 'glow' does not exist on type '"#ff4444"'.
 src/hub-2-rotas/PredictionHistory.tsx(121,3): error TS6133: 'muted' is declared but its value is never read.
 src/hub-2-rotas/PredictionHistory.tsx(121,28): error TS2339: Property 'muted' does not exist on type '"#ff4444"'.
-src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(31,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(31,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
 src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(530,47): error TS7006: Parameter 'query' implicitly has an 'any' type.
 src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(530,54): error TS7006: Parameter 'index' implicitly has an 'any' type.
 src/hub-3-arepo/components/CrossHubQueryBuilder.tsx(561,36): error TS7006: Parameter 'query' implicitly has an 'any' type.
@@ -1434,10 +1434,10 @@ src/hub-3-arepo/components/Forum/hooks/useForumData.ts(376,59): error TS6133: 'p
 src/hub-3-arepo/components/Forum/index.ts(12,21): error TS2300: Duplicate identifier 'ForumPost'.
 src/hub-3-arepo/components/Forum/index.ts(32,3): error TS2207: The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.
 src/hub-3-arepo/components/Forum/index.ts(32,8): error TS2300: Duplicate identifier 'ForumPost'.
-src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(31,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(31,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
 src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(102,9): error TS6133: 'getDeltaColor' is declared but its value is never read.
 src/hub-3-arepo/components/PatchImpactAnalyzer.tsx(108,9): error TS6133: 'getDeltaIcon' is declared but its value is never read.
-src/hub-3-arepo/components/PlayerTournamentSearch.tsx(27,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/PlayerTournamentSearch.tsx(27,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
 src/hub-3-arepo/components/PlayerTournamentSearch.tsx(41,10): error TS6133: 'playerName' is declared but its value is never read.
 src/hub-3-arepo/components/PlayerTournamentSearch.tsx(42,10): error TS6133: 'tournamentName' is declared but its value is never read.
 src/hub-3-arepo/components/TacticalMap/MapMarkers.tsx(16,3): error TS6133: 'Circle' is declared but its value is never read.
@@ -1451,7 +1451,7 @@ src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(50,3): error TS6133: 'annot
 src/hub-3-arepo/components/TacticalMap/MapViewer.tsx(53,3): error TS6133: 'readOnly' is declared but its value is never read.
 src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,8): error TS6133: 'HubWrapper' is declared but its value is never read.
 src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,22): error TS6133: 'HubCard' is declared but its value is never read.
-src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,50): error TS7016: Could not find a declaration file for module '@/shared/components/HubWrapper'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/shared/components/HubWrapper.jsx' implicitly has an 'any' type.
+src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(23,50): error TS7016: Could not find a declaration file for module '@/shared/components/HubWrapper'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/shared/components/HubWrapper.jsx' implicitly has an 'any' type.
 src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(27,1): error TS6133: 'MapSelector' is declared but its value is never read.
 src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(33,3): error TS6133: 'MapData' is declared but its value is never read.
 src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(37,3): error TS6133: 'MapViewState' is declared but its value is never read.
@@ -1461,7 +1461,7 @@ src/hub-3-arepo/components/TacticalMap/TacticalMapContainer.tsx(260,38): error T
 src/hub-3-arepo/components/TeamComparisonTool.tsx(14,3): error TS6133: 'Target' is declared but its value is never read.
 src/hub-3-arepo/components/TeamComparisonTool.tsx(18,3): error TS6133: 'TrendingUp' is declared but its value is never read.
 src/hub-3-arepo/components/TeamComparisonTool.tsx(23,3): error TS6133: 'ChevronRight' is declared but its value is never read.
-src/hub-3-arepo/components/TeamComparisonTool.tsx(29,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
+src/hub-3-arepo/components/TeamComparisonTool.tsx(29,41): error TS7016: Could not find a declaration file for module '../hooks/useArepoData'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-3-arepo/hooks/useArepoData.js' implicitly has an 'any' type.
 src/hub-3-arepo/components/TeamComparisonTool.tsx(81,9): error TS6133: 'getComparisonColor' is declared but its value is never read.
 src/hub-4-opera/__tests__/index.test.tsx(22,18): error TS7031: Binding element 'children' implicitly has an 'any' type.
 src/hub-4-opera/__tests__/index.test.tsx(23,19): error TS7031: Binding element 'label' implicitly has an 'any' type.
@@ -1642,8 +1642,8 @@ src/hub-4-opera/hooks/useOperaData.ts(19,3): error TS6196: 'TournamentFilters' i
 src/hub-4-opera/index.tsx(6,8): error TS6133: 'React' is declared but its value is never read.
 src/hub-4-opera/index.tsx(14,3): error TS6133: 'Filter' is declared but its value is never read.
 src/hub-4-opera/index.tsx(21,22): error TS6133: 'HubCard' is declared but its value is never read.
-src/hub-4-opera/index.tsx(21,50): error TS7016: Could not find a declaration file for module '@/shared/components/HubWrapper'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/shared/components/HubWrapper.jsx' implicitly has an 'any' type.
-src/hub-4-opera/index.tsx(22,42): error TS7016: Could not find a declaration file for module '@/shared/store/njzStore'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/shared/store/njzStore.js' implicitly has an 'any' type.
+src/hub-4-opera/index.tsx(21,50): error TS7016: Could not find a declaration file for module '@/shared/components/HubWrapper'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/shared/components/HubWrapper.jsx' implicitly has an 'any' type.
+src/hub-4-opera/index.tsx(22,42): error TS7016: Could not find a declaration file for module '@/shared/store/njzStore'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/shared/store/njzStore.js' implicitly has an 'any' type.
 src/hub-4-opera/index.tsx(45,27): error TS2339: Property 'base' does not exist on type '"#ff00ff"'.
 src/hub-4-opera/index.tsx(46,26): error TS2339: Property 'glow' does not exist on type '"#ff00ff"'.
 src/hub-4-opera/index.tsx(47,27): error TS2339: Property 'muted' does not exist on type '"#ff00ff"'.
@@ -1679,9 +1679,9 @@ src/hubs/HubCell.tsx(83,29): error TS6133: 'hubId' is declared but its value is 
 src/hubs/HubCell.tsx(85,17): error TS6133: 'render' is declared but its value is never read.
 src/hubs/HubCell.tsx(89,12): error TS2554: Expected 0 arguments, but got 1.
 src/hubs/HubCell.tsx(110,32): error TS2304: Cannot find name 'HubWeight'.
-src/hubs/HubRegistry.tsx(21,36): error TS7016: Could not find a declaration file for module '../hub-1-sator/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-1-sator/index.jsx' implicitly has an 'any' type.
-src/hubs/HubRegistry.tsx(22,36): error TS7016: Could not find a declaration file for module '../hub-2-rotas/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-2-rotas/index.jsx' implicitly has an 'any' type.
-src/hubs/HubRegistry.tsx(23,36): error TS7016: Could not find a declaration file for module '../hub-3-arepo/index.jsx'. 'C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/hub-3-arepo/index.jsx' implicitly has an 'any' type.
+src/hubs/HubRegistry.tsx(21,36): error TS7016: Could not find a declaration file for module '../hub-1-sator/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-1-sator/index.jsx' implicitly has an 'any' type.
+src/hubs/HubRegistry.tsx(22,36): error TS7016: Could not find a declaration file for module '../hub-2-rotas/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-2-rotas/index.jsx' implicitly has an 'any' type.
+src/hubs/HubRegistry.tsx(23,36): error TS7016: Could not find a declaration file for module '../hub-3-arepo/index.jsx'. 'C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/hub-3-arepo/index.jsx' implicitly has an 'any' type.
 src/hubs/HubRegistry.tsx(29,5): error TS2322: Type 'LazyExoticComponent<ComponentType<any>>' is not assignable to type 'LazyExoticComponent<FC<any>>'.
   Type 'ComponentType<any>' is not assignable to type 'FC<any>'.
     Type 'ComponentClass<any, any>' is not assignable to type 'FunctionComponent<any>'.
@@ -2733,7 +2733,7 @@ src/lib/mobile/voiceover.ts(232,9): error TS6133: 'hasAccessibility' is declared
 src/lib/mobile/voiceover.ts(555,3): error TS6133: 'regionId' is declared but its value is never read.
 src/lib/motor/__tests__/motor.test.ts(206,44): error TS6133: 'DEFAULT_EYE_TRACKING_CONFIG' is declared but its value is never read.
 src/lib/motor/__tests__/motor.test.ts(608,11): error TS2551: Property 'setCurrent' does not exist on type 'HierarchicalNavigation'. Did you mean 'getCurrent'?
-src/lib/motor/__tests__/motor.test.ts(719,44): error TS2339: Property 'NavigationMode' does not exist on type 'typeof import("C:/Users/jacke/Documents/GitHub/eSports-EXE/apps/web/src/lib/motor/navigation")'.
+src/lib/motor/__tests__/motor.test.ts(719,44): error TS2339: Property 'NavigationMode' does not exist on type 'typeof import("C:/Users/jacke/Documents/GitHub/ZeSporteXte/apps/web/src/lib/motor/navigation")'.
 src/lib/motor/__tests__/motor.test.ts(719,44): error TS6133: 'NavigationMode' is declared but its value is never read.
 src/lib/motor/__tests__/motor.test.ts(721,18): error TS2749: 'NavigationMode' refers to a value, but is being used as a type here. Did you mean 'typeof NavigationMode'?
 src/lib/motor/alternativeInput.ts(53,11): error TS6133: 'currentPosition' is declared but its value is never read.

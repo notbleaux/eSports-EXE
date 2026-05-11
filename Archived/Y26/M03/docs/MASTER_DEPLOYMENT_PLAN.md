@@ -85,7 +85,7 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM player_performance;"
 1. Go to https://dashboard.render.com
 2. Click "New +" → "Blueprint"
 3. Connect GitHub repository
-4. Select `notbleaux/eSports-EXE`
+4. Select `notbleaux/ZeSporteXte`
 5. Render will detect `render.yaml`
 
 **Step 2: Configure Environment**

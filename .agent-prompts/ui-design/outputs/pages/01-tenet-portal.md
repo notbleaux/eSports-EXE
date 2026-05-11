@@ -17,7 +17,7 @@ Game selection portal — the entry point for all users. Establishes brand ident
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  [Logo: eSports-EXE]              [Search] [Settings]       │  Header
+│  [Logo: ZeSporteXte]              [Search] [Settings]       │  Header
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │         The Esports Analytics Platform                      │  Hero
@@ -54,7 +54,7 @@ Game selection portal — the entry point for all users. Establishes brand ident
 ## Components
 
 ### Header
-- **Logo:** eSports-EXE wordmark + icon
+- **Logo:** ZeSporteXte wordmark + icon
 - **Search:** Global search (cmd+k shortcut)
 - **Settings:** Theme toggle, language (future)
 

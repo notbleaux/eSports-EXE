@@ -148,7 +148,7 @@
 
 ### Repository State
 ```
-URL: https://github.com/notbleaux/eSports-EXE
+URL: https://github.com/notbleaux/ZeSporteXte
 Branch: main
 Last Commit: 87c2e40
 Status: Clean working tree

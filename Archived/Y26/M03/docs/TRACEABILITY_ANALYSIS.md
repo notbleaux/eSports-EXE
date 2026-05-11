@@ -51,7 +51,7 @@
 | `@hub-2` | `./src/hub-2-rotas` | `./2_Libreaux_NJZ_eXe_[P_TENET]/020-ROTAS_[ROTAS]` | **MUST UPDATE** |
 | `@hub-3` | `./src/hub-3-arepo` | `./2_Libreaux_NJZ_eXe_[P_TENET]/030-AREPO_[AREPO]` | **MUST UPDATE** |
 | `@hub-4` | `./src/hub-4-opera` | `./2_Libreaux_NJZ_eXe_[P_TENET]/040-OPERA_[OPERA]` | **MUST UPDATE** |
-| `base` | `/eSports-EXE/platform/` | Unchanged | Keep as-is |
+| `base` | `/ZeSporteXte/platform/` | Unchanged | Keep as-is |
 | `outDir` | `dist` | `dist` | Keep as-is |
 
 **Vite Config Update:** REQUIRED before any file moves

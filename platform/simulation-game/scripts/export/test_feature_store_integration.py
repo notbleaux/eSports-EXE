@@ -1,5 +1,5 @@
 """
-Test ExportClient integration with eSports-EXE Feature Store API.
+Test ExportClient integration with ZeSporteXte Feature Store API.
 
 This test simulates the Godot ExportClient sending data to the Feature Store.
 Run with: python test_feature_store_integration.py
@@ -11,7 +11,7 @@ import httpx
 from datetime import datetime
 from typing import Dict, Any, Optional
 
-# Feature Store API endpoint (from eSports-EXE)
+# Feature Store API endpoint (from ZeSporteXte)
 FEATURE_STORE_URL = "http://localhost:8000/v1/features"
 API_KEY = "test_key_123"
 
@@ -313,7 +313,7 @@ async def run_all_tests():
     print("ExportClient - Feature Store Integration Tests")
     print("=" * 60)
     print(f"Feature Store URL: {FEATURE_STORE_URL}")
-    print("Note: Make sure eSports-EXE API is running on port 8000")
+    print("Note: Make sure ZeSporteXte API is running on port 8000")
     print("=" * 60)
     
     results = []

@@ -1,12 +1,12 @@
 # 01 - Project Overview
-## eSports-EXE Platform Context
+## ZeSporteXte Platform Context
 
 ---
 
 ## Project Identity
 
-**Name:** eSports-EXE (formerly NJZiteGeisTe Platform / SATOR-eXe-ROTAS)
-**Repository:** https://github.com/notbleaux/eSports-EXE
+**Name:** ZeSporteXte (formerly NJZiteGeisTe Platform / SATOR-eXe-ROTAS)
+**Repository:** https://github.com/notbleaux/ZeSporteXte
 **Current Version:** 2.1.0
 **Status:** ROTAS MVP Backend Complete, Frontend UI Design Phase
 

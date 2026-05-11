@@ -212,4 +212,4 @@ curl -fsS -o /dev/null https://sator-api.onrender.com/health || echo "DOWN"
 
 - Render Docs: https://render.com/docs
 - Vercel Docs: https://vercel.com/docs
-- SATOR Issues: https://github.com/notbleaux/eSports-EXE/issues
+- SATOR Issues: https://github.com/notbleaux/ZeSporteXte/issues

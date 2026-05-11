@@ -4,7 +4,7 @@
 ## How to Contribute to NJZiteGeisTe Platform
 
 **Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform)  
-**Repository:** https://github.com/notbleaux/eSports-EXE
+**Repository:** https://github.com/notbleaux/ZeSporteXte
 
 ---
 
@@ -12,8 +12,8 @@
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/notbleaux/eSports-EXE.git
-cd eSports-EXE
+git clone https://github.com/notbleaux/ZeSporteXte.git
+cd ZeSporteXte
 ```
 
 ### 2. Understand the Structure
@@ -74,7 +74,7 @@ git push origin main
 ## 🔄 Using GitHub Desktop (Alternative)
 
 1. Open GitHub Desktop
-2. Select `eSports-EXE` repository
+2. Select `ZeSporteXte` repository
 3. Review changes in the left panel
 4. Write commit message (summary + description)
 5. Click "Commit to main"

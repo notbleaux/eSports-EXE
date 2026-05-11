@@ -20,7 +20,7 @@ author: "@hvrryh-web, @notbleaux"
 
 ### Repository: hvrryh-web/satorXrotas
 
-The SATOR platform was developed in the `hvrryh-web/satorXrotas` repository before consolidation into `notbleaux/eSports-EXE`.
+The SATOR platform was developed in the `hvrryh-web/satorXrotas` repository before consolidation into `notbleaux/ZeSporteXte`.
 
 #### Key Milestones
 
@@ -78,7 +78,7 @@ This period covered the initial development and documentation of the SATOR platf
 
 ## Migration to 1.0.0
 
-On 2026-03-04, all development was consolidated into `notbleaux/eSports-EXE`:
+On 2026-03-04, all development was consolidated into `notbleaux/ZeSporteXte`:
 
 - All code migrated (already synchronized)
 - All documentation migrated
@@ -100,7 +100,7 @@ See [Patch 001](../patches/2026/2026-03-04_001_MIGRATION_initial-repo-merge.md) 
 
 ### Target Repository
 
-- **URL:** https://github.com/notbleaux/eSports-EXE
+- **URL:** https://github.com/notbleaux/ZeSporteXte
 - **Status:** 🟢 Active development
 - **Established:** 2026-03-01
 - **Consolidated:** 2026-03-04

@@ -175,7 +175,7 @@ Anything requiring:
 1. You go to GitHub → Settings → Pages
 2. Select "main" branch, "/docs" folder
 3. Click Save
-4. Website live at `notbleaux.github.io/eSports-EXE`
+4. Website live at `notbleaux.github.io/ZeSporteXte`
 
 **Time:** 3 minutes  
 **Your effort:** 3 clicks  

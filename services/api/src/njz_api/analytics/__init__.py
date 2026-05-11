@@ -1,7 +1,7 @@
 """
 Analytics Module — SimRating, RAR, and Investment Grading
 
-Migrated from satorXrotas to eSports-EXE
+Migrated from satorXrotas to ZeSporteXte
 Provides comprehensive esports analytics calculations:
 - SimRating: 5-component player performance rating
 - RAR: Role-Adjusted Replacement value

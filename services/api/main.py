@@ -271,7 +271,7 @@ app = FastAPI(
     
     - [API Guide](/docs/API_GUIDE.md)
     - [OpenAPI Spec](/docs/openapi.yaml)
-    - [GitHub Repository](https://github.com/notbleaux/eSports-EXE)
+    - [GitHub Repository](https://github.com/notbleaux/ZeSporteXte)
     """,
     version="1.0.0",
     lifespan=lifespan,
@@ -308,7 +308,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://notbleaux.github.io",  # GitHub Pages production
-        "https://notbleaux.github.io/eSports-EXE",
+        "https://notbleaux.github.io/ZeSporteXte",
         "http://localhost:3000",         # Local development
         "http://localhost:5173",         # Vite dev server
     ],

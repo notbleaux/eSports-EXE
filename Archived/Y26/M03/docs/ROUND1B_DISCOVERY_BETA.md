@@ -374,7 +374,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://notbleaux.github.io",
-        "https://notbleaux.github.io/eSports-EXE",
+        "https://notbleaux.github.io/ZeSporteXte",
         "http://localhost:3000",
         "http://localhost:5173",
     ],

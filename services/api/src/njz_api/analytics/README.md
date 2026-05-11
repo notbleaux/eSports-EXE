@@ -1,6 +1,6 @@
 # Analytics Module
 
-Migrated from satorXrotas to eSports-EXE
+Migrated from satorXrotas to ZeSporteXte
 
 ## Overview
 

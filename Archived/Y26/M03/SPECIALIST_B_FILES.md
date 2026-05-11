@@ -11,7 +11,7 @@
 ### TeneT Verification Service
 
 #### Core Implementation
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/tenet-verification/main.py`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/tenet-verification/main.py`
 - **Lines:** 561
 - **Purpose:** Main service with confidence calculator, database models, and endpoints
 - **Contents:**
@@ -23,7 +23,7 @@
   - Distribution path logic
 
 #### Test Suite
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/tenet-verification/tests/test_verification.py`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/tenet-verification/tests/test_verification.py`
 - **Lines:** 284
 - **Purpose:** Comprehensive unit tests
 - **Contents:**
@@ -36,7 +36,7 @@
   - Plus integration & validation tests
 
 #### Documentation
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/tenet-verification/DATABASE_SCHEMA.md`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/tenet-verification/DATABASE_SCHEMA.md`
 - **Purpose:** Database schema documentation for migration specialist
 - **Contents:**
   - Table designs (verification_records, data_source_contributions, review_queue)
@@ -52,7 +52,7 @@
 ### WebSocket Service
 
 #### Core Implementation
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/main.py`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/main.py`
 - **Lines:** 476
 - **Purpose:** Main service with Redis consumer and WebSocket manager
 - **Contents:**
@@ -65,7 +65,7 @@
   - Heartbeat broadcasting system
 
 #### Test Suite
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/tests/test_websocket.py`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/tests/test_websocket.py`
 - **Lines:** 274
 - **Purpose:** Comprehensive unit tests
 - **Contents:**
@@ -78,7 +78,7 @@
   - Plus integration scenarios
 
 #### Test Package Init
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/tests/__init__.py`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/tests/__init__.py`
 - **Purpose:** Python package marker for tests directory
 
 ---
@@ -88,7 +88,7 @@
 ### TeneT Verification Service
 
 #### README
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/tenet-verification/README.md`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/tenet-verification/README.md`
 - **Change:** v001.000 → v001.001
 - **Modifications:**
   - Updated status from "Phase 0 Stub" to "Phase 1 Implementation Complete"
@@ -108,7 +108,7 @@
 ### WebSocket Service
 
 #### README
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/README.md`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/README.md`
 - **Change:** v001.000 → v001.001
 - **Modifications:**
   - Updated status from "Phase 0 Stub" to "Phase 1 Implementation Complete"
@@ -122,7 +122,7 @@
   - Removed placeholder sections
 
 #### Requirements
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/requirements.txt`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/requirements.txt`
 - **Change:** Updated versions
 - **Previous:**
   ```
@@ -149,7 +149,7 @@
 ## Documentation Files (Project Root)
 
 ### Completion Report
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/SPECIALIST_B_COMPLETION_REPORT.md`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/SPECIALIST_B_COMPLETION_REPORT.md`
 - **Purpose:** Comprehensive completion report with requirements checklist
 - **Contents:**
   - Task 1 & 2 implementation details
@@ -161,7 +161,7 @@
   - Integration points with existing code
 
 ### Integration Checklist
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/INTEGRATION_CHECKLIST.md`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/INTEGRATION_CHECKLIST.md`
 - **Purpose:** Detailed integration guide for other specialists
 - **Contents:**
   - Pre-integration requirements
@@ -173,7 +173,7 @@
   - API documentation references
 
 ### This File
-**File:** `/c/Users/jacke/Documents/GitHub/eSports-EXE/SPECIALIST_B_FILES.md`
+**File:** `/c/Users/jacke/Documents/GitHub/ZeSporteXte/SPECIALIST_B_FILES.md`
 - **Purpose:** Index of all files created/modified
 - **Contents:** This document
 
@@ -233,9 +233,9 @@ Total: 7 documentation files
 
 All files located at:
 ```
-/c/Users/jacke/Documents/GitHub/eSports-EXE/services/tenet-verification/
-/c/Users/jacke/Documents/GitHub/eSports-EXE/services/websocket/
-/c/Users/jacke/Documents/GitHub/eSports-EXE/
+/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/tenet-verification/
+/c/Users/jacke/Documents/GitHub/ZeSporteXte/services/websocket/
+/c/Users/jacke/Documents/GitHub/ZeSporteXte/
 ```
 
 To verify all files exist:

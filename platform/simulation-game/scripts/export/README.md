@@ -1,14 +1,14 @@
-# Godot Export Client for eSports-EXE
+# Godot Export Client for ZeSporteXte
 
 **Version:** 1.0.0  
 **Component:** ExportClient.gd  
-**Purpose:** HTTP client for exporting simulation data to eSports-EXE API
+**Purpose:** HTTP client for exporting simulation data to ZeSporteXte API
 
 ---
 
 ## Overview
 
-ExportClient provides reliable HTTP communication between the Godot simulation and the eSports-EXE platform API. Features include:
+ExportClient provides reliable HTTP communication between the Godot simulation and the ZeSporteXte platform API. Features include:
 
 - **Automatic Retry:** Exponential backoff with jitter
 - **Offline Queue:** Failed requests queued for later retry
@@ -28,7 +28,7 @@ extends Node
 
 func _ready():
     export_client.configure(
-        "https://api.esports-exe.com/v1",
+        "https://api.zesportexte.com/v1",
         "your_api_key"
     )
     export_client.request_completed.connect(_on_export_complete)
@@ -94,23 +94,23 @@ export_client.restore_queue(saved_queue_data)
 
 ---
 
-## Integration with eSports-EXE
+## Integration with ZeSporteXte
 
 ### API Endpoints
 
 ```gdscript
 # Feature Store
-export_client.api_endpoint = "https://api.esports-exe.com/v1/features"
+export_client.api_endpoint = "https://api.zesportexte.com/v1/features"
 
 # Model Registry  
-export_client.api_endpoint = "https://api.esports-exe.com/v1/models"
+export_client.api_endpoint = "https://api.zesportexte.com/v1/models"
 
 # Analytics
-export_client.api_endpoint = "https://api.esports-exe.com/v1/analytics"
+export_client.api_endpoint = "https://api.zesportexte.com/v1/analytics"
 ```
 
 ---
 
 ## License
 
-Part of eSports-EXE - MIT License
+Part of ZeSporteXte - MIT License
