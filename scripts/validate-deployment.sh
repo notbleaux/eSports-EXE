@@ -13,8 +13,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Configuration
-API_URL="${API_URL:-https://sator-api.onrender.com}"
-WEB_URL="${WEB_URL:-https://sator-platform.vercel.app}"
+API_URL="${API_URL:-https://njz-api.onrender.com}"
+WEB_URL="${WEB_URL:-https://zesportexte.vercel.app}"
 TIMEOUT=30
 
 log_info() {

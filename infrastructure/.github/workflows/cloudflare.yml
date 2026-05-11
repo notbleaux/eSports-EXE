@@ -22,6 +22,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: satorx-website
+          projectName: zesportexte
           directory: website
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

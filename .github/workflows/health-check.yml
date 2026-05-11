@@ -32,7 +32,7 @@ jobs:
           FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run: |
           FRONTEND_URL="${FRONTEND_URL:-${{ secrets.FRONTEND_URL }}}"
-          TARGET="${FRONTEND_URL:-https://esports-exe.vercel.app}"
+          TARGET="${FRONTEND_URL:-https://zesportexte.vercel.app}"
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 10 \
             "$TARGET" || echo "000")

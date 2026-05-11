@@ -86,15 +86,14 @@ try {
 if (-not $SkipSupabaseCheck) {
     Show-Header "SUPABASE STATUS (CRITICAL)"
     
-    Write-Status "Supabase Project: NJZ-EXE" "WARN"
+    Write-Status "Supabase Project: ZeSporteXte (new project)" "WARN"
     Write-Host ""
     Write-Host "$Yellow ACTION REQUIRED:$Reset"
-    Write-Host "  1. Visit: https://supabase.com/dashboard/project/sxwyaxfresuroiezxo"
-    Write-Host "  2. Click the 'Resume project' button"
+    Write-Host "  1. Visit: https://supabase.com/dashboard/projects"
+    Write-Host "  2. Open the new ZeSporteXte project and click 'Resume project'"
     Write-Host "  3. Wait 2-3 minutes for database to start"
     Write-Host ""
-    Write-Host "  Project has been paused since 14 Mar 2026"
-    Write-Host "  87 days remaining until permanent deletion!"
+    Write-Host "  Confirm the project is active and note its project ref for DATABASE_URL."
     Write-Host ""
     
     $resume = Read-Host "Have you resumed the Supabase project? (y/n)"
@@ -118,7 +117,7 @@ if (-not $SkipRenderCheck) {
     
     Write-Host "$Blue Deployment Steps:$Reset"
     Write-Host "  1. Visit: https://dashboard.render.com/"
-    Write-Host "  2. Delete the failed 'sator-api' service if it exists"
+    Write-Host "  2. Delete legacy API services if they still reference old project settings"
     Write-Host "  3. Click 'New +' → 'Blueprint'"
     Write-Host "  4. Connect this GitHub repository"
     Write-Host "  5. Select 'infrastructure/render.yaml'"
@@ -187,8 +186,8 @@ Write-Host @"
 
 $Blue Infrastructure Resurrection Checklist:$Reset
 
-[ ] 1. Resume Supabase (CRITICAL - 87 days left!)
-      https://supabase.com/dashboard/project/sxwyaxfresuroiezxo
+[ ] 1. Resume Supabase new project
+      https://supabase.com/dashboard/projects
 
 [ ] 2. Deploy to Render
       https://dashboard.render.com/ → Blueprint → infrastructure/render.yaml
@@ -207,7 +206,7 @@ $Blue Infrastructure Resurrection Checklist:$Reset
 $Green Next Steps:$Reset
   - Run: .\scripts\setup-local.ps1 (for local dev)
   - Run: pytest tests/unit (for test verification)
-  - Check: https://github.com/notbleaux/eSports-EXE/actions (for CI status)
+  - Check: https://github.com/notbleaux/ZeSporteXte/actions (for CI status)
 
 "@
 
