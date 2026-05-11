@@ -1,3 +1,5 @@
+[Ver001.000]
+
 # Pull Request
 
 > **Tip:** Use a typed template by appending `?template=feature.md` (or `fix.md`, `refactor.md`, `docs.md`, `schema-change.md`, `deletion.md`, `agent_session_handoff.md`) to the PR URL. This default applies when no template query is set.

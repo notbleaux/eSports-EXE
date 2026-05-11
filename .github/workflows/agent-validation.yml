@@ -66,9 +66,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check all modified .md files have version headers
         run: |
-          # Get list of .md files changed in this PR
+          # Get list of .md files changed in this PR, excluding archived material
+          # (archive/** is T2 per .doc-tiers.json — don't load, don't validate)
           git fetch origin ${{ github.base_ref }}
-          CHANGED_MD=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep '\.md$' || true)
+          CHANGED_MD=$(git diff --name-only origin/${{ github.base_ref }}..HEAD \
+            | grep '\.md$' \
+            | grep -v '^archive/' \
+            | grep -v '^Archived/' \
+            || true)
 
           if [ -z "$CHANGED_MD" ]; then
             echo "No .md files changed — skipping doc header check"
