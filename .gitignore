@@ -38,6 +38,7 @@ obj/
 node_modules/
 dist/
 *.tsbuildinfo
+.turbo/
 
 # Environment
 .env
