@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**NJZ eSports — NJZiteGeisTe Platform** (v2.1.0) — A community eSports analytics and simulation platform for Valorant and CS2.
+**NJZ eSports — ZESPORTEXTE** (v2.1.0) — A community eSports analytics and simulation platform for Valorant and CS2.
 
 ### TENET Architecture — CRITICAL: Read Before Modifying Any Route, Hub, or Data Layer
 
@@ -91,7 +91,7 @@ godot --headless --script tests/run_tests.gd   # Run headless tests
 ### Monorepo Structure (pnpm workspaces + Turbo)
 
 ```
-apps/web/                     # NJZiteGeisTe Platform — React 18 + Vite (MAIN)
+apps/web/                     # ZESPORTEXTE — React 18 + Vite (MAIN)
 apps/VCT Valorant eSports/    # VCT data project (Python/FastAPI)
 packages/shared/api/          # FastAPI REST backend
 packages/shared/axiom-esports-data/   # Python data pipeline (PostgreSQL, asyncpg)

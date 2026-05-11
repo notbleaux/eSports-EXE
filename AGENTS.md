@@ -1,29 +1,29 @@
 [Ver003.000]
 
-# AGENTS.md — NJZiteGeisTe Platform
+# AGENTS.md — ZESPORTEXTE
 
-**Purpose:** This file provides essential context for AI coding agents working on the NJZiteGeisTe Platform project.
-**Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
-**Repository:** https://github.com/notbleaux/eSports-EXE  
+**Purpose:** This file provides essential context for AI coding agents working on the ZESPORTEXTE project.
+**Project:** ZESPORTEXTE (formerly NJZiteGeisTe Platform / SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
+**Repository:** https://github.com/notbleaux/ZESPORTEXTE  
 **Last Updated:** 2026-03-30
 
 ---
 
 ## 📋 Project Overview
 
-NJZiteGeisTe Platform is an esports simulation and analytics platform focused on tactical FPS games (Valorant with planned Counter-Strike 2 support). The platform provides:
+ZESPORTEXTE is an esports simulation and analytics platform focused on tactical FPS games (Valorant with planned Counter-Strike 2 support). The platform provides:
 
 - **SATOR Analytics:** Advanced player metrics (SimRating, RAR) with confidence weighting
 - **eXe Directory:** Service registry and coordination hub
 - **ROTAS Simulation:** Deterministic tactical FPS match simulation (Godot 4)
-- **NJZiteGeisTe Platform:** 5-hub web interface (SATOR, ROTAS, AREPO, OPERA, TENET Central Hub)
+- **ZESPORTEXTE:** 5-hub web interface (SATOR, ROTAS, AREPO, OPERA, TENET Central Hub)
 - **Pandascore Integration:** Official API for legal esports data access
 
 ### Key Components
 
 | Component | Location | Technology | Status |
 |-----------|----------|------------|--------|
-| **NJZiteGeisTe Platform** | `apps/web/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.1 |
+| **ZESPORTEXTE** | `apps/web/` | React 18, Vite, Tailwind, TypeScript | ✅ Active v2.1 |
 | **API Backend** | `services/api/` | FastAPI, Python 3.11+, Poetry | ✅ Active |
 | **Data Pipeline** | `packages/shared/axiom-esports-data/` | Python, PostgreSQL, asyncpg | ✅ Active |
 | **Simulation Game** | `platform/simulation-game/` | Godot 4, GDScript, C# | 🟡 Paused |
@@ -48,7 +48,7 @@ NJZiteGeisTe Platform is an esports simulation and analytics platform focused on
 ```
 /
 ├── apps/                          # Applications
-│   ├── web/                      # NJZiteGeisTe Platform (React + Vite) - MAIN
+│   ├── web/                      # ZESPORTEXTE (React + Vite) - MAIN
 │   ├── browser-extension/        # WebExtension for live data
 │   ├── companion/                # Mobile companion app
 │   ├── nexus/                    # Nexus hub application
@@ -215,7 +215,7 @@ pnpm run setup                 # Initial setup (PowerShell)
 pnpm run setup:reset           # Reset database
 ```
 
-### NJZiteGeisTe Platform (apps/web/)
+### ZESPORTEXTE (apps/web/)
 
 ```bash
 cd apps/web

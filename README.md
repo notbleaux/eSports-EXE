@@ -1,14 +1,14 @@
 [Ver003.000]
 
-# NJZiteGeisTe Platform
+# ZESPORTEXTE
 
-[![CI Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
-[![Playwright Tests](https://github.com/notbleaux/eSports-EXE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
-[![Security Audit](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
-[![Health Check](https://github.com/notbleaux/eSports-EXE/actions/workflows/health-check.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
+[![CI Status](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions)
+[![Playwright Tests](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions)
+[![Security Audit](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions)
+[![Health Check](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/health-check.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions)
 
-[![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/eSports-EXE/main)](https://codecov.io/gh/notbleaux/eSports-EXE)
-[![License](https://img.shields.io/github/license/notbleaux/eSports-EXE)](LICENSE)
+[![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/ZESPORTEXTE/main)](https://codecov.io/gh/notbleaux/ZESPORTEXTE)
+[![License](https://img.shields.io/github/license/notbleaux/ZESPORTEXTE)](LICENSE)
 
 > **Advanced Esports Analytics & Simulation Platform for Valorant and Counter-Strike 2**
 
@@ -33,7 +33,7 @@ The Master Plan is the single source of truth that prevents Design Drift and Arc
 
 ## 🎯 Overview
 
-NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS) is a comprehensive esports analytics and simulation platform focused on tactical FPS games. The platform provides advanced player metrics, match predictions, and deterministic tactical simulations.
+ZESPORTEXTE (formerly NJZiteGeisTe Platform / SATOR-eXe-ROTAS) is a comprehensive esports analytics and simulation platform focused on tactical FPS games. The platform provides advanced player metrics, match predictions, and deterministic tactical simulations.
 
 ### Key Components
 
@@ -99,8 +99,8 @@ NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS) is a comprehensive esports anal
 
 ```bash
 # Clone repository
-git clone https://github.com/notbleaux/eSports-EXE.git
-cd eSports-EXE
+git clone https://github.com/notbleaux/ZESPORTEXTE.git
+cd ZESPORTEXTE
 
 # Install dependencies
 pnpm install
@@ -134,11 +134,11 @@ pytest packages/shared/
 
 | Metric | Status |
 |--------|--------|
-| **Build** | [![CI Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
-| **Tests** | [![Playwright Tests](https://github.com/notbleaux/eSports-EXE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
-| **Security** | [![Security Audit](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
-| **Coverage** | [![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/eSports-EXE/main)](https://codecov.io/gh/notbleaux/eSports-EXE) |
-| **Uptime** | [![Health Check](https://github.com/notbleaux/eSports-EXE/actions/workflows/health-check.yml/badge.svg)](https://status.njzitegeist.com) |
+| **Build** | [![CI Status](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions) |
+| **Tests** | [![Playwright Tests](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions) |
+| **Security** | [![Security Audit](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/ZESPORTEXTE/actions) |
+| **Coverage** | [![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/ZESPORTEXTE/main)](https://codecov.io/gh/notbleaux/ZESPORTEXTE) |
+| **Uptime** | [![Health Check](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/health-check.yml/badge.svg)](https://status.njzitegeist.com) |
 
 ---
 
@@ -264,7 +264,7 @@ Security is a top priority. Please see our security documentation:
 
 - [Security Policy](SECURITY.md)
 - [Vulnerability Reporting](SECURITY.md#reporting-vulnerabilities)
-- [Security Audit Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml)
+- [Security Audit Status](https://github.com/notbleaux/ZESPORTEXTE/actions/workflows/security.yml)
 
 ---
 
@@ -298,6 +298,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  <strong>NJZiteGeisTe Platform</strong><br>
+  <strong>ZESPORTEXTE</strong><br>
   Advanced Esports Analytics & Simulation
 </p>

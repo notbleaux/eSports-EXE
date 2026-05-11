@@ -4,7 +4,7 @@
 
 ## Supported Versions
 
-The following versions of the NJZiteGeisTe Platform are currently supported with security updates:
+The following versions of ZESPORTEXTE are currently supported with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
