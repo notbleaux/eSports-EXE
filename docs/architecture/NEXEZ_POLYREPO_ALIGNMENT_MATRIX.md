@@ -4,7 +4,7 @@
 
 **Date:** 2026-05-13  
 **Scope:** Strategic alignment only (no feature implementation)  
-**Authority:** Approved continuation decisions (AB)
+**Authority:** Approved continuation decisions from Elijah Bleaux (AB)
 
 ---
 
@@ -55,4 +55,3 @@ This matrix cross-references current architecture/planning documents and resolve
 - [ ] Must-have/nice-to-have scoring template adopted for planning decisions  
 - [ ] Monorepo-now/polyrepo-ready language harmonized across architecture docs  
 - [ ] LIVEservice stability guardrails documented and linked to release process
-

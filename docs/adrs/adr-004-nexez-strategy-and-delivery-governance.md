@@ -30,7 +30,7 @@ Chosen option: **Codify approved decisions in a unified ADR + alignment set**.
 
 The following are now official:
 
-1. **Unified Platform Direction:** Build toward NeXeZ / NAIOH-OSS-CCP (NuMuN-aligned command-center model) via sequential staged delivery.
+1. **Unified Platform Direction:** Build toward NeXeZ / NAIOH-OSS-CCP (**Nexus AI Orchestration Hub — Operations System and Services Command Center Platform**) (NuMuN-aligned command-center model) via sequential staged delivery.
 2. **Prioritization Model:** Use a required 13-question, 1–5 scoring framework to classify and sequence Must-Haves and Nice-to-Haves.
 3. **Stack/Deployment Baseline:** REST + PixiJS + Docker Compose; deployment path is Vercel + Railway/Render.
 4. **Governance Path:** Simplified ADR-first governance now, with later SATOR-inspired refinement after incubation/maturation.
@@ -73,4 +73,3 @@ The following are now official:
 
 This ADR supplements (does not invalidate) existing ADR-001 through ADR-003.  
 It standardizes continuation execution and governance interpretation for the approved strategic context.
-
