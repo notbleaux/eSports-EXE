@@ -26,6 +26,10 @@ on:
           - automated
           - manual
 
+env:
+  API_BASE_URL: https://njz-api.onrender.com
+  API_HEALTH_URL: https://njz-api.onrender.com/health
+
 concurrency:
   group: production-deploy
   cancel-in-progress: false
@@ -73,7 +77,7 @@ jobs:
       - name: Verify required secrets
         run: |
           echo "Checking required secrets..."
-          if [ "${{ github.event.inputs.deployment_mode || 'automated' }}" = "automated" ]; then
+          if [ "${{ steps.mode.outputs.deployment_mode }}" = "automated" ]; then
             if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
               echo "✓ RENDER_DEPLOY_HOOK_URL is set"
             else
@@ -108,8 +112,9 @@ jobs:
             -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
           echo "Render response code: $HTTP_CODE"
           if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ] && [ "$HTTP_CODE" != "202" ]; then
-            echo "✗ Failed to trigger deployment hook"
-            cat "$RESPONSE_FILE" || true
+            echo "✗ Failed to trigger deployment hook (HTTP $HTTP_CODE)"
+            echo "Response body:"
+            cat "$RESPONSE_FILE" || echo "<empty response>"
             rm -f "$RESPONSE_FILE"
             exit 1
           fi
@@ -124,9 +129,9 @@ jobs:
 
           echo "Checking health endpoint..."
           for i in {1..12}; do
-            if curl -sf https://njz-api.onrender.com/health 2>/dev/null; then
+            if curl -sf "$API_HEALTH_URL" 2>/dev/null; then
               echo "✓ Health check passed"
-              echo "url=https://njz-api.onrender.com" >> $GITHUB_OUTPUT
+              echo "url=$API_BASE_URL" >> $GITHUB_OUTPUT
               exit 0
             fi
             echo "Attempt $i failed, retrying..."
@@ -155,10 +160,10 @@ jobs:
           echo "  2. Click 'New +' → 'Blueprint'"
           echo "  3. Select this repository and branch"
           echo "  4. Confirm service health endpoint returns 200"
-          echo "url=https://njz-api.onrender.com" >> $GITHUB_OUTPUT
+          echo "url=$API_BASE_URL" >> $GITHUB_OUTPUT
       - name: Manual-mode health verification
         run: |
-          curl -sf https://njz-api.onrender.com/health
+          curl -sf "$API_HEALTH_URL"
 
   # ==========================================================================
   # Notify on Completion
@@ -178,7 +183,7 @@ jobs:
           echo "Commit: ${{ github.sha }}"
           echo ""
           echo "Next steps:"
-          echo "  - Verify deployment: https://njz-api.onrender.com/health"
+          echo "  - Verify deployment: $API_HEALTH_URL"
           echo "  - Check logs: https://dashboard.render.com/"
 
           if [ "${{ needs.pre-deploy-checks.outputs.deployment_mode }}" = "automated" ] && [ "${{ needs.deploy-automated.result }}" != "success" ]; then

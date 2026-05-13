@@ -105,8 +105,8 @@ jobs:
           try:
               from main import app  # noqa: F401
               print("✅ All Python schemas import successfully")
-          except Exception:
-              print("❌ Schema validation failed: unable to import FastAPI app and related Pydantic schemas")
+          except Exception as e:
+              print(f"❌ Schema validation failed: {str(e)}")
               traceback.print_exc()
               raise SystemExit(1)
           PY

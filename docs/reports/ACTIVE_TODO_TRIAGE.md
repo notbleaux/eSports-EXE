@@ -2,6 +2,8 @@
 
 # Active TODO Triage — Production Paths
 
+**Last Updated:** 2026-05-13
+
 This checklist records active-path TODO/stub items that are intentionally deferred and assigns owner + tracking anchors.
 
 ## Immediate Fixes in This PR
