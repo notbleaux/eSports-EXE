@@ -46,8 +46,9 @@ jobs:
       - name: Resolve deployment mode
         id: mode
         run: |
-          echo "deployment_mode=${{ github.event.inputs.deployment_mode }}" >> $GITHUB_OUTPUT
-          echo "Mode: ${{ github.event.inputs.deployment_mode }}"
+          MODE="${{ github.event.inputs.deployment_mode || 'automated' }}"
+          echo "deployment_mode=$MODE" >> $GITHUB_OUTPUT
+          echo "Mode: $MODE"
 
       - name: Run pre-deployment checks
         id: checks
@@ -72,7 +73,7 @@ jobs:
       - name: Verify required secrets
         run: |
           echo "Checking required secrets..."
-          if [ "${{ github.event.inputs.deployment_mode }}" = "automated" ]; then
+          if [ "${{ steps.mode.outputs.deployment_mode }}" = "automated" ]; then
             if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
               echo "✓ RENDER_DEPLOY_HOOK_URL is set"
             else
