@@ -152,9 +152,8 @@
   "build": {
     "env": {
       "VITE_BASE_PATH": "/",
-      "VITE_API_URL": "@api_url",
-      "VITE_WS_URL": "@ws_url",
-      "VITE_SENTRY_DSN": "@sentry_dsn"
+      "VITE_API_URL": "https://sator-api.onrender.com/v1",
+      "VITE_WS_URL": "wss://sator-api.onrender.com/v1/ws"
     }
   }
 }
