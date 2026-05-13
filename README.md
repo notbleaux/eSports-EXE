@@ -176,6 +176,7 @@ Key architectural decisions are documented in `docs/adrs/`:
 | [001](docs/adrs/adr-001-tenet-architecture.md) | TENET Four-HUB Architecture | ✅ Accepted |
 | [002](docs/adrs/adr-002-tech-stack.md) | React + FastAPI Tech Stack | ✅ Accepted |
 | [003](docs/adrs/adr-003-design-tokens.md) | Design Token System | ✅ Accepted |
+| [004](docs/adrs/adr-004-nexez-polyrepo-continuation.md) | NeXeZ Continuation and Polyrepo Alignment | ✅ Accepted |
 
 ### Historical Decisions
 | ADR | Decision | Status |

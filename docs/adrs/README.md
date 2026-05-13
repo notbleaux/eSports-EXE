@@ -17,6 +17,7 @@ An Architecture Decision Record (ADR) captures an important architectural decisi
 | [ADR-001](./adr-001-tenet-architecture.md) | TENET Four-HUB Architecture | Accepted | 2026-03-31 |
 | [ADR-002](./adr-002-tech-stack.md) | React + FastAPI Tech Stack | Accepted | 2026-03-31 |
 | [ADR-003](./adr-003-design-tokens.md) | Design Token System | Accepted | 2026-03-31 |
+| [ADR-004](./adr-004-nexez-polyrepo-continuation.md) | NeXeZ Continuation and Polyrepo Alignment | Accepted | 2026-05-13 |
 
 ## Creating a New ADR
 

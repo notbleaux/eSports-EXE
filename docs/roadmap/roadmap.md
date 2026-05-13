@@ -4,8 +4,95 @@
 
 This roadmap outlines the path from current state (build stabilized) to production-ready eSports-EXE platform.
 
-**Current Status:** Build stable, TypeScript errors resolved  
-**Next Milestone:** ROTAS MVP with real data
+**Current Status:** Build stable, TypeScript errors resolved, NeXeZ continuation track approved  
+**Next Milestone:** Sprint 1 (Alignment & Decision Lock)
+
+---
+
+## NeXeZ Continuation Track (Priority)
+
+This priority track defines immediate execution for NeXeZ webapp/website alignment and polyrepo integration readiness.
+
+### Sprint 1 — Alignment & Decision Lock (Weeks 1-2)
+
+**Deliveries**
+- [ ] Unified Architecture Brief v1 for NeXeZ + current platform coexistence
+- [ ] Must-have / Nice-to-have scoring framework (13-question rubric, 1–5 scale)
+- [ ] Cross-repo inventory (apps, shared packages, APIs, deployments, ADR gaps)
+
+**Targets**
+- 100% core components classified as Must/Nice
+- Top 10 Must-haves ranked and accepted
+- Repository dependency map approved
+
+### Sprint 2 — Shared Foundation (Weeks 3-4)
+
+**Deliveries**
+- [ ] Shared contract baseline (API schemas, events, auth boundaries, env naming)
+- [ ] Integration standards (branching, versioning, release tags, compatibility policy)
+- [ ] Deployment profile matrix (dev/stage/prod) for Vercel + Railway/Render
+
+**Targets**
+- All active repositories mapped to one compatibility matrix
+- Zero ambiguous environment variable names across core services
+
+### Sprint 3 — First Vertical Slice (Weeks 5-6)
+
+**Deliveries**
+- [ ] End-to-end NeXeZ slice (dashboard shell + orchestration API + integrated service module)
+- [ ] PixiJS visualization MVP in webapp
+- [ ] Docker Compose local integration stack for validation
+
+**Targets**
+- Vertical slice runs locally and in staging
+- Baseline SLOs defined (latency, error rate, uptime)
+
+### Sprint 4 — Hardening & Live-Safe Operations (Weeks 7-8)
+
+**Deliveries**
+- [ ] Live-safe operating model to protect production website performance
+- [ ] Test gates (integration, contract, smoke, rollback validation)
+- [ ] Runbooks (incident response, rollback, release checks)
+
+**Targets**
+- Release checklist mandatory before production promotion
+- Controlled weekly release cadence established
+
+### Must-Have / Nice-to-Have Scoring Rubric (13 Questions)
+
+Score each question 1-5 per candidate component/plan item:
+1. Is it required for core user journeys?
+2. Does it directly support NeXeZ command-center goals?
+3. Does it unblock other high-priority work?
+4. Does it reduce operational risk?
+5. Does it improve production reliability?
+6. Does it improve developer velocity?
+7. Is implementation complexity manageable this cycle?
+8. Are dependencies already available?
+9. Is expected user value high?
+10. Is economic value strong relative to effort?
+11. Is opportunity cost acceptable?
+12. Can it be delivered as a clean vertical slice?
+13. Can it be validated with measurable acceptance criteria?
+
+Classification rule:
+- **Must Have:** Required for first-wave portfolio completion
+- **Nice to Have:** Sequenced by difficulty, utility, and economic value/opportunity cost
+
+### Post-Sprint Progression
+
+- **Phase A — Foundation (Sprints 1–2)**
+- **Phase B — Integration (Sprints 3–4)**
+- **Phase C — Productionization (next 2–3 sprints)**
+- **Phase D — Expansion (omnibus command-center scaling + incubated SATOR-inspired experimentation)**
+
+### Required Unification Checks
+
+- Shared types/contracts consistency checks
+- REST API parity checks
+- Env and deployment drift checks (Vercel/Railway/Render)
+- ADR conformance checks
+- UI/visual system consistency checks (webapp + website)
 
 ---
 

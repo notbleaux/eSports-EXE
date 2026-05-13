@@ -1,8 +1,8 @@
 # eSports-EXE Master Plan
 ## The Single Source of Truth for Project Direction
 
-> **Version:** 1.0.0  
-> **Last Updated:** 2026-03-31  
+> **Version:** 1.1.0  
+> **Last Updated:** 2026-05-13  
 > **Status:** ACTIVE  
 > **Approver:** Elijah Bleaux (notbleaux)
 
@@ -357,6 +357,64 @@ stats:
 
 ## 6. Development Roadmap
 
+### 6.0 NeXeZ Continuation Program (Approved 2026-05-13)
+**Goal:** Continue from current state while aligning all active repositories to the NeXeZ command-center direction.
+
+**Baseline Rules:**
+- Preserve platform continuity while transitioning toward the NAIOH-OSS-CCP NeXeZ architecture.
+- Treat shared contracts/types as the integration anchor across repositories.
+- Execute by sequence: stabilize now, integrate next, scale after.
+
+### 6.0.1 Early Sprint Track (2 weeks each)
+
+#### Sprint 1 — Alignment & Decision Lock
+**Deliveries:**
+- [ ] Unified Architecture Brief v1 for NeXeZ + existing platform coexistence
+- [ ] Must-have / Nice-to-have scoring framework (13-question rubric, 1–5 scale)
+- [ ] Cross-repo inventory (apps, shared packages, APIs, deployment configs, ADR gaps)
+
+**Targets:**
+- 100% core components classified as Must/Nice
+- Top 10 Must-haves ranked and accepted
+- Repository dependency map approved
+
+#### Sprint 2 — Shared Foundation
+**Deliveries:**
+- [ ] Shared contract baseline (API schemas, events, auth boundaries, env naming)
+- [ ] Repository integration standards (branching, versioning, release tags, compatibility policy)
+- [ ] Deployment profile matrix (dev/stage/prod) for Vercel + Railway/Render
+
+**Targets:**
+- All active repositories mapped to one compatibility matrix
+- Zero ambiguous environment variable names across core services
+
+#### Sprint 3 — First Vertical Slice
+**Deliveries:**
+- [ ] End-to-end NeXeZ slice (dashboard shell + orchestration API + one integrated service module)
+- [ ] PixiJS visualization MVP embedded in webapp
+- [ ] Docker Compose local integration stack for slice validation
+
+**Targets:**
+- Slice runs locally and in staging
+- Baseline SLOs defined (latency, error rate, uptime)
+
+#### Sprint 4 — Hardening & Live-Safe Operations
+**Deliveries:**
+- [ ] Non-disruptive live-service operating model (development without degrading public website)
+- [ ] Test gates (integration, contract, smoke, rollback validation)
+- [ ] Operational runbooks (incident, rollback, release checks)
+
+**Targets:**
+- Release gate checklist required before production promotion
+- Controlled weekly release cadence established
+
+### 6.0.2 Post-Sprint Phase Progression
+
+- **Phase A — Foundation (Sprints 1–2):** Governance, scoring, architecture lock, shared contracts, ADR baseline
+- **Phase B — Integration (Sprints 3–4):** Vertical slices, interoperability, staging confidence, live-safe workflow
+- **Phase C — Productionization (next 2–3 sprints):** Must-haves completed first; Nice-to-haves sequenced by difficulty × utility × economic value/opportunity cost
+- **Phase D — Expansion:** Omnibus command-center scaling, with SATOR-inspired experimentation in an incubated track (not on critical production path)
+
 ### Phase 1: Foundation (Weeks 1-2)
 **Goal:** Stable development environment and design system
 
@@ -511,6 +569,24 @@ stats:
 - Is the roadmap on track?
 - What have we learned?
 
+### 7.4 Cross-Repository Unification Checks (Required)
+
+- Shared types/contracts consistency (breaking-change detection)
+- REST API surface parity (route and version compatibility)
+- Environment and deployment drift checks (Vercel/Railway/Render)
+- ADR conformance checks (all major changes linked to simplified ADRs)
+- UI/visual system consistency checks across NeXeZ webapp and website
+
+### 7.5 Simplified ADR Policy
+
+All major architectural or operational decisions must be captured in concise ADRs that include:
+1. Context
+2. Decision
+3. Consequences
+4. Validation criteria
+
+Detailed SATOR-inspired refinements remain optional and are applied in the incubation track after production stability gates are met.
+
 ---
 
 ## 8. Quality Gates
@@ -621,7 +697,7 @@ By approving this document, you agree to:
 ---
 
 **Document Control:**
-- Version: 1.0.0
-- Last Updated: 2026-03-31
-- Next Review: 2026-04-30
+- Version: 1.1.0
+- Last Updated: 2026-05-13
+- Next Review: 2026-06-13
 - Status: ACTIVE ✅
