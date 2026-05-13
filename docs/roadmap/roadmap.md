@@ -41,7 +41,7 @@ Each candidate component/plan is scored **1–5** for each question:
 13. Does it align with NeXeZ/NuMuN command-center direction?  
 
 Routing:
-- **Must-Have Lane (A):** Prioritize completion in first portfolio waves before mini turbo-repo step
+- **Must-Have Lane (A):** Prioritize completion in first portfolio waves before polyrepo extraction milestone
 - **Nice-to-Have Lane (B):** Sequence by difficulty, utility, and economic value/opportunity-cost ratio
 
 ### LIVEservice Safety & Performance Guardrails
