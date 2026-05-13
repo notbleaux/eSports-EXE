@@ -10,7 +10,7 @@
 
 ## Purpose
 
-This matrix cross-references current architecture/planning documents and resolves strategic drift so future monorepo-to-polyrepo evolution remains integration-safe.
+This matrix cross-references current architecture/planning documents and resolves strategic drift so future monorepo-to-polyrepo evolution remains integration-safe, without breaking service contracts or forcing large refactors.
 
 ---
 
