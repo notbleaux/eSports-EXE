@@ -39,6 +39,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 .turbo/
+.next/
 
 # Environment
 .env

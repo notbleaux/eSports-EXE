@@ -100,7 +100,16 @@ jobs:
       - name: Validate Python Pydantic imports
         run: |
           cd packages/shared/api
-          python -c "from main import app; print('✅ All Python schemas import successfully')"
+          python - <<'PY'
+          import traceback
+          try:
+              from main import app  # noqa: F401
+              print("✅ All Python schemas import successfully")
+          except Exception:
+              print("❌ Schema validation failed: unable to import FastAPI app and related Pydantic schemas")
+              traceback.print_exc()
+              raise SystemExit(1)
+          PY
 
   test-python:
     name: Python Unit Tests

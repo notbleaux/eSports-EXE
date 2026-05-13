@@ -73,7 +73,7 @@ jobs:
       - name: Verify required secrets
         run: |
           echo "Checking required secrets..."
-          if [ "${{ steps.mode.outputs.deployment_mode }}" = "automated" ]; then
+          if [ "${{ github.event.inputs.deployment_mode || 'automated' }}" = "automated" ]; then
             if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
               echo "✓ RENDER_DEPLOY_HOOK_URL is set"
             else
