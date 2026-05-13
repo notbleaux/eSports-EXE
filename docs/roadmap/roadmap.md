@@ -4,7 +4,7 @@
 
 This roadmap outlines the path from current state (build stabilized) to production-ready eSports-EXE platform.
 
-**Current Status:** Build stable, TypeScript errors resolved, NeXeZ continuation track approved  
+**Current Status:** Build stable, TypeScript errors resolved, NeXeZ continuation track approved (see [ADR-004](../adrs/adr-004-nexez-polyrepo-continuation.md))  
 **Next Milestone:** Sprint 1 (Alignment & Decision Lock)
 
 ---
