@@ -13,7 +13,7 @@ Endpoints:
 WebSocket:
 - WS   /ws/lens-updates       - Real-time lens updates (mounted at app level)
 
-TODO: Replace MAPS_DB mock data with actual database queries
+TODO(NJZ-TO-201, owner:@backend-rotas): Replace MAPS_DB mock data with database queries. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-201
 
 [Ver002.000] - Fixed duplicate function and docstring issues
 """

@@ -76,7 +76,7 @@ export function useExpertise(
       setIsLoading(true);
       setError(null);
       
-      // TODO: Replace with actual API call
+      // TODO(NJZ-TO-001, owner:@frontend-platform): Replace with actual API call. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-001
       // const response = await fetch(`/api/v1/help/expertise`);
       // const data = await response.json();
       
@@ -130,7 +130,7 @@ export function useExpertise(
   // Real-time updates (WebSocket placeholder)
   useEffect(() => {
     if (realtime) {
-      // TODO: Implement WebSocket connection
+      // TODO(NJZ-TO-002, owner:@frontend-platform): Implement WebSocket connection. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-002
       console.log('Real-time expertise updates enabled');
     }
   }, [realtime]);
@@ -145,7 +145,7 @@ export function useExpertise(
 
   // Record interaction
   const recordInteraction = useCallback((type: InteractionType, metadata?: Record<string, unknown>) => {
-    // TODO: Send to API
+    // TODO(NJZ-TO-003, owner:@frontend-platform): Send interaction to API. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-003
     console.log('Recording interaction:', { type, featureId, metadata });
     
     // Optimistic update
@@ -183,7 +183,7 @@ export function useExpertise(
 
   // Record error
   const recordError = useCallback((err: Error, recoverable = true) => {
-    // TODO: Send to API
+    // TODO(NJZ-TO-004, owner:@frontend-platform): Send error telemetry to API. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-004
     console.log('Recording error:', { error: err.message, featureId, recoverable });
     
     // Optimistic update
@@ -219,7 +219,7 @@ export function useExpertise(
 
   // Record help request
   const recordHelpRequest = useCallback((contentId: string) => {
-    // TODO: Send to API
+    // TODO(NJZ-TO-005, owner:@frontend-platform): Send help-request telemetry to API. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-005
     console.log('Recording help request:', { contentId, featureId });
     
     // Optimistic update

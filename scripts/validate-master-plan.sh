@@ -4,7 +4,7 @@
 
 set -e
 
-echo "🔍 eSports-EXE Master Plan Validator"
+echo "🔍 ZeSporteXte Master Plan Validator"
 echo "====================================="
 echo ""
 

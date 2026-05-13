@@ -27,7 +27,7 @@ __all__ = [
 ]
 
 # [STUB*PENDING: Phase X]
-# TODO: Replace with real implementation when Phase X begins
-# TODO: Add actual database queries
-# TODO: Implement confidence scoring algorithm
-# TODO: Wire up review queue workflow
+# TODO(NJZ-TO-101, owner:@backend-verification): Replace stubs with production implementation. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-101
+# TODO(NJZ-TO-102, owner:@backend-verification): Add database-backed verification queries. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-102
+# TODO(NJZ-TO-103, owner:@backend-verification): Implement confidence scoring algorithm. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-103
+# TODO(NJZ-TO-104, owner:@backend-verification): Wire verification review queue workflow. Tracking: /docs/reports/ACTIVE_TODO_TRIAGE.md#njz-to-104

@@ -4,7 +4,7 @@
 
 **Purpose:** This file provides essential context for AI coding agents working on the NJZiteGeisTe Platform project.
 **Project:** NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS / NJZ Platform / RadiantX)
-**Repository:** https://github.com/notbleaux/eSports-EXE  
+**Repository:** https://github.com/notbleaux/ZeSporteXte  
 **Last Updated:** 2026-03-30
 
 ---

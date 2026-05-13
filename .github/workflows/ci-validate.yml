@@ -52,7 +52,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build web app (Vite)
-        run: pnpm run build --filter=web
+        run: pnpm --filter @njzitegeist/web run build
 
       - name: Check bundle size
         run: |
@@ -100,7 +100,7 @@ jobs:
       - name: Validate Python Pydantic imports
         run: |
           cd packages/shared/api
-          python -c "from main import app; print('✅ All Python schemas import successfully')" || true
+          python -c "from main import app; print('✅ All Python schemas import successfully')"
 
   test-python:
     name: Python Unit Tests
@@ -134,8 +134,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
         run: |
           cd packages/shared/api
-          pytest tests/ -v --tb=short || true
-          # Don't fail the workflow if tests fail (they may have DB setup issues in CI)
+          pytest tests/ -v --tb=short
 
   summary:
     name: Status Summary
@@ -155,6 +154,10 @@ jobs:
           fi
           if [ "${{ needs.schema-validation.result }}" == "failure" ]; then
             echo "❌ Schema validation failed"
+            exit 1
+          fi
+          if [ "${{ needs.test-python.result }}" == "failure" ]; then
+            echo "❌ Python unit tests failed"
             exit 1
           fi
           echo "✅ All checks passed!"
