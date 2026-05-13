@@ -7,7 +7,6 @@
  */
 
 import type { Quarter, QuarterId } from './types';
-import { DEFAULT_QUARTERS } from './constants';
 
 /**
  * Deep merge default quarters with user-provided overrides.

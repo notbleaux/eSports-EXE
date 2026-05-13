@@ -9,7 +9,7 @@
 
 import { useState, useCallback } from 'react';
 import type { QuarterCardProps } from './types';
-import { ANIMATION, A11Y } from './constants';
+import { A11Y } from './constants';
 import { prefersReducedMotion } from './utils';
 
 /**

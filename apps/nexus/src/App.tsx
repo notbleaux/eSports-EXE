@@ -6,7 +6,6 @@
  * Full implementation planned post-Phase 6.
  * [Ver001.000]
  */
-import React from 'react'
 import { WorldPortCard } from '@njz/ui'
 import type { SupportedGame } from '@njz/types'
 
