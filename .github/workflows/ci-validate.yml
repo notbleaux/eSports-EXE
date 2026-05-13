@@ -153,19 +153,19 @@ jobs:
     steps:
       - name: Check all jobs status
         run: |
-          if [ "${{ needs.typecheck.result }}" = "failure" ]; then
+          if [ "${{ needs.typecheck.result }}" == "failure" ]; then
             echo "❌ TypeScript check failed"
             exit 1
           fi
-          if [ "${{ needs.build-web.result }}" = "failure" ]; then
+          if [ "${{ needs.build-web.result }}" == "failure" ]; then
             echo "❌ Web build failed"
             exit 1
           fi
-          if [ "${{ needs.schema-validation.result }}" = "failure" ]; then
+          if [ "${{ needs.schema-validation.result }}" == "failure" ]; then
             echo "❌ Schema validation failed"
             exit 1
           fi
-          if [ "${{ needs.test-python.result }}" = "failure" ]; then
+          if [ "${{ needs.test-python.result }}" == "failure" ]; then
             echo "❌ Python unit tests failed"
             exit 1
           fi

@@ -103,14 +103,17 @@ jobs:
         run: |
           set -e
           echo "=== Triggering automated Render deployment ==="
-          HTTP_CODE=$(curl -sS -o /tmp/render-deploy-response.txt -w "%{http_code}" \
+          RESPONSE_FILE="$(mktemp)"
+          HTTP_CODE=$(curl -sS -o "$RESPONSE_FILE" -w "%{http_code}" \
             -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
           echo "Render response code: $HTTP_CODE"
           if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ] && [ "$HTTP_CODE" != "202" ]; then
             echo "✗ Failed to trigger deployment hook"
-            cat /tmp/render-deploy-response.txt || true
+            cat "$RESPONSE_FILE" || true
+            rm -f "$RESPONSE_FILE"
             exit 1
           fi
+          rm -f "$RESPONSE_FILE"
           echo "✓ Deployment hook accepted"
 
       - name: Post-deployment health check (blocking)
