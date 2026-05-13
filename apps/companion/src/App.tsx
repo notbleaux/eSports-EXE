@@ -6,7 +6,6 @@
  * Full implementation planned for Phase 5 (Month 3+).
  * [Ver001.000]
  */
-import React from 'react'
 import { GameNodeBadge } from '@njz/ui'
 
 export function App() {

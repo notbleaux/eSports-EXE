@@ -3,4 +3,4 @@ const nextConfig = {
   transpilePackages: ['@njz/types'],
 }
 
-module.exports = nextConfig
+export default nextConfig
