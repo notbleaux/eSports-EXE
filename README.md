@@ -1,6 +1,6 @@
 [Ver003.000]
 
-# NJZiteGeisTe Platform
+# ZeSporteXte
 
 [![CI Status](https://github.com/notbleaux/ZeSporteXte/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions)
 [![Playwright Tests](https://github.com/notbleaux/ZeSporteXte/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions)
