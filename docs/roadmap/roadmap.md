@@ -51,6 +51,19 @@ Routing:
 - Performance budgets with regression checks (frontend, API, data-path latency)
 - Controlled release cadence to avoid degrading published LIVEservice website usage
 
+### Report-Driven Short-Term Execution Set (Current Planning Session)
+
+The current planning session expands assessment/evaluation feedback into a fixed short-term set:
+
+1. API resilience baseline (retry/backoff/circuit-breaker + endpoint rate-limit matrix)
+2. TENET verification de-stub with implementation/docs parity checks
+3. SimRating transparency hardening (formula/runtime parity + CI confidence checks)
+4. LIVEservice guardrail gate pack (preview gate + performance budget + rollback readiness)
+5. PR governance refinement (ADR-lite traceability + blocker mapping for planning PRs)
+
+Action reference:
+- `docs/reports/SHORT_TERM_REFINEMENT_ACTIONS_PHASED.md`
+
 Cross-reference:
 - `docs/adrs/adr-004-nexez-strategy-and-delivery-governance.md`
 - `docs/architecture/NEXEZ_POLYREPO_ALIGNMENT_MATRIX.md`

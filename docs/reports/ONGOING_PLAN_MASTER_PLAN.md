@@ -9,6 +9,31 @@
 
 ---
 
+## 2026-05-13 Refinement Addendum (Report-Driven)
+
+This plan has been refined using current assessment/evaluation feedback and strategic continuation decisions.
+
+### Alignment Updates
+
+- Prioritize short-term Must-Have execution using one unified task set (5 tasks).
+- Tie each planning PR to blocker traceability and simplified ADR-first governance.
+- Keep LIVEservice safety gates mandatory before promotion.
+- Maintain monorepo-now, polyrepo-ready planning boundaries.
+
+### Short-Term Action Pack (Current Session)
+
+1. API resilience baseline (retry/backoff/circuit-breaker + per-endpoint limits)
+2. TENET verification de-stub + docs parity checks
+3. SimRating formula/runtime parity + confidence interval validation checks
+4. LIVEservice guardrail gate pack (preview, budgets, rollback trigger)
+5. PR governance refinement (ADR-lite + blocker mapping section)
+
+Reference:
+- `docs/reports/SHORT_TERM_REFINEMENT_ACTIONS_PHASED.md`
+- `docs/roadmap/roadmap.md` (Strategic Continuation Sprint Track)
+
+---
+
 ## Current Status Summary
 
 ### Phases Completed ✅
