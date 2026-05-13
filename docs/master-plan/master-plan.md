@@ -363,7 +363,7 @@ This addendum records approved continuation strategy for post-current-state exec
 
 1. **Unified Platform Target:** Progress toward NeXeZ / NAIOH-OSS-CCP command-center architecture through sequential staged delivery.
 2. **Prioritization Gate:** Use a required 13-question, 1–5 scoring model to route initiatives into:
-   - **Lane A (Must-Haves):** Completed in first portfolio waves before mini turbo-repo step
+   - **Lane A (Must-Haves):** Completed in first portfolio waves before polyrepo extraction milestone
    - **Lane B (Nice-to-Haves):** Ordered by difficulty, utility, and economic value/opportunity-cost ratio
 3. **Stack/Deployment Baseline:** REST, PixiJS, Docker Compose, and deployment via Vercel + Railway/Render.
 4. **Governance Path:** Simplified ADR-first governance now, with SATOR-inspired refinements after incubation.
@@ -603,6 +603,7 @@ Cross-reference:
 **SATOR:** Advanced Analytics HUB (insights, predictions)  
 **OPERA:** Pro Scene Information HUB (tournaments, matches)  
 **AREPO:** Community HUB (forums, engagement)  
+**NAIOH-OSS-CCP:** Nexus AI Orchestration Hub — Operations Systems and Services Command Center Platform  
 **ADR:** Architecture Decision Record  
 **Progressive Disclosure:** UI pattern revealing complexity gradually  
 

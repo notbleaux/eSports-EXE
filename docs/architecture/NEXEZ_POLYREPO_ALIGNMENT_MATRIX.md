@@ -2,6 +2,7 @@
 
 # NeXeZ Polyrepo Alignment Matrix
 
+**Version:** 1.0.0  
 **Date:** 2026-05-13  
 **Scope:** Strategic alignment only (no feature implementation)  
 **Authority:** Approved continuation decisions from Elijah Bleaux (AB)
