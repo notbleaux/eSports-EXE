@@ -495,11 +495,11 @@ Cross-reference:
 
 2. **Create an ADR (Architecture Decision Record)**
     - Template in `docs/adrs/adr-template.md`
-   - For strategic continuation changes, use simplified ADR framing first, then refine if needed
+    - For strategic continuation changes, use simplified ADR framing first, then refine if needed
     - Explain the problem
     - List considered options
     - State the decision
-   - Document consequences
+    - Document consequences
 
 3. **Submit for Review**
    - TIER 1: Direct to Elijah
