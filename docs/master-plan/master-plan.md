@@ -603,7 +603,7 @@ Cross-reference:
 **SATOR:** Advanced Analytics HUB (insights, predictions)  
 **OPERA:** Pro Scene Information HUB (tournaments, matches)  
 **AREPO:** Community HUB (forums, engagement)  
-**NAIOH-OSS-CCP:** Nexus AI Orchestration Hub — Operations Systems and Services Command Center Platform  
+**NAIOH-OSS-CCP:** NAIOH = Nexus AI Orchestration Hub; OSS-CCP = Operations Systems and Services Command Center Platform  
 **ADR:** Architecture Decision Record  
 **Progressive Disclosure:** UI pattern revealing complexity gradually  
 
