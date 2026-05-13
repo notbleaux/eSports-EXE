@@ -9,6 +9,55 @@ This roadmap outlines the path from current state (build stabilized) to producti
 
 ---
 
+## Strategic Continuation Sprint Track (Approved Addendum)
+
+This addendum defines post-current-state continuation for NeXeZ / NuMuN alignment.
+
+### Sprint 0–3 Delivery Targets
+
+| Sprint | Focus | Exit Targets |
+|---|---|---|
+| Sprint 0 (Alignment) | Strategic alignment and architecture lock | ADR-004 accepted, alignment matrix published, dependency map confirmed |
+| Sprint 1 (Must-Have Wave 1) | Command-center foundation + baseline integrations | Core platform contracts and initial vertical slices operational |
+| Sprint 2 (Must-Have Wave 2) | Hardening + interoperability + deployment consistency | CI/CD consistency and cross-service contract validation passed |
+| Sprint 3 (Nice-to-Have Prototype Wave) | Ordered prototypes to hardening pipeline | Priority nice-to-have slices validated for production progression |
+
+### Must-Have / Nice-to-Have Scoring Framework (Required)
+
+Each candidate component/plan is scored **1–5** for each question:
+
+1. Is it required for core platform operation?  
+2. Does it unlock critical integration dependencies?  
+3. Does it reduce architectural risk?  
+4. Does it improve reliability/resilience materially?  
+5. Does it improve security/compliance posture materially?  
+6. Is implementation complexity acceptable for current phase?  
+7. Is estimated delivery time acceptable for current sprint window?  
+8. Does it provide high user or operator utility?  
+9. Does it provide measurable economic value?  
+10. Is opportunity-cost favorable versus alternatives?  
+11. Can it ship safely under LIVEservice constraints?  
+12. Does it improve maintainability/operational clarity?  
+13. Does it align with NeXeZ/NuMuN command-center direction?  
+
+Routing:
+- **Must-Have Lane (A):** Prioritize completion in first portfolio waves before mini turbo-repo step
+- **Nice-to-Have Lane (B):** Sequence by difficulty, utility, and economic value/opportunity-cost ratio
+
+### LIVEservice Safety & Performance Guardrails
+
+- Isolated rollout strategy for high-impact changes
+- Mandatory staging/preview validation gates before production promotion
+- Performance budgets with regression checks (frontend, API, data-path latency)
+- Controlled release cadence to avoid degrading published LIVEservice website usage
+
+Cross-reference:
+- `docs/adrs/adr-004-nexez-strategy-and-delivery-governance.md`
+- `docs/architecture/NEXEZ_POLYREPO_ALIGNMENT_MATRIX.md`
+- `docs/architecture/REPO_STRUCTURE_DECISION.md`
+
+---
+
 ## Phase 1: Foundation (Weeks 1-2)
 **Goal:** Stable development environment and design system
 

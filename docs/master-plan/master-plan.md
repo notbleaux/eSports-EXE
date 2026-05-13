@@ -1,8 +1,8 @@
 # eSports-EXE Master Plan
 ## The Single Source of Truth for Project Direction
 
-> **Version:** 1.0.0  
-> **Last Updated:** 2026-03-31  
+> **Version:** 1.1.0  
+> **Last Updated:** 2026-05-13  
 > **Status:** ACTIVE  
 > **Approver:** Elijah Bleaux (notbleaux)
 
@@ -357,6 +357,22 @@ stats:
 
 ## 6. Development Roadmap
 
+### 6.0 Strategic Continuation Addendum (NeXeZ / NuMuN)
+
+This addendum records approved continuation strategy for post-current-state execution:
+
+1. **Unified Platform Target:** Progress toward NeXeZ / NAIOH-OSS-CCP command-center architecture through sequential staged delivery.
+2. **Prioritization Gate:** Use a required 13-question, 1–5 scoring model to route initiatives into:
+   - **Lane A (Must-Haves):** Completed in first portfolio waves before mini turbo-repo step
+   - **Lane B (Nice-to-Haves):** Ordered by difficulty, utility, and economic value/opportunity-cost ratio
+3. **Stack/Deployment Baseline:** REST, PixiJS, Docker Compose, and deployment via Vercel + Railway/Render.
+4. **Governance Path:** Simplified ADR-first governance now, with SATOR-inspired refinements after incubation.
+
+Cross-reference:
+- `docs/adrs/adr-004-nexez-strategy-and-delivery-governance.md`
+- `docs/architecture/NEXEZ_POLYREPO_ALIGNMENT_MATRIX.md`
+- `docs/architecture/REPO_STRUCTURE_DECISION.md`
+
 ### Phase 1: Foundation (Weeks 1-2)
 **Goal:** Stable development environment and design system
 
@@ -478,10 +494,11 @@ stats:
    - Has this been tried before? (Check ADRs)
 
 2. **Create an ADR (Architecture Decision Record)**
-   - Template in `docs/adrs/adr-template.md`
-   - Explain the problem
-   - List considered options
-   - State the decision
+    - Template in `docs/adrs/adr-template.md`
+   - For strategic continuation changes, use simplified ADR framing first, then refine if needed
+    - Explain the problem
+    - List considered options
+    - State the decision
    - Document consequences
 
 3. **Submit for Review**
@@ -621,7 +638,7 @@ By approving this document, you agree to:
 ---
 
 **Document Control:**
-- Version: 1.0.0
-- Last Updated: 2026-03-31
-- Next Review: 2026-04-30
+- Version: 1.1.0
+- Last Updated: 2026-05-13
+- Next Review: 2026-06-15
 - Status: ACTIVE ✅

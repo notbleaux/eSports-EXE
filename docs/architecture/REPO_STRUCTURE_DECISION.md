@@ -111,3 +111,30 @@ Both consume `@njz/types` and `@njz/ui` as workspace packages and add no new cro
 Re-evaluate when the Companion App (`apps/companion/`) approaches production-ready status or when any trigger condition is met. Estimated checkpoint: Month 6+.
 
 *This document satisfies Phase 6 gate 6.5.*
+
+---
+
+## Strategic Continuation Addendum (2026-05-13)
+
+### Updated Interpretation: Monorepo-Now, Polyrepo-Ready
+
+The repository remains monorepo for active development, while planning and boundaries must stay **polyrepo-ready** so future extraction/integration can occur without contract breakage.
+
+### Polyrepo-Readiness Rules
+
+1. Shared contracts (types, API schemas, service boundaries) must remain explicit and versionable.
+2. New components should be designed as independent vertical slices with clear ownership boundaries.
+3. Extraction remains trigger-based; no proactive split without prerequisite completion.
+
+### Extraction Prerequisites (Reaffirmed)
+
+- [ ] Shared package publishing strategy validated
+- [ ] Independent versioning policy validated
+- [ ] CI pipelines validated for extracted repositories
+- [ ] Deployment topology validated (Vercel + Railway/Render pathways)
+
+### Decision Cross-References
+
+- `docs/adrs/adr-004-nexez-strategy-and-delivery-governance.md`
+- `docs/architecture/NEXEZ_POLYREPO_ALIGNMENT_MATRIX.md`
+- `docs/master-plan/master-plan.md` (Strategic Continuation Addendum)
