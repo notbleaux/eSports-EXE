@@ -17,6 +17,32 @@ All three scout passes completed. Findings validated. Plans optimized for:
 - ✅ **Scalability** (PgBouncer, connection pooling)
 - ✅ **Transparency** (SimRating methodology published)
 
+### 2026-05-13 Refinement Addendum — NeXeZ Alignment
+
+This action plan is refined to align with the NeXeZ continuation program, polyrepo integration readiness, and current phase governance. The following short-term tasks supersede generic backlog expansion and are prioritized for immediate execution in active sprints.
+
+#### Five Short-Term Tasks and Recommendations
+
+1. **Compatibility Matrix Finalization (Must-Have)**
+   - Recommendation: lock shared contracts, REST versions, env naming, and deployment profile parity into one approved matrix.
+   - Window: Sprint 1.
+
+2. **PandaScore Reliability Upgrade (Must-Have)**
+   - Recommendation: complete resilience controls (retry, fallback, breaker behavior) and verify degraded-mode behavior.
+   - Window: Sprint 2.
+
+3. **TENET Core Verification Enablement (Must-Have)**
+   - Recommendation: replace stubbed verification with confidence-backed responses on priority routes only.
+   - Window: Sprint 2-3.
+
+4. **NeXeZ Vertical Slice Live-Safe Validation (Must-Have)**
+   - Recommendation: run one end-to-end slice in local + staging with rollback rehearsal and evidence capture.
+   - Window: Sprint 3.
+
+5. **Release PR Gate Enforcement (Must-Have)**
+   - Recommendation: enforce PR checklists requiring acceptance evidence, rollback notes, and actionable failed-check remediation notes.
+   - Window: Sprint 4.
+
 ---
 
 ## CRITICAL FINDINGS SUMMARY

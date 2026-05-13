@@ -415,6 +415,30 @@ stats:
 - **Phase C — Productionization (next 2–3 sprints):** Must-haves completed first; Nice-to-haves sequenced by difficulty × utility × economic value/opportunity cost
 - **Phase D — Expansion:** Omnibus command-center scaling, with SATOR-inspired experimentation in an incubated track (not on critical production path)
 
+### 6.0.3 Assessment-Driven Short-Term Execution (Current Phases)
+
+The following five tasks are mandatory near-term refinements derived from assessment and evaluation reports and must be tracked in Sprint 1-4 execution:
+
+1. **Cross-Repo Compatibility Matrix Freeze (Sprint 1, Must-Have)**
+   - Scope: shared contracts/types, API versions, environment key naming, deployment profiles.
+   - Completion evidence: approved matrix and drift exceptions list.
+
+2. **PandaScore Resilience Hardening (Sprint 2, Must-Have)**
+   - Scope: retries, circuit-break behavior, cache fallback, error classification.
+   - Completion evidence: integration test pass and failure-path verification.
+
+3. **TENET Core Gating Activation (Sprint 2-3, Must-Have)**
+   - Scope: verified confidence fields in responses and core verification routing.
+   - Completion evidence: staging endpoint validation and documentation parity check.
+
+4. **First Vertical Slice Live-Safe Gate (Sprint 3, Must-Have)**
+   - Scope: dashboard shell + orchestration API + one integrated module + Docker Compose staging parity.
+   - Completion evidence: local and staging runbook with rollback drill result.
+
+5. **PR Quality Gate Upgrade (Sprint 4, Must-Have)**
+   - Scope: actionable CI failure outputs, release checklist enforcement, go/no-go decision log.
+   - Completion evidence: merged PR template/checklist updates and one successful release-gated cycle.
+
 ### Phase 1: Foundation (Weeks 1-2)
 **Goal:** Stable development environment and design system
 
@@ -586,6 +610,15 @@ All major architectural or operational decisions must be captured in concise ADR
 4. Validation criteria
 
 Detailed SATOR-inspired refinements remain optional and are applied in the incubation track after production stability gates are met.
+
+### 7.6 PR Refinement Protocol (Required for Current Phases)
+
+Every planning and implementation PR tied to the NeXeZ continuation program must include:
+- direct linkage to the governing ADR(s),
+- declared phase/sprint target and Must/Nice classification,
+- explicit acceptance criteria and evidence links,
+- rollout and rollback notes for staging-to-production promotion,
+- remediation notes for failed checks with actionable operator guidance.
 
 ---
 

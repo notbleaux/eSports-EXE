@@ -94,6 +94,35 @@ Classification rule:
 - ADR conformance checks
 - UI/visual system consistency checks (webapp + website)
 
+### Short-Term Actionable Recommendations (Assessment-Driven)
+
+These five tasks are optimized for short-term completion within current phased planning sessions:
+
+1. **Task A1 — Compatibility Matrix Lock**
+   - Phase: A (Sprint 1)
+   - Recommendation: finalize one repo-to-repo compatibility matrix for contracts, API versions, and env keys.
+   - Acceptance: approved matrix, unresolved drift list reduced to zero critical items.
+
+2. **Task A2 — Data Source Resilience Baseline**
+   - Phase: A/B (Sprint 2)
+   - Recommendation: harden PandaScore integration with retry/fallback/error-path validation.
+   - Acceptance: integration verification for success and degraded modes documented.
+
+3. **Task B1 — TENET Core Verification Gate**
+   - Phase: B (Sprint 2-3)
+   - Recommendation: move from stubbed verification responses to confidence-tiered live responses for core routes.
+   - Acceptance: staging endpoints show verification metadata and pass contract checks.
+
+4. **Task B2 — Vertical Slice + Live-Safe Rollback Drill**
+   - Phase: B (Sprint 3-4)
+   - Recommendation: validate one full NeXeZ slice locally and in staging with a rollback rehearsal.
+   - Acceptance: runbook evidence includes pass/fail criteria, recovery time, and sign-off.
+
+5. **Task C1 — PR Gate Clarity & Release Check Discipline**
+   - Phase: B/C (Sprint 4 onward)
+   - Recommendation: require actionable CI failure messaging and mandatory release checklist completion per PR.
+   - Acceptance: one complete weekly release cycle with documented go/no-go record.
+
 ---
 
 ## Phase 1: Foundation (Weeks 1-2)
