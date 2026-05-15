@@ -224,13 +224,20 @@ jobs:
   # ==========================================================================
   # Job 3: Coverage Report
   # ==========================================================================
+  # Non-blocking download: when integration-tests is cancelled (concurrency
+  # supersession) or fails before pytest emits coverage.xml/junit.xml, the
+  # 'integration-test-results' artifact does not exist and the download
+  # action hard-errors. The 'Check coverage threshold' step below already
+  # handles a missing XML gracefully, so allow the download to skip past
+  # the error and the rest of the job to run.
   coverage-report:
     needs: integration-tests
     runs-on: ubuntu-latest
     if: always()
-    
+
     steps:
       - name: Download test results
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: integration-test-results
