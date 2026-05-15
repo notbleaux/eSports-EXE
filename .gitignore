@@ -140,3 +140,9 @@ LongTermMemory/
 
 # Cleanup scripts (local use only)
 cleanup-extensions.ps1
+
+# Claude Code local settings (per-developer tool permissions allowlist)
+.claude/settings.local.json
+
+# Turborepo build cache (regenerated per run)
+.turbo/cache/
