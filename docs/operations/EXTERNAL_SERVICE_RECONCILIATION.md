@@ -72,27 +72,44 @@ Environment Variable "VITE_API_URL" references Secret "api_url",
 which does not exist.
 ```
 
-`vercel.json` declares the following `build.env` overrides using Vercel secret syntax (`@<secret_name>`):
+`vercel.json` declared `build.env` overrides using Vercel secret syntax (`@<secret_name>`) for three vars whose secrets were never created in the `njzitegeiste` Vercel team project. Every PR's preview deploy crashed at build-config time.
 
-```json
-"build": {
-  "env": {
-    "VITE_API_URL": "@api_url",
-    "VITE_WS_URL": "@ws_url",
-    "VITE_SENTRY_DSN": "@sentry_dsn"
-  }
-}
-```
+**Resolved in PR #43** (commit on `claude/post-rename-cleanup-tail`):
 
-None of these secrets are defined in the `notbleaux/njzitegeiste` Vercel team project. As a result every PR's preview deploy fails at build-config time. This predates the rename and would have failed PR #17 too.
+- Removed the three `@<secret>` references from `vercel.json` → `build.env`:
+  - `VITE_API_URL: @api_url` (removed)
+  - `VITE_WS_URL: @ws_url` (removed)
+  - `VITE_SENTRY_DSN: @sentry_dsn` (removed)
+- Retained `VITE_BASE_PATH: /` (literal value, no secret dependency)
 
-**Resolution deferred** to a dedicated follow-up PR. Three options on the table when ready:
+**Safe because:** every frontend consumer of these vars has a `??` fallback in code (`apps/web/src/shared/api/client.ts`, `hooks/usePlayerStatsLive.ts`, `lib/sentry.ts`, etc.) — missing env at build time falls back to `localhost:8000`. To wire real production values, set them as project-level env vars in the Vercel dashboard or via `vercel env add`.
 
-1. Define the secrets via `vercel secrets add api_url <value>` (cleanest; values stay in dashboard)
-2. Replace `@<secret>` references in `vercel.json` with literal env values (1-commit fix, but values become repo-visible)
-3. Remove the entire `build.env` block from `vercel.json` and rely on project-level dashboard env vars (cleanest separation; requires dashboard one-time setup)
+### Supabase wiring — verified configuration
 
-Until resolved, the Vercel deploy-preview status check on PRs will remain a known-failing channel.
+Live project state (via MCP, 2026-05-15):
+
+| Field | Value |
+|---|---|
+| URL | `https://sxwyaxfresusroiezxxc.supabase.co` |
+| Modern publishable key format | `sb_publishable_*` (recommended) |
+| Legacy anon key format | JWT `eyJ*` (still supported, less preferred) |
+| Public schema tables | 13 (raws_games/teams/players/tournaments, users, workspace_projects, agent_roster, system_connections, system_events, esports_teams/players/matches/stats) |
+| RLS enabled on all 13 tables | ✓ |
+| Frontend wiring | Not yet present — no `@supabase` package imports in `apps/web/src/` |
+
+**Action taken in PR #43:**
+- `apps/web/.env.example` updated to reflect modern publishable-key format (`sb_publishable_*`) and the dashboard provenance.
+- Project name/branding in the file header refreshed to "NJZ eSports — ZeSporteXte Platform".
+
+**Out of scope for PR #43** (future Kimi sprint or focused work):
+- Install `@supabase/supabase-js` in `apps/web`
+- Create the canonical client at `apps/web/src/shared/lib/supabase.ts`
+- Generate TypeScript schema types via `mcp__supabase__generate_typescript_types` → `apps/web/src/shared/lib/supabase.types.ts`
+- Wire client-side hooks for the 13 existing tables
+
+### Net result
+
+**Zero platform-side dashboard reconciliation is required for the rename itself.** Vercel deploy issue is in-repo fixed. Supabase project verified healthy.
 
 ---
 
