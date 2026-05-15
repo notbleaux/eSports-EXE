@@ -125,13 +125,17 @@ jobs:
           retention-days: 14
 
       - name: Comment PR with test results
-        if: github.event_name == 'pull_request' && always()
+        # Only comment when the JUnit XML actually exists — otherwise this
+        # step posts an empty "## Integration Test Results" comment on every
+        # run (e.g. when the test job was cancelled by concurrency or never
+        # produced output), spamming the PR thread.
+        if: github.event_name == 'pull_request' && always() && hashFiles('integration-junit.xml') != ''
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             let summary = '## Integration Test Results\n\n';
-            
+
             // Check for test results
             if (fs.existsSync('integration-junit.xml')) {
               const junit = fs.readFileSync('integration-junit.xml', 'utf8');
