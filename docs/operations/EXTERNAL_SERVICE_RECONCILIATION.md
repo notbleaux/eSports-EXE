@@ -61,7 +61,38 @@ This is the canonical reference for "what's the state of the rename?" — supers
 
 ### Net result
 
-**Zero platform-side dashboard reconciliation is required.** The only post-rename work is in-repo URL updates, tracked below.
+**Zero platform-side dashboard reconciliation is required for the rename itself.** The only post-rename work is in-repo URL updates, tracked below.
+
+### Pre-existing Vercel deploy issue (surfaced 2026-05-15 on PR #43)
+
+**Unrelated to the rename**, but discovered while monitoring this PR:
+
+```
+Environment Variable "VITE_API_URL" references Secret "api_url",
+which does not exist.
+```
+
+`vercel.json` declares the following `build.env` overrides using Vercel secret syntax (`@<secret_name>`):
+
+```json
+"build": {
+  "env": {
+    "VITE_API_URL": "@api_url",
+    "VITE_WS_URL": "@ws_url",
+    "VITE_SENTRY_DSN": "@sentry_dsn"
+  }
+}
+```
+
+None of these secrets are defined in the `notbleaux/njzitegeiste` Vercel team project. As a result every PR's preview deploy fails at build-config time. This predates the rename and would have failed PR #17 too.
+
+**Resolution deferred** to a dedicated follow-up PR. Three options on the table when ready:
+
+1. Define the secrets via `vercel secrets add api_url <value>` (cleanest; values stay in dashboard)
+2. Replace `@<secret>` references in `vercel.json` with literal env values (1-commit fix, but values become repo-visible)
+3. Remove the entire `build.env` block from `vercel.json` and rely on project-level dashboard env vars (cleanest separation; requires dashboard one-time setup)
+
+Until resolved, the Vercel deploy-preview status check on PRs will remain a known-failing channel.
 
 ---
 
