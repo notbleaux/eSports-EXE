@@ -2,13 +2,13 @@
 
 # NJZiteGeisTe Platform
 
-[![CI Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
-[![Playwright Tests](https://github.com/notbleaux/eSports-EXE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
-[![Security Audit](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
-[![Health Check](https://github.com/notbleaux/eSports-EXE/actions/workflows/health-check.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions)
+[![CI Status](https://github.com/notbleaux/ZeSporteXte/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions)
+[![Playwright Tests](https://github.com/notbleaux/ZeSporteXte/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions)
+[![Security Audit](https://github.com/notbleaux/ZeSporteXte/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions)
+[![Health Check](https://github.com/notbleaux/ZeSporteXte/actions/workflows/health-check.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions)
 
-[![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/eSports-EXE/main)](https://codecov.io/gh/notbleaux/eSports-EXE)
-[![License](https://img.shields.io/github/license/notbleaux/eSports-EXE)](LICENSE)
+[![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/ZeSporteXte/main)](https://codecov.io/gh/notbleaux/ZeSporteXte)
+[![License](https://img.shields.io/github/license/notbleaux/ZeSporteXte)](LICENSE)
 
 > **Advanced Esports Analytics & Simulation Platform for Valorant and Counter-Strike 2**
 
@@ -99,8 +99,8 @@ NJZiteGeisTe Platform (formerly SATOR-eXe-ROTAS) is a comprehensive esports anal
 
 ```bash
 # Clone repository
-git clone https://github.com/notbleaux/eSports-EXE.git
-cd eSports-EXE
+git clone https://github.com/notbleaux/ZeSporteXte.git
+cd ZeSporteXte
 
 # Install dependencies
 pnpm install
@@ -134,11 +134,11 @@ pytest packages/shared/
 
 | Metric | Status |
 |--------|--------|
-| **Build** | [![CI Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
-| **Tests** | [![Playwright Tests](https://github.com/notbleaux/eSports-EXE/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
-| **Security** | [![Security Audit](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/eSports-EXE/actions) |
-| **Coverage** | [![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/eSports-EXE/main)](https://codecov.io/gh/notbleaux/eSports-EXE) |
-| **Uptime** | [![Health Check](https://github.com/notbleaux/eSports-EXE/actions/workflows/health-check.yml/badge.svg)](https://status.njzitegeist.com) |
+| **Build** | [![CI Status](https://github.com/notbleaux/ZeSporteXte/actions/workflows/ci.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions) |
+| **Tests** | [![Playwright Tests](https://github.com/notbleaux/ZeSporteXte/actions/workflows/playwright.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions) |
+| **Security** | [![Security Audit](https://github.com/notbleaux/ZeSporteXte/actions/workflows/security.yml/badge.svg)](https://github.com/notbleaux/ZeSporteXte/actions) |
+| **Coverage** | [![Code Coverage](https://img.shields.io/codecov/c/github/notbleaux/ZeSporteXte/main)](https://codecov.io/gh/notbleaux/ZeSporteXte) |
+| **Uptime** | [![Health Check](https://github.com/notbleaux/ZeSporteXte/actions/workflows/health-check.yml/badge.svg)](https://status.njzitegeist.com) |
 
 ---
 
@@ -264,7 +264,7 @@ Security is a top priority. Please see our security documentation:
 
 - [Security Policy](SECURITY.md)
 - [Vulnerability Reporting](SECURITY.md#reporting-vulnerabilities)
-- [Security Audit Status](https://github.com/notbleaux/eSports-EXE/actions/workflows/security.yml)
+- [Security Audit Status](https://github.com/notbleaux/ZeSporteXte/actions/workflows/security.yml)
 
 ---
 
