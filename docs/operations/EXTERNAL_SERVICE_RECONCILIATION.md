@@ -79,10 +79,29 @@ This is the canonical reference for "what's the state of the rename?" — supers
 
 ### PR #A — this PR
 
+**Wave 2a (functional URL refs):**
 - `docs/openapi.yaml` — info.contact.url
 - `docs/api-contracts/rotas-openapi.yaml` — info.contact.name (intentionally left `api@esports-exe.com` and `api.esports-exe.com` unchanged — placeholder fictional domain values, not live services; Kimi sprint resolves repo-wide)
 - `packages/shared/api/.env.example` — CORS_ORIGINS allowlist path
 - `docs/operations/EXTERNAL_SERVICE_RECONCILIATION.md` *(this file)*
+
+**Wave 2b (missed-by-#17 sweep — caught in PR-#A self-audit):**
+- `.github/workflows/integration-tests.yml` — header comment (line 2)
+- `apps/web/src/components/sator-square/hooks/useSpatialData.ts` — JSDoc (line 5)
+- `apps/web/src/components/sator-square/index.ts` — JSDoc (line 8)
+
+The wave 2b files are TypeScript / workflow comments only — no runtime string literals or URLs. Caught because the PR-#A self-audit grep included `*.ts` / `*.tsx` extensions and the previous sweep didn't.
+
+### Files explicitly out-of-scope for PR #A (deferred to Kimi sweep)
+
+| File | Why deferred |
+|---|---|
+| `.kimi/config.yaml` | Kimi's own config; let Kimi update during Stage 1 |
+| `.openclaw/agent-manifest.yaml`, `.openclaw/shared-state.json` | Agent framework state files; mass-update with other agent dirs |
+| `.agent-prompts/ui-design/mappings/user-path-schema.json` | Part of the ~148 doc/agent refs Kimi Stage 1 batch handles |
+| `apps/web/.mascot-cache/index.json` | Build cache — regenerates; no need to hand-edit |
+| `apps/web/tests/optimization/BUNDLE_ANALYSIS_REPORT.json` | Stale build artifact; should regen, not hand-edit |
+| ~140 `.md` files in `docs/`, `.agents/`, `plans/`, etc. | Bulk doc-only sweep — Kimi Stage 1 mechanical replacement |
 
 ---
 
