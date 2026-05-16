@@ -137,8 +137,3 @@ declare module '@storybook/react' {
   export type StoryObj<T = unknown> = object;
   export type StoryFn<T = unknown> = () => React.ReactElement;
 }
-
-declare module '@sentry/react' {
-  export function captureException(error: unknown): void;
-  export function showReportDialog(options?: object): void;
-}
