@@ -1,11 +1,34 @@
-[Ver001.000]
+[Ver001.001]
 
 # Playwright E2E Sprint — Scope
 
-**Status:** OPEN · sprint kickoff
-**Branch:** `claude/playwright-sprint`
+**Status:** UNBLOCKED · sprint ready to begin Step 2 (PR #43 merged 2026-05-16 at `d11542a`)
+**Branch:** `claude/playwright-sprint` (stacked on `claude/agents-id-protocol-phase-0` → main)
 **Owner:** TBD (sprint candidate; could be a focused human session, Kimi, or a follow-up Claude session)
-**Pre-requisite:** PR #43 should merge first (it contains the `pnpm --filter=@njzitegeist/web` fix the workflow needs to even execute the tests)
+**Plan counter:** `PLN-004-playwright-sprint` (registered in `polyrepo/registry/index.json`)
+**Portfolio:** `NJZPL` · **Project:** `ZSXT` · **Repo:** `notbleaux/ZeSporteXte`
+
+---
+
+## Linear progression context (portfolio → sprint)
+
+```
+NJZPL (NeXeZ Portfolio)
+└── ZSXT (ZeSporteXte project)
+    ├── PLN-001-rename               ✅ SHIPPED (PR #17 + PR #43)
+    ├── PLN-002-agent-id             🟡 IN PROGRESS (PR #44 — Phase 0 advisory protocol)
+    ├── PLN-003-network-api          ⏸ SCOPED (Phases 1-7, blocked on user infra for 4+6)
+    │   ├── Phase 1: ECDSA crypto baseline       (NEXT — drafting underway)
+    │   ├── Phase 2: Network API gateway MVP
+    │   ├── Phase 3: Persistent storage (SQLite WAL + Supabase failover)
+    │   ├── Phase 4: Hermes-MiMo worker          ⚠️ blocked on Cloud VPS + OpenRouter key
+    │   ├── Phase 5: Redis Pub/Sub bus
+    │   ├── Phase 6: Production edge (Caddy)     ⚠️ blocked on registered domain
+    │   └── Phase 7: Telemetry + multi-platform fallbacks
+    └── PLN-004-playwright-sprint    🟡 THIS (CI hygiene tail — re-enable Playwright as hard gate)
+```
+
+This sprint is **orthogonal** to the network-API stack (PLN-003) and **dependent on** the post-rename cleanup (PLN-001 — now in main). It does NOT block any other plan; it just closes the loose end where Playwright was deescalated to non-blocking in PR #43 `d528a95`.
 
 ---
 
@@ -40,18 +63,13 @@ PR #43 deescalates Playwright to non-blocking (`continue-on-error: true` in comm
 
 ## Sprint plan
 
-### Step 0 — Branch hygiene (this commit)
+### Step 0 — Branch hygiene ✅ (initial scope-doc commit + this refinement)
 
-This file. Branch off main.
+Branch stacked on PR #44 (Agent ID Phase 0). Scope doc now reflects linear-progression placement in the portfolio plan tree.
 
-### Step 1 — Wait for PR #43 to merge OR cherry-pick its workflow fix
+### Step 1 — PR #43 prerequisite ✅ (satisfied 2026-05-16)
 
-`pnpm --filter web run build` doesn't work on this branch (still the OLD pre-PR-#43 filter); the build step fails before Playwright even runs. Pick:
-
-- **Option a:** Wait for PR #43 to merge → rebase this branch on the new main → workflow runs through to Playwright step
-- **Option b:** Cherry-pick PR #43 commits `439262e` (filter fix) and `79a629e` (`@njz/types` tsconfig fix) into this branch immediately
-
-Recommendation: **(a)** — keeps the sprint branch clean. Don't accumulate cherry-picks from PR #43.
+PR #43 merged at commit `d11542a` on main. The Playwright workflow's `pnpm --filter=@njzitegeist/web run build` step now works on every branch off main. **No cherry-pick needed.** This sprint branch was rebased onto PR #44 → main on 2026-05-16; rebase was clean (zero conflicts).
 
 ### Step 2 — Local repro
 
@@ -91,6 +109,7 @@ Once Playwright run is consistently green (3+ consecutive runs):
 1. Edit `.github/workflows/playwright.yml` — remove the `continue-on-error: true` (and the comment block) added in PR #43 commit `d528a95`
 2. Update `docs/operations/EXTERNAL_SERVICE_RECONCILIATION.md` — move "Playwright deescalation" out of the deferred backlog
 3. Update this scope doc's status to CLOSED
+4. Bump `polyrepo/registry/index.json::plans.PLN-004-playwright-sprint.status` → `"shipped"`
 
 ### Step 6 — Sprint close
 
@@ -105,6 +124,7 @@ Final commit: archive this scope doc to `docs/sprints/closed/` with a one-paragr
 - Adding new tests — sprint focus is making existing tests pass
 - The 21 docker-compose-tests pre-existing bugs documented in PR #43 commit `17043af` — separate sprint
 - TS error reduction (2,142 → <100, MASTER_PLAN.md) — separate sprint
+- Network API gateway work (PLN-003 — separate plan entirely)
 
 ---
 
@@ -112,7 +132,21 @@ Final commit: archive this scope doc to `docs/sprints/closed/` with a one-paragr
 
 - Webhook events on PR #43 that surfaced this failure: runs `25938950408`, `25939147528` (and continuing on each new commit)
 - Plan file: `/root/.claude/plans/plan-and-draft-the-elegant-widget.md` v002 (this sprint is one of several follow-up workstreams documented there)
-- Agent ID: this sprint's first author should sign off per `.agents/AGENT_ID_PROTOCOL.md` (Phase 0, advisory)
+- Central registry entry: `polyrepo/registry/index.json::plans.PLN-004-playwright-sprint`
+
+---
+
+## Agent ID sign-off (per AGENT_ID_PROTOCOL Phase 0 — advisory)
+
+Every commit on this branch should carry:
+
+```
+Agent-Sign-Off:    agent://<lineage>/<model>/<session>/<order>
+Plan-Counter:      PLN-004-playwright-sprint-A<N>
+Portfolio-Counter: NJZPL-MUTUAL-<N>
+```
+
+The sprint owner bumps `polyrepo/registry/index.json::plans.PLN-004-playwright-sprint.next` for each action consumed.
 
 ---
 
@@ -121,5 +155,6 @@ Final commit: archive this scope doc to `docs/sprints/closed/` with a one-paragr
 - [ ] All E2E tests pass on `main` (3 consecutive green runs)
 - [ ] `continue-on-error: true` removed from `.github/workflows/playwright.yml::Run Playwright tests`
 - [ ] EXTERNAL_SERVICE_RECONCILIATION report updated to remove Playwright from the deferred backlog
+- [ ] `PLN-004-playwright-sprint.status` → `"shipped"` in the central registry
 - [ ] This scope doc moved to `docs/sprints/closed/PLAYWRIGHT_E2E_SPRINT.md` with outcome summary
 - [ ] Sign-off appended to merge commit per AGENT_ID_PROTOCOL
