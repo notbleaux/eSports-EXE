@@ -1,10 +1,15 @@
-[Ver001.000]
+[Ver001.002]
 
 # External Service Reconciliation Report — Post Rename to ZeSporteXte
 
-**Status:** Verified · 2026-05-15
+**Status:** Verified + Vercel/Supabase/Sentry actions complete · 2026-05-15
 **Owner:** Platform / infra
 **Supersedes:** None — first canonical post-rename audit
+
+## Change log
+- `[Ver001.000]` initial verified findings (PR #43 commit `1049cb3`)
+- `[Ver001.001]` documented Vercel deploy-secret issue (`d06c39d`)
+- `[Ver001.002]` Vercel deploy unblocked + Sentry removal complete across 3 stages (`759bd77`, `6c53507`, `26a21ef`, `875ee93`)
 
 ---
 
@@ -62,6 +67,46 @@ This is the canonical reference for "what's the state of the rename?" — supers
 ### Net result
 
 **Zero platform-side dashboard reconciliation is required for the rename itself.** The only post-rename work is in-repo URL updates, tracked below.
+
+## Sentry — REMOVED (PR #43, 3 stages, 2026-05-15)
+
+User direction: "I don't think I have sentry account or it at up. Remove sentry entirely if it's blocking progress and find alternative that is free and accessible for you within your tools now."
+
+Verified beforehand: all "secrets" in the 3 tracked `.env.*` files were placeholder strings (`your_sentry_auth_token_here`, `https://xxxxxxxx@sentry.io/yyyyyyyy`) — no real Sentry account or token ever existed. No rotation required.
+
+**Stage 1 — `6c53507`** (`chore(deps): remove Sentry entirely (Stage 1 of 2)`)
+- Deleted `apps/web/src/components/error/SentryErrorBoundary.tsx` (only file with hard `@sentry/react` import; was unused)
+- Deleted `apps/web/src/config/sentry.ts` (redundant `@ts-nocheck`'d stub)
+- Simplified `apps/web/src/shared/lib/sentry.ts` to a pure no-op (call sites unchanged: `initSentry`/`captureException`/`captureMessage`/`setUser` keep working)
+- Removed `@sentry/react ^10.46.0` from `apps/web/package.json` → `pnpm-lock.yaml` dropped 7 packages
+
+**Stage 2a — `26a21ef`** (`chore(gitignore): untrack 3 placeholder env files + narrow overly-broad lib/ rule`)
+- `git rm --cached` for the 3 placeholder env files (`apps/web/.env.production`, `.env.vercel`, `.env.sentry-build-plugin`)
+- Added `.gitignore` patterns so they stay untracked
+- Narrowed unrooted `lib/` and `lib64/` rules → `/lib/` and `/lib64/` so they no longer shadow legitimate frontend source dirs (`apps/web/src/lib/`, `apps/web/src/shared/lib/`)
+
+**Stage 2b — `875ee93`** (`chore(sentry): remove VITE_SENTRY_DSN env vars + type declarations`)
+- Removed the `SENTRY` block from `apps/web/.env.example`
+- Removed the `SENTRY_DSN` line from `packages/shared/api/.env.example`
+- Removed the `declare module '@sentry/react'` stub from `apps/web/src/global.d.ts`
+- Removed `readonly VITE_SENTRY_DSN?: string;` from `apps/web/src/vite-env.d.ts`
+
+**Stage 2c — this commit**
+- Removed Sentry block from root `.env.production.template`
+- Final report update marking the workstream complete
+
+**Verification across all stages:**
+- `pnpm --filter=@njzitegeist/web run typecheck` → 0 errors
+- `grep -rln '@sentry\|VITE_SENTRY\|SENTRY_DSN' --include='*.ts' --include='*.tsx' --include='*.env*' --include='*.json' apps/ packages/` → 0 matches in tracked files
+- `grep '@sentry' pnpm-lock.yaml` → 0 matches
+
+**Out of scope (legacy archives, intentionally NOT touched):**
+- `docs/legacy/analysis/context_dossier_deployment.json` — by directory name, this is the deprecated context dossier; should be archived if not already
+
+**Future error-reporting replacement path** (no work needed unless observability becomes a requirement):
+- `apps/web/src/shared/lib/sentry.ts` is a single swap-in point — wire Supabase logs (project `NJZitegeiste` already exists) or Cloudflare Workers Analytics Engine (free tier, account already exists) into the no-op there, no call-site changes.
+
+---
 
 ### Pre-existing Vercel deploy issue (surfaced 2026-05-15 on PR #43)
 
