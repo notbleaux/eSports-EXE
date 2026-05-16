@@ -76,8 +76,11 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# Python setuptools 'lib/' and 'lib64/' live at the repo root.
+# Anchored to / so they don't shadow legitimate source dirs like
+# apps/web/src/lib/ or apps/web/src/shared/lib/.
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -85,6 +88,13 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Frontend env templates committed by mistake — should be .env.local instead.
+# Values currently in these tracked files are placeholders, not real secrets.
+# Untracked in commit on PR #43.
+apps/web/.env.production
+apps/web/.env.vercel
+apps/web/.env.sentry-build-plugin
 
 # Testing / coverage
 .coverage
