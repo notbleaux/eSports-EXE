@@ -17,7 +17,6 @@ services:
       - "5433:5432"
     volumes:
       - test_postgres_data:/var/lib/postgresql/data
-      - ../../infra/migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U test"]
       interval: 5s
@@ -66,7 +65,7 @@ services:
     networks:
       - njz-test-network
     command: >
-      uvicorn main:app 
+      uvicorn packages.shared.api.main:app 
       --host 0.0.0.0 
       --port 8000 
       --log-level debug
