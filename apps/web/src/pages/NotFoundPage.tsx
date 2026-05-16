@@ -1,5 +1,5 @@
 /**
- * NotFoundPage — 404 route for the NJZiteGeisTe Platform
+ * NotFoundPage — 404 route for the EXE Platform
  * [Ver001.000]
  */
 import { Link, useLocation } from 'react-router-dom';

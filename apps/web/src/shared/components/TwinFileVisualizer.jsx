@@ -5,11 +5,11 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Shield, Database, Activity, RefreshCw } from 'lucide-react'
-import { useTwinFile, useNJZStore } from '../store/njzStore'
+import { useTwinFile, useEXEStore } from '../store/njzStore'
 
 function TwinFileVisualizer({ compact = false, showDetails = true }) {
   const { raws, base, integrity, verify } = useTwinFile()
-  const addNotification = useNJZStore(state => state.addNotification)
+  const addNotification = useEXEStore(state => state.addNotification)
   const [isVerifying, setIsVerifying] = useState(false)
   const [showPulse, setShowPulse] = useState(false)
 

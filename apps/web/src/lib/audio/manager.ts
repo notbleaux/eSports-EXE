@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Audio Manager
  * =============
- * Centralized audio control system for NJZiteGeisTe.
+ * Centralized audio control system for EXE.
  * Manages all audio playback including SFX, voice lines, and ambient audio.
  * 
  * Features:

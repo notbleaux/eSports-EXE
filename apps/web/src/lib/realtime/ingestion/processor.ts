@@ -583,7 +583,7 @@ export class EventStreamProcessor {
   }
 
   private enrichKillEvent(event: LiveEvent, context: EnrichmentContext): LiveEvent {
-    const data = event.data as Record<string, unknown>;
+    const data = event.data as unknown as Record<string, unknown>;
     
     // Calculate K/D ratio context
     const attackerId = String(data.attackerId);
@@ -611,12 +611,12 @@ export class EventStreamProcessor {
         attackerDeaths: attackerStats.deaths,
         victimKills: victimStats.kills,
         victimDeaths: victimStats.deaths,
-      },
+      } as unknown as LiveEventData,
     };
   }
 
   private enrichEconomyEvent(event: LiveEvent, context: EnrichmentContext): LiveEvent {
-    const data = event.data as Record<string, unknown>;
+    const data = event.data as unknown as Record<string, unknown>;
     const teamId = String(data.teamId);
     
     let teamStats = context.teamStats.get(teamId);
@@ -640,12 +640,12 @@ export class EventStreamProcessor {
         teamAverageEconomy: Math.round(avgEconomy),
         economyTrend: teamStats.economyHistory.length > 1 ? 
           teamStats.economyHistory[teamStats.economyHistory.length - 1] - teamStats.economyHistory[0] : 0,
-      },
+      } as unknown as LiveEventData,
     };
   }
 
   private enrichScoreEvent(event: LiveEvent, context: EnrichmentContext): LiveEvent {
-    const data = event.data as Record<string, unknown>;
+    const data = event.data as unknown as Record<string, unknown>;
     
     const teamAScore = Number(data.teamAScore) || 0;
     const teamBScore = Number(data.teamBScore) || 0;
@@ -658,8 +658,8 @@ export class EventStreamProcessor {
         totalRoundsPlayed: totalRounds,
         roundDifference: Math.abs(teamAScore - teamBScore),
         isOvertime: totalRounds > 24,
-        currentHalf: totalRounds <= 12 ? 1 : totalRounds <= 24 ? 2 : Math.floor((totalRounds - 1) / 12) + 1,
-      },
+        currentHalf: (totalRounds <= 12 ? 1 : totalRounds <= 24 ? 2 : 3) as 1 | 2 | 3,
+      } as unknown as LiveEventData,
     };
   }
 

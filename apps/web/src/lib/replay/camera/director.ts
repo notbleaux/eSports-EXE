@@ -7,7 +7,7 @@
  * Team: Replay 2.0 Core (TL-S2)
  */
 
-import type { Position3D, GameEvent, Player, Team, Round } from '../types';
+import type { Position3D, GameEvent, ReplayPlayer as Player, Team, Round } from '../types';
 import type { DetectedAction, ActionType } from './actionDetection';
 import {
   ActionDetectionEngine,

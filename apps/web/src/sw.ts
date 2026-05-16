@@ -14,15 +14,21 @@
 
 /// <reference lib="webworker" />
 
+// Background Sync API types (not in standard TS lib)
+interface SyncEvent extends ExtendableEvent {
+  tag: string
+  lastChance: boolean
+}
+
 declare const self: ServiceWorkerGlobalScope
 
 // Cache versions - increment to invalidate
 const CACHE_VERSION = 'v3'
-const STATIC_CACHE = `njzitegeiste-static-${CACHE_VERSION}`
-const API_CACHE = `njzitegeiste-api-${CACHE_VERSION}`
-const PLAYER_CACHE = `njzitegeiste-players-${CACHE_VERSION}`
-const IMAGE_CACHE = `njzitegeiste-images-${CACHE_VERSION}`
-const FALLBACK_CACHE = `njzitegeiste-fallback-${CACHE_VERSION}`
+const STATIC_CACHE = `esportexe-static-${CACHE_VERSION}`
+const API_CACHE = `esportexe-api-${CACHE_VERSION}`
+const PLAYER_CACHE = `esportexe-players-${CACHE_VERSION}`
+const IMAGE_CACHE = `esportexe-images-${CACHE_VERSION}`
+const FALLBACK_CACHE = `esportexe-fallback-${CACHE_VERSION}`
 
 // Precache critical assets
 const PRECACHE_ASSETS = [
@@ -52,7 +58,7 @@ const OFFLINE_FALLBACK_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Offline - NJZiteGeisTe</title>
+  <title>Offline - EXE</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -251,11 +257,12 @@ self.addEventListener('message', (event: ExtendableMessageEvent) => {
 })
 
 // Background sync for offline mutations
-self.addEventListener('sync', (event: SyncEvent) => {
-  if (event.tag === 'sync-player-data') {
-    event.waitUntil(syncPlayerData())
+self.addEventListener('sync', ((event: Event) => {
+  const syncEvent = event as SyncEvent
+  if (syncEvent.tag === 'sync-player-data') {
+    syncEvent.waitUntil(syncPlayerData())
   }
-})
+}) as EventListener)
 
 // ==================== Cache Strategies ====================
 
@@ -277,7 +284,8 @@ async function cacheFirst(request: Request, cacheName: string): Promise<Response
     // Return offline fallback for navigation
     if (request.mode === 'navigate') {
       const fallbackCache = await caches.open(FALLBACK_CACHE)
-      return fallbackCache.match('/offline.html') || new Response('Offline', { status: 503 })
+      const fallbackResponse = await fallbackCache.match('/offline.html')
+      return fallbackResponse || new Response('Offline', { status: 503 })
     }
     throw error
   }
@@ -348,10 +356,10 @@ async function staleWhileRevalidate(request: Request, cacheName: string): Promis
       }
       return networkResponse
     })
-    .catch(() => cached)
+    .catch(() => cached as Response)
   
   // Return cached immediately, or wait for network if no cache
-  return cached || fetchPromise
+  return cached ?? fetchPromise
 }
 
 async function networkWithOfflineFallback(request: Request): Promise<Response> {
@@ -455,7 +463,7 @@ function isImageRequest(url: URL): boolean {
 // Push notification handlers
 self.addEventListener('push', (event: PushEvent) => {
   const data = event.data?.json() ?? {}
-  const title = data.title ?? 'NJZiteGeisTe'
+  const title = data.title ?? 'EXE'
   const body = data.body ?? 'New match update'
   const url = data.url ?? '/pro-scene'
   event.waitUntil(
@@ -470,7 +478,7 @@ self.addEventListener('push', (event: PushEvent) => {
 self.addEventListener('notificationclick', (event: NotificationEvent) => {
   event.notification.close()
   const url = (event.notification.data?.url as string) ?? '/'
-  event.waitUntil(clients.openWindow(url))
+  event.waitUntil(self.clients.openWindow(url))
 })
 
 // Export for testing

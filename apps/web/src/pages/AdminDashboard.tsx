@@ -207,7 +207,7 @@ export default function AdminDashboard() {
           transition={{ delay: 0.3 }}
           className="mt-12 p-4 border border-white/5 bg-white/[0.01] rounded text-center text-xs text-white/40 font-mono"
         >
-          <p>NJZ eSports Admin Panel • Phase 5 • {new Date().toLocaleString()}</p>
+          <p>EXE eSports Admin Panel • Phase 5 • {new Date().toLocaleString()}</p>
         </motion.div>
       </motion.div>
     </div>

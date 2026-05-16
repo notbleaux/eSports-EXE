@@ -834,7 +834,7 @@ export class DataIngestionEngine {
     }
   }
 
-  private getFieldValue(obj: Record<string, unknown>, field: string): unknown {
+  private getFieldValue(obj: object, field: string): unknown {
     const parts = field.split('.');
     let current: unknown = obj;
     

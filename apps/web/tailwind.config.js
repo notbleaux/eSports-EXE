@@ -66,7 +66,7 @@ export default {
           900: '#171717',
         },
         
-        // HUB Colors - 5-hub NJZ system
+        // HUB Colors - 5-hub EXE system
         hub: {
           sator: '#000000',
           rotas: '#FF69B4',

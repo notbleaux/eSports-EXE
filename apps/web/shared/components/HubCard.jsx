@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - HubCard Component
+ * EXE Platform v2 - HubCard Component
  * Glassmorphic card for hub navigation with hover effects
  * 
  * @version 2.0.0
@@ -91,7 +91,7 @@ export function HubCard({
   return (
     <motion.a
       href={disabled ? undefined : href}
-      className={`njz-hub-card ${disabled ? 'njz-hub-card--disabled' : ''} ${glowing ? 'njz-hub-card--glowing' : ''} ${className}`}
+      className={`exe-hub-card ${disabled ? 'exe-hub-card--disabled' : ''} ${glowing ? 'exe-hub-card--glowing' : ''} ${className}`}
       variants={cardVariants}
       initial="hidden"
       whileInView="visible"
@@ -109,19 +109,19 @@ export function HubCard({
       {...props}
     >
       {/* Background gradient */}
-      <div className="njz-hub-card__bg" />
+      <div className="exe-hub-card__bg" />
       
       {/* Image background if provided */}
       {image && (
         <div 
-          className="njz-hub-card__image"
+          className="exe-hub-card__image"
           style={{ backgroundImage: `url(${image})` }}
         />
       )}
 
       {/* Glow effect */}
       <motion.div 
-        className="njz-hub-card__glow"
+        className="exe-hub-card__glow"
         animate={{
           opacity: isHovered || glowing ? 1 : 0,
           scale: isHovered ? 1.2 : 1,
@@ -130,10 +130,10 @@ export function HubCard({
       />
 
       {/* Content */}
-      <div className="njz-hub-card__content">
+      <div className="exe-hub-card__content">
         {/* Icon */}
         <motion.div 
-          className="njz-hub-card__icon"
+          className="exe-hub-card__icon"
           animate={{
             scale: isHovered ? 1.1 : 1,
             rotate: isHovered ? 5 : 0,
@@ -144,19 +144,19 @@ export function HubCard({
         </motion.div>
 
         {/* Text content */}
-        <div className="njz-hub-card__text">
-          <h3 className="njz-hub-card__title">
+        <div className="exe-hub-card__text">
+          <h3 className="exe-hub-card__title">
             {title}
             {badge && (
-              <span className="njz-hub-card__badge">{badge}</span>
+              <span className="exe-hub-card__badge">{badge}</span>
             )}
           </h3>
-          <p className="njz-hub-card__description">{description}</p>
+          <p className="exe-hub-card__description">{description}</p>
         </div>
 
         {/* Arrow indicator */}
         <motion.div 
-          className="njz-hub-card__arrow"
+          className="exe-hub-card__arrow"
           animate={{
             x: isHovered ? 4 : 0,
             opacity: isHovered ? 1 : 0.5,
@@ -168,17 +168,17 @@ export function HubCard({
 
       {/* Border highlight */}
       <motion.div 
-        className="njz-hub-card__border"
+        className="exe-hub-card__border"
         animate={{
           opacity: isHovered ? 1 : 0,
         }}
       />
 
       {/* Corner accent */}
-      <div className="njz-hub-card__corner" />
+      <div className="exe-hub-card__corner" />
 
       <style jsx>{`
-        .njz-hub-card {
+        .exe-hub-card {
           position: relative;
           display: block;
           background: rgba(26, 26, 36, 0.6);
@@ -193,22 +193,22 @@ export function HubCard({
           transition: box-shadow 0.3s ease;
         }
 
-        .njz-hub-card:hover {
+        .exe-hub-card:hover {
           box-shadow: 
             0 20px 40px rgba(0, 0, 0, 0.4),
             0 0 60px var(--hub-glow);
         }
 
-        .njz-hub-card--disabled {
+        .exe-hub-card--disabled {
           opacity: 0.5;
           pointer-events: none;
         }
 
-        .njz-hub-card--glowing {
+        .exe-hub-card--glowing {
           box-shadow: 0 0 40px var(--hub-glow);
         }
 
-        .njz-hub-card__bg {
+        .exe-hub-card__bg {
           position: absolute;
           inset: 0;
           background: linear-gradient(
@@ -221,11 +221,11 @@ export function HubCard({
           transition: opacity 0.3s ease;
         }
 
-        .njz-hub-card:hover .njz-hub-card__bg {
+        .exe-hub-card:hover .exe-hub-card__bg {
           opacity: 1;
         }
 
-        .njz-hub-card__image {
+        .exe-hub-card__image {
           position: absolute;
           inset: 0;
           background-size: cover;
@@ -234,12 +234,12 @@ export function HubCard({
           transition: opacity 0.3s ease, transform 0.5s ease;
         }
 
-        .njz-hub-card:hover .njz-hub-card__image {
+        .exe-hub-card:hover .exe-hub-card__image {
           opacity: 0.25;
           transform: scale(1.05);
         }
 
-        .njz-hub-card__glow {
+        .exe-hub-card__glow {
           position: absolute;
           top: 50%;
           left: 50%;
@@ -251,7 +251,7 @@ export function HubCard({
           pointer-events: none;
         }
 
-        .njz-hub-card__content {
+        .exe-hub-card__content {
           position: relative;
           z-index: 1;
           display: flex;
@@ -259,7 +259,7 @@ export function HubCard({
           gap: 20px;
         }
 
-        .njz-hub-card__icon {
+        .exe-hub-card__icon {
           width: 56px;
           height: 56px;
           display: flex;
@@ -271,13 +271,13 @@ export function HubCard({
           border-radius: 12px;
         }
 
-        .njz-hub-card__text {
+        .exe-hub-card__text {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
 
-        .njz-hub-card__title {
+        .exe-hub-card__title {
           font-family: 'Space Grotesk', sans-serif;
           font-size: 1.5rem;
           font-weight: 600;
@@ -288,7 +288,7 @@ export function HubCard({
           gap: 12px;
         }
 
-        .njz-hub-card__badge {
+        .exe-hub-card__badge {
           font-size: 0.7rem;
           font-weight: 500;
           padding: 4px 10px;
@@ -299,7 +299,7 @@ export function HubCard({
           letter-spacing: 0.05em;
         }
 
-        .njz-hub-card__description {
+        .exe-hub-card__description {
           font-family: 'Inter', sans-serif;
           font-size: 0.95rem;
           color: rgba(255, 255, 255, 0.6);
@@ -307,7 +307,7 @@ export function HubCard({
           margin: 0;
         }
 
-        .njz-hub-card__arrow {
+        .exe-hub-card__arrow {
           position: absolute;
           bottom: 32px;
           right: 32px;
@@ -315,7 +315,7 @@ export function HubCard({
           color: var(--hub-accent);
         }
 
-        .njz-hub-card__border {
+        .exe-hub-card__border {
           position: absolute;
           inset: 0;
           border: 1px solid var(--hub-accent);
@@ -324,7 +324,7 @@ export function HubCard({
           pointer-events: none;
         }
 
-        .njz-hub-card__corner {
+        .exe-hub-card__corner {
           position: absolute;
           top: 0;
           right: 0;

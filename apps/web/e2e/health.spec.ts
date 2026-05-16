@@ -13,10 +13,10 @@ test.describe('Health Check Endpoint', () => {
     await page.goto('/')
     
     // Check that page loads successfully
-    await expect(page).toHaveTitle(/NJZiteGeisTe|TENET/)
+    await expect(page).toHaveTitle(/EXE|TENET/)
 
     // Verify page content is visible
-    await expect(page.locator('body')).toContainText(/NJZiteGeisTe|TENET|Platform/)
+    await expect(page.locator('body')).toContainText(/EXE|TENET|Platform/)
     
     // Check that the app is interactive
     const links = page.getByRole('link')

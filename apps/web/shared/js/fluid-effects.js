@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Fluid Effects
+ * EXE Platform v2 - Fluid Effects
  * Liquid motion and morphing animations
  * 
  * @version 2.0.0

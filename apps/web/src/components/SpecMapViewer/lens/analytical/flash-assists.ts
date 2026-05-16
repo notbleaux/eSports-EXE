@@ -50,7 +50,7 @@ function extractFlashEvents(soundEvents: SoundEvent[]): FlashEvent[] {
 
   return soundEvents
     .filter(event =>
-      event.type === 'ability' &&
+      event.soundType === 'ability' &&
       flashAbilities.some(f => event.source.toLowerCase().includes(f))
     )
     .map((event, index) => ({
@@ -111,6 +111,7 @@ function groupAssistsByFlash(assists: FlashAssist[]): Map<string, FlashAssist[]>
 }
 
 export const flashAssistsLens: Lens = {
+  id: 'flash-assists',
   name: 'flash-assists',
   displayName: 'Flash Assists',
   description: 'Shows flash → kill correlation. Lines connect flashes to assisted kills. Thicker lines = more assists.',
@@ -118,7 +119,7 @@ export const flashAssistsLens: Lens = {
 
   defaultOptions: {
     opacity: 0.8,
-    color: 'rgb(251, 191, 36)',
+    colors: { primary: 'rgb(251, 191, 36)' },
     blendMode: 'screen',
     animationSpeed: 1,
     showLabels: false
@@ -146,7 +147,7 @@ export const flashAssistsLens: Lens = {
     if (assists.length === 0) return
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 1
 
     // Draw flash effect areas
     flashEvents.forEach(flash => {
@@ -285,7 +286,7 @@ export const flashAssistsLens: Lens = {
 
     // Draw blinded player indicators
     if (showBlinded) {
-      drawBlindedIndicators(ctx, flashEvents, data.playerPositions)
+      drawBlindedIndicators(ctx, flashEvents, data.playerPositions as { playerId: string; positions: { x: number; y: number; timestamp: number }[] }[])
     }
 
     ctx.restore()

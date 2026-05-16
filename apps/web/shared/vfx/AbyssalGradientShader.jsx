@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - AbyssalGradientShader Component
+ * EXE Platform v2 - AbyssalGradientShader Component
  * Advanced gradient shader with abyssal theme
  * 
  * @version 2.0.0
@@ -214,7 +214,7 @@ export function AbyssalGradientShader({
 }) {
   return (
     <div 
-      className={`njz-abyssal-gradient ${className}`}
+      className={`exe-abyssal-gradient ${className}`}
       style={{
         position: 'fixed',
         inset: 0,

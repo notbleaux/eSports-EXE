@@ -488,8 +488,8 @@ function determineEconomyTrend(
     teamA.totalCredits < 10000 ? 'declining' : 'stable';
   
   // Return overall trend
-  if (teamATrend === teamB.totalCredits > 20000 ? 'improving' : 
-      teamB.totalCredits < 10000 ? 'declining' : 'stable') {
+  if (teamATrend === (teamB.totalCredits > 20000 ? 'improving' : 
+      teamB.totalCredits < 10000 ? 'declining' : 'stable')) {
     return 'stable';
   }
   

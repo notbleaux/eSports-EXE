@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * Type Guards — NJZiteGeisTe Platform
+ * Type Guards — EXE Platform
  * 
  * Runtime type checking utilities for API responses and complex types.
  * 

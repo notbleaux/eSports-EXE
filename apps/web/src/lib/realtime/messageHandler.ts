@@ -460,7 +460,7 @@ export class LiveMessageHandler {
   private eventInvolvesPlayer(event: LiveEvent, playerId: string): boolean {
     // Check if player is involved in the event
     if (event.data && typeof event.data === 'object') {
-      const data = event.data as Record<string, unknown>;
+      const data = event.data as unknown as Record<string, unknown>;
       
       // Common player ID fields
       const playerFields = ['playerId', 'attackerId', 'victimId', 'assists'];
@@ -480,7 +480,7 @@ export class LiveMessageHandler {
 
   private eventInvolvesTeam(event: LiveEvent, teamId: string): boolean {
     if (event.data && typeof event.data === 'object') {
-      const data = event.data as Record<string, unknown>;
+      const data = event.data as unknown as Record<string, unknown>;
       
       // Common team ID fields
       const teamFields = ['teamId', 'attackerTeam', 'victimTeam', 'winningTeam', 'teamAId', 'teamBId'];

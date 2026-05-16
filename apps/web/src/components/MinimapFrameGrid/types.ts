@@ -2,7 +2,7 @@
  * MinimapFrameGrid Types
  *
  * TypeScript type definitions for the Minimap Frame Grid component.
- * Part of Phase 9: Minimap Feature for NJZiteGeisTe Platform.
+ * Part of Phase 9: Minimap Feature for EXE Platform.
  *
  * [Ver001.000]
  */

@@ -12,12 +12,13 @@ import type {
   KnowledgeGraph as KnowledgeGraphData,
   NodeType,
   EdgeType,
-  SearchFilters,
   SearchResult,
   RecommendationContext,
   LearningPath,
   KnowledgeGap,
   GraphTraversalOptions,
+  KnowledgeGraphRecommendationContext,
+  KnowledgeGraphSearchFilters,
 } from '../../types/help/knowledgeGraph';
 
 // ============================================================================
@@ -294,7 +295,7 @@ export class KnowledgeGraph {
       let reason = 'related';
 
       // Skip completed topics
-      if (context.completedTopicIds.includes(topic.id)) {
+      if (context.completedTopicIds?.includes(topic.id)) {
         continue;
       }
 
@@ -305,7 +306,7 @@ export class KnowledgeGraph {
 
       // Difficulty match (prefer topics at user's level)
       const difficultyMap = { beginner: 1, intermediate: 3, advanced: 4, expert: 5 };
-      const targetDifficulty = difficultyMap[context.userExpertiseLevel];
+      const targetDifficulty = context.userExpertiseLevel ? difficultyMap[context.userExpertiseLevel] : 3;
       const difficultyDiff = Math.abs(topic.difficulty - targetDifficulty);
       score += Math.max(0, 5 - difficultyDiff);
 
@@ -353,11 +354,11 @@ export class KnowledgeGraph {
       }
 
       // Search history alignment
-      if (context.recentSearches.length > 0) {
-        const searchTerms = context.recentSearches.join(' ').toLowerCase();
+      if ((context.recentSearches ?? []).length > 0) {
+        const searchTerms = context.recentSearches!.join(' ').toLowerCase();
         const topicText = `${topic.title} ${topic.description} ${topic.keywords.join(' ')}`.toLowerCase();
         
-        for (const term of context.recentSearches) {
+        for (const term of context.recentSearches!) {
           if (topicText.includes(term.toLowerCase())) {
             score += 3;
           }
@@ -370,7 +371,7 @@ export class KnowledgeGraph {
     }
 
     // Sort by score and return top recommendations
-    const maxRecommendations = context.maxRecommendations || 5;
+    const maxRecommendations = context.maxRecommendations ?? 5;
     return scoredTopics
       .sort((a, b) => b.score - a.score)
       .slice(0, maxRecommendations)

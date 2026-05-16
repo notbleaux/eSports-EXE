@@ -9,11 +9,11 @@ interface PlayersResponse {
   offset: number;
 }
 
-export function usePlayers(game?: 'valorant' | 'cs2', slug?: string, teamId?: number) {
+export function usePlayers(game?: 'valorant' | 'cs2', slug?: string, teamId?: number | string) {
   const params = new URLSearchParams();
   if (game) params.append('game', game);
   if (slug) params.append('slug', slug);
-  if (teamId) params.append('team_id', String(teamId));
+  if (teamId != null) params.append('team_id', String(teamId));
   const query = params.toString();
 
   return useQuery({

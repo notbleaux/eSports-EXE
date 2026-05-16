@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Easing Functions Library
  * 
- * Fluid dynamics-inspired easing functions for the NJZiteGeisTe Platform.
+ * Fluid dynamics-inspired easing functions for the EXE Platform.
  * All easings are designed to create smooth, organic motion that respects
  * the platform's aesthetic while maintaining 60fps performance.
  * 

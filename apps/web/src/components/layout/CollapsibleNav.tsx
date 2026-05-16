@@ -3,7 +3,7 @@
  * Collapsible Navigation Component
  * 
  * Mobile-first navigation with hamburger menu and slide-out drawer.
- * Supports touch gestures, 5-hub navigation for NJZiteGeisTe Platform.
+ * Supports touch gestures, 5-hub navigation for EXE Platform.
  * 
  * @module components/layout/CollapsibleNav
  */
@@ -99,7 +99,7 @@ function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Default 5 hubs for NJZiteGeisTe Platform
+ * Default 5 hubs for EXE Platform
  */
 export const DEFAULT_HUBS: NavHub[] = [
   {
@@ -372,7 +372,7 @@ export function CollapsibleNav({
     >
       {/* Drawer Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
-        {brand || <div className="text-xl font-bold text-porcelain">NJZiteGeisTe</div>}
+        {brand || <div className="text-xl font-bold text-porcelain">EXE</div>}
         <button
           onClick={closeDrawer}
           className={cn(
@@ -516,7 +516,7 @@ export function CollapsibleNav({
       {/* Drawer Footer */}
       <div className="p-4 border-t border-white/10">
         <div className="text-xs text-porcelain/40 text-center">
-          NJZiteGeisTe Platform v2.0
+          EXE Platform v2.0
         </div>
       </div>
     </motion.div>

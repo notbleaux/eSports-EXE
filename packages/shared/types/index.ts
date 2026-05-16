@@ -1,6 +1,6 @@
 /**
  * [Ver002.000]
- * NJZiteGeisTe Platform — Shared Types
+ * EXE Platform — Shared Types
  * =====================================
  * Root re-export for @sator/types package.
  * Core types shared across all frontend hubs and backend services.

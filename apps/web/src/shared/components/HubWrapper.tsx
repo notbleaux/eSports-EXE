@@ -12,7 +12,7 @@
 
 import React, { ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
+import { PanelErrorBoundary, type HubType } from '@/components/grid/PanelErrorBoundary';
 
 /** Props for HubWrapper component */
 export interface HubWrapperProps {
@@ -45,7 +45,7 @@ export function HubWrapper({
   description,
 }: HubWrapperProps): React.ReactElement {
   return (
-    <PanelErrorBoundary panelId={hubId} panelTitle={title || hubId} hub={hubId.toUpperCase()}>
+    <PanelErrorBoundary panelId={hubId} panelTitle={title || hubId} hub={hubId.toUpperCase() as HubType}>
       <motion.div
         data-hub={hubId}
         className={`hub-wrapper hub-${hubId} min-h-screen ${className}`}

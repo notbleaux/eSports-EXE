@@ -169,7 +169,7 @@ services:
     container_name: njz-pgadmin
     restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@njz.local
+      PGADMIN_DEFAULT_EMAIL: admin@esportexe.local
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"

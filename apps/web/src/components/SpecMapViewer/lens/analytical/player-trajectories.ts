@@ -97,6 +97,7 @@ function getTrajectoryColor(
 }
 
 export const playerTrajectoriesLens: Lens = {
+  id: 'player-trajectories',
   name: 'player-trajectories',
   displayName: 'Player Trajectories',
   description: 'Shows player movement patterns. Red/Blue = team paths, Orange/Cyan = rotations, Dashed = predicted.',
@@ -104,7 +105,7 @@ export const playerTrajectoriesLens: Lens = {
 
   defaultOptions: {
     opacity: 0.7,
-    color: 'rgb(59, 130, 246)',
+    colors: { primary: 'rgb(59, 130, 246)' },
     blendMode: 'source-over',
     animationSpeed: 1,
     showLabels: false
@@ -130,7 +131,7 @@ export const playerTrajectoriesLens: Lens = {
     const currentTime = Date.now()
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 1
 
     // Process each player's trajectory
     data.playerPositions.forEach(player => {
@@ -140,7 +141,7 @@ export const playerTrajectoriesLens: Lens = {
 
       // Filter positions by time window
       const cutoffTime = currentTime - trailLength
-      const recentPositions = player.positions.filter(p => p.timestamp > cutoffTime)
+      const recentPositions = player.positions?.filter(p => p.timestamp > cutoffTime) ?? []
 
       if (recentPositions.length < 2) return
 
@@ -168,7 +169,7 @@ export const playerTrajectoriesLens: Lens = {
       const { isRotation, confidence } = detectRotation(trajectoryPoints)
 
       // Get trajectory color
-      const color = getTrajectoryColor(player.team, isRotation && highlightRotations)
+      const color = getTrajectoryColor(player.team ?? 'attackers', isRotation && highlightRotations)
 
       // Render main trajectory
       const trajectoryOptions: Partial<TrajectoryOptions> = {
@@ -194,7 +195,7 @@ export const playerTrajectoriesLens: Lens = {
           const predictivePoints = generatePredictiveTrajectory(lastPoint, 5, 500)
 
           ctx.save()
-          ctx.strokeStyle = getTrajectoryColor(player.team, false, true)
+          ctx.strokeStyle = getTrajectoryColor(player.team ?? 'attackers', false, true)
           ctx.lineWidth = 2
           ctx.setLineDash([4, 4])
 
@@ -217,18 +218,18 @@ export const playerTrajectoriesLens: Lens = {
 
       // Render velocity vectors
       if (showVelocity) {
-        renderVelocityVectors(ctx, trajectoryPoints, player.team)
+        renderVelocityVectors(ctx, trajectoryPoints, player.team ?? 'attackers')
       }
 
       // Render rotation indicator
       if (highlightRotations && isRotation && confidence > 0.5) {
-        renderRotationIndicator(ctx, trajectoryPoints, player.team, confidence)
+        renderRotationIndicator(ctx, trajectoryPoints, player.team ?? 'attackers', confidence)
       }
 
       // Render current position marker
       if (trajectoryPoints.length > 0) {
         const current = trajectoryPoints[trajectoryPoints.length - 1]
-        ctx.fillStyle = player.team === 'attackers' ? '#ef4444' : '#3b82f6'
+        ctx.fillStyle = (player.team ?? 'attackers') === 'attackers' ? '#ef4444' : '#3b82f6'
         ctx.beginPath()
         ctx.arc(current.x, current.y, 6, 0, Math.PI * 2)
         ctx.fill()

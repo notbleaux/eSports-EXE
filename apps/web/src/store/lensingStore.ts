@@ -1,6 +1,6 @@
 /**
  * Lensing Store - TENET HUB Visibility & Configuration
- * Phase 1 of NJZiteGeisTe Platform
+ * Phase 1 of EXE Platform
  * Manages active lenses/HUBs, integrates with dynamicStore layouts
  * [Ver001.000]
  */
@@ -11,6 +11,12 @@ import type { Panel } from './dynamicStore'
 import { useDynamicStore, usePanels as dynamicPanels } from './dynamicStore'
 // import LensCompositor from '../../components/SpecMapViewer/lenses/LensCompositor'
 // TODO: Init in component after import confirmed
+
+// Stub class until LensCompositor component is available
+class LensCompositor {
+  registerLens?(name: string): void
+}
+
 
 export interface LensConfig {
   hubs: Record<
@@ -149,10 +155,11 @@ export const useLensingStore = create<LensingState>()(
 
 // Computed selector - visible panels (integrates with dynamicStore)
 useLensingStore.subscribe(
-  state => state.activeLens,
-  () => {
-    // Trigger dynamicStore panel filter via custom hook
-    // Implementation in consuming components
+  (state, prevState) => {
+    if (state.activeLens !== prevState?.activeLens) {
+      // Trigger dynamicStore panel filter via custom hook
+      // Implementation in consuming components
+    }
   }
 )
 

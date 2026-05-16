@@ -234,12 +234,12 @@ export function ModernQuarterGrid() {
           {/* Main Title */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="bg-gradient-to-r from-[#ffd700] via-[#00d4ff] to-[#9d4edd] bg-clip-text text-transparent">
-              NJZiteGeisTe
+              EXE
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/60 mb-4 font-light">
-            NJZiteGeisTe Platform
+            EXE Platform
           </p>
           
           <p className="text-white/40 max-w-xl mx-auto leading-relaxed">

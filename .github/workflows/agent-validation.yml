@@ -114,7 +114,7 @@ jobs:
           for file in $CHANGED_TS; do
             if [ -f "$file" ]; then
               # Check for top-level interface/type declarations (not imports)
-              INLINE=$(grep -nE '^(export )?(interface|type) [A-Z]' "$file" | grep -v 'from "@njz' | grep -v '// compat' || true)
+              INLINE=$(grep -nE '^(export )?(interface|type) [A-Z]' "$file" | grep -v 'from "@esportexe' | grep -v '// compat' || true)
               if [ -n "$INLINE" ]; then
                 echo "INLINE TYPE DEFINITION in $file:"
                 echo "$INLINE"
@@ -125,7 +125,7 @@ jobs:
 
           if [ "$FAILED" = "1" ]; then
             echo ""
-            echo "Hub components must not define inline types. Import from @njz/types instead."
+            echo "Hub components must not define inline types. Import from @esportexe/types instead."
             exit 1
           fi
 

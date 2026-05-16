@@ -35,7 +35,6 @@ export type {
   TraversalOptions,
   TraversalResult,
   GraphStats,
-  ValidationError,
   GraphVisualizationOptions,
   VisualNode,
   VisualEdge,

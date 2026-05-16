@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@njz/types'],
+  transpilePackages: ['@esportexe/types'],
 }
 
 module.exports = nextConfig

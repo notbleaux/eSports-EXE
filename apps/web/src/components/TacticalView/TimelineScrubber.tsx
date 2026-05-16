@@ -149,7 +149,7 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
         })}
 
         {/* Key event markers */}
-        {keyEvents.map((event, _index) => {
+        {keyEvents.map((event, index) => {
           const position = (event.timestamp / totalDuration) * 100;
           
           return (

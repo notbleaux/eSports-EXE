@@ -268,6 +268,7 @@ export class DirectionalNavigation {
   private nodes: NavigationNode[] = [];
   private currentNode: NavigationNode | null = null;
   private config: NavigationConfig;
+  private root: HTMLElement | null = null;
 
   constructor(config: Partial<NavigationConfig> = {}) {
     this.config = { ...DEFAULT_NAVIGATION_CONFIG, ...config, mode: 'directional' };
@@ -277,6 +278,7 @@ export class DirectionalNavigation {
    * Build directional navigation
    */
   build(root: HTMLElement): void {
+    this.root = root;
     const interactiveElements = this.getInteractiveElements(root);
     
     this.nodes = interactiveElements.map((el, index) => ({

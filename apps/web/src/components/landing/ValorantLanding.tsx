@@ -86,7 +86,7 @@ export const ValorantLanding: React.FC = () => {
                 <Target className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold uppercase tracking-wider">
-                NJZ<span className="text-valorant-accent-red">ite</span>GeisTe
+                EXE<span className="text-valorant-accent-red">ite</span>GeisTe
               </span>
             </div>
 
@@ -295,7 +295,7 @@ export const ValorantLanding: React.FC = () => {
             <div className="flex items-center gap-3">
               <div className="w-6 h-6 bg-valorant-accent-red rounded-sm" />
               <span className="font-bold uppercase tracking-wider">
-                NJZ<span className="text-valorant-accent-red">ite</span>GeisTe
+                EXE<span className="text-valorant-accent-red">ite</span>GeisTe
               </span>
             </div>
             
@@ -312,7 +312,7 @@ export const ValorantLanding: React.FC = () => {
             </div>
 
             <div className="text-xs text-valorant-text-muted uppercase tracking-wider">
-              © 2026 NJZiteGeisTe. All rights reserved.
+              © 2026 EXE. All rights reserved.
             </div>
           </div>
         </div>

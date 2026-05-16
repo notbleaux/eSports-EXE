@@ -37,7 +37,7 @@ export default function PlayerProfilePage() {
   const { slug } = useParams<{ slug: string }>();
 
   const { data: player, isLoading, isError } = usePlayerBySlug(slug ?? '');
-  const { data: ratingData, isLoading: ratingLoading } = usePlayerSimRating(player?.id ?? 0);
+  const { data: ratingData, isLoading: ratingLoading } = usePlayerSimRating(player ? parseInt(player.id, 10) : 0);
 
   if (!slug) return <div className="p-20 text-center text-gray-400">No player specified.</div>;
   if (isLoading) return <div className="p-20 text-center text-gray-400">Loading player...</div>;
@@ -49,7 +49,6 @@ export default function PlayerProfilePage() {
   );
 
   const rating = ratingData?.simrating ?? null;
-  const grade = ratingData?.grade ?? null;
   const source = (ratingData as { source?: string } | undefined)?.source;
   const components = (ratingData as { components?: Record<string, number> } | undefined)?.components;
   const gamesSampled = (ratingData as { games_sampled?: number } | undefined)?.games_sampled ?? 0;
@@ -85,16 +84,8 @@ export default function PlayerProfilePage() {
             <>
               <div className="flex items-end gap-4 mb-4">
                 <span className="text-5xl font-bold text-white">
-                  {rating != null ? rating.toFixed(1) : '--'}
+                  {rating != null ? rating.rating.toFixed(1) : '--'}
                 </span>
-                {grade && (
-                  <span
-                    className="text-2xl font-bold mb-1"
-                    style={{ color: gradeColor[grade] ?? '#6b7280' }}
-                  >
-                    {grade}
-                  </span>
-                )}
                 <span className="text-xs text-gray-500 mb-2">
                   {source === 'v2_stats' ? 'Based on match data' : 'Estimated'}
                 </span>

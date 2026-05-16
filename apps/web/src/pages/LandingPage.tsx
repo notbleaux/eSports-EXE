@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * LandingPage Component
  * =====================
- * Main landing page for the NJZiteGeisTe Platform.
+ * Main landing page for the EXE Platform.
  * 
  * Features:
  * - Pink Boitano-style hero with sharp geometry
@@ -71,7 +71,7 @@ export function LandingPage() {
         {/* Navigation */}
         <nav className="fixed top-0 left-0 right-0 z-50 p-4 md:p-6 mix-blend-difference">
           <div className="container mx-auto flex justify-between items-center text-white">
-            <span className="text-2xl font-display font-bold tracking-tight">NJZiteGeisTe</span>
+            <span className="text-2xl font-display font-bold tracking-tight">EXE</span>
 
             {/* Desktop links */}
             <div className="hidden md:flex gap-8">
@@ -121,7 +121,7 @@ export function LandingPage() {
             {/* Large headline */}
             <div className="col-span-12">
               <h1 className="text-hero text-black uppercase">
-                NJZiteGeisTe
+                EXE
               </h1>
               <h2 className="text-hero text-black -mt-4 md:-mt-8">
                 PLATFORM
@@ -239,8 +239,8 @@ export function LandingPage() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-12 md:col-span-6">
-              <h3 className="text-4xl font-display font-bold">NJZiteGeisTe</h3>
-              <p className="mt-4 text-gray-400">NJZiteGeisTe Platform v2.0</p>
+              <h3 className="text-4xl font-display font-bold">EXE</h3>
+              <p className="mt-4 text-gray-400">EXE Platform v2.0</p>
             </div>
             <div className="col-span-12 md:col-span-6 flex flex-wrap justify-start md:justify-end gap-6">
               {[

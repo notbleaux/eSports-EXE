@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Animation Utilities
+ * EXE Platform v2 - Animation Utilities
  * GSAP-based animation orchestration
  * 
  * @version 2.0.0

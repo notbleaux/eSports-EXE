@@ -30,7 +30,7 @@ export interface TestReport {
   }
 }
 
-const STORAGE_KEY = '4njz4-test-reports'
+const STORAGE_KEY = '4exe4-test-reports'
 
 /**
  * Run complete test suite

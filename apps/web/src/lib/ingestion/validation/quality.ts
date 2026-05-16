@@ -2,7 +2,7 @@
  * Quality Scorer
  * 
  * Data quality scoring, completeness metrics, accuracy estimation, and confidence levels
- * for NJZiteGeisTe Platform data ingestion.
+ * for EXE Platform data ingestion.
  * 
  * [Ver001.000]
  * 

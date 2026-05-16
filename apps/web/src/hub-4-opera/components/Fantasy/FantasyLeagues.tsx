@@ -225,7 +225,7 @@ export const FantasyLeagues: React.FC = () => {
                       Prize
                     </div>
                     <div className="text-[#ffd700] font-medium">
-                      {league.prize_pool_tokens.toLocaleString()} NJZ
+                      {league.prize_pool_tokens.toLocaleString()} EXE
                     </div>
                   </div>
                 </div>
@@ -233,7 +233,7 @@ export const FantasyLeagues: React.FC = () => {
                 {/* Footer */}
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/10">
                   <div className="text-sm text-white/40">
-                    Entry: <span className="text-white">{league.entry_fee_tokens} NJZ</span>
+                    Entry: <span className="text-white">{league.entry_fee_tokens} EXE</span>
                   </div>
                   <Button 
                     variant="outline" 

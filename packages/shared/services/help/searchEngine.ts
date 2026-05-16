@@ -6,15 +6,15 @@
  * Provides fuzzy matching, relevance scoring, and expertise-based ranking.
  */
 
-import MiniSearch from 'minisearch';
+import MiniSearch, { type SearchResult as MiniSearchResult } from 'minisearch';
 import type {
   KnowledgeNode,
   SearchResult,
   SearchQuery,
   SearchEngineConfig,
-  DEFAULT_SEARCH_CONFIG,
   AutocompleteSuggestion,
 } from '../../types/help/knowledgeGraph';
+import { DEFAULT_SEARCH_CONFIG } from '../../types/help/knowledgeGraph';
 import type { UserExpertiseProfileData } from '../../types/help/expertise';
 
 // ============================================================================
@@ -121,7 +121,10 @@ export class HelpSearchEngine {
    * Remove a document from the search index
    */
   removeDocument(nodeId: string): void {
-    this.index.remove(nodeId);
+    const doc = this.documents.get(nodeId);
+    if (doc) {
+      this.index.remove(doc);
+    }
     this.documents.delete(nodeId);
   }
 
@@ -322,7 +325,7 @@ export class HelpSearchEngine {
    * Calculate relevance score based on user expertise and document attributes
    */
   private calculateRelevance(
-    result: MiniSearch.Result,
+    result: MiniSearchResult,
     node: KnowledgeNode,
     userProfile?: UserExpertiseProfile
   ): number {
@@ -385,7 +388,7 @@ export class HelpSearchEngine {
     this.searchHistory.set(normalized, current + 1);
   }
 
-  private extractHighlights(result: MiniSearch.Result, doc: SearchDocument): string[] {
+  private extractHighlights(result: MiniSearchResult, doc: SearchDocument): string[] {
     const highlights: string[] = [];
     
     // Extract matched terms from result

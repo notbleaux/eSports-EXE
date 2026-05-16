@@ -1,6 +1,6 @@
 /**
  * Hub Navigation E2E Tests
- * Tests navigation between all 5 hubs of the NJZiteGeisTe Platform
+ * Tests navigation between all 5 hubs of the EXE Platform
  * 
  * [Ver001.000]
  */

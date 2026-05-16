@@ -7,7 +7,7 @@
  * Team: Replay 2.0 Core (TL-S2)
  */
 
-import type { Position3D, Player, GameEvent } from '../types';
+import type { Position3D, ReplayPlayer as Player, GameEvent } from '../types';
 
 // ============================================================================
 // Camera Types

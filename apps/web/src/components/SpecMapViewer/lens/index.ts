@@ -114,16 +114,16 @@ import {
   entrySuccessLens
 } from './analytical'
 
-import type { Lens } from '../lenses/types'
+import type { Lens } from './types'
 
 /** Creative/Atmospheric lenses */
 export const creativeLenses: Lens[] = [
-  tensionLens,
-  rippleLens,
-  bloodTrailLens,
-  windFieldLens,
-  doorsLens,
-  securedLens
+  tensionLens as unknown as Lens,
+  rippleLens as unknown as Lens,
+  bloodTrailLens as unknown as Lens,
+  windFieldLens as unknown as Lens,
+  doorsLens as unknown as Lens,
+  securedLens as unknown as Lens
 ]
 
 /** Analytical/Statistical lenses */

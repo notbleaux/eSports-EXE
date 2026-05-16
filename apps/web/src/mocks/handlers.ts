@@ -15,7 +15,7 @@ export const websocketHandlers = [
     
     // Handle incoming messages
     client.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data)
+      const data = JSON.parse(typeof event.data === 'string' ? event.data : '')
       
       if (data.type === 'subscribe') {
         // Acknowledge subscription

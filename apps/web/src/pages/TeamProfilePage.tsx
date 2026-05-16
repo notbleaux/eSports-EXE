@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTeams } from '@/shared/api/hooks';
 import { usePlayers } from '@/shared/api/hooks';
 import { useMatches } from '@/shared/api/hooks';
+import type { Team } from '@sator/types';
 
 export default function TeamProfilePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -22,7 +23,7 @@ export default function TeamProfilePage() {
   return <TeamDetail team={team} />;
 }
 
-function TeamDetail({ team }: { team: { id: number; name: string; shortName?: string; game: string; region?: string } }) {
+function TeamDetail({ team }: { team: Team }) {
   const { data: rosterData, isLoading: rosterLoading } = usePlayers(
     team.game as 'valorant' | 'cs2',
     undefined,
@@ -60,7 +61,7 @@ function TeamDetail({ team }: { team: { id: number; name: string; shortName?: st
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {players.map((p) => (
                 <Link
-                  to={`/player/${p.slug}`}
+                  to={`/player/${p.id}`}
                   key={p.id}
                   className="flex flex-col bg-gray-800 rounded-lg p-3 hover:bg-gray-700 transition-colors"
                 >
@@ -88,7 +89,7 @@ function TeamDetail({ team }: { team: { id: number; name: string; shortName?: st
                   key={m.id}
                   className="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-3 text-sm"
                 >
-                  <span className="text-gray-200">{m.name ?? `Match #${m.id}`}</span>
+                  <span className="text-gray-200">{m.teamA.name ?? 'Team A'} vs {m.teamB.name ?? 'Team B'} </span>
                   <span className="text-green-400 text-xs capitalize">{m.status}</span>
                 </div>
               ))}

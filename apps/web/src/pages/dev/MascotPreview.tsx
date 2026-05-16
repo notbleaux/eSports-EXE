@@ -198,7 +198,7 @@ export const MascotPreview: React.FC = () => {
                     <MascotAssetEnhanced
                       key={mascot}
                       mascot={mascot}
-                      size={96}
+                      size={64}
                       format={selectedFormat}
                       animate={true}
                       animation={anim}

@@ -395,7 +395,7 @@ export class POVSwitcher {
     this.prewarmCache.clear();
   }
 
-  private isSamePOV(a: POVAssignment | null, b: POVAssignment): boolean {
+  public isSamePOV(a: POVAssignment | null, b: POVAssignment): boolean {
     if (!a) return false;
     return a.playerId === b.playerId && a.viewMode === b.viewMode;
   }
@@ -482,10 +482,10 @@ export class POVAvailabilityChecker {
    * Get available POVs (not currently in use)
    */
   static getAvailablePOVs(
-    players: Array<{ id: string; name: string; teamId: string; teamSide: string; isAlive?: boolean }>,
+    players: Array<{ id: string; name: string; teamId?: string; teamSide?: string; isAlive?: boolean }>,
     slots: ViewSlot[],
     excludeSlotId?: string
-  ): Array<{ playerId: string; name: string; teamId: string }> {
+  ): Array<{ playerId: string; name: string; teamId?: string }> {
     const usedPlayerIds = new Set(
       slots
         .filter(s => s.id !== excludeSlotId && s.pov.playerId !== null)

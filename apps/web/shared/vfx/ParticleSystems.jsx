@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - ParticleSystems Component
+ * EXE Platform v2 - ParticleSystems Component
  * Interactive particle effects
  * 
  * @version 2.0.0
@@ -241,7 +241,7 @@ export function ParticleSystems({
 }) {
   return (
     <div 
-      className={`njz-particles ${className}`}
+      className={`exe-particles ${className}`}
       style={{
         position: 'fixed',
         inset: 0,

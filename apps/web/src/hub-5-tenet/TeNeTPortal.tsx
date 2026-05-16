@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 /**
  * TeNeT Portal (Home Portal)
- * Authoritative entry point for the NJZiteGeisTe Platform.
+ * Authoritative entry point for the EXE Platform.
  * [Ver001.000]
  */
 export function TeNeTPortal() {
@@ -42,7 +42,7 @@ export function TeNeTPortal() {
           TeNeT Portal
         </h1>
         <h2 className="text-4xl md:text-5xl font-display font-bold text-black mb-12 tracking-tight">
-          NJZiteGeisTe Platform Entry
+          EXE Platform Entry
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">

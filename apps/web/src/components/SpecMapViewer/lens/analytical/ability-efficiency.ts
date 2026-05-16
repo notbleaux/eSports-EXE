@@ -92,6 +92,7 @@ function calculateAbilityEfficiency(data: GameData): AbilityEvent[] {
 }
 
 export const abilityEfficiencyLens: Lens = {
+  id: 'ability-efficiency',
   name: 'ability-efficiency',
   displayName: 'Ability Efficiency',
   description: 'Shows utility usage vs impact. Green = efficient, Red = wasted. Circle size indicates total value generated.',

@@ -1,5 +1,5 @@
 /** [Ver003.000] - Added Grid Worker types for VirtualDataGrid
- * Worker Types for NJZiteGeisTe Platform
+ * Worker Types for EXE Platform
  * Type definitions for Web Workers infrastructure
  */
 

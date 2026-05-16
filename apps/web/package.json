@@ -1,7 +1,7 @@
 {
-  "name": "@njzitegeist/web",
+  "name": "@esportexe/web",
   "version": "2.1.0",
-  "description": "NJZiteGeisTe — Community eSports analytics platform (Valorant & CS2)",
+  "description": "eSports-EXE — Community eSports analytics platform (Valorant & CS2)",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@gsap/react": "^2.0.0",
-    "@njz/types": "workspace:*",
-    "@njz/ui": "workspace:*",
+    "@esportexe/types": "workspace:*",
+    "@esportexe/ui": "workspace:*",
     "@react-three/drei": "^9.90.0",
     "@react-three/fiber": "^8.15.0",
     "@sentry/react": "^10.46.0",
@@ -52,7 +52,8 @@
     "terser": "^5.46.1",
     "three": "^0.159.0",
     "three-mesh-bvh": "^0.8.0",
-    "zustand": "^4.4.0"
+    "zustand": "^4.4.0",
+    "immer": "^10.0.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",

@@ -51,12 +51,12 @@ importers:
 
   apps/browser-extension:
     dependencies:
-      '@njz/types':
+      '@esportexe/types':
         specifier: workspace:*
-        version: link:../../packages/@njz/types
-      '@njz/websocket-client':
+        version: link:../../packages/@esportexe/types
+      '@esportexe/websocket-client':
         specifier: workspace:*
-        version: link:../../packages/@njz/websocket-client
+        version: link:../../packages/@esportexe/websocket-client
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -76,12 +76,12 @@ importers:
 
   apps/companion:
     dependencies:
-      '@njz/types':
+      '@esportexe/types':
         specifier: workspace:*
-        version: link:../../packages/@njz/types
-      '@njz/ui':
+        version: link:../../packages/@esportexe/types
+      '@esportexe/ui':
         specifier: workspace:*
-        version: link:../../packages/@njz/ui
+        version: link:../../packages/@esportexe/ui
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -122,12 +122,12 @@ importers:
 
   apps/nexus:
     dependencies:
-      '@njz/types':
+      '@esportexe/types':
         specifier: workspace:*
-        version: link:../../packages/@njz/types
-      '@njz/ui':
+        version: link:../../packages/@esportexe/types
+      '@esportexe/ui':
         specifier: workspace:*
-        version: link:../../packages/@njz/ui
+        version: link:../../packages/@esportexe/ui
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -144,12 +144,12 @@ importers:
 
   apps/overlay:
     dependencies:
-      '@njz/types':
+      '@esportexe/types':
         specifier: workspace:*
-        version: link:../../packages/@njz/types
-      '@njz/ui':
+        version: link:../../packages/@esportexe/types
+      '@esportexe/ui':
         specifier: workspace:*
-        version: link:../../packages/@njz/ui
+        version: link:../../packages/@esportexe/ui
       framer-motion:
         specifier: ^11.2.10
         version: 11.18.2(react-dom@18.3.1)(react@18.3.1)
@@ -169,18 +169,18 @@ importers:
 
   apps/web:
     dependencies:
+      '@esportexe/types':
+        specifier: workspace:*
+        version: link:../../packages/@esportexe/types
+      '@esportexe/ui':
+        specifier: workspace:*
+        version: link:../../packages/@esportexe/ui
       '@gsap/react':
         specifier: ^2.0.0
         version: 2.1.2(gsap@3.14.2)(react@18.3.1)
-      '@njz/types':
-        specifier: workspace:*
-        version: link:../../packages/@njz/types
-      '@njz/ui':
-        specifier: workspace:*
-        version: link:../../packages/@njz/ui
       '@react-three/drei':
         specifier: ^9.90.0
-        version: 9.122.0(@react-three/fiber@8.18.0)(@types/react@18.3.28)(@types/three@0.159.0)(react-dom@18.3.1)(react@18.3.1)(three@0.159.0)
+        version: 9.122.0(@react-three/fiber@8.18.0)(@types/react@18.3.28)(@types/three@0.159.0)(immer@10.2.0)(react-dom@18.3.1)(react@18.3.1)(three@0.159.0)
       '@react-three/fiber':
         specifier: ^8.15.0
         version: 8.18.0(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)(three@0.159.0)
@@ -217,6 +217,9 @@ importers:
       gsap:
         specifier: ^3.12.0
         version: 3.14.2
+      immer:
+        specifier: ^10.0.0
+        version: 10.2.0
       lucide-react:
         specifier: ^0.294.0
         version: 0.294.0(react@18.3.1)
@@ -252,7 +255,7 @@ importers:
         version: 0.8.3(three@0.159.0)
       zustand:
         specifier: ^4.4.0
-        version: 4.5.7(@types/react@18.3.28)(react@18.3.1)
+        version: 4.5.7(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1)
     devDependencies:
       '@axe-core/playwright':
         specifier: ^4.10.1
@@ -359,9 +362,9 @@ importers:
 
   apps/wiki:
     dependencies:
-      '@njz/types':
+      '@esportexe/types':
         specifier: workspace:*
-        version: link:../../packages/@njz/types
+        version: link:../../packages/@esportexe/types
       next:
         specifier: 15.5.14
         version: 15.5.14(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1)
@@ -372,7 +375,7 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
 
-  packages/@njz/types:
+  packages/@esportexe/types:
     devDependencies:
       tsup:
         specifier: ^8.0.0
@@ -384,7 +387,7 @@ importers:
         specifier: ^1.4.0
         version: 1.6.1(terser@5.46.1)
 
-  packages/@njz/ui:
+  packages/@esportexe/ui:
     dependencies:
       react:
         specifier: '>=18.0.0'
@@ -400,7 +403,7 @@ importers:
         specifier: ^5.4.0
         version: 5.9.3
 
-  packages/@njz/websocket-client:
+  packages/@esportexe/websocket-client:
     devDependencies:
       typescript:
         specifier: ^5.4.0
@@ -1920,7 +1923,7 @@ packages:
     resolution: {integrity: sha512-HVj7LrZ4ReHWBimBvu2SKND3cDVUPWKLqRTmWe/fNY6o1owGOX0cAHbdPDTMelgBlVbrTKrre6lFkhqGZErK/g==}
     dev: false
 
-  /@react-three/drei@9.122.0(@react-three/fiber@8.18.0)(@types/react@18.3.28)(@types/three@0.159.0)(react-dom@18.3.1)(react@18.3.1)(three@0.159.0):
+  /@react-three/drei@9.122.0(@react-three/fiber@8.18.0)(@types/react@18.3.28)(@types/three@0.159.0)(immer@10.2.0)(react-dom@18.3.1)(react@18.3.1)(three@0.159.0):
     resolution: {integrity: sha512-SEO/F/rBCTjlLez7WAlpys+iGe9hty4rNgjZvgkQeXFSiwqD4Hbk/wNHMAbdd8vprO2Aj81mihv4dF5bC7D0CA==}
     peerDependencies:
       '@react-three/fiber': ^8
@@ -1954,9 +1957,9 @@ packages:
       three-mesh-bvh: 0.7.8(three@0.159.0)
       three-stdlib: 2.36.1(three@0.159.0)
       troika-three-text: 0.52.4(three@0.159.0)
-      tunnel-rat: 0.1.2(@types/react@18.3.28)(react@18.3.1)
+      tunnel-rat: 0.1.2(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1)
       utility-types: 3.11.0
-      zustand: 5.0.12(@types/react@18.3.28)(react@18.3.1)
+      zustand: 5.0.12(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/three'
@@ -8555,10 +8558,10 @@ packages:
       - yaml
     dev: true
 
-  /tunnel-rat@0.1.2(@types/react@18.3.28)(react@18.3.1):
+  /tunnel-rat@0.1.2(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1):
     resolution: {integrity: sha512-lR5VHmkPhzdhrM092lI2nACsLO4QubF0/yoOhzX7c+wIpbN1GjHNzCc91QlpxBi+cnx8vVJ+Ur6vL5cEoQPFpQ==}
     dependencies:
-      zustand: 4.5.7(@types/react@18.3.28)(react@18.3.1)
+      zustand: 4.5.7(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -9267,7 +9270,7 @@ packages:
       react: 18.3.1
     dev: false
 
-  /zustand@4.5.7(@types/react@18.3.28)(react@18.3.1):
+  /zustand@4.5.7(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1):
     resolution: {integrity: sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -9283,11 +9286,12 @@ packages:
         optional: true
     dependencies:
       '@types/react': 18.3.28
+      immer: 10.2.0
       react: 18.3.1
       use-sync-external-store: 1.6.0(react@18.3.1)
     dev: false
 
-  /zustand@5.0.12(@types/react@18.3.28)(react@18.3.1):
+  /zustand@5.0.12(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1):
     resolution: {integrity: sha512-i77ae3aZq4dhMlRhJVCYgMLKuSiZAaUPAct2AksxQ+gOtimhGMdXljRT21P5BNpeT4kXlLIckvkPM029OljD7g==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
@@ -9306,5 +9310,6 @@ packages:
         optional: true
     dependencies:
       '@types/react': 18.3.28
+      immer: 10.2.0
       react: 18.3.1
     dev: false

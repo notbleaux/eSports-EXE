@@ -1,14 +1,14 @@
 /**
- * NJZ Nexus Portal
+ * EXE Nexus Portal
  *
- * Aggregated directory of all NJZ World-Ports and platform entry points.
- * Phase 6 stub — imports @njz/types and @njz/ui (gate 6.3).
+ * Aggregated directory of all EXE World-Ports and platform entry points.
+ * Phase 6 stub — imports @esportexe/types and @esportexe/ui (gate 6.3).
  * Full implementation planned post-Phase 6.
  * [Ver001.000]
  */
 import React from 'react'
-import { WorldPortCard } from '@njz/ui'
-import type { SupportedGame } from '@njz/types'
+import { WorldPortCard } from '@esportexe/ui'
+import type { SupportedGame } from '@esportexe/types'
 
 interface WorldPortEntry {
   id: string
@@ -62,7 +62,7 @@ export function App() {
             marginBottom: '0.5rem',
           }}
         >
-          NJZ Nexus
+          EXE Nexus
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '3rem' }}>
           All World-Ports and platform entry points in one place.

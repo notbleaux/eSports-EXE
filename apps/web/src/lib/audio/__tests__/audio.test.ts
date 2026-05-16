@@ -1,7 +1,7 @@
 /** [Ver001.000]
  * Audio System Tests
  * ==================
- * Comprehensive test suite for the NJZiteGeisTe audio system.
+ * Comprehensive test suite for the EXE audio system.
  * Tests AudioManager, VoiceController, SFXController, and related utilities.
  * 
  * Coverage:

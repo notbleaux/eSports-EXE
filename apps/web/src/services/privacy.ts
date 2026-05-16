@@ -74,7 +74,7 @@ export function setConsent(consent: Partial<UserConsent>): void {
   }
 }
 
-export function hasConsent(category: keyof UserConsent): boolean {
+export function hasConsent(category: keyof Omit<UserConsent, 'timestamp' | 'version'>): boolean {
   if (isPrivacyMode()) return false
   return getConsent()[category] || false
 }
@@ -82,7 +82,7 @@ export function hasConsent(category: keyof UserConsent): boolean {
 export function scrubPii<T extends Record<string, unknown>>(data: T): T {
   const scrubbed = { ...data }
   for (const field of PRIVACY_CONFIG.piiFields) {
-    if (field in scrubbed) scrubbed[field] = '[REDACTED]'
+    if (field in scrubbed) (scrubbed as Record<string, unknown>)[field] = '[REDACTED]'
   }
   return scrubbed
 }

@@ -28,7 +28,7 @@ vi.mock('@/shared/components/HubWrapper', () => ({
 }))
 
 vi.mock('@/shared/store/njzStore', () => ({
-  useNJZStore: vi.fn(() => ({
+  useEXEStore: vi.fn(() => ({
     addNotification: vi.fn()
   })),
   useHubState: vi.fn(() => ({

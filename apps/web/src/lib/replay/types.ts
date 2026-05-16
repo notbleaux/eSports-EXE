@@ -338,7 +338,7 @@ export interface Replay {
   timestamp: number;
   duration: number;
   teams: [Team, Team];
-  players: Player[];
+  players: ReplayPlayer[];
   rounds: Round[];
   events: GameEvent[];
   metadata: ReplayMetadata;
@@ -448,14 +448,14 @@ export function isValidPosition3D(obj: unknown): obj is Position3D {
   );
 }
 
-export function isValidPlayer(obj: unknown): obj is Player {
+export function isValidPlayer(obj: unknown): obj is ReplayPlayer {
   return (
     typeof obj === 'object' &&
     obj !== null &&
-    'id' in obj && typeof (obj as Player).id === 'string' &&
-    'name' in obj && typeof (obj as Player).name === 'string' &&
-    'teamId' in obj && typeof (obj as Player).teamId === 'string' &&
-    'teamSide' in obj && typeof (obj as Player).teamSide === 'string'
+    'id' in obj && typeof (obj as ReplayPlayer).id === 'string' &&
+    'name' in obj && typeof (obj as ReplayPlayer).name === 'string' &&
+    'teamId' in obj && typeof (obj as ReplayPlayer).teamId === 'string' &&
+    'teamSide' in obj && typeof (obj as ReplayPlayer).teamSide === 'string'
   );
 }
 

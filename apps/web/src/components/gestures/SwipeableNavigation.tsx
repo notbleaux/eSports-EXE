@@ -271,7 +271,7 @@ export const SwipeableNavigation: React.FC<SwipeableNavigationProps> = ({
                       <Zap className="w-5 h-5 text-[#0a0a0f]" />
                     </div>
                     <div>
-                      <span className="font-bold text-lg text-white">NJZiteGeisTe</span>
+                      <span className="font-bold text-lg text-white">EXE</span>
                       <span className="text-xs text-white/50 block">Swipe to navigate</span>
                     </div>
                   </div>

@@ -6,10 +6,14 @@
  */
 
 export { bindGrid } from './grid-utils';
-export * from './types';
+// Re-export types selectively to avoid conflicts with lenses/types.ts
+export type { CellType, Position, Bounds, Site, Teleporter, ChokePoint, CoverPosition, SpawnPoints, GridRegion, MapGridData, GridCell, PathNode, TacticalAnalysis } from './types';
+export type { Vector2D } from './types';
+// Note: Vector3D is intentionally NOT re-exported here to avoid conflict with lenses/types.ts
+// Import it directly from lenses/types if needed
 export {
   getCell,
-  findPath,
+  findPath as gridFindPath,
   getImportantChokePoints,
   gridDistance,
   getSiteCenter,

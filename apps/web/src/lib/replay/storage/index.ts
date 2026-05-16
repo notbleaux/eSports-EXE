@@ -43,7 +43,6 @@ export {
 
 export type {
   StoredReplay,
-  ReplayMetadata,
   ReplayThumbnail,
   TagIndex,
   StorageQuota,

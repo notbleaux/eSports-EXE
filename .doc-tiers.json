@@ -6,12 +6,15 @@
     ".agents/PHASE_GATES.md",
     ".agents/AGENT_CONTRACT.md",
     "ARCHIVE_MASTER_DOSSIER.md",
-    ".agents/CODEOWNER_CHECKLIST.md"
+    ".agents/CODEOWNER_CHECKLIST.md",
+    ".agents/COORDINATION_PROTOCOL.md",
+    ".agents/COLLABORATION_RUNBOOK.md"
   ],
   "T1": [
     ".agents/SCHEMA_REGISTRY.md",
     ".agents/SKILL_MAP.md",
-    ".agents/COORDINATION_PROTOCOL.md",
+    ".agents/AGENT_ID_PROTOCOL.md",
+    ".agents/lineage-discovery.yaml",
     ".agents/registry/AGENT_REGISTRY.md",
     ".agents/session/CONTEXT_FORWARD.md",
     ".agents/phase-logbooks/",
@@ -19,6 +22,7 @@
     ".agents/PHASE_2_PLAN.md",
     ".agents/PHASE_3-6_DETAILED_PLAN.md",
     ".agents/PHASE_5_IMPLEMENTATION_PLAN.md",
+    "polyrepo/registry/index.json",
     "docs/architecture/TENET_TOPOLOGY.md",
     "docs/architecture/REPO_STRUCTURE_DECISION.md",
     "docs/QUICK_REFERENCE.md",

@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - useScrollAnimation Hook
+ * EXE Platform v2 - useScrollAnimation Hook
  * Scroll-triggered animations with GSAP ScrollTrigger
  * 
  * @version 2.0.0

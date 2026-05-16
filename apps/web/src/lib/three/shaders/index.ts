@@ -126,7 +126,7 @@ export function getDefaultShaderForMascot(mascotId: MascotId) {
 }
 
 /** Get preset configs for a mascot */
-export function getPresetsForMascot(mascotId: MascotId): Record<string, Record<string, unknown>> {
+export function getPresetsForMascot(mascotId: MascotId): Record<string, unknown> {
   switch (mascotId) {
     case 'sol':
       return {
@@ -134,21 +134,21 @@ export function getPresetsForMascot(mascotId: MascotId): Record<string, Record<s
         sunSurface: SolarGlowShader.createSunSurfacePreset(),
         goldenHalo: SolarGlowShader.createGoldenHaloPreset(),
         corona: SolarGlowShader.createCoronaPreset(),
-      };
+      } as Record<string, unknown>;
     case 'lun':
       return {
         default: {},
         fullMoon: LunarGlowShader.createFullMoonPreset(),
         crescent: LunarGlowShader.createCrescentPreset(),
         bloodMoon: LunarGlowShader.createBloodMoonPreset(),
-      };
+      } as Record<string, unknown>;
     case 'bin':
       return {
         default: {},
         matrix: BinaryCodeShader.createMatrixPreset(),
         cyberpunk: BinaryCodeShader.createCyberpunkPreset(),
         dataStream: BinaryCodeShader.createDataStreamPreset(),
-      };
+      } as Record<string, unknown>;
     case 'fat':
       return {
         default: {},
@@ -156,7 +156,7 @@ export function getPresetsForMascot(mascotId: MascotId): Record<string, Record<s
         torch: FireVFXShader.createTorchPreset(),
         inferno: FireVFXShader.createInfernoPreset(),
         magicFire: FireVFXShader.createMagicFirePreset(),
-      };
+      } as Record<string, unknown>;
     case 'uni':
       return {
         default: {},
@@ -164,7 +164,7 @@ export function getPresetsForMascot(mascotId: MascotId): Record<string, Record<s
         starlight: MagicSparkleShader.createStarlightPreset(),
         fairyDust: MagicSparkleShader.createFairyDustPreset(),
         cosmic: MagicSparkleShader.createCosmicPreset(),
-      };
+      } as Record<string, unknown>;
     default:
       return { default: {} };
   }

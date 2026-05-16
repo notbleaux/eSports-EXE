@@ -19,7 +19,7 @@ import {
   GitBranch,
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
-import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { useEXEStore, useHubState } from '@/shared/store/njzStore';
 import { colors } from '@/theme/colors';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PanelErrorBoundary } from '@/components/grid/PanelErrorBoundary';
@@ -74,7 +74,7 @@ function OperaHubContent(): JSX.Element {
   const [selectedCircuit, setSelectedCircuit] = useState<CircuitRegion>('Americas');
   const [selectedSeason, setSelectedSeason] = useState<string>('2026');
 
-  const addNotification = useNJZStore((state) => state.addNotification);
+  const addNotification = useEXEStore((state) => state.addNotification);
   const { setState } = useHubState('opera');
   
   const {

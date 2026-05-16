@@ -38,6 +38,15 @@ export class AnalyticsSyncService {
     this.isInitialized = false
   }
 
+  track(type: string, data: Record<string, unknown>): void {
+    if (!privacyService.hasConsent('analytics')) return
+    this.bufferEvent({
+      type,
+      timestamp: Date.now(),
+      data
+    })
+  }
+
   trackPrediction(event: PredictionEvent): void {
     if (!privacyService.hasConsent('analytics')) return
     this.bufferEvent({

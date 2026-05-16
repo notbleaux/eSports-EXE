@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * Worker Utilities for NJZiteGeisTe Platform
+ * Worker Utilities for EXE Platform
  * Worker pool management, message serialization, and cleanup utilities
  */
 
@@ -10,7 +10,8 @@ import type {
   WorkerPoolConfig,
   WorkerTask,
   WorkerInstance,
-  WorkerStatus
+  WorkerStatus,
+  WorkerStatusInfo
 } from '../types/worker'
 
 // Default pool configuration
@@ -102,7 +103,7 @@ export class WorkerPool {
   /**
    * Get worker statuses
    */
-  getWorkerStatuses(): WorkerStatus[] {
+  getWorkerStatuses(): WorkerStatusInfo[] {
     return Array.from(this.workers.entries()).map(([id, worker]) => ({
       type: worker.type,
       id,
@@ -219,7 +220,8 @@ export class WorkerPool {
       id: task.id,
       type: task.type,
       action: task.action,
-      payload: task.payload
+      payload: task.payload,
+      timestamp: Date.now()
     }
 
     // Set timeout

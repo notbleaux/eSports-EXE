@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - FluidSmokeEffects Component
+ * EXE Platform v2 - FluidSmokeEffects Component
  * WebGL-powered fluid smoke simulation
  * 
  * @version 2.0.0
@@ -218,7 +218,7 @@ export function FluidSmokeEffects({
 }) {
   return (
     <div 
-      className={`njz-fluid-smoke ${className}`}
+      className={`exe-fluid-smoke ${className}`}
       style={{
         position: 'fixed',
         inset: 0,

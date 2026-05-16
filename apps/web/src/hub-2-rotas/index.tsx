@@ -32,7 +32,7 @@ import {
   HubErrorBoundary,
   HubErrorFallback 
 } from '@/components/error';
-import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { useEXEStore, useHubState } from '@/shared/store/njzStore';
 
 // ROTAS Hub Configuration
 const HUB_CONFIG = {
@@ -117,9 +117,9 @@ function RotasHubContent(): React.ReactElement {
   const [activeLayer, setActiveLayer] = useState('surface');
   const [activeLayers, setActiveLayers] = useState<string[]>(['persona']);
   const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
-  const [lbGame, setLbGame] = useState<string | undefined>(undefined); // 'valorant' | 'cs2' | undefined
+  const [lbGame, setLbGame] = useState<'valorant' | 'cs2' | undefined>(undefined); // 'valorant' | 'cs2' | undefined
   const [statsTab, setStatsTab] = useState('leaderboard'); // 'leaderboard' | 'raw-stats'
-  const { addNotification } = useNJZStore();
+  const addNotification = useEXEStore((state) => state.addNotification);
   const { state, setState } = useHubState('rotas');
 
   // Fetch ROTAS data
@@ -139,7 +139,7 @@ function RotasHubContent(): React.ReactElement {
       : [...activeLayers, layerId];
     
     setActiveLayers(newLayers);
-    setState({ activeLayers: newLayers });
+    setState('rotas', { activeLayers: newLayers });
     
     addNotification(
       `${layers.find(l => l.id === layerId)?.label} layer ${newLayers.includes(layerId) ? 'activated' : 'deactivated'}`,
@@ -149,7 +149,7 @@ function RotasHubContent(): React.ReactElement {
 
   const handleLayerChange = (layerId: string) => {
     setActiveLayer(layerId);
-    setState({ activeLayer: layerId });
+    setState('rotas', { activeLayer: layerId });
     
     const layer = ANALYTICS_LAYERS.find(l => l.id === layerId);
     addNotification(`${layer?.name} layer activated`, 'info');
@@ -496,7 +496,6 @@ function RotasHubContent(): React.ReactElement {
                 hub="ROTAS"
                 title="Analytics Error"
                 message="Failed to load ML analytics panel."
-                compact
               />
             }
           >
@@ -506,7 +505,7 @@ function RotasHubContent(): React.ReactElement {
               glow={HUB_CONFIG.glow}
               muted={HUB_CONFIG.muted}
               data={analytics}
-              isLoading={isLoading}
+              isLoading={isLoading as boolean | undefined}
             />
           </MLInferenceErrorBoundary>
 
@@ -666,7 +665,6 @@ function RotasHubContent(): React.ReactElement {
                 hub="ROTAS"
                 title="Streaming Error"
                 message="Failed to load prediction stream."
-                compact
               />
             }
           >
@@ -679,9 +677,9 @@ function RotasHubContent(): React.ReactElement {
               </div>
               
               <div className="space-y-4">
-                {predictions?.map((prediction, index) => (
+                {(predictions as unknown[] | undefined)?.map((prediction, index) => (
                   <PredictionCard
-                    key={prediction.id}
+                    key={(prediction as Record<string, unknown>).id as string}
                     prediction={prediction}
                     color={HUB_CONFIG.color}
                     glow={HUB_CONFIG.glow}
@@ -822,7 +820,7 @@ function RotasHubContent(): React.ReactElement {
                 </button>
               </div>
               <div className="flex gap-1">
-                {[undefined, 'valorant', 'cs2'].map((g) => (
+                {([undefined, 'valorant', 'cs2'] as ('valorant' | 'cs2' | undefined)[]).map((g) => (
                   <button
                     key={String(g)}
                     onClick={() => setLbGame(g)}
@@ -844,34 +842,14 @@ function RotasHubContent(): React.ReactElement {
                 <p className="text-gray-500 text-xs">No data yet — run sync_pandascore.py to seed.</p>
               ) : (
                 <div className="space-y-1">
-                  {topPlayers.map((p) => (
+                  {(topPlayers as unknown[]).map((p: any, idx: number) => (
                     <div key={p.player_id} className="flex items-center justify-between text-xs text-gray-300 py-1 border-b border-gray-700 last:border-0">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-gray-500 w-5 shrink-0">#{p.rank}</span>
-                        <Link
-                          to={`/player/${p.player_slug}`}
-                          className="hover:text-purple-300 transition-colors truncate"
-                        >
-                          {p.player_name}
-                        </Link>
+                        <span className="text-gray-500 w-5 shrink-0">#{idx + 1}</span>
+                        <span className="truncate">Player {p.player_id}</span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0 ml-2">
-                        <span
-                          className="font-bold text-xs w-4 text-center"
-                          style={{ color: GRADE_COLOR[p.grade] ?? '#6b7280' }}
-                        >
-                          {p.grade}
-                        </span>
-                        <span className="text-purple-300 font-mono">{p.simrating?.toFixed(1)}</span>
-                        <span
-                          className="text-xs px-1 rounded"
-                          style={{
-                            backgroundColor: p.source === 'v2_stats' ? 'rgba(34,197,94,0.15)' : 'rgba(107,114,128,0.15)',
-                            color: p.source === 'v2_stats' ? '#22c55e' : '#6b7280',
-                          }}
-                        >
-                          {p.source === 'v2_stats' ? 'v2' : 'est.'}
-                        </span>
+                        <span className="text-purple-300 font-mono">{p.simrating != null ? Number(p.simrating).toFixed(1) : 'N/A'}</span>
                       </div>
                     </div>
                   ))}
@@ -932,7 +910,7 @@ function RotasHubContent(): React.ReactElement {
             >
               <div className="flex items-center gap-2" style={{ color: colors.status.error }}>
                 <AlertTriangle className="w-4 h-4" />
-                <span className="text-sm">Error loading data: {error}</span>
+                <span className="text-sm">Error loading data: {String(error)}</span>
               </div>
             </GlassCard>
           </motion.div>

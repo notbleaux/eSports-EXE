@@ -33,7 +33,7 @@ import {
   HubErrorBoundary,
   HubErrorFallback 
 } from '@/components/error';
-import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { useEXEStore, useHubState } from '@/shared/store/njzStore';
 import { getWorkerPool, isWorkerSupported, isOffscreenCanvasSupported } from '@/lib/worker-utils';
 import { useSimRating } from './hooks/useSimRating';
 import { initMLBackend } from '@hub-1/ml';
@@ -133,7 +133,7 @@ function SatorHubContent(): React.ReactElement {
   // Live player data from API
   const { data: playersData, isLoading: playersLoading, isError: playersError } = usePlayers('valorant');
   const players = playersData?.players ?? [];
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
   const { state, setState } = useHubState('sator');
   const gridRef = useRef(null);
   
@@ -150,7 +150,7 @@ function SatorHubContent(): React.ReactElement {
   // Initialise ML backend on mount (TensorFlow.js WASM/WebGPU)
   useEffect(() => {
     initMLBackend().catch(err =>
-      console.warn('[NJZ SATOR] ML backend init failed:', err)
+      console.warn('[EXE SATOR] ML backend init failed:', err)
     );
   }, []);
 
@@ -826,7 +826,7 @@ interface SimRatingSectionProps {
  * Demonstrates Web Worker-based SimRating calculations
  */
 function SimRatingAnalyticsSection({ hubColor, hubGlow, hubMuted }: SimRatingSectionProps): React.ReactElement {
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
   const [calculationTimes, setCalculationTimes] = useState<number[]>([]);
   
   const { 

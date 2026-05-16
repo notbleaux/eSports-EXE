@@ -3,7 +3,7 @@
  * Central export for all canonical type definitions.
  *
  * Usage: import type { GameNodeID, VerifiedMatchSummary } from '../data/schemas';
- * Or via @njz/types package (Phase 1+): import type { ... } from '@njz/types';
+ * Or via @esportexe/types package (Phase 1+): import type { ... } from '@esportexe/types';
  *
  * SCHEMA CHANGE: Initial definition — 2026-03-27
  */

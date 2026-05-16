@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Input Component
+ * EXE Platform v2 - Input Component
  * Glassmorphic form inputs with validation states
  * 
  * @version 2.0.0
@@ -74,16 +74,16 @@ export const Input = forwardRef(({
   };
 
   const sizeClasses = {
-    sm: 'njz-input--sm',
-    md: 'njz-input--md',
-    lg: 'njz-input--lg',
+    sm: 'exe-input--sm',
+    md: 'exe-input--md',
+    lg: 'exe-input--lg',
   };
 
   return (
     <div 
       className={`
-        njz-input-wrapper 
-        ${fullWidth ? 'njz-input-wrapper--full' : ''} 
+        exe-input-wrapper 
+        ${fullWidth ? 'exe-input-wrapper--full' : ''} 
         ${className}
       `}
     >
@@ -91,25 +91,25 @@ export const Input = forwardRef(({
       {label && (
         <motion.label 
           htmlFor={inputId}
-          className="njz-input__label"
+          className="exe-input__label"
           animate={{
             color: isFocused ? '#00f0ff' : 'rgba(255, 255, 255, 0.8)',
           }}
         >
           {label}
-          {required && <span className="njz-input__required"> *</span>}
+          {required && <span className="exe-input__required"> *</span>}
         </motion.label>
       )}
 
       {/* Input container */}
       <motion.div
         className={`
-          njz-input 
+          exe-input 
           ${sizeClasses[size]} 
-          ${isFocused ? 'njz-input--focused' : ''} 
-          ${hasError ? 'njz-input--error' : ''} 
-          ${disabled ? 'njz-input--disabled' : ''}
-          ${isFilled ? 'njz-input--filled' : ''}
+          ${isFocused ? 'exe-input--focused' : ''} 
+          ${hasError ? 'exe-input--error' : ''} 
+          ${disabled ? 'exe-input--disabled' : ''}
+          ${isFilled ? 'exe-input--filled' : ''}
         `}
         animate={{
           boxShadow: isFocused
@@ -122,7 +122,7 @@ export const Input = forwardRef(({
         {/* Leading icon */}
         {icon && (
           <motion.span 
-            className="njz-input__icon njz-input__icon--left"
+            className="exe-input__icon exe-input__icon--left"
             animate={{
               color: isFocused ? '#00f0ff' : 'rgba(255, 255, 255, 0.4)',
             }}
@@ -144,20 +144,20 @@ export const Input = forwardRef(({
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={handleChange}
-          className="njz-input__field"
+          className="exe-input__field"
           {...props}
         />
 
         {/* Trailing icon */}
         {iconRight && (
-          <span className="njz-input__icon njz-input__icon--right">
+          <span className="exe-input__icon exe-input__icon--right">
             {iconRight}
           </span>
         )}
 
         {/* Focus border animation */}
         <motion.span
-          className="njz-input__border"
+          className="exe-input__border"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: isFocused ? 1 : 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -166,7 +166,7 @@ export const Input = forwardRef(({
         {/* Error indicator */}
         {hasError && (
           <motion.span
-            className="njz-input__error-icon"
+            className="exe-input__error-icon"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 500 }}
@@ -180,7 +180,7 @@ export const Input = forwardRef(({
       <AnimatePresence mode="wait">
         {hasError && (
           <motion.span
-            className="njz-input__error-message"
+            className="exe-input__error-message"
             initial={{ opacity: 0, y: -10, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: -10, height: 0 }}
@@ -193,21 +193,21 @@ export const Input = forwardRef(({
 
       {/* Hint text */}
       {hasHint && (
-        <span className="njz-input__hint">{hint}</span>
+        <span className="exe-input__hint">{hint}</span>
       )}
 
       <style jsx>{`
-        .njz-input-wrapper {
+        .exe-input-wrapper {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
 
-        .njz-input-wrapper--full {
+        .exe-input-wrapper--full {
           width: 100%;
         }
 
-        .njz-input__label {
+        .exe-input__label {
           font-family: 'Inter', sans-serif;
           font-size: 0.875rem;
           font-weight: 500;
@@ -215,11 +215,11 @@ export const Input = forwardRef(({
           transition: color 0.2s ease;
         }
 
-        .njz-input__required {
+        .exe-input__required {
           color: #ff4757;
         }
 
-        .njz-input {
+        .exe-input {
           position: relative;
           display: flex;
           align-items: center;
@@ -230,46 +230,46 @@ export const Input = forwardRef(({
           overflow: hidden;
         }
 
-        .njz-input:hover:not(.njz-input--disabled) {
+        .exe-input:hover:not(.exe-input--disabled) {
           background: rgba(255, 255, 255, 0.05);
           border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .njz-input--focused {
+        .exe-input--focused {
           background: rgba(255, 255, 255, 0.07);
           border-color: #00f0ff;
         }
 
-        .njz-input--error {
+        .exe-input--error {
           border-color: #ff4757;
         }
 
-        .njz-input--error.njz-input--focused {
+        .exe-input--error.exe-input--focused {
           border-color: #ff4757;
           box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2) !important;
         }
 
-        .njz-input--disabled {
+        .exe-input--disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
 
-        .njz-input--sm {
+        .exe-input--sm {
           height: 40px;
           padding: 0 12px;
         }
 
-        .njz-input--md {
+        .exe-input--md {
           height: 48px;
           padding: 0 16px;
         }
 
-        .njz-input--lg {
+        .exe-input--lg {
           height: 56px;
           padding: 0 20px;
         }
 
-        .njz-input__field {
+        .exe-input__field {
           flex: 1;
           background: transparent;
           border: none;
@@ -281,15 +281,15 @@ export const Input = forwardRef(({
           width: 100%;
         }
 
-        .njz-input__field::placeholder {
+        .exe-input__field::placeholder {
           color: rgba(255, 255, 255, 0.3);
         }
 
-        .njz-input__field:disabled {
+        .exe-input__field:disabled {
           cursor: not-allowed;
         }
 
-        .njz-input__icon {
+        .exe-input__icon {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -297,15 +297,15 @@ export const Input = forwardRef(({
           transition: color 0.2s ease;
         }
 
-        .njz-input__icon--left {
+        .exe-input__icon--left {
           margin-right: 12px;
         }
 
-        .njz-input__icon--right {
+        .exe-input__icon--right {
           margin-left: 12px;
         }
 
-        .njz-input__border {
+        .exe-input__border {
           position: absolute;
           bottom: 0;
           left: 0;
@@ -315,21 +315,21 @@ export const Input = forwardRef(({
           transform-origin: left;
         }
 
-        .njz-input__error-icon {
+        .exe-input__error-icon {
           position: absolute;
           right: 16px;
           color: #ff4757;
           font-size: 1.125rem;
         }
 
-        .njz-input__error-message {
+        .exe-input__error-message {
           font-family: 'Inter', sans-serif;
           font-size: 0.8rem;
           color: #ff4757;
           margin-top: 4px;
         }
 
-        .njz-input__hint {
+        .exe-input__hint {
           font-family: 'Inter', sans-serif;
           font-size: 0.8rem;
           color: rgba(255, 255, 255, 0.4);

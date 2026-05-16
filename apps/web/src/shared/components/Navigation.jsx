@@ -6,11 +6,11 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Zap, ChevronDown, Radio, LayoutGrid } from 'lucide-react'
-import { useNJZStore, HUBS } from '../store/njzStore'
+import { useEXEStore, HUBS } from '../store/njzStore'
 import { ModeToggle } from '@/components/ModeToggle'
 
 const navItems = [
-  { path: '/', label: 'NJZiteGeisTe', icon: '◎', hubId: 'central' },
+  { path: '/', label: 'EXE', icon: '◎', hubId: 'central' },
   { path: '/home', label: 'Home', icon: '◈', hubId: 'grid', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
   { path: '/analytics', label: 'Analytics', icon: '◎', hubId: 'sator', color: 'text-alert-amber', borderColor: 'border-alert-amber' },
   { path: '/stats', label: 'Stats', icon: '◈', hubId: 'rotas', color: 'text-signal-cyan', borderColor: 'border-signal-cyan' },
@@ -23,7 +23,7 @@ function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [showHubSwitcher, setShowHubSwitcher] = useState(false)
   const location = useLocation()
-  const currentHub = useNJZStore(state => state.currentHub)
+  const currentHub = useEXEStore(state => state.currentHub)
   
   // Track scroll for styling changes
   useEffect(() => {
@@ -68,10 +68,10 @@ function Navigation() {
               </motion.div>
               <div className="hidden sm:flex flex-col">
                 <span className="font-display font-bold text-lg tracking-tight">
-                  NJZ ¿!?
+                  EXE ¿!?
                 </span>
                 <span className="text-xs text-slate font-mono">
-                  NJZiteGeisTe Platform
+                  EXE Platform
                 </span>
               </div>
             </Link>

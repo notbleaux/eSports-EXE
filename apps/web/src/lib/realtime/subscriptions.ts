@@ -366,7 +366,7 @@ export class SubscriptionManager {
 
     // Add topics based on event data
     if (event.data && typeof event.data === 'object') {
-      const data = event.data as Record<string, unknown>;
+      const data = event.data as unknown as Record<string, unknown>;
 
       // Team topics
       if (data.teamId) {
@@ -424,7 +424,7 @@ export class SubscriptionManager {
 
   private eventInvolvesTeams(event: LiveEvent, teams: string[]): boolean {
     if (event.data && typeof event.data === 'object') {
-      const data = event.data as Record<string, unknown>;
+      const data = event.data as unknown as Record<string, unknown>;
       const teamFields = ['teamId', 'attackerTeam', 'victimTeam', 'winningTeam'];
       
       for (const field of teamFields) {
@@ -436,7 +436,7 @@ export class SubscriptionManager {
 
   private eventInvolvesPlayers(event: LiveEvent, players: string[]): boolean {
     if (event.data && typeof event.data === 'object') {
-      const data = event.data as Record<string, unknown>;
+      const data = event.data as unknown as Record<string, unknown>;
       const playerFields = ['playerId', 'attackerId', 'victimId'];
       
       for (const field of playerFields) {

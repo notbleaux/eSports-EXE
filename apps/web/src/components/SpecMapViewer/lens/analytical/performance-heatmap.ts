@@ -61,6 +61,7 @@ export const deathGradient: HeatmapGradient = {
 }
 
 export const performanceHeatmapLens: Lens = {
+  id: 'performance-heatmap',
   name: 'performance-heatmap',
   displayName: 'Performance Heatmap',
   description: 'Visualizes kill/death density across the map. Red zones indicate high combat activity and dangerous chokepoints.',
@@ -68,7 +69,7 @@ export const performanceHeatmapLens: Lens = {
 
   defaultOptions: {
     opacity: 0.65,
-    color: 'rgb(220, 38, 38)',
+    colors: { primary: 'rgb(220, 38, 38)' },
     blendMode: 'screen',
     animationSpeed: 1,
     showLabels: false
@@ -95,16 +96,16 @@ export const performanceHeatmapLens: Lens = {
     const currentTime = Date.now()
 
     // Process kill events
-    data.killEvents.forEach(event => {
-      const isKill = showKills !== false
-      const isDeath = showKills !== true
+    const isKill = showKills !== false
+    const isDeath = showKills !== true
 
+    data.killEvents.forEach(event => {
       if (isKill) {
         points.push({
           x: event.position.x,
           y: event.position.y,
           intensity: killWeight * (event.isFirstBlood ? 1.5 : 1.0),
-          timestamp: temporalDecay ? currentTime - (data.metadata.matchTime - event.timestamp) : undefined,
+          timestamp: temporalDecay && data.metadata?.matchTime ? currentTime - (data.metadata.matchTime - event.timestamp) : undefined,
           radius: event.isFirstBlood ? radius * 1.3 : radius
         })
       }
@@ -118,9 +119,9 @@ export const performanceHeatmapLens: Lens = {
           points.push({
             x: event.position.x,
             y: event.position.y,
-            intensity: deathWeight * (event.isFirstBlood ? 1.5 : 1.0),
-            timestamp: temporalDecay ? currentTime - (data.metadata.matchTime - event.timestamp) : undefined,
-            radius: event.isFirstBlood ? radius * 1.3 : radius
+            intensity: deathWeight,
+            timestamp: temporalDecay && data.metadata?.matchTime ? currentTime - (data.metadata.matchTime - event.timestamp) : undefined,
+            radius: radius
           })
         })
     }

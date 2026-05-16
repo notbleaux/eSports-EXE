@@ -33,7 +33,7 @@ import {
   Map
 } from 'lucide-react';
 import HubWrapper, { HubCard, HubStatCard } from '@/shared/components/HubWrapper';
-import { useNJZStore, useHubState } from '@/shared/store/njzStore';
+import { useEXEStore, useHubState } from '@/shared/store/njzStore';
 import { colors } from '@/theme/colors';
 
 // Import local components
@@ -161,7 +161,7 @@ function ArepoHubContent(): React.ReactElement {
   const [selectedQuestion, setSelectedQuestion] = useState<{ id: number; question: string; answers: number; status: 'answered' | 'open' } | null>(null);
   const [selectedTool, setSelectedTool] = useState('query-builder');
   
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
   const { state, setState } = useHubState('arepo');
   const { queryHistory } = useCrossReferenceEngine();
 

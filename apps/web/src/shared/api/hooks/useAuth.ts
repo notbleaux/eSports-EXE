@@ -1,6 +1,6 @@
 /**
  * useAuth — OAuth authentication hook
- * Handles Google + Discord OAuth flows for NJZiteGeisTe Platform.
+ * Handles Google + Discord OAuth flows for EXE Platform.
  * [Ver001.000]
  */
 import { useCallback, useEffect, useState } from 'react';
@@ -27,8 +27,8 @@ export interface OAuthProvider {
 // STORAGE KEY
 // ============================================================================
 
-const STORAGE_KEY = 'njz_auth_token';
-const USER_KEY = 'njz_auth_user';
+const STORAGE_KEY = 'exe_auth_token';
+const USER_KEY = 'exe_auth_user';
 
 // ============================================================================
 // HELPERS

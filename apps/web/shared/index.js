@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Shared Components Index
+ * EXE Platform v2 - Shared Components Index
  * Central export for all shared components
  * 
  * @version 2.0.0

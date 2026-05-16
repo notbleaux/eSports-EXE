@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@njz/types': path.resolve(__dirname, '../../packages/@njz/types/src/index.ts'),
-      '@njz/ui': path.resolve(__dirname, '../../packages/@njz/ui/src/index.ts'),
+      '@esportexe/types': path.resolve(__dirname, '../../packages/@esportexe/types/src/index.ts'),
+      '@esportexe/ui': path.resolve(__dirname, '../../packages/@esportexe/ui/src/index.ts'),
     },
   },
   build: {

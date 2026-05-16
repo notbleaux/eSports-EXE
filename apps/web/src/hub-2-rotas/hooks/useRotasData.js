@@ -4,7 +4,7 @@
  * [Ver001.000]
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useNJZStore } from '@/shared/store/njzStore';
+import { useEXEStore } from '@/shared/store/njzStore';
 
 // Mock data for development - will be replaced with actual API calls
 const MOCK_ANALYTICS_DATA = {
@@ -111,7 +111,7 @@ function useRotasData(options = {}) {
   const intervalRef = useRef(null);
   
   // Get store actions
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
   
   /**
    * Fetch analytics data with caching

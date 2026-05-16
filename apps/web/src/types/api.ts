@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * API Types — NJZiteGeisTe Platform
+ * API Types — EXE Platform
  * 
  * TypeScript definitions aligned with FastAPI Pydantic schemas.
  * These types represent the complete API contract.

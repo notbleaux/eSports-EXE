@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - useFluidTransition Hook
+ * EXE Platform v2 - useFluidTransition Hook
  * Fluid, physics-based transitions using Framer Motion
  * 
  * @version 2.0.0

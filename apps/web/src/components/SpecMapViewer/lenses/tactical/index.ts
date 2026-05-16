@@ -16,8 +16,8 @@
  */
 
 // Export prediction interface and model
+export type { PredictionModel } from './predictionInterface'
 export {
-  PredictionModel,
   HeuristicPredictionModel,
   predictionModel,
   toPredictionState

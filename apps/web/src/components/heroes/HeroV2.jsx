@@ -140,7 +140,7 @@ export function HeroV2() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-sm uppercase tracking-[0.3em] text-pure-black/60 mb-6 font-medium"
             >
-              NJZiteGeisTe Platform v2.0
+              EXE Platform v2.0
             </motion.p>
 
             {/* Main Title */}
@@ -154,7 +154,7 @@ export function HeroV2() {
                 transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="block"
               >
-                NJZiteGeisTe
+                EXE
               </motion.span>
               <motion.span
                 initial={{ opacity: 0, y: 60 }}

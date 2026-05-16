@@ -1,10 +1,11 @@
-[Ver001.003]
+[Ver001.004]
 
 # Agent Contract — NJZ eSports Platform
 
 **Status:** ACTIVE — All agents operating in this repository are bound by this contract.
 **Supersedes:** `.agents/COORDINATION_PROTOCOL.md` (JLB-based system, archived)
-**Authority:** This contract + `MASTER_PLAN.md` + `CLAUDE.md` together form the agent operating framework.
+**Authority:** This contract + `MASTER_PLAN.md` + `CLAUDE.md` + `.agents/AGENT_ID_PROTOCOL.md` together form the agent operating framework.
+**Multi-Agent Context:** This repository currently operates with 3 active agent lineages: Claude (Anthropic), GitHub Copilot, and Kimi (Moonshot AI). All must coordinate through the Shared Context Framework defined in `.agents/COORDINATION_PROTOCOL.md`.
 
 ---
 
@@ -19,18 +20,46 @@ An agent MUST complete the 5-stage Session Lifecycle (full detail: `docs/ai-oper
 1. `MASTER_PLAN.md` — Current phase, what is in scope, what is not
 2. `.agents/PHASE_GATES.md` — Confirm the phase you are working on is unlocked
 3. `.agents/CODEOWNER_CHECKLIST.md` — Check for UNCLAIMED / PENDING USER_INPUT_REQUIRED. **If any exist for the current phase: STOP and report to user before proceeding.**
-4. `.agents/session/CONTEXT_FORWARD.md` — Previous session handoff (check DO NOT REDO list)
-5. `.agents/phase-logbooks/Phase-N-LOGBOOK.md` — Current phase history
-6. `.agents/SCHEMA_REGISTRY.md` — Check relevant types before creating any
-7. `CLAUDE.md` — Code conventions and commit format
+4. `.agents/COORDINATION_PROTOCOL.md` — Check for active shared contexts, claimed branches, and agent lock status
+5. `.agents/session/CONTEXT_FORWARD.md` — Previous session handoff (check DO NOT REDO list)
+6. `.agents/phase-logbooks/Phase-N-LOGBOOK.md` — Current phase history
+7. `.agents/SCHEMA_REGISTRY.md` — Check relevant types before creating any
+8. `CLAUDE.md` — Code conventions and commit format
+9. `.agents/AGENT_ID_PROTOCOL.md` — Current agent identity and counter state
 
-**Stage 3 — Plan:** Create `.agents/session/NOTEBOOK-YYYY-MM-DD.md` and `.agents/session/TODO-YYYY-MM-DD.md`. Sync TODO from the current phase checklist in MASTER_PLAN.md.
+**Stage 3 — Plan:** Create `.agents/session/NOTEBOOK-YYYY-MM-DD.md` and `.agents/session/TODO-YYYY-MM-DD.md`. Sync TODO from the current phase checklist in MASTER_PLAN.md. **If working in shared context:** Append your plan to the active Collaboration Runbook (`.agents/session/SHARED_CONTEXT.md` or `.agents/channels/broadcast/YYYY-MM-DD-shared.md`).
 
-**Stage 4 — Work:** Execute tasks. Run drift check before each new gate (re-read phase section in MASTER_PLAN.md; if what you're about to do is NOT there, stop and confirm).
+**Stage 4 — Work:** Execute tasks. Run drift check before each new gate (re-read phase section in MASTER_PLAN.md; if what you're about to do is NOT there, stop and confirm). **If another agent is active in shared context:** Check `.agents/active/` for lock files before modifying any non-owned domain.
 
-**Stage 5 — Close:** Update PHASE_GATES.md for completed gates. Append to Phase Logbook. Write CONTEXT_FORWARD. Run archiving/deletion final check.
+**Stage 5 — Close:** Update PHASE_GATES.md for completed gates. Append to Phase Logbook. Write CONTEXT_FORWARD. **Update the Collaboration Runbook with your completion summary.** Run archiving/deletion final check.
 
 If any of these files cannot be read (missing, corrupted), **stop and report** before proceeding.
+
+---
+
+## Multi-Agent Shared Context Rules (NEW)
+
+When ≥2 agents are concurrently active (Claude, Copilot, Kimi), the following rules apply:
+
+### Shared Context Declaration
+Before beginning work, an agent MUST check `.agents/active/` and `.agents/channels/broadcast/` for an active shared context declaration. If one exists, the agent MUST append its identity and intended workstream to the declaration rather than creating a new one.
+
+### Domain Ownership in Shared Context
+| Domain | Primary Owner | Shared Context Rule |
+|--------|--------------|---------------------|
+| `schema` | First agent to touch schema files | Lock required; schema changes must be committed before other domains can proceed |
+| `frontend` | Agent declared in shared context | Concurrent work allowed on **different** hub components; same file requires coordination |
+| `backend` | Agent declared in shared context | Same-file changes require lock; different endpoints can proceed in parallel |
+| `pipeline` | Single agent per ETL job | No concurrent pipeline work on same connector/transformer |
+| `infra` | First agent to claim CI/CD files | Lock required; workflow changes are high-friction |
+| `docs` | Any agent | Concurrent docs work allowed; merge conflicts resolved via CODEOWNER |
+| `test` | Parallel execution encouraged | Test files are low-friction; run tests independently |
+
+### Conflict Prevention in Shared Context
+1. **Pre-flight check:** Before any file modification, check if another agent has modified the same file in an unmerged PR
+2. **Staggered commits:** Agents in shared context should commit every 15-30 minutes (not batch at end) so others see changes incrementally
+3. **Broadcast significant changes:** Any change that affects >3 files or modifies a shared interface MUST be broadcast to `.agents/channels/broadcast/`
+4. **Merge-first rule:** When conflicts arise, the agent whose changes are smaller/more focused merges first; the other rebases
 
 ---
 
@@ -41,15 +70,17 @@ When dispatching a subagent, provide exactly this context — no more, no less:
 ```
 [Gate Number]: [N.X — name of gate]
 [Phase Status Summary]: From CONTEXT_FORWARD.md — current phase, last 3 PASSED gates, DO NOT REDO list
-[Task Description]: [specific, bounded task — one gate only]
+n[Task Description]: [specific, bounded task — one gate only]
 [Expected Deliverables]: [C1 measurable outcome] / [files to create or modify] / [verification command]
 [Commit Convention]: [type(scope): description [RISK-TAG]]
+[Shared Context Status]: [ACTIVE / NONE — if ACTIVE, reference .agents/session/SHARED_CONTEXT.md]
 ```
 
 **Never include in subagent payload:**
 - Full MASTER_PLAN.md (too large; provide only the current phase section if needed)
 - Full PHASE_GATES.md (provide only the current gate row)
 - Full AGENT_CONTRACT.md (subagents are dispatched workers, not coordinators)
+- Full COLLABORATION_RUNBOOK (provide only the current task row)
 
 **If subagent returns BLOCKED status:** Re-dispatch with the specific missing context added. Do not retry without change.
 
@@ -125,6 +156,8 @@ If your task requires changes in more than one domain:
 - Create `TODO.md`, `QUICK_FIX_GUIDE_*.md`, `IMPLEMENTATION_SUMMARY_*.md` at the root
 - Begin any task listed in `.agents/CODEOWNER_CHECKLIST.md` without that task showing `CLAIMED → ACTIVE` status confirmed by @notbleaux
 - Merge or approve a `[CRIT]` PR before the 24-hour hold period has elapsed after CODEOWNER approval
+- **In shared context:** Modify a file locked by another agent without coordination (see `.agents/COORDINATION_PROTOCOL.md`)
+- **In shared context:** Force-push to a branch that another agent is actively working on
 
 ---
 
@@ -139,6 +172,8 @@ If your task requires changes in more than one domain:
 - Reference schema types from `@njz/types` or `data/schemas/` — do not inline new types in component files
 - When adding a new API endpoint: update `docs/API_V1_DOCUMENTATION.md`
 - When adding a new service: add `README.md`, health check, and at least one unit test
+- **In shared context:** Sign off all commits with Agent ID per `.agents/AGENT_ID_PROTOCOL.md`
+- **In shared context:** Broadcast changes affecting >3 files to `.agents/channels/broadcast/`
 
 ---
 
@@ -169,11 +204,13 @@ Agents must use this terminology consistently:
 **How agents coordinate now:**
 1. Read `MASTER_PLAN.md` to understand current phase and priorities
 2. Read `.agents/PHASE_GATES.md` to confirm phase is unlocked
-3. Work within your declared domain
-4. After completing a significant unit of work, update `AGENTS.md` under the relevant phase section
-5. For parallel work, the schema boundary is the synchronization point — schema must be committed before dependent domains start
+3. Read `.agents/COORDINATION_PROTOCOL.md` to check shared context status
+4. Work within your declared domain
+5. After completing a significant unit of work, update `AGENTS.md` under the relevant phase section
+6. **In shared context:** Append progress to the active Collaboration Runbook
+7. For parallel work, the schema boundary is the synchronization point — schema must be committed before dependent domains start
 
-**There is no foreman, no lock system, no timing schedule.** The schema contract and phase gates are the coordination mechanism.
+**There is no foreman, no lock system, no timing schedule.** The schema contract, phase gates, and shared context declaration are the coordination mechanisms.
 
 ---
 
@@ -191,7 +228,9 @@ A task is complete when:
 - [ ] Session Notebook updated with decisions made
 - [ ] Session TODO items marked `[x]`
 - [ ] Stage 5 close completed: logbook appended, CONTEXT_FORWARD written
+- [ ] **If in shared context:** Collaboration Runbook updated with completion summary and next actions
 
 ---
 
 *Agents that ignore this contract produce drift. Drift compounds. The contract exists to prevent the accumulated mess that occurs when each agent improvises.*
+*In shared contexts, the Collaboration Runbook is the single source of truth for who is doing what right now.*

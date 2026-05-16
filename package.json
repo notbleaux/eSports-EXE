@@ -1,5 +1,5 @@
 {
-  "name": "njzitegeist-platform",
+  "name": "esportexe-platform",
   "version": "2.1.0",
   "description": "ZeSporteXte — Cross-game eSports analytics platform for Valorant and CS2",
   "private": true,
@@ -43,7 +43,7 @@
     "apps/*"
   ],
   "keywords": [
-    "njzitegeist",
+    "esportexe",
     "tenet",
     "esports",
     "tactical-fps",

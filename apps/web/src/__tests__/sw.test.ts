@@ -26,14 +26,14 @@ describe('Service Worker Utilities', () => {
   it('should define proper cache names', () => {
     // Cache names should follow versioning convention
     const cacheNames = {
-      static: '4njz4-grid-v1',
-      api: '4njz4-api-v1',
-      grid: '4njz4-grid-render-v1'
+      static: '4exe4-grid-v1',
+      api: '4exe4-api-v1',
+      grid: '4exe4-grid-render-v1'
     }
     
-    expect(cacheNames.static).toContain('4njz4')
-    expect(cacheNames.api).toContain('4njz4')
-    expect(cacheNames.grid).toContain('4njz4')
+    expect(cacheNames.static).toContain('4exe4')
+    expect(cacheNames.api).toContain('4exe4')
+    expect(cacheNames.grid).toContain('4exe4')
   })
 
   it('should define static assets to cache', () => {

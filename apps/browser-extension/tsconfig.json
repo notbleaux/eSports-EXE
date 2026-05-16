@@ -14,8 +14,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@njz/types": ["../../packages/@njz/types/src/index.ts"],
-      "@njz/websocket-client": ["../../packages/@njz/websocket-client/src/index.ts"]
+      "@esportexe/types": ["../../packages/@esportexe/types/src/index.ts"],
+      "@esportexe/websocket-client": ["../../packages/@esportexe/websocket-client/src/index.ts"]
     }
   },
   "include": ["src"]

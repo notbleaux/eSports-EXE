@@ -66,7 +66,7 @@ function extractEntryEvents(
         killer: kill.killer,
         victim: kill.victim,
         timestamp: kill.timestamp,
-        isFirstBlood: kill.isFirstBlood,
+        isFirstBlood: kill.isFirstBlood ?? false,
         isOpeningKill,
         weapon: kill.weapon,
         team,
@@ -155,6 +155,7 @@ function calculateEntryStats(events: EntryEvent[]): {
 }
 
 export const entrySuccessLens: Lens = {
+  id: 'entry-success',
   name: 'entry-success',
   displayName: 'Entry Success',
   description: 'Shows first contact outcomes. Green = Attacker entry success, Red = Defender stop. Size indicates significance.',
@@ -162,7 +163,7 @@ export const entrySuccessLens: Lens = {
 
   defaultOptions: {
     opacity: 0.8,
-    color: 'rgb(34, 197, 94)',
+    colors: { primary: 'rgb(34, 197, 94)' },
     blendMode: 'source-over',
     animationSpeed: 1,
     showLabels: true
@@ -191,7 +192,7 @@ export const entrySuccessLens: Lens = {
       : entryEvents
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 1
 
     // Cluster entries by location
     const clusters = clusterEntryEvents(filteredEvents)

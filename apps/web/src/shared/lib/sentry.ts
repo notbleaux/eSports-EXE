@@ -1,5 +1,5 @@
 /**
- * Sentry integration — NJZiteGeisTe Platform
+ * Sentry integration — EXE Platform
  *
  * Graceful no-op when VITE_SENTRY_DSN is not set.
  * To activate: set VITE_SENTRY_DSN in .env.local

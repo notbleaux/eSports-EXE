@@ -14,8 +14,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@njz/types": ["../../packages/@njz/types/src/index.ts"],
-      "@njz/ui": ["../../packages/@njz/ui/src/index.ts"]
+      "@esportexe/types": ["../../packages/@esportexe/types/src/index.ts"],
+      "@esportexe/ui": ["../../packages/@esportexe/ui/src/index.ts"]
     }
   },
   "include": ["src"]

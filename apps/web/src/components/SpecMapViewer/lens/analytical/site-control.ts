@@ -30,7 +30,7 @@ interface ControlZone {
   name: string
   center: Vector2D
   radius: number
-  type: 'site' | 'mid' | 'chokepoint'
+  type: 'site' | 'chokepoint' | 'mid'
 }
 
 /** Control event for a zone */
@@ -47,18 +47,15 @@ interface ControlEvent {
 function getDefaultZones(mapName: string): ControlZone[] {
   // Simplified zone definitions - would be map-specific in production
   return [
-    { id: 'a-site', name: 'A Site', center: { x: 200, y: 200 }, radius: 120, type: 'site' },
-    { id: 'b-site', name: 'B Site', center: { x: 800, y: 800 }, radius: 120, type: 'site' },
-    { id: 'mid', name: 'Mid', center: { x: 500, y: 500 }, radius: 100, type: 'mid' },
-    { id: 'a-main', name: 'A Main', center: { x: 100, y: 300 }, radius: 80, type: 'chokepoint' },
-    { id: 'b-main', name: 'B Main', center: { x: 900, y: 700 }, radius: 80, type: 'chokepoint' }
+    { id: 'a-site', name: 'A Site', center: { x: 200, y: 200 }, radius: 120, type: 'site' as const },
+    { id: 'b-site', name: 'B Site', center: { x: 800, y: 800 }, radius: 120, type: 'site' as const },
+    { id: 'mid', name: 'Mid Control', center: { x: 500, y: 500 }, radius: 100, type: 'mid' as const },
+    { id: 'a-main', name: 'A Main', center: { x: 100, y: 200 }, radius: 80, type: 'chokepoint' as const },
+    { id: 'b-main', name: 'B Main', center: { x: 900, y: 800 }, radius: 80, type: 'chokepoint' as const }
   ]
 }
 
-/**
- * Calculate control events from game data
- * Analyzes player positions and kill events to determine zone control
- */
+/** Calculate control events from game data */
 function calculateControlEvents(
   data: GameData,
   zones: ControlZone[],
@@ -71,33 +68,33 @@ function calculateControlEvents(
   zones.forEach(zone => {
     // Analyze player positions in zone
     const positionsInZone = data.playerPositions.filter(player => {
-      return player.positions.some(pos => {
+      return player.positions?.some(pos => {
         const dx = pos.x - zone.center.x
         const dy = pos.y - zone.center.y
         return Math.sqrt(dx * dx + dy * dy) < zone.radius
-      })
+      }) ?? false
     })
 
     // Count players by team
     const attackers = positionsInZone.filter(p => p.team === 'attackers').length
     const defenders = positionsInZone.filter(p => p.team === 'defenders').length
 
-    // Determine control
-    let team: ControlEvent['team']
-    let strength = 0
+    // Determine control state
+    let team: ControlEvent['team'] = 'contested'
+    let strength = 0.5
 
-    if (attackers > 0 && defenders > 0) {
-      team = 'contested'
-      strength = Math.min(attackers, defenders) / Math.max(attackers, defenders)
-    } else if (attackers > defenders) {
+    if (attackers > 0 && defenders === 0) {
       team = 'attackers'
-      strength = Math.min(1, attackers / 3)
-    } else if (defenders > attackers) {
+      strength = Math.min(attackers / 3, 1.0)
+    } else if (defenders > 0 && attackers === 0) {
       team = 'defenders'
-      strength = Math.min(1, defenders / 3)
+      strength = Math.min(defenders / 3, 1.0)
     } else {
-      team = 'defenders' // Default to defenders if empty
-      strength = 0.3
+      // Contested - strength based on ratio
+      const total = attackers + defenders
+      if (total > 0) {
+        strength = Math.max(attackers, defenders) / total
+      }
     }
 
     events.push({
@@ -106,16 +103,14 @@ function calculateControlEvents(
       startTime,
       endTime: currentTime,
       strength,
-      playerCount: attackers + defenders
+      playerCount: positionsInZone.length
     })
   })
 
   return events
 }
 
-/**
- * Get color for team control
- */
+/** Get color for team control */
 function getTeamColor(team: ControlEvent['team'], strength: number): string {
   const alpha = 0.3 + strength * 0.4
 
@@ -127,13 +122,11 @@ function getTeamColor(team: ControlEvent['team'], strength: number): string {
     case 'contested':
       return `rgba(168, 85, 247, ${alpha})` // Purple
     default:
-      return `rgba(156, 163, 175, ${alpha})` // Gray
+      return `rgba(128, 128, 128, ${alpha})`
   }
 }
 
-/**
- * Get border color for team control
- */
+/** Get border color for team control */
 function getTeamBorderColor(team: ControlEvent['team']): string {
   switch (team) {
     case 'attackers':
@@ -143,11 +136,12 @@ function getTeamBorderColor(team: ControlEvent['team']): string {
     case 'contested':
       return '#a855f7'
     default:
-      return '#9ca3af'
+      return '#808080'
   }
 }
 
 export const siteControlLens: Lens = {
+  id: 'site-control',
   name: 'site-control',
   displayName: 'Site Control',
   description: 'Shows site ownership over time. Blue = Defender control, Red = Attacker control, Purple = Contested.',
@@ -155,8 +149,8 @@ export const siteControlLens: Lens = {
 
   defaultOptions: {
     opacity: 0.6,
-    color: 'rgb(59, 130, 246)',
-    blendMode: 'source-over',
+    colors: { primary: 'rgb(59, 130, 246)' },
+    blendMode: 'source-over' as const,
     animationSpeed: 1,
     showLabels: true
   },
@@ -175,12 +169,12 @@ export const siteControlLens: Lens = {
       minControlTime = 2000
     } = options || {}
 
-    const zones = getDefaultZones(data.metadata.mapName)
+    const zones = getDefaultZones((data.metadata?.mapName as string) ?? '')
     const currentTime = Date.now()
     const events = calculateControlEvents(data, zones, currentTime, timeWindow)
 
     ctx.save()
-    ctx.globalAlpha = mergedOptions.opacity
+    ctx.globalAlpha = mergedOptions.opacity ?? 1
 
     zones.forEach(zone => {
       const event = events.find(e => e.zoneId === zone.id)
@@ -247,9 +241,9 @@ export const siteControlLens: Lens = {
         const countX = x + radius - 15
         const countY = y - radius + 15
 
-        ctx.fillStyle = event.team === 'attackers' ? '#ef4444' : '#3b82f6'
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
         ctx.beginPath()
-        ctx.arc(countX, countY, 12, 0, Math.PI * 2)
+        ctx.arc(countX, countY, 10, 0, Math.PI * 2)
         ctx.fill()
 
         ctx.fillStyle = 'white'
@@ -258,118 +252,75 @@ export const siteControlLens: Lens = {
         ctx.textBaseline = 'middle'
         ctx.fillText(event.playerCount.toString(), countX, countY)
       }
-
-      // Draw transition arrows if enabled
-      if (showTransitions) {
-        drawControlTransition(ctx, zone, event, events)
-      }
     })
 
-    // Draw control flow lines between zones
+    // Draw transition arrows if enabled
     if (showTransitions) {
-      drawControlFlow(ctx, zones, events)
+      drawTransitionArrows(ctx, events, zones, currentTime, minControlTime)
+    }
+
+    // Draw percentage indicators if enabled
+    if (showPercentages) {
+      drawPercentageIndicators(ctx, events, zones)
     }
 
     ctx.restore()
   }
 }
 
-/**
- * Draw control transition indicators
- */
-function drawControlTransition(
+/** Draw arrows showing control transitions */
+function drawTransitionArrows(
   ctx: CanvasRenderingContext2D,
-  zone: ControlZone,
-  event: ControlEvent,
-  allEvents: ControlEvent[]
+  events: ControlEvent[],
+  zones: ControlZone[],
+  currentTime: number,
+  minControlTime: number
 ): void {
-  // Check for control changes (simplified - would need historical data)
-  const arrowSize = 15
-  const x = zone.center.x
-  const y = zone.center.y + zone.radius + 20
+  // Simplified transition visualization
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+  ctx.lineWidth = 2
+  ctx.setLineDash([3, 3])
 
-  ctx.fillStyle = event.team === 'attackers' ? '#ef4444' : '#3b82f6'
+  events.forEach(event => {
+    if (event.endTime - event.startTime < minControlTime) return
 
-  // Draw directional indicator based on control direction
-  ctx.beginPath()
-  if (event.team === 'attackers') {
-    // Arrow pointing in (attackers pushing)
-    ctx.moveTo(x - arrowSize, y - arrowSize)
-    ctx.lineTo(x, y)
-    ctx.lineTo(x + arrowSize, y - arrowSize)
-  } else {
-    // Arrow pointing out (defenders holding)
-    ctx.moveTo(x - arrowSize, y)
-    ctx.lineTo(x, y + arrowSize)
-    ctx.lineTo(x + arrowSize, y)
-  }
-  ctx.strokeStyle = ctx.fillStyle
-  ctx.lineWidth = 3
-  ctx.stroke()
+    const zone = zones.find(z => z.id === event.zoneId)
+    if (!zone) return
+
+    // Draw small arrow indicating control direction
+    const angle = (currentTime / 1000) % (Math.PI * 2)
+    const arrowLength = 20
+    const x = zone.center.x + Math.cos(angle) * (zone.radius - 10)
+    const y = zone.center.y + Math.sin(angle) * (zone.radius - 10)
+
+    ctx.beginPath()
+    ctx.moveTo(x, y)
+    ctx.lineTo(
+      x + Math.cos(angle + Math.PI / 4) * arrowLength,
+      y + Math.sin(angle + Math.PI / 4) * arrowLength
+    )
+    ctx.stroke()
+  })
+
+  ctx.setLineDash([])
 }
 
-/**
- * Draw control flow between connected zones
- */
-function drawControlFlow(
+/** Draw percentage indicators for control strength */
+function drawPercentageIndicators(
   ctx: CanvasRenderingContext2D,
-  zones: ControlZone[],
-  events: ControlEvent[]
+  events: ControlEvent[],
+  zones: ControlZone[]
 ): void {
-  // Define zone connections
-  const connections = [
-    { from: 'a-main', to: 'a-site' },
-    { from: 'b-main', to: 'b-site' },
-    { from: 'mid', to: 'a-site' },
-    { from: 'mid', to: 'b-site' }
-  ]
+  ctx.fillStyle = 'white'
+  ctx.font = 'bold 14px sans-serif'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
 
-  connections.forEach(conn => {
-    const fromZone = zones.find(z => z.id === conn.from)
-    const toZone = zones.find(z => z.id === conn.to)
-    const fromEvent = events.find(e => e.zoneId === conn.from)
-    const toEvent = events.find(e => e.zoneId === conn.to)
+  events.forEach(event => {
+    const zone = zones.find(z => z.id === event.zoneId)
+    if (!zone) return
 
-    if (!fromZone || !toZone || !fromEvent || !toEvent) return
-
-    // Draw flow line if different teams control connected zones
-    if (fromEvent.team !== toEvent.team && fromEvent.team !== 'contested' && toEvent.team !== 'contested') {
-      const x1 = fromZone.center.x
-      const y1 = fromZone.center.y
-      const x2 = toZone.center.x
-      const y2 = toZone.center.y
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)'
-      ctx.lineWidth = 2
-      ctx.setLineDash([8, 4])
-      ctx.beginPath()
-      ctx.moveTo(x1, y1)
-      ctx.lineTo(x2, y2)
-      ctx.stroke()
-      ctx.setLineDash([])
-
-      // Draw flow direction arrow
-      const midX = (x1 + x2) / 2
-      const midY = (y1 + y2) / 2
-      const angle = Math.atan2(y2 - y1, x2 - x1)
-
-      ctx.fillStyle = fromEvent.team === 'attackers' ? '#ef4444' : '#3b82f6'
-      ctx.beginPath()
-      ctx.moveTo(
-        midX + Math.cos(angle) * 10,
-        midY + Math.sin(angle) * 10
-      )
-      ctx.lineTo(
-        midX + Math.cos(angle + 2.5) * 8,
-        midY + Math.sin(angle + 2.5) * 8
-      )
-      ctx.lineTo(
-        midX + Math.cos(angle - 2.5) * 8,
-        midY + Math.sin(angle - 2.5) * 8
-      )
-      ctx.fill()
-    }
+    const percentage = Math.round(event.strength * 100)
+    ctx.fillText(`${percentage}%`, zone.center.x, zone.center.y + zone.radius + 20)
   })
 }
-
-export default siteControlLens

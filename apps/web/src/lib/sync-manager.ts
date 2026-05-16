@@ -112,7 +112,7 @@ export class SyncManager {
     if (!isConnected) {
       // On disconnect, mark live data as stale
       this.queryClient.setQueryDefaults(
-        { queryKey: [queryKeys.matches.live()] },
+        queryKeys.matches.live(),
         { staleTime: 0 }
       );
     } else {

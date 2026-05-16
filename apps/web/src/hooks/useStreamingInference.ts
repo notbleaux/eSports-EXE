@@ -15,9 +15,13 @@ export interface StreamingInferenceOptions {
 }
 
 export interface Prediction {
+  id?: string
   timestamp: number
   confidence: number
   result: unknown
+  latencyMs?: number
+  input?: unknown
+  output?: unknown
 }
 
 export interface StreamingInferenceResult {

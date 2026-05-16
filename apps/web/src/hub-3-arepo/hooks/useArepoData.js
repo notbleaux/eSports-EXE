@@ -7,7 +7,7 @@
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { createLogger } from '@/utils/logger';
-import { useNJZStore } from '@/shared/store/njzStore';
+import { useEXEStore } from '@/shared/store/njzStore';
 import { 
   searchAll, 
   searchPlayers, 
@@ -36,7 +36,7 @@ const MOCK_DOCUMENTATION = [
     id: 1, 
     title: 'Platform Overview', 
     category: 'getting-started', 
-    content: 'Comprehensive overview of the NJZiteGeisTe platform...',
+    content: 'Comprehensive overview of the EXE platform...',
     lastUpdated: '2026-03-10',
     views: 2400
   },
@@ -135,7 +135,7 @@ export function useArepoData(options = {}) {
     debounceMs = 300
   } = options;
 
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
   const abortControllerRef = useRef(null);
   
   // State
@@ -514,7 +514,7 @@ export function useArepoData(options = {}) {
  * Enables cross-hub queries between SATOR and OPERA
  */
 export function useCrossReferenceEngine() {
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
   
   // State
   const [isLoading, setIsLoading] = useState(false);
@@ -797,7 +797,7 @@ export function useCrossReferenceEngine() {
 export function useDocument(docId) {
   const [document, setDocument] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
 
   const fetchDocument = useCallback(async () => {
     if (!docId) return;
@@ -833,7 +833,7 @@ export function useDocument(docId) {
 export function useQuestion(questionId) {
   const [question, setQuestion] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const addNotification = useNJZStore(state => state.addNotification);
+  const addNotification = useEXEStore(state => state.addNotification);
 
   const fetchQuestion = useCallback(async () => {
     if (!questionId) return;

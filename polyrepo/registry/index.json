@@ -1,0 +1,158 @@
+{
+  "_meta": {
+    "schema_version": "0.1.0",
+    "doc_version": "[Ver001.001]",
+    "name": "NJZPL Central PolyRepo Registry — Interim",
+    "long_term_home": "notbleaux/njzpl-registry (TBD — bootstrap when NeXeZ-core exists)",
+    "interim_home": "polyrepo/registry/index.json (this file, in notbleaux/ZeSporteXte)",
+    "owner": "AGENT_ID_PROTOCOL.md",
+    "protocol": ".agents/AGENT_ID_PROTOCOL.md",
+    "lineage_discovery": ".agents/lineage-discovery.yaml",
+    "phase": 0,
+    "enforcement": "advisory",
+    "last_updated": "2026-05-16",
+    "updated_by": "agent://kimi/k2-6/20260516-1/A0001"
+  },
+  "repos": {
+    "ZSXT": {
+      "kind": "repo",
+      "next": 1,
+      "github_path": "notbleaux/ZeSporteXte",
+      "short_code": "ZSXT",
+      "long_name": "ZeSporteXte",
+      "project": "ZSXT",
+      "portfolio": "NJZPL"
+    }
+  },
+  "agents": {
+    "claude": {
+      "lineage_short": "CLA",
+      "next": 7,
+      "session_count": 1,
+      "scope": "AGENT-CLA",
+      "_note": "Actions: PR #44 creation (A0001-A0005), PR #45 creation (A0006), registry counter bump (A0007). Next counter reflects consumed actions."
+    },
+    "copilot": {
+      "lineage_short": "COP",
+      "next": 1,
+      "session_count": 0,
+      "scope": "AGENT-COP",
+      "_note": "Actions: PR #20, PR #21 opened. No sign-off per Phase 0 advisory — counter gap is visible signal."
+    },
+    "kimi": {
+      "lineage_short": "KMI",
+      "next": 2,
+      "session_count": 1,
+      "scope": "AGENT-KMI",
+      "_note": "Actions: Governance framework update (A0001 — this registry update). Active in shared context with Claude + Copilot."
+    },
+    "gpt": {
+      "lineage_short": "GPT",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-GPT"
+    },
+    "gemini": {
+      "lineage_short": "GEM",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-GEM"
+    },
+    "mimo": {
+      "lineage_short": "MMO",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-MMO"
+    },
+    "hermes": {
+      "lineage_short": "HRM",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-HRM"
+    },
+    "qwen": {
+      "lineage_short": "QWN",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-QWN"
+    }
+  },
+  "projects": {
+    "ZSXT": {
+      "next": 2,
+      "kind": "project",
+      "repos": ["ZSXT"],
+      "portfolio": "NJZPL"
+    },
+    "NEXEZ-CORE": {
+      "next": 0,
+      "kind": "project",
+      "repos": [],
+      "portfolio": "NJZPL",
+      "status": "not-yet-bootstrapped"
+    },
+    "NEXEZ-CODON": {
+      "next": 0,
+      "kind": "project",
+      "repos": [],
+      "portfolio": "NJZPL",
+      "status": "not-yet-bootstrapped"
+    }
+  },
+  "plans": {
+    "PLN-001-rename": {
+      "next": 24,
+      "title": "Post-rename cleanup tail",
+      "status": "shipped",
+      "delivered_in": "PR #43"
+    },
+    "PLN-002-agent-id": {
+      "next": 6,
+      "title": "Agent ID + Lineage Protocol — Phase 0 (advisory)",
+      "status": "shipped",
+      "delivered_in": "PR #44"
+    },
+    "PLN-003-network-api": {
+      "next": 0,
+      "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
+      "status": "scoped",
+      "blocking_prerequisites": [
+        "user-provisioned Cloud VPS",
+        "OpenRouter API key",
+        "registered domain"
+      ]
+    },
+    "PLN-004-playwright-sprint": {
+      "next": 1,
+      "title": "Playwright E2E Diagnostic + Remediation Sprint",
+      "status": "unblocked",
+      "delivered_in": "PR #45",
+      "depends_on": "PLN-001-rename",
+      "blocks": [],
+      "owner": "TBD"
+    },
+    "PLN-005-multi-agent-governance": {
+      "next": 1,
+      "title": "Multi-Agent Shared Context Framework v1.1",
+      "status": "in-progress",
+      "delivered_in": "kimi governance session",
+      "depends_on": "PLN-002-agent-id",
+      "blocks": [],
+      "owner": "kimi"
+    }
+  },
+  "portfolio": {
+    "next": 8,
+    "scope": "NJZPL",
+    "long_name": "NJZ NeXeZ Portfolio",
+    "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
+  },
+  "public_keys": {
+    "_comment": "ECDSA secp256k1 public keys per agent_id (uncompressed HEX, '04' prefix). Phase 1 adds the first entries. Phase 0 ships the empty container.",
+    "agent_claude_code_local": null,
+    "agent_copilot_swe_agent": null,
+    "agent_kimi_claw_worker": null,
+    "agent_mimo_hermes_cloud": null,
+    "agent_hermes_host": null
+  }
+}

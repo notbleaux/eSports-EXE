@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * TypeScript Type Definitions Index — NJZiteGeisTe Platform
+ * TypeScript Type Definitions Index — EXE Platform
  * 
  * Comprehensive TypeScript coverage for all API contracts.
  * These types are aligned with FastAPI Pydantic schemas.
@@ -31,7 +31,7 @@ export type {
   CS2Economy,
   isValorantNode,
   isCS2Node,
-} from '@njz/types';
+} from '@esportexe/types';
 
 export type {
   // TeneT Protocol types
@@ -61,7 +61,7 @@ export type {
   SourceDataPayload,
   TenetDirectoryEntry,
   DataTierRequirement,
-} from '@njz/types';
+} from '@esportexe/types';
 
 export type {
   // Live data types
@@ -83,7 +83,7 @@ export type {
   WsEconomyMessage,
   WsMatchEndMessage,
   WsHeartbeatMessage,
-} from '@njz/types';
+} from '@esportexe/types';
 
 export type {
   // Legacy data types
@@ -100,7 +100,7 @@ export type {
   PlayerSeasonStats,
   TournamentRecord,
   SimRatingEntry,
-} from '@njz/types';
+} from '@esportexe/types';
 
 // ============================================================================
 // Animation Types

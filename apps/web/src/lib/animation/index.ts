@@ -1,3 +1,15 @@
+import {
+  AnimationState,
+  DEFAULT_TRANSITIONS,
+  DEFAULT_STATE_CONFIGS,
+  PRIORITY_WEIGHTS,
+} from './states';
+
+import type {
+  AnimationSequence,
+  AnimationStep,
+} from './sequencer';
+
 /** [Ver001.000]
  * Animation Library Index
  * =======================
@@ -42,7 +54,7 @@ export {
 } from './sequencer';
 
 // ============================================================================
-// State Types & Configurations
+// Type Exports
 // ============================================================================
 
 export type {
@@ -63,13 +75,15 @@ export type {
   StateMachineOptions,
 } from './states';
 
+// ============================================================================
+// Value Exports
+// ============================================================================
+
 export {
   DEFAULT_STATE_CONFIGS,
   DEFAULT_TRANSITIONS,
   PRIORITY_WEIGHTS,
 } from './states';
-
-export type { MascotId } from './states';
 
 // ============================================================================
 // Blend Tree System

@@ -2,7 +2,7 @@
  * useMinimapFrames Hook
  *
  * TanStack Query hook for fetching paginated minimap frames.
- * Part of Phase 9: Minimap Feature for NJZiteGeisTe Platform.
+ * Part of Phase 9: Minimap Feature for EXE Platform.
  *
  * Tasks: MF-6, MF-8 - Initial implementation + Real API integration
  *

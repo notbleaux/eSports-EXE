@@ -2,7 +2,7 @@
  *
  * MobileAccessible Components
  * 
- * Mobile accessibility wrapper components and utilities for the NJZiteGeisTe Platform.
+ * Mobile accessibility wrapper components and utilities for the EXE Platform.
  * Provides screen reader announcements, focus management, and mobile-optimized
  * accessibility patterns.
  * 

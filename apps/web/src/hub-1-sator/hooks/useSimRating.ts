@@ -1,5 +1,5 @@
 /** [Ver001.000]
- * useSimRating Hook for NJZiteGeisTe Platform
+ * useSimRating Hook for EXE Platform
  * Hook for calculating SimRating with Web Worker support
  * 
  * Features:

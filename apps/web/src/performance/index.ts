@@ -13,12 +13,12 @@
  */
 
 // Monitors
-export { FPSMonitor, getGlobalFPSMonitor, disposeGlobalFPSMonitor } from './FPSMonitor'
-export { MemoryMonitor, getGlobalMemoryMonitor, disposeGlobalMemoryMonitor } from './MemoryMonitor'
+export { FPSMonitor } from './FPSMonitor'
+export { MemoryMonitor } from './MemoryMonitor'
 
 // Web Vitals
-export { createWebVitalsReporter, initWebVitals, WEB_VITALS_THRESHOLDS } from './webVitals'
-export type { WebVitalName, WebVitalRating, WebVitalEntry } from './webVitals'
+export { THRESHOLDS as WEB_VITALS_THRESHOLDS } from './webVitals'
+export type { WebVitalName, WebVitalMetric, WebVitalsReport } from './webVitals'
 
 // Legacy exports (for backward compatibility)
 export { PerformanceDashboard } from './PerformanceDashboard'

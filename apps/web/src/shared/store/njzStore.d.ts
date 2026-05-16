@@ -1,14 +1,14 @@
 /**
- * NJZ Store Types
+ * EXE Store Types
  * [Ver001.000]
  */
 import type { StoreApi } from 'zustand';
 
-export interface NJZState {
+export interface EXEState {
   addNotification: (message: string, type?: 'info' | 'success' | 'warning' | 'error') => void;
 }
 
-export declare const useNJZStore: <T>(selector: (state: NJZState) => T) => T;
+export declare const useEXEStore: <T>(selector: (state: EXEState) => T) => T;
 
 export interface HubState {
   state: Record<string, unknown>;

@@ -71,7 +71,7 @@ export const OfflineFallback: React.FC = () => {
             resolve(event.data?.data || null)
           }
           
-          navigator.serviceWorker.controller.postMessage(
+          navigator.serviceWorker.controller?.postMessage(
             { type: 'GET_CACHED_PLAYER', playerId: 'all' },
             [messageChannel.port2]
           )
@@ -251,7 +251,7 @@ export const OfflineFallback: React.FC = () => {
         {/* Footer */}
         <div className="px-6 py-3 bg-[#0a0a0f] border-t border-[#2a2a3a] text-center">
           <p className="text-xs text-gray-600">
-            NJZiteGeisTe Platform • Offline Mode
+            EXE Platform • Offline Mode
           </p>
         </div>
       </div>

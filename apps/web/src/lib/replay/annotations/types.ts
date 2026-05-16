@@ -8,6 +8,9 @@
 
 import type { Position2D } from '../types';
 
+// Re-export Position2D for consumers
+export type { Position2D } from '../types';
+
 // ============================================================================
 // Core Annotation Types
 // ============================================================================

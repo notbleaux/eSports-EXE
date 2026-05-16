@@ -108,8 +108,8 @@ async function createShareLink(
       const id = `share-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
       resolve({
         id,
-        url: `https://4njz4.app/replay/${replayId}?share=${id}`,
-        shortUrl: `https://4njz.app/s/${id.slice(-8)}`,
+        url: `https://4exe4.app/replay/${replayId}?share=${id}`,
+        shortUrl: `https://4exe.app/s/${id.slice(-8)}`,
         config,
         createdAt: Date.now(),
         expiresAt: config.expiresIn ? Date.now() + config.expiresIn * 3600000 : undefined,

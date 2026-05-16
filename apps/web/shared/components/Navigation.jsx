@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Navigation Component
+ * EXE Platform v2 - Navigation Component
  * Glassmorphic navigation with fluid animations
  * 
  * @version 2.0.0
@@ -84,7 +84,7 @@ const mobileMenuVariants = {
 
 export function Navigation({
   links = [],
-  logo = 'NJZ',
+  logo = 'EXE',
   logoComponent = null,
   glassEffect = true,
   fixed = true,
@@ -130,10 +130,10 @@ export function Navigation({
   };
 
   const navClasses = [
-    'njz-nav',
-    fixed && 'njz-nav--fixed',
-    scrolled && 'njz-nav--scrolled',
-    glassEffect && 'njz-nav--glass',
+    'exe-nav',
+    fixed && 'exe-nav--fixed',
+    scrolled && 'exe-nav--scrolled',
+    glassEffect && 'exe-nav--glass',
     className,
   ].filter(Boolean).join(' ');
 
@@ -147,35 +147,35 @@ export function Navigation({
         variants={navVariants}
         {...props}
       >
-        <div className="njz-nav__container">
+        <div className="exe-nav__container">
           {/* Logo */}
           <motion.a
             href="/"
-            className="njz-nav__logo"
+            className="exe-nav__logo"
             variants={itemVariants}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={(e) => handleLinkClick('/', e)}
           >
             {logoComponent || (
-              <span className="njz-nav__logo-text">{logo}</span>
+              <span className="exe-nav__logo-text">{logo}</span>
             )}
           </motion.a>
 
           {/* Desktop Navigation */}
-          <motion.ul className="njz-nav__links" variants={navVariants}>
+          <motion.ul className="exe-nav__links" variants={navVariants}>
             {links.map((link, index) => (
               <motion.li
                 key={link.href || index}
-                className="njz-nav__item"
+                className="exe-nav__item"
                 variants={itemVariants}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 <motion.a
                   href={link.href}
-                  className={`njz-nav__link ${
-                    activePath === link.href ? 'njz-nav__link--active' : ''
+                  className={`exe-nav__link ${
+                    activePath === link.href ? 'exe-nav__link--active' : ''
                   }`}
                   target={link.external ? '_blank' : undefined}
                   rel={link.external ? 'noopener noreferrer' : undefined}
@@ -184,15 +184,15 @@ export function Navigation({
                   whileTap={{ y: 0 }}
                 >
                   {link.icon && (
-                    <span className="njz-nav__link-icon">{link.icon}</span>
+                    <span className="exe-nav__link-icon">{link.icon}</span>
                   )}
-                  <span className="njz-nav__link-text">{link.label}</span>
+                  <span className="exe-nav__link-text">{link.label}</span>
                   
                   {/* Hover indicator */}
                   <AnimatePresence>
                     {hoveredIndex === index && (
                       <motion.span
-                        className="njz-nav__link-indicator"
+                        className="exe-nav__link-indicator"
                         layoutId="navIndicator"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -207,13 +207,13 @@ export function Navigation({
           </motion.ul>
 
           {/* Actions */}
-          <motion.div className="njz-nav__actions" variants={itemVariants}>
+          <motion.div className="exe-nav__actions" variants={itemVariants}>
             {actions}
           </motion.div>
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="njz-nav__mobile-toggle"
+            className="exe-nav__mobile-toggle"
             onClick={() => setMobileOpen(!mobileOpen)}
             variants={itemVariants}
             whileHover={{ scale: 1.1 }}
@@ -221,7 +221,7 @@ export function Navigation({
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
           >
-            <span className={`njz-nav__hamburger ${mobileOpen ? 'is-open' : ''}`}>
+            <span className={`exe-nav__hamburger ${mobileOpen ? 'is-open' : ''}`}>
               <span />
               <span />
               <span />
@@ -235,39 +235,39 @@ export function Navigation({
         {mobileOpen && (
           <>
             <motion.div
-              className="njz-nav__mobile-overlay"
+              className="exe-nav__mobile-overlay"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
-              className="njz-nav__mobile-menu"
+              className="exe-nav__mobile-menu"
               initial="closed"
               animate="open"
               exit="closed"
               variants={mobileMenuVariants}
             >
-              <motion.ul className="njz-nav__mobile-links">
+              <motion.ul className="exe-nav__mobile-links">
                 {links.map((link, index) => (
                   <motion.li
                     key={link.href || index}
-                    className="njz-nav__mobile-item"
+                    className="exe-nav__mobile-item"
                     variants={itemVariants}
                   >
                     <motion.a
                       href={link.href}
-                      className={`njz-nav__mobile-link ${
-                        activePath === link.href ? 'njz-nav__mobile-link--active' : ''
+                      className={`exe-nav__mobile-link ${
+                        activePath === link.href ? 'exe-nav__mobile-link--active' : ''
                       }`}
                       target={link.external ? '_blank' : undefined}
                       rel={link.external ? 'noopener noreferrer' : undefined}
                       onClick={(e) => handleLinkClick(link.href, e)}
                       whileHover={{ x: 10 }}
                     >
-                      <span className="njz-nav__mobile-link-text">{link.label}</span>
+                      <span className="exe-nav__mobile-link-text">{link.label}</span>
                       <motion.span
-                        className="njz-nav__mobile-link-arrow"
+                        className="exe-nav__mobile-link-arrow"
                         initial={{ x: -10, opacity: 0 }}
                         whileHover={{ x: 0, opacity: 1 }}
                       >
@@ -280,7 +280,7 @@ export function Navigation({
 
               {actions && (
                 <motion.div
-                  className="njz-nav__mobile-actions"
+                  className="exe-nav__mobile-actions"
                   variants={itemVariants}
                 >
                   {actions}
@@ -292,7 +292,7 @@ export function Navigation({
       </AnimatePresence>
 
       <style>{`
-        .njz-nav {
+        .exe-nav {
           position: ${fixed ? 'fixed' : 'relative'};
           top: 0;
           left: 0;
@@ -302,11 +302,11 @@ export function Navigation({
           transition: all 0.3s ease;
         }
 
-        .njz-nav--fixed {
+        .exe-nav--fixed {
           position: fixed;
         }
 
-        .njz-nav--glass {
+        .exe-nav--glass {
           background: linear-gradient(
             to bottom,
             rgba(10, 10, 15, 0.9) 0%,
@@ -317,13 +317,13 @@ export function Navigation({
           -webkit-backdrop-filter: blur(20px);
         }
 
-        .njz-nav--scrolled {
+        .exe-nav--scrolled {
           background: rgba(26, 26, 36, 0.8);
           box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .njz-nav__container {
+        .exe-nav__container {
           max-width: 1440px;
           margin: 0 auto;
           padding: 0 24px;
@@ -333,7 +333,7 @@ export function Navigation({
           justify-content: space-between;
         }
 
-        .njz-nav__logo {
+        .exe-nav__logo {
           display: flex;
           align-items: center;
           text-decoration: none;
@@ -344,14 +344,14 @@ export function Navigation({
           letter-spacing: -0.02em;
         }
 
-        .njz-nav__logo-text {
+        .exe-nav__logo-text {
           background: linear-gradient(135deg, #00f0ff, #ffffff);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
 
-        .njz-nav__links {
+        .exe-nav__links {
           display: none;
           list-style: none;
           gap: 8px;
@@ -360,16 +360,16 @@ export function Navigation({
         }
 
         @media (min-width: 768px) {
-          .njz-nav__links {
+          .exe-nav__links {
             display: flex;
           }
         }
 
-        .njz-nav__item {
+        .exe-nav__item {
           position: relative;
         }
 
-        .njz-nav__link {
+        .exe-nav__link {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -384,15 +384,15 @@ export function Navigation({
           position: relative;
         }
 
-        .njz-nav__link:hover {
+        .exe-nav__link:hover {
           color: #ffffff;
         }
 
-        .njz-nav__link--active {
+        .exe-nav__link--active {
           color: #00f0ff;
         }
 
-        .njz-nav__link-indicator {
+        .exe-nav__link-indicator {
           position: absolute;
           bottom: 0;
           left: 50%;
@@ -404,19 +404,19 @@ export function Navigation({
           box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
-        .njz-nav__actions {
+        .exe-nav__actions {
           display: none;
           align-items: center;
           gap: 12px;
         }
 
         @media (min-width: 768px) {
-          .njz-nav__actions {
+          .exe-nav__actions {
             display: flex;
           }
         }
 
-        .njz-nav__mobile-toggle {
+        .exe-nav__mobile-toggle {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -430,19 +430,19 @@ export function Navigation({
         }
 
         @media (min-width: 768px) {
-          .njz-nav__mobile-toggle {
+          .exe-nav__mobile-toggle {
             display: none;
           }
         }
 
-        .njz-nav__hamburger {
+        .exe-nav__hamburger {
           display: flex;
           flex-direction: column;
           gap: 5px;
           width: 20px;
         }
 
-        .njz-nav__hamburger span {
+        .exe-nav__hamburger span {
           display: block;
           height: 2px;
           background: #ffffff;
@@ -451,19 +451,19 @@ export function Navigation({
           transform-origin: center;
         }
 
-        .njz-nav__hamburger.is-open span:nth-child(1) {
+        .exe-nav__hamburger.is-open span:nth-child(1) {
           transform: translateY(7px) rotate(45deg);
         }
 
-        .njz-nav__hamburger.is-open span:nth-child(2) {
+        .exe-nav__hamburger.is-open span:nth-child(2) {
           opacity: 0;
         }
 
-        .njz-nav__hamburger.is-open span:nth-child(3) {
+        .exe-nav__hamburger.is-open span:nth-child(3) {
           transform: translateY(-7px) rotate(-45deg);
         }
 
-        .njz-nav__mobile-overlay {
+        .exe-nav__mobile-overlay {
           position: fixed;
           inset: 0;
           background: rgba(10, 10, 15, 0.8);
@@ -471,7 +471,7 @@ export function Navigation({
           z-index: 199;
         }
 
-        .njz-nav__mobile-menu {
+        .exe-nav__mobile-menu {
           position: fixed;
           top: 0;
           right: 0;
@@ -485,7 +485,7 @@ export function Navigation({
           border-left: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .njz-nav__mobile-links {
+        .exe-nav__mobile-links {
           list-style: none;
           padding: 0;
           margin: 0;
@@ -494,7 +494,7 @@ export function Navigation({
           gap: 8px;
         }
 
-        .njz-nav__mobile-link {
+        .exe-nav__mobile-link {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -507,11 +507,11 @@ export function Navigation({
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .njz-nav__mobile-link--active {
+        .exe-nav__mobile-link--active {
           color: #00f0ff;
         }
 
-        .njz-nav__mobile-actions {
+        .exe-nav__mobile-actions {
           margin-top: 32px;
           padding-top: 32px;
           border-top: 1px solid rgba(255, 255, 255, 0.08);

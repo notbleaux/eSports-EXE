@@ -1,5 +1,5 @@
 /** [Ver002.000]
- * Worker Hooks Index for NJZiteGeisTe Platform
+ * Worker Hooks Index for EXE Platform
  * Export all worker-related hooks
  */
 

@@ -2,7 +2,7 @@
  * Schema Validator
  * 
  * JSON Schema validation, type checking, required field validation, and custom validators
- * for NJZiteGeisTe Platform data ingestion.
+ * for EXE Platform data ingestion.
  * 
  * [Ver001.000]
  * 

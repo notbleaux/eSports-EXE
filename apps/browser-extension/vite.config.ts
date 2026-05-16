@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@njz/types': path.resolve(__dirname, '../../packages/@njz/types/src/index.ts'),
-      '@njz/websocket-client': path.resolve(__dirname, '../../packages/@njz/websocket-client/src/index.ts'),
+      '@esportexe/types': path.resolve(__dirname, '../../packages/@esportexe/types/src/index.ts'),
+      '@esportexe/websocket-client': path.resolve(__dirname, '../../packages/@esportexe/websocket-client/src/index.ts'),
     },
   },
   build: {

@@ -7,12 +7,6 @@
 
 // Knowledge Graph Service
 export { KnowledgeGraph } from './knowledgeGraph';
-export type {
-  HelpTopic,
-  HelpCategory,
-  KnowledgeGraphSearchFilters,
-  KnowledgeGraphRecommendationContext,
-} from './knowledgeGraph';
 
 // Search Engine Service
 export { HelpSearchEngine } from './searchEngine';

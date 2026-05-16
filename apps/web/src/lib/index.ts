@@ -15,8 +15,8 @@ export type { ApiError, RequestConfig } from './api-client';
 export * from './easing';
 
 // Worker utilities
-export { createWorker, terminateWorker, wrapWorker } from './worker-utils';
-export type { WorkerWrapper, WorkerMessage } from './worker-utils';
+export { WorkerPool, workerPerformance } from './worker-utils';
+export type { WorkerMessage } from '../types/worker';
 
 // ML Loader - Dynamic TensorFlow.js loading
 export {

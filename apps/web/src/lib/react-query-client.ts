@@ -57,9 +57,9 @@ export function createQueryClient(): QueryClient {
           Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff, max 30s
 
         // Refetch behavior
-        refetchOnWindowFocus: 'stale', // Only refetch if data is stale
-        refetchOnReconnect: 'stale',
-        refetchOnMount: 'stale',
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchOnMount: true,
 
         // Abort signal handling
         throwOnError: true,
@@ -129,7 +129,7 @@ export function setupPerformanceMonitoring(
   slowQueryThreshold = 5000
 ) {
   const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
-    if (event.type === 'success' && event.query.getObserversCount() > 0) {
+    if (event.type === 'updated' && 'query' in event && event.query.getObserversCount() > 0) {
       const duration = Date.now() - (event.query.state.dataUpdatedAt || 0);
 
       if (duration > slowQueryThreshold) {

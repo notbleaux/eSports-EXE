@@ -1,5 +1,5 @@
 /**
- * NJZiteGeisTe Platform Color Palette
+ * EXE Platform Color Palette
  *
  * [Ver002.000] - Updated hub colors to object format with base/glow/muted
  * SATOR (Cyan) | ROTAS (Red) | AREPO (Yellow) | OPERA (Magenta) | TENET (Purple)

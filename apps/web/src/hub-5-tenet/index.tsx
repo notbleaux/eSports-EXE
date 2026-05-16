@@ -17,7 +17,7 @@ import {
 import { GlassCard } from '@/components/ui/GlassCard';
 import { colors } from '@/theme/colors';
 import HubWrapper from '@/shared/components/HubWrapper';
-import { useNJZStore } from '@/shared/store/njzStore';
+import { useEXEStore } from '@/shared/store/njzStore';
 import { PanelSkeleton } from '@/components/grid/PanelSkeleton';
 import ControlPanel from './components/ControlPanel';
 import useTENETData from './hooks/useTENETData';
@@ -45,7 +45,7 @@ const QUICK_STATS = [
 ];
 
 function TENETHubContent(): React.ReactElement {
-  const { addNotification } = useNJZStore();
+  const { addNotification } = useEXEStore();
   const {
     systemStatus,
     logs,
@@ -111,7 +111,7 @@ function TENETHubContent(): React.ReactElement {
           >
             <Command className="w-4 h-4" style={{ color: HUB_CONFIG.color }} />
             <span className="text-sm font-mono font-medium" style={{ color: HUB_CONFIG.color }}>
-              NJZiteGeisTe Platform
+              EXE Platform
             </span>
           </div>
         </motion.div>
@@ -197,7 +197,7 @@ function TENETHubContent(): React.ReactElement {
               <p className="text-sm text-gray-300 leading-relaxed">
                 The SATOR Square is a five-layer palindromic structure that reads the same
                 forwards, backwards, and from any direction. Each ring represents one of the
-                five hubs in the NJZiteGeisTe Platform.
+                five hubs in the EXE Platform.
               </p>
             </div>
           </GlassCard>

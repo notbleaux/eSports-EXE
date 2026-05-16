@@ -328,8 +328,7 @@ export class UniformManager {
       case 'mat2':
       case 'mat3':
       case 'mat4':
-        return value instanceof THREE.Matrix2 ||
-               value instanceof THREE.Matrix3 ||
+        return value instanceof THREE.Matrix3 ||
                value instanceof THREE.Matrix4;
       case 'sampler2D':
       case 'samplerCube':
@@ -363,7 +362,7 @@ export abstract class BaseShader {
   protected startTime: number;
 
   // Shared cache instance
-  protected static cache = new ShaderCache();
+  public static cache = new ShaderCache();
 
   constructor(config: BaseShaderConfig) {
     this.config = {

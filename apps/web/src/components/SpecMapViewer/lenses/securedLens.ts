@@ -122,7 +122,7 @@ export const securedLens: Lens = {
 function calculateSiteControl(data: GameData): SiteControl[] {
   const controls: SiteControl[] = []
   const { playerPositions, killEvents, metadata } = data
-  const currentTime = metadata.matchTime
+  const currentTime = (metadata?.matchTime as number) ?? 0
 
   // Analyze each site
   (['A', 'B'] as const).forEach(site => {

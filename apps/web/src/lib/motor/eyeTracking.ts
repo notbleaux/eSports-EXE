@@ -117,6 +117,7 @@ class EyeTrackingManager {
   private status: EyeTrackingStatus = 'inactive';
   private calibrationStatus: CalibrationStatus = 'unstarted';
   private currentGaze: GazePoint | null = null;
+  private currentDwellTarget: DwellTarget | null = null;
   private smoother: GazeSmoother = new GazeSmoother();
   private videoElement: HTMLVideoElement | null = null;
   private canvasElement: HTMLCanvasElement | null = null;

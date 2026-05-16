@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Button Component
+ * EXE Platform v2 - Button Component
  * Multi-variant button with fluid animations
  * 
  * @version 2.0.0
@@ -127,7 +127,7 @@ export function Button({
       {/* Loading spinner */}
       {loading && (
         <motion.span
-          className="njz-button__spinner"
+          className="exe-button__spinner"
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         >
@@ -137,18 +137,18 @@ export function Button({
 
       {/* Leading icon */}
       {icon && !loading && (
-        <span className="njz-button__icon njz-button__icon--left">
+        <span className="exe-button__icon exe-button__icon--left">
           {icon}
         </span>
       )}
 
       {/* Button text */}
-      <span className="njz-button__text">{children}</span>
+      <span className="exe-button__text">{children}</span>
 
       {/* Trailing icon */}
       {iconRight && (
         <motion.span 
-          className="njz-button__icon njz-button__icon--right"
+          className="exe-button__icon exe-button__icon--right"
           animate={{ x: isHovered ? 4 : 0 }}
           transition={{ type: 'spring', stiffness: 400 }}
         >
@@ -157,12 +157,12 @@ export function Button({
       )}
 
       {/* Ripple effect container */}
-      <span className="njz-button__ripple" />
+      <span className="exe-button__ripple" />
 
       {/* Gradient overlay for hover */}
       {variant === 'glass' && (
         <motion.span
-          className="njz-button__overlay"
+          className="exe-button__overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered ? 1 : 0 }}
           style={{
@@ -175,13 +175,13 @@ export function Button({
 
   const commonProps = {
     className: `
-      njz-button 
-      njz-button--${variant} 
-      njz-button--${size}
-      ${loading ? 'njz-button--loading' : ''}
-      ${isDisabled ? 'njz-button--disabled' : ''}
-      ${fullWidth ? 'njz-button--full' : ''}
-      ${magnetic ? 'njz-button--magnetic' : ''}
+      exe-button 
+      exe-button--${variant} 
+      exe-button--${size}
+      ${loading ? 'exe-button--loading' : ''}
+      ${isDisabled ? 'exe-button--disabled' : ''}
+      ${fullWidth ? 'exe-button--full' : ''}
+      ${magnetic ? 'exe-button--magnetic' : ''}
       ${className}
     `,
     style: {

@@ -248,7 +248,7 @@ export function HeroSection({
   secondaryCta = { label: 'View Documentation', href: '/docs' },
   className,
   label = 'Platform v2.0 Live',
-  titleLine1 = 'NJZiteGeisTe',
+  titleLine1 = 'EXE',
   titleLine2 = 'Platform',
   subtitle = 'Navigate through five interconnected hubs. Each quadrant holds a universe of esports data, analytics, and intelligence.',
 }: HeroSectionProps) {

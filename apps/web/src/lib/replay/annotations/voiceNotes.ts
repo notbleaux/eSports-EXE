@@ -225,7 +225,7 @@ export async function generateWaveformFromBlob(
 /**
  * Get real-time audio levels for visualization during recording
  */
-export function getAudioLevel(analyser: AnalyserNode, dataArray: Uint8Array): number {
+export function getAudioLevel(analyser: AnalyserNode, dataArray: any): number {
   analyser.getByteFrequencyData(dataArray);
   
   let sum = 0;
@@ -241,7 +241,7 @@ export function getAudioLevel(analyser: AnalyserNode, dataArray: Uint8Array): nu
  */
 export function getRealtimeWaveform(
   analyser: AnalyserNode,
-  dataArray: Uint8Array,
+  dataArray: any,
   samples: number = 50
 ): number[] {
   analyser.getByteTimeDomainData(dataArray);

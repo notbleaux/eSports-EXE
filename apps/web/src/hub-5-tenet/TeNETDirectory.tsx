@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { WorldPortCard } from '@njz/ui';
+import { WorldPortCard } from '@esportexe/ui';
 
 const WORLD_PORTS = [
   {
@@ -95,7 +95,7 @@ export function TeNETDirectory() {
       {/* Breadcrumb / Status */}
       <div className="fixed bottom-10 left-10 hidden md:block">
         <div className="flex items-center gap-4 text-[10px] font-mono font-bold uppercase tracking-widest text-white/20">
-          <span>NJZ Ecosystem</span>
+          <span>EXE Ecosystem</span>
           <span>/</span>
           <span className="text-white/60">TeNET Directory</span>
         </div>

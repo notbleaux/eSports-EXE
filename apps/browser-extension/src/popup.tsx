@@ -1,23 +1,23 @@
 /**
- * NJZ Browser Extension — Popup
+ * EXE Browser Extension — Popup
  * Quick-view live match scores for supported games.
  *
- * Phase 5 stub — imports @njz/types and @njz/websocket-client (gate 5.4).
+ * Phase 5 stub — imports @esportexe/types and @esportexe/websocket-client (gate 5.4).
  * Full implementation planned for Phase 5 (Month 3+).
  * [Ver001.000]
  */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { NjzWebSocketClient } from '@njz/websocket-client'
+import { ExeWebSocketClient } from '@esportexe/websocket-client'
 
 // Demonstrate import usage (gate 5.4 compliance)
-const _clientFactory = (url: string) => new NjzWebSocketClient({ baseUrl: url })
+const _clientFactory = (url: string) => new ExeWebSocketClient({ baseUrl: url })
 
 function Popup() {
   return (
     <div style={{ padding: '1.5rem', background: '#0a0a0f', color: '#fff', fontFamily: 'monospace', minHeight: '300px' }}>
       <div style={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)', marginBottom: '1rem' }}>
-        NJZ eSports Extension
+        EXE eSports Extension
       </div>
       <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
         Live Match Feed

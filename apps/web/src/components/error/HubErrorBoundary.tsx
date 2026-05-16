@@ -185,8 +185,8 @@ export class HubErrorBoundary extends Component<Props, State> {
     // Clear hub-specific state from storage
     const { hubName } = this.props
     try {
-      localStorage.removeItem(`njz_${hubName}_state`)
-      sessionStorage.removeItem(`njz_${hubName}_session`)
+      localStorage.removeItem(`exe_${hubName}_state`)
+      sessionStorage.removeItem(`exe_${hubName}_session`)
     } catch (e) {
       logger.warn(`[HubErrorBoundary:${hubName}] Failed to clear storage:`, e)
     }

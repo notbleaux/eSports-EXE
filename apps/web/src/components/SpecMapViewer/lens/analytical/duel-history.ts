@@ -100,6 +100,7 @@ function calculateLocationWinRate(
 }
 
 export const duelHistoryLens: Lens = {
+  id: 'duel-history',
   name: 'duel-history',
   displayName: 'Duel History',
   description: 'Shows 1v1 win/loss locations. Green = win, Red = loss. Circle size indicates duel significance.',

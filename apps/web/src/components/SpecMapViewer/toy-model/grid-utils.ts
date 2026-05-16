@@ -17,7 +17,7 @@ import type {
 import bindGridData from './bind-grid.json';
 
 // Export the bind grid data as default
-export const bindGrid: MapGridData = bindGridData as MapGridData;
+export const bindGrid: MapGridData = bindGridData as unknown as MapGridData;
 
 /**
  * Get cell at specific coordinates

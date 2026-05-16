@@ -2,7 +2,7 @@
 /**
  * Push Notifications Service
  * ==========================
- * Web Push Protocol client implementation for NJZiteGeisTe Platform.
+ * Web Push Protocol client implementation for EXE Platform.
  * 
  * Handles:
  * - Browser permission requests
@@ -485,7 +485,7 @@ export async function updatePreferences(
  */
 export async function sendTestNotification(
   title: string = 'Test Notification',
-  body: string = 'This is a test notification from NJZiteGeisTe Platform'
+  body: string = 'This is a test notification from EXE Platform'
 ): Promise<boolean> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/notifications/test`, {

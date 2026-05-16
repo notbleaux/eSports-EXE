@@ -12,7 +12,7 @@
  */
 
 import { logger } from '../../../utils/logger';
-import type { LiveEvent, LiveEventType, LiveMatchState } from '../types';
+import type { LiveEvent, LiveEventData, LiveEventType, LiveMatchState } from '../types';
 
 const connectorLogger = logger.child('SourceConnectors');
 
@@ -90,7 +90,7 @@ export interface MockConfig extends SourceConfig {
 // Base Connector Class
 // =============================================================================
 
-abstract class BaseConnector implements SourceConnector {
+export abstract class BaseConnector implements SourceConnector {
   public id: string;
   public config: SourceConfig;
   public health: SourceHealth;
@@ -382,8 +382,15 @@ export class PandascoreConnector extends BaseConnector {
               data: {
                 matchId: String(m.id),
                 status: 'live',
-                map: g.map || 'unknown',
-              },
+                map: String(g.map || 'unknown'),
+                teamAId: 'team_a',
+                teamBId: 'team_b',
+                teamAScore: 0,
+                teamBScore: 0,
+                teamARoundsWon: [],
+                teamBRoundsWon: [],
+                currentHalf: 1,
+              } as LiveEventData,
               source: 'official',
               confidence: 0.95,
             });
@@ -406,7 +413,10 @@ export class PandascoreConnector extends BaseConnector {
                 teamBId: String(r.team_id || 'team_b'),
                 teamAScore: Number(r.score || 0),
                 teamBScore: Number(r.score || 0),
-              },
+                teamARoundsWon: [],
+                teamBRoundsWon: [],
+                currentHalf: 1,
+              } as LiveEventData,
               source: 'official',
               confidence: 0.95,
             });
@@ -685,7 +695,7 @@ export class FileUploadConnector extends BaseConnector {
     eventNodes.forEach((node, index) => {
       const event: Record<string, unknown> = { id: index };
       
-      node.attributes.forEach(attr => {
+      Array.from(node.attributes).forEach(attr => {
         event[attr.name] = attr.value;
       });
 
@@ -714,7 +724,7 @@ export class FileUploadConnector extends BaseConnector {
       matchId: String(d.matchId || 'unknown'),
       timestamp: String(d.timestamp || new Date().toISOString()),
       round: d.round ? Number(d.round) : undefined,
-      data: d.data || {},
+      data: (d.data || {}) as LiveEventData,
       source: (d.source as LiveEvent['source']) || 'community',
       confidence: Number(d.confidence) || 0.5,
     };
@@ -819,7 +829,7 @@ export class MockConnector extends BaseConnector {
       matchId: matchIds[Math.floor(Math.random() * matchIds.length)],
       timestamp: new Date().toISOString(),
       round: Math.floor(Math.random() * 24) + 1,
-      data: {},
+      data: {} as LiveEventData,
       source: 'simulation',
       confidence: 0.8 + Math.random() * 0.2,
     };
@@ -836,7 +846,7 @@ export class MockConnector extends BaseConnector {
           headshot: Math.random() < 0.3,
           wallbang: Math.random() < 0.1,
           throughSmoke: Math.random() < 0.05,
-        };
+        } as LiveEventData;
         break;
       
       case 'spike_plant':
@@ -844,7 +854,7 @@ export class MockConnector extends BaseConnector {
         baseEvent.data = {
           playerId: players[Math.floor(Math.random() * players.length)],
           teamId: teams[Math.floor(Math.random() * teams.length)],
-        };
+        } as LiveEventData;
         break;
       
       case 'economy_update':
@@ -881,7 +891,10 @@ export class MockConnector extends BaseConnector {
           teamBId: teams[1],
           teamAScore: Math.floor(Math.random() * 13),
           teamBScore: Math.floor(Math.random() * 13),
-        };
+          teamARoundsWon: [],
+          teamBRoundsWon: [],
+          currentHalf: 1,
+        } as LiveEventData;
         break;
     }
 

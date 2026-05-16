@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - useAbyssalGradient Hook
+ * EXE Platform v2 - useAbyssalGradient Hook
  * Animated gradient background with abyssal theme
  * 
  * @version 2.0.0

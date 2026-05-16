@@ -1,5 +1,5 @@
 /**
- * Zustand store for NJZ Platform state management
+ * Zustand store for eSports-EXE Platform state management
  * Handles navigation, hub states, twin-file integrity, and UI preferences
  */
 import { create } from 'zustand'
@@ -89,7 +89,7 @@ const initialTwinFileState = {
 }
 
 // Create store with persistence
-export const useNJZStore = create(
+export const useEXEStore = create(
   persist(
     (set, get) => ({
       // Navigation state
@@ -208,7 +208,7 @@ export const useNJZStore = create(
       }
     }),
     {
-      name: 'njz-platform-storage',
+      name: 'exe-platform-storage',
       partialize: (state) => ({
         preferences: state.preferences,
         navigationHistory: state.navigationHistory
@@ -219,7 +219,7 @@ export const useNJZStore = create(
 
 // Hook for hub-specific state
 export const useHubState = (hubId) => {
-  const store = useNJZStore()
+  const store = useEXEStore()
   return {
     state: store.hubStates[hubId] || {},
     setState: (updates) => store.setHubState(hubId, updates)
@@ -228,7 +228,7 @@ export const useHubState = (hubId) => {
 
 // Hook for twin-file integrity
 export const useTwinFile = () => {
-  const store = useNJZStore()
+  const store = useEXEStore()
   return {
     raws: store.twinFile.raws,
     base: store.twinFile.base,
@@ -238,4 +238,4 @@ export const useTwinFile = () => {
   }
 }
 
-export default useNJZStore
+export default useEXEStore

@@ -266,7 +266,7 @@ export function useSmoothScrub(options: UseSmoothScrubOptions) {
     const container = containerRef.current;
     if (!container) return;
 
-    const touch = 'touches' in e ? e.touches[0] : e.changedTouches[0];
+    const touch = e.touches[0];
     const rect = container.getBoundingClientRect();
     const progress = (touch.clientX - rect.left) / rect.width;
     targetProgressRef.current = Math.max(0, Math.min(1, progress));
@@ -335,6 +335,7 @@ export interface PerformanceMetrics {
   frameTime: number;
   scrubLatency: number;
   memoryUsage?: number;
+  recordScrubLatency?: (latencyMs: number) => void;
 }
 
 export function usePerformanceMetrics(): PerformanceMetrics {

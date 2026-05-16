@@ -1,5 +1,5 @@
 /**
- * NJZ Platform v2 - Transition Utilities
+ * EXE Platform v2 - Transition Utilities
  * Page transitions and state change animations
  * 
  * @version 2.0.0

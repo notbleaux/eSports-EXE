@@ -27,7 +27,7 @@ function Footer() {
                 <Zap className="w-5 h-5 text-void-black" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-xl">NJZ ¿!? Platform</h3>
+                <h3 className="font-display font-bold text-xl">EXE ¿!? Platform</h3>
               </div>
             </div>
             
@@ -123,7 +123,7 @@ function Footer() {
 
         <div className="mt-12 pt-8 border-t border-mist flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-slate">
-            © 2025 NJZ Platform. Twin-file integrity system. All rights reserved.
+            © 2025 eSports-EXE Platform. Twin-file integrity system. All rights reserved.
           </p>
           
           <div className="flex items-center gap-6">

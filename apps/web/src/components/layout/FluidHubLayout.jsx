@@ -1,6 +1,6 @@
 /**
  * FluidHubLayout - Wrapper for all HUBs with adaptive features
- * Uses new fluid.js utilities + NJZiteGeisTe viscous SFX
+ * Uses new fluid.js utilities + EXE viscous SFX
  */
 
 import React from 'react';
@@ -49,7 +49,7 @@ export function FluidHubLayout({ hub = 'tenet', children }) {
       className="min-h-screen bg-gradient-to-br from-void to-abyss relative"
       style={{ '--hub-glow': theme.glow }}
     >
-      {/* NJZiteGeisTe Viscous Background */}
+      {/* EXE Viscous Background */}
       {!reducedMotion && <AnimatedBackground className="fixed inset-0 z-0 opacity-30" />}
 
       {/* Lensing Controls - Latin Square Panel */}

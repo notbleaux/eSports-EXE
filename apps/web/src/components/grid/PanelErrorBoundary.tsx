@@ -25,7 +25,7 @@ const HUB_COLORS = {
   TENET: colors.hub.tenet.base,
 };
 
-type HubType = 'SATOR' | 'ROTAS' | 'AREPO' | 'OPERA' | 'TENET';
+export type HubType = 'SATOR' | 'ROTAS' | 'AREPO' | 'OPERA' | 'TENET';
 
 /** Props for ErrorDisplay component */
 interface ErrorDisplayProps {

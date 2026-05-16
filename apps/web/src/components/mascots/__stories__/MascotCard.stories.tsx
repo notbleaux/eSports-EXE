@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /** [Ver001.000]
  * MascotCard Stories
  * ==================

@@ -7,7 +7,7 @@
  * Team: Replay 2.0 Core (TL-S2)
  */
 
-import type { Replay, GameType, Player, Team, KillEvent, GameEvent } from '../types';
+import type { Replay, GameType, ReplayPlayer as Player, Team, KillEvent, GameEvent } from '../types';
 
 // ============================================================================
 // Metadata Types

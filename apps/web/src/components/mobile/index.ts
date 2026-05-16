@@ -2,7 +2,7 @@
  * Mobile Components Index
  * [Ver003.000] - Mobile UI Components with Screen Reader Support
  * 
- * Export all mobile-specific components for the NJZiteGeisTe Platform.
+ * Export all mobile-specific components for the EXE Platform.
  * These components are optimized for touch interactions, PWA experiences,
  * and mobile screen reader accessibility (VoiceOver/TalkBack).
  */

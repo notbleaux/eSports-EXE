@@ -93,7 +93,7 @@ jobs:
           COUNT=$(grep -r "^interface\|^type " apps/web/src --include="*.ts" --include="*.tsx" | grep -v "node_modules\|@types" | wc -l)
           echo "Found $COUNT inline type definitions in frontend"
           if [ $COUNT -gt 10 ]; then
-            echo "❌ Too many inline types. Import from @njz/types instead."
+            echo "❌ Too many inline types. Import from @esportexe/types instead."
             exit 1
           fi
 

@@ -4,7 +4,7 @@
  */
 
 export { 
-  default as useNJZStore, 
+  default as useEXEStore, 
   HUBS,
   useHubState,
   useTwinFile 

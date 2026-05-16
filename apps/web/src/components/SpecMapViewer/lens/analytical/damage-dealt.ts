@@ -74,6 +74,7 @@ function getDamageRadius(damage: number): number {
 }
 
 export const damageDealtLens: Lens = {
+  id: 'damage-dealt',
   name: 'damage-dealt',
   displayName: 'Damage Dealt',
   description: 'Shows damage distribution. Size = damage amount, Color = severity (Red = critical, Gray = light).',

@@ -2,7 +2,7 @@
  *
  * Breakpoint System for Mobile-First Responsive Design
  * 
- * Provides consistent breakpoint values and hooks for the NJZiteGeisTe Platform.
+ * Provides consistent breakpoint values and hooks for the EXE Platform.
  * Integrates with Tailwind CSS breakpoints for seamless responsive layouts.
  * 
  * @module mobile/breakpoints

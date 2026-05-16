@@ -1,7 +1,7 @@
 /**
  * Data Validation and Cleaning System
  * 
- * Comprehensive data validation and cleaning for NJZiteGeisTe Platform.
+ * Comprehensive data validation and cleaning for EXE Platform.
  * 
  * [Ver001.000]
  * 

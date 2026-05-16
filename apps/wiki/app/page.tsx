@@ -1,7 +1,7 @@
 /**
- * NJZ Wiki — Home Page
+ * EXE Wiki — Home Page
  *
- * Entry page for the NJZ eSports media and knowledge base.
+ * Entry page for the eSports-EXE media and knowledge base.
  * Renders game world entries for Valorant and CS2.
  * [Ver001.000]
  */
@@ -25,10 +25,10 @@ export default function WikiHome() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 2rem' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-        NJZ Knowledge Base
+        EXE Knowledge Base
       </h1>
       <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '2.5rem' }}>
-        Guides, stats, and editorial content for the NJZ eSports community.
+        Guides, stats, and editorial content for the eSports-EXE community.
       </p>
 
       <div style={{ display: 'grid', gap: '1rem' }}>

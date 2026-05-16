@@ -13,7 +13,7 @@ import type {
   BombPlantEvent,
   BombDefuseEvent,
   RoundEndEvent,
-  Player,
+  ReplayPlayer as Player,
   Team,
   Round,
   Position3D,
@@ -89,6 +89,8 @@ export const DETECTION_CONFIG = {
   MULTIPLIERS: {
     HEADSHOT: 1.3,
     WALLBANG: 1.4,
+    OPENING_KILL: 1.2,
+    TRADE_KILL: 1.2,
     CLUTCH_1v1: 1.5,
     CLUTCH_1v2: 2.0,
     CLUTCH_1v3_PLUS: 2.5,

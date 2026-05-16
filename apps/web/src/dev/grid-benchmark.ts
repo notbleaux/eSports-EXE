@@ -29,7 +29,7 @@ export interface BenchmarkSuite {
   baseline?: BenchmarkResult
 }
 
-const STORAGE_KEY = '4njz4-grid-benchmarks'
+const STORAGE_KEY = '4exe4-grid-benchmarks'
 
 /**
  * Measure render time for specific panel count

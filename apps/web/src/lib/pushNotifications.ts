@@ -6,7 +6,8 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const rawData = atob(base64);
-  return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  const output = Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  return output as unknown as Uint8Array;
 }
 
 export async function requestPushPermission(): Promise<NotificationPermission> {
@@ -28,10 +29,10 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
 
     return reg.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as unknown as BufferSource,
     });
   } catch (err) {
-    console.warn('[NJZ Push] Subscription failed:', err);
+    console.warn('[EXE Push] Subscription failed:', err);
     return null;
   }
 }

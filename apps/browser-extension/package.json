@@ -1,5 +1,5 @@
 {
-  "name": "@njz/browser-extension",
+  "name": "@esportexe/browser-extension",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -11,8 +11,8 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@njz/types": "workspace:*",
-    "@njz/websocket-client": "workspace:*"
+    "@esportexe/types": "workspace:*",
+    "@esportexe/websocket-client": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.2.2",

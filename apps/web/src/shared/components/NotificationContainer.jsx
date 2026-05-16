@@ -5,10 +5,10 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, AlertCircle, Info, X } from 'lucide-react'
-import { useNJZStore } from '../store/njzStore'
+import { useEXEStore } from '../store/njzStore'
 
 function NotificationContainer() {
-  const notifications = useNJZStore(state => state.notifications)
+  const notifications = useEXEStore(state => state.notifications)
   const notificationsArray = Array.isArray(notifications) ? notifications : []
 
   return (

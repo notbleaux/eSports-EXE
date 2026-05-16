@@ -2,7 +2,7 @@
  * Validation Pipeline
  * 
  * Multi-stage validation, error aggregation, repair suggestions, and validation reporting
- * for NJZiteGeisTe Platform data ingestion.
+ * for EXE Platform data ingestion.
  * 
  * [Ver001.000]
  * 

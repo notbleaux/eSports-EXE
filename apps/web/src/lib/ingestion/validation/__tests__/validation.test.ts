@@ -2,7 +2,7 @@
  * Validation System Tests
  * 
  * Comprehensive test suite for data validation and cleaning system
- * for NJZiteGeisTe Platform.
+ * for EXE Platform.
  * 
  * [Ver001.000]
  * 

@@ -1,5 +1,5 @@
 /** [Ver001.001] - Exported UseWorkerOptions and UseWorkerReturn types
- * useWorker Hook for NJZiteGeisTe Platform
+ * useWorker Hook for EXE Platform
  * Generic worker management hook with lifecycle handling
  */
 

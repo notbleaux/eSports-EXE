@@ -13,7 +13,21 @@
  */
 
 // ============================================================================
-// Type Exports
+// Lens Function Imports (for unified interface)
+// ============================================================================
+
+import { calculate as calculateVisionCone, render as renderVisionCone } from './vision-cone'
+import { calculate as calculateCrossfire, render as renderCrossfire } from './crossfire-analysis'
+import { calculate as calculateRetakeEfficiency, render as renderRetakeEfficiency } from './retake-efficiency'
+import { calculate as calculateEntryFragging, render as renderEntryFragging } from './entry-fragging'
+import { calculate as calculatePostPlant, render as renderPostPlant } from './post-plant'
+import { calculate as calculateFakeDetection, render as renderFakeDetection } from './fake-detection'
+import { calculate as calculateAnchorPerformance, render as renderAnchorPerformance } from './anchor-performance'
+import { calculate as calculateLurkEffectiveness, render as renderLurkEffectiveness } from './lurk-effectiveness'
+import type { LensResult, LensRenderOptions, TacticalLensData, Player, MapBounds, Site } from './tactical-types'
+
+// ============================================================================
+// Type Exports (all from tactical-types.ts)
 // ============================================================================
 
 export * from './tactical-types'
@@ -23,8 +37,6 @@ export * from './tactical-types'
 // ============================================================================
 
 export {
-  calculate as calculateVisionCone,
-  render as renderVisionCone,
   isPositionVisible,
   getConeOverlap,
   DEFAULT_FOV,
@@ -32,20 +44,11 @@ export {
   VISION_COLORS
 } from './vision-cone'
 
-export type {
-  VisionConeOptions,
-  VisionConeData,
-  VisionCone,
-  SightLine
-} from './vision-cone'
-
 // ============================================================================
 // Lens 2: Crossfire Analysis
 // ============================================================================
 
 export {
-  calculate as calculateCrossfire,
-  render as renderCrossfire,
   OPTIMAL_CROSSFIRE_ANGLE,
   ANGLE_TOLERANCE,
   MAX_CROSSFIRE_RANGE,
@@ -53,31 +56,15 @@ export {
   CROSSFIRE_COLORS
 } from './crossfire-analysis'
 
-export type {
-  CrossfireOptions,
-  CrossfireData,
-  CrossfireSetup,
-  CrossfireEffectiveness
-} from './crossfire-analysis'
-
 // ============================================================================
 // Lens 3: Retake Efficiency
 // ============================================================================
 
 export {
-  calculate as calculateRetakeEfficiency,
-  render as renderRetakeEfficiency,
   MOVEMENT_SPEED,
   RETAKE_TIMINGS,
   UTILITY_TYPES,
   RETAKE_COLORS
-} from './retake-efficiency'
-
-export type {
-  RetakeOptions,
-  RetakeEfficiencyData,
-  RetakeScenario,
-  RetakePath
 } from './retake-efficiency'
 
 // ============================================================================
@@ -85,8 +72,6 @@ export type {
 // ============================================================================
 
 export {
-  calculate as calculateEntryFragging,
-  render as renderEntryFragging,
   getEntryTimingCategory,
   calculateEntryDifficulty,
   ENTRY_TIMINGS,
@@ -94,20 +79,11 @@ export {
   ENTRY_COLORS
 } from './entry-fragging'
 
-export type {
-  EntryOptions,
-  EntryFraggingData,
-  EntryAttempt,
-  EntryPositionStats
-} from './entry-fragging'
-
 // ============================================================================
 // Lens 5: Post-Plant Positioning
 // ============================================================================
 
 export {
-  calculate as calculatePostPlant,
-  render as renderPostPlant,
   calculateTimeRemaining,
   isDefusePossible,
   BOMB_TIMER,
@@ -116,20 +92,11 @@ export {
   POSTPLANT_COLORS
 } from './post-plant'
 
-export type {
-  PostPlantOptions,
-  PostPlantData,
-  PostPlantScenario,
-  OptimalPostPlantPosition
-} from './post-plant'
-
 // ============================================================================
 // Lens 6: Fake Detection
 // ============================================================================
 
 export {
-  calculate as calculateFakeDetection,
-  render as renderFakeDetection,
   analyzeCurrentExecute,
   getCommitTimingCategory,
   MIN_COMMIT_TIME,
@@ -138,20 +105,11 @@ export {
   FAKE_COLORS
 } from './fake-detection'
 
-export type {
-  FakeDetectionOptions,
-  FakeDetectionData,
-  FakeExecute,
-  FakePattern
-} from './fake-detection'
-
 // ============================================================================
 // Lens 7: Anchor Performance
 // ============================================================================
 
 export {
-  calculate as calculateAnchorPerformance,
-  render as renderAnchorPerformance,
   calculateHoldQuality,
   getPerformanceTier,
   MIN_HOLDS_FOR_STATS,
@@ -160,20 +118,11 @@ export {
   ANCHOR_COLORS
 } from './anchor-performance'
 
-export type {
-  AnchorOptions,
-  AnchorPerformanceData,
-  AnchorPerformance,
-  AnchorMetrics
-} from './anchor-performance'
-
 // ============================================================================
 // Lens 8: Lurk Effectiveness
 // ============================================================================
 
 export {
-  calculate as calculateLurkEffectiveness,
-  render as renderLurkEffectiveness,
   calculateOptimalLurkTiming,
   evaluateLurkPath,
   getLurkPhase,
@@ -182,13 +131,6 @@ export {
   MAX_LURK_DISTANCE,
   BACKSTAB_WINDOW,
   LURK_COLORS
-} from './lurk-effectiveness'
-
-export type {
-  LurkOptions,
-  LurkEffectivenessData,
-  LurkRound,
-  OptimalLurkPath
 } from './lurk-effectiveness'
 
 // ============================================================================
@@ -321,8 +263,6 @@ export function getAllTacticalLenses(): TacticalLensRegistryEntry[] {
 // ============================================================================
 // Unified Lens Interface
 // ============================================================================
-
-import type { LensResult, LensRenderOptions, TacticalLensData } from './tactical-types'
 
 /** Unified calculate function for any tactical lens */
 export function calculateLens<T extends TacticalLensData>(

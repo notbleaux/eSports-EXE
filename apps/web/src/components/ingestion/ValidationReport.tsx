@@ -2,7 +2,7 @@
  * ValidationReport Component
  * 
  * Display validation errors, quality dashboard, repair recommendations, and export reports
- * for NJZiteGeisTe Platform data ingestion.
+ * for EXE Platform data ingestion.
  * 
  * [Ver001.000]
  * 

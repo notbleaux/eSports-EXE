@@ -42,10 +42,10 @@ export async function initMLBackend(): Promise<void> {
 export async function loadTrainedModel(): Promise<boolean> {
   try {
     model = await tf.loadLayersModel('/models/simrating/model.json');
-    console.log('[NJZ SimRating] Trained model loaded');
+    console.log('[EXE SimRating] Trained model loaded');
     return true;
   } catch {
-    console.warn('[NJZ SimRating] No trained model found, using untrained weights');
+    console.warn('[EXE SimRating] No trained model found, using untrained weights');
     model = buildSimRatingModel();
     return false;
   }

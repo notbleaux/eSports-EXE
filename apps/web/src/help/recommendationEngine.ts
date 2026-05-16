@@ -2,7 +2,7 @@
 /**
  * Recommendation Engine
  * =====================
- * Personalized help content recommendation system for the NJZiteGeisTe Platform.
+ * Personalized help content recommendation system for the EXE Platform.
  * Provides intelligent suggestions based on user expertise, learning progress,
  * and identified knowledge gaps.
  */

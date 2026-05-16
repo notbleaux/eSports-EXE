@@ -124,7 +124,8 @@ function analyzeRotationPatterns(data: GameData): RotationPattern[] {
       type: 'A-to-B',
       frequency: aToB.count,
       lastOccurrence: aToB.lastTime,
-      successRate: aToB.successRate
+      successRate: aToB.successRate,
+      team: 'attackers'
     })
   }
 
@@ -135,7 +136,8 @@ function analyzeRotationPatterns(data: GameData): RotationPattern[] {
       type: 'B-to-A',
       frequency: bToA.count,
       lastOccurrence: bToA.lastTime,
-      successRate: bToA.successRate
+      successRate: bToA.successRate,
+      team: 'attackers'
     })
   }
 
@@ -146,7 +148,8 @@ function analyzeRotationPatterns(data: GameData): RotationPattern[] {
       type: 'Retake',
       frequency: retakeA.count,
       lastOccurrence: retakeA.lastTime,
-      successRate: retakeA.successRate
+      successRate: retakeA.successRate,
+      team: 'defenders'
     })
   }
 

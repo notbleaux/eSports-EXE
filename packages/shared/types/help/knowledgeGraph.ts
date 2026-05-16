@@ -116,9 +116,19 @@ export const DEFAULT_RECOMMENDATION_CONFIG: RecommendationEngineConfig = {
 export interface RecommendationContext {
   userId: string;
   userLevel: ExpertiseLevel;
+  /** @deprecated Use currentNodeId instead */
+  currentTopicId?: string;
   currentNodeId?: string;
+  /** @deprecated Use recentNodes instead */
+  recentSearches?: string[];
   recentNodes: string[];
+  /** @deprecated Use completedNodes instead */
+  completedTopicIds?: string[];
   completedNodes: string[];
+  /** Max number of recommendations to return */
+  maxRecommendations?: number;
+  /** @deprecated Use userLevel instead */
+  userExpertiseLevel?: ExpertiseLevel;
 }
 
 export interface PersonalizedRecommendation extends Recommendation {
@@ -180,4 +190,27 @@ export interface GetLearningPathResponse {
   path: LearningPath;
   gaps: KnowledgeGap[];
   alternativePaths: LearningPath[];
+}
+
+// ============================================================================
+// Service Aliases (for backward compatibility)
+// ============================================================================
+
+/** Alias for RecommendationContext used in KnowledgeGraph service */
+export type KnowledgeGraphRecommendationContext = RecommendationContext;
+
+/** Alias for SearchQuery filters used in KnowledgeGraph service */
+export interface KnowledgeGraphSearchFilters {
+  type?: NodeType[];
+  difficulty?: number[];
+  /** @deprecated Use difficulty instead */
+  difficulties?: number[];
+  feature?: string[];
+  userLevel?: ExpertiseLevel;
+  limit?: number;
+  // Extended properties used in knowledgeGraph service
+  types?: NodeType[];
+  categories?: string[];
+  keywords?: string[];
+  minPopularity?: number;
 }

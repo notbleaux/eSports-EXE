@@ -53,6 +53,8 @@ class HeadTrackingManager {
   private listeners: Map<string, Set<(...args: any[]) => void>> = new Map();
   private isActive: boolean = false;
   private lastTiltClick: number = 0;
+  private currentPosition: HeadPosition | null = null;
+  private animationFrame: number | null = null;
 
   constructor(config: Partial<HeadTrackingConfig> = {}) {
     this.config = { ...DEFAULT_HEAD_TRACKING_CONFIG, ...config };

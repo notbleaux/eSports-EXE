@@ -185,7 +185,7 @@ export const StreamingPredictionPanel: React.FC<StreamingPredictionPanelProps> =
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm text-gray-400">Latest Prediction</span>
             <span className="text-xs text-gray-500">
-              {latestPrediction.timestamp.toLocaleTimeString()}
+              {new Date(latestPrediction.timestamp).toLocaleTimeString()}
             </span>
           </div>
 
@@ -224,16 +224,16 @@ export const StreamingPredictionPanel: React.FC<StreamingPredictionPanelProps> =
           {/* Latency Bar */}
           <div className="flex items-center justify-between text-xs">
             <span className="text-gray-500">Inference Latency</span>
-            <span style={{ color: getLagColor(latestPrediction.latencyMs) }}>
-              {latestPrediction.latencyMs.toFixed(1)}ms
+            <span style={{ color: getLagColor(latestPrediction.latencyMs ?? 0) }}>
+              {(latestPrediction.latencyMs ?? 0).toFixed(1)}ms
             </span>
           </div>
           <div className="mt-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-300"
               style={{
-                width: `${Math.min((latestPrediction.latencyMs / 100) * 100, 100)}%`,
-                backgroundColor: getLagColor(latestPrediction.latencyMs)
+                width: `${Math.min(((latestPrediction.latencyMs ?? 0) / 100) * 100, 100)}%`,
+                backgroundColor: getLagColor(latestPrediction.latencyMs ?? 0)
               }}
             />
           </div>
@@ -251,20 +251,20 @@ export const StreamingPredictionPanel: React.FC<StreamingPredictionPanelProps> =
           <div className="space-y-2">
             {predictions.slice(1, 11).map((pred) => (
               <div
-                key={pred.id}
+                key={pred.id ?? `pred-${pred.timestamp}`}
                 className="p-2 rounded bg-white/5 text-sm flex items-center justify-between hover:bg-white/10 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-gray-500">
-                    {pred.timestamp.toLocaleTimeString()}
+                    {new Date(pred.timestamp).toLocaleTimeString()}
                   </span>
                   <span className="text-gray-400 font-mono">
-                    [{pred.input.slice(0, 3).map(v => v.toFixed(2)).join(', ')}]
+                    [{Array.isArray(pred.input) ? pred.input.slice(0, 3).map(v => v.toFixed(2)).join(', ') : 'N/A'}]
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-gray-300 font-mono">
-                    → [{pred.output.map(v => v.toFixed(2)).join(', ')}]
+                    → [{Array.isArray(pred.output) ? pred.output.map(v => v.toFixed(2)).join(', ') : 'N/A'}]
                   </span>
                   <span
                     className="text-xs px-2 py-0.5 rounded"
@@ -278,7 +278,7 @@ export const StreamingPredictionPanel: React.FC<StreamingPredictionPanelProps> =
                     {(pred.confidence * 100).toFixed(0)}%
                   </span>
                   <span className="text-xs text-gray-500 w-14 text-right">
-                    {pred.latencyMs.toFixed(0)}ms
+                    {(pred.latencyMs ?? 0).toFixed(0)}ms
                   </span>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 // [Ver001.000] Player follow system — localStorage persistence.
 import { useState, useCallback } from 'react';
 
-const KEY = 'njz_followed_players';
+const KEY = 'exe_followed_players';
 
 export interface FollowedPlayer {
   id: number; slug: string; handle: string;

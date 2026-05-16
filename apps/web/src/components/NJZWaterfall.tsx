@@ -1,10 +1,10 @@
 /**
- * NJZ Primordial Waters - Subtle waterfall edge effect
+ * EXE Primordial Waters - Subtle waterfall edge effect
  * Prussian Blue base, cyan accents
  */
 import React from 'react'
 
-const NJZWaterfall: React.FC<{ direction?: 'up' | 'down'; className?: string }> = ({
+const EXEWaterfall: React.FC<{ direction?: 'up' | 'down'; className?: string }> = ({
   direction = 'down',
   className = ''
 }) => (
@@ -32,4 +32,4 @@ const NJZWaterfall: React.FC<{ direction?: 'up' | 'down'; className?: string }> 
   </div>
 )
 
-export default NJZWaterfall
+export default EXEWaterfall

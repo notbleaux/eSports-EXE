@@ -85,7 +85,7 @@ function CentralGrid() {
           </motion.div>
 
           <h1 className="font-display text-hero font-bold mb-6">
-            <span className="gradient-text">NJZ</span>
+            <span className="gradient-text">EXE</span>
             <span className="text-white"> ¿!? Platform</span>
           </h1>
           

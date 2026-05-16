@@ -4,7 +4,7 @@
  */
 import React from 'react'
 import { motion } from 'framer-motion'
-import { useNJZStore, HUBS } from '../store/njzStore'
+import { useEXEStore, HUBS } from '../store/njzStore'
 
 function HubWrapper({ 
   hubId, 
@@ -14,7 +14,7 @@ function HubWrapper({
   customHeader = null
 }) {
   const hub = HUBS[hubId]
-  const { preferences } = useNJZStore()
+  const { preferences } = useEXEStore()
   
   if (!hub) {
     console.error(`Hub ${hubId} not found in HUBS configuration`)

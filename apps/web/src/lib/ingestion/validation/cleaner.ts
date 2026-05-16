@@ -2,7 +2,7 @@
  * Data Cleaner
  * 
  * Removes duplicates, fills missing values, normalizes formats, and detects outliers
- * for NJZiteGeisTe Platform data ingestion.
+ * for EXE Platform data ingestion.
  * 
  * [Ver001.000]
  * 

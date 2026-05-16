@@ -228,11 +228,11 @@ export const getLensesByCategory = (category: LensMetadata['category']): LensMet
 // Lens Calculator Registry
 // ============================================================================
 
-/** Calculate function type */
-export type LensCalculateFunction = (input: unknown) => unknown
+/** Calculate function type - permissive for lens variants */
+export type LensCalculateFunction = (input: any) => any
 
-/** Render function type */
-export type LensRenderFunction = (options: unknown) => boolean
+/** Render function type - permissive for lens variants */
+export type LensRenderFunction = (options: any) => any
 
 /** Lens calculator entry */
 export interface LensCalculator {
