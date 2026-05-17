@@ -96,6 +96,11 @@ apps/web/.env.production
 apps/web/.env.vercel
 apps/web/.env.sentry-build-plugin
 
+# Agent gateway — ECDSA private keys (NEVER commit). Per-agent private
+# keypairs live here; only the public hex gets registered in
+# polyrepo/registry/index.json::public_keys.
+services/agent-gateway/keys/
+
 # Testing / coverage
 .coverage
 .coverage.*

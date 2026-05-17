@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 7,
+      "next": 22,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0006 consumed across PR #44 creation + 3 Copilot triage comments + PR #45 creation + sprint refinement."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0021 consumed across PR #44/#45/#46/#47 creation + 3 Copilot triage comments + 10 dependabot merge + this Phase 1.5 keypair registration. First real-world signing key registered for agent_claude_code_local."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -103,15 +103,16 @@
       "delivered_in": "PR #43"
     },
     "PLN-002-agent-id": {
-      "next": 6,
-      "title": "Agent ID + Lineage Protocol — Phase 0 (advisory)",
+      "next": 22,
+      "title": "Agent ID + Lineage Protocol — Phase 0 (advisory) + Phase 1 (soft enforcement)",
       "status": "in-progress",
-      "delivered_in": "PR #44"
+      "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement)"
     },
     "PLN-003-network-api": {
-      "next": 0,
+      "next": 2,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
-      "status": "scoped",
+      "status": "in-progress",
+      "delivered_in": "PR #46 (Phase 1 ECDSA crypto baseline). Phase 1.5 keypair registration in current PR.",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS",
         "OpenRouter API key",
@@ -128,14 +129,14 @@
     }
   },
   "portfolio": {
-    "next": 7,
+    "next": 22,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
   },
   "public_keys": {
     "_comment": "ECDSA secp256k1 public keys per agent_id (uncompressed HEX, '04' prefix). Phase 1 adds the first entries. Phase 0 ships the empty container.",
-    "agent_claude_code_local": null,
+    "agent_claude_code_local": "049819d65ba1d03f43da0c4e503b8dd9d26e1e50dceb358984f3d4fb2523056bb91429b766ce794f0d5aa1a16cad4a74387336d1adde23c5e3535cb18cbe6abc5c",
     "agent_copilot_swe_agent": null,
     "agent_kimi_claw_worker": null,
     "agent_mimo_hermes_cloud": null,
