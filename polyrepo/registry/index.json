@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 22,
+      "next": 23,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0021 consumed across PR #44/#45/#46/#47 creation + 3 Copilot triage comments + 10 dependabot merge + this Phase 1.5 keypair registration. First real-world signing key registered for agent_claude_code_local."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0022 consumed across PR #44/#45/#46/#47/#49/#52/#53 creation + Copilot triage + 10 dependabot merge + Phase 1.5 keypair registration. A0023 claimed by R2.5 docker majors audit + PLN-005 reservation."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -126,10 +126,24 @@
       "delivered_in": "PR #45",
       "depends_on": ["PLN-001-rename"],
       "blocks": []
+    },
+    "PLN-005-wiki-sourcegraph-inspired": {
+      "next": 0,
+      "title": "Internal AI-augmented wiki — Sourcegraph-inspired 5-phase rollout (W1..W5)",
+      "status": "scoped",
+      "scoped_in": "PR #53 (docs/research/SOURCEGRAPH_WIKI_INSPIRATION.md)",
+      "decisions": {
+        "registry_reservation": "approved (this entry)",
+        "content_authoring": "ai-augmented",
+        "visibility": "internal",
+        "sequencing": "after R2.5"
+      },
+      "depends_on": ["PLN-003-network-api"],
+      "blocks": []
     }
   },
   "portfolio": {
-    "next": 22,
+    "next": 23,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
