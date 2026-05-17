@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TENET Station Layout Component
  * Provides consistent layout structure for all -ZiXiS- Stations

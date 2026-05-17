@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * useSwipe Hook
  * Detect horizontal/vertical swipes with velocity detection

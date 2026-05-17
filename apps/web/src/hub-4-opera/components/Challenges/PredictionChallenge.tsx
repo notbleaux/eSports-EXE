@@ -21,7 +21,7 @@ import { colors } from '@/theme/colors';
 import { cn } from '@/utils/cn';
 import type { PredictionChallengeProps } from './types';
 
-const OPERA_COLOR = colors.hub.opera;
+const OPERA_COLOR = colors.hub.opera.base;
 const OPERA_GLOW = "rgba(255, 0, 255, 0.4)";
 
 export const PredictionChallenge: React.FC<PredictionChallengeProps> = ({

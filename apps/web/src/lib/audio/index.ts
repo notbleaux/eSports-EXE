@@ -27,6 +27,10 @@
  * ```
  */
 
+import { getAudioManager, destroyAudioManager } from './manager';
+import { getVoiceController, destroyVoiceController } from './voice';
+import { getSFXController, destroySFXController } from './sfx';
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -55,7 +59,6 @@ export type {
   // SFX Types
   SFXEvent,
   SFXType,
-  SFXDefinition,
   ActiveSound,
   SpatialPosition,
   
@@ -68,6 +71,10 @@ export type {
   AudioBufferCache,
   PannerConfig,
 } from './types';
+
+export type {
+  SFXDefinition,
+} from './sfx';
 
 // ============================================================================
 // Constants

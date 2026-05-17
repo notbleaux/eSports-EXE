@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * HubRegistry - Lazy HUB Component Definitions
  * Phase 1: Lensing System

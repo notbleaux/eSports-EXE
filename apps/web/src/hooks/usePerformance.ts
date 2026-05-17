@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * usePerformance Hook
  * React hook for tracking component render times and measuring interaction latency

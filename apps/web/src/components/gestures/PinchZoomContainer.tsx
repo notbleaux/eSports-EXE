@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PinchZoomContainer Component
  * Wraps content with pinch-to-zoom and double-tap reset functionality

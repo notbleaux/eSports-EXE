@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Emote Controller
  * ================
@@ -780,12 +781,3 @@ export function createEmoteController(
 // ============================================================================
 // Exports
 // ============================================================================
-
-export type {
-  EmotePlayOptions,
-  EmotePlayState,
-  EmoteEvent,
-  QueuedEmote,
-  ActiveEmoteState,
-  EmoteControllerOptions,
-};

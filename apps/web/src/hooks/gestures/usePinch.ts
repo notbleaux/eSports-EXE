@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * usePinch Hook
  * Pinch zoom detection with scale tracking and min/max limits

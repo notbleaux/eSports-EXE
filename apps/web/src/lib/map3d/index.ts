@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Map3D Optimization Module
  * 

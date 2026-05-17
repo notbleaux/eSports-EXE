@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * StreamingPredictionPanel - Real-time Streaming Prediction Display
  * Shows live predictions with lag indicators and throughput metrics

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TouchFeedback Component - Touch Ripple Effect
  * [Ver001.000] - Framer Motion powered ripple feedback

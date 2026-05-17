@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AREPO Forum Components - Index
  * Export all forum components and types

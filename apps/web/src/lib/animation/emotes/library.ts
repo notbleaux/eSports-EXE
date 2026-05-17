@@ -86,6 +86,8 @@ export interface EmoteDefinition {
   icon: string;
   /** Preview color */
   color: string;
+  /** Sound effect ID */
+  sfx?: string;
 }
 
 export interface UnlockRequirements {
@@ -1085,13 +1087,3 @@ export function getEmoteCountByRarity(): Record<EmoteRarity, number> {
 // ============================================================================
 // Exports
 // ============================================================================
-
-export type {
-  EmoteDefinition,
-  EmoteKeyFrame,
-  EmoteAudioConfig,
-  UnlockRequirements,
-  PlayerEmoteProgress,
-  RarityConfig,
-  CategoryConfig,
-};

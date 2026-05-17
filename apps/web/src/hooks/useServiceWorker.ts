@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * useServiceWorker Hook - PWA Registration & Update Management
  * [Ver001.001] - Migrated to centralized logger

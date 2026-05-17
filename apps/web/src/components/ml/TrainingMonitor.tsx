@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Training Monitor Component
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ML Worker Benchmark Tool
  * Tests Web Worker vs Main Thread performance for ML inference

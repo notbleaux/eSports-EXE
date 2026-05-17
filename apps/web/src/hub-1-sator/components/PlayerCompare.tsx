@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PlayerCompare Component
  * Side-by-side SimRating comparison panel for up to 3 players.

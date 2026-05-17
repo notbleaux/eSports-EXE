@@ -1015,15 +1015,3 @@ export function createMicroExpression(
 // ============================================================================
 // Exports
 // ============================================================================
-
-export type {
-  EyeState,
-  MouthState,
-  EyebrowState,
-  CheekState,
-  FacialState,
-  ExpressionBlend,
-  BlinkConfig,
-  ExpressionControllerOptions,
-  ExpressionEvent,
-};

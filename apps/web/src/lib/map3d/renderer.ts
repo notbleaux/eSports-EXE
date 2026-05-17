@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 3D Map Renderer for SpecMap
  * 

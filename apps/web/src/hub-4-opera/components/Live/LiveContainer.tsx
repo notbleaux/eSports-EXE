@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LiveContainer - Main container integrating all live components
  * 

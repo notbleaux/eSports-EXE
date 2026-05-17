@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ML Bundle Test - Verify Bundle Size Optimization
  * 

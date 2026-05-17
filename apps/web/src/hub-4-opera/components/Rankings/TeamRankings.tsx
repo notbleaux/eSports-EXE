@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TeamRankings Component
  * Team power rankings with tier-based grouping

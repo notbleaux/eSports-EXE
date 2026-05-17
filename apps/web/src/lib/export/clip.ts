@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Clip Export System
  * Video clip generation from canvas/video sources

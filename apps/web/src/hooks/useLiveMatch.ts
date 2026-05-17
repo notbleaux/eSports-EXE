@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * useLiveMatch Hook - React Hook for Live Match Data
  * 

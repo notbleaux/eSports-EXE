@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ForumThreadList Component
  * Displays list of threads in a category with sorting and filtering

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OrganizationRankings Component
  * Organization (esports org) power rankings

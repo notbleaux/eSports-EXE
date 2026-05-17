@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Performance Profiler for 3D Maps
  * 

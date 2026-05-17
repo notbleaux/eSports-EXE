@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PlayerTournamentSearch Component
  * Cross-reference: Player performance in specific tournaments

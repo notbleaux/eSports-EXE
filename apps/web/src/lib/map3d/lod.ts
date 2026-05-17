@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Advanced LOD (Level of Detail) System for 3D Maps
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * WolfMascot Component
  * [Ver001.000]

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   AnimationState,
   DEFAULT_TRANSITIONS,

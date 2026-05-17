@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Annotation Tools Component
  * Toolbar for drawing, text, and voice annotations

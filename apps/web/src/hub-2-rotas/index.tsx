@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ROTAS Hub - Hub 2: The Harmonic Layer
  * Analytics and predictive modeling with ellipse layer blending

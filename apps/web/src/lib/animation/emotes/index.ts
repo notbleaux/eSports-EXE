@@ -121,7 +121,7 @@ export type {
 // ============================================================================
 
 import type { AnimationStateMachine } from '@/lib/animation/stateMachine';
-import { EmoteController } from './controller';
+import { EmoteController, createEmoteController } from './controller';
 import { ExpressionController } from './expressions';
 import { SyncedEmoteController } from './sync';
 

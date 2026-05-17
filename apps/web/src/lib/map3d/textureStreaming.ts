@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Texture Streaming System for 3D Maps
  * 

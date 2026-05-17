@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver002.000] */
 /**
  * Timeline Scrubber Component

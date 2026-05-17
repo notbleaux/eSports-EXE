@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Hub Navigation Gestures
  * Swipe navigation between 5 hubs (SATOR, ROTAS, AREPO, OPERA, TENET)

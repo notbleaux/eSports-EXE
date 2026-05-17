@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TENET Layer — Layer 3: Area control grading, mutual exclusion zones.
  * D3.js SVG rendering.

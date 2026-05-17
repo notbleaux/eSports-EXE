@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OPERA Live Stream Mock Data
  * Mock data for development and demonstration

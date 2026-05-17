@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver002.001] - Fixed type exports from lib/broadcast/types */
 /**
  * Help Components

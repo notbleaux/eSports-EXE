@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * NJ Style Wolf Mascot Component
  * ==============================

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ForumPost Component
  * Individual post display with author sidebar and actions

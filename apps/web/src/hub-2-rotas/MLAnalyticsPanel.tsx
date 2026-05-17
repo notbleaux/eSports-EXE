@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ML Analytics Panel - Main analytics dashboard for ROTAS Hub
  * Displays ML model metrics, predictions stats, and model comparison

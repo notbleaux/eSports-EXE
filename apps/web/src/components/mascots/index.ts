@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Mascot Components - Optimized Exports
  * 

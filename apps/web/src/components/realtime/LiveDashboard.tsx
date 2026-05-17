@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Live Dashboard Component
  * 

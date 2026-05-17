@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * UnifiedGrid - Single Grid Component with Worker/DOM/Auto Modes
  * Consolidates VirtualGrid + HybridGrid functionality

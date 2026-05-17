@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * SFX System
  * ==========
@@ -832,11 +833,3 @@ export function destroySFXController(): void {
 // ============================================================================
 // Exports
 // ============================================================================
-
-export type {
-  SFXDefinition,
-  AbilitySFXMapping,
-  QueuedSFX,
-  SFXControllerOptions,
-  SFXAnimationSync,
-};

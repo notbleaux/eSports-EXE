@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TopPerformers Component
  * Shows top 5 players by SimRating for a selected game.

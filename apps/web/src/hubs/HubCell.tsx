@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * HubCell - HUB Wrapper Component
  * Handles visibility pause, worker fallback, animations

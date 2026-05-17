@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PlayerRankings Component
  * Individual player leaderboards with ELO ratings

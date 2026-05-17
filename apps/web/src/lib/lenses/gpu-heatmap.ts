@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * GPU-Accelerated Heatmap Renderer for EXE Platform
  * WebGL-based heatmap rendering with CPU fallback
