@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * useMatchHistory Hook
  *
@@ -10,11 +9,12 @@
 
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryKeys, CACHE_CONFIGS } from '@lib/cache-manager';
-import { pandascoreApi } from '@api/pandascore';
-import type { PandascoreMatch } from '@api/pandascore';
+import { rotasApi } from '@api/rotas';
+import type { RotasMatchSummary } from '@api/rotas';
 
 interface UseMatchHistoryOptions {
   game?: string;
+  teamId?: number;
   limit?: number;
   offset?: number;
   enabled?: boolean;
@@ -22,15 +22,17 @@ interface UseMatchHistoryOptions {
 
 export function useMatchHistory({
   game,
+  teamId,
   limit = 20,
   offset = 0,
   enabled = true,
-}: UseMatchHistoryOptions = {}): UseQueryResult<PandascoreMatch[], Error> {
+}: UseMatchHistoryOptions = {}): UseQueryResult<RotasMatchSummary[], Error> {
   return useQuery({
     queryKey: queryKeys.matches.historyByGame(game, limit, offset),
     queryFn: async () => {
-      const videogame = (game as 'valorant') ?? 'valorant';
-      return pandascoreApi.fetchMatches(videogame, 'finished', limit);
+      const videogame = game ?? 'valorant';
+      const response = await rotasApi.matches.history(videogame, teamId, 1, limit);
+      return response.items;
     },
     staleTime: CACHE_CONFIGS.HISTORICAL.staleTime,
     gcTime: CACHE_CONFIGS.HISTORICAL.cacheTime,

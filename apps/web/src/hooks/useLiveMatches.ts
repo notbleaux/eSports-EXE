@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * useLiveMatches Hook
  *
@@ -10,8 +9,8 @@
 
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryKeys, CACHE_CONFIGS } from '@lib/cache-manager';
-import { pandascoreApi } from '@api/pandascore';
-import type { PandascoreMatch } from '@api/pandascore';
+import { rotasApi } from '@api/rotas';
+import type { RotasMatchSummary } from '@api/rotas';
 
 interface UseLiveMatchesOptions {
   game?: string;
@@ -25,12 +24,12 @@ export function useLiveMatches({
   limit = 20,
   offset: _offset = 0,
   enabled = true,
-}: UseLiveMatchesOptions = {}): UseQueryResult<PandascoreMatch[], Error> {
+}: UseLiveMatchesOptions = {}): UseQueryResult<RotasMatchSummary[], Error> {
   return useQuery({
     queryKey: queryKeys.matches.liveByGame(game),
     queryFn: async () => {
-      const videogame = (game as 'valorant') ?? 'valorant';
-      return pandascoreApi.fetchMatches(videogame, 'running', limit);
+      const videogame = game ?? 'valorant';
+      return rotasApi.matches.live(videogame, limit);
     },
     staleTime: CACHE_CONFIGS.LIVE.staleTime,
     gcTime: CACHE_CONFIGS.LIVE.cacheTime,

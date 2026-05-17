@@ -173,7 +173,7 @@ export interface TalkBackAnnouncementOptions {
   /** Whether to queue or interrupt */
   queue?: boolean;
   /** Announcement priority */
-  priority?: 'low' | 'normal' | 'high';
+  priority?: 'low' | 'normal' | 'high' | 'critical';
   /** Earcon (sound) to play */
   earcon?: string;
   /** Vibration pattern */

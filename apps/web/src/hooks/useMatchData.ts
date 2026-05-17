@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * useMatchData Hook
  *
@@ -10,8 +9,8 @@
 
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryKeys, CACHE_CONFIGS } from '@lib/cache-manager';
-import { pandascoreApi } from '@api/pandascore';
-import type { PandascoreMatch } from '@api/pandascore';
+import { rotasApi } from '@api/rotas';
+import type { RotasMatchDetail } from '@api/rotas';
 
 interface UseMatchDataOptions {
   matchId: string;
@@ -21,11 +20,11 @@ interface UseMatchDataOptions {
 export function useMatchData({
   matchId,
   enabled = true,
-}: UseMatchDataOptions): UseQueryResult<PandascoreMatch, Error> {
+}: UseMatchDataOptions): UseQueryResult<RotasMatchDetail, Error> {
   return useQuery({
     queryKey: queryKeys.matches.detail(matchId),
     queryFn: async () => {
-      return pandascoreApi.fetchMatchDetails(Number(matchId));
+      return rotasApi.matches.get(Number(matchId));
     },
     staleTime: CACHE_CONFIGS.REALTIME.staleTime,
     gcTime: CACHE_CONFIGS.REALTIME.cacheTime,

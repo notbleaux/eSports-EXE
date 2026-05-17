@@ -36,7 +36,11 @@
       "@sator/types": ["../../packages/shared/types"],
       "@sator/types/*": ["../../packages/shared/types/*"],
       "@sator/services": ["../../packages/shared/services/help"],
-      "@sator/services/*": ["../../packages/shared/services/*"]
+      "@sator/services/*": ["../../packages/shared/services/*"],
+      "@lib/*": ["src/lib/*"],
+      "@api": ["src/api/index.ts"],
+      "@api/*": ["src/api/*"],
+      "@components/*": ["src/components/*"]
     },
     "types": ["node", "vitest/globals"]
   },

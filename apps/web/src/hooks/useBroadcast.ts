@@ -1,4 +1,5 @@
 // @ts-nocheck
+
 /** [Ver001.000] */
 /**
  * useBroadcast Hook
@@ -152,7 +153,7 @@ export function useBroadcast(options: UseBroadcastOptions): UseBroadcastReturn {
     onConnect: handleConnect,
     onDisconnect: handleDisconnect,
     onError: handleError,
-    autoReconnect,
+    reconnect: autoReconnect,
     reconnectInterval,
     maxReconnectAttempts,
   });

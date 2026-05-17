@@ -71,5 +71,39 @@ export {
   type PandascoreMatch,
   type PandascoreStats,
   type SatorPlayer,
-  type SatorStats
+  type SatorStats,
 } from './pandascore'
+
+// ROTAS API - Stats Reference backend endpoints
+export {
+  rotasApi,
+  // Match functions
+  fetchMatches as fetchRotasMatches,
+  fetchMatch as fetchRotasMatch,
+  fetchLiveMatches as fetchRotasLiveMatches,
+  fetchMatchHistory as fetchRotasMatchHistory,
+  // Player functions
+  fetchPlayers as fetchRotasPlayers,
+  fetchPlayer as fetchRotasPlayer,
+  fetchPlayerStats as fetchRotasPlayerStats,
+  // Team functions
+  fetchTeams as fetchRotasTeams,
+  fetchTeam as fetchRotasTeam,
+  fetchTeamStats as fetchRotasTeamStats,
+  // Tournament functions
+  fetchTournaments as fetchRotasTournaments,
+  // Leaderboard functions
+  fetchKDLeaderboard,
+  fetchADRLeaderboard,
+  // Types
+  type RotasPlayerSummary,
+  type RotasPlayerDetail,
+  type RotasPlayerStats,
+  type RotasTeamSummary,
+  type RotasTeamDetail,
+  type RotasTeamStats,
+  type RotasMatchSummary,
+  type RotasMatchDetail,
+  type RotasTournamentSummary,
+  type RotasLeaderboard,
+} from './rotas'

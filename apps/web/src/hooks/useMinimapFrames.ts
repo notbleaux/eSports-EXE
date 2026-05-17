@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * useMinimapFrames Hook
  *
