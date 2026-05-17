@@ -1,0 +1,116 @@
+# Lineage Discovery — per-frontier-LLM attribute resolution
+# [Ver001.000]
+#
+# Each entry declares how an agent of that lineage discovers its own
+# `model` and `session` attributes at session start. The agent reads
+# this file (or a vendored copy) and resolves its attributes in order
+# of the declared sources. `unknown` is acceptable for any slot the
+# agent can't determine.
+#
+# See: .agents/AGENT_ID_PROTOCOL.md
+
+version: 1
+default_session_format: uuidv7  # fallback: YYYYMMDD-N
+
+lineages:
+
+  claude:
+    short_code: CLA
+    discovery:
+      model:
+        - env: ANTHROPIC_MODEL
+        - introspect: system_prompt.model_name
+        - literal: unknown
+      session:
+        - env: CLAUDE_SESSION_ID
+        - git_config: claude.session
+        - generate: uuidv7
+    notes: |
+      Claude Code sets ANTHROPIC_MODEL via the harness. For Claude API direct
+      calls, the model ID is in the request. Older sessions may surface it via
+      the system prompt's identity block.
+
+  copilot:
+    short_code: COP
+    discovery:
+      model:
+        - env: COPILOT_MODEL
+        - literal: copilot-swe-agent  # current Copilot SWE Agent doesn't expose its underlying model
+      session:
+        - env: GITHUB_RUN_ID
+        - derive: pr_number
+        - generate: uuidv7
+    notes: |
+      Copilot SWE Agent does NOT currently introspect its underlying model.
+      Default to the literal `copilot-swe-agent` and revisit when the agent
+      surfaces its model version through GH Actions metadata.
+
+  kimi:
+    short_code: KMI
+    discovery:
+      model:
+        - env: KIMI_MODEL
+        - literal: k2-6
+      session:
+        - env: KIMI_SESSION_ID
+        - generate: uuidv7
+    notes: |
+      Kimi K2.6 is the current swarm target. Update literal when newer
+      versions ship (k3, k2-7, etc.).
+
+  gpt:
+    short_code: GPT
+    discovery:
+      model:
+        - env: OPENAI_MODEL
+        - literal: unknown
+      session:
+        - env: OPENAI_THREAD_ID
+        - generate: uuidv7
+
+  gemini:
+    short_code: GEM
+    discovery:
+      model:
+        - env: GEMINI_MODEL
+        - literal: unknown
+      session:
+        - env: GEMINI_SESSION
+        - generate: uuidv7
+
+  mimo:
+    short_code: MMO
+    discovery:
+      model:
+        - env: MIMO_MODEL
+        - literal: mimo-v2-5-pro
+      session:
+        - env: MIMO_SESSION_ID
+        - generate: uuidv7
+    notes: |
+      Xiaomi MiMo-V2.5-Pro is the Deep Architect persona (per network
+      architecture v002 plan). Long-context reasoning; runs on a Hermes
+      host node when present.
+
+  hermes:
+    short_code: HRM
+    discovery:
+      model:
+        - env: HERMES_PROVIDER_MODEL  # the model Hermes is currently fronting (often mimo-v2-5-pro)
+        - literal: unknown
+      session:
+        - env: HERMES_SESSION_ID
+        - generate: uuidv7
+    notes: |
+      Hermes is the host daemon, not a model itself. Its `model` field reflects
+      the underlying provider model it's currently routing to.
+
+  qwen:
+    short_code: QWN
+    discovery:
+      model:
+        - env: QWEN_MODEL
+        - literal: unknown
+      session:
+        - env: QWEN_SESSION
+        - generate: uuidv7
