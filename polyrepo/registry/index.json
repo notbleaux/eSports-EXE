@@ -25,9 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 1,
-      "session_count": 0,
-      "scope": "AGENT-CLA"
+      "next": 7,
+      "session_count": 1,
+      "scope": "AGENT-CLA",
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0006 consumed across PR #44 creation + 3 Copilot triage comments + PR #45 creation + sprint refinement."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -102,10 +103,10 @@
       "delivered_in": "PR #43"
     },
     "PLN-002-agent-id": {
-      "next": 1,
+      "next": 6,
       "title": "Agent ID + Lineage Protocol — Phase 0 (advisory)",
       "status": "in-progress",
-      "delivered_in": "this PR"
+      "delivered_in": "PR #44"
     },
     "PLN-003-network-api": {
       "next": 0,
@@ -116,10 +117,18 @@
         "OpenRouter API key",
         "registered domain"
       ]
+    },
+    "PLN-004-playwright-sprint": {
+      "next": 1,
+      "title": "Playwright E2E sprint — diagnose + fix + re-enable gate",
+      "status": "open",
+      "delivered_in": "PR #45",
+      "depends_on": ["PLN-001-rename"],
+      "blocks": []
     }
   },
   "portfolio": {
-    "next": 1,
+    "next": 7,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
