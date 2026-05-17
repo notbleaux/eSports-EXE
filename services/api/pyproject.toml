@@ -13,7 +13,7 @@ packages = [{include = "src"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 fastapi = "^0.115.0"
-uvicorn = {extras = ["standard"], version = "^0.24.0"}
+uvicorn = {extras = ["standard"], version = ">=0.24,<0.48"}
 asyncpg = "^0.29.0"
 aioredis = "^2.0.0"
 redis = "^5.0.0"
