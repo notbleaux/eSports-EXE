@@ -65,6 +65,15 @@ export const CACHE_CONFIGS = {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   },
+
+  // Standard reference data - moderate staleness for lists and lookups
+  STANDARD: {
+    staleTime: 60000, // 60 seconds
+    cacheTime: 300000, // 5 minutes
+    refetchInterval: null,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  },
 };
 
 /**
@@ -214,6 +223,26 @@ export const queryKeys = {
     all: ['admin'] as const,
     health: () => [...queryKeys.admin.all, 'health'] as const,
     stats: () => [...queryKeys.admin.all, 'stats'] as const,
+  },
+
+  players: {
+    all: ['players'] as const,
+    list: (filters: { game?: string; teamId?: number; search?: string; page?: number; perPage?: number } = {}) =>
+      [...queryKeys.players.all, 'list', filters.game, filters.teamId, filters.search, filters.page, filters.perPage] as const,
+    detail: (playerId: number) =>
+      [...queryKeys.players.all, 'detail', playerId] as const,
+    stats: (playerId: number, game?: string) =>
+      [...queryKeys.players.all, 'stats', playerId, game] as const,
+  },
+
+  teams: {
+    all: ['teams'] as const,
+    list: (filters: { game?: string; region?: string; search?: string; page?: number; perPage?: number } = {}) =>
+      [...queryKeys.teams.all, 'list', filters.game, filters.region, filters.search, filters.page, filters.perPage] as const,
+    detail: (teamId: number) =>
+      [...queryKeys.teams.all, 'detail', teamId] as const,
+    stats: (teamId: number, game?: string) =>
+      [...queryKeys.teams.all, 'stats', teamId, game] as const,
   },
 
   realtime: {
