@@ -1,6 +1,6 @@
 {
-  "name": "NJZiteGeisTe",
-  "short_name": "NJZ",
+  "name": "ZeSporteXte",
+  "short_name": "ZX",
   "description": "Community eSports analytics and simulation platform for Valorant and CS2",
   "start_url": "/",
   "display": "standalone",
@@ -131,7 +131,7 @@
   },
   "protocol_handlers": [
     {
-      "protocol": "web+njzitegeiste",
+      "protocol": "web+ZESPORTEXTE",
       "url": "/%s"
     }
   ],

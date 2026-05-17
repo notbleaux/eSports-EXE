@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * useSwipe Hook
  * Detect horizontal/vertical swipes with velocity detection
@@ -162,8 +161,8 @@ export function useSwipe(
     {
       axis: cfg.horizontal && !cfg.vertical ? 'x' : !cfg.horizontal && cfg.vertical ? 'y' : undefined,
       preventDefault: cfg.preventDefault,
-      touchAction: cfg.touchAction as DragConfig['touchAction'],
-    }
+      touchAction: cfg.touchAction,
+    } as DragConfig
   );
 
   return { bind, state, reset };

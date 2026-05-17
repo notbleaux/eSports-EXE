@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** [Ver001.000]
  * Spatial Audio Library
  * =====================
@@ -39,6 +38,24 @@
  * engine.setSourcePosition(sourceId, { x: 3, y: 0, z: 2 });
  * ```
  */
+
+// ============================================================================
+// Internal Imports (used by module functions, also re-exported below)
+// ============================================================================
+
+import {
+  SpatialAudioEngine,
+  getSpatialAudioEngine,
+  destroySpatialAudioEngine,
+  createSpatialAudioEngine,
+} from './engine';
+
+import {
+  EnvironmentAudioManager,
+  getEnvironmentAudioManager,
+  destroyEnvironmentAudioManager,
+  createEnvironmentAudioManager,
+} from './environment';
 
 // ============================================================================
 // Core Engine Exports
@@ -128,7 +145,7 @@ export type {
   AudioSourceOptions,
   
   // Listener types
-  AudioListener,
+  AudioListenerState,
   ListenerConfig,
   
   // HRTF types

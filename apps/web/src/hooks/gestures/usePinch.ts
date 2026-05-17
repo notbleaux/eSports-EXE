@@ -1,13 +1,12 @@
-// @ts-nocheck
 /**
  * usePinch Hook
  * Pinch zoom detection with scale tracking and min/max limits
  * [Ver001.000]
  */
-import { usePinch as useGesturePinch, PinchConfig } from '@use-gesture/react';
+import { usePinch as useGesturePinch } from '@use-gesture/react';
 import { useCallback, useRef, useState } from 'react';
 
-export interface PinchConfig {
+export interface UsePinchOptions {
   /** Minimum scale value [default: 0.5] */
   minScale?: number;
   /** Maximum scale value [default: 3] */
@@ -21,6 +20,8 @@ export interface PinchConfig {
   /** Prevent default gesture [default: true] */
   preventDefault?: boolean;
 }
+
+export type PinchConfig = UsePinchOptions;
 
 export interface PinchState {
   /** Current scale value */
@@ -48,7 +49,7 @@ export interface UsePinchReturn {
   scaleTo: (targetScale: number, duration?: number) => void;
 }
 
-const DEFAULT_CONFIG: Required<PinchConfig> = {
+const DEFAULT_CONFIG: Required<UsePinchOptions> = {
   minScale: 0.5,
   maxScale: 3,
   sensitivity: 1,
@@ -64,7 +65,7 @@ const DEFAULT_CONFIG: Required<PinchConfig> = {
  */
 export function usePinch(
   onPinch?: (state: PinchState) => void,
-  config: PinchConfig = {}
+  config: UsePinchOptions = {}
 ): UsePinchReturn {
   const cfg = { ...DEFAULT_CONFIG, ...config };
   const [state, setState] = useState<PinchState>({
@@ -196,7 +197,7 @@ export function usePinch(
     {
       preventDefault: cfg.preventDefault,
       pinchOnWheel: true,
-    } as PinchConfig
+    }
   );
 
   return { bind, state, setScale, reset, scaleTo };
@@ -207,7 +208,7 @@ export function usePinch(
  */
 export function useWheelZoom(
   onZoom?: (scale: number, delta: number) => void,
-  config: Pick<PinchConfig, 'minScale' | 'maxScale' | 'sensitivity'> = {}
+  config: Pick<UsePinchOptions, 'minScale' | 'maxScale' | 'sensitivity'> = {}
 ): {
   scale: number;
   setScale: (scale: number) => void;
@@ -250,7 +251,7 @@ export function useWheelZoom(
       wheel: {
         axis: 'y',
       },
-    } as PinchConfig
+    } as any
   );
 
   return { scale, setScale, reset, bind };

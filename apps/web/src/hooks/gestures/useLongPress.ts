@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * useLongPress Hook
  * Long press detection with configurable duration and cancel on move
@@ -55,9 +54,9 @@ const DEFAULT_CONFIG: Required<LongPressConfig> = {
  * @param config - Long press configuration
  */
 export function useLongPress(
-  onLongPress?: (event: PointerEvent | MouseEvent | TouchEvent) => void,
-  onPressStart?: (event: PointerEvent | MouseEvent | TouchEvent) => void,
-  onPressEnd?: (wasLongPress: boolean, event: PointerEvent | MouseEvent | TouchEvent) => void,
+  onLongPress?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void,
+  onPressStart?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void,
+  onPressEnd?: (wasLongPress: boolean, event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void,
   config: LongPressConfig = {}
 ): UseLongPressReturn {
   const cfg = { ...DEFAULT_CONFIG, ...config };
@@ -199,8 +198,8 @@ export function useLongPress(
  * Hook for detecting double-tap gestures
  */
 export function useDoubleTap(
-  onDoubleTap?: (event: PointerEvent | MouseEvent | TouchEvent) => void,
-  onTap?: (event: PointerEvent | MouseEvent | TouchEvent) => void,
+  onDoubleTap?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void,
+  onTap?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void,
   config: { delay?: number; preventDefault?: boolean } = {}
 ): {
   bind: ReturnType<typeof useDrag>;
@@ -258,9 +257,9 @@ export function useDoubleTap(
  */
 export function usePressable(
   handlers: {
-    onPress?: (event: PointerEvent | MouseEvent | TouchEvent) => void;
-    onLongPress?: (event: PointerEvent | MouseEvent | TouchEvent) => void;
-    onDoubleTap?: (event: PointerEvent | MouseEvent | TouchEvent) => void;
+    onPress?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void;
+    onLongPress?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void;
+    onDoubleTap?: (event: PointerEvent | MouseEvent | TouchEvent | KeyboardEvent) => void;
   },
   config: LongPressConfig & { doubleTapDelay?: number } = {}
 ): {

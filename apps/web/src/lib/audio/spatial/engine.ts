@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** [Ver001.000]
  * Spatial Audio Engine
  * ====================
@@ -25,7 +24,7 @@ import {
   type AudioSourceId,
   type SpatialAudioSource,
   type AudioSourceOptions,
-  type AudioListener,
+  type AudioListenerState,
   type ListenerConfig,
   type HRTFConfig,
   type OcclusionConfig,
@@ -69,7 +68,7 @@ export class SpatialAudioEngine {
   
   // Audio nodes
   private masterGain: GainNode | null = null;
-  private listenerNode: AudioListenerNode | null = null;
+  private listenerNode: AudioListener | null = null;
   private sourceNodes: Map<AudioSourceId, SourceAudioNodes>;
   private reverbNode: ConvolverNode | null = null;
   private reverbGain: GainNode | null = null;
@@ -313,7 +312,7 @@ export class SpatialAudioEngine {
     // Create panner for spatialization
     const pannerNode = this.audioContext.createPanner();
     pannerNode.panningModel = this.config.hrtfEnabled ? 'HRTF' : 'equalpower';
-    pannerNode.distanceModel = this.config.defaultDistanceModel;
+    pannerNode.distanceModel = this.config.defaultDistanceModel as 'linear' | 'inverse' | 'exponential';
     pannerNode.refDistance = source.refDistance;
     pannerNode.maxDistance = source.maxDistance;
     pannerNode.rolloffFactor = source.rolloffFactor;
@@ -569,7 +568,11 @@ export class SpatialAudioEngine {
     if (!source) return false;
 
     // Update source position
-    source.position = { ...source.position, ...position };
+    source.position = {
+      x: position.x ?? source.position.x,
+      y: position.y ?? source.position.y,
+      z: position.z ?? source.position.z,
+    };
 
     // Update panner node
     const nodes = this.sourceNodes.get(id);
@@ -587,21 +590,29 @@ export class SpatialAudioEngine {
     const source = this.state.sources.get(id);
     if (!source) return false;
 
-    source.velocity = { ...source.velocity, ...velocity };
+    source.velocity = {
+      x: velocity.x ?? source.velocity?.x ?? 0,
+      y: velocity.y ?? source.velocity?.y ?? 0,
+      z: velocity.z ?? source.velocity?.z ?? 0,
+    };
 
     // Update panner node velocity
     const nodes = this.sourceNodes.get(id);
     if (nodes?.pannerNode) {
-      if (velocity.x !== undefined) nodes.pannerNode.positionX.value = velocity.x;
-      if (velocity.y !== undefined) nodes.pannerNode.positionY.value = velocity.y;
-      if (velocity.z !== undefined) nodes.pannerNode.positionZ.value = velocity.z;
+      if (velocity.x !== undefined) nodes.pannerNode.positionX.value = velocity.x!;
+      if (velocity.y !== undefined) nodes.pannerNode.positionY.value = velocity.y!;
+      if (velocity.z !== undefined) nodes.pannerNode.positionZ.value = velocity.z!;
     }
 
     return true;
   }
 
   setListenerPosition(position: Partial<Vector3>, orientation?: { forward?: Partial<Vector3>; up?: Partial<Vector3> }): void {
-    this.state.listener.position = { ...this.state.listener.position, ...position };
+    this.state.listener.position = {
+      x: position.x ?? this.state.listener.position.x,
+      y: position.y ?? this.state.listener.position.y,
+      z: position.z ?? this.state.listener.position.z,
+    };
     
     if (orientation?.forward) {
       this.state.listener.forward = { ...this.state.listener.forward, ...orientation.forward };
@@ -1073,7 +1084,7 @@ interface SourceAudioNodes {
   pannerNode: PannerNode;
   sourceNode: AudioBufferSourceNode | null;
   occlusionFilter: BiquadFilterNode | null;
-  reverbSend: GainNode;
+  reverbSend: GainNode | null;
 }
 
 // ============================================================================

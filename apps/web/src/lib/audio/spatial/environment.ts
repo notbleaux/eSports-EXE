@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** [Ver001.000]
  * Environment Audio System
  * ========================
@@ -427,23 +426,29 @@ export class EnvironmentAudioManager {
       nodes.source.loop = layer.loop;
 
       // Set up filter if specified
-      if (layer.filterFrequency && nodes.filter) {
+      if (layer.filterFrequency && nodes.filter && nodes.gain) {
         nodes.filter.frequency.value = layer.filterFrequency;
         nodes.source.connect(nodes.filter);
         nodes.filter.connect(nodes.gain);
-      } else {
+      } else if (nodes.gain) {
         nodes.source.connect(nodes.gain);
       }
 
       // Connect to destination
+      if (!nodes.gain || !nodes.context) return;
       nodes.gain.connect(nodes.context.destination);
 
       // Fade in
       const targetVolume = layer.volume * baseVolume;
-      nodes.gain.gain.setValueAtTime(0, nodes.context.currentTime);
-      nodes.gain.gain.linearRampToValueAtTime(
+      const gainNode = nodes.gain;
+      const audioContext = nodes.context;
+      if (!gainNode || !audioContext) return;
+      const gainParam = gainNode.gain as AudioParam;
+      const currentTime = audioContext.currentTime;
+      gainParam.setValueAtTime(0, currentTime);
+      gainParam.linearRampToValueAtTime(
         targetVolume,
-        nodes.context.currentTime + fadeInDuration / 1000
+        currentTime + fadeInDuration / 1000
       );
 
       // Start playback
@@ -482,15 +487,15 @@ export class EnvironmentAudioManager {
   }
 
   private getOrCreateAudioNodes(layerId: string): EnvironmentAudioNodes {
-    let nodes = this.audioNodes.get(layerId);
-    if (nodes) return nodes;
+    const existing = this.audioNodes.get(layerId);
+    if (existing) return existing;
 
     const context = this.engine['audioContext'];
     if (!context) {
       return { context: null };
     }
 
-    nodes = {
+    const nodes: Required<EnvironmentAudioNodes> = {
       context,
       source: null,
       gain: context.createGain(),

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** [Ver001.000]
  * useFluidResize Hook
  * 
@@ -54,7 +53,7 @@ const MIN_THROTTLE_MS = 8; // ~120fps max
  * Throttle function using requestAnimationFrame.
  * More performant than setTimeout for visual updates.
  */
-function throttleWithRAF<T extends (...args: ResizeObserverEntry[]) => void>(
+function throttleWithRAF<T extends ResizeObserverCallback>(
   fn: T,
   wait: number,
   options: { leading?: boolean; trailing?: boolean } = {}
@@ -68,7 +67,7 @@ function throttleWithRAF<T extends (...args: ResizeObserverEntry[]) => void>(
   
   const invoke = (): void => {
     if (lastArgs) {
-      fn(...lastArgs);
+      (fn as ResizeObserverCallback)(lastArgs[0], lastArgs[1]);
       lastCallTime = Date.now();
       lastArgs = null;
     }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** [Ver001.000]
  * Spatial Audio Types
  * ===================
@@ -115,12 +114,12 @@ export interface AudioSourceOptions {
 /**
  * Audio listener state
  */
-export interface AudioListener {
+export interface AudioListenerState {
   position: Vector3;
   velocity: Vector3;
   forward: Vector3;
   up: Vector3;
-  listenerObject?: AudioListenerNode;
+  listenerObject?: AudioListenerState;
 }
 
 /**
@@ -340,7 +339,7 @@ export interface SoundscapeLayer {
  */
 export interface SpatialAudioState {
   isInitialized: boolean;
-  listener: AudioListener;
+  listener: AudioListenerState;
   sources: Map<AudioSourceId, SpatialAudioSource>;
   reverbZones: Map<string, ReverbZone>;
   activeReverbZone: ReverbZone | null;
@@ -353,7 +352,7 @@ export interface SpatialAudioState {
  * Spatial audio engine configuration
  */
 export interface SpatialAudioEngineConfig {
-  audioContext?: AudioContext;
+  audioContext?: AudioContext | null;
   masterVolume?: number;
   hrtfEnabled?: boolean;
   occlusionEnabled?: boolean;
