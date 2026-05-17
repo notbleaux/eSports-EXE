@@ -266,6 +266,9 @@ importers:
       '@axe-core/playwright':
         specifier: ^4.10.1
         version: 4.11.1(playwright-core@1.60.0)
+      '@eslint/compat':
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@10.4.0)
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.4.0)
@@ -1936,6 +1939,19 @@ packages:
   /@eslint-community/regexpp@4.12.2:
     resolution: {integrity: sha512-EriSTlt5OC9/7SXkRSCAhfSxxoSUgBm33OH+IkwbdpgoqsSsUg7y3uh+IICI/Qg4BBWr3U2i39RpmycbxMq4ew==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
+    dev: true
+
+  /@eslint/compat@2.1.0(eslint@10.4.0):
+    resolution: {integrity: sha512-LgaSCymEpw7tF53xvDw9SNsraPb1IBHxpdABIOM0hW8UAlP8znrjYtuxfR58FSJ3L9BhwD+FaPRFQpZq84Nh6g==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+    peerDependencies:
+      eslint: ^8.40 || 9 || 10
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+    dependencies:
+      '@eslint/core': 1.2.1
+      eslint: 10.4.0
     dev: true
 
   /@eslint/config-array@0.23.5:

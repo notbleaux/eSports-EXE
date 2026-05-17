@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import { fixupPluginRules } from '@eslint/compat'
 import globals from 'globals'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -7,7 +8,17 @@ import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 
 export default [
-  { ignores: ['dist', 'node_modules'] },
+  {
+    ignores: [
+      'dist',
+      'node_modules',
+      '*.config.js',
+      '*.config.ts',
+      'vite.config.ts',
+      'public/',
+      'coverage/',
+    ],
+  },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
@@ -22,7 +33,7 @@ export default [
     },
     settings: { react: { version: 'detect' } },
     plugins: {
-      react,
+      react: fixupPluginRules(react),
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       '@typescript-eslint': tseslint,
@@ -43,11 +54,22 @@ export default [
       'react/no-unknown-property': 'off', // Three.js props
       'react/no-unescaped-entities': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
-      // Disable stricter experimental hooks rules for Week 0
+      // Disable React Compiler rules (v7 recommended adds these by default;
+      // existing codebase was not compiled with React Compiler)
       'react-hooks/purity': 'off',
       'react-hooks/refs': 'off',
       'react-hooks/immutability': 'off',
       'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/static-components': 'off',
+      'react-hooks/preserve-manual-memoization': 'off',
+      'react-hooks/use-memo': 'off',
+      'react-hooks/set-state-in-render': 'off',
+      'react-hooks/error-boundaries': 'off',
+      'react-hooks/unsupported-syntax': 'off',
+      'react-hooks/globals': 'off',
+      'react-hooks/config': 'off',
+      'react-hooks/gating': 'off',
+      'react-hooks/incompatible-library': 'off',
       'no-redeclare': 'off', // Allow function overloading patterns
       'no-undef': 'off', // TypeScript handles this
     },

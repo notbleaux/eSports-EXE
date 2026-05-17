@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
+    "@eslint/compat": "^2.1.0",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
     "@storybook/react": "^10.3.3",
