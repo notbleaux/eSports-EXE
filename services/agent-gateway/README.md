@@ -104,5 +104,7 @@ Phase 2 implements step 4 (verification at gateway).
 
 - Plan v002: `/root/.claude/plans/plan-and-draft-the-elegant-widget.md` (multi-phase roadmap)
 - Agent ID Protocol: `.agents/AGENT_ID_PROTOCOL.md` (Phase 0, advisory)
+- **Keypair generation runbook:** `docs/runbooks/AGENT_KEY_GENERATION.md` — step-by-step for any new lineage to register their public hex
+- **Sign-off helper:** `services/agent-gateway/sign_off.py` — CLI that emits Conventional-Commits trailer or PR-body YAML frontmatter, auto-deriving counters from the central registry
 - Central registry: `polyrepo/registry/index.json` (interim home; will move when NeXeZ-core repo is bootstrapped)
 - Lineage discovery: `.agents/lineage-discovery.yaml`
