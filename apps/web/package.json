@@ -58,7 +58,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
     "@eslint/js": "^9.39.4",
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.60.0",
     "@storybook/react": "^10.3.3",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -73,7 +73,7 @@
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "@vitejs/plugin-react": "^4.7.0",
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.6",
     "autoprefixer": "^10.4.16",
     "cross-env": "^7.0.3",
     "eslint": "^9.39.4",
@@ -89,7 +89,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vite": "^7.3.2",
-    "vitest": "^4.1.0",
+    "vitest": "^4.1.6",
     "ws": "^8.14.0"
   }
 }
