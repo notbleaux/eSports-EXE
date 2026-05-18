@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 25,
+      "next": 26,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0024 consumed across PR #44..#55 + Copilot triage + dependabot waves. A0025 claimed by R2.6 Phase 2 FastAPI gateway scaffold."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0025 consumed across PR #44..#56 + Copilot triage + dependabot waves. A0026 claimed by Phase 2 /tasks/create endpoint + in-memory blackboard."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -109,10 +109,10 @@
       "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
     },
     "PLN-003-network-api": {
-      "next": 3,
+      "next": 4,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
       "status": "in-progress",
-      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), this PR (Phase 2 FastAPI scaffold).",
+      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56 (Phase 2 FastAPI scaffold), this PR (Phase 2 /tasks/create + blackboard).",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS (Phase 4+)",
         "OpenRouter API key (Phase 4+)",
@@ -143,7 +143,7 @@
     }
   },
   "portfolio": {
-    "next": 25,
+    "next": 26,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
