@@ -2,10 +2,10 @@
 
 # services/agent-gateway
 
-**Status:** Phase 1 (ECDSA crypto baseline) — in development
+**Status:** Phase 2 (FastAPI gateway scaffold) — in development
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
-**Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 0, advisory)
+**Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
 
 ---
 
@@ -27,15 +27,41 @@ This is intentionally a **separate service** from `packages/shared/api`:
 
 | Phase | Scope | Status | Tracking PR |
 |---|---|---|---|
-| **Phase 1** | ECDSA crypto baseline + local signing client | **🟡 IN DEVELOPMENT** | this PR (#TBD) |
-| Phase 2 | Network API gateway MVP (FastAPI, in-memory blackboard) | scoped | — |
+| **Phase 1** | ECDSA crypto baseline + local signing client | ✅ shipped | PR #46 |
+| **Phase 1.5** | First public key registered | ✅ shipped | PR #48 |
+| **Phase 1.6** | Sign-off helper CLI + key-gen runbook | ✅ shipped | PR #49, #55 (review fixes) |
+| **Phase 2 (scaffold)** | FastAPI app + signature middleware + `/health` | **🟡 IN DEVELOPMENT** | this PR |
+| Phase 2 (endpoints) | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | scoped | — |
+| Phase 2 (OpenAPI) | Export `openapi.json` + CI publish — hits v1.0.0 OKR | scoped | — |
 | Phase 3 | Persistent storage (SQLite WAL, Supabase failover) | scoped | — |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
 | Phase 5 | Real-time Pub/Sub (Redis 7) | scoped | — |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
 | Phase 7 | Telemetry + multi-platform fallbacks | scoped | — |
 
-## Phase 1 scope (this PR)
+## Phase 2 scaffold scope (this PR)
+
+**Goal:** ship a FastAPI app skeleton that future Phase 2 PRs can attach endpoints to, with the signature-verification middleware proven against the registered ECDSA keys from Phase 1.5.
+
+**Deliverables in this PR:**
+1. `app.py` — FastAPI app, signature-verification middleware, `/health` endpoint
+2. `requirements.txt` — fastapi + uvicorn + ecdsa + httpx/pytest for tests
+3. `tests/test_app.py` — 5 tests: `/health` public, middleware rejects missing/stale/bad-sig/unknown-agent
+4. README update (this section)
+
+**Out of scope for this scaffold PR** (deliberately — each gets its own focused PR):
+- `/tasks/create` endpoint + in-memory task blackboard
+- `/tasks/{id}/bid`, `/tasks/{id}/submit` endpoints
+- Persistent storage (Phase 3)
+- OpenAPI 3.1 spec export (subsequent Phase 2 PR — hits v1.0.0 OKR)
+
+**Acceptance criteria:**
+- `pip install -r services/agent-gateway/requirements.txt` succeeds
+- `pytest services/agent-gateway/tests/` passes 5/5
+- `uvicorn services.agent_gateway.app:app --port 8001` starts; `curl localhost:8001/health` returns 200
+- Middleware verifies an ECDSA signature against a registered `public_keys` entry from the central registry
+
+## Phase 1 scope (shipped — PR #46)
 
 **Goal:** ship a self-contained ECDSA signing client that future phases can import, without any network calls or external dependencies.
 
