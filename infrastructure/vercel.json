@@ -2,7 +2,7 @@
   "version": 2,
   "name": "njzitegeist-platform",
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "turbo run build --filter=@esportexe/web",
+  "buildCommand": "turbo run build --filter=@njzitegeist/web",
   "outputDirectory": "apps/web/dist",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,

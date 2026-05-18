@@ -13,7 +13,7 @@
       ],
       "outputs": ["dist/**", ".vercel/output/**"]
     },
-    "@esportexe/web#build": {
+    "@njzitegeist/web#build": {
       "dependsOn": ["^build"],
       "env": [
         "VITE_API_URL",
