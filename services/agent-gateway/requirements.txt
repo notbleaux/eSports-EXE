@@ -1,0 +1,14 @@
+# Agent-gateway runtime + test deps (Phase 2 scaffold)
+# Pinned to active, well-supported minor versions; bumps via dependabot.
+
+# Web framework
+fastapi>=0.115,<0.120
+uvicorn[standard]>=0.30,<0.35
+
+# Cryptography (shared with crypto_client.py)
+ecdsa>=0.19,<0.20
+
+# Test deps
+pytest>=8.0,<9.0
+pytest-asyncio>=0.23,<0.25
+httpx>=0.27,<0.30
