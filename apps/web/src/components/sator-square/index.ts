@@ -5,7 +5,7 @@
  * Layers: SATOR (impact), OPERA (uncertainty), TENET (control),
  *         AREPO (deaths), ROTAS (movement)
  * 
- * Migrated from satorXrotas - integrated with eSports-EXE Feature Store
+ * Migrated from satorXrotas - integrated with ZeSporteXte Feature Store
  */
 
 export { SatorSquare } from './SatorSquare';

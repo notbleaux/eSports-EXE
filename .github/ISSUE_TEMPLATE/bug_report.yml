@@ -1,0 +1,69 @@
+name: Bug report
+description: Report a defect in the platform
+title: "fix: <short summary>"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please confirm the bug reproduces against `main` before filing.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is broken, in one or two sentences.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps. Include URL, commands, or test case.
+      placeholder: |
+        1. Run `pnpm run dev:web`
+        2. Open http://localhost:5173/analytics
+        3. Click ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include error messages, stack traces, screenshots.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - apps/web
+        - apps/browser-extension
+        - apps/companion
+        - apps/overlay
+        - services/api
+        - data/schemas
+        - infra / CI
+        - docs
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: OS, Node version, browser, deployment (local / preview / prod)
+    validations:
+      required: false

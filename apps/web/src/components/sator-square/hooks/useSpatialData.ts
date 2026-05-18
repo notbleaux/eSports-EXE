@@ -2,7 +2,7 @@
  * useSpatialData — Hook for fetching and transforming spatial event data
  * for all five SATOR Square layers.
  * 
- * Integration: Connects to eSports-EXE Feature Store API for live match data.
+ * Integration: Connects to ZeSporteXte Feature Store API for live match data.
  */
 
 import { useState, useEffect, useCallback } from 'react';

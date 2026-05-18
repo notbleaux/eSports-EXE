@@ -1,0 +1,137 @@
+# Agent ID Sign-Off Check (Phase 1 — soft / advisory)
+#
+# Parses PR body + head commit message for Agent ID sign-off per
+# .agents/AGENT_ID_PROTOCOL.md. Posts a comment if missing.
+#
+# SOFT ENFORCEMENT: this workflow always exits 0. It does NOT block merge.
+# Per the enforcement roadmap in AGENT_ID_PROTOCOL.md:
+#   Phase 0 (PR #44)              : advisory doc only, no CI
+#   Phase 1 (THIS WORKFLOW)       : comment-only, soft
+#   Phase 2 (next workflow update): hard-fail unless `agent-id-exempt` label
+#   Phase 3 (after Hermes-MiMo)   : ECDSA-verified, not just claimed
+#   Phase 4 (after Pub/Sub bus)   : registry-write-before-commit enforcement
+#
+# [Ver001.000]
+
+name: Agent ID Sign-Off Check (advisory)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: write   # post comment if sign-off missing
+
+jobs:
+  check-sign-off:
+    runs-on: ubuntu-latest
+    # Skip for known exempt actors (per AGENT_ID_PROTOCOL §7 Exemptions)
+    if: |
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      !contains(github.event.pull_request.labels.*.name, 'agent-id-exempt')
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Need the PR head commit message
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Inspect PR body + head commit for sign-off
+        id: check
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          set -euo pipefail
+
+          HEAD_MSG=$(git log -1 --pretty=%B)
+
+          # Two acceptable forms (either is fine):
+          #   PR body YAML frontmatter:   "agent-sign-off: agent://..."
+          #   Commit trailer:             "Agent-Sign-Off: agent://..."
+          AGENT_URI_RE='agent://[a-z][a-z0-9_-]*/[A-Za-z0-9._-]+/[A-Za-z0-9_-]+/A[0-9]{4,}'
+
+          BODY_HIT=0
+          COMMIT_HIT=0
+
+          if printf '%s' "${PR_BODY:-}" | grep -qiE "agent-sign-off:[[:space:]]*${AGENT_URI_RE}"; then
+            BODY_HIT=1
+          fi
+
+          if printf '%s' "${HEAD_MSG}" | grep -qE "Agent-Sign-Off:[[:space:]]*${AGENT_URI_RE}"; then
+            COMMIT_HIT=1
+          fi
+
+          {
+            echo "body_hit=${BODY_HIT}"
+            echo "commit_hit=${COMMIT_HIT}"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ "$BODY_HIT" = 1 ] || [ "$COMMIT_HIT" = 1 ]; then
+            echo "OK: sign-off present (body=${BODY_HIT}, commit=${COMMIT_HIT})"
+            exit 0
+          fi
+
+          echo "NOTICE: no sign-off found in PR body or head commit."
+          echo "       This is advisory (Phase 1 — soft). Not failing the build."
+
+      - name: Comment if sign-off missing
+        if: steps.check.outputs.body_hit == '0' && steps.check.outputs.commit_hit == '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const ME = 'github-actions[bot]';
+            const MARKER = '<!-- agent-id-check:phase-1 -->';
+
+            // Idempotent: don't post a duplicate comment if one already exists
+            const existing = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const already = existing.data.find(c =>
+              c.user.login === ME && (c.body || '').includes(MARKER)
+            );
+            if (already) {
+              console.log('Comment already present — skipping (idempotent).');
+              return;
+            }
+
+            const body = [
+              MARKER,
+              '🤖 **Agent ID sign-off missing** (Phase 1 — advisory)',
+              '',
+              'Per `.agents/AGENT_ID_PROTOCOL.md`, AI-agent contributions should sign off in either:',
+              '',
+              '- **PR body frontmatter** (YAML block at top of PR description):',
+              '  ```yaml',
+              '  ---',
+              '  agent-sign-off: agent://<lineage>/<model>/<session>/<order>',
+              '  plan-counter: PLN-XXX-name-A0001',
+              '  portfolio-counter: NJZPL-MUTUAL-0001',
+              '  ---',
+              '  ```',
+              '',
+              '- **OR a git commit trailer** on the head commit:',
+              '  ```',
+              '  Agent-Sign-Off: agent://<lineage>/<model>/<session>/<order>',
+              '  Plan-Counter: PLN-XXX-name-A0001',
+              '  Portfolio-Counter: NJZPL-MUTUAL-0001',
+              '  ```',
+              '',
+              '**Format:** `agent://<lineage>/<model>/<session>/<order>` — e.g. `agent://claude/claude-opus-4-7/01HXX-ZSPRT-0G0F5/A0028`.',
+              '',
+              '**Exemptions:** dependabot (auto-exempt), human-authored PRs labelled `agent-id-exempt`, squash-merge child commits.',
+              '',
+              'This is currently **soft / advisory** — merging is not blocked. Phase 2 will require sign-off; Phase 3+ will require ECDSA-verified signatures. See `.agents/AGENT_ID_PROTOCOL.md` for the full enforcement roadmap.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+            console.log('Posted advisory comment (Phase 1 soft enforcement).');

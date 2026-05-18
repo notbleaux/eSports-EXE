@@ -1,0 +1,38 @@
+# Normalize line endings on commit
+* text=auto eol=lf
+
+# Force LF on shell scripts and unix configs (broken by CRLF)
+*.sh        text eol=lf
+*.bash      text eol=lf
+Dockerfile* text eol=lf
+
+# Force CRLF on Windows scripts
+*.ps1       text eol=crlf
+*.psm1      text eol=crlf
+*.psd1      text eol=crlf
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+
+# Binary assets — never diff or normalize
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.webp      binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.otf       binary
+*.eot       binary
+*.pdf       binary
+*.zip       binary
+*.gz        binary
+*.tar       binary
+
+# Generated / lock files — collapse in PR diffs
+pnpm-lock.yaml      linguist-generated=true
+package-lock.json   linguist-generated=true
+poetry.lock         linguist-generated=true
+*.min.js            linguist-generated=true
+*.min.css           linguist-generated=true

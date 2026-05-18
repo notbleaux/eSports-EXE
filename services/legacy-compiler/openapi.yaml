@@ -10,7 +10,7 @@ info:
   version: 1.0.0
   contact:
     name: NJZ eSports
-    url: https://github.com/notbleaux/eSports-EXE
+    url: https://github.com/notbleaux/ZeSporteXte
 
 servers:
   - url: http://localhost:8003

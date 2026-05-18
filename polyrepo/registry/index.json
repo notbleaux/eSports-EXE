@@ -1,0 +1,159 @@
+{
+  "_meta": {
+    "schema_version": "0.1.0",
+    "doc_version": "[Ver001.000]",
+    "name": "NJZPL Central PolyRepo Registry — Interim",
+    "long_term_home": "notbleaux/njzpl-registry (TBD — bootstrap when NeXeZ-core exists)",
+    "interim_home": "polyrepo/registry/index.json (this file, in notbleaux/ZeSporteXte)",
+    "owner": "AGENT_ID_PROTOCOL.md",
+    "protocol": ".agents/AGENT_ID_PROTOCOL.md",
+    "lineage_discovery": ".agents/lineage-discovery.yaml",
+    "phase": 0,
+    "enforcement": "advisory"
+  },
+  "repos": {
+    "ZSXT": {
+      "kind": "repo",
+      "next": 1,
+      "github_path": "notbleaux/ZeSporteXte",
+      "short_code": "ZSXT",
+      "long_name": "ZeSporteXte",
+      "project": "ZSXT",
+      "portfolio": "NJZPL"
+    }
+  },
+  "agents": {
+    "claude": {
+      "lineage_short": "CLA",
+      "next": 25,
+      "session_count": 1,
+      "scope": "AGENT-CLA",
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0024 consumed across PR #44..#55 + Copilot triage + dependabot waves. A0025 claimed by R2.6 Phase 2 FastAPI gateway scaffold."
+    },
+    "copilot": {
+      "lineage_short": "COP",
+      "next": 1,
+      "session_count": 0,
+      "scope": "AGENT-COP"
+    },
+    "kimi": {
+      "lineage_short": "KMI",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-KMI"
+    },
+    "gpt": {
+      "lineage_short": "GPT",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-GPT"
+    },
+    "gemini": {
+      "lineage_short": "GEM",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-GEM"
+    },
+    "mimo": {
+      "lineage_short": "MMO",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-MMO"
+    },
+    "hermes": {
+      "lineage_short": "HRM",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-HRM"
+    },
+    "qwen": {
+      "lineage_short": "QWN",
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-QWN"
+    }
+  },
+  "projects": {
+    "ZSXT": {
+      "next": 1,
+      "kind": "project",
+      "repos": ["ZSXT"],
+      "portfolio": "NJZPL"
+    },
+    "NEXEZ-CORE": {
+      "next": 0,
+      "kind": "project",
+      "repos": [],
+      "portfolio": "NJZPL",
+      "status": "not-yet-bootstrapped"
+    },
+    "NEXEZ-CODON": {
+      "next": 0,
+      "kind": "project",
+      "repos": [],
+      "portfolio": "NJZPL",
+      "status": "not-yet-bootstrapped"
+    }
+  },
+  "plans": {
+    "PLN-001-rename": {
+      "next": 24,
+      "title": "Post-rename cleanup tail",
+      "status": "shipped",
+      "delivered_in": "PR #43"
+    },
+    "PLN-002-agent-id": {
+      "next": 23,
+      "title": "Agent ID + Lineage Protocol — Phase 0 (advisory) + Phase 1 (soft enforcement) + Phase 1.6 (sign-off helper)",
+      "status": "in-progress",
+      "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
+    },
+    "PLN-003-network-api": {
+      "next": 3,
+      "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
+      "status": "in-progress",
+      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), this PR (Phase 2 FastAPI scaffold).",
+      "blocking_prerequisites": [
+        "user-provisioned Cloud VPS (Phase 4+)",
+        "OpenRouter API key (Phase 4+)",
+        "registered domain (Phase 6+)"
+      ]
+    },
+    "PLN-004-playwright-sprint": {
+      "next": 1,
+      "title": "Playwright E2E sprint — diagnose + fix + re-enable gate",
+      "status": "open",
+      "delivered_in": "PR #45",
+      "depends_on": ["PLN-001-rename"],
+      "blocks": []
+    },
+    "PLN-005-wiki-sourcegraph-inspired": {
+      "next": 0,
+      "title": "Internal AI-augmented wiki — Sourcegraph-inspired 5-phase rollout (W1..W5)",
+      "status": "scoped",
+      "scoped_in": "PR #53 (docs/research/SOURCEGRAPH_WIKI_INSPIRATION.md)",
+      "decisions": {
+        "registry_reservation": "approved (this entry)",
+        "content_authoring": "ai-augmented",
+        "visibility": "internal",
+        "sequencing": "after R2.5"
+      },
+      "depends_on": ["PLN-003-network-api"],
+      "blocks": []
+    }
+  },
+  "portfolio": {
+    "next": 25,
+    "scope": "NJZPL",
+    "long_name": "NJZ NeXeZ Portfolio",
+    "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
+  },
+  "public_keys": {
+    "_comment": "ECDSA secp256k1 public keys per agent_id (uncompressed HEX, '04' prefix). Phase 1 adds the first entries. Phase 0 ships the empty container.",
+    "agent_claude_code_local": "049819d65ba1d03f43da0c4e503b8dd9d26e1e50dceb358984f3d4fb2523056bb91429b766ce794f0d5aa1a16cad4a74387336d1adde23c5e3535cb18cbe6abc5c",
+    "agent_copilot_swe_agent": null,
+    "agent_kimi_claw_worker": null,
+    "agent_mimo_hermes_cloud": null,
+    "agent_hermes_host": null
+  }
+}
