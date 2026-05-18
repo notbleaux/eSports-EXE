@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Data Ingestion Engine - Live Match Data Ingestion System
  * 

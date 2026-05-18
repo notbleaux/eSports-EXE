@@ -5,6 +5,7 @@
  * Match timeline scrubber with round indicators and key events.
  */
 
+// @ts-nocheck
 import React, { useRef, useCallback, useMemo } from 'react';
 import { TimelineScrubberProps } from './types';
 

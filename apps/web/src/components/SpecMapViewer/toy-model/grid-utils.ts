@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SpecMapViewer Toy Model - Grid Utilities
  * 

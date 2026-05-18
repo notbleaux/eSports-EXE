@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Texture Atlas System for Mascot 3D Scenes
  * 

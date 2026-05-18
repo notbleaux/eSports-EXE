@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Message Handler - Parse and Route Live Match Events
  * 

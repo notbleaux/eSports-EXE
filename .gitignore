@@ -24,7 +24,9 @@ user://
 Thumbs.db
 
 # IDE
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
 .idea/
 
 # .NET build artifacts
@@ -38,6 +40,10 @@ obj/
 node_modules/
 dist/
 *.tsbuildinfo
+
+# TypeScript compiler dumps (do not commit)
+tsc-check*.txt
+tsc-output*.txt
 
 # Environment
 .env
@@ -70,8 +76,11 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# Python setuptools 'lib/' and 'lib64/' live at the repo root.
+# Anchored to / so they don't shadow legitimate source dirs like
+# apps/web/src/lib/ or apps/web/src/shared/lib/.
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -79,6 +88,18 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Frontend env templates committed by mistake — should be .env.local instead.
+# Values currently in these tracked files are placeholders, not real secrets.
+# Untracked in commit on PR #43.
+apps/web/.env.production
+apps/web/.env.vercel
+apps/web/.env.sentry-build-plugin
+
+# Agent gateway — ECDSA private keys (NEVER commit). Per-agent private
+# keypairs live here; only the public hex gets registered in
+# polyrepo/registry/index.json::public_keys.
+services/agent-gateway/keys/
 
 # Testing / coverage
 .coverage
@@ -104,4 +125,39 @@ bandit-*.json
 venv/
 ENV/
 env/
+
+# Auto-generated agent rules (personalized per developer)
+.brainsync/agent-rules.md
+
+AGENT.md
+.agent-mem/
+
+# FrameRef cache directory
+/.frameref
+
+# Personal memory/config files
+.memory/
+.memix/
+.memvid/
+.windsurfrules
+temp_repo/
+
+# Personal AI/IDE configurations
+.agent/
+.agents/rules/
+.aimemory/
+.brainsync/
+.cursor/
+.cursorrules
+.github/instructions/
+.github/prompts/
+LongTermMemory/
+
+# Cleanup scripts (local use only)
+cleanup-extensions.ps1
+
+# Claude Code local settings (per-developer tool permissions allowlist)
+.claude/settings.local.json
+
+# Turborepo build cache (regenerated per run)
 .turbo/cache/

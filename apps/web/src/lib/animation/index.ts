@@ -1,16 +1,4 @@
 // @ts-nocheck
-import {
-  AnimationState,
-  DEFAULT_TRANSITIONS,
-  DEFAULT_STATE_CONFIGS,
-  PRIORITY_WEIGHTS,
-} from './states';
-
-import type {
-  AnimationSequence,
-  AnimationStep,
-} from './sequencer';
-
 /** [Ver001.000]
  * Animation Library Index
  * =======================
@@ -18,6 +6,13 @@ import type {
  * Provides mascot character animation management with Framer Motion
  * and Three.js integration.
  */
+
+// ============================================================================
+// Imports (for use in utility functions below)
+// ============================================================================
+
+import type { AnimationState, AnimationStep, AnimationPriority, AnimationSequence } from './states';
+import { DEFAULT_STATE_CONFIGS, DEFAULT_TRANSITIONS, PRIORITY_WEIGHTS } from './states';
 
 // ============================================================================
 // Core Exports
@@ -55,7 +50,7 @@ export {
 } from './sequencer';
 
 // ============================================================================
-// Type Exports
+// State Types & Configurations
 // ============================================================================
 
 export type {
@@ -76,15 +71,13 @@ export type {
   StateMachineOptions,
 } from './states';
 
-// ============================================================================
-// Value Exports
-// ============================================================================
-
 export {
   DEFAULT_STATE_CONFIGS,
   DEFAULT_TRANSITIONS,
   PRIORITY_WEIGHTS,
 } from './states';
+
+export type { MascotId } from './states';
 
 // ============================================================================
 // Blend Tree System

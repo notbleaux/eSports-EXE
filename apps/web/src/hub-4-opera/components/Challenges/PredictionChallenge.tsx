@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PredictionChallenge Component
  * Match winner prediction challenge

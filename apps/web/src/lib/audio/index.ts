@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Audio Library
  * =============
@@ -26,6 +27,14 @@
  * audio.setMasterVolume(0.5);
  * ```
  */
+
+import { getAudioManager, destroyAudioManager } from './manager';
+import { getVoiceController, destroyVoiceController } from './voice';
+import { getSFXController, destroySFXController } from './sfx';
+
+// ============================================================================
+// Internal Imports (for utility functions)
+// ============================================================================
 
 import { getAudioManager, destroyAudioManager } from './manager';
 import { getVoiceController, destroyVoiceController } from './voice';

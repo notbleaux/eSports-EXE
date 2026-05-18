@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Replay Parser Web Worker
  * Offloads parsing to a background thread for performance

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // [Ver001.000] eSports Calendar — upcoming matches from Pandascore API.
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';

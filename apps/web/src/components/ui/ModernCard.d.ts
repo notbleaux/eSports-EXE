@@ -1,8 +1,10 @@
 import type { FC, ReactNode } from 'react';
 
-interface ModernCardProps {
+export interface ModernCardProps {
   children?: ReactNode;
+  className?: string;
+  variant?: 'default' | 'glass' | 'outlined';
 }
 
-declare const ModernCard: FC<ModernCardProps>;
+export declare const ModernCard: FC<ModernCardProps>;
 export default ModernCard;

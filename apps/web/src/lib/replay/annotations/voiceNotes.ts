@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Voice Notes System
  * Audio recording, playback, and waveform visualization

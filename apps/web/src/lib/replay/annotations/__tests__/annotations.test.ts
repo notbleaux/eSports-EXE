@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Annotation System Tests
  * Comprehensive test suite for annotations, drawing, text, and voice

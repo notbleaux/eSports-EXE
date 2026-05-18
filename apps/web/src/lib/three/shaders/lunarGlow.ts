@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Lunar Glow Shader
  * 

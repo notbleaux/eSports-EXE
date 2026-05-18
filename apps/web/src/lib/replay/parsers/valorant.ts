@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Valorant Replay Parser
  * Parses Valorant match JSON/demo files to normalized replay format

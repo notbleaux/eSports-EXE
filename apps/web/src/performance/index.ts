@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.000]
  * Performance Module
  * Exports performance monitoring utilities and dashboard

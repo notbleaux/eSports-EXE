@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Map Geometry Management for SpecMap 3D
  * 

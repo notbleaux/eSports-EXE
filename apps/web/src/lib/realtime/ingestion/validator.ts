@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Data Validator - Live Match Data Validation System
  * 

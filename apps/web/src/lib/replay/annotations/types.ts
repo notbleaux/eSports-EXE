@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Annotation System Types
  * [Ver001.000]

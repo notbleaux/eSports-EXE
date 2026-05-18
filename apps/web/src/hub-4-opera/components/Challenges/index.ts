@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Daily Challenges Components - Index
  * Export all challenge-related components

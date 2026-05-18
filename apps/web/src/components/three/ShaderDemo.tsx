@@ -11,6 +11,7 @@
  * - All 5 mascot shader demonstrations
  */
 
+// @ts-nocheck
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';

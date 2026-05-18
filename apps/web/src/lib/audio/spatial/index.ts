@@ -40,22 +40,11 @@
  */
 
 // ============================================================================
-// Internal Imports (used by module functions, also re-exported below)
+// Internal Imports (for utility functions below)
 // ============================================================================
 
-import {
-  SpatialAudioEngine,
-  getSpatialAudioEngine,
-  destroySpatialAudioEngine,
-  createSpatialAudioEngine,
-} from './engine';
-
-import {
-  EnvironmentAudioManager,
-  getEnvironmentAudioManager,
-  destroyEnvironmentAudioManager,
-  createEnvironmentAudioManager,
-} from './environment';
+import { getSpatialAudioEngine, destroySpatialAudioEngine } from './engine';
+import { getEnvironmentAudioManager, destroyEnvironmentAudioManager } from './environment';
 
 // ============================================================================
 // Core Engine Exports

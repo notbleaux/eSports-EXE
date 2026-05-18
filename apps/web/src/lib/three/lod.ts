@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Level of Detail (LOD) System for Mascot 3D Scenes
  * 

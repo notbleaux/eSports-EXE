@@ -232,5 +232,32 @@ A task is complete when:
 
 ---
 
+## Agent ID Sign-Off (Phase 0 — advisory)
+
+All agents working in this repo are encouraged (not yet required) to sign off their commits and PRs per the canonical schema:
+
+```
+agent://<lineage>/<model>/<session>/<order>
+```
+
+Full protocol: `.agents/AGENT_ID_PROTOCOL.md`.
+Central registry (interim, in-repo): `polyrepo/registry/index.json`.
+Lineage discovery rules: `.agents/lineage-discovery.yaml`.
+
+**Canonical codes for this repo:**
+- Repo short code: **`ZSXT`** (ZeSporteXte)
+- Portfolio code: **`NJZPL`** (NeXeZ portfolio root)
+
+**Where to sign off:**
+- Git commit trailer (required for Phase 1+; advisory now)
+- PR body frontmatter (parseable by CI in Phase 1+)
+- Append-only audit log at `polyrepo/registry/log.jsonl`
+
+**Exemptions:** Dependabot, `agent-id-exempt`-labelled PRs, squash-merge child commits.
+
+Phase 0 introduces this advisory layer; enforcement progresses through Phases 1–4 (soft → required → cryptographically verified → networked) as the Zero-Trust Network API rollout lands. See `MASTER_PLAN.md` and the v002 multi-phase plan for the full progression.
+
+---
+
 *Agents that ignore this contract produce drift. Drift compounds. The contract exists to prevent the accumulated mess that occurs when each agent improvises.*
 *In shared contexts, the Collaboration Runbook is the single source of truth for who is doing what right now.*

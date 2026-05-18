@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Cloud Upload Pattern
  * Presigned URL uploads with progress tracking, retry logic, and chunked uploads

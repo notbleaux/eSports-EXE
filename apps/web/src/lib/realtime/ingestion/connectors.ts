@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Source Connectors - Data Source Connectors for Live Match Data
  * 

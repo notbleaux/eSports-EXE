@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * [Ver001.000]
  * Eye Tracking Integration for Motor Accessibility

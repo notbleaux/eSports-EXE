@@ -778,6 +778,4 @@ export function createEmoteController(
   return new EmoteController(stateMachine, options);
 }
 
-// ============================================================================
-// Exports
-// ============================================================================
+// All types already exported above

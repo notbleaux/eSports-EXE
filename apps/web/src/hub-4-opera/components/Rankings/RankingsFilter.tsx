@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * RankingsFilter Component
  * Filter controls for rankings

@@ -42,7 +42,7 @@
       "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"]
     },
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals", "three", "d3"]
   },
   "include": ["src/**/*", "src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
   "exclude": [

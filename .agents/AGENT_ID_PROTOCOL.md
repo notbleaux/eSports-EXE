@@ -162,8 +162,6 @@ No counter renumbering required — the values are stable across the move.
 ## 9. References
 
 - `AGENT_CONTRACT.md` — operating contract this protocol extends
-- `.agents/COORDINATION_PROTOCOL.md` — shared context framework for multi-agent work
-- `.agents/COLLABORATION_RUNBOOK.md` — step-by-step procedures for multi-agent collaboration
 - `polyrepo/registry/index.json` — interim central registry
 - `.agents/lineage-discovery.yaml` — per-lineage discovery rules
 - `/root/.claude/plans/plan-and-draft-the-elegant-widget.md` v002 — broader multi-phase roadmap (Phases 0–7)

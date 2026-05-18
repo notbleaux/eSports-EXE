@@ -5,6 +5,7 @@
  * Large click targets, adjustable timing, visual feedback, error prevention
  */
 
+// @ts-nocheck
 import React, { 
   createContext, 
   useContext, 

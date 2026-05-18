@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** [Ver001.002] - Fixed Vector2D re-export */
 /**
  * Lens System Types

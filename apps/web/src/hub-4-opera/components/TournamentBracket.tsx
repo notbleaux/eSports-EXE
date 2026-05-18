@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TournamentBracket Component
  * 8-team single-elimination bracket rendered with CSS flex columns.

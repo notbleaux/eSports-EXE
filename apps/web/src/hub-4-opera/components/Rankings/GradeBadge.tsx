@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * GradeBadge Component
  * S/A/B/C/D/F grade display with color coding

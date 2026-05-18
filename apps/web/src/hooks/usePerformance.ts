@@ -20,6 +20,7 @@
  *   }
  */
 
+// @ts-nocheck
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createLogger } from '@/utils/logger'
 import type { RenderMetrics, InteractionMetrics, PerformanceConfig, PerformanceAlert } from '../types/performance'

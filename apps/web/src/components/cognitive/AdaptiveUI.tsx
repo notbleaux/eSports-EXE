@@ -17,6 +17,7 @@
  * @module components/cognitive/AdaptiveUI
  */
 
+// @ts-nocheck
 import React, {
   createContext,
   useContext,

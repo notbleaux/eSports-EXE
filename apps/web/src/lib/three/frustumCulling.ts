@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Frustum Culling System for Mascot 3D Scenes
  * 

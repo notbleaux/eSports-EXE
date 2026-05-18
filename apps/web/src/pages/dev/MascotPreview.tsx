@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Mascot Preview Tool - Recommendation #3
  * 

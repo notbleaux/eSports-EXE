@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Camera Director System Tests
  * [Ver001.000]

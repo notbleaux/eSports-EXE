@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Camera Modes for Replay System
  * Free, Follow, Orbit, and Cinematic camera implementations

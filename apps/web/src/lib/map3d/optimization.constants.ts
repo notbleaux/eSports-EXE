@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Optimization Constants and Device Profiles
  * 

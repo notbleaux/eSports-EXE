@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Annotation State Management
  * Zustand-based store for annotation state

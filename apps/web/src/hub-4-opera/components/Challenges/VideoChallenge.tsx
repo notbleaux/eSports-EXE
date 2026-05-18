@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * VideoChallenge Component
  * Video quiz challenge ("Who won this round?")

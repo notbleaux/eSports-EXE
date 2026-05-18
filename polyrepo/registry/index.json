@@ -1,7 +1,7 @@
 {
   "_meta": {
     "schema_version": "0.1.0",
-    "doc_version": "[Ver001.001]",
+    "doc_version": "[Ver001.000]",
     "name": "NJZPL Central PolyRepo Registry — Interim",
     "long_term_home": "notbleaux/njzpl-registry (TBD — bootstrap when NeXeZ-core exists)",
     "interim_home": "polyrepo/registry/index.json (this file, in notbleaux/ZeSporteXte)",
@@ -9,9 +9,7 @@
     "protocol": ".agents/AGENT_ID_PROTOCOL.md",
     "lineage_discovery": ".agents/lineage-discovery.yaml",
     "phase": 0,
-    "enforcement": "advisory",
-    "last_updated": "2026-05-16",
-    "updated_by": "agent://kimi/k2-6/20260516-1/A0001"
+    "enforcement": "advisory"
   },
   "repos": {
     "ZSXT": {
@@ -27,24 +25,22 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 7,
+      "next": 24,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Actions: PR #44 creation (A0001-A0005), PR #45 creation (A0006), registry counter bump (A0007). Next counter reflects consumed actions."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0023 consumed across PR #44..#54 + Copilot triage + dependabot waves. A0024 claimed by Phase 1.6 review-fix PR (sign_off.py project-key bug + JSON error handling + docstring + typo)."
     },
     "copilot": {
       "lineage_short": "COP",
       "next": 1,
       "session_count": 0,
-      "scope": "AGENT-COP",
-      "_note": "Actions: PR #20, PR #21 opened. No sign-off per Phase 0 advisory — counter gap is visible signal."
+      "scope": "AGENT-COP"
     },
     "kimi": {
       "lineage_short": "KMI",
-      "next": 2,
-      "session_count": 1,
-      "scope": "AGENT-KMI",
-      "_note": "Actions: Governance framework update (A0001 — this registry update). Active in shared context with Claude + Copilot."
+      "next": 0,
+      "session_count": 0,
+      "scope": "AGENT-KMI"
     },
     "gpt": {
       "lineage_short": "GPT",
@@ -79,7 +75,7 @@
   },
   "projects": {
     "ZSXT": {
-      "next": 2,
+      "next": 1,
       "kind": "project",
       "repos": ["ZSXT"],
       "portfolio": "NJZPL"
@@ -107,15 +103,16 @@
       "delivered_in": "PR #43"
     },
     "PLN-002-agent-id": {
-      "next": 6,
-      "title": "Agent ID + Lineage Protocol — Phase 0 (advisory)",
-      "status": "shipped",
-      "delivered_in": "PR #44"
+      "next": 23,
+      "title": "Agent ID + Lineage Protocol — Phase 0 (advisory) + Phase 1 (soft enforcement) + Phase 1.6 (sign-off helper)",
+      "status": "in-progress",
+      "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
     },
     "PLN-003-network-api": {
-      "next": 0,
+      "next": 2,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
-      "status": "scoped",
+      "status": "in-progress",
+      "delivered_in": "PR #46 (Phase 1 ECDSA crypto baseline). Phase 1.5 keypair registration in current PR.",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS",
         "OpenRouter API key",
@@ -124,32 +121,36 @@
     },
     "PLN-004-playwright-sprint": {
       "next": 1,
-      "title": "Playwright E2E Diagnostic + Remediation Sprint",
-      "status": "unblocked",
+      "title": "Playwright E2E sprint — diagnose + fix + re-enable gate",
+      "status": "open",
       "delivered_in": "PR #45",
-      "depends_on": "PLN-001-rename",
-      "blocks": [],
-      "owner": "TBD"
+      "depends_on": ["PLN-001-rename"],
+      "blocks": []
     },
-    "PLN-005-multi-agent-governance": {
-      "next": 1,
-      "title": "Multi-Agent Shared Context Framework v1.1",
-      "status": "in-progress",
-      "delivered_in": "kimi governance session",
-      "depends_on": "PLN-002-agent-id",
-      "blocks": [],
-      "owner": "kimi"
+    "PLN-005-wiki-sourcegraph-inspired": {
+      "next": 0,
+      "title": "Internal AI-augmented wiki — Sourcegraph-inspired 5-phase rollout (W1..W5)",
+      "status": "scoped",
+      "scoped_in": "PR #53 (docs/research/SOURCEGRAPH_WIKI_INSPIRATION.md)",
+      "decisions": {
+        "registry_reservation": "approved (this entry)",
+        "content_authoring": "ai-augmented",
+        "visibility": "internal",
+        "sequencing": "after R2.5"
+      },
+      "depends_on": ["PLN-003-network-api"],
+      "blocks": []
     }
   },
   "portfolio": {
-    "next": 8,
+    "next": 24,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
   },
   "public_keys": {
     "_comment": "ECDSA secp256k1 public keys per agent_id (uncompressed HEX, '04' prefix). Phase 1 adds the first entries. Phase 0 ships the empty container.",
-    "agent_claude_code_local": null,
+    "agent_claude_code_local": "049819d65ba1d03f43da0c4e503b8dd9d26e1e50dceb358984f3d4fb2523056bb91429b766ce794f0d5aa1a16cad4a74387336d1adde23c5e3535cb18cbe6abc5c",
     "agent_copilot_swe_agent": null,
     "agent_kimi_claw_worker": null,
     "agent_mimo_hermes_cloud": null,

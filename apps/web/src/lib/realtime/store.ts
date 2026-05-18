@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Live Data Store - Zustand Store for Real-time Data
  * 

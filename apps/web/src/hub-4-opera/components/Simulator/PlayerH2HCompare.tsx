@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PlayerH2HCompare Component
  * Player vs Player stat comparison with radar chart

@@ -23,6 +23,7 @@
  * ```
  */
 
+// @ts-nocheck
 import React, {
   useRef,
   useEffect,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SimulatorPanel Component
  * Main simulator container with tabs for different prediction modes

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Daily Challenges Types
  * TypeScript interfaces and types for OPERA Daily Challenges

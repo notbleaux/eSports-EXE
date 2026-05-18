@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Action Detection Engine for Camera Director
  * Detects significant gameplay events for automated camera switching

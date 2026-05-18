@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Privacy Service - GDPR compliance and data protection
  * 

@@ -11,6 +11,6 @@
     "sourceMap": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*", "../../data/schemas/**/*"],
+  "include": ["src/**/*", "../../../data/schemas/**/*"],
   "exclude": ["dist", "node_modules"]
 }

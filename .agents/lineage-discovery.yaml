@@ -1,5 +1,5 @@
 # Lineage Discovery — per-frontier-LLM attribute resolution
-# [Ver001.001]
+# [Ver001.000]
 #
 # Each entry declares how an agent of that lineage discovers its own
 # `model` and `session` attributes at session start. The agent reads
@@ -53,12 +53,10 @@ lineages:
         - literal: k2-6
       session:
         - env: KIMI_SESSION_ID
-        - env: OPENCLAW_SESSION_ID
         - generate: uuidv7
     notes: |
-      Kimi K2.6 is the current swarm target via OpenClaw. The OpenClaw runtime
-      sets KIMI_SESSION_ID when spawning. Fallback to uuidv7 when running
-      outside OpenClaw harness.
+      Kimi K2.6 is the current swarm target. Update literal when newer
+      versions ship (k3, k2-7, etc.).
 
   gpt:
     short_code: GPT

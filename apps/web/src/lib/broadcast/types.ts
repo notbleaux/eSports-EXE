@@ -175,3 +175,9 @@ export interface BroadcastNotificationProps {
   onClick?: () => void;
   index: number;
 }
+
+export interface UseLiveBroadcastOptions extends LiveBroadcastProps {
+  wsUrl?: string;
+  userId?: string;
+  channels?: string[];
+}

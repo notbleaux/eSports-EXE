@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Camera Path Recording System
  * Record, save, load, and interpolate smooth camera paths

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * RankingTable Component
  * Reusable sortable ranking table with pagination

@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 /** [Ver001.000]
  * useVoiceCommand Hook
  * 
@@ -619,15 +618,4 @@ export function useVoiceCommand(
 
 export default useVoiceCommand;
 
-// ============================================================================
-// Type Exports
-// ============================================================================
-
-export type { 
-  UseVoiceCommandOptions, 
-  UseVoiceCommandReturn,
-  VoiceState,
-  SupportedLanguage,
-  CommandMatch,
-  VoiceError,
-};
+// Types are already exported above with 'export interface'

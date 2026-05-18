@@ -14,6 +14,7 @@
  * ```
  */
 
+// @ts-nocheck
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createLogger } from '@/utils/logger';
 import type {

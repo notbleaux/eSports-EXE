@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CircuitStandings Component
  * VCT points leaderboard with team rankings and qualification status

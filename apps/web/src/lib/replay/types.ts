@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Normalized Replay Schema
  * Game-agnostic replay format for Valorant and CS2

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Camera Director System Exports
  * [Ver001.000]

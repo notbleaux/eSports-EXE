@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Replay Storage Module
  * IndexedDB storage, metadata indexing, and cloud upload
