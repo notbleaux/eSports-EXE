@@ -173,7 +173,7 @@ Your PR will:
 
 ## Key rotation (when needed)
 
-If a private key is compromised or end-of-lifed:
+If a private key is compromised or reaches end-of-life:
 
 1. Generate a new keypair at `<your_agent_id>_v2` (e.g. `agent_kimi_claw_worker_v2`)
 2. Register the new public hex (new slot in `public_keys`)

@@ -32,11 +32,12 @@ Usage examples:
                     --subject "feat(scope): description")
 
 Counter semantics (per .agents/AGENT_ID_PROTOCOL.md §3):
-  - This tool READS current counter state from polyrepo/registry/index.json
+  - This tool READS counter slots from polyrepo/registry/index.json
   - It does NOT write back — the consuming commit / PR is expected to
     bump the registry in the same commit (manual today; automated in
     Phase 5 networked enforcement)
-  - The order number printed is `current + 1` (the next unclaimed slot)
+  - Registry fields named `next` already store the next-unclaimed slot,
+    so this tool emits them verbatim (no `+1` adjustment in the script)
 """
 
 from __future__ import annotations
@@ -82,7 +83,11 @@ def _load_registry(path: Path) -> dict:
     if not path.exists():
         sys.stderr.write(f"ERROR: registry not found at {path}\n")
         sys.exit(2)
-    return json.loads(path.read_text())
+    try:
+        return json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        sys.stderr.write(f"ERROR: registry at {path} is not valid JSON: {e}\n")
+        sys.exit(2)
 
 
 def _resolve_lineage(agent_id: str) -> str:
@@ -107,9 +112,15 @@ def _derive_counters(
     lineage: str,
     plan_id: str,
     repo_short: str = "ZSXT",
-    project_short: str = "NJZ",
+    project_short: str = "ZSXT",
 ) -> Dict[str, int]:
-    """Pull `next` from each scope (does NOT mutate the registry)."""
+    """Pull `next` from each scope (does NOT mutate the registry).
+
+    `project_short` keys into `registry.projects` and is also used by the
+    trailer formatter for the `{project_short}-P-NNNN` rendering, so the
+    two must agree. Default is "ZSXT" (matching the project entry in the
+    registry); NJZ is the portfolio prefix, not a project key.
+    """
     repos = registry.get("repos", {})
     agents = registry.get("agents", {})
     projects = registry.get("projects", {})
@@ -120,7 +131,7 @@ def _derive_counters(
         "repo": repos.get(repo_short, {}).get("next", 0),
         "agent": agents.get(lineage, {}).get("next", 0),
         "session_count": agents.get(lineage, {}).get("session_count", 0) or 0,
-        "project": projects.get(repo_short, {}).get("next", 0),
+        "project": projects.get(project_short, {}).get("next", 0),
         "plan": plans.get(plan_id, {}).get("next", 0),
         "portfolio": portfolio.get("next", 0),
     }
@@ -211,7 +222,11 @@ def _cli() -> int:
         help=f"Path to central registry JSON (default: {REGISTRY_PATH_DEFAULT})",
     )
     p.add_argument("--repo-short", default="ZSXT", help="Repo short code (default: ZSXT)")
-    p.add_argument("--project-short", default="NJZ", help="Project short code (default: NJZ)")
+    p.add_argument(
+        "--project-short",
+        default="ZSXT",
+        help="Project short code — must match a key in registry.projects (default: ZSXT)",
+    )
     args = p.parse_args()
 
     registry = _load_registry(args.registry)
