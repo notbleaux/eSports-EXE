@@ -37,7 +37,7 @@ from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from blackboard import blackboard
+from blackboard import TaskStateError, blackboard
 
 try:
     from ecdsa import VerifyingKey, SECP256k1, BadSignatureError
@@ -167,6 +167,14 @@ class TaskCreateRequest(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
+def _trusted_agent_id(request: Request) -> str:
+    """Pull the middleware-verified agent_id off the request, else 500."""
+    agent_id = getattr(request.state, "agent_id", None)
+    if not agent_id:  # defensive — middleware should have set this
+        raise HTTPException(status_code=500, detail="agent_id not propagated by middleware")
+    return agent_id
+
+
 @app.post("/tasks/create", status_code=status.HTTP_201_CREATED)
 async def create_task(payload: TaskCreateRequest, request: Request) -> dict[str, Any]:
     """Post a new task to the blackboard.
@@ -174,10 +182,7 @@ async def create_task(payload: TaskCreateRequest, request: Request) -> dict[str,
     The middleware has already verified the caller's signature; `agent_id`
     on `request.state` is trusted.
     """
-    creator_agent_id = getattr(request.state, "agent_id", None)
-    if not creator_agent_id:  # defensive — middleware should have set this
-        raise HTTPException(status_code=500, detail="agent_id not propagated by middleware")
-
+    creator_agent_id = _trusted_agent_id(request)
     try:
         task = blackboard.create(
             creator_agent_id=creator_agent_id,
@@ -186,5 +191,65 @@ async def create_task(payload: TaskCreateRequest, request: Request) -> dict[str,
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    return task.to_dict()
 
+
+class TaskBidRequest(BaseModel):
+    message: str | None = Field(default=None, max_length=2048)
+
+
+@app.post("/tasks/{task_id}/bid")
+async def bid_on_task(
+    task_id: str,
+    payload: TaskBidRequest,
+    request: Request,
+) -> dict[str, Any]:
+    """Claim an OPEN task (or accept a hand-off from PARTIAL_PENDING_HANDOFF).
+
+    First bid wins — Phase 5 will swap this for a multi-bidder auction.
+    """
+    bidder_agent_id = _trusted_agent_id(request)
+    try:
+        task = blackboard.bid(
+            task_id=task_id,
+            bidder_agent_id=bidder_agent_id,
+            message=payload.message,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"task {task_id} not found")
+    except TaskStateError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    return task.to_dict()
+
+
+class TaskSubmitRequest(BaseModel):
+    content: str = Field(..., min_length=1, max_length=65536)
+    complete: bool = Field(..., description="True → COMPLETED; False → PARTIAL_PENDING_HANDOFF")
+
+
+@app.post("/tasks/{task_id}/submit")
+async def submit_task(
+    task_id: str,
+    payload: TaskSubmitRequest,
+    request: Request,
+) -> dict[str, Any]:
+    """Submit work for a task you currently claim.
+
+    `complete=True` → COMPLETED; `complete=False` → PARTIAL_PENDING_HANDOFF
+    (the task becomes biddable again so another agent can take it over).
+    """
+    submitter_agent_id = _trusted_agent_id(request)
+    try:
+        task = blackboard.submit(
+            task_id=task_id,
+            submitter_agent_id=submitter_agent_id,
+            content=payload.content,
+            complete=payload.complete,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"task {task_id} not found")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except TaskStateError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     return task.to_dict()

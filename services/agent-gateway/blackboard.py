@@ -43,11 +43,16 @@ class Task:
     created_at: float
     metadata: dict[str, Any] = field(default_factory=dict)
     contributions: list[dict[str, Any]] = field(default_factory=list)
+    claimer_agent_id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
         d["status"] = self.status.value
         return d
+
+
+class TaskStateError(Exception):
+    """Raised when an operation is invalid given a task's current state."""
 
 
 class Blackboard:
@@ -85,6 +90,84 @@ class Blackboard:
         with self._lock:
             self._tasks[task.id] = task
         return task
+
+    def bid(
+        self,
+        task_id: str,
+        bidder_agent_id: str,
+        message: str | None = None,
+    ) -> Task:
+        """Claim an OPEN task or accept a hand-off from PARTIAL_PENDING_HANDOFF.
+
+        Single-bidder Phase 2 model: first bid wins. Phase 5 will replace
+        this with multi-bidder auction semantics + creator selection.
+
+        Raises:
+            KeyError: task not found
+            TaskStateError: task is not in OPEN or PARTIAL_PENDING_HANDOFF
+        """
+        with self._lock:
+            task = self._tasks.get(task_id)
+            if task is None:
+                raise KeyError(task_id)
+            if task.status not in (TaskStatus.OPEN, TaskStatus.PARTIAL_PENDING_HANDOFF):
+                raise TaskStateError(
+                    f"cannot bid on task in state {task.status.value!r}"
+                )
+            task.contributions.append({
+                "kind": "bid",
+                "agent_id": bidder_agent_id,
+                "message": message,
+                "at": time.time(),
+            })
+            task.claimer_agent_id = bidder_agent_id
+            task.status = TaskStatus.CLAIMED
+            return task
+
+    def submit(
+        self,
+        task_id: str,
+        submitter_agent_id: str,
+        content: str,
+        complete: bool,
+    ) -> Task:
+        """Submit work against a CLAIMED task.
+
+        - `complete=True`  → task → COMPLETED
+        - `complete=False` → task → PARTIAL_PENDING_HANDOFF (claimer cleared
+                              so another agent can pick up via /bid)
+
+        Raises:
+            KeyError: task not found
+            TaskStateError: task not in CLAIMED, or submitter is not the claimer
+        """
+        if not content or not content.strip():
+            raise ValueError("content must be non-empty")
+        with self._lock:
+            task = self._tasks.get(task_id)
+            if task is None:
+                raise KeyError(task_id)
+            if task.status != TaskStatus.CLAIMED:
+                raise TaskStateError(
+                    f"cannot submit on task in state {task.status.value!r}"
+                )
+            if task.claimer_agent_id != submitter_agent_id:
+                raise TaskStateError(
+                    "only the current claimer can submit on this task"
+                )
+            task.contributions.append({
+                "kind": "submission",
+                "agent_id": submitter_agent_id,
+                "content": content,
+                "complete": bool(complete),
+                "at": time.time(),
+            })
+            if complete:
+                task.status = TaskStatus.COMPLETED
+            else:
+                task.status = TaskStatus.PARTIAL_PENDING_HANDOFF
+                task.claimer_agent_id = None  # free for next bidder
+            return task
 
     def get(self, task_id: str) -> Task | None:
         with self._lock:
