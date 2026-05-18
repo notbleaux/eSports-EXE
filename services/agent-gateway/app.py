@@ -31,10 +31,13 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable
 
-from fastapi import FastAPI, Request, Response, status
+from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+
+from blackboard import blackboard
 
 try:
     from ecdsa import VerifyingKey, SECP256k1, BadSignatureError
@@ -155,4 +158,33 @@ async def health() -> dict[str, str | int]:
         "phase": 2,
         "status": "ok",
         "registered_keys": sum(1 for v in _load_public_keys().values() if v),
+        "open_tasks": len(blackboard.list_open()),
     }
+
+
+class TaskCreateRequest(BaseModel):
+    description: str = Field(..., min_length=1, max_length=4096)
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+@app.post("/tasks/create", status_code=status.HTTP_201_CREATED)
+async def create_task(payload: TaskCreateRequest, request: Request) -> dict[str, Any]:
+    """Post a new task to the blackboard.
+
+    The middleware has already verified the caller's signature; `agent_id`
+    on `request.state` is trusted.
+    """
+    creator_agent_id = getattr(request.state, "agent_id", None)
+    if not creator_agent_id:  # defensive — middleware should have set this
+        raise HTTPException(status_code=500, detail="agent_id not propagated by middleware")
+
+    try:
+        task = blackboard.create(
+            creator_agent_id=creator_agent_id,
+            description=payload.description,
+            metadata=payload.metadata,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    return task.to_dict()
