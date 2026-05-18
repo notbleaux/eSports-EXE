@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SATOR Hub - Hub 1: The Observatory
  * Raw data ingestion with orbital ring navigation

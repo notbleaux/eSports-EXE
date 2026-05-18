@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * OPERA Hub - Hub 4: eSports Hub
  * Tournament browser, schedules, patch notes, and circuit standings

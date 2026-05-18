@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * TENET Hub - Hub 5: The Control Center
  * White-themed center hub with SATOR Square 3D visualization
