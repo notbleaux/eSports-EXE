@@ -6,7 +6,7 @@
     "enabled": true,
     "autoAlias": true
   },
-  "buildCommand": "turbo run build --filter=@njzitegeist/web",
+  "buildCommand": "turbo run build --filter=@esportexe/web",
   "outputDirectory": "apps/web/dist",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
