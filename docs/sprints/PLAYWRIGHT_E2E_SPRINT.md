@@ -1,10 +1,10 @@
-[Ver001.001]
+[Ver001.002]
 
 # Playwright E2E Sprint — Scope
 
-**Status:** UNBLOCKED · sprint ready to begin Step 2 (PR #43 merged 2026-05-16 at `d11542a`)
-**Branch:** `claude/playwright-sprint` (stacked on `claude/agents-id-protocol-phase-0` → main)
-**Owner:** TBD (sprint candidate; could be a focused human session, Kimi, or a follow-up Claude session)
+**Status:** Step 2 ATTEMPTED · sandbox-blocked · static-triage matrix written (Step 3) · awaiting CI artifact-based completion
+**Branch:** `claude/r2-7-playwright-step-2` (off post-#58 main)
+**Owner:** TBD (next focused session)
 **Plan counter:** `PLN-004-playwright-sprint` (registered in `polyrepo/registry/index.json`)
 **Portfolio:** `NJZPL` · **Project:** `ZSXT` · **Repo:** `notbleaux/ZeSporteXte`
 
@@ -73,19 +73,70 @@ PR #43 merged at commit `d11542a` on main. The Playwright workflow's `pnpm --fil
 
 ### Step 2 — Local repro
 
+**Attempted 2026-05-18 from `claude/r2-7-playwright-step-2` branch.**
+
 ```bash
-pnpm install --frozen-lockfile
+pnpm install --frozen-lockfile          # ✅ ok (workspace already hydrated)
 cd apps/web
-pnpm exec playwright install --with-deps
-pnpm run build
-pnpm exec playwright test --reporter=list 2>&1 | tee /tmp/playwright-sprint-run-1.log
+pnpm exec playwright install chromium   # ❌ failed: sandbox network restricted
+pnpm run build                          # not attempted (browser missing)
+pnpm exec playwright test               # not attempted (browser missing)
 ```
 
-Goal: identify which tests fail, with verbose output. List reporter shows pass/fail per test inline; HTML report is a fallback if the failure mode needs trace inspection.
+**Failure detail:**
+```
+Failed to install browsers
+Error: Failed to download Chrome for Testing 145.0.7632.6 (playwright chromium v1208)
+Error: Download failure, code=1
+```
+
+The current execution environment cannot reach the Playwright CDN to fetch
+browser binaries. **Step 2 cannot complete in this sandbox.**
+
+**Static survey performed instead** (no browsers required):
+
+| Metric | Value |
+|---|---|
+| Spec files at top level | 6 (`tests/e2e/*.spec.ts`) |
+| Spec files in `features/` | 10 (`tests/e2e/features/*.spec.ts`) |
+| Total spec files | **16** |
+| Total tests (Playwright `--list`) | **990** (198 unique × 5 browsers) |
+| Largest suite | `navigation.spec.ts` (40 unique tests) |
+| Existing conditional skips (runtime guards) | **7** |
+
+### Step 2 alternative path — CI-based observation
+
+When a local browser install is unblocked, the cheapest reroll is:
+
+1. Trigger the **E2E Tests** workflow on this branch (it already exists at
+   `.github/workflows/playwright.yml`, `continue-on-error: true` so it won't
+   block the PR)
+2. Download the `playwright-report` artifact from the run
+3. `npx playwright show-report` against the artifact to drive failure inspection
+4. Update Step 3 below with the actual failure ledger
+
+For convenience, the workflow run for any PR on this branch can be found at:
+`https://github.com/notbleaux/ZeSporteXte/actions/workflows/playwright.yml`
 
 ### Step 3 — Triage matrix
 
-For each failing test:
+**Pre-populated** from static analysis (existing `test.skip(...)` markers documenting
+real failure causes). The 7 entries below are already-quarantined runtime guards
+that bypass the assertion when the UI prerequisite is absent — these are sprint
+deliverables in their own right (need either the missing UI surface implemented,
+or the test removed/rewritten).
+
+| # | Test | File / line | Marker reason | Failure mode | Verdict |
+|---|---|---|---|---|---|
+| 1 | accessibility audit | `tests/e2e/accessibility.spec.ts:25` | "@axe-core/playwright not installed — run: pnpm add -D @axe-core/playwright" | missing dev dep | **fix** (add the dep + re-enable) |
+| 2 | SpecMap pathfinding | `tests/e2e/specmap-viewer.spec.ts:388` | "Pathfinding UI not available" | feature unimplemented | **delete or rescope** (UI not shipping) |
+| 3 | Mascot click | `tests/e2e/mascot-cross-browser.spec.ts:97` | "No clickable mascot element on this page" | UI changed | **rewrite** (locator outdated) |
+| 4 | Mascot animation | `tests/e2e/mascot-cross-browser.spec.ts:162` | "No animation detected on mascot element" | UI changed | **rewrite** |
+| 5 | Follow button (player card) | `tests/e2e/features/follows.spec.ts:25` | "No follow button visible — player cards may require API data" | data fixture missing | **fix fixture or skip** |
+| 6 | Unfollow button | `tests/e2e/features/follows.spec.ts:39` | "No follow button visible" | same | **fix fixture or skip** |
+| 7 | Search input | `tests/e2e/features/search.spec.ts:33` | "Search input not found on /stats — may be on a different hub" | routing changed | **update locator/route** |
+
+For each **non-quarantined** failure surfaced by the CI artifact (next session):
 
 | Column | Values |
 |---|---|
@@ -158,3 +209,10 @@ The sprint owner bumps `polyrepo/registry/index.json::plans.PLN-004-playwright-s
 - [ ] `PLN-004-playwright-sprint.status` → `"shipped"` in the central registry
 - [ ] This scope doc moved to `docs/sprints/closed/PLAYWRIGHT_E2E_SPRINT.md` with outcome summary
 - [ ] Sign-off appended to merge commit per AGENT_ID_PROTOCOL
+
+## Session log
+
+| Date | Session | Action | Outcome |
+|---|---|---|---|
+| 2026-05-18 | claude/r2-7-playwright-step-2 | Attempted Step 2 local repro | Browser install network-blocked in sandbox; produced static survey + pre-populated Step 3 triage matrix; handed off to CI-artifact path |
+

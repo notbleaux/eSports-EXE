@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 29,
+      "next": 30,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0028 consumed across PR #44..#64. A0029 claimed by Phase 2 OpenAPI 3.1 export (v1.0.0 OKR deliverable)."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0029 consumed across PR #44..#64 + Phase 2 OpenAPI (PR #59). A0030 claimed by R2.7 Playwright sprint Step 2 (sandbox-blocked local repro; static triage matrix written)."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -120,10 +120,10 @@
       ]
     },
     "PLN-004-playwright-sprint": {
-      "next": 1,
+      "next": 2,
       "title": "Playwright E2E sprint — diagnose + fix + re-enable gate",
       "status": "open",
-      "delivered_in": "PR #45",
+      "delivered_in": "PR #45 (scope), this PR (Step 2 attempt + static triage matrix)",
       "depends_on": ["PLN-001-rename"],
       "blocks": []
     },
@@ -143,7 +143,7 @@
     }
   },
   "portfolio": {
-    "next": 29,
+    "next": 30,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
