@@ -30,9 +30,9 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 1** | ECDSA crypto baseline + local signing client | ✅ shipped | PR #46 |
 | **Phase 1.5** | First public key registered | ✅ shipped | PR #48 |
 | **Phase 1.6** | Sign-off helper CLI + key-gen runbook | ✅ shipped | PR #49, #55 (review fixes) |
-| **Phase 2 (scaffold)** | FastAPI app + signature middleware + `/health` | **🟡 IN DEVELOPMENT** | this PR |
-| Phase 2 (endpoints) | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | scoped | — |
-| Phase 2 (OpenAPI) | Export `openapi.json` + CI publish — hits v1.0.0 OKR | scoped | — |
+| **Phase 2 (scaffold)** | FastAPI app + signature middleware + `/health` | ✅ shipped | PR #56 |
+| **Phase 2 (endpoints)** | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | ✅ shipped | PR #57, #58 |
+| **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | **🟡 IN DEVELOPMENT** | this PR |
 | Phase 3 | Persistent storage (SQLite WAL, Supabase failover) | scoped | — |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
 | Phase 5 | Real-time Pub/Sub (Redis 7) | scoped | — |

@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 28,
+      "next": 29,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0027 consumed across PR #44..#58 + Copilot triage + dependabot waves. A0028 claimed by Vercel/website/plans alignment — converging all turbo --filter refs on @esportexe/web (user's chosen direction post-b9a87ff)."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0028 consumed across PR #44..#64. A0029 claimed by Phase 2 OpenAPI 3.1 export (v1.0.0 OKR deliverable)."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -109,10 +109,10 @@
       "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
     },
     "PLN-003-network-api": {
-      "next": 5,
+      "next": 6,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
       "status": "in-progress",
-      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56 (Phase 2 FastAPI scaffold), PR #57 (Phase 2 /tasks/create + blackboard), this PR (Phase 2 /bid + /submit + hand-off).",
+      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56 (Phase 2 scaffold), PR #57 (Phase 2 /tasks/create + blackboard), PR #58 (Phase 2 /bid + /submit + hand-off), this PR (Phase 2 OpenAPI 3.1 export). Phase 2 endpoint surface COMPLETE — v1.0.0 OKR 'OpenAPI 3.1 published' hit.",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS (Phase 4+)",
         "OpenRouter API key (Phase 4+)",
@@ -143,7 +143,7 @@
     }
   },
   "portfolio": {
-    "next": 28,
+    "next": 29,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
