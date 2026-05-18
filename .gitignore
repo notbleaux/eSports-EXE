@@ -161,3 +161,6 @@ cleanup-extensions.ps1
 
 # Turborepo build cache (regenerated per run)
 .turbo/cache/
+
+# agent-gateway SQLite databases (Phase 3+)
+services/agent-gateway/data/

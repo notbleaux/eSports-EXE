@@ -2,7 +2,7 @@
 
 # services/agent-gateway
 
-**Status:** Phase 2 (FastAPI gateway scaffold) — in development
+**Status:** Phase 3 (SQLite WAL persistence) — in development; Phase 2 endpoint surface shipped (PR #56..#59)
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
 **Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
@@ -32,14 +32,56 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 1.6** | Sign-off helper CLI + key-gen runbook | ✅ shipped | PR #49, #55 (review fixes) |
 | **Phase 2 (scaffold)** | FastAPI app + signature middleware + `/health` | ✅ shipped | PR #56 |
 | **Phase 2 (endpoints)** | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | ✅ shipped | PR #57, #58 |
-| **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | **🟡 IN DEVELOPMENT** | this PR |
-| Phase 3 | Persistent storage (SQLite WAL, Supabase failover) | scoped | — |
+| **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | ✅ shipped | PR #59 |
+| **Phase 3** | Persistent storage (SQLite WAL, FK constraints, schema bootstrap) | **🟡 IN DEVELOPMENT** | this PR |
+| Phase 3.5 | Supabase failover (cloud durability) | scoped | — |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
 | Phase 5 | Real-time Pub/Sub (Redis 7) | scoped | — |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
 | Phase 7 | Telemetry + multi-platform fallbacks | scoped | — |
 
-## Phase 2 scaffold scope (this PR)
+## Phase 3 scope (this PR)
+
+**Goal:** swap the Phase 2 in-memory dict for a SQLite-backed Blackboard so tasks survive process restarts, with WAL journal mode for concurrent readers + FK constraints for referential integrity.
+
+**Deliverables in this PR:**
+1. `blackboard.py` rewritten — same Task/TaskStatus/TaskStateError/Blackboard surface, internal storage swapped from `dict` to `sqlite3` with WAL + FK ON DELETE CASCADE
+2. `tests/conftest.py` (NEW) — forces `AGENT_GATEWAY_DB_PATH=:memory:` so tests don't touch on-disk default
+3. `tests/test_persistence.py` (NEW, 10 tests) — durability across restarts, FK cascade, list_open filter, full hand-off chain reloaded from disk
+4. `.gitignore` — exclude `services/agent-gateway/data/` (the default DB directory)
+
+**Out of scope for this PR:**
+- Supabase failover (Phase 3.5 — separate PR; needs supabase-py + connection string + writer migration logic)
+- Alembic-style migrations (Phase 3.5+ — currently using `CREATE TABLE IF NOT EXISTS` idempotency)
+- WAL checkpoint tuning / backup procedures (Phase 7 telemetry)
+
+**Schema (created by `CREATE TABLE IF NOT EXISTS`):**
+
+```sql
+tasks (
+    id PRIMARY KEY, creator_agent_id, description, status,
+    created_at REAL, metadata JSON, claimer_agent_id
+)
+INDEX idx_tasks_status ON tasks(status)
+
+task_contributions (
+    id PRIMARY KEY AUTOINCREMENT, task_id FK, kind, agent_id, payload JSON, at REAL,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
+)
+INDEX idx_contributions_task ON task_contributions(task_id)
+```
+
+**Configuration:**
+- Default DB path: `services/agent-gateway/data/agent-gateway.db`
+- Env override: `AGENT_GATEWAY_DB_PATH` (use `:memory:` for ephemeral)
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` passes 33/33 (5 + 5 + 9 + 4 + 10 new)
+- Tasks created via `/tasks/create` survive an `uvicorn` restart
+- FK cascade verified: deleting a task removes its contributions
+- OpenAPI spec unchanged (storage swap is internal — no route/schema delta)
+
+## Phase 2 scaffold scope (shipped — PR #56)
 
 **Goal:** ship a FastAPI app skeleton that future Phase 2 PRs can attach endpoints to, with the signature-verification middleware proven against the registered ECDSA keys from Phase 1.5.
 
