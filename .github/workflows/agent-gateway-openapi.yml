@@ -1,0 +1,47 @@
+name: agent-gateway OpenAPI drift check
+
+# v1.0.0 OKR — keeps the published OpenAPI 3.1 spec in sync with the
+# FastAPI routes. PRs that change services/agent-gateway/** without
+# regenerating openapi.json fail this check with a clear remediation hint.
+
+on:
+  pull_request:
+    paths:
+      - "services/agent-gateway/**"
+      - ".github/workflows/agent-gateway-openapi.yml"
+  push:
+    branches: [main]
+    paths:
+      - "services/agent-gateway/**"
+
+permissions:
+  contents: read
+
+jobs:
+  openapi-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: services/agent-gateway/requirements.txt
+
+      - name: Install agent-gateway deps
+        run: pip install -r services/agent-gateway/requirements.txt
+
+      - name: Verify openapi.json matches the FastAPI routes
+        run: |
+          python services/agent-gateway/scripts/export_openapi.py --check
+
+      - name: Show the drift (only on failure)
+        if: failure()
+        run: |
+          python services/agent-gateway/scripts/export_openapi.py
+          echo "::group::Diff after regeneration"
+          git --no-pager diff services/agent-gateway/openapi.json || true
+          echo "::endgroup::"
+          echo "::error::services/agent-gateway/openapi.json is stale. Run: python services/agent-gateway/scripts/export_openapi.py && git add services/agent-gateway/openapi.json"
