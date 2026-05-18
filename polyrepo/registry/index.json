@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 27,
+      "next": 28,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0026 consumed across PR #44..#57 + Copilot triage + dependabot waves. A0027 claimed by Phase 2 /tasks/{id}/bid + /submit hand-off semantics."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0027 consumed across PR #44..#58 + Copilot triage + dependabot waves. A0028 claimed by Vercel/website/plans alignment — converging all turbo --filter refs on @esportexe/web (user's chosen direction post-b9a87ff)."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -97,10 +97,10 @@
   },
   "plans": {
     "PLN-001-rename": {
-      "next": 24,
+      "next": 25,
       "title": "Post-rename cleanup tail",
       "status": "shipped",
-      "delivered_in": "PR #43"
+      "delivered_in": "PR #43; alignment PR (this) converges all `--filter` references on @esportexe/web after the b9a87ff merge resolved ROTAS Phase 1 in that direction."
     },
     "PLN-002-agent-id": {
       "next": 23,
@@ -143,7 +143,7 @@
     }
   },
   "portfolio": {
-    "next": 27,
+    "next": 28,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
