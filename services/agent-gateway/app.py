@@ -30,6 +30,7 @@ from __future__ import annotations
 import json
 import sys
 import time
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, Awaitable, Callable
 
@@ -38,6 +39,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from blackboard import TaskStateError, blackboard
+from telemetry_monitor import default_monitor
 
 try:
     from ecdsa import VerifyingKey, SECP256k1, BadSignatureError
@@ -51,9 +53,9 @@ except ImportError:  # pragma: no cover
 
 
 SERVICE_NAME = "agent-gateway"
-SERVICE_VERSION = "0.2.0-phase2-scaffold"
+SERVICE_VERSION = "0.7.0-phase7-telemetry"
 REPLAY_WINDOW_SECONDS = 60
-PUBLIC_PATHS = {"/health", "/docs", "/openapi.json", "/redoc"}
+PUBLIC_PATHS = {"/health", "/telemetry/summary", "/docs", "/openapi.json", "/redoc"}
 
 REGISTRY_PATH = (
     Path(__file__).resolve().parents[2] / "polyrepo" / "registry" / "index.json"
@@ -104,13 +106,28 @@ def _is_timestamp_fresh(timestamp: str, now: float | None = None) -> bool:
     return abs(current - ts) <= REPLAY_WINDOW_SECONDS
 
 
+@asynccontextmanager
+async def _lifespan(_app: FastAPI):
+    """Start the Phase 7 telemetry subscriber on app boot; stop on shutdown.
+
+    No-op when REDIS_URL is unset (TelemetryMonitor.start checks).
+    """
+    default_monitor.start()
+    try:
+        yield
+    finally:
+        default_monitor.stop()
+
+
 app = FastAPI(
     title="ZSXT Agent-Coordination Gateway",
     version=SERVICE_VERSION,
     description=(
-        "Phase 2 skeleton — signature-verification middleware + /health. "
-        "Endpoints for /tasks/* land in subsequent PRs."
+        "Zero-Trust agent coordination gateway — ECDSA-signed task lifecycle "
+        "(/tasks/create, /bid, /submit) backed by SQLite WAL with optional "
+        "Supabase mirror + Redis Pub/Sub event bus + telemetry counters."
     ),
+    lifespan=_lifespan,
 )
 
 
@@ -150,16 +167,27 @@ async def signature_verification_middleware(
 
 
 @app.get("/health")
-async def health() -> dict[str, str | int]:
+async def health() -> dict[str, Any]:
     """Liveness probe — bypasses auth middleware via PUBLIC_PATHS."""
     return {
         "service": SERVICE_NAME,
         "version": SERVICE_VERSION,
-        "phase": 2,
+        "phase": 7,
         "status": "ok",
         "registered_keys": sum(1 for v in _load_public_keys().values() if v),
         "open_tasks": len(blackboard.list_open()),
+        "telemetry_subscriber": "running" if default_monitor.is_running else "off",
     }
+
+
+@app.get("/telemetry/summary")
+async def telemetry_summary() -> dict[str, Any]:
+    """Per-agent + total event counts aggregated from the Phase 5 bus.
+
+    Public endpoint (no signature required) — read-only over the local
+    `telemetry_counters` table. Returns zeros when the bus is unwired.
+    """
+    return default_monitor.summary()
 
 
 class TaskCreateRequest(BaseModel):

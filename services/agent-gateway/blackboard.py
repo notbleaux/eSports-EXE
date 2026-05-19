@@ -103,6 +103,14 @@ CREATE TABLE IF NOT EXISTS task_contributions (
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_contributions_task ON task_contributions(task_id);
+
+CREATE TABLE IF NOT EXISTS telemetry_counters (
+    agent_id    TEXT NOT NULL,
+    event_kind  TEXT NOT NULL,
+    count       INTEGER NOT NULL DEFAULT 0,
+    updated_at  REAL NOT NULL,
+    PRIMARY KEY (agent_id, event_kind)
+);
 """
 
 
