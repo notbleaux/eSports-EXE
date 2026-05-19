@@ -2,7 +2,7 @@
 
 # services/agent-gateway
 
-**Status:** Phase 3.5 (Supabase cloud mirror) — in development; Phase 3 SQLite WAL shipped (PR #65)
+**Status:** Phase 5 (Redis Pub/Sub event bus) — in development; Phase 3 + 3.5 shipped (PR #65, #66)
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
 **Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
@@ -34,9 +34,9 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 2 (endpoints)** | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | ✅ shipped | PR #57, #58 |
 | **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | ✅ shipped | PR #59 |
 | **Phase 3** | Persistent storage (SQLite WAL, FK constraints, schema bootstrap) | ✅ shipped | PR #65 |
-| **Phase 3.5** | Supabase cloud mirror (write-only, env-gated, fire-and-forget) | **🟡 IN DEVELOPMENT** | this PR |
+| **Phase 3.5** | Supabase cloud mirror (write-only, env-gated, fire-and-forget) | ✅ shipped | PR #66 |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
-| Phase 5 | Real-time Pub/Sub (Redis 7) | scoped | — |
+| **Phase 5** | Real-time Pub/Sub (Redis 7) — 4 channels, env-gated, no-op when unset | **🟡 IN DEVELOPMENT** | this PR |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
 | Phase 7 | Telemetry + multi-platform fallbacks | scoped | — |
 
@@ -81,7 +81,44 @@ INDEX idx_contributions_task ON task_contributions(task_id)
 - FK cascade verified: deleting a task removes its contributions
 - OpenAPI spec unchanged (storage swap is internal — no route/schema delta)
 
-## Phase 3.5 scope (this PR)
+## Phase 5 scope (this PR)
+
+**Goal:** publish task-lifecycle events to a Redis Pub/Sub bus so downstream consumers (Phase 4 Hermes-MiMo worker, future telemetry monitor, live UI feeds) can react event-driven instead of polling.
+
+**Deliverables in this PR:**
+1. `async_bus.py` (NEW, ~160 lines) — `AsyncEventBus` wrapper over `redis.Redis` with 4 publish helpers + a `subscribe()` generator. Env-gated via `REDIS_URL`; unset → no-op stub, no client constructed, no connection attempted. `default_bus` singleton built from env at import time.
+2. `blackboard.py` — `Blackboard.__init__` accepts an optional `bus` parameter (defaults to `default_bus`). `create`/`bid`/`submit` publish to the corresponding channel after each SQLite commit (outside the lock).
+3. `tests/test_async_bus.py` (NEW, 6 tests) — disabled-bus no-op, single-channel roundtrip, full-lifecycle 5-event chain (created → claimed → handoff → claimed → submitted), broken-client doesn't crash caller, subscribe() yields decoded JSON, isolation of injected bus.
+4. `requirements.txt` — adds `redis>=5.0,<6.0` (runtime) and `fakeredis>=2.0,<3.0` (test).
+5. `tests/conftest.py` — also strips `REDIS_URL` so `default_bus` is no-op during tests.
+
+**Channels:**
+
+| Channel | Payload | Fired by |
+|---|---|---|
+| `agent.tasks.created` | `{id, creator_agent_id, description, created_at}` | `create` |
+| `agent.tasks.claimed` | `{id, claimer_agent_id, at}` | `bid` |
+| `agent.tasks.handoff` | `{id, previous_claimer, at}` | `submit(complete=False)` |
+| `agent.tasks.submitted` | `{id, submitter_agent_id, at}` | `submit(complete=True)` |
+
+**Activation:**
+```bash
+export REDIS_URL="redis://localhost:6379/0"
+uvicorn services.agent_gateway.app:app --port 8001
+# Subscribe from a consumer (e.g., the eventual Hermes-MiMo worker):
+redis-cli SUBSCRIBE 'agent.tasks.*'
+```
+
+Reuses the existing Redis service in `docker-compose.yml` — no new infra.
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` passes 45/45 (39 + 6 new bus tests)
+- With `REDIS_URL` unset → bus is silent no-op (no redis import attempted, no client constructed)
+- Full lifecycle test (create → bid → partial → re-bid → complete) emits 5 events in order across all 4 channels
+- Publish failures (Redis down, connection error) logged but never crash the API caller
+- OpenAPI spec byte-identical (no API surface change)
+
+## Phase 3.5 scope (shipped — PR #66)
 
 **Goal:** mirror every successful local task-lifecycle write to a Supabase project for disaster recovery. SQLite is the source of truth; Supabase is async-replicated, write-only from the gateway's POV. Mirror failures never propagate to API callers.
 
