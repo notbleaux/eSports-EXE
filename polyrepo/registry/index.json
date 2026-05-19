@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 33,
+      "next": 36,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0032 consumed across PR #44..#66 (Phase 3 + 3.5). A0033 claimed by Phase 5 Redis Pub/Sub event bus."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0035 consumed across PR #44..#75. A0036 claimed by Phase 7-C EMERGENCY_MEMORY_PROTOCOLS runbook."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -109,10 +109,10 @@
       "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
     },
     "PLN-003-network-api": {
-      "next": 9,
+      "next": 12,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
       "status": "in-progress",
-      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56..#59 (Phase 2 scaffold + endpoints + OpenAPI — v1.0.0 OKR hit), PR #65 (Phase 3 SQLite WAL), PR #66 (Phase 3.5 Supabase mirror), this PR (Phase 5 Redis Pub/Sub).",
+      "delivered_in": "PR #46 (1), PR #48 (1.5), PR #56..#59 (2 + OpenAPI v1.0.0 OKR), PR #65 (3), PR #73 (3.5), PR #72 (5), PR #74 (7-A), PR #75 (7-B), this PR (7-C runbook).",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS (Phase 4+)",
         "OpenRouter API key (Phase 4+)",
@@ -143,7 +143,7 @@
     }
   },
   "portfolio": {
-    "next": 33,
+    "next": 36,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
