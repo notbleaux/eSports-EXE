@@ -124,6 +124,195 @@ const SAMPLE_MAPS: Record<CS2MapId, CS2MapData> = {
     competitivePool: true,
     releaseDate: '2001-03-13',
   },
+  nuke: {
+    id: 'nuke',
+    name: 'Nuke',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Ramp', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Vents', x: 60, y: 40, z: 0, region: 'mid' },
+      { id: '5', name: 'Outside', x: 30, y: 30, z: 0, region: 'mid' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 2,
+    competitivePool: true,
+    releaseDate: '1999-11-01',
+  },
+  overpass: {
+    id: 'overpass',
+    name: 'Overpass',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Connector', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Monster', x: 70, y: 70, z: 0, region: 'b' },
+      { id: '5', name: 'Party', x: 40, y: 40, z: 0, region: 'a' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 1,
+    competitivePool: true,
+    releaseDate: '2013-12-18',
+  },
+  ancient: {
+    id: 'ancient',
+    name: 'Ancient',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Cave', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Red Room', x: 60, y: 40, z: 0, region: 'a' },
+      { id: '5', name: 'Main', x: 40, y: 60, z: 0, region: 'mid' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 1,
+    competitivePool: true,
+    releaseDate: '2021-05-03',
+  },
+  anubis: {
+    id: 'anubis',
+    name: 'Anubis',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Mid', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Dark', x: 60, y: 40, z: 0, region: 'b' },
+      { id: '5', name: 'Bridge', x: 40, y: 60, z: 0, region: 'mid' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 1,
+    competitivePool: true,
+    releaseDate: '2020-11-24',
+  },
+  vertigo: {
+    id: 'vertigo',
+    name: 'Vertigo',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Mid', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Ramp', x: 60, y: 40, z: 0, region: 'a' },
+      { id: '5', name: 'Elevator', x: 40, y: 60, z: 0, region: 'b' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 2,
+    competitivePool: true,
+    releaseDate: '2019-03-29',
+  },
+  train: {
+    id: 'train',
+    name: 'Train',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Ivy', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Main', x: 60, y: 40, z: 0, region: 'a' },
+      { id: '5', name: 'Popdog', x: 40, y: 60, z: 0, region: 'mid' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 1,
+    competitivePool: false,
+    releaseDate: '1999-11-01',
+  },
+  cache: {
+    id: 'cache',
+    name: 'Cache',
+    game: 'cs2',
+    thumbnail: '',
+    minimapUrl: '',
+    fullmapUrl: '',
+    dimensions: { width: 800, height: 800, inGameUnits: 4000 },
+    callouts: [
+      { id: '1', name: 'A Site', x: 80, y: 20, z: 0, region: 'a' },
+      { id: '2', name: 'B Site', x: 20, y: 80, z: 0, region: 'b' },
+      { id: '3', name: 'Mid', x: 50, y: 50, z: 0, region: 'mid' },
+      { id: '4', name: 'Quad', x: 60, y: 40, z: 0, region: 'a' },
+      { id: '5', name: 'Squeaky', x: 40, y: 60, z: 0, region: 'b' },
+    ],
+    spawns: [
+      { id: 't1', team: 't', x: 50, y: 90, z: 0 },
+      { id: 'ct1', team: 'ct', x: 50, y: 10, z: 0 },
+    ],
+    bombsites: [
+      { id: 'A', name: 'Bombsite A', x: 80, y: 20, z: 0, plantRadius: 10 },
+      { id: 'B', name: 'Bombsite B', x: 20, y: 80, z: 0, plantRadius: 10 },
+    ],
+    zLevels: 1,
+    competitivePool: false,
+    releaseDate: '2012-12-12',
+  },
 } as const;
 
 // Sample Weapons
@@ -545,7 +734,7 @@ function CS2HubContent(): JSX.Element {
                   <CS2WeaponCard
                     key={weapon.id}
                     weapon={weapon}
-                    compareWeapon={selectedWeapon?.id === weapon.id ? undefined : selectedWeapon}
+                    compareWeapon={selectedWeapon?.id === weapon.id ? undefined : selectedWeapon ?? undefined}
                     onClick={handleWeaponSelect}
                     isSelected={selectedWeapon?.id === weapon.id || compareWeapon?.id === weapon.id}
                   />

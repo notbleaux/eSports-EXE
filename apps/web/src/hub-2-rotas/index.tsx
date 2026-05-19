@@ -139,7 +139,7 @@ function RotasHubContent(): React.ReactElement {
       : [...activeLayers, layerId];
     
     setActiveLayers(newLayers);
-    setState('rotas', { activeLayers: newLayers });
+    setState({ activeLayers: newLayers });
     
     addNotification(
       `${layers.find(l => l.id === layerId)?.label} layer ${newLayers.includes(layerId) ? 'activated' : 'deactivated'}`,
@@ -149,7 +149,7 @@ function RotasHubContent(): React.ReactElement {
 
   const handleLayerChange = (layerId: string) => {
     setActiveLayer(layerId);
-    setState('rotas', { activeLayer: layerId });
+    setState({ activeLayer: layerId });
     
     const layer = ANALYTICS_LAYERS.find(l => l.id === layerId);
     addNotification(`${layer?.name} layer activated`, 'info');
@@ -873,7 +873,7 @@ function RotasHubContent(): React.ReactElement {
                     </tr>
                   </thead>
                   <tbody>
-                    {rawStatsData.stats.map((p: { player_id: string; slug: string; handle: string; avg_kd: number; avg_acs: number; avg_hs_pct: number; games: number }, i: number) => (
+                    {rawStatsData.stats.map((p: { player_id: number; slug: string; handle: string; avg_kd: number; avg_acs: number; avg_hs_pct: number; games: number }, i: number) => (
                       <tr key={p.player_id} className="border-b border-gray-700 last:border-0">
                         <td className="py-1 text-gray-500">#{i + 1}</td>
                         <td className="py-1">
@@ -897,7 +897,7 @@ function RotasHubContent(): React.ReactElement {
 
       {/* Error Display */}
       <AnimatePresence>
-        {error && (
+        {Boolean(error) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

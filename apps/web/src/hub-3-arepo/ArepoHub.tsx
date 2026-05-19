@@ -71,9 +71,9 @@ const HUB_CONFIG = {
   name: 'AREPO',
   subtitle: 'The Cross-Reference Engine',
   description: 'Connect SATOR analytics with OPERA metadata through cross-hub queries',
-  color: colors.hub.arepo,           // #ffaa00
-  glow: 'rgba(255, 170, 0, 0.4)',    // derived from arepo
-  muted: '#cc8800',                  // muted version of arepo
+  color: colors.hub.arepo.base,      // #ffaa00
+  glow: colors.hub.arepo.glow,       // rgba(255, 170, 0, 0.4)
+  muted: colors.hub.arepo.muted,     // #cc8800
 };
 
 // Categories for directory navigation
@@ -156,7 +156,7 @@ interface HubProps {
  */
 function ArepoHubContent(): React.ReactElement {
   const [activeTab, setActiveTab] = useState('cross-reference'); // 'cross-reference' | 'directory' | 'help' | 'tactical-maps'
-  const [activeCategory, setActiveCategory] = useState<{ id: string; name: string; icon: typeof BookOpen; items: number; color: string } | null>(null);
+  const [activeCategory, setActiveCategory] = useState<{ id: string; name: string; icon: React.ComponentType; items: number; color: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedQuestion, setSelectedQuestion] = useState<{ id: number; question: string; answers: number; status: 'answered' | 'open' } | null>(null);
   const [selectedTool, setSelectedTool] = useState('query-builder');
@@ -171,7 +171,7 @@ function ArepoHubContent(): React.ReactElement {
   const { data: teamData } = useTeams();
   const recentMatches = matchData?.matches?.slice(0, 5) ?? [];
 
-  const handleCategorySelect = useCallback((category: { id: string; name: string; icon: typeof BookOpen; items: number; color: string }) => {
+  const handleCategorySelect = useCallback((category: { id: string; name: string; icon: React.ComponentType; items: number; color: string }) => {
     setActiveCategory(category);
     setState({ selectedCategory: category });
     addNotification(`Browsing ${category.name}`, 'info');
@@ -419,13 +419,13 @@ function ArepoHubContent(): React.ReactElement {
                   </div>
                   
                   <div className="space-y-2">
-                    {queryHistory.slice(0, 5).map((query: { type: string; timestamp: string }, index: number) => (
+                    {queryHistory.slice(0, 5).map((query: { id: string; query: string; timestamp: string; results: number }, index: number) => (
                       <div 
                         key={index}
                         className="flex items-center gap-2 text-sm p-2 rounded-lg bg-void-mid"
                       >
                         <Clock className="w-3 h-3 text-slate" />
-                        <span className="capitalize text-slate">{query.type}</span>
+                        <span className="capitalize text-slate">{query.query}</span>
                         <span className="text-xs text-slate/50 ml-auto">
                           {new Date(query.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
@@ -543,7 +543,7 @@ function ArepoHubContent(): React.ReactElement {
                     <DirectoryList 
                       categories={CATEGORIES}
                       activeCategory={activeCategory}
-                      onCategorySelect={handleCategorySelect}
+                      onCategorySelect={(category) => category && handleCategorySelect(category)}
                       hubColor={HUB_CONFIG.color}
                       hubGlow={HUB_CONFIG.glow}
                     />
@@ -728,9 +728,9 @@ function ArepoHubContent(): React.ReactElement {
         <h3 className="text-sm font-semibold text-purple-400 mb-2">Recent Matches</h3>
         {recentMatches.length === 0
           ? <p className="text-gray-500 text-xs">No finished matches yet — run sync_pandascore.py to seed.</p>
-          : recentMatches.map((m: { id: string; name: string; status: string }) => (
+          : recentMatches.map((m) => (
               <div key={m.id} className="flex justify-between text-xs text-gray-300 mb-1">
-                <span>{m.name ?? m.id}</span>
+                <span>{(m as any).name ?? `${m.teamA?.name ?? 'TBD'} vs ${m.teamB?.name ?? 'TBD'}`}</span>
                 <span className="text-green-400">{m.status}</span>
               </div>
             ))
@@ -745,7 +745,7 @@ function ArepoHubContent(): React.ReactElement {
  */
 function ArepoHub(): React.ReactElement {
   return (
-    <HubErrorBoundary hubName="AREPO" componentName="ArepoHub">
+    <HubErrorBoundary hubName="arepo" componentName="ArepoHub">
       <DataErrorBoundary
         hubName="AREPO"
         componentName="ArepoHub"

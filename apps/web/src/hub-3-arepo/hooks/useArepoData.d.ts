@@ -14,6 +14,12 @@ export interface CrossReferenceResult {
   }>;
   total: number;
   query: string;
+  queryHistory: Array<{
+    id: string;
+    query: string;
+    timestamp: string;
+    results: number;
+  }>;
 }
 
 export function useCrossReferenceEngine(query?: string): CrossReferenceResult;

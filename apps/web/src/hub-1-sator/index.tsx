@@ -109,7 +109,7 @@ const generateMockPlayerData = (count = 1000) => {
 };
 
 // Grid columns configuration
-const playerGridColumns = [
+const playerGridColumns: import('@/types/worker').GridColumn[] = [
   { key: 'rank', header: 'Rank', width: 60, type: 'number', align: 'center' },
   { key: 'name', header: 'Player', width: 150, type: 'text', align: 'left' },
   { key: 'team', header: 'Team', width: 140, type: 'text', align: 'left' },
@@ -126,7 +126,7 @@ interface HubProps {
 }
 
 function SatorHubContent(): React.ReactElement {
-  const [stats, setStats] = useState([]);
+  const [stats, setStats] = useState<{ value: number; label: string; trend: 'up' | 'down' | 'neutral' }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -141,7 +141,7 @@ function SatorHubContent(): React.ReactElement {
   const [activeRing, setActiveRing] = useState<string | null>(null);
   const [rotation, setRotation] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [gridData, setGridData] = useState([]);
+  const [gridData, setGridData] = useState<ReturnType<typeof generateMockPlayerData>>([]);
   const [workerCapabilities, setWorkerCapabilities] = useState({ 
     supported: false, 
     offscreen: false 
@@ -177,12 +177,12 @@ function SatorHubContent(): React.ReactElement {
         await new Promise(resolve => setTimeout(resolve, 500));
         
         const mockStats = [
-          { value: 2847, label: 'Teams', trend: 'up' },
-          { value: 156, label: 'Matches', trend: 'neutral' },
-          { value: 12847, label: 'Players', trend: 'up' },
-          { value: 48, label: 'Tournaments', trend: 'up' },
-          { value: 2400000, label: 'Records', trend: 'up' },
-          { value: 99.9, label: 'Uptime %', trend: 'neutral' },
+          { value: 2847, label: 'Teams', trend: 'up' as const },
+          { value: 156, label: 'Matches', trend: 'neutral' as const },
+          { value: 12847, label: 'Players', trend: 'up' as const },
+          { value: 48, label: 'Tournaments', trend: 'up' as const },
+          { value: 2400000, label: 'Records', trend: 'up' as const },
+          { value: 99.9, label: 'Uptime %', trend: 'neutral' as const },
         ];
 
         const mockGridData = generateMockPlayerData(1000);
@@ -573,7 +573,7 @@ function SatorHubContent(): React.ReactElement {
               <div className="error">Failed to load player data.</div>
             ) : (
               <div className="space-y-4">
-                {players.map((player, index) => (
+                {players.map((player: any, index: number) => (
                   <PlayerWidget
                     key={player.id}
                     player={player}

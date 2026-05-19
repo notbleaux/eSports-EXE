@@ -45,7 +45,7 @@ const QUICK_STATS = [
 ];
 
 function TENETHubContent(): React.ReactElement {
-  const { addNotification } = useEXEStore();
+  const addNotification = useEXEStore((state) => state.addNotification);
   const {
     systemStatus,
     logs,
