@@ -1,21 +1,17 @@
 """
-app.py — FastAPI agent-coordination gateway (Phase 2 skeleton).
+app.py — FastAPI agent-coordination gateway (Phase 2 + VaultBrain Phase 3).
 
-[Ver001.000] · Phase 2 of PLN-003-network-api
+[Ver002.000] · Phase 2 of PLN-003-network-api + VaultBrain Integration
 
-Scope of this PR (R2.6 — scaffold only):
+Scope:
   - `/health` endpoint returning 200 + service metadata
-  - Signature-verification middleware that:
-      * skips `/health` (public)
-      * extracts X-Agent-ID / X-Signature / X-Timestamp headers
-      * loads the agent's public hex from polyrepo/registry/index.json
-      * verifies the ECDSA signature against `{agent_id}:{timestamp}`
-      * rejects requests with stale timestamps (> 60s skew)
-
-Out of scope this PR (subsequent Phase 2 PRs will add):
+  - Signature-verification middleware (ECDSA secp256k1)
   - `/tasks/create`, `/tasks/{id}/bid`, `/tasks/{id}/submit` endpoints
-  - In-memory task blackboard
-  - OpenAPI 3.1 spec export + CI publish
+  - **NEW:** VaultBrain PostgreSQL persistence (feature-flagged)
+
+Persistence mode (feature flag):
+  - `AGENT_GATEWAY_PERSISTENCE=memory` (default) → in-memory blackboard
+  - `AGENT_GATEWAY_PERSISTENCE=vaultbrain` → VaultBrain PostgreSQL via PgBouncer
 
 Run locally:
 
@@ -28,6 +24,7 @@ Run locally:
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -37,23 +34,33 @@ from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from blackboard import TaskStateError, blackboard
+# ── Persistence Layer Selection ─────────────────────────────────
+# Feature flag: AGENT_GATEWAY_PERSISTENCE=memory|vaultbrain
+# Default: memory (backward compatible with Phase 2)
 
-try:
-    from ecdsa import VerifyingKey, SECP256k1, BadSignatureError
-    from ecdsa.util import sigdecode_der
-except ImportError:  # pragma: no cover
-    sys.stderr.write(
-        "ERROR: 'ecdsa' library not installed. Install with:\n"
-        "    pip install -r services/agent-gateway/requirements.txt\n"
-    )
-    raise
+_PERSISTENCE_MODE = os.getenv("AGENT_GATEWAY_PERSISTENCE", "memory").lower()
 
+if _PERSISTENCE_MODE == "vaultbrain":
+    try:
+        from vaultbrain_adapter import TaskStateError, vaultbrain_store as store
+    except ImportError:
+        sys.stderr.write(
+            "ERROR: psycopg2-binary not installed. Install with:\n"
+            "    pip install -r services/agent-gateway/requirements.txt\n"
+        )
+        raise
+    _PERSISTENCE_BACKEND = "vaultbrain"
+else:
+    from blackboard import TaskStateError, blackboard as store
+    _PERSISTENCE_BACKEND = "memory"
 
 SERVICE_NAME = "agent-gateway"
-SERVICE_VERSION = "0.2.0-phase2-scaffold"
+SERVICE_VERSION = "0.3.0-vaultbrain"
 REPLAY_WINDOW_SECONDS = 60
 PUBLIC_PATHS = {"/health", "/docs", "/openapi.json", "/redoc"}
+
+# Show persistence mode in startup
+print(f"[AGENT_GATEWAY] Persistence backend: {_PERSISTENCE_BACKEND}", file=sys.stderr)
 
 REGISTRY_PATH = (
     Path(__file__).resolve().parents[2] / "polyrepo" / "registry" / "index.json"
@@ -108,8 +115,9 @@ app = FastAPI(
     title="ZSXT Agent-Coordination Gateway",
     version=SERVICE_VERSION,
     description=(
-        "Phase 2 skeleton — signature-verification middleware + /health. "
-        "Endpoints for /tasks/* land in subsequent PRs."
+        "Phase 2 + VaultBrain Phase 3 — signature-verification middleware + /health + task endpoints. "
+        f"Persistence: {_PERSISTENCE_BACKEND}. "
+        "VaultBrain PostgreSQL cluster for persistent task storage."
     ),
 )
 
@@ -158,7 +166,8 @@ async def health() -> dict[str, str | int]:
         "phase": 2,
         "status": "ok",
         "registered_keys": sum(1 for v in _load_public_keys().values() if v),
-        "open_tasks": len(blackboard.list_open()),
+        "open_tasks": len(store.list_open()),
+        "persistence_backend": _PERSISTENCE_BACKEND,
     }
 
 
@@ -184,7 +193,7 @@ async def create_task(payload: TaskCreateRequest, request: Request) -> dict[str,
     """
     creator_agent_id = _trusted_agent_id(request)
     try:
-        task = blackboard.create(
+        task = store.create(
             creator_agent_id=creator_agent_id,
             description=payload.description,
             metadata=payload.metadata,
@@ -210,7 +219,7 @@ async def bid_on_task(
     """
     bidder_agent_id = _trusted_agent_id(request)
     try:
-        task = blackboard.bid(
+        task = store.bid(
             task_id=task_id,
             bidder_agent_id=bidder_agent_id,
             message=payload.message,
@@ -240,7 +249,7 @@ async def submit_task(
     """
     submitter_agent_id = _trusted_agent_id(request)
     try:
-        task = blackboard.submit(
+        task = store.submit(
             task_id=task_id,
             submitter_agent_id=submitter_agent_id,
             content=payload.content,
