@@ -116,9 +116,9 @@
     }
   },
   "info": {
-    "description": "Phase 2 skeleton \u2014 signature-verification middleware + /health. Endpoints for /tasks/* land in subsequent PRs.",
+    "description": "Zero-Trust agent coordination gateway \u2014 ECDSA-signed task lifecycle (/tasks/create, /bid, /submit) backed by SQLite WAL with optional Supabase mirror + Redis Pub/Sub event bus + telemetry counters.",
     "title": "ZSXT Agent-Coordination Gateway",
-    "version": "0.2.0-phase2-scaffold"
+    "version": "0.7.0-phase7-telemetry"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -131,16 +131,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "anyOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "integer"
-                      }
-                    ]
-                  },
+                  "additionalProperties": true,
                   "title": "Response Health Health Get",
                   "type": "object"
                 }
@@ -295,6 +286,27 @@
           }
         },
         "summary": "Submit Task"
+      }
+    },
+    "/telemetry/summary": {
+      "get": {
+        "description": "Per-agent + total event counts aggregated from the Phase 5 bus.\n\nPublic endpoint (no signature required) \u2014 read-only over the local\n`telemetry_counters` table. Returns zeros when the bus is unwired.",
+        "operationId": "telemetry_summary_telemetry_summary_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Telemetry Summary Telemetry Summary Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Telemetry Summary"
       }
     }
   }

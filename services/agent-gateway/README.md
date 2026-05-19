@@ -2,7 +2,7 @@
 
 # services/agent-gateway
 
-**Status:** Phase 5 (Redis Pub/Sub event bus) — in development; Phase 3 + 3.5 shipped (PR #65, #66)
+**Status:** Phase 7-A (telemetry monitor) — in development; Phase 3 / 3.5 / 5 shipped (PR #65, #73, #72)
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
 **Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
@@ -36,11 +36,43 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 3** | Persistent storage (SQLite WAL, FK constraints, schema bootstrap) | ✅ shipped | PR #65 |
 | **Phase 3.5** | Supabase cloud mirror (write-only, env-gated, fire-and-forget) | ✅ shipped | PR #66 |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
-| **Phase 5** | Real-time Pub/Sub (Redis 7) — 4 channels, env-gated, no-op when unset | **🟡 IN DEVELOPMENT** | this PR |
+| **Phase 5** | Real-time Pub/Sub (Redis 7) — 4 channels, env-gated, no-op when unset | ✅ shipped | PR #72 |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
-| Phase 7 | Telemetry + multi-platform fallbacks | scoped | — |
+| **Phase 7-A** | Telemetry monitor (per-agent event counters + `/telemetry/summary`) | **🟡 IN DEVELOPMENT** | this PR |
+| Phase 7-B | Backup manager (SQLite snapshot + retention CLI) | scoped | — |
+| Phase 7-C | Emergency memory protocols runbook | scoped | — |
 
-## Phase 3 scope (this PR)
+## Phase 7-A scope (this PR)
+
+**Goal:** subscribe to the Phase 5 Redis bus and aggregate per-agent event counts into a SQLite-backed `telemetry_counters` table, surfaced via a public `GET /telemetry/summary` endpoint. Provides the measurement substrate for Phase 4 worker cost-cap policies (Phase 4 is owner-blocked).
+
+**Deliverables in this PR:**
+1. `telemetry_monitor.py` (NEW, ~180 lines) — `TelemetryMonitor` with subscriber thread + `record()` + `summary()`. Reuses Phase 5's `AsyncEventBus`; opens its own SQLite connection (WAL handles concurrent readers, `busy_timeout=5000` absorbs write-write contention with Blackboard). Env-gated via `REDIS_URL`; `start()` is a no-op when unset.
+2. `blackboard.py::SCHEMA` — adds `telemetry_counters` table (composite PK on `agent_id, event_kind`)
+3. `app.py` — adds `GET /telemetry/summary` (public, like `/health`); FastAPI `lifespan` context starts/stops the monitor thread
+4. `tests/test_telemetry.py` (NEW, 6 tests) — shape, record aggregation, no-op-when-disabled, bus-to-counter pipeline, public endpoint, end-to-end direct record → HTTP response
+
+**`GET /telemetry/summary` response shape:**
+```json
+{
+  "agents": {
+    "agent_claude_code_local": {"created": 12, "submitted": 8, "claimed": 14, "handoff": 2}
+  },
+  "totals": {"created": 12, "claimed": 14, "handoff": 2, "submitted": 8},
+  "agent_count": 1,
+  "updated_at": 1779100123.45
+}
+```
+
+**Activation:** `export REDIS_URL=redis://localhost:6379/0` (same as Phase 5). With unset → endpoint returns zeros; tests / ops can write counters directly via `default_monitor.record()`.
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` → 51 pass (45 + 6 new telemetry)
+- `/telemetry/summary` returns 200 without auth headers
+- Bus events `agent.tasks.*` → counter rows update within 2s
+- OpenAPI spec regenerated: 5 paths (4 prior + `/telemetry/summary`)
+
+## Phase 3 scope (shipped — PR #65)
 
 **Goal:** swap the Phase 2 in-memory dict for a SQLite-backed Blackboard so tasks survive process restarts, with WAL journal mode for concurrent readers + FK constraints for referential integrity.
 
