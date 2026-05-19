@@ -38,8 +38,8 @@
     },
     "kimi": {
       "lineage_short": "KMI",
-      "next": 0,
-      "session_count": 0,
+      "next": 1,
+      "session_count": 1,
       "scope": "AGENT-KMI"
     },
     "gpt": {
@@ -149,7 +149,7 @@
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
   },
   "public_keys": {
-    "_comment": "ECDSA secp256k1 public keys per agent_id (uncompressed HEX, '04' prefix). Phase 1 adds the first entries. Phase 0 ships the empty container.",
+    "_comment": "ECDSA secp256k1 public keys per agent_id (uncompressed HEX, '04' prefix). Phase 1 adds the first entries. Phase 0 ships the empty container. Kimi key pending generation via crypto_client.py (2026-05-19).",
     "agent_claude_code_local": "049819d65ba1d03f43da0c4e503b8dd9d26e1e50dceb358984f3d4fb2523056bb91429b766ce794f0d5aa1a16cad4a74387336d1adde23c5e3535cb18cbe6abc5c",
     "agent_copilot_swe_agent": null,
     "agent_kimi_claw_worker": null,
