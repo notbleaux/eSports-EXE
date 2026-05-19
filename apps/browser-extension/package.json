@@ -11,13 +11,13 @@
   "dependencies": {
     "@esportexe/types": "workspace:*",
     "@esportexe/websocket-client": "workspace:*",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.1.0",
-    "@types/react": "^18.3.28",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "rollup": "^2.80.0",
     "typescript": "^5.2.2",
     "vite": "^7.3.2"
