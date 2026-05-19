@@ -1,7 +1,7 @@
 """
-blackboard.py — SQLite-backed task store for the Phase 3 gateway.
+blackboard.py — SQLite-backed task store with optional Supabase mirror.
 
-[Ver002.000] · Phase 3 of PLN-003-network-api (was Phase 2 in-memory)
+[Ver002.001] · Phase 3 of PLN-003-network-api + Phase 3.5 cloud mirror
 
 A task blackboard is the coordination surface where agents post work, bid
 on work, and submit results.
@@ -14,19 +14,21 @@ Persistence model:
   - Default DB path: `services/agent-gateway/data/agent-gateway.db`
   - Env override: `AGENT_GATEWAY_DB_PATH` (set to `:memory:` for tests)
 
+Phase 3.5 — optional Supabase cloud mirror:
+  - After each successful local write (create / bid / submit) the
+    Blackboard fires a no-block call to `SupabaseMirror`, which
+    asynchronously POSTs the row to the configured Supabase project's
+    REST endpoint (env vars `SUPABASE_URL`, `SUPABASE_KEY`).
+  - Mirror is **opt-in** and write-only; reads always come from local
+    SQLite for latency. If env vars are unset the mirror is a no-op.
+  - Mirror failures are logged but never propagated to the API caller.
+
 Task lifecycle:
 
     open  →  claimed  →  partial_pending_handoff  →  completed
                                                   ↘  failed
 
-Same Task / TaskStatus / TaskStateError types as Phase 2. The Blackboard
-class's external interface is unchanged — only the storage swapped from
-dict to SQLite. app.py imports `blackboard` (the singleton) and is
-unaffected by this change.
-
-Subsequent phases:
-  - Phase 3.5 (future): Supabase failover for cloud-backed durability
-  - Phase 5: swap polling for Redis Pub/Sub event-driven model
+Same Task / TaskStatus / TaskStateError types as Phase 2.
 """
 
 from __future__ import annotations
@@ -41,6 +43,8 @@ from dataclasses import asdict, dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
+
+from supabase_mirror import SupabaseMirror, default_mirror
 
 DEFAULT_DB_DIR = Path(__file__).resolve().parent / "data"
 DEFAULT_DB_PATH = DEFAULT_DB_DIR / "agent-gateway.db"
@@ -119,19 +123,28 @@ def _resolve_db_path(override: str | Path | None) -> str:
 
 
 class Blackboard:
-    """Thread-safe SQLite-backed task store.
+    """Thread-safe SQLite-backed task store with optional Supabase mirror.
 
     Same external interface as the Phase 2 in-memory implementation. Pass
     `:memory:` for tests that want ephemeral state without env var setup.
+
+    `mirror` defaults to the module-level `default_mirror` (env-configured).
+    Pass `mirror=SupabaseMirror()` (no args) to explicitly disable the
+    mirror for a specific instance (useful in tests).
     """
 
-    def __init__(self, db_path: str | Path | None = None) -> None:
+    def __init__(
+        self,
+        db_path: str | Path | None = None,
+        mirror: SupabaseMirror | None = None,
+    ) -> None:
         self._lock = threading.Lock()
         self._db_path = _resolve_db_path(db_path)
         # check_same_thread=False so FastAPI's TestClient + worker threads
         # can share the same connection (guarded by self._lock).
         self._conn = sqlite3.connect(self._db_path, check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
+        self._mirror = mirror if mirror is not None else default_mirror
         self._init_db()
 
     def _init_db(self) -> None:
@@ -211,6 +224,16 @@ class Blackboard:
                 ),
             )
             self._conn.commit()
+        # Phase 3.5: async mirror to Supabase (no-op when env unset)
+        self._mirror.mirror_task_insert(
+            task_id=task.id,
+            creator_agent_id=task.creator_agent_id,
+            description=task.description,
+            status=task.status.value,
+            created_at=task.created_at,
+            metadata=task.metadata,
+            claimer_agent_id=None,
+        )
         return task
 
     def bid(
@@ -245,7 +268,11 @@ class Blackboard:
                 (TaskStatus.CLAIMED.value, bidder_agent_id, task_id),
             )
             self._conn.commit()
-            return self._get_unlocked(task_id)
+            task = self._get_unlocked(task_id)
+        # Phase 3.5: mirror outside the lock — fire-and-forget queue
+        self._mirror.mirror_contribution(task_id, "bid", bidder_agent_id, {"message": message}, now)
+        self._mirror.mirror_task_update(task_id, TaskStatus.CLAIMED.value, bidder_agent_id)
+        return task
 
     def submit(
         self,
@@ -292,13 +319,27 @@ class Blackboard:
                     "UPDATE tasks SET status = ? WHERE id = ?",
                     (TaskStatus.COMPLETED.value, task_id),
                 )
+                new_status = TaskStatus.COMPLETED.value
+                new_claimer: str | None = submitter_agent_id
             else:
                 self._conn.execute(
                     "UPDATE tasks SET status = ?, claimer_agent_id = NULL WHERE id = ?",
                     (TaskStatus.PARTIAL_PENDING_HANDOFF.value, task_id),
                 )
+                new_status = TaskStatus.PARTIAL_PENDING_HANDOFF.value
+                new_claimer = None
             self._conn.commit()
-            return self._get_unlocked(task_id)
+            task = self._get_unlocked(task_id)
+        # Phase 3.5: mirror outside the lock
+        self._mirror.mirror_contribution(
+            task_id,
+            "submission",
+            submitter_agent_id,
+            {"content": content, "complete": bool(complete)},
+            now,
+        )
+        self._mirror.mirror_task_update(task_id, new_status, new_claimer)
+        return task
 
     def _get_unlocked(self, task_id: str) -> Task:
         """Internal: load a task without acquiring self._lock (caller holds it)."""

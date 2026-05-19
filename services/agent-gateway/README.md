@@ -2,7 +2,7 @@
 
 # services/agent-gateway
 
-**Status:** Phase 3 (SQLite WAL persistence) — in development; Phase 2 endpoint surface shipped (PR #56..#59)
+**Status:** Phase 3.5 (Supabase cloud mirror) — in development; Phase 3 SQLite WAL shipped (PR #65)
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
 **Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
@@ -33,8 +33,8 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 2 (scaffold)** | FastAPI app + signature middleware + `/health` | ✅ shipped | PR #56 |
 | **Phase 2 (endpoints)** | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | ✅ shipped | PR #57, #58 |
 | **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | ✅ shipped | PR #59 |
-| **Phase 3** | Persistent storage (SQLite WAL, FK constraints, schema bootstrap) | **🟡 IN DEVELOPMENT** | this PR |
-| Phase 3.5 | Supabase failover (cloud durability) | scoped | — |
+| **Phase 3** | Persistent storage (SQLite WAL, FK constraints, schema bootstrap) | ✅ shipped | PR #65 |
+| **Phase 3.5** | Supabase cloud mirror (write-only, env-gated, fire-and-forget) | **🟡 IN DEVELOPMENT** | this PR |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
 | Phase 5 | Real-time Pub/Sub (Redis 7) | scoped | — |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
@@ -80,6 +80,53 @@ INDEX idx_contributions_task ON task_contributions(task_id)
 - Tasks created via `/tasks/create` survive an `uvicorn` restart
 - FK cascade verified: deleting a task removes its contributions
 - OpenAPI spec unchanged (storage swap is internal — no route/schema delta)
+
+## Phase 3.5 scope (this PR)
+
+**Goal:** mirror every successful local task-lifecycle write to a Supabase project for disaster recovery. SQLite is the source of truth; Supabase is async-replicated, write-only from the gateway's POV. Mirror failures never propagate to API callers.
+
+**Deliverables in this PR:**
+1. `supabase_mirror.py` (NEW, ~250 lines) — `SupabaseMirror` async write-mirror via Supabase REST API. No new runtime deps (stdlib `urllib.request` + `json`). Fire-and-forget queue drained by a daemon thread. `default_mirror` singleton built from env at import time.
+2. `blackboard.py` — `Blackboard.__init__` accepts an optional `mirror` parameter; `create`/`bid`/`submit` call `mirror_task_insert`/`mirror_task_update`/`mirror_contribution` after each SQLite commit (outside the lock, non-blocking)
+3. `tests/test_supabase_mirror.py` (NEW, 6 tests) — disabled-mirror no-op, enabled posts via mocked urlopen, pending count, 404 graceful degrade, Blackboard wiring verification
+4. `tests/conftest.py` — also strips `SUPABASE_URL`/`SUPABASE_KEY` from env so `default_mirror` is no-op during tests
+
+**Activation:**
+```bash
+export SUPABASE_URL="https://<project-ref>.supabase.co"
+export SUPABASE_KEY="<service-role-jwt-or-anon-with-rls>"
+uvicorn services.agent_gateway.app:app --port 8001
+```
+
+**Operator one-time setup** (Supabase MCP or dashboard):
+```sql
+create table agent_gateway_tasks (
+    id text primary key,
+    creator_agent_id text not null,
+    description text not null,
+    status text not null,
+    created_at double precision not null,
+    metadata jsonb not null default '{}'::jsonb,
+    claimer_agent_id text,
+    mirrored_at double precision not null default extract(epoch from now())
+);
+create table agent_gateway_contributions (
+    id bigserial primary key,
+    task_id text not null references agent_gateway_tasks(id) on delete cascade,
+    kind text not null,
+    agent_id text not null,
+    payload jsonb not null default '{}'::jsonb,
+    at double precision not null
+);
+```
+
+If tables don't exist, the mirror logs a one-time warning and degrades to no-op for the rest of the run.
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` passes 39/39 (33 + 6 new mirror tests)
+- With `SUPABASE_URL`/`SUPABASE_KEY` unset → mirror is silent no-op (no thread spawned, no network calls)
+- With env set → POST bodies match `agent_gateway_tasks` / `agent_gateway_contributions` schema
+- OpenAPI spec byte-identical (no API surface change)
 
 ## Phase 2 scaffold scope (shipped — PR #56)
 
