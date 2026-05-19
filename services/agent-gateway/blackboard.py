@@ -44,6 +44,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+from async_bus import AsyncEventBus, default_bus
 from supabase_mirror import SupabaseMirror, default_mirror
 
 DEFAULT_DB_DIR = Path(__file__).resolve().parent / "data"
@@ -137,6 +138,7 @@ class Blackboard:
         self,
         db_path: str | Path | None = None,
         mirror: SupabaseMirror | None = None,
+        bus: AsyncEventBus | None = None,
     ) -> None:
         self._lock = threading.Lock()
         self._db_path = _resolve_db_path(db_path)
@@ -145,6 +147,7 @@ class Blackboard:
         self._conn = sqlite3.connect(self._db_path, check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
         self._mirror = mirror if mirror is not None else default_mirror
+        self._bus = bus if bus is not None else default_bus
         self._init_db()
 
     def _init_db(self) -> None:
@@ -234,6 +237,13 @@ class Blackboard:
             metadata=task.metadata,
             claimer_agent_id=None,
         )
+        # Phase 5: emit task.created event (no-op when REDIS_URL unset)
+        self._bus.publish_task_created(
+            task_id=task.id,
+            creator_agent_id=task.creator_agent_id,
+            description=task.description,
+            created_at=task.created_at,
+        )
         return task
 
     def bid(
@@ -272,6 +282,8 @@ class Blackboard:
         # Phase 3.5: mirror outside the lock — fire-and-forget queue
         self._mirror.mirror_contribution(task_id, "bid", bidder_agent_id, {"message": message}, now)
         self._mirror.mirror_task_update(task_id, TaskStatus.CLAIMED.value, bidder_agent_id)
+        # Phase 5: emit task.claimed event
+        self._bus.publish_task_claimed(task_id=task_id, claimer_agent_id=bidder_agent_id, at=now)
         return task
 
     def submit(
@@ -339,6 +351,11 @@ class Blackboard:
             now,
         )
         self._mirror.mirror_task_update(task_id, new_status, new_claimer)
+        # Phase 5: emit submitted (complete=True) or handoff (complete=False)
+        if complete:
+            self._bus.publish_task_submitted(task_id=task_id, submitter_agent_id=submitter_agent_id, at=now)
+        else:
+            self._bus.publish_task_handoff(task_id=task_id, previous_claimer=submitter_agent_id, at=now)
         return task
 
     def _get_unlocked(self, task_id: str) -> Task:

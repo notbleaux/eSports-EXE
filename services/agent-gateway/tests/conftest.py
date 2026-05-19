@@ -17,8 +17,10 @@ import sys
 os.environ.setdefault("AGENT_GATEWAY_DB_PATH", ":memory:")
 os.environ.pop("SUPABASE_URL", None)
 os.environ.pop("SUPABASE_KEY", None)
+os.environ.pop("REDIS_URL", None)
 
 # Ensure a fresh import if pytest already touched these modules.
 sys.modules.pop("blackboard", None)
 sys.modules.pop("supabase_mirror", None)
+sys.modules.pop("async_bus", None)
 sys.modules.pop("app", None)
