@@ -2,7 +2,7 @@
 
 # services/agent-gateway
 
-**Status:** Phase 2 (FastAPI gateway scaffold) — in development
+**Status:** Phase 5 (Redis Pub/Sub event bus) — in development; Phase 3 + 3.5 shipped (PR #65, #66)
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
 **Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
@@ -32,14 +32,140 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 1.6** | Sign-off helper CLI + key-gen runbook | ✅ shipped | PR #49, #55 (review fixes) |
 | **Phase 2 (scaffold)** | FastAPI app + signature middleware + `/health` | ✅ shipped | PR #56 |
 | **Phase 2 (endpoints)** | `/tasks/create`, `/bid`, `/submit` + in-memory blackboard | ✅ shipped | PR #57, #58 |
-| **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | **🟡 IN DEVELOPMENT** | this PR |
-| Phase 3 | Persistent storage (SQLite WAL, Supabase failover) | scoped | — |
+| **Phase 2 (OpenAPI)** | Export `openapi.json` + CI drift check — **v1.0.0 OKR hit** | ✅ shipped | PR #59 |
+| **Phase 3** | Persistent storage (SQLite WAL, FK constraints, schema bootstrap) | ✅ shipped | PR #65 |
+| **Phase 3.5** | Supabase cloud mirror (write-only, env-gated, fire-and-forget) | ✅ shipped | PR #66 |
 | Phase 4 | Hermes-MiMo worker node (OpenRouter integration) | **⚠️ blocked** on user infra | — |
-| Phase 5 | Real-time Pub/Sub (Redis 7) | scoped | — |
+| **Phase 5** | Real-time Pub/Sub (Redis 7) — 4 channels, env-gated, no-op when unset | **🟡 IN DEVELOPMENT** | this PR |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
 | Phase 7 | Telemetry + multi-platform fallbacks | scoped | — |
 
-## Phase 2 scaffold scope (this PR)
+## Phase 3 scope (this PR)
+
+**Goal:** swap the Phase 2 in-memory dict for a SQLite-backed Blackboard so tasks survive process restarts, with WAL journal mode for concurrent readers + FK constraints for referential integrity.
+
+**Deliverables in this PR:**
+1. `blackboard.py` rewritten — same Task/TaskStatus/TaskStateError/Blackboard surface, internal storage swapped from `dict` to `sqlite3` with WAL + FK ON DELETE CASCADE
+2. `tests/conftest.py` (NEW) — forces `AGENT_GATEWAY_DB_PATH=:memory:` so tests don't touch on-disk default
+3. `tests/test_persistence.py` (NEW, 10 tests) — durability across restarts, FK cascade, list_open filter, full hand-off chain reloaded from disk
+4. `.gitignore` — exclude `services/agent-gateway/data/` (the default DB directory)
+
+**Out of scope for this PR:**
+- Supabase failover (Phase 3.5 — separate PR; needs supabase-py + connection string + writer migration logic)
+- Alembic-style migrations (Phase 3.5+ — currently using `CREATE TABLE IF NOT EXISTS` idempotency)
+- WAL checkpoint tuning / backup procedures (Phase 7 telemetry)
+
+**Schema (created by `CREATE TABLE IF NOT EXISTS`):**
+
+```sql
+tasks (
+    id PRIMARY KEY, creator_agent_id, description, status,
+    created_at REAL, metadata JSON, claimer_agent_id
+)
+INDEX idx_tasks_status ON tasks(status)
+
+task_contributions (
+    id PRIMARY KEY AUTOINCREMENT, task_id FK, kind, agent_id, payload JSON, at REAL,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
+)
+INDEX idx_contributions_task ON task_contributions(task_id)
+```
+
+**Configuration:**
+- Default DB path: `services/agent-gateway/data/agent-gateway.db`
+- Env override: `AGENT_GATEWAY_DB_PATH` (use `:memory:` for ephemeral)
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` passes 33/33 (5 + 5 + 9 + 4 + 10 new)
+- Tasks created via `/tasks/create` survive an `uvicorn` restart
+- FK cascade verified: deleting a task removes its contributions
+- OpenAPI spec unchanged (storage swap is internal — no route/schema delta)
+
+## Phase 5 scope (this PR)
+
+**Goal:** publish task-lifecycle events to a Redis Pub/Sub bus so downstream consumers (Phase 4 Hermes-MiMo worker, future telemetry monitor, live UI feeds) can react event-driven instead of polling.
+
+**Deliverables in this PR:**
+1. `async_bus.py` (NEW, ~160 lines) — `AsyncEventBus` wrapper over `redis.Redis` with 4 publish helpers + a `subscribe()` generator. Env-gated via `REDIS_URL`; unset → no-op stub, no client constructed, no connection attempted. `default_bus` singleton built from env at import time.
+2. `blackboard.py` — `Blackboard.__init__` accepts an optional `bus` parameter (defaults to `default_bus`). `create`/`bid`/`submit` publish to the corresponding channel after each SQLite commit (outside the lock).
+3. `tests/test_async_bus.py` (NEW, 6 tests) — disabled-bus no-op, single-channel roundtrip, full-lifecycle 5-event chain (created → claimed → handoff → claimed → submitted), broken-client doesn't crash caller, subscribe() yields decoded JSON, isolation of injected bus.
+4. `requirements.txt` — adds `redis>=5.0,<6.0` (runtime) and `fakeredis>=2.0,<3.0` (test).
+5. `tests/conftest.py` — also strips `REDIS_URL` so `default_bus` is no-op during tests.
+
+**Channels:**
+
+| Channel | Payload | Fired by |
+|---|---|---|
+| `agent.tasks.created` | `{id, creator_agent_id, description, created_at}` | `create` |
+| `agent.tasks.claimed` | `{id, claimer_agent_id, at}` | `bid` |
+| `agent.tasks.handoff` | `{id, previous_claimer, at}` | `submit(complete=False)` |
+| `agent.tasks.submitted` | `{id, submitter_agent_id, at}` | `submit(complete=True)` |
+
+**Activation:**
+```bash
+export REDIS_URL="redis://localhost:6379/0"
+uvicorn services.agent_gateway.app:app --port 8001
+# Subscribe from a consumer (e.g., the eventual Hermes-MiMo worker):
+redis-cli SUBSCRIBE 'agent.tasks.*'
+```
+
+Reuses the existing Redis service in `docker-compose.yml` — no new infra.
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` passes 45/45 (39 + 6 new bus tests)
+- With `REDIS_URL` unset → bus is silent no-op (no redis import attempted, no client constructed)
+- Full lifecycle test (create → bid → partial → re-bid → complete) emits 5 events in order across all 4 channels
+- Publish failures (Redis down, connection error) logged but never crash the API caller
+- OpenAPI spec byte-identical (no API surface change)
+
+## Phase 3.5 scope (shipped — PR #66)
+
+**Goal:** mirror every successful local task-lifecycle write to a Supabase project for disaster recovery. SQLite is the source of truth; Supabase is async-replicated, write-only from the gateway's POV. Mirror failures never propagate to API callers.
+
+**Deliverables in this PR:**
+1. `supabase_mirror.py` (NEW, ~250 lines) — `SupabaseMirror` async write-mirror via Supabase REST API. No new runtime deps (stdlib `urllib.request` + `json`). Fire-and-forget queue drained by a daemon thread. `default_mirror` singleton built from env at import time.
+2. `blackboard.py` — `Blackboard.__init__` accepts an optional `mirror` parameter; `create`/`bid`/`submit` call `mirror_task_insert`/`mirror_task_update`/`mirror_contribution` after each SQLite commit (outside the lock, non-blocking)
+3. `tests/test_supabase_mirror.py` (NEW, 6 tests) — disabled-mirror no-op, enabled posts via mocked urlopen, pending count, 404 graceful degrade, Blackboard wiring verification
+4. `tests/conftest.py` — also strips `SUPABASE_URL`/`SUPABASE_KEY` from env so `default_mirror` is no-op during tests
+
+**Activation:**
+```bash
+export SUPABASE_URL="https://<project-ref>.supabase.co"
+export SUPABASE_KEY="<service-role-jwt-or-anon-with-rls>"
+uvicorn services.agent_gateway.app:app --port 8001
+```
+
+**Operator one-time setup** (Supabase MCP or dashboard):
+```sql
+create table agent_gateway_tasks (
+    id text primary key,
+    creator_agent_id text not null,
+    description text not null,
+    status text not null,
+    created_at double precision not null,
+    metadata jsonb not null default '{}'::jsonb,
+    claimer_agent_id text,
+    mirrored_at double precision not null default extract(epoch from now())
+);
+create table agent_gateway_contributions (
+    id bigserial primary key,
+    task_id text not null references agent_gateway_tasks(id) on delete cascade,
+    kind text not null,
+    agent_id text not null,
+    payload jsonb not null default '{}'::jsonb,
+    at double precision not null
+);
+```
+
+If tables don't exist, the mirror logs a one-time warning and degrades to no-op for the rest of the run.
+
+**Acceptance criteria:**
+- `pytest services/agent-gateway/tests/` passes 39/39 (33 + 6 new mirror tests)
+- With `SUPABASE_URL`/`SUPABASE_KEY` unset → mirror is silent no-op (no thread spawned, no network calls)
+- With env set → POST bodies match `agent_gateway_tasks` / `agent_gateway_contributions` schema
+- OpenAPI spec byte-identical (no API surface change)
+
+## Phase 2 scaffold scope (shipped — PR #56)
 
 **Goal:** ship a FastAPI app skeleton that future Phase 2 PRs can attach endpoints to, with the signature-verification middleware proven against the registered ECDSA keys from Phase 1.5.
 

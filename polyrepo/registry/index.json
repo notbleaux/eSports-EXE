@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 30,
+      "next": 33,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0029 consumed across PR #44..#64 + Phase 2 OpenAPI (PR #59). A0030 claimed by R2.7 Playwright sprint Step 2 (sandbox-blocked local repro; static triage matrix written)."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0032 consumed across PR #44..#66 (Phase 3 + 3.5). A0033 claimed by Phase 5 Redis Pub/Sub event bus."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -109,10 +109,10 @@
       "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
     },
     "PLN-003-network-api": {
-      "next": 6,
+      "next": 9,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
       "status": "in-progress",
-      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56 (Phase 2 scaffold), PR #57 (Phase 2 /tasks/create + blackboard), PR #58 (Phase 2 /bid + /submit + hand-off), this PR (Phase 2 OpenAPI 3.1 export). Phase 2 endpoint surface COMPLETE — v1.0.0 OKR 'OpenAPI 3.1 published' hit.",
+      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56..#59 (Phase 2 scaffold + endpoints + OpenAPI — v1.0.0 OKR hit), PR #65 (Phase 3 SQLite WAL), PR #66 (Phase 3.5 Supabase mirror), this PR (Phase 5 Redis Pub/Sub).",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS (Phase 4+)",
         "OpenRouter API key (Phase 4+)",
@@ -143,7 +143,7 @@
     }
   },
   "portfolio": {
-    "next": 30,
+    "next": 33,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
