@@ -31,7 +31,7 @@ def test_health_is_public_and_returns_200(client: TestClient) -> None:
     body = response.json()
     assert body["service"] == "agent-gateway"
     assert body["status"] == "ok"
-    assert body["phase"] == 2
+    assert body["phase"] == 7
     assert isinstance(body["registered_keys"], int)
 
 

@@ -48,7 +48,13 @@ def test_committed_spec_matches_generated() -> None:
 
 def test_expected_paths_present(spec: dict) -> None:
     paths = set(spec.get("paths", {}).keys())
-    expected = {"/health", "/tasks/create", "/tasks/{task_id}/bid", "/tasks/{task_id}/submit"}
+    expected = {
+        "/health",
+        "/tasks/create",
+        "/tasks/{task_id}/bid",
+        "/tasks/{task_id}/submit",
+        "/telemetry/summary",
+    }
     missing = expected - paths
     assert not missing, f"spec is missing expected paths: {missing}"
 

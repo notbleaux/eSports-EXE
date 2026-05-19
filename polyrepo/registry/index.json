@@ -25,10 +25,10 @@
   "agents": {
     "claude": {
       "lineage_short": "CLA",
-      "next": 33,
+      "next": 37,
       "session_count": 1,
       "scope": "AGENT-CLA",
-      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0032 consumed across PR #44..#66 (Phase 3 + 3.5). A0033 claimed by Phase 5 Redis Pub/Sub event bus."
+      "_note": "Session 01HXX-ZSPRT-0G0F5 active; A0001..A0036 consumed across PR #44..#76. A0037 claimed by PLN-006 HexNex+Vaultbrain design + reservation (drafted by Claude on behalf of absent Kimi lineage)."
     },
     "copilot": {
       "lineage_short": "COP",
@@ -109,10 +109,10 @@
       "delivered_in": "PR #44 (Phase 0), PR #47 (Phase 1 soft enforcement), PR #49 (Phase 1.6 sign-off helper + key-gen runbook), this PR (Phase 1.6 review fixes)"
     },
     "PLN-003-network-api": {
-      "next": 9,
+      "next": 12,
       "title": "Zero-Trust Network API multi-phase rollout (Phases 1–7)",
       "status": "in-progress",
-      "delivered_in": "PR #46 (Phase 1 ECDSA), PR #48 (Phase 1.5 key registration), PR #56..#59 (Phase 2 scaffold + endpoints + OpenAPI — v1.0.0 OKR hit), PR #65 (Phase 3 SQLite WAL), PR #66 (Phase 3.5 Supabase mirror), this PR (Phase 5 Redis Pub/Sub).",
+      "delivered_in": "PR #46 (1), PR #48 (1.5), PR #56..#59 (2 + OpenAPI v1.0.0 OKR), PR #65 (3), PR #73 (3.5), PR #72 (5), PR #74 (7-A), PR #75 (7-B), this PR (7-C runbook).",
       "blocking_prerequisites": [
         "user-provisioned Cloud VPS (Phase 4+)",
         "OpenRouter API key (Phase 4+)",
@@ -130,8 +130,9 @@
     "PLN-005-wiki-sourcegraph-inspired": {
       "next": 0,
       "title": "Internal AI-augmented wiki — Sourcegraph-inspired 5-phase rollout (W1..W5)",
-      "status": "scoped",
+      "status": "superseded-by-PLN-006",
       "scoped_in": "PR #53 (docs/research/SOURCEGRAPH_WIKI_INSPIRATION.md)",
+      "superseded_note": "Rolled into PLN-006 V3 (HexNex). PLN-005 scoping doc remains as reference; implementation tracked under PLN-006.",
       "decisions": {
         "registry_reservation": "approved (this entry)",
         "content_authoring": "ai-augmented",
@@ -140,10 +141,30 @@
       },
       "depends_on": ["PLN-003-network-api"],
       "blocks": []
+    },
+    "PLN-006-hexnex-vaultbrain": {
+      "next": 0,
+      "title": "HexNex (AI-augmented wiki) + Vaultbrain (encrypted memory + vector knowledge brain) — 4-wave rollout (V1..V4)",
+      "status": "scoped",
+      "scoped_in": "PR #TBD (docs/research/HEXNEX_VAULTBRAIN_DESIGN.md)",
+      "owner_of_record": "kimi (when public key registers per Phase 1.5)",
+      "drafted_by": "claude (agent_claude_code_local)",
+      "waves": {
+        "V1": "Vaultbrain VAULT half — Phase 1 ECDSA-signed envelope storage in Phase 3 SQLite",
+        "V2": "Vaultbrain BRAIN half — vector embeddings (sqlite-vss / pgvector / HF Inference, env-gated)",
+        "V3": "HexNex wiki shell — supersedes PLN-005; built into existing apps/wiki Next.js scaffold",
+        "V4": "Production polish — telemetry channels + Procedure D in EMERGENCY_MEMORY_PROTOCOLS"
+      },
+      "depends_on": [
+        "PLN-002-agent-id",
+        "PLN-003-network-api"
+      ],
+      "supersedes": ["PLN-005-wiki-sourcegraph-inspired"],
+      "blocks": []
     }
   },
   "portfolio": {
-    "next": 33,
+    "next": 37,
     "scope": "NJZPL",
     "long_name": "NJZ NeXeZ Portfolio",
     "members": ["ZSXT", "NEXEZ-CORE", "NEXEZ-CODON"]
