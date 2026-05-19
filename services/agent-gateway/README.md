@@ -2,7 +2,7 @@
 
 # services/agent-gateway
 
-**Status:** Phase 7-B (backup manager) — in development; Phase 3 / 3.5 / 5 / 7-A shipped (PR #65, #73, #72, #74)
+**Status:** Phase 7-C (emergency runbook) — in development; Phase 3 / 3.5 / 5 / 7-A / 7-B shipped (PR #65, #73, #72, #74, #75)
 **Plan:** `PLN-003-network-api` (multi-phase rollout, Phases 1–7)
 **Owner:** `notbleaux/ZeSporteXte` repo (project `ZSXT`, portfolio `NJZPL`)
 **Protocol:** `.agents/AGENT_ID_PROTOCOL.md` (Phase 1, soft enforcement)
@@ -39,8 +39,8 @@ This is intentionally a **separate service** from `packages/shared/api`:
 | **Phase 5** | Real-time Pub/Sub (Redis 7) — 4 channels, env-gated, no-op when unset | ✅ shipped | PR #72 |
 | Phase 6 | Production edge (Caddy + Docker Compose prod) | **⚠️ blocked** on user infra | — |
 | **Phase 7-A** | Telemetry monitor (per-agent event counters + `/telemetry/summary`) | ✅ shipped | PR #74 |
-| **Phase 7-B** | Backup manager (SQLite snapshot + retention CLI) | **🟡 IN DEVELOPMENT** | this PR |
-| Phase 7-C | Emergency memory protocols runbook | scoped | — |
+| **Phase 7-B** | Backup manager (SQLite snapshot + retention CLI) | ✅ shipped | PR #75 |
+| **Phase 7-C** | Emergency memory protocols runbook (multi-platform recovery procedures) | **🟡 IN DEVELOPMENT** | this PR |
 
 ## Phase 7-B scope (this PR)
 
